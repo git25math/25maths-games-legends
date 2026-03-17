@@ -129,9 +129,15 @@ export default function App() {
             <Languages size={18} />
             {lang === 'zh' ? 'EN' : '中文'}
           </button>
-          {user && (
+          {(user || isGuest) && (
             <button
-              onClick={signOut}
+              onClick={() => {
+                signOut();
+                setIsGuest(false);
+                setGameState('welcome');
+                setActiveMission(null);
+                setSelectedCharId(null);
+              }}
               className="p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-full hover:bg-rose-500/30 transition-all"
             >
               <LogOut size={20} />
