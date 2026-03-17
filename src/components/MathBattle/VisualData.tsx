@@ -18,8 +18,14 @@ import {
   CompassRose,
 } from '../diagrams';
 
+const VIS_LABELS = {
+  zh: { simpleEq: '基础代数方程', compound: '复利增长模型', estimation: '无理数估算', length: '长', width: '宽', start: '起点', end: '落点' },
+  en: { simpleEq: 'Simple Equation', compound: 'Compound Growth', estimation: 'Estimation', length: 'L', width: 'W', start: 'Start', end: 'End' },
+} as const;
+
 export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language }) => {
   const t = translations[lang];
+  const vl = VIS_LABELS[lang];
 
   // ──────────────────────────────
   // New diagram-based visualizations
@@ -108,7 +114,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
         <div className="text-4xl font-black text-[#3d2b1f] mb-2">
           <MathView tex={interpolate(mission.description[lang], mission.data ?? {}).match(/\$(.*?)\$/)?.[1] || ''} />
         </div>
-        <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">基础代数方程 (Simple Equation)</p>
+        <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">{vl.simpleEq}</p>
       </div>
     );
   }
@@ -118,7 +124,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
         <div className="text-3xl font-black text-[#3d2b1f] mb-2">
           <MathView tex={`${mission.data.initial} \\times (1 + ${mission.data.rate})^{${mission.data.years}}`} />
         </div>
-        <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">复利增长模型 (Compound Growth)</p>
+        <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">{vl.compound}</p>
       </div>
     );
   }
@@ -128,7 +134,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
         <div className="text-5xl font-black text-[#3d2b1f] mb-2">
           <MathView tex={`\\sqrt{${mission.data.value}} \\approx ?`} />
         </div>
-        <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">无理数估算 (Estimation)</p>
+        <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">{vl.estimation}</p>
       </div>
     );
   }
@@ -172,8 +178,8 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     return (
       <div className="bg-white/30 p-6 rounded-lg border border-[#3d2b1f]/10 flex flex-col items-center">
         <div className="w-32 h-20 border-4 border-[#3d2b1f] bg-indigo-500/20 flex items-center justify-center relative">
-          <span className="absolute -top-6 text-xs font-bold text-[#5c4033]">长: {length}</span>
-          <span className="absolute -left-10 text-xs font-bold text-[#5c4033]">宽: {width}</span>
+          <span className="absolute -top-6 text-xs font-bold text-[#5c4033]">{vl.length}: {length}</span>
+          <span className="absolute -left-10 text-xs font-bold text-[#5c4033]">{vl.width}: {width}</span>
           <Sparkles className="text-indigo-500/30" size={32} />
         </div>
       </div>
@@ -200,11 +206,11 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-[#3d2b1f]/10">
-          <span className="text-xs font-black text-[#5c4033]">起点</span>
+          <span className="text-xs font-black text-[#5c4033]">{vl.start}</span>
           <MathView tex={`(${p1[0]}, ${p1[1]})`} className="text-lg font-black text-[#3d2b1f]" />
         </div>
         <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-[#3d2b1f]/10">
-          <span className="text-xs font-black text-[#5c4033]">落点</span>
+          <span className="text-xs font-black text-[#5c4033]">{vl.end}</span>
           <MathView tex={`(${p2[0]}, ${p2[1]})`} className="text-lg font-black text-[#3d2b1f]" />
         </div>
       </div>
