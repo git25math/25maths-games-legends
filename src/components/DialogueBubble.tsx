@@ -1,5 +1,6 @@
 import { useState, useEffect, memo } from 'react';
 import { motion } from 'motion/react';
+import { LatexText } from './MathView';
 
 export const DialogueBubble = memo(function DialogueBubble({
   text,
@@ -11,11 +12,12 @@ export const DialogueBubble = memo(function DialogueBubble({
   onComplete?: () => void;
 }) {
   const [displayedText, setDisplayedText] = useState('');
+  const [typingDone, setTypingDone] = useState(false);
 
   useEffect(() => {
     setDisplayedText('');
+    setTypingDone(false);
     let index = 0;
-    // Adaptive speed: shorter interval for longer text so user doesn't wait too long
     const speed = text.length > 30 ? 25 : 40;
 
     const timer = setInterval(() => {
@@ -24,6 +26,7 @@ export const DialogueBubble = memo(function DialogueBubble({
         setDisplayedText(text.slice(0, index));
       } else {
         clearInterval(timer);
+        setTypingDone(true);
         onComplete?.();
       }
     }, speed);
@@ -62,11 +65,15 @@ export const DialogueBubble = memo(function DialogueBubble({
         {speaker}
       </div>
 
-      {/* Typed text */}
+      {/* Typed text — plain during typing, LaTeX-rendered when done */}
       <div className="text-sm leading-relaxed" style={{ color: '#3d2b1f' }}>
-        {displayedText}
-        {displayedText.length < text.length && (
-          <span className="inline-block w-0.5 h-3.5 ml-0.5 bg-[#3d2b1f] animate-pulse align-text-bottom" />
+        {typingDone ? (
+          <LatexText text={text} />
+        ) : (
+          <>
+            {displayedText}
+            <span className="inline-block w-0.5 h-3.5 ml-0.5 bg-[#3d2b1f] animate-pulse align-text-bottom" />
+          </>
         )}
       </div>
     </motion.div>
