@@ -84,14 +84,17 @@ export const WelcomeScreen = ({
 
         <div className="flex flex-col items-center gap-6">
           <button
-            disabled={!selectedCharId}
+            disabled={!selectedCharId || !isLoggedIn}
             onClick={onStart}
             className={`px-16 py-6 rounded-3xl text-3xl font-black transition-all shadow-2xl ${
-              selectedCharId ? 'bg-yellow-400 hover:bg-yellow-300 text-slate-900 scale-105' : 'bg-slate-800 text-slate-600 cursor-not-allowed'
+              selectedCharId && isLoggedIn ? 'bg-yellow-400 hover:bg-yellow-300 text-slate-900 scale-105' : 'bg-slate-800 text-slate-600 cursor-not-allowed'
             }`}
           >
             {t.startJourney}
           </button>
+          {!isLoggedIn && selectedCharId && (
+            <p className="text-amber-400/80 text-sm font-bold">{lang === 'zh' ? '请先登录或选择游客模式' : 'Please login or use guest mode first'}</p>
+          )}
 
           {!isLoggedIn && !showAuthForm && (
             <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
