@@ -87,8 +87,8 @@ export const PracticeScreen = ({
 
   const handleWrongAnswerContinue = () => {
     setWrongAnswerData(null);
-    setInputs({});
-    // No HP deduction, no penalty — just clear and stay
+    // Generate a NEW question with different numbers (don't repeat the same one — student already saw the answer)
+    regenerateQuestion();
   };
 
   const handlePhaseForward = () => {
@@ -288,6 +288,7 @@ export const PracticeScreen = ({
                 tutorialSteps={currentMission.tutorialSteps}
                 lang={lang}
                 onContinue={handleWrongAnswerContinue}
+                continueLabel={lang === 'zh' ? '明白了，下一题' : 'Got it, next question'}
               />
             )}
 

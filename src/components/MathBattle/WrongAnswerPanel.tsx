@@ -29,6 +29,8 @@ type Props = {
   tutorialSteps?: { text: { zh: string; en: string } }[];
   lang: Language;
   onContinue: () => void;
+  /** Override the continue button label */
+  continueLabel?: string;
 };
 
 export function WrongAnswerPanel({
@@ -39,6 +41,7 @@ export function WrongAnswerPanel({
   tutorialSteps,
   lang,
   onContinue,
+  continueLabel,
 }: Props) {
   const t = LABELS[lang];
   const fields = INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || [];
@@ -101,7 +104,7 @@ export function WrongAnswerPanel({
         onClick={onContinue}
         className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2"
       >
-        {t.continue}
+        {continueLabel || t.continue}
         <ChevronRight size={18} />
       </button>
     </motion.div>
