@@ -165,7 +165,67 @@ CH8 不作为独立章节，以**支线任务**形式嵌入相关章节：
 
 ---
 
-## 四、三层架构（产品骨架）
+## 四、系统架构：Play 是 ExamHub 的游戏前端
+
+### 4.0 关键发现：共享 Supabase 实例
+
+Play 和 ExamHub **共享同一个 Supabase 实例** (`jjjigohjvmyewasmmmyf`)。这意味着 Play 不是独立产品，而是 ExamHub 生态的游戏入口。
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  Supabase (jjjigohjvmyewasmmmyf) — 共享数据层                 │
+│                                                              │
+│  ExamHub 已有（不重建）          Play 专属（gl_ 前缀）         │
+│  ├── schools                    ├── gl_missions              │
+│  ├── teachers                   ├── gl_user_progress         │
+│  ├── kw_classes                 ├── gl_battle_results        │
+│  ├── kw_class_students          └── gl_rooms                 │
+│  ├── kw_assignments                                          │
+│  ├── assignment_results                                      │
+│  ├── leaderboard (含 class_id, school_id)                    │
+│  ├── notifications                                           │
+│  └── vocab_progress (FLM 4态)                                │
+└──────────────────────────────────────────────────────────────┘
+```
+
+**核心原则：Play 只做游戏体验层，不重建 ExamHub 已有的基础设施。**
+
+| 功能 | ExamHub 已有 | Play 正确做法 |
+|------|-------------|-------------|
+| 班级管理 | `kw_classes` + `kw_class_students` | 直接 SELECT，不新建表 |
+| 教师后台 | 完整教师系统（班级/作业/分析） | ExamHub 教师面板加"Play 闯关"Tab |
+| 排行榜 | `leaderboard` 表（含 class_id/school_id/rank_emoji） | 扩展现有表加 play 相关字段 |
+| 错误分析 | Error Memory 5 类 pattern | Play battle 数据桥接到 ExamHub FLM |
+| 作业布置 | `kw_assignments` + `assignment_results` | 教师布置 type='play' 的 assignment |
+| 通知 | `notifications` 表 | Play 事件写入同一张表 |
+
+### 4.1 数据流设计
+
+```
+学生在 Play 闯关
+  │
+  ├─→ gl_battle_results.insert({ kp_id, success, score, ... })
+  │
+  ├─→ gl_user_progress.update({ completed_missions, total_score })
+  │
+  └─→ [Phase 4 桥接] ExamHub.recordUnitAnswer('play', kpId, success)
+        │
+        ├─→ KP FLM 状态更新（new→learning→uncertain→mastered）
+        ├─→ getSectionHealth() 权重纳入 Play 数据
+        └─→ leaderboard 更新 play_score
+
+教师在 ExamHub 布置 Play 任务
+  │
+  ├─→ kw_assignments.insert({ type:'play', deck_slugs: mission_ids })
+  │
+  └─→ 学生在 Play 看到任务 → 完成 → assignment_results 更新
+
+Play 动态难度读取 ExamHub 数据
+  │
+  └─→ 查询该学生的 KP mastery state → 决定生成器数字范围
+```
+
+### 4.2 三层产品架构
 
 ```
 ┌──────────────────────────────────────────────────────┐
@@ -176,9 +236,9 @@ CH8 不作为独立章节，以**支线任务**形式嵌入相关章节：
 │  Layer 2: 课程映射层 (SCHOOL FILTER)                   │
 │  📍 哈罗海口 → Y7-Y11  📍 自学模式 → 全量 294 KP      │
 ├──────────────────────────────────────────────────────┤
-│  Layer 1: 294 KP 元结构 (IMMUTABLE SKELETON)           │
-│  9 章 → 72 Topics → 294 KPs                          │
-│  🎮 闯关  🎬 视频  📝 练习                             │
+│  Layer 1: ExamHub 共享数据层 (SHARED BACKBONE)         │
+│  auth + classes + FLM + leaderboard + notifications   │
+│  🎮 Play 闯关  🎬 视频  📝 ExamHub 练习               │
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -302,7 +362,10 @@ CH8 不作为独立章节，以**支线任务**形式嵌入相关章节：
 | 2.6 | **移动端响应式** | Battle 界面 < 768px 时单列布局，输入框全宽，按钮 min-h-12 touch-friendly | iPhone SE (375px) 到 iPad 全可用 | 中 |
 | 2.7 | **内部验证** | 找 3 个目标年级学生（Y7-Y10）试玩多题连闯模式 15 分钟，观察记录：在哪卡住/跳过/关闭/微笑 | 至少完成 3 份观察记录，据此调整 Phase 3 计划 | — |
 
-**Phase 2 建议实施顺序**：2.6(移动端) → 2.1(生成器) → 2.2(答错解题) → 2.3(多题连闯) → 2.4+2.5(连击+特效) → 2.7(验证)
+**Phase 2 实施顺序**（v3 审查修正：移动端放到 MathBattle 形态确定后）：
+`2.1(生成器叙事修复) → 2.2(答错解题) → 2.3(多题连闯 + gl_battle_results 加 session_id) → 2.4+2.5(连击+特效) → 2.6(移动端) → 2.7(验证)`
+
+> 全部为纯前端工作，不阻塞于任何后端变更。唯一的 DB migration（session_id）在 2.3 时顺带做。
 
 ### Phase 3: 内容扩展 + 游戏化机制
 
@@ -328,24 +391,29 @@ CH8 不作为独立章节，以**支线任务**形式嵌入相关章节：
 - CH9 统计：9.1(均值/中位数), 9.3(散点图)
 具体 40 个 KP ID 在实施前从 `/analysis/` 管线输出确认。
 
-### Phase 4: 社交与评估
+### Phase 4: ExamHub 集成（复用已有基础设施）
 
-> **前提**：需要 Supabase 后端 schema 重构（class_id, teacher-student binding, RLS）。
+> **关键决策**：Play 和 ExamHub 共享 Supabase `jjjigohjvmyewasmmmyf`。ExamHub 已有 schools/teachers/kw_classes/kw_class_students/leaderboard/notifications/Error Memory。Play 不重建这些，只做桥接。
+>
+> **被砍掉的工作**：独立班级表（已有 `kw_classes`）、独立排行榜（已有 `leaderboard`）、独立教师系统（已有）、独立错误分析（已有 Error Memory 5 类 pattern）。
+>
+> **省掉的工程量估计**：原 Phase 4 的 ~70%。
 
-| # | 任务 | 详情 |
-|---|------|------|
-| 4.1 | **段位系统** | ELO 式评分：难度×正确率×连击加权，不活跃衰退，可升可降 |
-| 4.2 | **班级数据模型** | Supabase: classes 表 + class_members + teacher RLS |
-| 4.3 | **班级排行榜** | Realtime 订阅，30s 刷新，超越通知，落后者只显示"你进步了 X 名" |
-| 4.4 | **教师控制台** | 选知识点→推送给全班，实时查看答对率，弱点分析 |
-| 4.5 | **学生测试** | 找 3-5 个目标年级学生试玩 15 分钟，记录卡点/跳过/关闭，据此调整 |
+| # | 任务 | 详情 | 工程量 |
+|---|------|------|--------|
+| 4.1 | **Play→ExamHub KP 桥接** | `gl_battle_results` 写入后触发 FLM 更新。注意：ExamHub 的 `recordUnitAnswer` 是前端 JS 函数，Play 无法直接调用。**实现方式**：Supabase DB trigger（PL/pgSQL on INSERT into gl_battle_results → 写入/更新 ExamHub 的 KP mastery 相关数据）。不用 Edge Function（避免冷启动延迟）。不用前端双写（Play 不知道 ExamHub localStorage 格式）。 | 中 |
+| 4.2 | **ExamHub→Play 难度读取** | Play 启动时查询该学生在 ExamHub 中的 KP mastery state（通过 kp_id 关联），用于动态难度的初始范围设定。mastered 的 KP 默认较大数字范围。 | 小 |
+| 4.3 | **ExamHub 教师面板加 Play Tab** | 在 ExamHub 教师面板新增"Play 闯关"标签页：① 布置 Play 关卡作为 kw_assignment (type='play') ② 查看学生 gl_battle_results 统计（完成率/正确率/平均时间）③ 班级 Play 排行。**此工作在 ExamHub 仓库中完成。** | 中 |
+| 4.4 | **leaderboard 扩展** | 现有 `leaderboard` 表已有 class_id/school_id。新增 `play_score` (INT)、`play_streak` (INT) 字段。Play 闯关完成后更新。排行榜 UI 在 Play 中读取显示。 | 小 |
+| 4.5 | **段位系统** | 基于 `leaderboard.play_score` 计算 ELO 式段位：难度×正确率×连击加权。不活跃 7 天衰退 5%。复用 ExamHub 的 `rank_emoji` 字段。 | 中 |
+| 4.6 | **学生验证测试** | 找 3-5 个目标年级学生试玩完整流程（含排行榜），15 分钟观察 | — |
 
 ### Phase 5: 内容深化 + 多主题
 
 | # | 任务 | 详情 |
 |---|------|------|
-| 5.1 | **章节导航 + DAG 解锁** | 9 章按史实编年地图，前置依赖解锁 |
-| 5.2 | **视频 + 练习三位一体** | manim 视频嵌入 + ExamHub 真题调取 |
+| 5.1 | **章节导航 + DAG 解锁** | 9 章按史实编年地图 + 完整剧情分支（答错→支线 KP），前置依赖解锁 |
+| 5.2 | **视频 + 练习三位一体** | manim 视频嵌入 + ExamHub 真题调取（通过 kp_id 关联 ExamHub question bank） |
 | 5.3 | **按需扩展剩余 KP** | 非高频 KP 按考前需求逐步解锁，不追求 294 全覆盖 |
 | 5.4 | **离线/弱网支持** | Service Worker + IndexedDB 离线队列，在线后同步 |
 | 5.5 | **西游记主题 v2** | Layer 3 可插拔皮肤验证 |
@@ -378,6 +446,38 @@ CH8 不作为独立章节，以**支线任务**形式嵌入相关章节：
 3. 剧情分支拆为简版(Phase 3)+完整版(Phase 5)
 4. Phase 2 末尾加入学生验证(2.7)
 5. 补充 40 高频 KP 候选范围
+
+### v3 架构审查（2026-03-17）— ExamHub 集成发现
+
+**关键发现**：Play 和 ExamHub 共享 Supabase 实例 `jjjigohjvmyewasmmmyf`。
+
+| ExamHub 已有 | Play 之前计划重建 | v3 决策 |
+|---|---|---|
+| `kw_classes` + `kw_class_students` | Phase 4.2 班级数据模型 | 砍掉，直接 SELECT |
+| `leaderboard` (含 class_id/school_id) | Phase 4.3 独立排行榜 | 砍掉，扩展现有表 |
+| 教师系统（班级/作业/分析） | Phase 4.4 独立教师控制台 | 砍掉，ExamHub 加 Tab |
+| Error Memory 5 类 pattern | 未计划（遗漏） | Phase 4.1 桥接 |
+| `kw_assignments` + `assignment_results` | 未计划 | 教师可布置 Play 关卡 |
+| `notifications` | 未计划 | Play 事件写入同表 |
+
+**影响**：Phase 4 工程量减少约 70%（从后端重构降为桥接+扩展）。
+**新风险**：Play 依赖 ExamHub 数据模型稳定性——ExamHub 表结构变更需要通知 Play。
+
+### v3 执行可行性审查（2026-03-17）— 评分 7.5/10
+
+| 维度 | v1→v2→v3 | 说明 |
+|------|----------|------|
+| 教育设计 | 4→7→7 | 稳定 |
+| 游戏机制 | 3→6→6 | 稳定 |
+| 优先级 | 5→8→8 | 稳定 |
+| 可行性 | 6→6.5→7.5 | ExamHub 复用省掉 70% 后端 |
+
+**v3 修补项**：
+1. 实施顺序修正：移动端放到 MathBattle 形态确定后（2.3→2.6）
+2. KP 桥接明确为 DB trigger（排除前端双写和 Edge Function）
+3. 多题连闯采用方案 A（每题一行 + session_id），利于 Phase 4 桥接
+
+**可执行判定：Phase 2 可以开始。** 7 个任务全为纯前端，不阻塞后端。
 
 **15 项关键发现摘要**：
 1. "用数学推动剧情"是空话——答对答错不影响故事走向
@@ -424,5 +524,5 @@ CH8 不作为独立章节，以**支线任务**形式嵌入相关章节：
 | 2026-03-17 | v0.4.0 | Phase C: 7 bug 修复 + i18n + 计划重构（严苛审查 4.5/10 → 修正路线） |
 | — | v1.0.0 | Phase 2: 教育核心（答错解题 + 多题连闯 + 连击 + 移动端）← **真正可给学生用的版本** |
 | — | v2.0.0 | Phase 3: 40 精品关卡 + 技能卡 + 动态难度 + 剧情分支 |
-| — | v3.0.0 | Phase 4: 段位(ELO) + 班级排行榜 + 教师控制台 |
+| — | v3.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |
 | — | v4.0.0 | Phase 5: 章节地图 + 视频三位一体 + 离线支持 |
