@@ -167,6 +167,9 @@ export default function App() {
           )}
         </AnimatePresence>
 
+        {/* Version indicator */}
+        <div className="fixed bottom-2 left-2 z-50 text-white/20 text-[10px] font-mono">v1.0.1-20260318</div>
+
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500 rounded-full blur-[120px]" />
