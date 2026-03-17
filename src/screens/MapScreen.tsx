@@ -3,6 +3,7 @@ import { MapIcon, Crown, ChevronRight, CheckCircle2, Lock, Users, Swords, BookOp
 import type { Language, UserProfile, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { MathView, LatexText } from '../components/MathView';
+import { CharacterAvatar } from '../components/CharacterAvatar';
 import { interpolate } from '../utils/interpolate';
 
 export const MapScreen = ({
@@ -35,8 +36,8 @@ export const MapScreen = ({
       {/* Profile Header */}
       <div className="flex flex-wrap items-center justify-between gap-6 bg-white/5 backdrop-blur-xl p-4 md:p-8 rounded-[2rem] border border-white/10">
         <div className="flex items-center gap-6">
-          <div className={`w-14 h-14 md:w-20 md:h-20 rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl ${selectedChar?.color}`}>
-            <img src={selectedChar?.image} alt={selectedChar?.name[lang]} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+          <div className="border-4 border-white/20 shadow-2xl rounded-full">
+            <CharacterAvatar characterId={selectedChar?.id || ''} size={72} />
           </div>
           <div>
             <h3 className="text-white font-black text-lg md:text-2xl flex items-center gap-2">

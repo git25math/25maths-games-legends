@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import type { Character, Language } from '../types';
 import { translations } from '../i18n/translations';
 import { MathView, LatexText } from './MathView';
+import { CharacterAvatar } from './CharacterAvatar';
 
 export const CharacterCard = ({ character, isSelected, onSelect, lang }: { character: Character; isSelected: boolean; onSelect: () => void; lang: Language; key?: string }) => (
   <motion.div
@@ -12,8 +13,8 @@ export const CharacterCard = ({ character, isSelected, onSelect, lang }: { chara
       isSelected ? 'border-yellow-400 shadow-xl scale-105 bg-white/10' : 'border-transparent bg-white/5'
     }`}
   >
-    <div className={`w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-4 border-white ${character.color}`}>
-      <img src={character.image} alt={character.name[lang]} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+    <div className="mx-auto mb-4 flex justify-center">
+      <CharacterAvatar characterId={character.id} size={96} />
     </div>
     <h3 className="text-lg font-bold text-white text-center">{character.name[lang]}</h3>
     <p className="text-yellow-300 text-xs text-center font-medium mb-3">{character.role[lang]}</p>
