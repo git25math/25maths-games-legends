@@ -1,39 +1,21 @@
-import { useState, useEffect, memo } from 'react';
+import { memo } from 'react';
 import { motion } from 'motion/react';
 import { LatexText } from './MathView';
 
+/**
+ * Dialogue bubble with LaTeX support.
+ * No typewriter effect — renders immediately with LatexText
+ * so $...$ formulas are always properly rendered by KaTeX.
+ */
 export const DialogueBubble = memo(function DialogueBubble({
   text,
   speaker,
-  onComplete,
+  onComplete: _onComplete,
 }: {
   text: string;
   speaker: string;
   onComplete?: () => void;
 }) {
-  const [displayedText, setDisplayedText] = useState('');
-  const [typingDone, setTypingDone] = useState(false);
-
-  useEffect(() => {
-    setDisplayedText('');
-    setTypingDone(false);
-    let index = 0;
-    const speed = text.length > 30 ? 25 : 40;
-
-    const timer = setInterval(() => {
-      index++;
-      if (index <= text.length) {
-        setDisplayedText(text.slice(0, index));
-      } else {
-        clearInterval(timer);
-        setTypingDone(true);
-        onComplete?.();
-      }
-    }, speed);
-
-    return () => clearInterval(timer);
-  }, [text]);
-
   return (
     <motion.div
       initial={{ scale: 0.8, opacity: 0 }}
@@ -65,16 +47,9 @@ export const DialogueBubble = memo(function DialogueBubble({
         {speaker}
       </div>
 
-      {/* Typed text — plain during typing, LaTeX-rendered when done */}
+      {/* Text with LaTeX rendering */}
       <div className="text-sm leading-relaxed" style={{ color: '#3d2b1f' }}>
-        {typingDone ? (
-          <LatexText text={text} />
-        ) : (
-          <>
-            {displayedText}
-            <span className="inline-block w-0.5 h-3.5 ml-0.5 bg-[#3d2b1f] animate-pulse align-text-bottom" />
-          </>
-        )}
+        <LatexText text={text} />
       </div>
     </motion.div>
   );

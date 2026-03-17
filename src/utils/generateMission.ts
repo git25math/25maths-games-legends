@@ -73,7 +73,7 @@ export function generateSimpleEqMission(template: Mission): Mission {
     // title: preserved (never replaced)
     // story: preserved (template with {a}, {result} — interpolated at render)
     // description: preserved (template — interpolated at render)
-    data: { ...template.data, x, a, result, generatorType: 'SIMPLE_EQ_RANDOM', tutorialEquationSteps },
+    data: { ...template.data, x, a, result, left: `${a}x`, right: `${result}`, generatorType: 'SIMPLE_EQ_RANDOM', tutorialEquationSteps },
     tutorialSteps,
   };
 }
@@ -102,7 +102,7 @@ export function generateAddEqMission(template: Mission): Mission {
 
   return {
     ...template,
-    data: { ...template.data, x, a, result, generatorType: 'SIMPLE_EQ_ADD_RANDOM', tutorialEquationSteps },
+    data: { ...template.data, x, a, result, left: `x+${a}`, right: `${result}`, generatorType: 'SIMPLE_EQ_ADD_RANDOM', tutorialEquationSteps },
     tutorialSteps,
   };
 }

@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { DialogueBubble } from '../DialogueBubble';
+import { LatexText } from '../MathView';
 import { EquationSteps } from '../diagrams/EquationSteps';
 
 type TutorialStep = {
@@ -81,7 +82,7 @@ export function AnimatedTutorial({
           {/* Hint box */}
           {hint && (
             <div className="mt-2 px-3 py-1.5 rounded-lg bg-amber-100/80 border border-amber-300 text-xs text-amber-800 leading-relaxed">
-              {hint}
+              <LatexText text={hint} />
             </div>
           )}
         </div>
