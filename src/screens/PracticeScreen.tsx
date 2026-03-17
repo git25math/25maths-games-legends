@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { XCircle, BookOpen, ChevronRight, ChevronLeft, Swords, MapIcon, CheckCircle2 } from 'lucide-react';
 import type { Mission, Character, Language, DifficultyMode } from '../types';
 import { translations } from '../i18n/translations';
-import { generateMission } from '../utils/generateMission';
+import { generateMission, type DifficultyTier } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
 import { interpolate } from '../utils/interpolate';
 import { LatexText, MathView } from '../components/MathView';
@@ -46,6 +46,10 @@ export const PracticeScreen = ({
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
   const [showBadge, setShowBadge] = useState(false);
+  // Adaptive difficulty: tracks consecutive correct/wrong to adjust number ranges
+  const [adaptiveTier, setAdaptiveTier] = useState<DifficultyTier>(1);
+  const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
+  const [consecutiveWrong, setConsecutiveWrong] = useState(0);
 
   const { playSuccess, playFail, playClick } = useAudio();
 
@@ -57,11 +61,11 @@ export const PracticeScreen = ({
   const descText = interpolate(currentMission.description[lang], p);
 
   const regenerateQuestion = useCallback(() => {
-    setCurrentMission(generateMission(mission));
+    setCurrentMission(generateMission(mission, adaptiveTier));
     setInputs({});
     setWrongAnswerData(null);
     setTutorialStep(0);
-  }, [mission]);
+  }, [mission, adaptiveTier]);
 
   const handleSubmit = () => {
     playClick();
@@ -69,6 +73,14 @@ export const PracticeScreen = ({
     if (result.correct) {
       playSuccess();
       setShowCorrectFlash(true);
+      // Adaptive: track consecutive correct, level up after 3
+      const newCorrect = consecutiveCorrect + 1;
+      setConsecutiveCorrect(newCorrect);
+      setConsecutiveWrong(0);
+      if (newCorrect >= 3 && adaptiveTier < 3 && currentPhase !== 'green') {
+        setAdaptiveTier(prev => Math.min(3, prev + 1) as DifficultyTier);
+        setConsecutiveCorrect(0);
+      }
       setTimeout(() => {
         setShowCorrectFlash(false);
         regenerateQuestion();
@@ -77,13 +89,20 @@ export const PracticeScreen = ({
       playFail();
       setShakeKey(k => k + 1);
       setTimeout(() => setShakeKey(0), 500);
+      // Adaptive: track consecutive wrong, level down after 2
+      const newWrong = consecutiveWrong + 1;
+      setConsecutiveWrong(newWrong);
+      setConsecutiveCorrect(0);
+      if (newWrong >= 2 && adaptiveTier > 1 && currentPhase !== 'green') {
+        setAdaptiveTier(prev => Math.max(1, prev - 1) as DifficultyTier);
+        setConsecutiveWrong(0);
+      }
       setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
     }
   };
 
   const handleWrongAnswerContinue = () => {
     setWrongAnswerData(null);
-    // Generate a NEW question with different numbers (don't repeat the same one — student already saw the answer)
     regenerateQuestion();
   };
 
@@ -194,6 +213,14 @@ export const PracticeScreen = ({
                     </div>
                   );
                 })}
+              {/* Adaptive difficulty tier indicator (Amber/Red only) */}
+              {currentPhase !== 'green' && (
+                <div className="flex items-center gap-1 ml-2">
+                  {[1, 2, 3].map(star => (
+                    <span key={star} className={`text-[10px] ${star <= adaptiveTier ? 'text-yellow-400' : 'text-white/20'}`}>★</span>
+                  ))}
+                </div>
+              )}
               </div>
             </div>
           </div>

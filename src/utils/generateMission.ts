@@ -25,6 +25,12 @@ export type GeneratorType =
   | 'PYTHAGORAS_RANDOM'
   | 'PERCENTAGE_RANDOM';
 
+/** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
+export type DifficultyTier = 1 | 2 | 3;
+
+// Module-level tier for generators to read (set before each generation call)
+let _currentTier: DifficultyTier = 2;
+
 const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   SIMPLE_EQ_RANDOM: generateSimpleEqMission,
   SIMPLE_EQ_ADD_RANDOM: generateAddEqMission,
@@ -39,12 +45,16 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   PERCENTAGE_RANDOM: generatePercentageMission,
 };
 
-/** Dispatch to the right generator based on mission.data.generatorType */
-export function generateMission(template: Mission): Mission {
+/** Dispatch to the right generator. Optional tier controls number difficulty. */
+export function generateMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const genType = template.data?.generatorType as GeneratorType | undefined;
   if (!genType || !GENERATOR_MAP[genType]) return template;
+  _currentTier = tier;
   return GENERATOR_MAP[genType](template);
 }
+
+/** Get current tier — called by generators */
+function getTier(): DifficultyTier { return _currentTier; }
 
 /**
  * SIMPLE_EQ (multiplication): ax = result
@@ -52,8 +62,11 @@ export function generateMission(template: Mission): Mission {
  * Story/title/description are templates with {a}, {result} — interpolated at render time.
  */
 export function generateSimpleEqMission(template: Mission): Mission {
-  const a = pickRandom([2, 3, 4, 5, 6, 7, 8, 9]);
-  const x = pickRandom([2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]);
+  const tier = getTier();
+  const aPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8, 9], 3: [3, 5, 7, 8, 9, 11, 12, 15] };
+  const xPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15], 3: [5, 8, 10, 12, 15, 18, 20, 25] };
+  const a = pickRandom(aPools[tier]);
+  const x = pickRandom(xPools[tier]);
   const result = a * x;
 
   const tutorialSteps = [
@@ -84,8 +97,11 @@ export function generateSimpleEqMission(template: Mission): Mission {
  * Story/title/description are templates with {a}, {result} — interpolated at render time.
  */
 export function generateAddEqMission(template: Mission): Mission {
-  const a = pickRandom([3, 4, 5, 6, 7, 8, 9, 11, 13, 15]);
-  const x = pickRandom([2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20]);
+  const tier = getTier();
+  const aPools = { 1: [3, 4, 5, 6], 2: [3, 4, 5, 6, 7, 8, 9, 11, 13, 15], 3: [7, 9, 11, 13, 15, 18, 21, 25] };
+  const xPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20], 3: [8, 10, 12, 15, 18, 20, 25, 30] };
+  const a = pickRandom(aPools[tier]);
+  const x = pickRandom(xPools[tier]);
   const result = x + a;
 
   const tutorialSteps = [
