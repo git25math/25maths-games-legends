@@ -1,14 +1,5 @@
 import type { Mission } from '../types';
 
-type BilingualText = { zh: string; en: string };
-
-type StoryTemplate = (a: number, x: number, result: number) => {
-  story: BilingualText;
-  title: BilingualText;
-  tip: BilingualText;
-  narrator: string;
-};
-
 /* ── Shared helpers ── */
 
 function pickRandom<T>(arr: T[]): T {
@@ -55,129 +46,20 @@ export function generateMission(template: Mission): Mission {
   return GENERATOR_MAP[genType](template);
 }
 
-const storyTemplates: StoryTemplate[] = [
-  // 1. 关羽买刀
-  (a, _x, result) => ({
-    story: {
-      zh: `关羽欲购${a}把青龙偃月刀，共需${result}两黄金。每把刀价值几何？`,
-      en: `Guan Yu wants to buy ${a} Green Dragon Crescent Blades for a total of ${result} gold. How much does each blade cost?`,
-    },
-    title: { zh: '关羽买刀', en: 'Guan Yu Buys Blades' },
-    tip: {
-      zh: `总价${result}金÷${a}把＝每把单价`,
-      en: `Total ${result} gold ÷ ${a} blades = price per blade`,
-    },
-    narrator: '关羽',
-  }),
-  // 2. 张飞分酒
-  (a, _x, result) => ({
-    story: {
-      zh: `张飞将${result}升美酒均分入${a}坛，每坛几升？`,
-      en: `Zhang Fei divides ${result} liters of wine equally into ${a} jars. How many liters per jar?`,
-    },
-    title: { zh: '张飞分酒', en: 'Zhang Fei Shares Wine' },
-    tip: {
-      zh: `${result}升÷${a}坛＝每坛升数`,
-      en: `${result} liters ÷ ${a} jars = liters per jar`,
-    },
-    narrator: '张飞',
-  }),
-  // 3. 赵云备马
-  (a, _x, result) => ({
-    story: {
-      zh: `赵云为骑兵备${a}匹战马，共花${result}两白银。每匹马多少银两？`,
-      en: `Zhao Yun prepares ${a} warhorses for the cavalry, costing ${result} silver in total. How much silver per horse?`,
-    },
-    title: { zh: '赵云备马', en: 'Zhao Yun Prepares Horses' },
-    tip: {
-      zh: `${result}两白银÷${a}匹＝每匹价格`,
-      en: `${result} silver ÷ ${a} horses = price per horse`,
-    },
-    narrator: '赵云',
-  }),
-  // 4. 诸葛亮配药
-  (a, _x, result) => ({
-    story: {
-      zh: `诸葛亮配制${a}剂良药，共需${result}味草药。每剂需几味？`,
-      en: `Zhuge Liang prepares ${a} doses of medicine using ${result} herbs in total. How many herbs per dose?`,
-    },
-    title: { zh: '诸葛亮配药', en: 'Zhuge Liang Mixes Medicine' },
-    tip: {
-      zh: `${result}味草药÷${a}剂＝每剂用量`,
-      en: `${result} herbs ÷ ${a} doses = herbs per dose`,
-    },
-    narrator: '诸葛亮',
-  }),
-  // 5. 曹操练兵
-  (a, _x, result) => ({
-    story: {
-      zh: `曹操将${result}名士兵编为${a}队，每队几人？`,
-      en: `Cao Cao organizes ${result} soldiers into ${a} squads. How many soldiers per squad?`,
-    },
-    title: { zh: '曹操练兵', en: 'Cao Cao Drills Soldiers' },
-    tip: {
-      zh: `${result}人÷${a}队＝每队人数`,
-      en: `${result} soldiers ÷ ${a} squads = soldiers per squad`,
-    },
-    narrator: '曹操',
-  }),
-  // 6. 孙权造船
-  (a, _x, result) => ({
-    story: {
-      zh: `孙权建造${a}艘战船，共需${result}块船板。每艘需几块？`,
-      en: `Sun Quan builds ${a} warships requiring ${result} planks in total. How many planks per ship?`,
-    },
-    title: { zh: '孙权造船', en: 'Sun Quan Builds Ships' },
-    tip: {
-      zh: `${result}块÷${a}艘＝每艘用量`,
-      en: `${result} planks ÷ ${a} ships = planks per ship`,
-    },
-    narrator: '孙权',
-  }),
-];
-
+/**
+ * SIMPLE_EQ (multiplication): ax = result
+ * Generator only updates data fields + tutorialSteps.
+ * Story/title/description are templates with {a}, {result} — interpolated at render time.
+ */
 export function generateSimpleEqMission(template: Mission): Mission {
-  const aPool = [2, 3, 4, 5, 6, 7, 8, 9];
-  const xPool = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15];
-
-  const a = pickRandom(aPool);
-  const x = pickRandom(xPool);
+  const a = pickRandom([2, 3, 4, 5, 6, 7, 8, 9]);
+  const x = pickRandom([2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]);
   const result = a * x;
 
-  const storyTemplate = pickRandom(storyTemplates);
-  const { story, title, tip, narrator } = storyTemplate(a, x, result);
-
-  const description: BilingualText = {
-    zh: `解方程 $${a}x=${result}$，求 $x$。`,
-    en: `Solve $${a}x=${result}$ for $x$.`,
-  };
-
   const tutorialSteps = [
-    {
-      text: {
-        zh: `${narrator}：「${a}x = ${result}，如何求出 x？」`,
-        en: `${narrator}: "${a}x = ${result}, how do we find x?"`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `${narrator}：「等式两边同时除以 ${a}」`,
-        en: `${narrator}: "Divide both sides by ${a}"`,
-      },
-      hint: {
-        zh: `${a}x ÷ ${a} = ${result} ÷ ${a}`,
-        en: `${a}x ÷ ${a} = ${result} ÷ ${a}`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `${narrator}：「所以 x = ${x}！」`,
-        en: `${narrator}: "So x = ${x}!"`,
-      },
-      highlightField: 'x',
-    },
+    { text: { zh: `军师：「${a}x = ${result}，如何求出 x？」`, en: `Strategist: "${a}x = ${result}, how do we find x?"` }, highlightField: 'x' },
+    { text: { zh: `军师：「等式两边同时除以 ${a}」`, en: `Strategist: "Divide both sides by ${a}"` }, hint: { zh: `${a}x ÷ ${a} = ${result} ÷ ${a}`, en: `${a}x ÷ ${a} = ${result} ÷ ${a}` }, highlightField: 'x' },
+    { text: { zh: `军师：「所以 x = ${x}！」`, en: `Strategist: "So x = ${x}!"` }, highlightField: 'x' },
   ];
 
   const tutorialEquationSteps = [
@@ -186,154 +68,30 @@ export function generateSimpleEqMission(template: Mission): Mission {
     { tex: `x = ${x}`, annotation: { zh: '求解', en: 'Solution' } },
   ];
 
-  const data = {
-    ...template.data,
-    x,
-    left: `${a}x`,
-    right: `${result}`,
-    generatorType: 'SIMPLE_EQ_RANDOM',
-    tutorialEquationSteps,
-  };
-
   return {
     ...template,
-    title,
-    story,
-    description,
-    data,
+    // title: preserved (never replaced)
+    // story: preserved (template with {a}, {result} — interpolated at render)
+    // description: preserved (template — interpolated at render)
+    data: { ...template.data, x, a, result, generatorType: 'SIMPLE_EQ_RANDOM', tutorialEquationSteps },
     tutorialSteps,
-    secret: {
-      ...template.secret,
-      tips: [tip, ...template.secret.tips],
-    },
   };
 }
 
-/* ── Addition / Subtraction equation: x + a = b ── */
-
-const addStoryTemplates: StoryTemplate[] = [
-  // 1. 刘备分酒
-  (a, x, result) => ({
-    story: {
-      zh: `刘备宴请群臣，已备 ${x} 壶美酒，又添 ${a} 壶，共 ${result} 壶。原有几壶？`,
-      en: `Liu Bei hosts a banquet with ${x} jugs of wine plus ${a} more, totaling ${result}. How many jugs were there originally?`,
-    },
-    title: { zh: '刘备分酒', en: 'Liu Bei Shares Wine' },
-    tip: {
-      zh: `总共${result}壶 − 新添${a}壶 ＝ 原有壶数`,
-      en: `Total ${result} jugs − ${a} added = original jugs`,
-    },
-    narrator: '刘备',
-  }),
-  // 2. 关羽行军
-  (a, x, result) => ({
-    story: {
-      zh: `关羽已行军 ${x} 里，再行 ${a} 里即达目的地，全程 ${result} 里。已行几里？`,
-      en: `Guan Yu has marched ${x} miles and has ${a} more to go, totaling ${result} miles. How far has he marched?`,
-    },
-    title: { zh: '关羽行军', en: 'Guan Yu Marches' },
-    tip: {
-      zh: `全程${result}里 − 剩余${a}里 ＝ 已行里数`,
-      en: `Total ${result} miles − ${a} remaining = miles marched`,
-    },
-    narrator: '关羽',
-  }),
-  // 3. 张飞打铁
-  (a, x, result) => ({
-    story: {
-      zh: `张飞已锻 ${x} 把宝刀，还需再锻 ${a} 把，共需 ${result} 把。已锻几把？`,
-      en: `Zhang Fei has forged ${x} swords and needs ${a} more, for a total of ${result}. How many has he forged?`,
-    },
-    title: { zh: '张飞打铁', en: 'Zhang Fei Forges Swords' },
-    tip: {
-      zh: `共需${result}把 − 待锻${a}把 ＝ 已锻数量`,
-      en: `Total ${result} swords − ${a} remaining = swords forged`,
-    },
-    narrator: '张飞',
-  }),
-  // 4. 诸葛亮算粮
-  (a, x, result) => ({
-    story: {
-      zh: `诸葛亮清点粮草，${x} 车军粮加上 ${a} 车储备粮，共 ${result} 车。军粮几车？`,
-      en: `Zhuge Liang counts ${x} carts of grain plus ${a} reserve carts, totaling ${result}. How many carts of grain?`,
-    },
-    title: { zh: '诸葛亮算粮', en: 'Zhuge Liang Counts Grain' },
-    tip: {
-      zh: `共${result}车 − 储备${a}车 ＝ 军粮车数`,
-      en: `Total ${result} carts − ${a} reserve = grain carts`,
-    },
-    narrator: '诸葛亮',
-  }),
-  // 5. 赵云点兵
-  (a, x, result) => ({
-    story: {
-      zh: `赵云点兵，${x} 骑兵加 ${a} 步兵，共 ${result} 人。骑兵几人？`,
-      en: `Zhao Yun musters ${x} cavalry and ${a} infantry, totaling ${result} soldiers. How many cavalry?`,
-    },
-    title: { zh: '赵云点兵', en: 'Zhao Yun Musters Troops' },
-    tip: {
-      zh: `共${result}人 − 步兵${a}人 ＝ 骑兵人数`,
-      en: `Total ${result} − ${a} infantry = cavalry count`,
-    },
-    narrator: '赵云',
-  }),
-  // 6. 曹操征税
-  (a, x, result) => ({
-    story: {
-      zh: `曹操收得赋税 ${x} 两黄金，加上进贡 ${a} 两，共 ${result} 两。赋税几何？`,
-      en: `Cao Cao collects ${x} gold in tax plus ${a} in tribute, totaling ${result}. How much was the tax?`,
-    },
-    title: { zh: '曹操征税', en: 'Cao Cao Collects Tax' },
-    tip: {
-      zh: `共${result}两 − 进贡${a}两 ＝ 赋税金额`,
-      en: `Total ${result} gold − ${a} tribute = tax amount`,
-    },
-    narrator: '曹操',
-  }),
-];
-
+/**
+ * SIMPLE_EQ (addition): x + a = result
+ * Generator only updates data fields + tutorialSteps.
+ * Story/title/description are templates with {a}, {result} — interpolated at render time.
+ */
 export function generateAddEqMission(template: Mission): Mission {
-  const aPool = [3, 4, 5, 6, 7, 8, 9, 11, 13, 15];
-  const xPool = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20];
-
-  const a = pickRandom(aPool);
-  const x = pickRandom(xPool);
+  const a = pickRandom([3, 4, 5, 6, 7, 8, 9, 11, 13, 15]);
+  const x = pickRandom([2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20]);
   const result = x + a;
 
-  const storyTemplate = pickRandom(addStoryTemplates);
-  const { story, title, tip, narrator } = storyTemplate(a, x, result);
-
-  const description: BilingualText = {
-    zh: `解方程 $x+${a}=${result}$，求 $x$。`,
-    en: `Solve $x+${a}=${result}$ for $x$.`,
-  };
-
   const tutorialSteps = [
-    {
-      text: {
-        zh: `${narrator}：「x + ${a} = ${result}，如何求出 x？」`,
-        en: `${narrator}: "x + ${a} = ${result}, how do we find x?"`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `${narrator}：「等式两边同时减去 ${a}」`,
-        en: `${narrator}: "Subtract ${a} from both sides"`,
-      },
-      hint: {
-        zh: `x + ${a} − ${a} = ${result} − ${a}`,
-        en: `x + ${a} − ${a} = ${result} − ${a}`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `${narrator}：「所以 x = ${x}！」`,
-        en: `${narrator}: "So x = ${x}!"`,
-      },
-      highlightField: 'x',
-    },
+    { text: { zh: `军师：「x + ${a} = ${result}，如何求出 x？」`, en: `Strategist: "x + ${a} = ${result}, how do we find x?"` }, highlightField: 'x' },
+    { text: { zh: `军师：「等式两边同时减去 ${a}」`, en: `Strategist: "Subtract ${a} from both sides"` }, hint: { zh: `x + ${a} − ${a} = ${result} − ${a}`, en: `x + ${a} − ${a} = ${result} − ${a}` }, highlightField: 'x' },
+    { text: { zh: `军师：「所以 x = ${x}！」`, en: `Strategist: "So x = ${x}!"` }, highlightField: 'x' },
   ];
 
   const tutorialEquationSteps = [
@@ -342,26 +100,10 @@ export function generateAddEqMission(template: Mission): Mission {
     { tex: `x = ${x}`, annotation: { zh: '求解', en: 'Solution' } },
   ];
 
-  const data = {
-    ...template.data,
-    x,
-    left: `x+${a}`,
-    right: `${result}`,
-    generatorType: 'SIMPLE_EQ_ADD_RANDOM',
-    tutorialEquationSteps,
-  };
-
   return {
     ...template,
-    title,
-    story,
-    description,
-    data,
+    data: { ...template.data, x, a, result, generatorType: 'SIMPLE_EQ_ADD_RANDOM', tutorialEquationSteps },
     tutorialSteps,
-    secret: {
-      ...template.secret,
-      tips: [tip, ...template.secret.tips],
-    },
   };
 }
 

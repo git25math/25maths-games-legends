@@ -4,6 +4,7 @@ import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, Volume2, Volume
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
 import { checkCorrectness } from '../../utils/checkCorrectness';
+import { interpolate } from '../../utils/interpolate';
 import { LatexText, MathView } from '../MathView';
 import { InputFields } from './InputFields';
 import { VisualData } from './VisualData';
@@ -55,6 +56,10 @@ export const MathBattle = ({
 
   const t = translations[lang];
   const isTutorial = mode === 'tutorial' && !!mission.tutorialSteps;
+  // Interpolate {param} placeholders in story/description with mission.data values
+  const p = mission.data ?? {};
+  const storyText = interpolate(mission.story[lang], p);
+  const descText = interpolate(mission.description[lang], p);
 
   // Start/stop BGM on mount/unmount + cleanup achievement timer
   useEffect(() => {
@@ -172,11 +177,11 @@ export const MathBattle = ({
             </div>
 
             <div className="bg-white/40 p-3 rounded-lg mb-4 italic text-xs text-[#5c4033] border-l-4 border-[#8b0000]">
-              <LatexText text={mission.story[lang]} />
+              <LatexText text={storyText} />
             </div>
 
             <div className="text-[#5c4033] text-sm font-bold mb-6 leading-relaxed">
-              <LatexText text={mission.description[lang]} />
+              <LatexText text={descText} />
             </div>
             <VisualData mission={mission} lang={lang} />
 

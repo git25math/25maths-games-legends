@@ -7,9 +7,9 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 结义与代数入门", en: "Unit 1: Oath & Intro to Algebra" },
     topic: 'Algebra', type: 'SIMPLE_EQ',
     title: { zh: '桃园结义', en: 'Oath in the Garden' },
-    story: { zh: '刘关张三人结义，需平分美酒。已知总酒量为 $x+5=12$。', en: 'Three brothers share wine. Total amount: $x+5=12$.' },
-    description: { zh: '解方程 $x+5=12$，求 $x$。', en: 'Solve $x+5=12$ for $x$.' },
-    data: { x: 7, left: 'x+5', right: '12', generatorType: 'SIMPLE_EQ_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
+    story: { zh: '刘关张三人结义，需平分美酒。已知总酒量为 $x+{a}={result}$。', en: 'Three brothers share wine. Total amount: $x+{a}={result}$.' },
+    description: { zh: '解方程 $x+{a}={result}$，求 $x$。', en: 'Solve $x+{a}={result}$ for $x$.' },
+    data: { x: 7, a: 5, result: 12, generatorType: 'SIMPLE_EQ_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-2.1-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -33,9 +33,9 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 结义与代数入门", en: "Unit 1: Oath & Intro to Algebra" },
     topic: 'Algebra', type: 'SIMPLE_EQ',
     title: { zh: '招兵买马', en: 'Recruiting Soldiers' },
-    story: { zh: '为了起义，需要购买兵器。已知 3 把长剑的价格是 15 金，即 $3x=15$。', en: 'To start the rebellion, weapons are needed. 3 swords cost 15 gold: $3x=15$.' },
-    description: { zh: '解方程 $3x=15$，求单价 $x$。', en: 'Solve $3x=15$ for the unit price $x$.' },
-    data: { x: 5, left: '3x', right: '15', generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 60,
+    story: { zh: '为了起义，需要购买兵器。已知 {a} 把长剑的价格是 {result} 金，即 ${a}x={result}$。', en: 'To start the rebellion, weapons are needed. {a} swords cost {result} gold: ${a}x={result}$.' },
+    description: { zh: '解方程 ${a}x={result}$，求单价 $x$。', en: 'Solve ${a}x={result}$ for the unit price $x$.' },
+    data: { x: 5, a: 3, result: 15, generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 60,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -59,9 +59,9 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 2: 粮草调度与比例", en: "Unit 2: Logistics & Ratios" },
     topic: 'Algebra', type: 'SIMPLE_EQ',
     title: { zh: '分配军粮', en: 'Distributing Grain' },
-    story: { zh: '军粮分配需按比例。已知 $2x = 24$，求每份军粮 $x$。', en: 'Grain must be distributed proportionally. $2x = 24$, find $x$.' },
-    description: { zh: '解方程 $2x=24$。', en: 'Solve $2x=24$.' },
-    data: { x: 12, left: '2x', right: '24', generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 70,
+    story: { zh: '军粮分配需按比例。已知 ${a}x = {result}$，求每份军粮 $x$。', en: 'Grain must be distributed proportionally. ${a}x = {result}$, find $x$.' },
+    description: { zh: '解方程 ${a}x={result}$。', en: 'Solve ${a}x={result}$.' },
+    data: { x: 12, a: 2, result: 24, generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 70,
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
@@ -85,9 +85,9 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 2: 粮草调度与比例", en: "Unit 2: Logistics & Ratios" },
     topic: 'Algebra', type: 'SIMPLE_EQ',
     title: { zh: '征调民夫', en: 'Drafting Laborers' },
-    story: { zh: '修筑工事需要民夫。已知 5 个村庄共征调了 $5x = 100$ 人。', en: 'Laborers are needed for fortifications. 5 villages drafted $5x = 100$ people.' },
-    description: { zh: '解方程 $5x=100$，求每个村庄的人数 $x$。', en: 'Solve $5x=100$ for $x$ per village.' },
-    data: { x: 20, left: '5x', right: '100', generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 75,
+    story: { zh: '修筑工事需要民夫。已知 {a} 个村庄共征调了 ${a}x = {result}$ 人。', en: 'Laborers are needed for fortifications. {a} villages drafted ${a}x = {result}$ people.' },
+    description: { zh: '解方程 ${a}x={result}$，求每个村庄的人数 $x$。', en: 'Solve ${a}x={result}$ for $x$ per village.' },
+    data: { x: 20, a: 5, result: 100, generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 75,
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
