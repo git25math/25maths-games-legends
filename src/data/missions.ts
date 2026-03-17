@@ -124,6 +124,10 @@ export const MISSIONS: Mission[] = [
     story: { zh: '虎牢关地势险要。已知城墙一侧角度为 ${angle}^\\circ$，求其补角 $x$ 以布置弩床。', en: 'Hulao Pass is steep. One side angle is ${angle}^\\circ$, find its supplementary angle $x$ for ballista placement.' },
     description: { zh: '计算补角：$180 - {angle} = x$。', en: 'Calculate supplementary angle: $180 - {angle} = x$.' },
     data: { angle: 120, total: 180, generatorType: 'ANGLES_RANDOM' }, difficulty: 'Easy', reward: 80,
+    storyConsequence: {
+      correct: { zh: '弩床角度精确，万箭齐发，敌军溃败！虎牢关固若金汤！', en: 'Perfect angle! Arrows rain down, the enemy retreats! Hulao Pass holds firm!' },
+      wrong: { zh: '角度偏差，箭阵出现盲区...敌军趁虚而入，需要重新布防！', en: 'Angle miscalculated, a gap in the arrow coverage... the enemy breaks through! Reposition needed!' },
+    },
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -564,6 +568,10 @@ export const MISSIONS: Mission[] = [
     story: { zh: "攻打袁绍营寨。城墙高 {b} 丈，护城河宽 {a} 丈。", en: "Attacking Yuan Shao's camp. Walls {b} units high, moat {a} units wide." },
     description: { zh: '求云梯长度 $c$。', en: 'Find ladder length $c$.' },
     data: { a: 6, b: 8, generatorType: 'PYTHAGORAS_RANDOM' }, difficulty: 'Medium', reward: 200,
+    storyConsequence: {
+      correct: { zh: '云梯精准搭上城头！将士们鱼贯而入，攻城成功！', en: 'The ladder reaches the top perfectly! Soldiers storm the walls, siege successful!' },
+      wrong: { zh: '云梯太短了！差了几丈，将士们只能撤退，改走地道突袭...', en: 'The ladder is too short! Soldiers must retreat and try the tunnel approach...' },
+    },
     kpId: 'kp-6.1-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -908,6 +916,10 @@ export const MISSIONS: Mission[] = [
     story: { zh: '诸葛亮设坛借东风。已知 {total} 张卦牌中，有 {target} 张是"东风"。', en: 'Zhuge Liang prays for the wind. Out of {total} cards, {target} are "East Wind".' },
     description: { zh: '随机抽一张，抽中"东风"的概率是多少？', en: 'Draw one card, what is the probability of "East Wind"?' },
     data: { total: 52, target: 4, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Easy', reward: 300,
+    storyConsequence: {
+      correct: { zh: '东风如期而至！火攻大计成功，曹军战船陷入火海！', en: 'The East Wind arrives! The fire attack succeeds, Cao Cao\'s fleet burns!' },
+      wrong: { zh: '东风未至...庞统建议先用连环计拖延时间，等待下一次机会。', en: 'The wind fails to come... Pang Tong suggests the chain strategy to buy time.' },
+    },
     kpId: 'kp-8.1-01', sectionId: 'statistics',
     tutorialSteps: [
       {

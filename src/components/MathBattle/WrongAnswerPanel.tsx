@@ -29,8 +29,9 @@ type Props = {
   tutorialSteps?: { text: { zh: string; en: string } }[];
   lang: Language;
   onContinue: () => void;
-  /** Override the continue button label */
   continueLabel?: string;
+  /** Story consequence text for wrong answer */
+  storyText?: string;
 };
 
 export function WrongAnswerPanel({
@@ -42,6 +43,7 @@ export function WrongAnswerPanel({
   lang,
   onContinue,
   continueLabel,
+  storyText,
 }: Props) {
   const t = LABELS[lang];
   const fields = (INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || { zh: [], en: [] })[lang] || [];
@@ -81,6 +83,13 @@ export function WrongAnswerPanel({
           );
         })}
       </div>
+
+      {/* Story consequence */}
+      {storyText && (
+        <div className="bg-amber-50 rounded-lg p-3 border border-amber-200 text-amber-800 text-sm italic leading-relaxed">
+          {storyText}
+        </div>
+      )}
 
       {/* Formula reminder */}
       {formula && (

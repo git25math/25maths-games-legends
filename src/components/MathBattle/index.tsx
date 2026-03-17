@@ -462,6 +462,7 @@ export const MathBattle = ({
                 tutorialSteps={currentQuestion.tutorialSteps}
                 lang={lang}
                 onContinue={handleWrongAnswerContinue}
+                storyText={mission.storyConsequence?.wrong[lang]}
               />
             )}
 
@@ -527,13 +528,20 @@ export const MathBattle = ({
                   <Trophy size={80} className="text-yellow-500 mb-4 mx-auto" />
                   <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-2">{t.successTitle}</h3>
                   <p className="text-slate-600 font-bold">{t.successDesc}</p>
+                  {mission.storyConsequence && (
+                    <p className="text-emerald-600 font-bold mt-3 italic text-sm">{mission.storyConsequence.correct[lang]}</p>
+                  )}
                 </motion.div>
               ) : (
                 <motion.div initial={{ y: 50 }} animate={{ y: 0 }}>
                   <XCircle size={80} className="text-red-500 mb-6 mx-auto" />
                   <h3 className="text-3xl md:text-5xl font-black text-white mb-4">{t.failTitle}</h3>
                   <p className="text-slate-400 mb-2">{t.failDesc}</p>
-                  <p className="text-indigo-400 font-bold mb-8 italic">"{encouragement}"</p>
+                  {mission.storyConsequence ? (
+                    <p className="text-amber-400 font-bold mb-8 italic">{mission.storyConsequence.wrong[lang]}</p>
+                  ) : (
+                    <p className="text-indigo-400 font-bold mb-8 italic">"{encouragement}"</p>
+                  )}
                   <button
                     onClick={handleRetry}
                     className="px-12 py-5 bg-red-700 text-white font-black rounded-xl shadow-xl hover:bg-red-600 transition-all"

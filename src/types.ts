@@ -76,6 +76,10 @@ export type Mission = {
     formula: string;
     tips: BilingualText[];
   };
+  storyConsequence?: {
+    correct: BilingualText;
+    wrong: BilingualText;
+  };
   kpId?: string;
   sectionId?: string;
 };
