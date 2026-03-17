@@ -341,7 +341,7 @@ export const PracticeScreen = ({
                     : 'bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-500'
                 }`}
               >
-                {currentPhase === 'red' ? t.enterChallenge : t.readyForNext}
+                {currentPhase === 'green' ? t.startPractice : currentPhase === 'amber' ? t.removeHints : t.enterChallenge}
                 <ChevronRight size={16} />
               </button>
             </div>
