@@ -1,4 +1,4 @@
-import type { Mission } from '../types';
+import type { Mission, BilingualText } from '../types';
 
 /* ── Shared helpers ── */
 
@@ -109,37 +109,13 @@ export function generateAddEqMission(template: Mission): Mission {
 
 /* ══════════════════════════════════════════════════════════
    INDICES generator: a^e1 × a^e2 = a^x  or  a^e1 / a^e2 = a^x
+   Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
-
-const indicesStories = [
-  (base: number, e1: number, e2: number, op: string) => ({
-    story: {
-      zh: op === 'div'
-        ? `曹操清点仓库，总量 $${base}^{${e1}}$，分出 $${base}^{${e2}}$ 后剩余 $${base}^x$。`
-        : `曹操屯粮，第一批 $${base}^{${e1}}$，第二批是 $${base}^{${e2}}$ 倍，总量 $${base}^x$。`,
-      en: op === 'div'
-        ? `Cao Cao has $${base}^{${e1}}$ in stock, gives away $${base}^{${e2}}$, remainder is $${base}^x$.`
-        : `Cao Cao stores grain: batch 1 is $${base}^{${e1}}$, batch 2 is $${base}^{${e2}}$ times, total $${base}^x$.`,
-    },
-    narrator: '曹操',
-  }),
-  (base: number, e1: number, e2: number, op: string) => ({
-    story: {
-      zh: op === 'div'
-        ? `孙权舰队 $${base}^{${e1}}$ 艘，损失 $${base}^{${e2}}$ 后剩 $${base}^x$ 艘。`
-        : `孙权造船，第一期 $${base}^{${e1}}$，扩建 $${base}^{${e2}}$ 倍，共 $${base}^x$ 艘。`,
-      en: op === 'div'
-        ? `Sun Quan's fleet of $${base}^{${e1}}$ loses $${base}^{${e2}}$, leaving $${base}^x$.`
-        : `Sun Quan builds ships: phase 1 is $${base}^{${e1}}$, expanded $${base}^{${e2}}$ times, total $${base}^x$.`,
-    },
-    narrator: '孙权',
-  }),
-];
 
 export function generateIndicesMission(template: Mission): Mission {
   const bases = [2, 3, 5];
   const base = pickRandom(bases);
-  const op = pickRandom(['mul', 'div'] as const);
+  const op = template.data?.op === 'div' ? 'div' : pickRandom(['mul', 'div'] as const);
   let e1: number, e2: number;
   if (op === 'div') {
     e1 = randInt(4, 9);
@@ -151,12 +127,12 @@ export function generateIndicesMission(template: Mission): Mission {
   const ans = op === 'div' ? e1 - e2 : e1 + e2;
   const sym = op === 'div' ? '/' : '\\times';
 
-  const { story, narrator } = pickRandom(indicesStories)(base, e1, e2, op);
   const description: BilingualText = {
     zh: `计算 $${base}^{${e1}} ${sym} ${base}^{${e2}} = ${base}^x$，求 $x$。`,
     en: `Calculate $${base}^{${e1}} ${sym} ${base}^{${e2}} = ${base}^x$, find $x$.`,
   };
 
+  const narrator = pickRandom(['曹操', '孙权', '关羽']);
   const tutorialSteps = [
     { text: { zh: `${narrator}：「${base}^{${e1}} ${op === 'div' ? '÷' : '×'} ${base}^{${e2}} = ${base}^x」`, en: `${narrator}: "${base}^{${e1}} ${op === 'div' ? '÷' : '×'} ${base}^{${e2}} = ${base}^x"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：「${op === 'div' ? '底数相同，指数相减' : '底数相同，指数相加'}：x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}」`, en: `${narrator}: "${op === 'div' ? 'Same base, subtract exponents' : 'Same base, add exponents'}: x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}"` }, highlightField: 'x' },
@@ -165,7 +141,6 @@ export function generateIndicesMission(template: Mission): Mission {
 
   return {
     ...template,
-    story,
     description,
     data: { ...template.data, base, e1, e2, op: op === 'div' ? 'div' : undefined, generatorType: 'INDICES_RANDOM' },
     tutorialSteps,
@@ -174,6 +149,7 @@ export function generateIndicesMission(template: Mission): Mission {
 
 /* ══════════════════════════════════════════════════════════
    ANGLES generator: supplementary (180) or complementary (90)
+   Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
 export function generateAnglesMission(template: Mission): Mission {
@@ -182,17 +158,12 @@ export function generateAnglesMission(template: Mission): Mission {
   const ans = total - angle;
   const kind = total === 90 ? { zh: '余角', en: 'complementary' } : { zh: '补角', en: 'supplementary' };
 
-  const narrators = ['关羽', '赵云', '张飞'];
-  const narrator = pickRandom(narrators);
-  const story: BilingualText = {
-    zh: `布阵之际，一角为 $${angle}^\\circ$，求其${kind.zh} $x$。`,
-    en: `During formation, one angle is $${angle}^\\circ$, find the ${kind.en} angle $x$.`,
-  };
   const description: BilingualText = {
     zh: `计算${kind.zh}：$${total} - ${angle} = x$。`,
     en: `Calculate ${kind.en} angle: $${total} - ${angle} = x$.`,
   };
 
+  const narrator = pickRandom(['关羽', '赵云', '张飞']);
   const tutorialSteps = [
     { text: { zh: `${narrator}：「已知角 ${angle}°，求${kind.zh}。」`, en: `${narrator}: "Given angle ${angle}°, find ${kind.en}."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：「${kind.zh}之和为 ${total}°：x = ${total} − ${angle}」`, en: `${narrator}: "${kind.en} angles sum to ${total}°: x = ${total} − ${angle}"` }, highlightField: 'x' },
@@ -201,7 +172,6 @@ export function generateAnglesMission(template: Mission): Mission {
 
   return {
     ...template,
-    story,
     description,
     data: { ...template.data, angle, total, generatorType: 'ANGLES_RANDOM' },
     tutorialSteps,
@@ -210,25 +180,8 @@ export function generateAnglesMission(template: Mission): Mission {
 
 /* ══════════════════════════════════════════════════════════
    ARITHMETIC sequence generator: a_n = a1 + (n-1)d
+   Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
-
-const arithStories = [
-  (a1: number, d: number, n: number) => ({
-    story: { zh: `联军每日增兵，第一日 ${a1} 人，此后每日增加 ${d} 人。`, en: `Reinforcements arrive daily: ${a1} on day 1, increasing by ${d} daily.` },
-    description: { zh: `求第 ${n} 日的增兵人数。$a_n = a_1 + (n-1)d$`, en: `Find reinforcements on Day ${n}. $a_n = a_1 + (n-1)d$` },
-    narrator: '诸葛亮',
-  }),
-  (a1: number, d: number, n: number) => ({
-    story: { zh: `修建防御工事，第一排 ${a1} 根木桩，每排增加 ${d} 根。`, en: `Building fortifications: row 1 has ${a1} stakes, ${d} more each row.` },
-    description: { zh: `求第 ${n} 排的木桩数。`, en: `Find stakes in Row ${n}.` },
-    narrator: '赵云',
-  }),
-  (a1: number, d: number, n: number) => ({
-    story: { zh: `运粮队每日增加 ${d} 担粮。第一日 ${a1} 担。`, en: `Supply team increases by ${d} units daily. Day 1 is ${a1}.` },
-    description: { zh: `求第 ${n} 日的运粮量。`, en: `Find supply on Day ${n}.` },
-    narrator: '曹操',
-  }),
-];
 
 export function generateArithmeticMission(template: Mission): Mission {
   const a1 = pickRandom([50, 80, 100, 150, 200, 300]);
@@ -236,9 +189,12 @@ export function generateArithmeticMission(template: Mission): Mission {
   const n = randInt(5, 15);
   const ans = a1 + (n - 1) * d;
 
-  const tmpl = pickRandom(arithStories)(a1, d, n);
-  const { narrator } = tmpl;
+  const description: BilingualText = {
+    zh: `求第 ${n} 项。$a_n = a_1 + (n-1)d$`,
+    en: `Find term ${n}. $a_n = a_1 + (n-1)d$`,
+  };
 
+  const narrator = pickRandom(['诸葛亮', '赵云', '曹操']);
   const tutorialSteps = [
     { text: { zh: `${narrator}：「等差数列，首项 ${a1}，公差 ${d}，求第 ${n} 项。」`, en: `${narrator}: "Arithmetic sequence: a1=${a1}, d=${d}, find term ${n}."` }, highlightField: 'ans' },
     { text: { zh: `${narrator}：「公式：a_n = ${a1} + (${n}-1)×${d}」`, en: `${narrator}: "Formula: a_n = ${a1} + (${n}-1)×${d}"` }, hint: { zh: `${a1} + ${(n - 1) * d} = ?`, en: `${a1} + ${(n - 1) * d} = ?` }, highlightField: 'ans' },
@@ -247,8 +203,7 @@ export function generateArithmeticMission(template: Mission): Mission {
 
   return {
     ...template,
-    story: tmpl.story,
-    description: tmpl.description,
+    description,
     data: { ...template.data, a1, d, n, generatorType: 'ARITHMETIC_RANDOM' },
     tutorialSteps,
   };
@@ -256,6 +211,7 @@ export function generateArithmeticMission(template: Mission): Mission {
 
 /* ══════════════════════════════════════════════════════════
    AREA (rectangular) generator
+   Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
 export function generateAreaRectMission(template: Mission): Mission {
@@ -263,10 +219,6 @@ export function generateAreaRectMission(template: Mission): Mission {
   const width = randInt(5, 30);
   const narrator = pickRandom(['刘备', '曹操', '孙权']);
 
-  const story: BilingualText = {
-    zh: `修建营地，长 ${length} 丈，宽 ${width} 丈。`,
-    en: `Building a camp: length ${length}, width ${width}.`,
-  };
   const description: BilingualText = {
     zh: `计算营地面积。`,
     en: `Calculate the camp area.`,
@@ -281,7 +233,6 @@ export function generateAreaRectMission(template: Mission): Mission {
 
   return {
     ...template,
-    story,
     description,
     data: { ...template.data, length, width, generatorType: 'AREA_RECT_RANDOM' },
     tutorialSteps,
@@ -290,6 +241,7 @@ export function generateAreaRectMission(template: Mission): Mission {
 
 /* ══════════════════════════════════════════════════════════
    AREA (trapezoid) generator
+   Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
 export function generateAreaTrapMission(template: Mission): Mission {
@@ -300,10 +252,6 @@ export function generateAreaTrapMission(template: Mission): Mission {
   if (((a + b) * h) % 2 !== 0) h += 1;
   const narrator = pickRandom(['赵云', '关羽']);
 
-  const story: BilingualText = {
-    zh: `修筑梯形点将台。上底 ${a} 丈，下底 ${b} 丈，高 ${h} 丈。`,
-    en: `Building a trapezoidal platform. Top ${a}, bottom ${b}, height ${h}.`,
-  };
   const description: BilingualText = {
     zh: `计算梯形面积：$(a+b)h/2$。`,
     en: `Calculate trapezoid area: $(a+b)h/2$.`,
@@ -317,7 +265,6 @@ export function generateAreaTrapMission(template: Mission): Mission {
 
   return {
     ...template,
-    story,
     description,
     data: { ...template.data, a, b, h, generatorType: 'AREA_TRAP_RANDOM' },
     tutorialSteps,
@@ -326,6 +273,7 @@ export function generateAreaTrapMission(template: Mission): Mission {
 
 /* ══════════════════════════════════════════════════════════
    PROBABILITY (simple) generator: P = target/total
+   Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
 export function generateProbSimpleMission(template: Mission): Mission {
@@ -333,10 +281,6 @@ export function generateProbSimpleMission(template: Mission): Mission {
   const target = pickRandom([2, 3, 4, 5, 6, 8, 10, 12, 15]);
   const narrator = '诸葛亮';
 
-  const story: BilingualText = {
-    zh: `诸葛亮观天象，共 ${total} 种卦象，其中 ${target} 种为吉兆。`,
-    en: `Zhuge Liang reads the sky: ${total} omens total, ${target} are auspicious.`,
-  };
   const description: BilingualText = {
     zh: `随机观一象，抽中吉兆的概率是多少？`,
     en: `What is the probability of an auspicious omen?`,
@@ -351,7 +295,6 @@ export function generateProbSimpleMission(template: Mission): Mission {
 
   return {
     ...template,
-    story,
     description,
     data: { ...template.data, total, target, generatorType: 'PROBABILITY_SIMPLE_RANDOM' },
     tutorialSteps,
@@ -360,6 +303,7 @@ export function generateProbSimpleMission(template: Mission): Mission {
 
 /* ══════════════════════════════════════════════════════════
    PROBABILITY (independent events) generator: P = p1 × p2
+   Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
 export function generateProbIndMission(template: Mission): Mission {
@@ -367,10 +311,6 @@ export function generateProbIndMission(template: Mission): Mission {
   const p2 = pickRandom([0.3, 0.4, 0.5, 0.6, 0.7, 0.8]);
   const narrator = '周瑜';
 
-  const story: BilingualText = {
-    zh: `两艘战船各自着火概率分别为 ${p1} 和 ${p2}，两船同时着火的概率是多少？`,
-    en: `Two ships have fire probabilities of ${p1} and ${p2}. What's the probability both catch fire?`,
-  };
   const description: BilingualText = {
     zh: `计算独立事件同时发生的概率：$P(A \\cap B) = P(A) \\times P(B)$。`,
     en: `Calculate prob of independent events: $P(A \\cap B) = P(A) \\times P(B)$.`,
@@ -385,7 +325,6 @@ export function generateProbIndMission(template: Mission): Mission {
 
   return {
     ...template,
-    story,
     description,
     data: { ...template.data, p1, p2, generatorType: 'PROBABILITY_IND_RANDOM' },
     tutorialSteps,
@@ -394,6 +333,8 @@ export function generateProbIndMission(template: Mission): Mission {
 
 /* ══════════════════════════════════════════════════════════
    PYTHAGORAS generator: uses integer triples
+   Story is now a template on the mission — generator only updates data + description + tutorialSteps.
+   Template data determines mode: has 'c' → find-leg, has 'b' → find-hypotenuse.
    ══════════════════════════════════════════════════════════ */
 
 const PYTHAGOREAN_TRIPLES: [number, number, number][] = [
@@ -402,61 +343,53 @@ const PYTHAGOREAN_TRIPLES: [number, number, number][] = [
 ];
 
 export function generatePythagorasMission(template: Mission): Mission {
-  const [a, b, c] = pickRandom(PYTHAGOREAN_TRIPLES);
-  const findC = Math.random() > 0.4; // 60% find hypotenuse, 40% find leg
+  const [triA, triB, triC] = pickRandom(PYTHAGOREAN_TRIPLES);
+  // Template data determines mode: if template has 'c' key, it's find-leg; if 'b' key, find-hypotenuse
+  const findC = !('c' in (template.data || {}));
   const narrator = pickRandom(['关羽', '赵云']);
 
-  let story: BilingualText, description: BilingualText, data: any;
+  let description: BilingualText;
+  let data: Record<string, unknown>;
 
   if (findC) {
-    story = {
-      zh: `攻城需架云梯。城墙高 ${a} 丈，距墙底 ${b} 丈处出发。`,
-      en: `Siege ladder needed. Wall height ${a}, distance from base ${b}.`,
-    };
     description = {
-      zh: `求云梯长度 $c = \\sqrt{${a}^2 + ${b}^2}$。`,
-      en: `Find ladder length $c = \\sqrt{${a}^2 + ${b}^2}$.`,
+      zh: `求云梯长度 $c = \\sqrt{${triA}^2 + ${triB}^2}$。`,
+      en: `Find ladder length $c = \\sqrt{${triA}^2 + ${triB}^2}$.`,
     };
     // Clean slate — don't spread template.data to avoid c leaking from template
-    data = { a, b, generatorType: 'PYTHAGORAS_RANDOM' };
+    data = { a: triA, b: triB, generatorType: 'PYTHAGORAS_RANDOM' };
   } else {
-    story = {
-      zh: `挖掘地道。斜长 ${c} 丈，水平距离 ${b} 丈。求深度。`,
-      en: `Digging a tunnel. Slant ${c}, horizontal ${b}. Find depth.`,
-    };
     description = {
-      zh: `求地道深度 $a = \\sqrt{${c}^2 - ${b}^2}$。`,
-      en: `Find depth $a = \\sqrt{${c}^2 - ${b}^2}$.`,
+      zh: `求地道深度 $a = \\sqrt{${triC}^2 - ${triB}^2}$。`,
+      en: `Find depth $a = \\sqrt{${triC}^2 - ${triB}^2}$.`,
     };
     // Clean slate — only include fields checkCorrectness needs
-    data = { a: b, c, generatorType: 'PYTHAGORAS_RANDOM' };
+    data = { a: triB, c: triC, generatorType: 'PYTHAGORAS_RANDOM' };
   }
 
-  const ans = findC ? c : a;
+  const ans = findC ? triC : triA;
   const tutorialSteps = [
     { text: { zh: `${narrator}：「勾股定理：a² + b² = c²」`, en: `${narrator}: "Pythagorean theorem: a² + b² = c²"` }, highlightField: 'c' },
-    { text: { zh: findC ? `${narrator}：「c = sqrt(${a}² + ${b}²) = sqrt(${a * a + b * b})」` : `${narrator}：「a = sqrt(${c}² - ${b}²) = sqrt(${c * c - b * b})」`, en: findC ? `${narrator}: "c = sqrt(${a}² + ${b}²) = sqrt(${a * a + b * b})"` : `${narrator}: "a = sqrt(${c}² - ${b}²) = sqrt(${c * c - b * b})"` }, highlightField: 'c' },
+    { text: { zh: findC ? `${narrator}：「c = sqrt(${triA}² + ${triB}²) = sqrt(${triA * triA + triB * triB})」` : `${narrator}：「a = sqrt(${triC}² - ${triB}²) = sqrt(${triC * triC - triB * triB})」`, en: findC ? `${narrator}: "c = sqrt(${triA}² + ${triB}²) = sqrt(${triA * triA + triB * triB})"` : `${narrator}: "a = sqrt(${triC}² - ${triB}²) = sqrt(${triC * triC - triB * triB})"` }, highlightField: 'c' },
     { text: { zh: `${narrator}：「答案 = ${ans}！」`, en: `${narrator}: "Answer = ${ans}!"` }, highlightField: 'c' },
   ];
 
-  return { ...template, story, description, data, tutorialSteps };
+  return { ...template, description, data, tutorialSteps };
 }
 
 /* ══════════════════════════════════════════════════════════
    PERCENTAGE generator: result = initial × (1+rate)^years
+   Story is now a template on the mission — generator only updates data + description + tutorialSteps.
+   Template data.rate sign determines mode: negative → discount, positive → tax.
    ══════════════════════════════════════════════════════════ */
 
 export function generatePercentageMission(template: Mission): Mission {
-  const isDiscount = Math.random() > 0.5;
+  const isDiscount = (template.data?.rate ?? 0) < 0;
   const initial = pickRandom([200, 500, 800, 1000, 1500, 2000, 3000, 5000]);
   const pct = pickRandom([10, 15, 20, 25, 30, 40, 50]);
   const rate = isDiscount ? -pct / 100 : pct / 100;
   const result = initial * (1 + rate);
   const narrator = '曹操';
-
-  const story: BilingualText = isDiscount
-    ? { zh: `采购军备原价 ${initial} 金，商家给予 ${pct}% 折扣。`, en: `Military supplies cost ${initial} gold, merchant offers ${pct}% discount.` }
-    : { zh: `产粮 ${initial} 斛，加征 ${pct}% 粮税后总额多少？`, en: `Grain harvest ${initial}, with ${pct}% tax added, total?` };
 
   const description: BilingualText = isDiscount
     ? { zh: `计算折后价：$${initial} \\times (1 - ${pct}\\%)$`, en: `Calculate discounted price: $${initial} \\times (1 - ${pct}\\%)$` }
@@ -471,9 +404,8 @@ export function generatePercentageMission(template: Mission): Mission {
 
   return {
     ...template,
-    story,
     description,
-    data: { ...template.data, initial, rate, years: 1, generatorType: 'PERCENTAGE_RANDOM' },
+    data: { ...template.data, initial, pct, rate, years: 1, generatorType: 'PERCENTAGE_RANDOM' },
     tutorialSteps,
   };
 }
