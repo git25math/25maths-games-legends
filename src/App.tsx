@@ -1,4 +1,4 @@
-import { useState, Component } from 'react';
+import { useState, useEffect, Component } from 'react';
 import 'katex/dist/katex.min.css';
 import { AnimatePresence } from 'motion/react';
 import { Languages, LogOut, XCircle } from 'lucide-react';
@@ -44,20 +44,56 @@ class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; er
   }
 }
 
+const LS_GUEST_KEY = 'gl_guest_profile';
+const LS_STATE_KEY = 'gl_app_state';
+
+function loadPersistedState(): { gameState: GameState; charId: string | null; isGuest: boolean } {
+  try {
+    const saved = localStorage.getItem(LS_STATE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch { /* ignore */ }
+  // If guest profile exists, resume at map
+  if (localStorage.getItem(LS_GUEST_KEY)) {
+    return { gameState: 'map', charId: null, isGuest: true };
+  }
+  return { gameState: 'welcome', charId: null, isGuest: false };
+}
+
+function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean) {
+  try {
+    // Only persist safe states (not battle/practice which need activeMission)
+    const safeState = (gameState === 'battle' || gameState === 'practice') ? 'map' : gameState;
+    localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest }));
+  } catch { /* ignore */ }
+}
+
 export default function App() {
+  const persisted = loadPersistedState();
   const [lang, setLang] = useState<Language>('zh');
-  const [gameState, setGameState] = useState<GameState>('welcome');
-  const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
+  const [gameState, setGameState] = useState<GameState>(persisted.gameState);
+  const [selectedCharId, setSelectedCharId] = useState<string | null>(persisted.charId);
   const [activeMission, setActiveMission] = useState<Mission | null>(null);
   const [showSecret, setShowSecret] = useState(false);
   const [showDifficultySelector, setShowDifficultySelector] = useState(false);
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyMode>('green');
-  const [isGuest, setIsGuest] = useState(false);
+  const [isGuest, setIsGuest] = useState(persisted.isGuest);
 
   const { user, signIn, signUp, signOut } = useAuth();
   const { profile, updateProfile, recordBattleComplete } = useProfile(user, isGuest);
   const { missions } = useMissions();
   const { activeRoom, createRoom, toggleReady, startGame, leaveRoom } = useMultiplayer(user, profile);
+
+  // Persist state across page refresh
+  useEffect(() => {
+    saveAppState(gameState, selectedCharId, isGuest);
+  }, [gameState, selectedCharId, isGuest]);
+
+  // If Supabase auth restored a session, jump to map
+  useEffect(() => {
+    if (user && gameState === 'welcome') {
+      setGameState('map');
+    }
+  }, [user]);
 
   const selectedChar = CHARACTERS.find(c => c.id === (selectedCharId || profile?.selected_char_id));
 
@@ -137,6 +173,8 @@ export default function App() {
                 setGameState('welcome');
                 setActiveMission(null);
                 setSelectedCharId(null);
+                localStorage.removeItem(LS_STATE_KEY);
+                localStorage.removeItem(LS_GUEST_KEY);
               }}
               className="p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-full hover:bg-rose-500/30 transition-all"
             >
