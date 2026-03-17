@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, Volume2, VolumeX } from 'lucide-react';
+import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, Volume2, VolumeX, Flame } from 'lucide-react';
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
 import { checkAnswer } from '../../utils/checkCorrectness';
@@ -14,8 +14,10 @@ import { CharacterAvatar } from '../CharacterAvatar';
 import { Confetti } from '../Confetti';
 import { AchievementCard } from '../AchievementCard';
 import { WrongAnswerPanel } from './WrongAnswerPanel';
+import { generateMission } from '../../utils/generateMission';
 
 const DIFFICULTY_MULTIPLIER: Record<DifficultyMode, number> = { green: 1, amber: 1.5, red: 2 };
+const TOTAL_QUESTIONS = 5;
 
 export const MathBattle = ({
   mission,
@@ -36,7 +38,25 @@ export const MathBattle = ({
   isMultiplayer?: boolean;
   roomData?: Room | null;
 }) => {
-  const showTutorial = difficultyMode === 'green' && mission.tutorialSteps && !isMultiplayer;
+  const isMultiQuestion = !!mission.data?.generatorType;
+
+  // Build question queue: 5 generated questions for multi-question, or just [mission] for single
+  const [questionQueue] = useState<Mission[]>(() => {
+    if (!isMultiQuestion) return [mission];
+    return Array.from({ length: TOTAL_QUESTIONS }, () => generateMission(mission));
+  });
+
+  const [currentQIdx, setCurrentQIdx] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [peakStreak, setPeakStreak] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
+  const [floatingScore, setFloatingScore] = useState<{ value: string; key: number } | null>(null);
+
+  const currentQuestion = questionQueue[currentQIdx];
+
+  // Tutorial only for single-question green mode
+  const showTutorial = !isMultiQuestion && difficultyMode === 'green' && mission.tutorialSteps && !isMultiplayer;
   const [mode, setMode] = useState<'tutorial' | 'battle'>(showTutorial ? 'tutorial' : 'battle');
   const [tutorialStep, setTutorialStep] = useState(0);
   const [encouragement, setEncouragement] = useState('');
@@ -53,23 +73,30 @@ export const MathBattle = ({
   const shaking = shakeKey > 0;
   const achievementTimerRef = useRef<number | null>(null);
   const shakeTimerRef = useRef<number | null>(null);
+  const advanceTimerRef = useRef<number | null>(null);
+  const floatingKeyRef = useRef(0);
 
   const { playBGM, stopBGM, playSuccess, playFail, playClick, muted, toggleMute } = useAudio();
 
   const t = translations[lang];
   const isTutorial = mode === 'tutorial' && !!mission.tutorialSteps;
-  // Interpolate {param} placeholders in story/description with mission.data values
-  const p = mission.data ?? {};
-  const storyText = interpolate(mission.story[lang], p);
-  const descText = interpolate(mission.description[lang], p);
 
-  // Start/stop BGM on mount/unmount + cleanup achievement timer
+  // Interpolate {param} placeholders using current question's data
+  const p = currentQuestion.data ?? {};
+  const storyText = interpolate(currentQuestion.story[lang], p);
+  const descText = interpolate(currentQuestion.description[lang], p);
+
+  // Streak multiplier: >=5 -> x2, >=3 -> x1.5, else x1
+  const getStreakMultiplier = (s: number) => s >= 5 ? 2 : s >= 3 ? 1.5 : 1;
+
+  // Start/stop BGM on mount/unmount + cleanup timers
   useEffect(() => {
     playBGM();
     return () => {
       stopBGM();
       if (achievementTimerRef.current !== null) clearTimeout(achievementTimerRef.current);
       if (shakeTimerRef.current !== null) clearTimeout(shakeTimerRef.current);
+      if (advanceTimerRef.current !== null) clearTimeout(advanceTimerRef.current);
     };
   }, []);
 
@@ -80,21 +107,80 @@ export const MathBattle = ({
     }
   }, [showResult]);
 
-  const handleSubmit = () => {
-    playClick();
-    const result = checkAnswer(mission, inputs);
-    if (result.correct) {
-      const duration = (Date.now() - startTime) / 1000;
-      const speedBonus = Math.max(0, 100 - Math.floor(duration));
-      const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
-      const score = Math.round((mission.reward + speedBonus) * multiplier);
-      setFinalScore(score);
-      setFinalDuration(Math.round(duration));
+  const advanceToNextQuestion = () => {
+    setInputs({});
+    setWrongAnswerData(null);
+    if (currentQIdx + 1 >= questionQueue.length) {
+      // All questions done — success
+      const duration = Math.round((Date.now() - startTime) / 1000);
+      setFinalDuration(duration);
+      setFinalScore(totalScore);
       setShowResult('success');
       setShowConfetti(true);
-      playSuccess();
       stopBGM();
       achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+    } else {
+      setCurrentQIdx(prev => prev + 1);
+    }
+  };
+
+  const handleSubmit = () => {
+    playClick();
+    const result = checkAnswer(currentQuestion, inputs);
+    if (result.correct) {
+      playSuccess();
+
+      if (isMultiQuestion) {
+        // Multi-question: combo scoring
+        const newStreak = streak + 1;
+        const streakMult = getStreakMultiplier(newStreak);
+        const diffMult = DIFFICULTY_MULTIPLIER[difficultyMode];
+        const score = Math.round(currentQuestion.reward * streakMult * diffMult);
+
+        setStreak(newStreak);
+        setPeakStreak(prev => Math.max(prev, newStreak));
+        setCorrectCount(prev => prev + 1);
+        const newTotal = totalScore + score;
+        setTotalScore(newTotal);
+
+        // Floating score
+        const label = streakMult > 1 ? `+${score} (x${streakMult})` : `+${score}`;
+        floatingKeyRef.current += 1;
+        setFloatingScore({ value: label, key: floatingKeyRef.current });
+
+        // Check if this was the last question
+        if (currentQIdx + 1 >= questionQueue.length) {
+          // Final question correct — show success after brief delay
+          const duration = Math.round((Date.now() - startTime) / 1000);
+          setFinalDuration(duration);
+          setFinalScore(newTotal);
+          advanceTimerRef.current = window.setTimeout(() => {
+            setShowResult('success');
+            setShowConfetti(true);
+            stopBGM();
+            achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+          }, 600);
+        } else {
+          // Advance after 600ms
+          advanceTimerRef.current = window.setTimeout(() => {
+            setInputs({});
+            setWrongAnswerData(null);
+            setCurrentQIdx(prev => prev + 1);
+          }, 600);
+        }
+      } else {
+        // Single-question: original behavior
+        const duration = (Date.now() - startTime) / 1000;
+        const speedBonus = Math.max(0, 100 - Math.floor(duration));
+        const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
+        const score = Math.round((mission.reward + speedBonus) * multiplier);
+        setFinalScore(score);
+        setFinalDuration(Math.round(duration));
+        setShowResult('success');
+        setShowConfetti(true);
+        stopBGM();
+        achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+      }
     } else {
       playFail();
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
@@ -108,18 +194,69 @@ export const MathBattle = ({
   const handleWrongAnswerContinue = () => {
     setWrongAnswerData(null);
     setInputs({});
-    setHp(prev => {
-      const next = prev - 1;
-      if (next <= 0) {
-        setShowResult('fail');
-        stopBGM();
+
+    if (isMultiQuestion) {
+      // Reset streak on wrong
+      setStreak(0);
+
+      setHp(prev => {
+        const next = prev - 1;
+        if (next <= 0) {
+          // HP depleted — fail
+          setShowResult('fail');
+          stopBGM();
+          return next;
+        }
+        return next;
+      });
+
+      // If HP > 1 (still alive after deduction), advance to next question
+      // Need to check hp > 1 because setHp is async; if hp is currently 1, next will be 0
+      if (hp > 1) {
+        if (currentQIdx + 1 >= questionQueue.length) {
+          // Was last question, show success (they survived)
+          const duration = Math.round((Date.now() - startTime) / 1000);
+          setFinalDuration(duration);
+          setFinalScore(totalScore);
+          advanceTimerRef.current = window.setTimeout(() => {
+            setShowResult('success');
+            setShowConfetti(true);
+            stopBGM();
+            achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+          }, 300);
+        } else {
+          setCurrentQIdx(prev => prev + 1);
+        }
       }
-      return next;
-    });
+    } else {
+      // Single-question: original behavior
+      setHp(prev => {
+        const next = prev - 1;
+        if (next <= 0) {
+          setShowResult('fail');
+          stopBGM();
+        }
+        return next;
+      });
+    }
   };
 
   const handleAchievementClose = () => {
-    onComplete(true, finalScore, finalDuration, hp);
+    onComplete(true, isMultiQuestion ? totalScore : finalScore, finalDuration, hp);
+  };
+
+  const handleRetry = () => {
+    setHp(4);
+    setShowResult('none');
+    setInputs({});
+    setWrongAnswerData(null);
+    setCurrentQIdx(0);
+    setCorrectCount(0);
+    setStreak(0);
+    setPeakStreak(0);
+    setTotalScore(0);
+    setFloatingScore(null);
+    playBGM();
   };
 
   return (
@@ -130,12 +267,13 @@ export const MathBattle = ({
         <AchievementCard
           characterId={character.id}
           missionTitle={mission.title}
-          score={finalScore}
+          score={isMultiQuestion ? totalScore : finalScore}
           duration={finalDuration}
           hp={hp}
           difficulty={difficultyMode}
           lang={lang}
           onClose={handleAchievementClose}
+          {...(isMultiQuestion ? { correctCount, totalQuestions: questionQueue.length, peakStreak } : {})}
         />
       )}
 
@@ -152,11 +290,20 @@ export const MathBattle = ({
             <CharacterAvatar characterId={character.id} size={56} />
             <div>
               <h2 className="text-xl font-black tracking-widest">{character.name[lang]} - {mission.title[lang]}</h2>
-              <div className="flex gap-1 mt-1">
+              <div className="flex gap-1 mt-1 items-center">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className={`w-4 h-4 rounded-full border border-black ${i < hp ? 'bg-red-600 shadow-[0_0_5px_rgba(220,38,38,0.8)]' : 'bg-slate-800'}`} />
                 ))}
                 <span className="text-[10px] ml-2 font-bold text-red-400 uppercase">{t.hp}</span>
+
+                {/* Streak badge */}
+                {isMultiQuestion && streak >= 2 && (
+                  <span className="ml-3 flex items-center gap-1 px-2 py-0.5 rounded bg-orange-600 text-[10px] font-black uppercase animate-pulse">
+                    <Flame size={12} />
+                    {streak} {t.streakLabel}
+                  </span>
+                )}
+
                 {/* Difficulty badge */}
                 <span className={`ml-4 px-2 py-0.5 rounded text-[10px] font-black uppercase ${
                   difficultyMode === 'green' ? 'bg-emerald-600' : difficultyMode === 'amber' ? 'bg-amber-600' : 'bg-rose-600'
@@ -164,6 +311,27 @@ export const MathBattle = ({
                   {t.difficultyMode[difficultyMode]}
                 </span>
               </div>
+
+              {/* Progress indicator for multi-question */}
+              {isMultiQuestion && (
+                <div className="flex items-center gap-2 mt-1.5">
+                  <span className="text-[10px] font-bold text-[#f4e4bc]/70">
+                    {(t.questionProgress as string).replace('{n}', String(currentQIdx + 1)).replace('{total}', String(questionQueue.length))}
+                  </span>
+                  <div className="flex gap-1">
+                    {questionQueue.map((_, i) => (
+                      <div
+                        key={i}
+                        className={`w-2 h-2 rounded-full ${
+                          i < currentQIdx ? 'bg-emerald-400' :
+                          i === currentQIdx ? 'bg-yellow-400' :
+                          'bg-[#f4e4bc]/30'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -195,13 +363,13 @@ export const MathBattle = ({
             <div className="text-[#5c4033] text-sm font-bold mb-6 leading-relaxed">
               <LatexText text={descText} />
             </div>
-            <VisualData mission={mission} lang={lang} />
+            <VisualData mission={currentQuestion} lang={lang} />
 
             {/* Amber mode: show formula hint */}
             {difficultyMode === 'amber' && (
               <div className="mt-4 p-3 bg-amber-100 border-2 border-amber-300 rounded-lg">
                 <div className="text-amber-800 text-xs font-bold mb-1">{t.secretFormula}</div>
-                <MathView tex={mission.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-amber-900" />
+                <MathView tex={currentQuestion.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-amber-900" />
               </div>
             )}
 
@@ -215,7 +383,7 @@ export const MathBattle = ({
 
           {/* Right: Inputs */}
           <div className="space-y-6">
-            {/* Tutorial overlay for Green mode */}
+            {/* Tutorial overlay for Green mode (single-question only) */}
             {isTutorial && mission.tutorialSteps && (
               <AnimatedTutorial
                 tutorialSteps={mission.tutorialSteps}
@@ -227,7 +395,7 @@ export const MathBattle = ({
             )}
 
             <InputFields
-              mission={mission}
+              mission={currentQuestion}
               inputs={inputs}
               setInputs={setInputs}
               difficultyMode={difficultyMode}
@@ -238,11 +406,11 @@ export const MathBattle = ({
             {/* Wrong answer review panel */}
             {wrongAnswerData && (
               <WrongAnswerPanel
-                questionType={mission.type}
+                questionType={currentQuestion.type}
                 userInputs={wrongAnswerData.userInputs}
                 expected={wrongAnswerData.expected}
-                formula={mission.secret.formula}
-                tutorialSteps={mission.tutorialSteps}
+                formula={currentQuestion.secret.formula}
+                tutorialSteps={currentQuestion.tutorialSteps}
                 lang={lang}
                 onContinue={handleWrongAnswerContinue}
               />
@@ -285,6 +453,22 @@ export const MathBattle = ({
           </div>
         </div>
 
+        {/* Floating Score Animation */}
+        <AnimatePresence>
+          {floatingScore && (
+            <motion.div
+              key={floatingScore.key}
+              initial={{ y: 0, opacity: 1 }}
+              animate={{ y: -60, opacity: 0 }}
+              transition={{ duration: 1, ease: 'easeOut' }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 pointer-events-none z-30 text-3xl font-black text-yellow-500 drop-shadow-lg"
+              style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
+            >
+              {floatingScore.value}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Result Overlay */}
         <AnimatePresence>
           {showResult !== 'none' && !showAchievement && (
@@ -309,7 +493,7 @@ export const MathBattle = ({
                   <p className="text-slate-400 mb-2">{t.failDesc}</p>
                   <p className="text-indigo-400 font-bold mb-8 italic">"{encouragement}"</p>
                   <button
-                    onClick={() => { setHp(4); setShowResult('none'); setInputs({}); playBGM(); }}
+                    onClick={handleRetry}
                     className="px-12 py-5 bg-red-700 text-white font-black rounded-xl shadow-xl hover:bg-red-600 transition-all"
                   >
                     {t.retry}
