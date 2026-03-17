@@ -1,8 +1,8 @@
 import { memo, useEffect, useMemo, useState } from "react";
 
-const COLORS = ["#FFD700", "#8b0000", "#2d6a2e", "#b8860b", "#4f46e5"];
-const PARTICLE_COUNT = 30;
-const DURATION_MS = 2000;
+const COLORS = ["#FFD700", "#8b0000", "#2d6a2e", "#b8860b", "#4f46e5", "#ef4444", "#f59e0b", "#fff"];
+const PARTICLE_COUNT = 60;
+const DURATION_MS = 3000;
 
 interface ConfettiProps {
   active: boolean;
@@ -30,19 +30,19 @@ export const Confetti = memo(function Confetti({ active }: ConfettiProps) {
     return Array.from({ length: PARTICLE_COUNT }, (_, i) => {
       const angle = Math.random() * Math.PI * 2;
       const distance = 120 + Math.random() * 280;
-      const sx = (Math.random() - 0.5) * 40;
-      const sy = (Math.random() - 0.5) * 40;
+      const sx = (Math.random() - 0.5) * 60;
+      const sy = (Math.random() - 0.5) * 60;
       return {
         id: i,
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
-        delay: Math.random() * 300,
-        width: Math.random() > 0.5 ? 8 : 6,
-        height: Math.random() > 0.5 ? 8 : 10,
-        rotation: Math.random() * 720 - 360,
+        delay: Math.random() * 500,
+        width: Math.random() > 0.5 ? 10 : 7,
+        height: Math.random() > 0.5 ? 10 : 14,
+        rotation: Math.random() * 1080 - 540,
         startX: sx,
         startY: sy,
         endX: sx + Math.cos(angle) * distance,
-        endY: sy + Math.sin(angle) * distance,
+        endY: sy + Math.sin(angle) * distance + 100, // gravity pull
       };
     });
   }, [active]);

@@ -9,7 +9,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '桃园结义', en: 'Oath in the Garden' },
     story: { zh: '刘关张三人结义，需平分美酒。已知总酒量为 $x+5=12$。', en: 'Three brothers share wine. Total amount: $x+5=12$.' },
     description: { zh: '解方程 $x+5=12$，求 $x$。', en: 'Solve $x+5=12$ for $x$.' },
-    data: { x: 7 }, difficulty: 'Easy', reward: 50,
+    data: { x: 7, left: 'x+5', right: '12', generatorType: 'SIMPLE_EQ_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-2.1-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -61,7 +61,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '分配军粮', en: 'Distributing Grain' },
     story: { zh: '军粮分配需按比例。已知 $2x = 24$，求每份军粮 $x$。', en: 'Grain must be distributed proportionally. $2x = 24$, find $x$.' },
     description: { zh: '解方程 $2x=24$。', en: 'Solve $2x=24$.' },
-    data: { x: 12 }, difficulty: 'Easy', reward: 70,
+    data: { x: 12, left: '2x', right: '24', generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 70,
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
@@ -87,7 +87,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '征调民夫', en: 'Drafting Laborers' },
     story: { zh: '修筑工事需要民夫。已知 5 个村庄共征调了 $5x = 100$ 人。', en: 'Laborers are needed for fortifications. 5 villages drafted $5x = 100$ people.' },
     description: { zh: '解方程 $5x=100$，求每个村庄的人数 $x$。', en: 'Solve $5x=100$ for $x$ per village.' },
-    data: { x: 20 }, difficulty: 'Easy', reward: 75,
+    data: { x: 20, left: '5x', right: '100', generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 75,
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
@@ -113,7 +113,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '据守虎牢关', en: 'Defending Hulao Pass' },
     story: { zh: '虎牢关地势险要。已知城墙一侧角度为 $120^\\circ$，求其补角 $x$ 以布置弩床。', en: 'Hulao Pass is steep. One side angle is $120^\\circ$, find its supplementary angle $x$ for ballista placement.' },
     description: { zh: '计算补角：$180 - 120 = x$。', en: 'Calculate supplementary angle: $180 - 120 = x$.' },
-    data: { angle: 120 }, difficulty: 'Easy', reward: 80,
+    data: { angle: 120, generatorType: 'ANGLES_RANDOM' }, difficulty: 'Easy', reward: 80,
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -139,7 +139,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '交叉火力', en: 'Crossfire' },
     story: { zh: '布置两座箭塔。已知两塔射击线成直角，其中一个角为 $35^\\circ$。', en: 'Set up two arrow towers. Their lines form a right angle, one angle is $35^\\circ$.' },
     description: { zh: '计算余角 $x$：$90 - 35 = x$。', en: 'Calculate complementary angle $x$: $90 - 35 = x$.' },
-    data: { angle: 35, total: 90 }, difficulty: 'Easy', reward: 85,
+    data: { angle: 35, total: 90, generatorType: 'ANGLES_RANDOM' }, difficulty: 'Easy', reward: 85,
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -165,7 +165,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '八卦阵位', en: 'Eight Trigrams Position' },
     story: { zh: '布置八卦阵。已知阵法中心发出的两个方位角互为补角，其中一个是 $45^\\circ$。', en: 'Setting up the Eight Trigrams. Two central angles are supplementary, one is $45^\\circ$.' },
     description: { zh: '求另一个角 $x$。', en: 'Find the other angle $x$.' },
-    data: { angle: 45 }, difficulty: 'Medium', reward: 90,
+    data: { angle: 45, generatorType: 'ANGLES_RANDOM' }, difficulty: 'Medium', reward: 90,
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -271,7 +271,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '安营扎寨', en: 'Setting Camp' },
     story: { zh: '为了抵御黄巾军，需要建立一个长方形营地。长为 20 丈，宽为 15 丈。', en: 'To defend against rebels, a rectangular camp is needed. Length 20, Width 15.' },
     description: { zh: '计算营地的总面积。', en: 'Calculate the total area of the camp.' },
-    data: { length: 20, width: 15 }, difficulty: 'Easy', reward: 100,
+    data: { length: 20, width: 15, generatorType: 'AREA_RECT_RANDOM' }, difficulty: 'Easy', reward: 100,
     kpId: 'kp-5.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -323,7 +323,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '点将台', en: 'Command Platform' },
     story: { zh: '修筑一个梯形点将台。上底 10 丈，下底 20 丈，高 8 丈。', en: 'Build a trapezoidal platform. Top base 10, bottom base 20, height 8.' },
     description: { zh: '计算梯形面积：$(a+b)h/2$。', en: 'Calculate trapezoid area: $(a+b)h/2$.' },
-    data: { a: 10, b: 20, h: 8 }, difficulty: 'Medium', reward: 190,
+    data: { a: 10, b: 20, h: 8, generatorType: 'AREA_TRAP_RANDOM' }, difficulty: 'Medium', reward: 190,
     kpId: 'kp-5.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -349,7 +349,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '征收粮税', en: 'Collecting Grain Tax' },
     story: { zh: '曹操在兖州推行屯田。已知农户产粮 1000 斛，需缴纳 40% 作为粮税。', en: 'Cao Cao implements tuntian. A farmer yields 1000, tax is 40%.' },
     description: { zh: '计算应缴粮税：$1000 \\times 40\\%$。', en: 'Calculate tax: $1000 \\times 40\\%$.' },
-    data: { initial: 1000, rate: 0.4, years: 1 }, difficulty: 'Easy', reward: 150,
+    data: { initial: 1000, rate: 0.4, years: 1, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Easy', reward: 150,
     kpId: 'kp-1.13-01', sectionId: 'number',
     tutorialSteps: [
       {
@@ -375,7 +375,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '军备折扣', en: 'Armament Discount' },
     story: { zh: '购买一批精铁。原价 5000 金，由于大批量采购，商家给予 15% 的折扣。', en: 'Buying fine iron. Original price 5000, 15% discount for bulk.' },
     description: { zh: '计算折后价格：$5000 \\times (1 - 15\\%)$。', en: 'Calculate discounted price: $5000 \\times (1 - 15\\%)$.' },
-    data: { initial: 5000, rate: -0.15, years: 1 }, difficulty: 'Medium', reward: 180,
+    data: { initial: 5000, rate: -0.15, years: 1, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Medium', reward: 180,
     kpId: 'kp-1.13-01', sectionId: 'number',
     tutorialSteps: [
       {
@@ -455,7 +455,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '官渡积粮', en: 'Guandu Supplies' },
     story: { zh: '官渡之战前夕，曹操囤积粮草。第一年产粮 $3^2$ 斛，第二年产粮是第一年的 $3^3$ 倍。', en: "Before Guandu, Cao Cao stores grain. Year 1 yields $3^2$, Year 2 is $3^3$ times that." },
     description: { zh: '计算总产量：$3^2 \\times 3^3 = 3^x$，求 $x$。', en: 'Calculate total: $3^2 \\times 3^3 = 3^x$, find $x$.' },
-    data: { base: 3, e1: 2, e2: 3 }, difficulty: 'Easy', reward: 120,
+    data: { base: 3, e1: 2, e2: 3, generatorType: 'INDICES_RANDOM' }, difficulty: 'Easy', reward: 120,
     kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
       {
@@ -481,7 +481,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '粮仓扩建', en: 'Granary Expansion' },
     story: { zh: '粮仓容量需提升。已知原容量为 $(2^3)^2$，求最终容量 $2^x$ 中的 $x$。', en: "Granary capacity must increase. Original is $(2^3)^2$, find $x$ in $2^x$." },
     description: { zh: '利用幂的乘方性质：$(a^m)^n = a^{mn}$。', en: 'Use power of a power property: $(a^m)^n = a^{mn}$.' },
-    data: { base: 2, e1: 3, e2: 2 }, difficulty: 'Medium', reward: 140,
+    data: { base: 2, e1: 3, e2: 2, generatorType: 'INDICES_RANDOM' }, difficulty: 'Medium', reward: 140,
     kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
       {
@@ -507,7 +507,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '火烧乌巢', en: 'Burning Wuchao' },
     story: { zh: '袭击袁绍粮仓。已知粮仓数量为 $2^8$，每把火能烧毁 $2^5$ 座。', en: "Attacking Wuchao. There are $2^8$ granaries, each fire destroys $2^5$." },
     description: { zh: '计算剩余粮仓：$2^8 / 2^5 = 2^x$，求 $x$。', en: 'Calculate remaining: $2^8 / 2^5 = 2^x$, find $x$.' },
-    data: { base: 2, e1: 8, e2: 5, op: 'div' }, difficulty: 'Medium', reward: 160,
+    data: { base: 2, e1: 8, e2: 5, op: 'div', generatorType: 'INDICES_RANDOM' }, difficulty: 'Medium', reward: 160,
     kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
       {
@@ -533,7 +533,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '云梯攻城', en: 'Siege Ladders' },
     story: { zh: "攻打袁绍营寨。城墙高 8 丈，护城河宽 6 丈。", en: "Attacking Yuan Shao's camp. Walls 8 units high, moat 6 units wide." },
     description: { zh: '求云梯长度 $c$。', en: 'Find ladder length $c$.' },
-    data: { a: 6, b: 8 }, difficulty: 'Medium', reward: 200,
+    data: { a: 6, b: 8, generatorType: 'PYTHAGORAS_RANDOM' }, difficulty: 'Medium', reward: 200,
     kpId: 'kp-6.1-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -585,7 +585,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '地道突袭', en: 'Tunnel Raid' },
     story: { zh: '挖掘地道突袭袁绍。地道斜长 25 丈，水平距离 24 丈。', en: 'Digging a tunnel to raid Yuan Shao. Slant length 25, horizontal distance 24.' },
     description: { zh: '求地道深度 $b$。', en: 'Find tunnel depth $b$.' },
-    data: { a: 24, c: 25 }, difficulty: 'Hard', reward: 250,
+    data: { a: 24, c: 25, generatorType: 'PYTHAGORAS_RANDOM' }, difficulty: 'Hard', reward: 250,
     kpId: 'kp-6.1-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -873,7 +873,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '借东风', en: 'Borrowing the East Wind' },
     story: { zh: '诸葛亮设坛借东风。已知 52 张卦牌中，有 4 张是"东风"。', en: 'Zhuge Liang prays for the wind. Out of 52 cards, 4 are "East Wind".' },
     description: { zh: '随机抽一张，抽中"东风"的概率是多少？', en: 'Draw one card, what is the probability of "East Wind"?' },
-    data: { total: 52, target: 4 }, difficulty: 'Easy', reward: 300,
+    data: { total: 52, target: 4, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Easy', reward: 300,
     kpId: 'kp-8.1-01', sectionId: 'statistics',
     tutorialSteps: [
       {
@@ -899,7 +899,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '连环计', en: 'Chain Link Strategy' },
     story: { zh: '庞统献连环计。已知单艘船着火概率为 0.6，两艘独立战船同时着火的概率是多少？', en: 'Pang Tong suggests the chain link. Prob of one ship burning is 0.6. Prob of two independent ships burning?' },
     description: { zh: '计算独立事件同时发生的概率：$P(A \\cap B) = P(A) \\times P(B)$。', en: 'Calculate prob of independent events: $P(A \\cap B) = P(A) \\times P(B)$.' },
-    data: { p1: 0.6, p2: 0.6 }, difficulty: 'Medium', reward: 350,
+    data: { p1: 0.6, p2: 0.6, generatorType: 'PROBABILITY_IND_RANDOM' }, difficulty: 'Medium', reward: 350,
     kpId: 'kp-8.3-02', sectionId: 'statistics',
     tutorialSteps: [
       {
@@ -925,7 +925,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '华容道伏兵', en: 'Huarong Pass Ambush' },
     story: { zh: '曹操败走华容道，连续遇到三个路口，每个路口有 1/3 概率遇到伏兵。至少遇到一次伏兵的概率是多少？', en: 'Cao Cao retreats via Huarong Pass, passing 3 checkpoints, each with 1/3 chance of ambush. What is the probability of at least one ambush?' },
     description: { zh: '求至少遇到一次伏兵的概率。$P = 1 - (2/3)^3$', en: 'Find P(at least one ambush). $P = 1 - (2/3)^3$' },
-    data: { total: 27, target: 19 }, difficulty: 'Hard', reward: 450,
+    data: { total: 27, target: 19, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Hard', reward: 450,
     kpId: 'kp-8.1-02', sectionId: 'statistics',
     tutorialSteps: [
       {
@@ -1029,7 +1029,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '赤壁增兵', en: 'Red Cliffs Reinforcements' },
     story: { zh: '孙刘联军持续增兵。第一日到达 200 人，此后每日增加 150 人。', en: 'The Sun-Liu alliance receives reinforcements. Day 1: 200 troops, increasing by 150 daily.' },
     description: { zh: '求第 8 日的增兵人数。$a_n = a_1 + (n-1)d$', en: 'Find reinforcements on Day 8. $a_n = a_1 + (n-1)d$' },
-    data: { a1: 200, d: 150, n: 8 }, difficulty: 'Easy', reward: 300,
+    data: { a1: 200, d: 150, n: 8, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Easy', reward: 300,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -1055,7 +1055,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '连弩齐射', en: 'Crossbow Volley' },
     story: { zh: '诸葛连弩部署。第一排 10 架弩，每排增加 6 架。', en: 'Zhuge crossbows deployed. Row 1: 10 crossbows, +6 per row.' },
     description: { zh: '求第 12 排的弩机数量。', en: 'Find crossbows in Row 12.' },
-    data: { a1: 10, d: 6, n: 12 }, difficulty: 'Medium', reward: 400,
+    data: { a1: 10, d: 6, n: 12, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -1081,7 +1081,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '粮草消耗', en: 'Supply Depletion' },
     story: { zh: '赤壁战后统计粮草消耗。第一日消耗 300 石，每日增加 20 石。持续 15 日。', en: 'Post-battle supply audit. Day 1: 300 units consumed, +20 daily for 15 days.' },
     description: { zh: '求第 15 日的消耗量。', en: 'Find consumption on Day 15.' },
-    data: { a1: 300, d: 20, n: 15 }, difficulty: 'Hard', reward: 500,
+    data: { a1: 300, d: 20, n: 15, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -1213,7 +1213,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '运粮序列', en: 'Supply Line' },
     story: { zh: '运粮队每日增加 50 担粮。第一日 100 担。', en: 'Supply team increases by 50 units daily. Day 1 is 100.' },
     description: { zh: '求第 10 日的运粮量。', en: 'Find the supply amount on Day 10.' },
-    data: { a1: 100, d: 50, n: 10 }, difficulty: 'Medium', reward: 400,
+    data: { a1: 100, d: 50, n: 10, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -1267,7 +1267,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '胜率评估', en: 'Win Rate Assessment' },
     story: { zh: '评估统一天下的概率。已知魏、蜀、吴的胜率分别为 0.7, 0.1, 0.2。', en: 'Assess the probability of unification. Wei, Shu, Wu win rates are 0.7, 0.1, 0.2.' },
     description: { zh: '若发生两次独立战争，魏国全胜的概率是多少？', en: 'If two independent wars occur, what is the probability of Wei winning both?' },
-    data: { p1: 0.7, p2: 0.7 }, difficulty: 'Medium', reward: 500,
+    data: { p1: 0.7, p2: 0.7, generatorType: 'PROBABILITY_IND_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-8.3-02', sectionId: 'statistics',
     tutorialSteps: [
       {

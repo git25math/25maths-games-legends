@@ -13,7 +13,7 @@ import { useMultiplayer } from './hooks/useMultiplayer';
 import { ScrollOfWisdom } from './components/ScrollOfWisdom';
 import { DifficultySelector } from './components/DifficultySelector';
 import { MathBattle } from './components/MathBattle';
-import { generateSimpleEqMission } from './utils/generateMission';
+import { generateMission } from './utils/generateMission';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
 import { MapScreen } from './screens/MapScreen';
@@ -74,8 +74,8 @@ export default function App() {
     setSelectedDifficulty(mode);
     setShowDifficultySelector(false);
     // Randomize: if mission has generatorType, generate new data
-    if (activeMission?.data?.generatorType === 'SIMPLE_EQ_RANDOM') {
-      setActiveMission(generateSimpleEqMission(activeMission));
+    if (activeMission?.data?.generatorType) {
+      setActiveMission(generateMission(activeMission));
     }
     setShowSecret(true);
   };

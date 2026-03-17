@@ -116,7 +116,8 @@ export function useAudio() {
   const playSuccess = useCallback(() => {
     if (mutedRef.current) return;
     const ac = getCtx();
-    const freqs = [523.25, 659.25, 783.99, 1046.5]; // C5-E5-G5-C6
+    // Victory fanfare: C5-E5-G5-C6 arpeggio + sustain chord
+    const freqs = [523.25, 659.25, 783.99, 1046.5];
     const now = ac.currentTime;
 
     freqs.forEach((freq, i) => {
@@ -124,20 +125,37 @@ export function useAudio() {
       const gain = ac.createGain();
       osc.type = "triangle";
       osc.frequency.value = freq;
-      const t = now + i * 0.1;
+      const t = now + i * 0.12;
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.15, t + 0.02);
-      gain.gain.linearRampToValueAtTime(0, t + 0.1);
+      gain.gain.linearRampToValueAtTime(0.18, t + 0.03);
+      gain.gain.linearRampToValueAtTime(0.08, t + 0.2);
+      gain.gain.linearRampToValueAtTime(0, t + 0.5);
       osc.connect(gain).connect(ac.destination);
       osc.start(t);
-      osc.stop(t + 0.12);
+      osc.stop(t + 0.55);
+    });
+
+    // Sustained chord at the end
+    const chordTime = now + 0.5;
+    [523.25, 659.25, 783.99].forEach((freq) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, chordTime);
+      gain.gain.linearRampToValueAtTime(0.06, chordTime + 0.05);
+      gain.gain.linearRampToValueAtTime(0, chordTime + 0.8);
+      osc.connect(gain).connect(ac.destination);
+      osc.start(chordTime);
+      osc.stop(chordTime + 0.85);
     });
   }, []);
 
   const playFail = useCallback(() => {
     if (mutedRef.current) return;
     const ac = getCtx();
-    const freqs = [329.63, 261.63]; // E4-C4
+    // Descending minor: E4-Eb4-D4-C4 (more dramatic)
+    const freqs = [329.63, 311.13, 293.66, 261.63];
     const now = ac.currentTime;
 
     freqs.forEach((freq, i) => {
@@ -145,13 +163,13 @@ export function useAudio() {
       const gain = ac.createGain();
       osc.type = "sawtooth";
       osc.frequency.value = freq;
-      const t = now + i * 0.15;
+      const t = now + i * 0.1;
       gain.gain.setValueAtTime(0, t);
       gain.gain.linearRampToValueAtTime(0.06, t + 0.02);
-      gain.gain.linearRampToValueAtTime(0, t + 0.15);
+      gain.gain.linearRampToValueAtTime(0, t + 0.18);
       osc.connect(gain).connect(ac.destination);
       osc.start(t);
-      osc.stop(t + 0.18);
+      osc.stop(t + 0.2);
     });
   }, []);
 

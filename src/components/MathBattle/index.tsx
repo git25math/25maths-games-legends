@@ -46,6 +46,7 @@ export const MathBattle = ({
   const [showAchievement, setShowAchievement] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [finalDuration, setFinalDuration] = useState(0);
+  const [shaking, setShaking] = useState(false);
   const achievementTimerRef = useRef<number | null>(null);
 
   const { playBGM, stopBGM, playSuccess, playFail, playClick, muted, toggleMute } = useAudio();
@@ -88,6 +89,8 @@ export const MathBattle = ({
       achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
     } else {
       playFail();
+      setShaking(true);
+      setTimeout(() => setShaking(false), 500);
       setHp(prev => prev - 1);
       if (hp <= 1) {
         setShowResult('fail');
@@ -119,8 +122,9 @@ export const MathBattle = ({
 
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="bg-[#f4e4bc] w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[12px] border-[#3d2b1f] relative"
+        animate={shaking ? { x: [0, -6, 6, -4, 4, -2, 2, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
+        transition={shaking ? { duration: 0.4, ease: 'easeOut' } : undefined}
+        className={`bg-[#f4e4bc] w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[12px] border-[#3d2b1f] relative ${shaking ? 'border-red-600' : ''}`}
       >
         {/* Header */}
         <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
