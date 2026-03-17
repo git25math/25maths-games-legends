@@ -305,10 +305,8 @@ export const MathBattle = ({
                 )}
 
                 {/* Difficulty badge */}
-                <span className={`ml-4 px-2 py-0.5 rounded text-[10px] font-black uppercase ${
-                  difficultyMode === 'green' ? 'bg-emerald-600' : difficultyMode === 'amber' ? 'bg-amber-600' : 'bg-rose-600'
-                }`}>
-                  {t.difficultyMode[difficultyMode]}
+                <span className="ml-4 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-rose-600">
+                  {t.challenge}
                 </span>
               </div>
 

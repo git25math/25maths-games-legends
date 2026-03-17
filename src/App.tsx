@@ -67,8 +67,15 @@ export default function App() {
   };
 
   const handleMissionStart = (mission: Mission) => {
-    setActiveMission(mission);
-    setShowDifficultySelector(true);
+    // Challenge mode: skip difficulty selector, go straight to battle
+    // Difficulty progression (Green→Amber→Red) is handled in Practice mode
+    let battleMission = mission;
+    if (mission.data?.generatorType) {
+      battleMission = generateMission(mission);
+    }
+    setActiveMission(battleMission);
+    setSelectedDifficulty('red'); // Challenge = no hints
+    setShowSecret(true);
   };
 
   const handlePracticeStart = (mission: Mission) => {
