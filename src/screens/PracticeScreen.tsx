@@ -205,8 +205,12 @@ export const PracticeScreen = ({
             <span className="px-3 py-1 bg-indigo-600/30 rounded-full text-xs font-bold">
               {t.practice}
             </span>
-            <button onClick={onCancel} className="p-2 hover:bg-white/10 rounded-full transition-colors">
-              <XCircle size={24} />
+            <button
+              onClick={onCancel}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-xs font-bold min-h-10"
+            >
+              <ChevronLeft size={16} />
+              {lang === 'zh' ? '返回' : 'Back'}
             </button>
           </div>
         </div>
@@ -325,7 +329,7 @@ export const PracticeScreen = ({
               {phaseIndex > 0 && (
                 <button
                   onClick={handlePhaseBack}
-                  className="flex-1 py-3 bg-white/50 border-2 border-[#3d2b1f]/20 text-[#3d2b1f] font-bold rounded-lg hover:bg-white/70 transition-all flex items-center justify-center gap-2 text-sm"
+                  className="flex-1 py-3 bg-white/50 border-2 border-[#3d2b1f]/20 text-[#3d2b1f] font-bold rounded-lg hover:bg-white/70 transition-all flex items-center justify-center gap-2 text-sm min-h-12"
                 >
                   <ChevronLeft size={16} />
                   {t.goBack}
@@ -333,7 +337,7 @@ export const PracticeScreen = ({
               )}
               <button
                 onClick={handlePhaseForward}
-                className={`flex-1 py-3 font-bold rounded-lg transition-all flex items-center justify-center gap-2 text-sm border-2 ${
+                className={`flex-1 py-3 font-bold rounded-lg transition-all flex items-center justify-center gap-2 text-sm border-2 min-h-12 ${
                   currentPhase === 'red'
                     ? 'bg-rose-600 text-white border-rose-700 hover:bg-rose-500'
                     : 'bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-500'
@@ -343,6 +347,15 @@ export const PracticeScreen = ({
                 <ChevronRight size={16} />
               </button>
             </div>
+
+            {/* Back to map */}
+            <button
+              onClick={onCancel}
+              className="w-full py-2 text-[#3d2b1f]/50 hover:text-[#3d2b1f] text-xs font-bold transition-colors flex items-center justify-center gap-1"
+            >
+              <ChevronLeft size={14} />
+              {lang === 'zh' ? '返回地图' : 'Back to Map'}
+            </button>
           </div>
         </div>
       </motion.div>
