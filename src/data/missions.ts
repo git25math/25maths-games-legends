@@ -8,7 +8,7 @@ export const MISSIONS: Mission[] = [
     topic: 'Algebra', type: 'SIMPLE_EQ',
     title: { zh: '桃园结义', en: 'Oath in the Garden' },
     skillName: { zh: '等式平衡术', en: 'Equation Balance' },
-    skillSummary: { zh: '等式两边同时加减同一个数', en: 'Add or subtract the same number from both sides' },
+    skillSummary: { zh: '等式两边同时加减同一个数，等号保持不变', en: 'Add or subtract the same number from both sides, the equation stays balanced' },
     story: { zh: '刘关张三人结义，需平分美酒。已知总酒量为 $x+{a}={result}$。', en: 'Three brothers share wine. Total amount: $x+{a}={result}$.' },
     description: { zh: '解方程 $x+{a}={result}$，求 $x$。', en: 'Solve $x+{a}={result}$ for $x$.' },
     data: { x: 7, a: 5, result: 12, generatorType: 'SIMPLE_EQ_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
