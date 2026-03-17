@@ -419,7 +419,7 @@ skillSummary: { zh: '等式两边做相同运算，等式不变', en: 'Same oper
 | 2.1 | **生成器参数化** | mission story 用 `{a}`, `{result}` 占位符，生成器只更新 data 数字，render 时 `interpolate(story, data)` 插值。title 永远不变。description 由生成器动态创建（LaTeX 复杂度高）。 | 24/24 mission 参数化，11/11 生成器重构 | ✅ 已完成 |
 | 2.2 | **答错解题展示** | 重构 checkCorrectness→checkAnswer 返回 `{ correct, expected }`。新建 WrongAnswerPanel 组件：红绿对比（你的答案 vs 正确答案）+ 公式 + 解题结论。答错后先展示面板，学生确认后才扣血。 | 答错后能看到"你答了 8，正确答案是 7" + 公式 | ✅ 已完成 |
 | 2.3 | **练习模式** | PracticeScreen 332 行：Green(tutorial+公式)→Amber(公式)→Red(无提示) 自主递进。答错无扣血+WrongAnswerPanel。答对 800ms 绿光→自动换题。MapScreen 双按钮（练习/闯关）。8 组新 i18n。 | 地图→练习→Green→Amber→Red→完成 全流程可走通 | ✅ 已完成 |
-| 2.4 | **技能勋章系统** | 每个 KP 定义 `skillName`（记忆锚点）+ `skillSummary`（技巧提炼）。Red 通关后弹出勋章卡（角色头像 + 技能名 + 技巧 + ★★★）。勋章数据存入 `gl_user_progress.practice_mastered`。地图页展示已获得勋章。 | 练习通关弹出"等式平衡术 ★★★"勋章卡 | ⬜ |
+| 2.4 | **技能勋章系统** | SkillBadgeCard 组件（深色+金色，角色头像金圈，★★★ 弹射动画）。24 个 mission 定义 skillName/skillSummary。PracticeScreen Red 通关弹出勋章。MapScreen 按 generatorType 区分单/双按钮。 | 练习通关弹出"等式平衡术 ★★★"勋章卡 | ✅ 已完成 |
 | 2.5 | **闯关模式改造** | 现有 MathBattle 改为"闯关模式"：前置条件（该 KP 已获勋章）+ 多题连闯（5 题同类型不同数字）+ HP + 计时 + 结算。gl_battle_results 加 session_id。 | 未获勋章的 KP 闯关按钮显示🔒 | ⬜ |
 | 2.6 | **连击 + 伤害数字飞出** | 连对 3 题 ×1.5, 5 题 ×2。答对瞬间金色 "+250" 上飘淡出 + "3连击！"。仅闯关模式。 | 300ms 内视觉反馈完成 | ⬜ |
 | 2.7 | **移动端响应式** | 练习 + 闯关 < 768px 单列，输入框全宽，按钮 min-h-12 touch-friendly | iPhone SE 375px 可用 | ⬜ |
@@ -588,6 +588,7 @@ skillSummary: { zh: '等式两边做相同运算，等式不变', en: 'Same oper
 | 2026-03-17 | v0.5.0 | Phase 2.1: 24 mission 参数化 + 11 生成器重构（叙事保留、只改数字） |
 | 2026-03-17 | v0.6.0 | Phase 2.2: 答错解题展示（checkAnswer 返回 expected + WrongAnswerPanel 组件） |
 | 2026-03-17 | v0.7.0 | Phase 2.3: 练习模式（PracticeScreen + Green→Amber→Red 自主递进 + MapScreen 双按钮） |
+| 2026-03-17 | v0.8.0 | Phase 2.4: 技能勋章（SkillBadgeCard + 24 个 skillName/Summary + 练习通关弹出） |
 | — | v1.0.0 | Phase 2 完整: 练习模式(Green→Amber→Red 递进) + 技能勋章 + 闯关模式 + 连击 + 移动端 ← **真正可给学生用的版本** |
 | — | v2.0.0 | Phase 3: 40 精品关卡 + Roguelike 技能卡 + 动态难度 + 剧情分支 |
 | — | v3.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |

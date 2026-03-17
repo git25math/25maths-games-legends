@@ -12,6 +12,7 @@ import { VisualData } from '../components/MathBattle/VisualData';
 import { AnimatedTutorial } from '../components/MathBattle/AnimatedTutorial';
 import { WrongAnswerPanel } from '../components/MathBattle/WrongAnswerPanel';
 import { CharacterAvatar } from '../components/CharacterAvatar';
+import { SkillBadgeCard } from '../components/SkillBadgeCard';
 import { useAudio } from '../hooks/useAudio';
 
 type PracticePhase = 'green' | 'amber' | 'red';
@@ -45,6 +46,7 @@ export const PracticeScreen = ({
   const [showTutorialForGreen, setShowTutorialForGreen] = useState(true);
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
+  const [showBadge, setShowBadge] = useState(false);
 
   const { playSuccess, playFail, playClick } = useAudio();
 
@@ -91,7 +93,12 @@ export const PracticeScreen = ({
 
   const handlePhaseForward = () => {
     if (currentPhase === 'red') {
-      onComplete();
+      // Show skill badge if mission has skillName, otherwise just complete
+      if (mission.skillName) {
+        setShowBadge(true);
+      } else {
+        onComplete();
+      }
       return;
     }
     const nextPhase = PHASE_ORDER[phaseIndex + 1];
@@ -110,6 +117,19 @@ export const PracticeScreen = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/95 backdrop-blur-md">
+      {/* Skill badge overlay */}
+      {showBadge && mission.skillName && mission.skillSummary && (
+        <SkillBadgeCard
+          characterId={character.id}
+          skillName={mission.skillName}
+          skillSummary={mission.skillSummary}
+          formula={mission.secret.formula}
+          missionTitle={mission.title}
+          lang={lang}
+          onClose={onComplete}
+        />
+      )}
+
       {/* Correct answer flash overlay */}
       <AnimatePresence>
         {showCorrectFlash && (

@@ -63,6 +63,8 @@ export type Mission = {
   topic: KnowledgePoint;
   type: QuestionType;
   title: BilingualText;
+  skillName?: BilingualText;
+  skillSummary?: BilingualText;
   story: BilingualText;
   description: BilingualText;
   data: any;

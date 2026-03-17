@@ -134,28 +134,41 @@ export const MapScreen = ({
                         <h4 className="text-2xl font-black text-slate-800 mb-1">{mission.title[lang]}</h4>
                         <p className="text-indigo-600 text-[10px] font-bold mb-3 uppercase">{t.questionTypes[mission.type]}</p>
                         <LatexText text={mission.description[lang]} className="text-slate-500 text-sm mb-8 line-clamp-2 block" />
-                        <div className="flex gap-2">
-                          <button
-                            disabled={!!isLocked}
-                            onClick={() => onPracticeStart(mission)}
-                            className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-sm ${
-                              isLocked ? 'bg-slate-100 text-slate-400' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-200'
-                            }`}
-                          >
-                            <BookOpen size={16} />
-                            {isLocked ? t.locked : t.practice}
-                          </button>
+                        {mission.data?.generatorType ? (
+                          <div className="flex gap-2">
+                            <button
+                              disabled={!!isLocked}
+                              onClick={() => onPracticeStart(mission)}
+                              className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-sm ${
+                                isLocked ? 'bg-slate-100 text-slate-400' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-200'
+                              }`}
+                            >
+                              <BookOpen size={16} />
+                              {isLocked ? t.locked : t.practice}
+                            </button>
+                            <button
+                              disabled={!!isLocked}
+                              onClick={() => onMissionStart(mission)}
+                              className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-sm ${
+                                isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200'
+                              }`}
+                            >
+                              <Swords size={16} />
+                              {isLocked ? t.locked : t.challenge}
+                            </button>
+                          </div>
+                        ) : (
                           <button
                             disabled={!!isLocked}
                             onClick={() => onMissionStart(mission)}
-                            className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-sm ${
-                              isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200'
+                            className={`w-full py-4 rounded-2xl font-black flex items-center justify-center gap-2 transition-all ${
+                              isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-xl shadow-indigo-200'
                             }`}
                           >
-                            <Swords size={16} />
-                            {isLocked ? t.locked : t.challenge}
+                            {isLocked ? t.locked : isCompleted ? t.missionRetry : t.missionStart}
+                            {!isLocked && <ChevronRight size={20} />}
                           </button>
-                        </div>
+                        )}
                         {isLocked && (
                           <p className="mt-2 text-[10px] text-rose-500 font-bold text-center">{t.lockedByOrder}</p>
                         )}
