@@ -89,10 +89,12 @@ export const PracticeScreen = ({
 
   const handlePhaseForward = () => {
     if (currentPhase === 'red') {
-      // Show skill badge if mission has skillName, otherwise just complete
-      if (mission.skillName) {
+      // Show skill badge
+      if (mission.skillName && mission.skillSummary) {
+        console.log('[Practice] Showing badge:', mission.skillName);
         setShowBadge(true);
       } else {
+        console.log('[Practice] No skillName, completing directly. mission.skillName:', mission.skillName);
         onComplete();
       }
       return;
