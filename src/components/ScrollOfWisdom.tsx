@@ -22,7 +22,7 @@ export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; l
             <XCircle size={24} />
           </button>
         </div>
-        <div className="p-8 space-y-6">
+        <div className="p-5 md:p-8 space-y-6">
           <section>
             <h3 className="text-amber-800 font-bold mb-2 flex items-center gap-2">
               <Sparkles size={18} />
@@ -52,7 +52,7 @@ export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; l
           </section>
           <button
             onClick={onClose}
-            className="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white font-black rounded-2xl shadow-xl transition-all"
+            className="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white font-black rounded-2xl shadow-xl transition-all min-h-12"
           >
             {lang === 'zh' ? '我准备好了！' : "I'm Ready!"}
           </button>

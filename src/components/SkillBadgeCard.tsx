@@ -47,7 +47,7 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
         initial={{ scale: 0.6, opacity: 0, rotateY: -30 }}
         animate={{ scale: 1, opacity: 1, rotateY: 0 }}
         transition={{ type: 'spring', duration: 0.6, bounce: 0.3 }}
-        className="relative w-[340px] overflow-hidden rounded-xl"
+        className="relative w-full max-w-[340px] overflow-hidden rounded-xl"
         style={{
           border: '4px solid #b8860b',
           background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',

@@ -159,14 +159,14 @@ export const PracticeScreen = ({
         initial={shakeKey > 0 ? false : { scale: 0.9, opacity: 0 }}
         animate={shaking ? { x: [0, -6, 6, -4, 4, -2, 2, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
         transition={shaking ? { duration: 0.4, ease: 'easeOut' } : undefined}
-        className={`bg-[#f4e4bc] w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[12px] border-[#3d2b1f] relative ${shaking ? 'border-red-600' : ''}`}
+        className={`bg-[#f4e4bc] w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[6px] md:border-[12px] border-[#3d2b1f] relative ${shaking ? 'border-red-600' : ''}`}
       >
         {/* Header */}
         <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
           <div className="flex items-center gap-4">
             <CharacterAvatar characterId={character.id} size={56} />
             <div>
-              <h2 className="text-xl font-black tracking-widest flex items-center gap-2">
+              <h2 className="text-base md:text-xl font-black tracking-widest flex items-center gap-2">
                 <BookOpen size={18} />
                 {mission.title[lang]}
               </h2>
@@ -212,7 +212,7 @@ export const PracticeScreen = ({
         </div>
 
         {/* Content */}
-        <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {/* Left: Question area */}
           <div className="bg-[#e8d5a7] rounded-lg p-6 border-2 border-[#3d2b1f]/20 shadow-inner">
             <div className="flex items-center gap-2 mb-4 text-[#3d2b1f] font-bold border-b border-[#3d2b1f]/10 pb-2">
@@ -300,7 +300,7 @@ export const PracticeScreen = ({
                     setInputs({});
                   }
                 }}
-                className="w-full py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
               >
                 {tutorialStep < (currentMission.tutorialSteps?.length || 0) - 1 ? t.nextStep : t.tutorialStartBattle}
                 <ChevronRight size={20} />
@@ -309,7 +309,7 @@ export const PracticeScreen = ({
               <button
                 onClick={handleSubmit}
                 disabled={!!wrongAnswerData || showCorrectFlash}
-                className={`w-full py-5 text-[#f4e4bc] text-xl font-black rounded-lg transition-all flex items-center justify-center gap-3 border-2 ${
+                className={`w-full py-5 text-[#f4e4bc] text-xl font-black rounded-lg transition-all flex items-center justify-center gap-3 border-2 min-h-12 ${
                   wrongAnswerData || showCorrectFlash
                     ? 'bg-slate-500 border-slate-600 cursor-not-allowed'
                     : 'bg-[#8b0000] hover:bg-[#a50000] shadow-[0_4px_0_#5c0000] active:translate-y-1 active:shadow-none border-[#5c0000]'

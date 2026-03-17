@@ -32,13 +32,13 @@ export const MapScreen = ({
   return (
     <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12">
       {/* Profile Header */}
-      <div className="flex flex-wrap items-center justify-between gap-6 bg-white/5 backdrop-blur-xl p-8 rounded-[2rem] border border-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-6 bg-white/5 backdrop-blur-xl p-4 md:p-8 rounded-[2rem] border border-white/10">
         <div className="flex items-center gap-6">
-          <div className={`w-20 h-20 rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl ${selectedChar?.color}`}>
+          <div className={`w-14 h-14 md:w-20 md:h-20 rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl ${selectedChar?.color}`}>
             <img src={selectedChar?.image} alt={selectedChar?.name[lang]} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
           </div>
           <div>
-            <h3 className="text-white font-black text-2xl flex items-center gap-2">
+            <h3 className="text-white font-black text-lg md:text-2xl flex items-center gap-2">
               {profile.display_name}
               <Crown size={20} className="text-yellow-400" />
             </h3>
@@ -56,11 +56,11 @@ export const MapScreen = ({
         <div className="flex gap-12">
           <div className="text-center">
             <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.totalScore}</span>
-            <MathView tex={profile.total_score} className="text-4xl font-black text-yellow-400" />
+            <MathView tex={profile.total_score} className="text-2xl md:text-4xl font-black text-yellow-400" />
           </div>
           <div className="text-center">
             <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.completed}</span>
-            <MathView tex={completedCount} className="text-4xl font-black text-emerald-400" />
+            <MathView tex={completedCount} className="text-2xl md:text-4xl font-black text-emerald-400" />
           </div>
         </div>
       </div>
@@ -69,20 +69,20 @@ export const MapScreen = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <button
           onClick={() => onCreateRoom('team', gradeMissions[0]?.id || 1)}
-          className="p-8 bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-3xl text-white flex items-center justify-between group overflow-hidden relative"
+          className="p-5 md:p-8 bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-3xl text-white flex items-center justify-between group overflow-hidden relative min-h-12"
         >
           <div className="relative z-10 text-left">
-            <h4 className="text-2xl font-black mb-1">{t.teamMode}</h4>
+            <h4 className="text-lg md:text-2xl font-black mb-1">{t.teamMode}</h4>
             <p className="text-indigo-200 text-sm">{t.multiplayer}</p>
           </div>
           <Users size={48} className="text-white/20 group-hover:scale-110 transition-transform" />
         </button>
         <button
           onClick={() => onCreateRoom('pk', gradeMissions[0]?.id || 1)}
-          className="p-8 bg-gradient-to-br from-rose-600 to-rose-800 rounded-3xl text-white flex items-center justify-between group overflow-hidden relative"
+          className="p-5 md:p-8 bg-gradient-to-br from-rose-600 to-rose-800 rounded-3xl text-white flex items-center justify-between group overflow-hidden relative min-h-12"
         >
           <div className="relative z-10 text-left">
-            <h4 className="text-2xl font-black mb-1">{t.pkMode}</h4>
+            <h4 className="text-lg md:text-2xl font-black mb-1">{t.pkMode}</h4>
             <p className="text-rose-200 text-sm">{t.multiplayer}</p>
           </div>
           <Swords size={48} className="text-white/20 group-hover:scale-110 transition-transform" />
@@ -114,7 +114,7 @@ export const MapScreen = ({
 
                   return (
                     <div key={mission.id} className="relative group">
-                      <div className={`bg-white rounded-[2rem] p-8 shadow-2xl transition-all ${isLocked ? 'opacity-50 grayscale' : 'hover:-translate-y-2'}`}>
+                      <div className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl transition-all ${isLocked ? 'opacity-50 grayscale' : 'hover:-translate-y-2'}`}>
                         <div className="flex justify-between items-start mb-6">
                           <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                             mission.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' :
@@ -131,7 +131,7 @@ export const MapScreen = ({
                             </div>
                           ) : isLocked ? <Lock className="text-slate-400" size={28} /> : null}
                         </div>
-                        <h4 className="text-2xl font-black text-slate-800 mb-1">{mission.title[lang]}</h4>
+                        <h4 className="text-lg md:text-2xl font-black text-slate-800 mb-1">{mission.title[lang]}</h4>
                         <p className="text-indigo-600 text-[10px] font-bold mb-3 uppercase">{t.questionTypes[mission.type]}</p>
                         <LatexText text={mission.description[lang]} className="text-slate-500 text-sm mb-8 line-clamp-2 block" />
                         {mission.data?.generatorType ? (
@@ -139,7 +139,7 @@ export const MapScreen = ({
                             <button
                               disabled={!!isLocked}
                               onClick={() => onPracticeStart(mission)}
-                              className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-sm ${
+                              className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-xs md:text-sm min-h-12 ${
                                 isLocked ? 'bg-slate-100 text-slate-400' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-200'
                               }`}
                             >
@@ -149,7 +149,7 @@ export const MapScreen = ({
                             <button
                               disabled={!!isLocked}
                               onClick={() => onMissionStart(mission)}
-                              className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-sm ${
+                              className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-xs md:text-sm min-h-12 ${
                                 isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200'
                               }`}
                             >
@@ -161,7 +161,7 @@ export const MapScreen = ({
                           <button
                             disabled={!!isLocked}
                             onClick={() => onMissionStart(mission)}
-                            className={`w-full py-4 rounded-2xl font-black flex items-center justify-center gap-2 transition-all ${
+                            className={`w-full py-4 rounded-2xl font-black flex items-center justify-center gap-2 transition-all min-h-12 ${
                               isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-xl shadow-indigo-200'
                             }`}
                           >

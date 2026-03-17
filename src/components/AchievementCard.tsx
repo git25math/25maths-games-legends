@@ -61,7 +61,7 @@ export const AchievementCard = memo(function AchievementCard({
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: 'spring', duration: 0.5 }}
-        className="relative w-[360px] max-h-[640px] overflow-hidden rounded-lg"
+        className="relative w-full max-w-[360px] max-h-[640px] overflow-hidden rounded-lg"
         style={{
           border: '4px solid #3d2b1f',
           background: 'linear-gradient(to bottom, #f4e4bc, #e8d5a7, #f4e4bc)',

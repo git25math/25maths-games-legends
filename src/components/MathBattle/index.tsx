@@ -282,14 +282,14 @@ export const MathBattle = ({
         initial={shakeKey > 0 ? false : { scale: 0.9, opacity: 0 }}
         animate={shaking ? { x: [0, -6, 6, -4, 4, -2, 2, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
         transition={shaking ? { duration: 0.4, ease: 'easeOut' } : undefined}
-        className={`bg-[#f4e4bc] w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[12px] border-[#3d2b1f] relative ${shaking ? 'border-red-600' : ''}`}
+        className={`bg-[#f4e4bc] w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[6px] md:border-[12px] border-[#3d2b1f] relative ${shaking ? 'border-red-600' : ''}`}
       >
         {/* Header */}
         <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
           <div className="flex items-center gap-4">
             <CharacterAvatar characterId={character.id} size={56} />
             <div>
-              <h2 className="text-xl font-black tracking-widest">{character.name[lang]} - {mission.title[lang]}</h2>
+              <h2 className="text-base md:text-xl font-black tracking-widest">{character.name[lang]} - {mission.title[lang]}</h2>
               <div className="flex gap-1 mt-1 items-center">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className={`w-4 h-4 rounded-full border border-black ${i < hp ? 'bg-red-600 shadow-[0_0_5px_rgba(220,38,38,0.8)]' : 'bg-slate-800'}`} />
@@ -348,7 +348,7 @@ export const MathBattle = ({
         </div>
 
         {/* Battle Content */}
-        <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {/* Left: Tactical Map */}
           <div className="bg-[#e8d5a7] rounded-lg p-6 border-2 border-[#3d2b1f]/20 shadow-inner">
             <div className="flex items-center gap-2 mb-4 text-[#3d2b1f] font-bold border-b border-[#3d2b1f]/10 pb-2">
@@ -427,7 +427,7 @@ export const MathBattle = ({
                     setInputs({});
                   }
                 }}
-                className="w-full py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
               >
                 {tutorialStep < (mission.tutorialSteps?.length || 0) - 1 ? t.nextStep : t.tutorialStartBattle}
                 <ChevronRight size={20} />
@@ -436,7 +436,7 @@ export const MathBattle = ({
               <button
                 onClick={handleSubmit}
                 disabled={!!wrongAnswerData}
-                className={`w-full py-6 text-[#f4e4bc] text-2xl font-black rounded-lg transition-all flex items-center justify-center gap-4 border-2 ${wrongAnswerData ? 'bg-slate-500 border-slate-600 cursor-not-allowed' : 'bg-[#8b0000] hover:bg-[#a50000] shadow-[0_4px_0_#5c0000] active:translate-y-1 active:shadow-none border-[#5c0000]'}`}
+                className={`w-full py-4 md:py-6 text-[#f4e4bc] text-lg md:text-2xl font-black rounded-lg transition-all flex items-center justify-center gap-4 border-2 min-h-12 ${wrongAnswerData ? 'bg-slate-500 border-slate-600 cursor-not-allowed' : 'bg-[#8b0000] hover:bg-[#a50000] shadow-[0_4px_0_#5c0000] active:translate-y-1 active:shadow-none border-[#5c0000]'}`}
               >
                 <Swords size={28} />
                 {t.attack}
@@ -476,20 +476,20 @@ export const MathBattle = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-20 ${
+              className={`absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 text-center z-20 ${
                 showResult === 'success' ? 'bg-[#f4e4bc]/90' : 'bg-[#3d2b1f]/90'
               }`}
             >
               {showResult === 'success' ? (
-                <motion.div initial={{ scale: 0.5 }} animate={{ scale: 1 }} className="bg-white p-12 rounded-full border-8 border-yellow-500 shadow-2xl">
+                <motion.div initial={{ scale: 0.5 }} animate={{ scale: 1 }} className="bg-white p-6 md:p-12 rounded-full border-8 border-yellow-500 shadow-2xl">
                   <Trophy size={80} className="text-yellow-500 mb-4 mx-auto" />
-                  <h3 className="text-5xl font-black text-slate-900 mb-2">{t.successTitle}</h3>
+                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-2">{t.successTitle}</h3>
                   <p className="text-slate-600 font-bold">{t.successDesc}</p>
                 </motion.div>
               ) : (
                 <motion.div initial={{ y: 50 }} animate={{ y: 0 }}>
                   <XCircle size={80} className="text-red-500 mb-6 mx-auto" />
-                  <h3 className="text-5xl font-black text-white mb-4">{t.failTitle}</h3>
+                  <h3 className="text-3xl md:text-5xl font-black text-white mb-4">{t.failTitle}</h3>
                   <p className="text-slate-400 mb-2">{t.failDesc}</p>
                   <p className="text-indigo-400 font-bold mb-8 italic">"{encouragement}"</p>
                   <button
