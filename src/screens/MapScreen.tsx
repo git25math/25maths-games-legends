@@ -1,10 +1,22 @@
 import { motion } from 'motion/react';
-import { MapIcon, Crown, ChevronRight, CheckCircle2, Lock, Users, Swords, BookOpen } from 'lucide-react';
+import { MapIcon, Crown, CheckCircle2, Lock, Users, Swords, BookOpen } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { MathView, LatexText } from '../components/MathView';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { interpolate } from '../utils/interpolate';
+
+const CHAPTER_IMAGES = [
+  './map/ch1-peach-garden.png',
+  './map/ch2-hulao-pass.png',
+  './map/ch3-guandu.png',
+  './map/ch4-longzhong.png',
+  './map/ch5-red-cliffs.png',
+  './map/ch6-jingzhou.png',
+  './map/ch7-northern-campaign.png',
+  './map/ch8-probability.png',
+  './map/ch9-unification.png',
+];
 
 export const MapScreen = ({
   lang,
@@ -91,16 +103,29 @@ export const MapScreen = ({
         </button>
       </div>
 
-      {/* Mission Grid */}
-      <div className="space-y-16">
-        {Array.from(new Set(gradeMissions.map(m => m.unitTitle[lang]))).map((unitTitle) => (
+      {/* Mission Grid with World Map Background */}
+      <div className="relative rounded-3xl overflow-hidden">
+        <img
+          src={lang === 'zh' ? './map/world-map-zh.png' : './map/world-map-en.png'}
+          alt="Three Kingdoms Map"
+          className="w-full rounded-3xl opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
+        />
+        <div className="relative z-10 space-y-16 p-4 md:p-8">
+        {Array.from(new Set(gradeMissions.map(m => m.unitTitle[lang]))).map((unitTitle, unitIndex) => (
           <div key={unitTitle} className="space-y-6">
             <div className="flex items-center gap-4">
               <div className="h-px flex-1 bg-white/10" />
-              <h3 className="text-2xl font-black text-white uppercase tracking-widest flex items-center gap-3">
-                <MapIcon className="text-indigo-400" />
-                {unitTitle}
-              </h3>
+              <div className="flex items-center gap-3">
+                <img
+                  src={CHAPTER_IMAGES[unitIndex % CHAPTER_IMAGES.length]}
+                  alt=""
+                  className="w-16 h-16 rounded-xl object-cover border-2 border-amber-400/30 shadow-lg"
+                />
+                <h3 className="text-2xl font-black text-white uppercase tracking-widest flex items-center gap-3">
+                  <MapIcon className="text-indigo-400" />
+                  {unitTitle}
+                </h3>
+              </div>
               <div className="h-px flex-1 bg-white/10" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -168,6 +193,7 @@ export const MapScreen = ({
             </div>
           </div>
         ))}
+        </div>
       </div>
     </motion.div>
   );
