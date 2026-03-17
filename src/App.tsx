@@ -14,6 +14,7 @@ import { ScrollOfWisdom } from './components/ScrollOfWisdom';
 import { DifficultySelector } from './components/DifficultySelector';
 import { MathBattle } from './components/MathBattle';
 import { generateMission } from './utils/generateMission';
+import { MISSIONS as LOCAL_MISSIONS } from './data/missions';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
 import { MapScreen } from './screens/MapScreen';
@@ -47,23 +48,30 @@ class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; er
 const LS_GUEST_KEY = 'gl_guest_profile';
 const LS_STATE_KEY = 'gl_app_state';
 
-function loadPersistedState(): { gameState: GameState; charId: string | null; isGuest: boolean } {
+type PersistedState = {
+  gameState: GameState;
+  charId: string | null;
+  isGuest: boolean;
+  missionId?: number | null; // for restoring practice/battle
+};
+
+function loadPersistedState(): PersistedState {
   try {
     const saved = localStorage.getItem(LS_STATE_KEY);
     if (saved) return JSON.parse(saved);
   } catch { /* ignore */ }
-  // If guest profile exists, resume at map
   if (localStorage.getItem(LS_GUEST_KEY)) {
     return { gameState: 'map', charId: null, isGuest: true };
   }
   return { gameState: 'welcome', charId: null, isGuest: false };
 }
 
-function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean) {
+function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
-    // Only persist safe states (not battle/practice which need activeMission)
-    const safeState = (gameState === 'battle' || gameState === 'practice') ? 'map' : gameState;
-    localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest }));
+    // Battle can't be restored (complex internal state) → save as map
+    const safeState = gameState === 'battle' ? 'map' : gameState;
+    const safeMission = safeState === 'practice' ? missionId : null;
+    localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
 }
 
@@ -72,7 +80,14 @@ export default function App() {
   const [lang, setLang] = useState<Language>('zh');
   const [gameState, setGameState] = useState<GameState>(persisted.gameState);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(persisted.charId);
-  const [activeMission, setActiveMission] = useState<Mission | null>(null);
+  const [activeMission, setActiveMission] = useState<Mission | null>(() => {
+    // Restore mission from persisted ID (for practice mode refresh)
+    if (persisted.missionId) {
+      const found = LOCAL_MISSIONS.find(m => m.id === persisted.missionId);
+      return found || null;
+    }
+    return null;
+  });
   const [showSecret, setShowSecret] = useState(false);
   const [showDifficultySelector, setShowDifficultySelector] = useState(false);
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyMode>('green');
@@ -85,8 +100,8 @@ export default function App() {
 
   // Persist state across page refresh
   useEffect(() => {
-    saveAppState(gameState, selectedCharId, isGuest);
-  }, [gameState, selectedCharId, isGuest]);
+    saveAppState(gameState, selectedCharId, isGuest, activeMission?.id);
+  }, [gameState, selectedCharId, isGuest, activeMission?.id]);
 
   // If Supabase auth restored a session, jump to map
   useEffect(() => {
