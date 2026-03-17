@@ -12,6 +12,7 @@ import { useMultiplayer } from './hooks/useMultiplayer';
 
 import { ScrollOfWisdom } from './components/ScrollOfWisdom';
 import { MathBattle } from './components/MathBattle';
+import { SkillCardSelector } from './components/SkillCardSelector';
 import { generateMission } from './utils/generateMission';
 import { MISSIONS as LOCAL_MISSIONS } from './data/missions';
 import { WelcomeScreen } from './screens/WelcomeScreen';
@@ -88,6 +89,8 @@ export default function App() {
     return null;
   });
   const [showSecret, setShowSecret] = useState(false);
+  const [selectedSkillCard, setSelectedSkillCard] = useState<string | null>(null);
+  const [showSkillCards, setShowSkillCards] = useState(false);
   const [selectedDifficulty] = useState<DifficultyMode>('red');
   const [isGuest, setIsGuest] = useState(persisted.isGuest);
 
@@ -121,8 +124,20 @@ export default function App() {
     let battleMission = mission;
     if (mission.data?.generatorType) {
       battleMission = generateMission(mission);
+      // Multi-question missions: show skill card selector first
+      setActiveMission(battleMission);
+      setSelectedSkillCard(null);
+      setShowSkillCards(true);
+    } else {
+      // Single-question: go directly to ScrollOfWisdom
+      setActiveMission(battleMission);
+      setShowSecret(true);
     }
-    setActiveMission(battleMission);
+  };
+
+  const handleSkillCardSelect = (cardId: string) => {
+    setSelectedSkillCard(cardId);
+    setShowSkillCards(false);
     setShowSecret(true);
   };
 
@@ -186,6 +201,15 @@ export default function App() {
         </div>
 
         {/* Overlays */}
+        <AnimatePresence>
+          {showSkillCards && (
+            <SkillCardSelector
+              lang={lang}
+              onSelect={handleSkillCardSelect}
+            />
+          )}
+        </AnimatePresence>
+
         <AnimatePresence>
           {showSecret && activeMission && (
             <ScrollOfWisdom
@@ -263,6 +287,7 @@ export default function App() {
               difficultyMode={selectedDifficulty}
               isMultiplayer={!!activeRoom}
               roomData={activeRoom}
+              skillCard={selectedSkillCard}
             />
           )}
 

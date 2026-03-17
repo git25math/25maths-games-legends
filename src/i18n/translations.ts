@@ -136,6 +136,7 @@ export const translations = {
     seeAnotherExample: "再看一个例题",
     gotItNextQuestion: "明白了，下一题",
     imReady: "我准备好了！",
+    chooseSkillCard: "选择一张技能卡",
   },
   en: {
     title: "Three Kingdoms Math",
@@ -272,6 +273,7 @@ export const translations = {
     seeAnotherExample: "See Another Example",
     gotItNextQuestion: "Got it, next question",
     imReady: "I'm Ready!",
+    chooseSkillCard: "Choose a Skill Card",
   }
 } as const;
 

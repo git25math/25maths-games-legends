@@ -15,6 +15,7 @@ import { Confetti } from '../Confetti';
 import { AchievementCard } from '../AchievementCard';
 import { WrongAnswerPanel } from './WrongAnswerPanel';
 import { generateMission } from '../../utils/generateMission';
+import { SKILL_CARDS } from '../SkillCardSelector';
 
 const DIFFICULTY_MULTIPLIER: Record<DifficultyMode, number> = { green: 1, amber: 1.5, red: 2 };
 const TOTAL_QUESTIONS = 5;
@@ -27,7 +28,8 @@ export const MathBattle = ({
   lang,
   difficultyMode,
   isMultiplayer = false,
-  roomData = null
+  roomData = null,
+  skillCard = null
 }: {
   mission: Mission;
   character: Character;
@@ -37,6 +39,7 @@ export const MathBattle = ({
   difficultyMode: DifficultyMode;
   isMultiplayer?: boolean;
   roomData?: Room | null;
+  skillCard?: string | null;
 }) => {
   const isMultiQuestion = !!mission.data?.generatorType;
 
@@ -69,6 +72,7 @@ export const MathBattle = ({
   const [showAchievement, setShowAchievement] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [finalDuration, setFinalDuration] = useState(0);
+  const [shieldCharges, setShieldCharges] = useState(skillCard === 'shield' ? 2 : 0);
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
   const achievementTimerRef = useRef<number | null>(null);
@@ -135,7 +139,8 @@ export const MathBattle = ({
         const newStreak = streak + 1;
         const streakMult = getStreakMultiplier(newStreak);
         const diffMult = DIFFICULTY_MULTIPLIER[difficultyMode];
-        const score = Math.round(currentQuestion.reward * streakMult * diffMult);
+        const doubleMult = (skillCard === 'double' && currentQIdx >= 2) ? 2 : 1;
+        const score = Math.round(currentQuestion.reward * streakMult * diffMult * doubleMult);
 
         setStreak(newStreak);
         setPeakStreak(prev => Math.max(prev, newStreak));
@@ -144,7 +149,8 @@ export const MathBattle = ({
         setTotalScore(newTotal);
 
         // Floating score
-        const label = streakMult > 1 ? `+${score} (x${streakMult})` : `+${score}`;
+        const multLabel = doubleMult > 1 ? `x${streakMult * doubleMult}` : streakMult > 1 ? `x${streakMult}` : '';
+        const label = multLabel ? `+${score} (${multLabel})` : `+${score}`;
         floatingKeyRef.current += 1;
         setFloatingScore({ value: label, key: floatingKeyRef.current });
 
@@ -198,6 +204,26 @@ export const MathBattle = ({
     if (isMultiQuestion) {
       // Reset streak on wrong
       setStreak(0);
+
+      // Shield absorbs wrong answer damage
+      if (shieldCharges > 0) {
+        setShieldCharges(prev => prev - 1);
+        // Shield absorbed — still alive, advance
+        if (currentQIdx + 1 >= questionQueue.length) {
+          const duration = Math.round((Date.now() - startTime) / 1000);
+          setFinalDuration(duration);
+          setFinalScore(totalScore);
+          advanceTimerRef.current = window.setTimeout(() => {
+            setShowResult('success');
+            setShowConfetti(true);
+            stopBGM();
+            achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+          }, 300);
+        } else {
+          setCurrentQIdx(prev => prev + 1);
+        }
+        return;
+      }
 
       setHp(prev => {
         const next = prev - 1;
@@ -256,6 +282,7 @@ export const MathBattle = ({
     setPeakStreak(0);
     setTotalScore(0);
     setFloatingScore(null);
+    setShieldCharges(skillCard === 'shield' ? 2 : 0);
     playBGM();
   };
 
@@ -305,10 +332,24 @@ export const MathBattle = ({
                   </span>
                 )}
 
+                {/* Shield charges indicator */}
+                {skillCard === 'shield' && shieldCharges > 0 && (
+                  <span className="ml-3 px-2 py-0.5 rounded bg-blue-600/60 text-[10px] font-black">
+                    {'\u{1F6E1}\u{FE0F}'} {'\u00D7'}{shieldCharges}
+                  </span>
+                )}
+
                 {/* Difficulty badge */}
                 <span className="ml-4 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-rose-600">
                   {t.challenge}
                 </span>
+
+                {/* Active skill card badge */}
+                {skillCard && (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-black bg-indigo-600/50">
+                    {SKILL_CARDS.find(c => c.id === skillCard)?.icon}
+                  </span>
+                )}
               </div>
 
               {/* Progress indicator for multi-question */}
@@ -363,6 +404,14 @@ export const MathBattle = ({
               <LatexText text={descText} />
             </div>
             <VisualData mission={currentQuestion} lang={lang} />
+
+            {/* Reveal skill card: show formula hint on Q1 */}
+            {skillCard === 'reveal' && currentQIdx === 0 && (
+              <div className="mt-4 p-3 bg-purple-100 border-2 border-purple-300 rounded-lg">
+                <div className="text-purple-800 text-xs font-bold mb-1">{'\u{1F52E}'} {t.secretFormula}</div>
+                <MathView tex={currentQuestion.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-purple-900" />
+              </div>
+            )}
 
             {/* Amber mode: show formula hint */}
             {difficultyMode === 'amber' && (
