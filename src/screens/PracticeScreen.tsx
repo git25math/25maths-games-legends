@@ -89,12 +89,9 @@ export const PracticeScreen = ({
 
   const handlePhaseForward = () => {
     if (currentPhase === 'red') {
-      // Show skill badge
       if (mission.skillName && mission.skillSummary) {
-        console.log('[Practice] Showing badge:', mission.skillName);
         setShowBadge(true);
       } else {
-        console.log('[Practice] No skillName, completing directly. mission.skillName:', mission.skillName);
         onComplete();
       }
       return;
@@ -111,21 +108,23 @@ export const PracticeScreen = ({
     regenerateQuestion();
   };
 
+  // Skill badge takes over the entire screen
+  if (showBadge && mission.skillName && mission.skillSummary) {
+    return (
+      <SkillBadgeCard
+        characterId={character.id}
+        skillName={mission.skillName}
+        skillSummary={mission.skillSummary}
+        formula={mission.secret.formula}
+        missionTitle={mission.title}
+        lang={lang}
+        onClose={onComplete}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/95 backdrop-blur-md">
-      {/* Skill badge overlay */}
-      {showBadge && mission.skillName && mission.skillSummary && (
-        <SkillBadgeCard
-          characterId={character.id}
-          skillName={mission.skillName}
-          skillSummary={mission.skillSummary}
-          formula={mission.secret.formula}
-          missionTitle={mission.title}
-          lang={lang}
-          onClose={onComplete}
-        />
-      )}
-
       {/* Correct answer flash overlay */}
       <AnimatePresence>
         {showCorrectFlash && (
