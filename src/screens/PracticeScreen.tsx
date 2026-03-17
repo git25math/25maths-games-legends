@@ -35,12 +35,7 @@ export const PracticeScreen = ({
   const t = translations[lang];
 
   const [currentPhase, setCurrentPhase] = useState<PracticePhase>('green');
-  const [currentMission, setCurrentMission] = useState<Mission>(() => {
-    const gen = generateMission(mission);
-    // DEBUG: temporary alert to verify generator works in browser
-    alert(`Generator test: original a=${mission.data?.a}, generated a=${gen.data?.a}, result=${gen.data?.result}, type=${mission.data?.generatorType}`);
-    return gen;
-  });
+  const [currentMission, setCurrentMission] = useState<Mission>(() => generateMission(mission));
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [wrongAnswerData, setWrongAnswerData] = useState<{
     userInputs: Record<string, string>;
@@ -64,9 +59,7 @@ export const PracticeScreen = ({
   const descText = interpolate(currentMission.description[lang], p);
 
   const regenerateQuestion = useCallback(() => {
-    const gen = generateMission(mission);
-    console.log('[PracticeScreen] regen:', { a: gen.data?.a, result: gen.data?.result, x: gen.data?.x });
-    setCurrentMission(gen);
+    setCurrentMission(generateMission(mission));
     setInputs({});
     setWrongAnswerData(null);
     setTutorialStep(0);

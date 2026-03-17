@@ -167,8 +167,8 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        {/* Version indicator — if you don't see this, browser has cached old code */}
-        <div className="fixed bottom-2 left-2 z-50 text-yellow-400 text-sm font-mono font-bold bg-black/80 px-2 py-1 rounded">v1.0.2</div>
+        {/* Version indicator */}
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v1.0.2</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
