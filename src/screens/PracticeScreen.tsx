@@ -37,7 +37,8 @@ export const PracticeScreen = ({
   const [currentPhase, setCurrentPhase] = useState<PracticePhase>('green');
   const [currentMission, setCurrentMission] = useState<Mission>(() => {
     const gen = generateMission(mission);
-    console.log('[PracticeScreen] init:', { origA: mission.data?.a, genA: gen.data?.a, genResult: gen.data?.result, genType: mission.data?.generatorType });
+    // DEBUG: temporary alert to verify generator works in browser
+    alert(`Generator test: original a=${mission.data?.a}, generated a=${gen.data?.a}, result=${gen.data?.result}, type=${mission.data?.generatorType}`);
     return gen;
   });
   const [inputs, setInputs] = useState<Record<string, string>>({});
