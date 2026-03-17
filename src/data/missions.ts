@@ -35,8 +35,8 @@ export const MISSIONS: Mission[] = [
     title: { zh: '招兵买马', en: 'Recruiting Soldiers' },
     story: { zh: '为了起义，需要购买兵器。已知 3 把长剑的价格是 15 金，即 $3x=15$。', en: 'To start the rebellion, weapons are needed. 3 swords cost 15 gold: $3x=15$.' },
     description: { zh: '解方程 $3x=15$，求单价 $x$。', en: 'Solve $3x=15$ for the unit price $x$.' },
-    data: { x: 5 }, difficulty: 'Easy', reward: 60,
-    kpId: 'kp-2.1-01', sectionId: 'algebra',
+    data: { x: 5, left: '3x', right: '15', generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 60,
+    kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '关羽："兄长，三把剑共需 15 金。方程 $3x=15$ 中，$x$ 代表每把剑的价格。"', en: 'Guan Yu: "Brother, three swords cost 15 gold. In $3x=15$, $x$ is the price per sword."' },

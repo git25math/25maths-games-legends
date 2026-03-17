@@ -1,12 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, Sparkles } from 'lucide-react';
+import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, Volume2, VolumeX } from 'lucide-react';
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
 import { checkCorrectness } from '../../utils/checkCorrectness';
 import { LatexText, MathView } from '../MathView';
 import { InputFields } from './InputFields';
 import { VisualData } from './VisualData';
+import { AnimatedTutorial } from './AnimatedTutorial';
+import { useAudio } from '../../hooks/useAudio';
+import { CharacterAvatar } from '../CharacterAvatar';
+import { Confetti } from '../Confetti';
+import { AchievementCard } from '../AchievementCard';
 
 const DIFFICULTY_MULTIPLIER: Record<DifficultyMode, number> = { green: 1, amber: 1.5, red: 2 };
 
@@ -37,12 +42,27 @@ export const MathBattle = ({
   const [showResult, setShowResult] = useState<'none' | 'success' | 'fail'>('none');
   const [hp, setHp] = useState(4);
   const [startTime] = useState(Date.now());
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showAchievement, setShowAchievement] = useState(false);
+  const [finalScore, setFinalScore] = useState(0);
+  const [finalDuration, setFinalDuration] = useState(0);
+  const achievementTimerRef = useRef<number | null>(null);
+
+  const { playBGM, stopBGM, playSuccess, playFail, playClick, muted, toggleMute } = useAudio();
 
   const t = translations[lang];
   const isTutorial = mode === 'tutorial' && !!mission.tutorialSteps;
 
-  // Show hints/formula for amber mode
-  const showHints = difficultyMode === 'amber' || difficultyMode === 'green';
+  // Start/stop BGM on mount/unmount + cleanup achievement timer
+  useEffect(() => {
+    playBGM();
+    return () => {
+      stopBGM();
+      if (achievementTimerRef.current !== null) {
+        clearTimeout(achievementTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (showResult === 'fail') {
@@ -52,23 +72,51 @@ export const MathBattle = ({
   }, [showResult]);
 
   const handleSubmit = () => {
+    playClick();
     if (checkCorrectness(mission, inputs)) {
       const duration = (Date.now() - startTime) / 1000;
       const speedBonus = Math.max(0, 100 - Math.floor(duration));
       const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
-      const finalScore = Math.round((mission.reward + speedBonus) * multiplier);
+      const score = Math.round((mission.reward + speedBonus) * multiplier);
+      setFinalScore(score);
+      setFinalDuration(Math.round(duration));
       setShowResult('success');
-      setTimeout(() => onComplete(true, finalScore, Math.round(duration), hp), 2000);
+      setShowConfetti(true);
+      playSuccess();
+      stopBGM();
+      // Show achievement card after 2s
+      achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
     } else {
+      playFail();
       setHp(prev => prev - 1);
       if (hp <= 1) {
         setShowResult('fail');
+        stopBGM();
       }
     }
   };
 
+  const handleAchievementClose = () => {
+    onComplete(true, finalScore, finalDuration, hp);
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/95 backdrop-blur-md">
+      <Confetti active={showConfetti} />
+
+      {showAchievement && (
+        <AchievementCard
+          characterId={character.id}
+          missionTitle={mission.title}
+          score={finalScore}
+          duration={finalDuration}
+          hp={hp}
+          difficulty={difficultyMode}
+          lang={lang}
+          onClose={handleAchievementClose}
+        />
+      )}
+
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -77,9 +125,7 @@ export const MathBattle = ({
         {/* Header */}
         <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
           <div className="flex items-center gap-4">
-            <div className={`w-14 h-14 rounded-lg border-2 border-[#f4e4bc]/30 overflow-hidden ${character.color}`}>
-              <img src={character.image} alt={character.name[lang]} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-            </div>
+            <CharacterAvatar characterId={character.id} size={56} />
             <div>
               <h2 className="text-xl font-black tracking-widest">{character.name[lang]} - {mission.title[lang]}</h2>
               <div className="flex gap-1 mt-1">
@@ -96,11 +142,17 @@ export const MathBattle = ({
               </div>
             </div>
           </div>
-          {!isMultiplayer && (
-            <button onClick={onCancel} className="p-2 hover:bg-white/10 rounded-full transition-colors">
-              <XCircle size={24} />
+          <div className="flex items-center gap-2">
+            {/* Mute button */}
+            <button onClick={toggleMute} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+              {muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
             </button>
-          )}
+            {!isMultiplayer && (
+              <button onClick={onCancel} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                <XCircle size={24} />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Battle Content */}
@@ -141,23 +193,13 @@ export const MathBattle = ({
           <div className="space-y-6">
             {/* Tutorial overlay for Green mode */}
             {isTutorial && mission.tutorialSteps && (
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="bg-indigo-600/10 border-2 border-indigo-500/30 p-4 rounded-xl mb-4"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center shrink-0">
-                    <Sparkles className="text-white" size={20} />
-                  </div>
-                  <div>
-                    <p className="text-indigo-900 font-bold text-sm mb-1">{t.tutorialTitle}</p>
-                    <p className="text-indigo-800 text-xs leading-relaxed italic">
-                      {mission.tutorialSteps[tutorialStep].text[lang]}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+              <AnimatedTutorial
+                tutorialSteps={mission.tutorialSteps}
+                equationSteps={mission.data?.tutorialEquationSteps}
+                characterId={character.id}
+                currentStep={tutorialStep}
+                lang={lang}
+              />
             )}
 
             <InputFields
@@ -172,6 +214,7 @@ export const MathBattle = ({
             {isTutorial ? (
               <button
                 onClick={() => {
+                  playClick();
                   if (tutorialStep < (mission.tutorialSteps?.length || 0) - 1) {
                     setTutorialStep(prev => prev + 1);
                   } else {
@@ -206,7 +249,7 @@ export const MathBattle = ({
 
         {/* Result Overlay */}
         <AnimatePresence>
-          {showResult !== 'none' && (
+          {showResult !== 'none' && !showAchievement && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -228,7 +271,7 @@ export const MathBattle = ({
                   <p className="text-slate-400 mb-2">{t.failDesc}</p>
                   <p className="text-indigo-400 font-bold mb-8 italic">"{encouragement}"</p>
                   <button
-                    onClick={() => { setHp(4); setShowResult('none'); setInputs({}); }}
+                    onClick={() => { setHp(4); setShowResult('none'); setInputs({}); playBGM(); }}
                     className="px-12 py-5 bg-red-700 text-white font-black rounded-xl shadow-xl hover:bg-red-600 transition-all"
                   >
                     {t.retry}
