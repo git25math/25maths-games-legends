@@ -113,6 +113,14 @@ export const translations = {
     hp: "体力",
     defense: "防御力",
     cards: { kill: "杀", dodge: "闪", peach: "桃" },
+    practice: "练习",
+    challenge: "闯关",
+    practicePhase: { green: "手把手", amber: "有提示", red: "独立挑战" },
+    readyForNext: "我准备好了，进入下一阶段",
+    goBack: "回到上一阶段",
+    practiceComplete: "练习通关！",
+    nextQuestion: "下一题",
+    enterChallenge: "进入闯关模式",
   },
   en: {
     title: "Three Kingdoms Math",
@@ -226,6 +234,14 @@ export const translations = {
     hp: "HP",
     defense: "Defense",
     cards: { kill: "Kill", dodge: "Dodge", peach: "Heal" },
+    practice: "Practice",
+    challenge: "Challenge",
+    practicePhase: { green: "Step by Step", amber: "With Hints", red: "On Your Own" },
+    readyForNext: "I'm ready for the next level",
+    goBack: "Go back to previous level",
+    practiceComplete: "Practice Complete!",
+    nextQuestion: "Next Question",
+    enterChallenge: "Enter Challenge Mode",
   }
 } as const;
 

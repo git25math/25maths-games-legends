@@ -118,4 +118,4 @@ export type BattleResult = {
   hp_remaining: number;
 };
 
-export type GameState = 'welcome' | 'map' | 'battle' | 'lobby';
+export type GameState = 'welcome' | 'map' | 'battle' | 'lobby' | 'practice';

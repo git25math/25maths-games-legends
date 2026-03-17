@@ -18,6 +18,7 @@ import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
 import { MapScreen } from './screens/MapScreen';
 import { LobbyScreen } from './screens/LobbyScreen';
+import { PracticeScreen } from './screens/PracticeScreen';
 
 class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; error: any }> {
   state = { hasError: false, error: null };
@@ -68,6 +69,11 @@ export default function App() {
   const handleMissionStart = (mission: Mission) => {
     setActiveMission(mission);
     setShowDifficultySelector(true);
+  };
+
+  const handlePracticeStart = (mission: Mission) => {
+    setActiveMission(mission);
+    setGameState('practice');
   };
 
   const handleDifficultySelect = (mode: DifficultyMode) => {
@@ -184,6 +190,7 @@ export default function App() {
                 missions={missions}
                 selectedChar={selectedChar}
                 onMissionStart={handleMissionStart}
+                onPracticeStart={handlePracticeStart}
                 onGradeChange={() => updateProfile({ grade: null })}
                 onCreateRoom={createRoom}
               />
@@ -211,6 +218,22 @@ export default function App() {
               difficultyMode={selectedDifficulty}
               isMultiplayer={!!activeRoom}
               roomData={activeRoom}
+            />
+          )}
+
+          {gameState === 'practice' && activeMission && selectedChar && (
+            <PracticeScreen
+              mission={activeMission}
+              character={selectedChar}
+              lang={lang}
+              onComplete={() => {
+                setGameState('map');
+                setActiveMission(null);
+              }}
+              onCancel={() => {
+                setGameState('map');
+                setActiveMission(null);
+              }}
             />
           )}
         </div>
