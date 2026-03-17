@@ -10,7 +10,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '刘关张三人结义，需平分美酒。已知总酒量为 $x+5=12$。', en: 'Three brothers share wine. Total amount: $x+5=12$.' },
     description: { zh: '解方程 $x+5=12$，求 $x$。', en: 'Solve $x+5=12$ for $x$.' },
     data: { x: 7 }, difficulty: 'Easy', reward: 50,
-    kpId: 'kp-2.1', sectionId: 'algebra',
+    kpId: 'kp-2.1-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '诸葛亮："三位将军结义，需平分美酒。方程 $x+5=12$ 中，$x$ 是每人的酒量。"', en: 'Zhuge Liang: "Three brothers share wine. In $x+5=12$, $x$ is each person\'s share."' },
@@ -36,7 +36,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '为了起义，需要购买兵器。已知 3 把长剑的价格是 15 金，即 $3x=15$。', en: 'To start the rebellion, weapons are needed. 3 swords cost 15 gold: $3x=15$.' },
     description: { zh: '解方程 $3x=15$，求单价 $x$。', en: 'Solve $3x=15$ for the unit price $x$.' },
     data: { x: 5 }, difficulty: 'Easy', reward: 60,
-    kpId: 'kp-2.1', sectionId: 'algebra',
+    kpId: 'kp-2.1-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '关羽："兄长，三把剑共需 15 金。方程 $3x=15$ 中，$x$ 代表每把剑的价格。"', en: 'Guan Yu: "Brother, three swords cost 15 gold. In $3x=15$, $x$ is the price per sword."' },
@@ -62,7 +62,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '军粮分配需按比例。已知 $2x = 24$，求每份军粮 $x$。', en: 'Grain must be distributed proportionally. $2x = 24$, find $x$.' },
     description: { zh: '解方程 $2x=24$。', en: 'Solve $2x=24$.' },
     data: { x: 12 }, difficulty: 'Easy', reward: 70,
-    kpId: 'kp-1.10', sectionId: 'number',
+    kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '曹操："粮草乃军中命脉。$2x = 24$ 中，$x$ 是每份军粮数量。"', en: 'Cao Cao: "Supplies are the army\'s lifeline. In $2x = 24$, $x$ is each portion of grain."' },
@@ -88,7 +88,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '修筑工事需要民夫。已知 5 个村庄共征调了 $5x = 100$ 人。', en: 'Laborers are needed for fortifications. 5 villages drafted $5x = 100$ people.' },
     description: { zh: '解方程 $5x=100$，求每个村庄的人数 $x$。', en: 'Solve $5x=100$ for $x$ per village.' },
     data: { x: 20 }, difficulty: 'Easy', reward: 75,
-    kpId: 'kp-1.10', sectionId: 'number',
+    kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '张飞："五个村庄，征调 100 人！$5x = 100$，$x$ 就是每村出的人数。"', en: 'Zhang Fei: "Five villages, drafting 100 people! In $5x = 100$, $x$ is the number per village."' },
@@ -114,7 +114,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '虎牢关地势险要。已知城墙一侧角度为 $120^\\circ$，求其补角 $x$ 以布置弩床。', en: 'Hulao Pass is steep. One side angle is $120^\\circ$, find its supplementary angle $x$ for ballista placement.' },
     description: { zh: '计算补角：$180 - 120 = x$。', en: 'Calculate supplementary angle: $180 - 120 = x$.' },
     data: { angle: 120 }, difficulty: 'Easy', reward: 80,
-    kpId: 'kp-4.1', sectionId: 'geometry',
+    kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '吕布："虎牢关城墙一侧角度为 $120^\\circ$，要布置弩床，须知其补角。"', en: 'Lu Bu: "The wall angle at Hulao Pass is $120^\\circ$. To place the ballista, we need the supplementary angle."' },
@@ -140,7 +140,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '布置两座箭塔。已知两塔射击线成直角，其中一个角为 $35^\\circ$。', en: 'Set up two arrow towers. Their lines form a right angle, one angle is $35^\\circ$.' },
     description: { zh: '计算余角 $x$：$90 - 35 = x$。', en: 'Calculate complementary angle $x$: $90 - 35 = x$.' },
     data: { angle: 35, total: 90 }, difficulty: 'Easy', reward: 85,
-    kpId: 'kp-4.1', sectionId: 'geometry',
+    kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '高顺："两座箭塔的射击线成直角，一个角为 $35^\\circ$，须求另一个角。"', en: 'Gao Shun: "Two towers form a right angle. One angle is $35^\\circ$, find the other."' },
@@ -166,7 +166,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '布置八卦阵。已知阵法中心发出的两个方位角互为补角，其中一个是 $45^\\circ$。', en: 'Setting up the Eight Trigrams. Two central angles are supplementary, one is $45^\\circ$.' },
     description: { zh: '求另一个角 $x$。', en: 'Find the other angle $x$.' },
     data: { angle: 45 }, difficulty: 'Medium', reward: 90,
-    kpId: 'kp-4.1', sectionId: 'geometry',
+    kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '诸葛亮："八卦阵中，两个方位角互为补角。已知一角 $45^\\circ$，须求另一角。"', en: 'Zhuge Liang: "In the Eight Trigrams, two bearing angles are supplementary. One is $45^\\circ$, find the other."' },
@@ -194,7 +194,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '黄巾军作乱，曹操率部急行军。已知出发点为 $(0, 2)$，1小时后到达 $(1, 5)$。', en: "Yellow Turbans are rebelling. Cao Cao leads a forced march. Start at $(0, 2)$, reach $(1, 5)$ in 1 hour." },
     description: { zh: '求行军路线的函数表达式 $y = mx + b$。', en: 'Find the function $y = mx + b$ for the march route.' },
     data: { points: [[0, 2], [1, 5]] }, difficulty: 'Medium', reward: 150,
-    kpId: 'kp-3.1', sectionId: 'functions',
+    kpId: 'kp-3.5-01', sectionId: 'functions',
     tutorialSteps: [
       {
         text: { zh: '曹操："急行军路线经过 $(0,2)$ 和 $(1,5)$ 两点。先求斜率 $m$。"', en: 'Cao Cao: "The march route passes through $(0,2)$ and $(1,5)$. First find the slope $m$."' },
@@ -220,7 +220,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '发现敌军哨兵！哨兵位置符合 $y = x + 4$，我军需在 $x=2$ 处拦截。', en: "Enemy scouts spotted! Their position follows $y = x + 4$. Intercept at $x=2$." },
     description: { zh: '计算拦截点的 $y$ 坐标。', en: 'Calculate the $y$ coordinate of the intercept point.' },
     data: { m: 1, b: 4, x: 2 }, difficulty: 'Medium', reward: 160,
-    kpId: 'kp-3.1', sectionId: 'functions',
+    kpId: 'kp-3.5-01', sectionId: 'functions',
     tutorialSteps: [
       {
         text: { zh: '夏侯惇："哨兵位置符合 $y = x + 4$，需在 $x=2$ 处拦截。"', en: 'Xiahou Dun: "Scout position follows $y = x + 4$. Intercept at $x=2$."' },
@@ -246,7 +246,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '两路大军合围。已知路线经过 $(2, 10)$ 和 $(4, 18)$。', en: 'Two armies encircle. The route passes through $(2, 10)$ and $(4, 18)$.' },
     description: { zh: '求斜率 $m$。', en: 'Find the slope $m$.' },
     data: { points: [[2, 10], [4, 18]] }, difficulty: 'Medium', reward: 170,
-    kpId: 'kp-3.1', sectionId: 'functions',
+    kpId: 'kp-3.3-01', sectionId: 'functions',
     tutorialSteps: [
       {
         text: { zh: '曹仁："合围路线经过 $(2,10)$ 和 $(4,18)$。先求斜率 $m$。"', en: 'Cao Ren: "The encirclement route passes through $(2,10)$ and $(4,18)$. Find slope $m$."' },
@@ -272,7 +272,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '为了抵御黄巾军，需要建立一个长方形营地。长为 20 丈，宽为 15 丈。', en: 'To defend against rebels, a rectangular camp is needed. Length 20, Width 15.' },
     description: { zh: '计算营地的总面积。', en: 'Calculate the total area of the camp.' },
     data: { length: 20, width: 15 }, difficulty: 'Easy', reward: 100,
-    kpId: 'kp-5.1', sectionId: 'geometry',
+    kpId: 'kp-5.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '荀彧："营地为长方形，长 20 丈，宽 15 丈。面积公式为长乘宽。"', en: 'Xun Yu: "The camp is rectangular, length 20, width 15. Area = length times width."' },
@@ -298,7 +298,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '建立圆柱形粮仓。底面半径 5 丈，高 10 丈。', en: 'Build a cylindrical granary. Base radius 5, height 10.' },
     description: { zh: '计算体积：$V = \\pi r^2 h$（取 $\\pi = 3$）。', en: 'Calculate volume: $V = \\pi r^2 h$ (use $\\pi = 3$).' },
     data: { radius: 5, height: 10, pi: 3 }, difficulty: 'Medium', reward: 180,
-    kpId: 'kp-5.2', sectionId: 'geometry',
+    kpId: 'kp-5.4-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '满宠："粮仓为圆柱形，半径 5 丈，高 10 丈。体积公式为 $V = \\pi r^2 h$。"', en: 'Man Chong: "The granary is cylindrical, radius 5, height 10. Volume formula: $V = \\pi r^2 h$."' },
@@ -324,7 +324,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '修筑一个梯形点将台。上底 10 丈，下底 20 丈，高 8 丈。', en: 'Build a trapezoidal platform. Top base 10, bottom base 20, height 8.' },
     description: { zh: '计算梯形面积：$(a+b)h/2$。', en: 'Calculate trapezoid area: $(a+b)h/2$.' },
     data: { a: 10, b: 20, h: 8 }, difficulty: 'Medium', reward: 190,
-    kpId: 'kp-5.1', sectionId: 'geometry',
+    kpId: 'kp-5.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '袁绍："点将台为梯形。上底 10 丈，下底 20 丈，高 8 丈。"', en: 'Yuan Shao: "The platform is trapezoidal. Top 10, bottom 20, height 8."' },
@@ -350,7 +350,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '曹操在兖州推行屯田。已知农户产粮 1000 斛，需缴纳 40% 作为粮税。', en: 'Cao Cao implements tuntian. A farmer yields 1000, tax is 40%.' },
     description: { zh: '计算应缴粮税：$1000 \\times 40\\%$。', en: 'Calculate tax: $1000 \\times 40\\%$.' },
     data: { initial: 1000, rate: 0.4, years: 1 }, difficulty: 'Easy', reward: 150,
-    kpId: 'kp-1.12', sectionId: 'number',
+    kpId: 'kp-1.13-01', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '枣祗："屯田之策，产粮 1000 斛，税率 40%。"', en: 'Zao Zhi: "Tuntian policy: yield 1000 units, tax rate 40%."' },
@@ -376,7 +376,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '购买一批精铁。原价 5000 金，由于大批量采购，商家给予 15% 的折扣。', en: 'Buying fine iron. Original price 5000, 15% discount for bulk.' },
     description: { zh: '计算折后价格：$5000 \\times (1 - 15\\%)$。', en: 'Calculate discounted price: $5000 \\times (1 - 15\\%)$.' },
     data: { initial: 5000, rate: -0.15, years: 1 }, difficulty: 'Medium', reward: 180,
-    kpId: 'kp-1.12', sectionId: 'number',
+    kpId: 'kp-1.13-01', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '韩浩："精铁原价 5000 金，打八五折（15% 折扣）。"', en: 'Han Hao: "Fine iron costs 5000 gold, with a 15% discount."' },
@@ -402,7 +402,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '统计一队精锐士兵的年龄：20, 22, 24, 26, 28。', en: "Stats for elite soldiers' ages: 20, 22, 24, 26, 28." },
     description: { zh: '计算平均年龄（Mean）。', en: 'Calculate the Mean age.' },
     data: { values: [20, 22, 24, 26, 28], mode: 'mean' }, difficulty: 'Medium', reward: 200,
-    kpId: 'kp-9.3', sectionId: 'statistics',
+    kpId: 'kp-9.3-01', sectionId: 'statistics',
     tutorialSteps: [
       {
         text: { zh: '满宠："统计精锐士兵年龄：20, 22, 24, 26, 28。求平均年龄。"', en: 'Man Chong: "Elite soldier ages: 20, 22, 24, 26, 28. Find the mean."' },
@@ -428,7 +428,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '测量亲卫队的身高（丈）：1.7, 1.8, 1.8, 1.9, 2.0。', en: 'Measuring guard heights: 1.7, 1.8, 1.8, 1.9, 2.0.' },
     description: { zh: '计算中位数（Median）。', en: 'Calculate the Median height.' },
     data: { values: [1.7, 1.8, 1.8, 1.9, 2.0], mode: 'median' }, difficulty: 'Medium', reward: 220,
-    kpId: 'kp-9.3', sectionId: 'statistics',
+    kpId: 'kp-9.3-01', sectionId: 'statistics',
     tutorialSteps: [
       {
         text: { zh: '典韦："亲卫队身高：1.7, 1.8, 1.8, 1.9, 2.0。求中位数。"', en: 'Dian Wei: "Guard heights: 1.7, 1.8, 1.8, 1.9, 2.0. Find the median."' },
@@ -456,7 +456,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '官渡之战前夕，曹操囤积粮草。第一年产粮 $3^2$ 斛，第二年产粮是第一年的 $3^3$ 倍。', en: "Before Guandu, Cao Cao stores grain. Year 1 yields $3^2$, Year 2 is $3^3$ times that." },
     description: { zh: '计算总产量：$3^2 \\times 3^3 = 3^x$，求 $x$。', en: 'Calculate total: $3^2 \\times 3^3 = 3^x$, find $x$.' },
     data: { base: 3, e1: 2, e2: 3 }, difficulty: 'Easy', reward: 120,
-    kpId: 'kp-1.6', sectionId: 'number',
+    kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '郭嘉："官渡之战前，粮草为 $3^2 \\times 3^3$。同底数幂相乘，指数相加。"', en: 'Guo Jia: "Before Guandu, grain is $3^2 \\times 3^3$. Same base powers multiply: add exponents."' },
@@ -482,7 +482,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '粮仓容量需提升。已知原容量为 $(2^3)^2$，求最终容量 $2^x$ 中的 $x$。', en: "Granary capacity must increase. Original is $(2^3)^2$, find $x$ in $2^x$." },
     description: { zh: '利用幂的乘方性质：$(a^m)^n = a^{mn}$。', en: 'Use power of a power property: $(a^m)^n = a^{mn}$.' },
     data: { base: 2, e1: 3, e2: 2 }, difficulty: 'Medium', reward: 140,
-    kpId: 'kp-1.6', sectionId: 'number',
+    kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '程昱："粮仓容量为 $(2^3)^2$。幂的乘方，底数不变，指数相乘。"', en: 'Cheng Yu: "Granary capacity is $(2^3)^2$. Power of a power: base stays, exponents multiply."' },
@@ -508,7 +508,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '袭击袁绍粮仓。已知粮仓数量为 $2^8$，每把火能烧毁 $2^5$ 座。', en: "Attacking Wuchao. There are $2^8$ granaries, each fire destroys $2^5$." },
     description: { zh: '计算剩余粮仓：$2^8 / 2^5 = 2^x$，求 $x$。', en: 'Calculate remaining: $2^8 / 2^5 = 2^x$, find $x$.' },
     data: { base: 2, e1: 8, e2: 5, op: 'div' }, difficulty: 'Medium', reward: 160,
-    kpId: 'kp-1.6', sectionId: 'number',
+    kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '曹操："乌巢粮仓 $2^8$ 座，一把火烧 $2^5$ 座。同底数幂相除，指数相减。"', en: 'Cao Cao: "$2^8$ granaries at Wuchao, fire destroys $2^5$. Same base division: subtract exponents."' },
@@ -534,7 +534,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: "攻打袁绍营寨。城墙高 8 丈，护城河宽 6 丈。", en: "Attacking Yuan Shao's camp. Walls 8 units high, moat 6 units wide." },
     description: { zh: '求云梯长度 $c$。', en: 'Find ladder length $c$.' },
     data: { a: 6, b: 8 }, difficulty: 'Medium', reward: 200,
-    kpId: 'kp-4.6', sectionId: 'geometry',
+    kpId: 'kp-6.1-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '许褚："城墙高 8 丈，护城河宽 6 丈。云梯是直角三角形的斜边！"', en: 'Xu Chu: "Wall height 8, moat width 6. The ladder is the hypotenuse of a right triangle!"' },
@@ -560,7 +560,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '从望楼俯瞰敌营。已知望楼高 12 丈，与敌营水平距离 16 丈。', en: 'Scouting from a tower. Height 12, horizontal distance 16.' },
     description: { zh: '求正切值 $\\tan(\\theta) = \\text{对边} / \\text{邻边}$。', en: 'Find $\\tan(\\theta) = \\text{opposite} / \\text{adjacent}$.' },
     data: { opposite: 12, adjacent: 16 }, difficulty: 'Medium', reward: 220,
-    kpId: 'kp-6.1', sectionId: 'geometry',
+    kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '乐进："望楼高 12 丈，敌营水平距离 16 丈。需求正切值。"', en: 'Yue Jin: "Tower height 12, horizontal distance 16. Find the tangent value."' },
@@ -586,7 +586,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '挖掘地道突袭袁绍。地道斜长 25 丈，水平距离 24 丈。', en: 'Digging a tunnel to raid Yuan Shao. Slant length 25, horizontal distance 24.' },
     description: { zh: '求地道深度 $b$。', en: 'Find tunnel depth $b$.' },
     data: { a: 24, c: 25 }, difficulty: 'Hard', reward: 250,
-    kpId: 'kp-4.6', sectionId: 'geometry',
+    kpId: 'kp-6.1-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '曹洪："地道斜长 25 丈，水平距离 24 丈。用勾股定理求深度。"', en: 'Cao Hong: "Tunnel slant length 25, horizontal distance 24. Use Pythagoras to find depth."' },
@@ -612,7 +612,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '制作一面大旗。已知小旗长 2 尺，宽 3 尺。大旗与小旗相似，长为 6 尺。', en: 'Making a large flag. Small flag is 2x3. Large flag is similar, length 6.' },
     description: { zh: '求大旗的宽 $x$。', en: 'Find the width $x$ of the large flag.' },
     data: { a: 6, b: 2, c: 3 }, difficulty: 'Medium', reward: 200,
-    kpId: 'kp-4.5', sectionId: 'geometry',
+    kpId: 'kp-4.4-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '于禁："小旗长 2 宽 3，大旗长 6。相似图形对应边成比例。"', en: 'Yu Jin: "Small flag: length 2, width 3. Large flag: length 6. Similar figures have proportional sides."' },
@@ -638,7 +638,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '在地图上测量距离。地图比例尺为 1:1000。地图上距离为 5 厘米。', en: 'Measuring distance on a map. Scale is 1:1000. Map distance is 5cm.' },
     description: { zh: '求实际距离 $x$（单位：厘米）。', en: 'Find actual distance $x$ (in cm).' },
     data: { a: 1000, b: 1, c: 5 }, difficulty: 'Medium', reward: 220,
-    kpId: 'kp-4.5', sectionId: 'geometry',
+    kpId: 'kp-4.4-01', sectionId: 'geometry',
     tutorialSteps: [
       {
         text: { zh: '董昭："地图比例尺 1:1000，图上距离 5 厘米。相似比例关系！"', en: 'Dong Zhao: "Map scale 1:1000, map distance 5cm. Similar proportional relationship!"' },
@@ -664,7 +664,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '分配粮草。士兵与粮草的比例需保持在 2:5。现有 1000 名士兵。', en: 'Allocating grain. Ratio of soldiers to grain must be 2:5. There are 1000 soldiers.' },
     description: { zh: '求所需粮草 $y$（即 $1000:y = 2:5$）。', en: 'Find grain $y$ (i.e., $1000:y = 2:5$).' },
     data: { a: 2, b: 5 }, difficulty: 'Medium', reward: 240,
-    kpId: 'kp-1.10', sectionId: 'number',
+    kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '李典："士兵与粮草比例 2:5，现有 1000 名士兵。先求比例因子。"', en: 'Li Dian: "Soldiers to grain ratio 2:5, with 1000 soldiers. First find the scale factor."' },
@@ -690,7 +690,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '混合兵种。步兵与骑兵比例为 3:1。现有步兵 900 人。', en: 'Mixing troops. Infantry to cavalry ratio is 3:1. There are 900 infantry.' },
     description: { zh: '求骑兵数量 $y$。', en: 'Find cavalry count $y$.' },
     data: { a: 3, b: 1 }, difficulty: 'Medium', reward: 260,
-    kpId: 'kp-1.10', sectionId: 'number',
+    kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '曹纯："步兵与骑兵比例 3:1，步兵 900 人。求骑兵数。"', en: 'Cao Chun: "Infantry to cavalry ratio 3:1, 900 infantry. Find cavalry count."' },
@@ -712,39 +712,39 @@ export const MISSIONS: Mission[] = [
   // --- Year 10: The Battle of Red Cliffs (Complexity) ---
   {
     id: 1011, grade: 10, unitId: 1, order: 1,
-    unitTitle: { zh: "Unit 1: 火攻与二次函数", en: "Unit 1: Fire Attack & Quadratics" },
+    unitTitle: { zh: "Unit 1: 火攻轨迹与二次函数", en: "Unit 1: Fire Attack & Quadratic Functions" },
     topic: 'Functions', type: 'QUADRATIC',
-    title: { zh: '草船借箭', en: 'Straw Boats' },
-    story: { zh: '诸葛亮利用大雾借箭。箭矢飞行的抛物线高度为 $h = -0.01x^2 + x$。', en: 'Zhuge Liang borrows arrows in the mist. Arrow height: $h = -0.01x^2 + x$.' },
-    description: { zh: '求箭矢飞行的最大高度（顶点 $y$）。', en: 'Find the maximum height of the arrow (vertex $y$).' },
-    data: { p1: [0, 0], p2: [50, 25] }, difficulty: 'Medium', reward: 300,
-    kpId: 'kp-2.10', sectionId: 'algebra',
+    title: { zh: '草船借箭', en: 'Straw Boats Borrow Arrows' },
+    story: { zh: '大雾弥漫，诸葛亮草船借箭。箭矢高度 $h = -x^2 + 10x$，求最高点 $x$。', en: 'Dense fog covers the river. Zhuge Liang borrows arrows with straw boats. Arrow height $h = -x^2 + 10x$, find the peak $x$.' },
+    description: { zh: '求箭矢飞行的最高点坐标。', en: 'Find the peak coordinates of the arrow trajectory.' },
+    data: { p1: [0, 0], p2: [5, 25] }, difficulty: 'Easy', reward: 300,
+    kpId: 'kp-2.10-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '诸葛亮："箭矢抛物线 $h = -0.01x^2 + x$。先找系数 $a$ 和 $b$。"', en: 'Zhuge Liang: "Arrow parabola $h = -0.01x^2 + x$. First identify coefficients $a$ and $b$."' },
+        text: { zh: '周瑜："诸葛亮草船借箭，箭矢轨迹是抛物线 $h = -x^2 + 10x$。我们要找最高点。"', en: 'Zhou Yu: "Zhuge Liang borrows arrows. The trajectory $h = -x^2 + 10x$ is a parabola. Find the peak."' },
         highlightField: 'a'
       },
       {
-        text: { zh: '诸葛亮："$a = -0.01$, $b = 1$。顶点 $x = -b/(2a) = -1/(2 \\times -0.01) = 50$"', en: 'Zhuge Liang: "$a = -0.01$, $b = 1$. Vertex $x = -b/(2a) = -1/(2 \\times -0.01) = 50$"' },
-        hint: { zh: '将 $x=50$ 代入求最大高度', en: 'Substitute $x=50$ to find maximum height' },
-        highlightField: 'c'
+        text: { zh: '周瑜："二次函数 $y = ax^2 + bx$ 的顶点在 $x = -b/(2a)$。这里 $a=-1, b=10$。"', en: 'Zhou Yu: "For $y = ax^2 + bx$, vertex is at $x = -b/(2a)$. Here $a=-1, b=10$."' },
+        hint: { zh: '$x = -10/(2 \\times -1) = ?$', en: '$x = -10/(2 \\times -1) = ?$' },
+        highlightField: 'a'
       },
       {
-        text: { zh: '诸葛亮："最大高度 $h = -0.01(50)^2 + 50 = 25$！借箭之妙，在于算准时机。"', en: 'Zhuge Liang: "Maximum height $h = -0.01(50)^2 + 50 = 25$! The beauty of borrowing arrows is in timing."' },
+        text: { zh: '周瑜："$x = 5$，代入得 $h = -25+50 = 25$。最高点在 $(5, 25)$！妙计成功！"', en: 'Zhou Yu: "$x = 5$, so $h = -25+50 = 25$. Peak at $(5, 25)$! Brilliant strategy!"' },
         highlightField: 'c'
       }
     ],
-    secret: { concept: { zh: '二次函数顶点纵坐标。', en: 'Vertex y-coordinate of a quadratic.' }, formula: '$y = -b^2 / 4a$', tips: [{ zh: '诸葛亮提示：借箭之妙，在于算准时机。', en: 'Zhuge Tip: The beauty of borrowing arrows is in the timing.' }] }
+    secret: { concept: { zh: '二次函数顶点公式：$x = -b/(2a)$。', en: 'Vertex formula: $x = -b/(2a)$.' }, formula: '$x = -b/(2a)$', tips: [{ zh: '周瑜提示：草船借箭，妙在算准轨迹。', en: 'Zhou Yu Tip: Borrowing arrows with straw boats — the key is calculating the trajectory.' }] }
   },
   {
     id: 1012, grade: 10, unitId: 1, order: 2,
-    unitTitle: { zh: "Unit 1: 火攻与二次函数", en: "Unit 1: Fire Attack & Quadratics" },
+    unitTitle: { zh: "Unit 1: 火攻轨迹与二次函数", en: "Unit 1: Fire Attack & Quadratic Functions" },
     topic: 'Functions', type: 'ROOTS',
     title: { zh: '火烧赤壁', en: 'Burning Red Cliffs' },
     story: { zh: "火船冲向曹营。火势蔓延范围由 $y = -x^2 + 16$ 描述。", en: "Fire ships rush Cao's camp. Fire spread range: $y = -x^2 + 16$." },
     description: { zh: '求火势覆盖的水平宽度（即两根之差）。', en: 'Find the horizontal width of the fire (difference between roots).' },
-    data: { a: -1, b: 0, c: 16 }, difficulty: 'Hard', reward: 350,
-    kpId: 'kp-2.10', sectionId: 'algebra',
+    data: { a: -1, b: 0, c: 16 }, difficulty: 'Medium', reward: 350,
+    kpId: 'kp-2.10-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '周瑜："火势范围 $y = -x^2 + 16$。令 $y=0$，求 $x$ 的根。"', en: 'Zhou Yu: "Fire range $y = -x^2 + 16$. Set $y=0$, find roots of $x$."' },
@@ -764,13 +764,13 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 1013, grade: 10, unitId: 1, order: 3,
-    unitTitle: { zh: "Unit 1: 火攻与二次函数", en: "Unit 1: Fire Attack & Quadratics" },
+    unitTitle: { zh: "Unit 1: 火攻轨迹与二次函数", en: "Unit 1: Fire Attack & Quadratic Functions" },
     topic: 'Functions', type: 'ROOTS',
     title: { zh: '投石射程', en: 'Catapult Range' },
     story: { zh: '曹军在岸边架起投石机。石块轨迹为 $y = -x^2 + 100$。', en: 'Cao army sets up catapults. Stone trajectory: $y = -x^2 + 100$.' },
     description: { zh: '求石块落地的位置 $x$（即 $y=0$ 且 $x>0$ 的根）。', en: 'Find where the stone hits the ground $x$ (root of $y=0$ where $x>0$).' },
     data: { a: -1, b: 0, c: 100 }, difficulty: 'Hard', reward: 480,
-    kpId: 'kp-2.10', sectionId: 'algebra',
+    kpId: 'kp-2.10-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '曹仁："石块轨迹 $y = -x^2 + 100$，求落地位置（$y=0$, $x>0$）。"', en: 'Cao Ren: "Stone trajectory $y = -x^2 + 100$, find landing position ($y=0$, $x>0$)."' },
@@ -790,16 +790,16 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 1021, grade: 10, unitId: 2, order: 1,
-    unitTitle: { zh: "Unit 2: 联军与二元一次方程", en: "Unit 2: Alliance & Simultaneous Equations" },
+    unitTitle: { zh: "Unit 2: 连环计与联立方程", en: "Unit 2: Chain Strategy & Simultaneous Equations" },
     topic: 'Algebra', type: 'SIMULTANEOUS',
     title: { zh: '兵力合围', en: 'Troop Encirclement' },
     story: { zh: '孙刘联军合围曹操。$x + y = 10000$，$2x - y = 5000$。', en: 'Sun-Liu coalition encircles Cao. $x + y = 10000$, $2x - y = 5000$.' },
     description: { zh: '求孙军 $x$ 和刘军 $y$ 的兵力。', en: 'Find Sun army $x$ and Liu army $y$ strength.' },
-    data: { x: 5000, y: 5000 }, difficulty: 'Medium', reward: 320,
-    kpId: 'kp-2.5', sectionId: 'algebra',
+    data: { x: 5000, y: 5000 }, difficulty: 'Easy', reward: 320,
+    kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '鲁肃："联军合围！$x + y = 10000$，$2x - y = 5000$。用加减消元法。"', en: 'Lu Su: "Coalition encircles! $x + y = 10000$, $2x - y = 5000$. Use elimination."' },
+        text: { zh: '鲁肃："赤壁之战在即，孙刘联盟合围曹操！$x + y = 10000$，$2x - y = 5000$。用加减消元法。"', en: 'Lu Su: "The Battle of Red Cliffs is imminent! Sun-Liu alliance encircles Cao! $x + y = 10000$, $2x - y = 5000$. Use elimination."' },
         highlightField: 'x'
       },
       {
@@ -808,7 +808,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '鲁肃："$x = 5000$，代入得 $y = 5000$。联军同心，其利断金！"', en: 'Lu Su: "$x = 5000$, substitute to get $y = 5000$. United coalition cuts through gold!"' },
+        text: { zh: '鲁肃："$x = 5000$，代入得 $y = 5000$。联军同心，其利断金！赤壁必胜！"', en: 'Lu Su: "$x = 5000$, substitute to get $y = 5000$. United coalition cuts through gold! Victory at Red Cliffs!"' },
         highlightField: 'y'
       }
     ],
@@ -816,13 +816,13 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 1022, grade: 10, unitId: 2, order: 2,
-    unitTitle: { zh: "Unit 2: 联军与二元一次方程", en: "Unit 2: Alliance & Simultaneous Equations" },
+    unitTitle: { zh: "Unit 2: 连环计与联立方程", en: "Unit 2: Chain Strategy & Simultaneous Equations" },
     topic: 'Algebra', type: 'SIMULTANEOUS',
     title: { zh: '粮草互换', en: 'Resource Exchange' },
     story: { zh: '孙刘两军交换物资。3车粮加2车草共12金，2车粮加3车草共13金。', en: 'Sun and Liu exchange resources. 3 grain + 2 grass = 12 gold, 2 grain + 3 grass = 13 gold.' },
     description: { zh: '求一车粮 $x$ 和一车草 $y$ 的价格。', en: 'Find price of 1 grain $x$ and 1 grass $y$.' },
-    data: { eq1: [3, 2, 12], eq2: [2, 3, 13] }, difficulty: 'Hard', reward: 550,
-    kpId: 'kp-2.5', sectionId: 'algebra',
+    data: { eq1: [3, 2, 12], eq2: [2, 3, 13] }, difficulty: 'Medium', reward: 550,
+    kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '鲁肃："$3x+2y=12$，$2x+3y=13$。系数对称，可用加减消元。"', en: 'Lu Su: "$3x+2y=12$, $2x+3y=13$. Symmetric coefficients, use elimination."' },
@@ -842,13 +842,13 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 1023, grade: 10, unitId: 2, order: 3,
-    unitTitle: { zh: "Unit 2: 联军与二元一次方程", en: "Unit 2: Alliance & Simultaneous Equations" },
+    unitTitle: { zh: "Unit 2: 连环计与联立方程", en: "Unit 2: Chain Strategy & Simultaneous Equations" },
     topic: 'Algebra', type: 'SIMULTANEOUS',
     title: { zh: '战船调度', en: 'Ship Deployment' },
     story: { zh: '调度战船。大船 $x$ 艘，小船 $y$ 艘。$x + y = 20$，$10x + 5y = 150$。', en: 'Deploying ships. Large $x$, small $y$. $x + y = 20$, $10x + 5y = 150$.' },
     description: { zh: '求大船和小船的数量。', en: 'Find the number of large and small ships.' },
     data: { x: 10, y: 10 }, difficulty: 'Hard', reward: 400,
-    kpId: 'kp-2.5', sectionId: 'algebra',
+    kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '周瑜："$x+y=20$，$10x+5y=150$。用代入消元法。"', en: 'Zhou Yu: "$x+y=20$, $10x+5y=150$. Use substitution method."' },
@@ -868,13 +868,13 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 1031, grade: 10, unitId: 3, order: 1,
-    unitTitle: { zh: "Unit 3: 占卜与概率", en: "Unit 3: Divination & Probability" },
+    unitTitle: { zh: "Unit 3: 天命占卜与概率", en: "Unit 3: Divination & Probability" },
     topic: 'Algebra', type: 'PROBABILITY',
     title: { zh: '借东风', en: 'Borrowing the East Wind' },
     story: { zh: '诸葛亮设坛借东风。已知 52 张卦牌中，有 4 张是"东风"。', en: 'Zhuge Liang prays for the wind. Out of 52 cards, 4 are "East Wind".' },
     description: { zh: '随机抽一张，抽中"东风"的概率是多少？', en: 'Draw one card, what is the probability of "East Wind"?' },
-    data: { total: 52, target: 4 }, difficulty: 'Medium', reward: 300,
-    kpId: 'kp-8.1', sectionId: 'statistics',
+    data: { total: 52, target: 4 }, difficulty: 'Easy', reward: 300,
+    kpId: 'kp-8.1-01', sectionId: 'statistics',
     tutorialSteps: [
       {
         text: { zh: '庞统："52 张卦牌中有 4 张东风。概率 = 目标数 / 总数。"', en: 'Pang Tong: "4 East Wind cards out of 52. Probability = target / total."' },
@@ -894,13 +894,13 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 1032, grade: 10, unitId: 3, order: 2,
-    unitTitle: { zh: "Unit 3: 占卜与概率", en: "Unit 3: Divination & Probability" },
+    unitTitle: { zh: "Unit 3: 天命占卜与概率", en: "Unit 3: Divination & Probability" },
     topic: 'Algebra', type: 'PROBABILITY',
     title: { zh: '连环计', en: 'Chain Link Strategy' },
     story: { zh: '庞统献连环计。已知单艘船着火概率为 0.6，两艘独立战船同时着火的概率是多少？', en: 'Pang Tong suggests the chain link. Prob of one ship burning is 0.6. Prob of two independent ships burning?' },
     description: { zh: '计算独立事件同时发生的概率：$P(A \\cap B) = P(A) \\times P(B)$。', en: 'Calculate prob of independent events: $P(A \\cap B) = P(A) \\times P(B)$.' },
-    data: { p1: 0.6, p2: 0.6 }, difficulty: 'Hard', reward: 350,
-    kpId: 'kp-8.1', sectionId: 'statistics',
+    data: { p1: 0.6, p2: 0.6 }, difficulty: 'Medium', reward: 350,
+    kpId: 'kp-8.3-02', sectionId: 'statistics',
     tutorialSteps: [
       {
         text: { zh: '庞统："每艘船着火概率 0.6。两船独立，联合概率用乘法。"', en: 'Pang Tong: "Each ship burns with probability 0.6. They are independent, use multiplication."' },
@@ -920,42 +920,42 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 1033, grade: 10, unitId: 3, order: 3,
-    unitTitle: { zh: "Unit 3: 占卜与概率", en: "Unit 3: Divination & Probability" },
+    unitTitle: { zh: "Unit 3: 天命占卜与概率", en: "Unit 3: Divination & Probability" },
     topic: 'Algebra', type: 'PROBABILITY',
     title: { zh: '华容道伏兵', en: 'Huarong Pass Ambush' },
-    story: { zh: '曹操败走华容道。已知三条路中只有一条有伏兵，曹操随机选一条。', en: 'Cao Cao retreats via Huarong. Only one of three paths has an ambush. Cao chooses randomly.' },
-    description: { zh: '求曹操遇到伏兵的概率。', en: 'Find the probability of Cao Cao hitting the ambush.' },
-    data: { total: 3, target: 1 }, difficulty: 'Easy', reward: 250,
-    kpId: 'kp-8.1', sectionId: 'statistics',
+    story: { zh: '曹操败走华容道，连续遇到三个路口，每个路口有 1/3 概率遇到伏兵。至少遇到一次伏兵的概率是多少？', en: 'Cao Cao retreats via Huarong Pass, passing 3 checkpoints, each with 1/3 chance of ambush. What is the probability of at least one ambush?' },
+    description: { zh: '求至少遇到一次伏兵的概率。$P = 1 - (2/3)^3$', en: 'Find P(at least one ambush). $P = 1 - (2/3)^3$' },
+    data: { total: 27, target: 19 }, difficulty: 'Hard', reward: 450,
+    kpId: 'kp-8.1-02', sectionId: 'statistics',
     tutorialSteps: [
       {
-        text: { zh: '关羽："华容道三条路，一条有伏兵。曹操随机选择。"', en: 'Guan Yu: "Three paths at Huarong, one has an ambush. Cao Cao chooses randomly."' },
+        text: { zh: '关羽："曹操连过三关，每关 $1/3$ 概率遇伏。至少遇一次的反面是——一次都不遇。"', en: 'Guan Yu: "Cao Cao passes 3 checkpoints, each $1/3$ chance of ambush. The complement of at least once is none at all."' },
         highlightField: 'p'
       },
       {
-        text: { zh: '关羽："概率 = 有伏兵的路数 / 总路数 = $1/3$"', en: 'Guan Yu: "Probability = paths with ambush / total paths = $1/3$"' },
-        hint: { zh: '1 除以 3 约等于多少？', en: 'What is 1 divided by 3 approximately?' },
+        text: { zh: '关羽："一次不遇的概率是 $2/3$，三次都不遇就是 $(2/3)^3 = 8/27$。"', en: 'Guan Yu: "P(no ambush once) = $2/3$. P(none in 3) = $(2/3)^3 = 8/27$."' },
+        hint: { zh: '至少一次 = 1 - 一次都没有', en: 'At least once = 1 - none' },
         highlightField: 'p'
       },
       {
-        text: { zh: '关羽："概率为 $1/3$。义薄云天，放他一马。"', en: 'Guan Yu: "Probability is $1/3$. Loyalty as high as the sky, let him pass."' },
+        text: { zh: '关羽："所以至少遇一次 $= 1 - 8/27 = 19/27 ≈ 0.70$。义释曹操，天意如此！"', en: 'Guan Yu: "P(at least once) $= 1 - 8/27 = 19/27 ≈ 0.70$. Releasing Cao Cao was fate!"' },
         highlightField: 'p'
       }
     ],
-    secret: { concept: { zh: '简单概率计算。', en: 'Simple probability calculation.' }, formula: '$P = 1/3$', tips: [{ zh: '关羽提示：义薄云天，放他一马。', en: 'Guan Yu Tip: Loyalty as high as the sky, let him pass.' }] }
+    secret: { concept: { zh: '补集概率：$P(\\text{至少一次}) = 1 - P(\\text{一次都没有})$。', en: 'Complement probability: $P(\\text{at least once}) = 1 - P(\\text{none})$.' }, formula: '$P = 1 - (2/3)^3 = 19/27$', tips: [{ zh: '关羽提示：义薄云天，放他一马。', en: 'Guan Yu Tip: Loyalty as high as the sky, let him pass.' }] }
   },
   {
     id: 1041, grade: 10, unitId: 4, order: 1,
-    unitTitle: { zh: "Unit 4: 水战与三角函数", en: "Unit 4: Naval Battle & Trig" },
+    unitTitle: { zh: "Unit 4: 水战风云与三角函数", en: "Unit 4: Naval Warfare & Trigonometry" },
     topic: 'Geometry', type: 'TRIGONOMETRY',
     title: { zh: '战船间距', en: 'Ship Distance' },
     story: { zh: '江面上烟雾缭绕。已知我军旗舰与敌舰连线与江岸成 $30^\\circ$ 角，对边距离为 50 丈。', en: "Mist on the river. The line between flagship and enemy is $30^\\circ$ to the bank, opposite distance is 50." },
     description: { zh: '求斜边距离 $c$（已知 $\\sin(30^\\circ) = 0.5$）。', en: 'Find hypotenuse distance $c$ (given $\\sin(30^\\circ) = 0.5$).' },
-    data: { angle: 30, opposite: 50, func: 'sin' }, difficulty: 'Hard', reward: 600,
-    kpId: 'kp-6.1', sectionId: 'geometry',
+    data: { angle: 30, opposite: 50, func: 'sin' }, difficulty: 'Easy', reward: 400,
+    kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '甘宁："旗舰与敌舰连线成 $30^\\circ$，对边 50 丈。$\\sin$ 联系对边和斜边。"', en: 'Gan Ning: "Line at $30^\\circ$, opposite is 50. $\\sin$ connects opposite and hypotenuse."' },
+        text: { zh: '甘宁："赤壁江面烟雾弥漫，旗舰与敌舰连线成 $30^\\circ$，对边 50 丈。$\\sin$ 联系对边和斜边。"', en: 'Gan Ning: "Mist covers Red Cliffs. Line at $30^\\circ$, opposite is 50. $\\sin$ connects opposite and hypotenuse."' },
         highlightField: 'c'
       },
       {
@@ -972,237 +972,133 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 1042, grade: 10, unitId: 4, order: 2,
-    unitTitle: { zh: "Unit 4: 水战与三角函数", en: "Unit 4: Naval Battle & Trig" },
+    unitTitle: { zh: "Unit 4: 水战风云与三角函数", en: "Unit 4: Naval Warfare & Trigonometry" },
     topic: 'Geometry', type: 'TRIGONOMETRY',
     title: { zh: '旗舰夹角', en: 'Flagship Angle' },
     story: { zh: '计算旗舰与护卫舰的夹角。已知对边 30 丈，邻边 30 丈。', en: 'Calculate the angle between flagship and escort. Opposite 30, adjacent 30.' },
     description: { zh: '求 $\\tan(\\theta) = 1$ 对应的角度 $\\theta$。', en: 'Find angle $\\theta$ where $\\tan(\\theta) = 1$.' },
-    data: { opposite: 30, adjacent: 30, func: 'tan_inv' }, difficulty: 'Hard', reward: 650,
-    kpId: 'kp-6.1', sectionId: 'geometry',
+    data: { opposite: 30, adjacent: 30, func: 'tan_inv' }, difficulty: 'Medium', reward: 650,
+    kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '陆逊："对边 30，邻边 30。先求正切值。"', en: 'Lu Xun: "Opposite 30, adjacent 30. First find the tangent value."' },
+        text: { zh: '甘宁："旗舰与护卫舰的位置关系——对边 30，邻边 30。先求正切值。"', en: 'Gan Ning: "Position between flagship and escort — opposite 30, adjacent 30. First find the tangent."' },
         highlightField: 'angle'
       },
       {
-        text: { zh: '陆逊："$\\tan(\\theta) = 30/30 = 1$。什么角度的正切值等于 1？"', en: 'Lu Xun: "$\\tan(\\theta) = 30/30 = 1$. What angle has tangent equal to 1?"' },
+        text: { zh: '甘宁："$\\tan(\\theta) = 30/30 = 1$。什么角度的正切值等于 1？"', en: 'Gan Ning: "$\\tan(\\theta) = 30/30 = 1$. What angle has tangent equal to 1?"' },
         hint: { zh: '$\\tan(45^\\circ) = 1$', en: '$\\tan(45^\\circ) = 1$' },
         highlightField: 'angle'
       },
       {
-        text: { zh: '陆逊："$\\theta = 45^\\circ$！火攻之势，在于风向与角度的完美契合。"', en: 'Lu Xun: "$\\theta = 45^\\circ$! The power of fire lies in the perfect match of wind and angle."' },
+        text: { zh: '甘宁："$\\theta = 45^\\circ$！火攻之势，在于风向与角度的完美契合。"', en: 'Gan Ning: "$\\theta = 45^\\circ$! The power of fire lies in the perfect match of wind and angle."' },
         highlightField: 'angle'
       }
     ],
-    secret: { concept: { zh: '正切值为1时，角度为 45 度。', en: 'When tangent is 1, the angle is 45 degrees.' }, formula: '$\\theta = \\arctan(a/b)$', tips: [{ zh: "陆逊提示：火攻之势，在于风向与角度的完美契合。", en: "Lu Xun Tip: The power of fire lies in the perfect match of wind and angle." }] }
+    secret: { concept: { zh: '正切值为1时，角度为 45 度。', en: 'When tangent is 1, the angle is 45 degrees.' }, formula: '$\\theta = \\arctan(a/b)$', tips: [{ zh: '甘宁提示：火攻之势，在于风向与角度的完美契合。', en: 'Gan Ning Tip: The power of fire lies in the perfect match of wind and angle.' }] }
   },
   {
     id: 1043, grade: 10, unitId: 4, order: 3,
-    unitTitle: { zh: "Unit 4: 水战与三角函数", en: "Unit 4: Naval Battle & Trig" },
+    unitTitle: { zh: "Unit 4: 水战风云与三角函数", en: "Unit 4: Naval Warfare & Trigonometry" },
     topic: 'Geometry', type: 'TRIGONOMETRY',
     title: { zh: '火攻仰角', en: 'Fire Attack Angle' },
     story: { zh: "火船冲向曹营。已知火船与曹营水平距离 100 丈，高度差 100 丈。", en: "Fire ships rush Cao's camp. Horizontal distance 100, height difference 100." },
     description: { zh: '求仰角 $\\theta$。', en: 'Find elevation angle $\\theta$.' },
     data: { opposite: 100, adjacent: 100, func: 'tan_inv' }, difficulty: 'Hard', reward: 700,
-    kpId: 'kp-6.1', sectionId: 'geometry',
+    kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '吕蒙："火船与曹营水平距 100 丈，高度差 100 丈。求仰角。"', en: 'Lu Meng: "Fire ship horizontal distance 100, height difference 100. Find elevation angle."' },
+        text: { zh: '甘宁："火船冲向曹营！水平距 100 丈，高度差 100 丈。求仰角。"', en: 'Gan Ning: "Fire ships charge Cao\'s camp! Horizontal distance 100, height difference 100. Find elevation angle."' },
         highlightField: 'angle'
       },
       {
-        text: { zh: '吕蒙："$\\tan(\\theta) = \\text{对边}/\\text{邻边} = 100/100 = 1$"', en: 'Lu Meng: "$\\tan(\\theta) = \\text{opposite}/\\text{adjacent} = 100/100 = 1$"' },
+        text: { zh: '甘宁："$\\tan(\\theta) = \\text{对边}/\\text{邻边} = 100/100 = 1$"', en: 'Gan Ning: "$\\tan(\\theta) = \\text{opposite}/\\text{adjacent} = 100/100 = 1$"' },
         hint: { zh: '$\\arctan(1) = ?$ 度', en: '$\\arctan(1) = ?$ degrees' },
         highlightField: 'angle'
       },
       {
-        text: { zh: '吕蒙："$\\theta = 45^\\circ$！白衣渡江，出奇制胜！"', en: 'Lu Meng: "$\\theta = 45^\\circ$! Cross the river in white, win by surprise!"' },
+        text: { zh: '甘宁："$\\theta = 45^\\circ$！百骑劫营，出奇制胜！"', en: 'Gan Ning: "$\\theta = 45^\\circ$! A hundred riders raid the camp, winning by surprise!"' },
         highlightField: 'angle'
       }
     ],
-    secret: { concept: { zh: '正切值等于对边除以邻边。', en: 'Tangent equals opposite divided by adjacent.' }, formula: '$\\tan(\\theta) = 1 \\Rightarrow \\theta = 45^\\circ$', tips: [{ zh: '吕蒙提示：白衣渡江，出奇制胜。', en: 'Lu Meng Tip: Cross the river in white, win by surprise.' }] }
+    secret: { concept: { zh: '正切值等于对边除以邻边。', en: 'Tangent equals opposite divided by adjacent.' }, formula: '$\\tan(\\theta) = 1 \\Rightarrow \\theta = 45^\\circ$', tips: [{ zh: '甘宁提示：百骑劫营，出奇制胜。', en: 'Gan Ning Tip: A hundred riders raid the camp, winning by surprise.' }] }
   },
   {
     id: 1051, grade: 10, unitId: 5, order: 1,
-    unitTitle: { zh: "Unit 5: 铁锁连舟与圆", en: "Unit 5: Iron Chains & Circles" },
-    topic: 'Geometry', type: 'CIRCLE',
-    title: { zh: '铁锁长度', en: 'Chain Length' },
-    story: { zh: '为了连接战船，需要打造铁环。已知铁环半径为 7 寸。', en: 'To connect ships, iron rings are needed. Radius is 7.' },
-    description: { zh: '计算铁环的周长（取 $\\pi = 22/7$）。', en: 'Calculate circumference (use $\\pi = 22/7$).' },
-    data: { r: 7, pi: 22/7, mode: 'circumference' }, difficulty: 'Medium', reward: 400,
-    kpId: 'kp-5.1', sectionId: 'geometry',
+    unitTitle: { zh: "Unit 5: 等差军阵与序列", en: "Unit 5: Military Formations & Sequences" },
+    topic: 'Algebra', type: 'ARITHMETIC',
+    title: { zh: '赤壁增兵', en: 'Red Cliffs Reinforcements' },
+    story: { zh: '孙刘联军持续增兵。第一日到达 200 人，此后每日增加 150 人。', en: 'The Sun-Liu alliance receives reinforcements. Day 1: 200 troops, increasing by 150 daily.' },
+    description: { zh: '求第 8 日的增兵人数。$a_n = a_1 + (n-1)d$', en: 'Find reinforcements on Day 8. $a_n = a_1 + (n-1)d$' },
+    data: { a1: 200, d: 150, n: 8 }, difficulty: 'Easy', reward: 300,
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '黄盖："铁环半径 7 寸，需求周长。圆的周长公式为 $C = 2\\pi r$。"', en: 'Huang Gai: "Ring radius is 7. Circumference formula: $C = 2\\pi r$."' },
-        highlightField: 'c'
+        text: { zh: '鲁肃："联军增兵有序，首日 200，日增 150。这是等差数列！"', en: 'Lu Su: "Reinforcements follow a pattern. Day 1: 200, +150 daily. An arithmetic sequence!"' },
+        highlightField: 'ans'
       },
       {
-        text: { zh: '黄盖："$C = 2 \\times (22/7) \\times 7 = 2 \\times 22$"', en: 'Huang Gai: "$C = 2 \\times (22/7) \\times 7 = 2 \\times 22$"' },
-        hint: { zh: '2 乘以 22 等于多少？', en: 'What is 2 times 22?' },
-        highlightField: 'c'
+        text: { zh: '鲁肃："通项公式 $a_n = a_1 + (n-1)d = 200 + 7 \\times 150$"', en: 'Lu Su: "General term: $a_n = a_1 + (n-1)d = 200 + 7 \\times 150$"' },
+        hint: { zh: '200 + 1050 = ?', en: '200 + 1050 = ?' },
+        highlightField: 'ans'
       },
       {
-        text: { zh: '黄盖："$C = 44$ 寸！铁索必须牢固，方能承载火攻之重。"', en: 'Huang Gai: "$C = 44$ inches! Chains must be strong to carry the weight of fire."' },
-        highlightField: 'c'
+        text: { zh: '鲁肃："第 8 日增兵 1250 人！兵力充沛，可以开战了！"', en: 'Lu Su: "Day 8: 1250 troops! Forces are sufficient, time to fight!"' },
+        highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: '圆的周长公式为 $2\\pi r$。', en: 'Circumference of a circle is $2\\pi r$.' }, formula: '$C = 2\\pi r$', tips: [{ zh: '黄盖提示：铁索必须牢固，方能承载火攻之重。', en: 'Huang Gai Tip: Chains must be strong to carry the weight of fire.' }] }
+    secret: { concept: { zh: '等差数列通项公式：$a_n = a_1 + (n-1)d$', en: 'Arithmetic sequence: $a_n = a_1 + (n-1)d$' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '鲁肃提示：兵马未动，粮草先行。', en: 'Lu Su Tip: Before troops move, supplies go first.' }] }
   },
   {
     id: 1052, grade: 10, unitId: 5, order: 2,
-    unitTitle: { zh: "Unit 5: 铁锁连舟与圆", en: "Unit 5: Iron Chains & Circles" },
-    topic: 'Geometry', type: 'CIRCLE',
-    title: { zh: '战船甲板', en: 'Ship Deck' },
-    story: { zh: '计算圆形甲板的面积。已知半径为 10 丈。', en: 'Calculate the area of a circular deck. Radius is 10.' },
-    description: { zh: '计算面积（取 $\\pi = 3.14$）。', en: 'Calculate area (use $\\pi = 3.14$).' },
-    data: { r: 10, pi: 3.14, mode: 'area' }, difficulty: 'Hard', reward: 450,
-    kpId: 'kp-5.1', sectionId: 'geometry',
+    unitTitle: { zh: "Unit 5: 等差军阵与序列", en: "Unit 5: Military Formations & Sequences" },
+    topic: 'Algebra', type: 'ARITHMETIC',
+    title: { zh: '连弩齐射', en: 'Crossbow Volley' },
+    story: { zh: '诸葛连弩部署。第一排 10 架弩，每排增加 6 架。', en: 'Zhuge crossbows deployed. Row 1: 10 crossbows, +6 per row.' },
+    description: { zh: '求第 12 排的弩机数量。', en: 'Find crossbows in Row 12.' },
+    data: { a1: 10, d: 6, n: 12 }, difficulty: 'Medium', reward: 400,
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '孙权："圆形甲板半径 10 丈。面积公式为 $A = \\pi r^2$。"', en: 'Sun Quan: "Circular deck radius 10. Area formula: $A = \\pi r^2$."' },
-        highlightField: 'area'
+        text: { zh: '诸葛亮："连弩阵法，首排 10 架，逐排增 6。求第 12 排。"', en: 'Zhuge Liang: "Crossbow formation. Row 1: 10, +6 per row. Find Row 12."' },
+        highlightField: 'ans'
       },
       {
-        text: { zh: '孙权："$A = 3.14 \\times 10^2 = 3.14 \\times 100$"', en: 'Sun Quan: "$A = 3.14 \\times 10^2 = 3.14 \\times 100$"' },
-        hint: { zh: '3.14 乘以 100 等于多少？', en: 'What is 3.14 times 100?' },
-        highlightField: 'area'
+        text: { zh: '诸葛亮："$a_{12} = 10 + (12-1) \\times 6 = 10 + 66$"', en: 'Zhuge Liang: "$a_{12} = 10 + (12-1) \\times 6 = 10 + 66$"' },
+        hint: { zh: '10 + 66 = ?', en: '10 + 66 = ?' },
+        highlightField: 'ans'
       },
       {
-        text: { zh: '孙权："$A = 314$ 平方丈！甲板宽阔，方能容纳江东子弟。"', en: 'Sun Quan: "$A = 314$ square units! A wide deck can hold the sons of Jiangdong."' },
-        highlightField: 'area'
+        text: { zh: '诸葛亮："76 架连弩齐射，万箭齐发！"', en: 'Zhuge Liang: "76 crossbows fire in unison, a storm of arrows!"' },
+        highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: '圆的面积公式为 $\\pi r^2$。', en: 'Area of a circle is $\\pi r^2$.' }, formula: '$A = \\pi r^2$', tips: [{ zh: '孙权提示：甲板宽阔，方能容纳江东子弟。', en: 'Sun Quan Tip: A wide deck can hold the sons of Jiangdong.' }] }
+    secret: { concept: { zh: '等差数列应用：排兵布阵。', en: 'Arithmetic sequences in formation planning.' }, formula: '$a_{12} = 10 + 11 \\times 6 = 76$', tips: [{ zh: '诸葛亮提示：连弩之威，在于密集。', en: 'Zhuge Tip: The power of crossbows is in their density.' }] }
   },
   {
     id: 1053, grade: 10, unitId: 5, order: 3,
-    unitTitle: { zh: "Unit 5: 铁锁连舟与圆", en: "Unit 5: Iron Chains & Circles" },
-    topic: 'Geometry', type: 'CIRCLE',
-    title: { zh: '八门金锁阵', en: 'Eight Gates Formation' },
-    story: { zh: '曹仁布置八门金锁阵。阵法核心是一个半径为 50 米的圆。', en: 'Cao Ren sets up the Eight Gates Formation. The core is a circle with radius 50m.' },
-    description: { zh: '计算该核心区域的周长（取 $\\pi = 3.14$）。', en: 'Calculate the circumference of the core (use $\\pi = 3.14$).' },
-    data: { r: 50, pi: 3.14, mode: 'circumference' }, difficulty: 'Hard', reward: 420,
-    kpId: 'kp-5.1', sectionId: 'geometry',
+    unitTitle: { zh: "Unit 5: 等差军阵与序列", en: "Unit 5: Military Formations & Sequences" },
+    topic: 'Algebra', type: 'ARITHMETIC',
+    title: { zh: '粮草消耗', en: 'Supply Depletion' },
+    story: { zh: '赤壁战后统计粮草消耗。第一日消耗 300 石，每日增加 20 石。持续 15 日。', en: 'Post-battle supply audit. Day 1: 300 units consumed, +20 daily for 15 days.' },
+    description: { zh: '求第 15 日的消耗量。', en: 'Find consumption on Day 15.' },
+    data: { a1: 300, d: 20, n: 15 }, difficulty: 'Hard', reward: 500,
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '徐庶："八门金锁阵核心是半径 50 米的圆。求周长。"', en: 'Xu Shu: "The Eight Gates core is a circle with radius 50m. Find circumference."' },
-        highlightField: 'c'
-      },
-      {
-        text: { zh: '徐庶："$C = 2\\pi r = 2 \\times 3.14 \\times 50$"', en: 'Xu Shu: "$C = 2\\pi r = 2 \\times 3.14 \\times 50$"' },
-        hint: { zh: '$2 \\times 3.14 = 6.28$，再乘以 50', en: '$2 \\times 3.14 = 6.28$, then multiply by 50' },
-        highlightField: 'c'
-      },
-      {
-        text: { zh: '徐庶："$C = 314$ 米！此阵虽精，但生门易破。"', en: 'Xu Shu: "$C = 314$ meters! This formation is refined, but the Gate of Life is easy to break."' },
-        highlightField: 'c'
-      }
-    ],
-    secret: { concept: { zh: '圆的周长公式为 $2\\pi r$。', en: 'Circumference of a circle is $2\\pi r$.' }, formula: '$C = 2\\pi r$', tips: [{ zh: '徐庶提示：此阵虽精，但生门易破。', en: 'Xu Shu Tip: This formation is refined, but the Gate of Life is easy to break.' }] }
-  },
-  {
-    id: 1061, grade: 10, unitId: 6, order: 1,
-    unitTitle: { zh: "Unit 6: 战后统计与平均数", en: "Unit 6: Statistics & Mean" },
-    topic: 'Statistics', type: 'STATISTICS',
-    title: { zh: '战损统计', en: 'Battle Loss Statistics' },
-    story: { zh: '统计五支部队的战损人数：120, 150, 130, 140, 160。', en: 'Stats of losses in 5 units: 120, 150, 130, 140, 160.' },
-    description: { zh: '求平均战损人数。', en: 'Find the mean loss.' },
-    data: { values: [120, 150, 130, 140, 160], mode: 'mean' }, difficulty: 'Medium', reward: 400,
-    kpId: 'kp-9.3', sectionId: 'statistics',
-    tutorialSteps: [
-      {
-        text: { zh: '鲁肃："五支部队战损：120, 150, 130, 140, 160。求平均值。"', en: 'Lu Su: "Losses in 5 units: 120, 150, 130, 140, 160. Find the mean."' },
+        text: { zh: '张昭："赤壁大捷，但粮草消耗惊人。首日 300 石，日增 20 石。"', en: 'Zhang Zhao: "Great victory at Red Cliffs, but supply costs are alarming. Day 1: 300, +20 daily."' },
         highlightField: 'ans'
       },
       {
-        text: { zh: '鲁肃："平均数 = $(120+150+130+140+160) \\div 5 = 700 \\div 5$"', en: 'Lu Su: "Mean = $(120+150+130+140+160) \\div 5 = 700 \\div 5$"' },
-        hint: { zh: '700 除以 5 等于多少？', en: 'What is 700 divided by 5?' },
+        text: { zh: '张昭："第 15 日：$a_{15} = 300 + 14 \\times 20 = 300 + 280$"', en: 'Zhang Zhao: "Day 15: $a_{15} = 300 + 14 \\times 20 = 300 + 280$"' },
+        hint: { zh: '300 + 280 = ?', en: '300 + 280 = ?' },
         highlightField: 'ans'
       },
       {
-        text: { zh: '鲁肃："平均战损为 140 人。统筹全局，方能减少伤亡。"', en: 'Lu Su: "Mean loss is 140. Overall planning can reduce casualties."' },
+        text: { zh: '张昭："580 石！主公，必须精打细算，方能长久。"', en: 'Zhang Zhao: "580 units! My lord, we must budget carefully to sustain."' },
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: '平均数是所有数值之和除以数值个数。', en: 'Mean is the sum of values divided by the count.' }, formula: '$\\bar{x} = \\frac{\\sum x_i}{n}$', tips: [{ zh: '鲁肃提示：统筹全局，方能减少伤亡。', en: 'Lu Su Tip: Overall planning can reduce casualties.' }] }
-  },
-  {
-    id: 1062, grade: 10, unitId: 6, order: 2,
-    unitTitle: { zh: "Unit 6: 战后统计与中位数", en: "Unit 6: Statistics & Median" },
-    topic: 'Statistics', type: 'STATISTICS',
-    title: { zh: '粮草中位数', en: 'Supply Median' },
-    story: { zh: '统计七个粮仓的存粮（万石）：10, 15, 12, 18, 20, 14, 16。', en: 'Stats of 7 granaries (10k units): 10, 15, 12, 18, 20, 14, 16.' },
-    description: { zh: '求存粮的中位数。', en: 'Find the median supply.' },
-    data: { values: [10, 15, 12, 18, 20, 14, 16], mode: 'median' }, difficulty: 'Medium', reward: 420,
-    kpId: 'kp-9.3', sectionId: 'statistics',
-    tutorialSteps: [
-      {
-        text: { zh: '张昭："七个粮仓存粮：10, 15, 12, 18, 20, 14, 16。求中位数。"', en: 'Zhang Zhao: "7 granaries: 10, 15, 12, 18, 20, 14, 16. Find the median."' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '张昭："先排序：10, 12, 14, 15, 16, 18, 20。7 个数，中间是第 4 个。"', en: 'Zhang Zhao: "Sort first: 10, 12, 14, 15, 16, 18, 20. 7 numbers, middle is the 4th."' },
-        hint: { zh: '排序后第 4 个数是多少？', en: 'What is the 4th number after sorting?' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '张昭："中位数为 15 万石！内政之要，在于平衡。"', en: 'Zhang Zhao: "Median is 15! The key to internal affairs is balance."' },
-        highlightField: 'ans'
-      }
-    ],
-    secret: { concept: { zh: '中位数是将数值从小到大排列后处于中间位置的数。', en: 'Median is the middle value when sorted.' }, formula: 'Sort and find middle', tips: [{ zh: '张昭提示：内政之要，在于平衡。', en: 'Zhang Zhao Tip: The key to internal affairs is balance.' }] }
-  },
-  {
-    id: 1071, grade: 10, unitId: 7, order: 1,
-    unitTitle: { zh: "Unit 7: 几何体与体积", en: "Unit 7: Solids & Volume" },
-    topic: 'Geometry', type: 'VOLUME',
-    title: { zh: '粮堆体积', en: 'Grain Pile Volume' },
-    story: { zh: '战后清点粮草。粮堆呈圆锥形，底面半径为 3 丈，高为 4 丈。', en: 'Post-battle supply check. The grain pile is conical, base radius 3, height 4.' },
-    description: { zh: '计算圆锥体积（$V = \\frac{1}{3}\\pi r^2 h$，取 $\\pi = 3$）。', en: 'Calculate conical volume ($V = \\frac{1}{3}\\pi r^2 h$, use $\\pi = 3$).' },
-    data: { radius: 3, height: 4, pi: 3, mode: 'cone' }, difficulty: 'Hard', reward: 480,
-    kpId: 'kp-5.2', sectionId: 'geometry',
-    tutorialSteps: [
-      {
-        text: { zh: '荀彧："粮堆为圆锥形，半径 3 丈，高 4 丈。体积公式：$V = \\frac{1}{3}\\pi r^2 h$。"', en: 'Xun Yu: "Grain pile is conical, radius 3, height 4. Volume: $V = \\frac{1}{3}\\pi r^2 h$."' },
-        highlightField: 'v'
-      },
-      {
-        text: { zh: '荀彧："$V = \\frac{1}{3} \\times 3 \\times 3^2 \\times 4 = \\frac{1}{3} \\times 3 \\times 9 \\times 4$"', en: 'Xun Yu: "$V = \\frac{1}{3} \\times 3 \\times 3^2 \\times 4 = \\frac{1}{3} \\times 3 \\times 9 \\times 4$"' },
-        hint: { zh: '$\\frac{1}{3} \\times 3 = 1$，再算 $1 \\times 9 \\times 4$', en: '$\\frac{1}{3} \\times 3 = 1$, then $1 \\times 9 \\times 4$' },
-        highlightField: 'v'
-      },
-      {
-        text: { zh: '荀彧："$V = 36$ 立方丈！积谷防饥，乃长久之计。"', en: 'Xun Yu: "$V = 36$ cubic units! Storing grain against famine is a long-term plan."' },
-        highlightField: 'v'
-      }
-    ],
-    secret: { concept: { zh: '圆锥的体积是等底等高圆柱体积的三分之一。', en: 'The volume of a cone is one-third of a cylinder with the same base and height.' }, formula: '$V = \\frac{1}{3}\\pi r^2 h$', tips: [{ zh: '荀彧提示：积谷防饥，乃长久之计。', en: 'Xun Yu Tip: Storing grain against famine is a long-term plan.' }] }
-  },
-  {
-    id: 1072, grade: 10, unitId: 7, order: 2,
-    unitTitle: { zh: "Unit 7: 几何体与表面积", en: "Unit 7: Solids & Surface Area" },
-    topic: 'Geometry', type: 'AREA',
-    title: { zh: '信号球表面积', en: 'Signal Ball Area' },
-    story: { zh: '制作一个球形信号灯。球体半径为 2 尺。', en: 'Making a spherical signal lamp. Radius is 2.' },
-    description: { zh: '计算球体表面积（$A = 4\\pi r^2$，取 $\\pi = 3.14$）。', en: 'Calculate spherical surface area ($A = 4\\pi r^2$, use $\\pi = 3.14$).' },
-    data: { r: 2, pi: 3.14, mode: 'sphere_area' }, difficulty: 'Hard', reward: 500,
-    kpId: 'kp-5.1', sectionId: 'geometry',
-    tutorialSteps: [
-      {
-        text: { zh: '郭嘉："球形信号灯半径 2 尺。球体表面积公式 $A = 4\\pi r^2$。"', en: 'Guo Jia: "Spherical lamp radius 2. Surface area formula: $A = 4\\pi r^2$."' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '郭嘉："$A = 4 \\times 3.14 \\times 2^2 = 4 \\times 3.14 \\times 4$"', en: 'Guo Jia: "$A = 4 \\times 3.14 \\times 2^2 = 4 \\times 3.14 \\times 4$"' },
-        hint: { zh: '$4 \\times 3.14 = 12.56$，再乘以 4', en: '$4 \\times 3.14 = 12.56$, then multiply by 4' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '郭嘉："$A = 50.24$ 平方尺！信号传递，贵在神速。"', en: 'Guo Jia: "$A = 50.24$ square feet! Signal transmission values speed above all."' },
-        highlightField: 'area'
-      }
-    ],
-    secret: { concept: { zh: '球体的表面积公式为 $4\\pi r^2$。', en: 'Surface area of a sphere is $4\\pi r^2$.' }, formula: '$A = 4\\pi r^2$', tips: [{ zh: '郭嘉提示：信号传递，贵在神速。', en: 'Guo Jia Tip: Signal transmission values speed above all.' }] }
+    secret: { concept: { zh: '等差数列在实际问题中的应用。', en: 'Arithmetic sequences in real-world problems.' }, formula: '$a_{15} = 300 + 14 \\times 20 = 580$', tips: [{ zh: '张昭提示：内政之要，在于精算。', en: 'Zhang Zhao Tip: The key to governance is precise calculation.' }] }
   },
 
   // --- Year 11: Northern Expedition (Advanced) ---
@@ -1214,7 +1110,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: "诸葛亮六出祁山，需优化粮草运输路径。路径损耗函数为 $f(x) = -x^2 + 8x$。", en: "Zhuge Liang's expeditions need optimal supply routes. Loss function: $f(x) = -x^2 + 8x$." },
     description: { zh: '求 $f(x)$ 达到最大值时的 $x$（即导数为0的点）。', en: 'Find $x$ where $f(x)$ is maximum (derivative is 0).' },
     data: { p1: [0, 0], p2: [4, 16] }, difficulty: 'Hard', reward: 800,
-    kpId: 'kp-2.13', sectionId: 'algebra',
+    kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '诸葛亮："路径损耗 $f(x) = -x^2 + 8x$，这是二次函数，$a=-1$, $b=8$。"', en: 'Zhuge Liang: "Path loss $f(x) = -x^2 + 8x$, a quadratic with $a=-1$, $b=8$."' },
@@ -1240,7 +1136,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '蜀军修筑栈道。山坡曲线为 $y = x^2$。在点 $(2, 4)$ 处需修筑一条切线支架。', en: 'Shu army builds a plank road. Slope curve $y = x^2$. Build a tangent support at $(2, 4)$.' },
     description: { zh: '求切线的斜率 $k$（即 $y=x^2$ 在 $x=2$ 处的导数）。', en: 'Find tangent slope $k$ (derivative of $y=x^2$ at $x=2$).' },
     data: { x: 2, func: 'x^2' }, difficulty: 'Hard', reward: 850,
-    kpId: 'kp-2.13', sectionId: 'algebra',
+    kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '姜维："山坡曲线 $y = x^2$，在 $(2,4)$ 处求切线斜率。先求导数。"', en: 'Jiang Wei: "Slope curve $y = x^2$, find tangent slope at $(2,4)$. First differentiate."' },
@@ -1266,7 +1162,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '在汉中屯田。农田边界由 $y = x$ 和 $x$ 轴以及 $x=4$ 围成。', en: 'Farming in Hanzhong. Field bounded by $y=x$, x-axis, and $x=4$.' },
     description: { zh: '求该区域的面积（即 $\\int_0^4 x dx$）。', en: 'Find the area (integral of $x$ from 0 to 4).' },
     data: { lower: 0, upper: 4, func: 'x' }, difficulty: 'Hard', reward: 900,
-    kpId: 'kp-2.13', sectionId: 'algebra',
+    kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '邓艾："农田由 $y=x$、$x$ 轴和 $x=4$ 围成。用积分求面积。"', en: 'Deng Ai: "Field bounded by $y=x$, x-axis, and $x=4$. Use integration for area."' },
@@ -1292,7 +1188,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '计算河道流量。流速函数为 $v(t) = 3t^2$。', en: 'Calculate river flow. Velocity function: $v(t) = 3t^2$.' },
     description: { zh: '求从 $t=0$ 到 $t=2$ 的总流量（即 $\\int_0^2 3t^2 dt$）。', en: 'Find total flow from $t=0$ to $t=2$ (integral of $3t^2$).' },
     data: { lower: 0, upper: 2, func: '3x^2' }, difficulty: 'Hard', reward: 950,
-    kpId: 'kp-2.13', sectionId: 'algebra',
+    kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '钟会："流速函数 $v(t) = 3t^2$。积分求总流量。"', en: 'Zhong Hui: "Velocity function $v(t) = 3t^2$. Integrate to find total flow."' },
@@ -1318,7 +1214,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '运粮队每日增加 50 担粮。第一日 100 担。', en: 'Supply team increases by 50 units daily. Day 1 is 100.' },
     description: { zh: '求第 10 日的运粮量。', en: 'Find the supply amount on Day 10.' },
     data: { a1: 100, d: 50, n: 10 }, difficulty: 'Medium', reward: 400,
-    kpId: 'kp-2.7', sectionId: 'algebra',
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '费祎："运粮队每日增加 50 担，第一日 100 担。等差数列问题！"', en: 'Fei Yi: "Daily increase of 50 units, Day 1 is 100. Arithmetic sequence!"' },
@@ -1346,7 +1242,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '守卫成都。城墙受力函数为 $f(x) = x^3 - 3x$。', en: 'Defending Chengdu. Wall stress function: $f(x) = x^3 - 3x$.' },
     description: { zh: '求函数的极小值点 $x$（$x > 0$）。', en: 'Find the local minimum point $x$ ($x > 0$).' },
     data: { x: 1, func: '3x^2-3' }, difficulty: 'Hard', reward: 1000,
-    kpId: 'kp-2.13', sectionId: 'algebra',
+    kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
         text: { zh: '刘禅："城墙受力 $f(x) = x^3 - 3x$。求导数 $f\'(x)$，令其为零。"', en: 'Liu Shan: "Wall stress $f(x) = x^3 - 3x$. Find $f\'(x)$ and set it to zero."' },
@@ -1372,7 +1268,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '评估统一天下的概率。已知魏、蜀、吴的胜率分别为 0.7, 0.1, 0.2。', en: 'Assess the probability of unification. Wei, Shu, Wu win rates are 0.7, 0.1, 0.2.' },
     description: { zh: '若发生两次独立战争，魏国全胜的概率是多少？', en: 'If two independent wars occur, what is the probability of Wei winning both?' },
     data: { p1: 0.7, p2: 0.7 }, difficulty: 'Medium', reward: 500,
-    kpId: 'kp-8.1', sectionId: 'statistics',
+    kpId: 'kp-8.3-02', sectionId: 'statistics',
     tutorialSteps: [
       {
         text: { zh: '司马炎："魏国每次胜率 0.7。两次独立战争全胜，用乘法原理。"', en: 'Sima Yan: "Wei win rate is 0.7 each time. For both wins in independent wars, use multiplication."' },

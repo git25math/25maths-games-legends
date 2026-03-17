@@ -12,70 +12,66 @@ const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 // KP mapping: mission ID → ExamHub KP ID + section
 // Based on plan: 三国故事线 × KP 知识树
 const KP_MAP: Record<number, { kpId: string; sectionId: string }> = {
-  // Year 7 — Foundations
-  711: { kpId: 'kp-2.1', sectionId: 'algebra' },      // Simple equations
-  712: { kpId: 'kp-2.1', sectionId: 'algebra' },
-  721: { kpId: 'kp-1.10', sectionId: 'number' },     // Ratio & proportion
-  722: { kpId: 'kp-1.10', sectionId: 'number' },
-  731: { kpId: 'kp-4.1', sectionId: 'geometry' },     // Angles
-  732: { kpId: 'kp-4.1', sectionId: 'geometry' },
-  733: { kpId: 'kp-4.1', sectionId: 'geometry' },
+  // Year 7 — CH2.1 代数表示, CH1.12 比, CH4.6 角
+  711: { kpId: 'kp-2.1-01', sectionId: 'algebra' },      // Algebraic Notation
+  712: { kpId: 'kp-2.1-01', sectionId: 'algebra' },
+  721: { kpId: 'kp-1.12-01', sectionId: 'number' },      // Ratio and Sharing
+  722: { kpId: 'kp-1.12-01', sectionId: 'number' },
+  731: { kpId: 'kp-4.6-01', sectionId: 'geometry' },     // Angles on lines
+  732: { kpId: 'kp-4.6-01', sectionId: 'geometry' },
+  733: { kpId: 'kp-4.6-01', sectionId: 'geometry' },
 
-  // Year 8 — Expansion
-  811: { kpId: 'kp-3.1', sectionId: 'functions' },    // Linear functions
-  812: { kpId: 'kp-3.1', sectionId: 'functions' },
-  813: { kpId: 'kp-3.1', sectionId: 'functions' },
-  821: { kpId: 'kp-5.1', sectionId: 'geometry' },     // Area
-  822: { kpId: 'kp-5.2', sectionId: 'geometry' },     // Volume
-  823: { kpId: 'kp-5.1', sectionId: 'geometry' },
-  831: { kpId: 'kp-1.12', sectionId: 'number' },      // Percentage
-  832: { kpId: 'kp-1.12', sectionId: 'number' },
-  841: { kpId: 'kp-9.3', sectionId: 'statistics' },   // Mean/Median
-  842: { kpId: 'kp-9.3', sectionId: 'statistics' },
+  // Year 8 — CH3.5 直线方程, CH5.2 面积, CH5.4 体积, CH1.13 百分比, CH9.3 统计
+  811: { kpId: 'kp-3.5-01', sectionId: 'coordinate' },   // y = mx + c
+  812: { kpId: 'kp-3.5-01', sectionId: 'coordinate' },
+  813: { kpId: 'kp-3.3-01', sectionId: 'coordinate' },   // Gradient
+  821: { kpId: 'kp-5.2-01', sectionId: 'mensuration' },  // Perimeter & Area
+  822: { kpId: 'kp-5.4-01', sectionId: 'mensuration' },  // Prisms & Cylinders
+  823: { kpId: 'kp-5.2-01', sectionId: 'mensuration' },
+  831: { kpId: 'kp-1.13-01', sectionId: 'number' },      // Percentage Change
+  832: { kpId: 'kp-1.13-01', sectionId: 'number' },
+  841: { kpId: 'kp-9.3-01', sectionId: 'statistics' },   // Mean, Median, Mode
+  842: { kpId: 'kp-9.3-01', sectionId: 'statistics' },
 
-  // Year 9 — Strategy
-  911: { kpId: 'kp-1.6', sectionId: 'number' },       // Indices
-  912: { kpId: 'kp-1.6', sectionId: 'number' },
-  913: { kpId: 'kp-1.6', sectionId: 'number' },
-  921: { kpId: 'kp-4.6', sectionId: 'geometry' },     // Pythagoras
-  922: { kpId: 'kp-6.1', sectionId: 'geometry' },     // Trigonometry
-  923: { kpId: 'kp-4.6', sectionId: 'geometry' },
-  931: { kpId: 'kp-4.5', sectionId: 'geometry' },     // Similarity
-  932: { kpId: 'kp-4.5', sectionId: 'geometry' },
-  941: { kpId: 'kp-1.10', sectionId: 'number' },      // Ratio
-  942: { kpId: 'kp-1.10', sectionId: 'number' },
+  // Year 9 — CH1.3 指数, CH6.1 勾股, CH6.2 三角比, CH4.4 相似, CH1.12 比
+  911: { kpId: 'kp-1.3-02', sectionId: 'number' },       // Index Laws
+  912: { kpId: 'kp-1.3-02', sectionId: 'number' },
+  913: { kpId: 'kp-1.3-02', sectionId: 'number' },
+  921: { kpId: 'kp-6.1-01', sectionId: 'trigonometry' }, // Pythagoras
+  922: { kpId: 'kp-6.2-01', sectionId: 'trigonometry' }, // SOH CAH TOA
+  923: { kpId: 'kp-6.1-01', sectionId: 'trigonometry' },
+  931: { kpId: 'kp-4.4-01', sectionId: 'geometry' },     // Similarity
+  932: { kpId: 'kp-4.4-01', sectionId: 'geometry' },
+  941: { kpId: 'kp-1.12-01', sectionId: 'number' },      // Ratio
+  942: { kpId: 'kp-1.12-01', sectionId: 'number' },
 
-  // Year 10 — Complexity
-  1011: { kpId: 'kp-2.10', sectionId: 'algebra' },    // Quadratic functions
-  1012: { kpId: 'kp-2.10', sectionId: 'algebra' },
-  1013: { kpId: 'kp-2.10', sectionId: 'algebra' },
-  1021: { kpId: 'kp-2.5', sectionId: 'algebra' },     // Simultaneous equations
-  1022: { kpId: 'kp-2.5', sectionId: 'algebra' },
-  1023: { kpId: 'kp-2.5', sectionId: 'algebra' },
-  1031: { kpId: 'kp-8.1', sectionId: 'statistics' },  // Probability
-  1032: { kpId: 'kp-8.1', sectionId: 'statistics' },
-  1033: { kpId: 'kp-8.1', sectionId: 'statistics' },
-  1041: { kpId: 'kp-6.1', sectionId: 'geometry' },    // Trigonometry
-  1042: { kpId: 'kp-6.1', sectionId: 'geometry' },
-  1043: { kpId: 'kp-6.1', sectionId: 'geometry' },
-  1051: { kpId: 'kp-5.1', sectionId: 'geometry' },    // Circle
-  1052: { kpId: 'kp-5.1', sectionId: 'geometry' },
-  1053: { kpId: 'kp-5.1', sectionId: 'geometry' },
-  1061: { kpId: 'kp-9.3', sectionId: 'statistics' },  // Statistics
-  1062: { kpId: 'kp-9.3', sectionId: 'statistics' },
-  1071: { kpId: 'kp-5.2', sectionId: 'geometry' },    // Volume
-  1072: { kpId: 'kp-5.1', sectionId: 'geometry' },    // Surface area
+  // Year 10 — CH2.10 函数图像, CH2.5 联立/二次方程, CH8 概率, CH6.2 三角比, CH2.7 数列
+  1011: { kpId: 'kp-2.10-01', sectionId: 'algebra' },    // Graphs of Functions
+  1012: { kpId: 'kp-2.5-02', sectionId: 'algebra' },     // Quadratic Equations
+  1013: { kpId: 'kp-2.5-02', sectionId: 'algebra' },
+  1021: { kpId: 'kp-2.5-01', sectionId: 'algebra' },     // Simultaneous Equations
+  1022: { kpId: 'kp-2.5-01', sectionId: 'algebra' },
+  1023: { kpId: 'kp-2.5-01', sectionId: 'algebra' },
+  1031: { kpId: 'kp-8.1-01', sectionId: 'probability' }, // Basic Probability
+  1032: { kpId: 'kp-8.3-02', sectionId: 'probability' }, // Independent Events
+  1033: { kpId: 'kp-8.1-02', sectionId: 'probability' }, // Complementary Events
+  1041: { kpId: 'kp-6.2-01', sectionId: 'trigonometry' },// SOH CAH TOA
+  1042: { kpId: 'kp-6.2-01', sectionId: 'trigonometry' },
+  1043: { kpId: 'kp-6.2-01', sectionId: 'trigonometry' },
+  1051: { kpId: 'kp-2.7-01', sectionId: 'algebra' },     // Sequences & Nth Term
+  1052: { kpId: 'kp-2.7-01', sectionId: 'algebra' },
+  1053: { kpId: 'kp-2.7-01', sectionId: 'algebra' },
 
-  // Year 11 — Advanced
-  1111: { kpId: 'kp-2.13', sectionId: 'algebra' },    // Differentiation
-  1112: { kpId: 'kp-2.13', sectionId: 'algebra' },
-  1121: { kpId: 'kp-2.13', sectionId: 'algebra' },    // Integration
-  1122: { kpId: 'kp-2.13', sectionId: 'algebra' },
-  1131: { kpId: 'kp-2.7', sectionId: 'algebra' },     // Sequences
+  // Year 11 — CH2.12 微分 (Extended)
+  1111: { kpId: 'kp-2.12-01', sectionId: 'algebra' },    // Differentiation
+  1112: { kpId: 'kp-2.12-01', sectionId: 'algebra' },
+  1121: { kpId: 'kp-2.12-01', sectionId: 'algebra' },    // Integration
+  1122: { kpId: 'kp-2.12-01', sectionId: 'algebra' },
+  1131: { kpId: 'kp-2.7-01', sectionId: 'algebra' },     // Sequences
 
-  // Year 12 — Final
-  1211: { kpId: 'kp-2.13', sectionId: 'algebra' },
-  1221: { kpId: 'kp-8.1', sectionId: 'statistics' },
+  // Year 12 — CH2.12 + CH8.3
+  1211: { kpId: 'kp-2.12-01', sectionId: 'algebra' },
+  1221: { kpId: 'kp-8.3-02', sectionId: 'probability' },
 };
 
 // Import missions from compiled source
