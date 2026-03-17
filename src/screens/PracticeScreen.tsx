@@ -124,7 +124,8 @@ export const PracticeScreen = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/95 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 overflow-y-auto p-4 bg-slate-900/95 backdrop-blur-md">
+    <div className="min-h-full flex items-center justify-center py-4">
       {/* Correct answer flash overlay */}
       <AnimatePresence>
         {showCorrectFlash && (
@@ -358,6 +359,7 @@ export const PracticeScreen = ({
           </div>
         </div>
       </motion.div>
+    </div>
     </div>
   );
 };
