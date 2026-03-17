@@ -46,8 +46,10 @@ export const MathBattle = ({
   const [showAchievement, setShowAchievement] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [finalDuration, setFinalDuration] = useState(0);
-  const [shaking, setShaking] = useState(false);
+  const [shakeKey, setShakeKey] = useState(0);
+  const shaking = shakeKey > 0;
   const achievementTimerRef = useRef<number | null>(null);
+  const shakeTimerRef = useRef<number | null>(null);
 
   const { playBGM, stopBGM, playSuccess, playFail, playClick, muted, toggleMute } = useAudio();
 
@@ -59,9 +61,8 @@ export const MathBattle = ({
     playBGM();
     return () => {
       stopBGM();
-      if (achievementTimerRef.current !== null) {
-        clearTimeout(achievementTimerRef.current);
-      }
+      if (achievementTimerRef.current !== null) clearTimeout(achievementTimerRef.current);
+      if (shakeTimerRef.current !== null) clearTimeout(shakeTimerRef.current);
     };
   }, []);
 
@@ -89,8 +90,9 @@ export const MathBattle = ({
       achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
     } else {
       playFail();
-      setShaking(true);
-      setTimeout(() => setShaking(false), 500);
+      if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
+      setShakeKey(k => k + 1);
+      shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), 500);
       setHp(prev => prev - 1);
       if (hp <= 1) {
         setShowResult('fail');
@@ -121,7 +123,8 @@ export const MathBattle = ({
       )}
 
       <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
+        key={`battle-${shakeKey}`}
+        initial={shakeKey > 0 ? false : { scale: 0.9, opacity: 0 }}
         animate={shaking ? { x: [0, -6, 6, -4, 4, -2, 2, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
         transition={shaking ? { duration: 0.4, ease: 'easeOut' } : undefined}
         className={`bg-[#f4e4bc] w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[12px] border-[#3d2b1f] relative ${shaking ? 'border-red-600' : ''}`}
@@ -136,7 +139,7 @@ export const MathBattle = ({
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className={`w-4 h-4 rounded-full border border-black ${i < hp ? 'bg-red-600 shadow-[0_0_5px_rgba(220,38,38,0.8)]' : 'bg-slate-800'}`} />
                 ))}
-                <span className="text-[10px] ml-2 font-bold text-red-400 uppercase">体力</span>
+                <span className="text-[10px] ml-2 font-bold text-red-400 uppercase">{t.hp}</span>
                 {/* Difficulty badge */}
                 <span className={`ml-4 px-2 py-0.5 rounded text-[10px] font-black uppercase ${
                   difficultyMode === 'green' ? 'bg-emerald-600' : difficultyMode === 'amber' ? 'bg-amber-600' : 'bg-rose-600'
@@ -188,7 +191,7 @@ export const MathBattle = ({
             <div className="mt-8 pt-4 border-t border-[#3d2b1f]/10">
               <div className="flex items-center gap-2 text-[#5c4033] text-xs font-bold">
                 <Shield size={14} />
-                <span>防御力：{character.stats.wisdom}</span>
+                <span>{t.defense}：{character.stats.wisdom}</span>
               </div>
             </div>
           </div>
@@ -242,7 +245,7 @@ export const MathBattle = ({
             )}
 
             <div className="flex justify-center gap-4 pt-2">
-              {['杀', '闪', '桃'].map(card => (
+              {([t.cards.kill, t.cards.dodge, t.cards.peach] as string[]).map(card => (
                 <div key={card} className="w-10 h-14 bg-[#3d2b1f] rounded border border-[#f4e4bc]/20 flex items-center justify-center text-[#f4e4bc] opacity-50">
                   <span className="text-[10px] font-black">{card}</span>
                 </div>

@@ -110,6 +110,9 @@ export const translations = {
     guestMode: "游客模式",
     loginError: "登录失败，请检查邮箱和密码",
     signupError: "注册失败，请重试",
+    hp: "体力",
+    defense: "防御力",
+    cards: { kill: "杀", dodge: "闪", peach: "桃" },
   },
   en: {
     title: "Three Kingdoms Math",
@@ -220,6 +223,9 @@ export const translations = {
     guestMode: "Guest Mode",
     loginError: "Login failed, check email and password",
     signupError: "Sign up failed, please try again",
+    hp: "HP",
+    defense: "Defense",
+    cards: { kill: "Kill", dodge: "Dodge", peach: "Heal" },
   }
 } as const;
 

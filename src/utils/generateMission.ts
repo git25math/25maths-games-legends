@@ -158,7 +158,7 @@ export function generateSimpleEqMission(template: Mission): Mission {
         zh: `${narrator}：「${a}x = ${result}，如何求出 x？」`,
         en: `${narrator}: "${a}x = ${result}, how do we find x?"`,
       },
-      highlightField: 'equation',
+      highlightField: 'x',
     },
     {
       text: {
@@ -169,14 +169,14 @@ export function generateSimpleEqMission(template: Mission): Mission {
         zh: `${a}x ÷ ${a} = ${result} ÷ ${a}`,
         en: `${a}x ÷ ${a} = ${result} ÷ ${a}`,
       },
-      highlightField: 'divide',
+      highlightField: 'x',
     },
     {
       text: {
         zh: `${narrator}：「所以 x = ${x}！」`,
         en: `${narrator}: "So x = ${x}!"`,
       },
-      highlightField: 'answer',
+      highlightField: 'x',
     },
   ];
 
@@ -314,7 +314,7 @@ export function generateAddEqMission(template: Mission): Mission {
         zh: `${narrator}：「x + ${a} = ${result}，如何求出 x？」`,
         en: `${narrator}: "x + ${a} = ${result}, how do we find x?"`,
       },
-      highlightField: 'equation',
+      highlightField: 'x',
     },
     {
       text: {
@@ -325,14 +325,14 @@ export function generateAddEqMission(template: Mission): Mission {
         zh: `x + ${a} − ${a} = ${result} − ${a}`,
         en: `x + ${a} − ${a} = ${result} − ${a}`,
       },
-      highlightField: 'subtract',
+      highlightField: 'x',
     },
     {
       text: {
         zh: `${narrator}：「所以 x = ${x}！」`,
         en: `${narrator}: "So x = ${x}!"`,
       },
-      highlightField: 'answer',
+      highlightField: 'x',
     },
   ];
 
@@ -499,7 +499,7 @@ export function generateArithmeticMission(template: Mission): Mission {
 
   const tutorialSteps = [
     { text: { zh: `${narrator}：「等差数列，首项 ${a1}，公差 ${d}，求第 ${n} 项。」`, en: `${narrator}: "Arithmetic sequence: a1=${a1}, d=${d}, find term ${n}."` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「公式：a_n = ${a1} + (${n}-1)x${d}」`, en: `${narrator}: "Formula: a_n = ${a1} + (${n}-1)x${d}"` }, hint: { zh: `${a1} + ${(n - 1) * d} = ?`, en: `${a1} + ${(n - 1) * d} = ?` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：「公式：a_n = ${a1} + (${n}-1)×${d}」`, en: `${narrator}: "Formula: a_n = ${a1} + (${n}-1)×${d}"` }, hint: { zh: `${a1} + ${(n - 1) * d} = ?`, en: `${a1} + ${(n - 1) * d} = ?` }, highlightField: 'ans' },
     { text: { zh: `${narrator}：「所以 a_${n} = ${ans}！」`, en: `${narrator}: "So a_${n} = ${ans}!"` }, highlightField: 'ans' },
   ];
 
@@ -551,9 +551,11 @@ export function generateAreaRectMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateAreaTrapMission(template: Mission): Mission {
-  const a = randInt(5, 20);
-  const b = randInt(a + 2, a + 20);
-  const h = randInt(4, 15);
+  let a = randInt(5, 20);
+  let b = randInt(a + 2, a + 20);
+  let h = randInt(4, 15);
+  // Ensure (a+b)*h is even so area is integer
+  if (((a + b) * h) % 2 !== 0) h += 1;
   const narrator = pickRandom(['赵云', '关羽']);
 
   const story: BilingualText = {
@@ -673,7 +675,8 @@ export function generatePythagorasMission(template: Mission): Mission {
       zh: `求云梯长度 $c = \\sqrt{${a}^2 + ${b}^2}$。`,
       en: `Find ladder length $c = \\sqrt{${a}^2 + ${b}^2}$.`,
     };
-    data = { ...template.data, a, b, generatorType: 'PYTHAGORAS_RANDOM' };
+    // Clean slate — don't spread template.data to avoid c leaking from template
+    data = { a, b, generatorType: 'PYTHAGORAS_RANDOM' };
   } else {
     story = {
       zh: `挖掘地道。斜长 ${c} 丈，水平距离 ${b} 丈。求深度。`,
@@ -683,7 +686,8 @@ export function generatePythagorasMission(template: Mission): Mission {
       zh: `求地道深度 $a = \\sqrt{${c}^2 - ${b}^2}$。`,
       en: `Find depth $a = \\sqrt{${c}^2 - ${b}^2}$.`,
     };
-    data = { ...template.data, a: b, c, generatorType: 'PYTHAGORAS_RANDOM' };
+    // Clean slate — only include fields checkCorrectness needs
+    data = { a: b, c, generatorType: 'PYTHAGORAS_RANDOM' };
   }
 
   const ans = findC ? c : a;
@@ -716,9 +720,10 @@ export function generatePercentageMission(template: Mission): Mission {
     ? { zh: `计算折后价：$${initial} \\times (1 - ${pct}\\%)$`, en: `Calculate discounted price: $${initial} \\times (1 - ${pct}\\%)$` }
     : { zh: `计算总额：$${initial} \\times (1 + ${pct}\\%)$`, en: `Calculate total: $${initial} \\times (1 + ${pct}\\%)$` };
 
+  const formulaStr = isDiscount ? `${initial} × (1 - ${pct}%)` : `${initial} × (1 + ${pct}%)`;
   const tutorialSteps = [
     { text: { zh: `${narrator}：「${isDiscount ? '折扣' : '加税'}计算：原价 × (1 ${isDiscount ? '-' : '+'} 百分比)」`, en: `${narrator}: "${isDiscount ? 'Discount' : 'Tax'}: original × (1 ${isDiscount ? '-' : '+'} rate)"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「${initial} × ${1 + rate} = ?」`, en: `${narrator}: "${initial} × ${1 + rate} = ?"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：「${formulaStr} = ?」`, en: `${narrator}: "${formulaStr} = ?"` }, highlightField: 'ans' },
     { text: { zh: `${narrator}：「答案 = ${result}！」`, en: `${narrator}: "Answer = ${result}!"` }, highlightField: 'ans' },
   ];
 
