@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, Volume2, VolumeX } from 'lucide-react';
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
-import { checkCorrectness } from '../../utils/checkCorrectness';
+import { checkAnswer } from '../../utils/checkCorrectness';
 import { interpolate } from '../../utils/interpolate';
 import { LatexText, MathView } from '../MathView';
 import { InputFields } from './InputFields';
@@ -13,6 +13,7 @@ import { useAudio } from '../../hooks/useAudio';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { Confetti } from '../Confetti';
 import { AchievementCard } from '../AchievementCard';
+import { WrongAnswerPanel } from './WrongAnswerPanel';
 
 const DIFFICULTY_MULTIPLIER: Record<DifficultyMode, number> = { green: 1, amber: 1.5, red: 2 };
 
@@ -41,6 +42,7 @@ export const MathBattle = ({
   const [encouragement, setEncouragement] = useState('');
   const [inputs, setInputs] = useState<{ [key: string]: string }>({});
   const [showResult, setShowResult] = useState<'none' | 'success' | 'fail'>('none');
+  const [wrongAnswerData, setWrongAnswerData] = useState<{ userInputs: Record<string, string>; expected: Record<string, string> } | null>(null);
   const [hp, setHp] = useState(4);
   const [startTime] = useState(Date.now());
   const [showConfetti, setShowConfetti] = useState(false);
@@ -80,7 +82,8 @@ export const MathBattle = ({
 
   const handleSubmit = () => {
     playClick();
-    if (checkCorrectness(mission, inputs)) {
+    const result = checkAnswer(mission, inputs);
+    if (result.correct) {
       const duration = (Date.now() - startTime) / 1000;
       const speedBonus = Math.max(0, 100 - Math.floor(duration));
       const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
@@ -91,19 +94,28 @@ export const MathBattle = ({
       setShowConfetti(true);
       playSuccess();
       stopBGM();
-      // Show achievement card after 2s
       achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
     } else {
       playFail();
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       setShakeKey(k => k + 1);
       shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), 500);
-      setHp(prev => prev - 1);
-      if (hp <= 1) {
+      // Show wrong answer panel with solution before deducting HP
+      setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
+    }
+  };
+
+  const handleWrongAnswerContinue = () => {
+    setWrongAnswerData(null);
+    setInputs({});
+    setHp(prev => {
+      const next = prev - 1;
+      if (next <= 0) {
         setShowResult('fail');
         stopBGM();
       }
-    }
+      return next;
+    });
   };
 
   const handleAchievementClose = () => {
@@ -223,6 +235,19 @@ export const MathBattle = ({
               isTutorial={isTutorial}
             />
 
+            {/* Wrong answer review panel */}
+            {wrongAnswerData && (
+              <WrongAnswerPanel
+                questionType={mission.type}
+                userInputs={wrongAnswerData.userInputs}
+                expected={wrongAnswerData.expected}
+                formula={mission.secret.formula}
+                tutorialSteps={mission.tutorialSteps}
+                lang={lang}
+                onContinue={handleWrongAnswerContinue}
+              />
+            )}
+
             {isTutorial ? (
               <button
                 onClick={() => {
@@ -242,7 +267,8 @@ export const MathBattle = ({
             ) : (
               <button
                 onClick={handleSubmit}
-                className="w-full py-6 bg-[#8b0000] hover:bg-[#a50000] text-[#f4e4bc] text-2xl font-black rounded-lg shadow-[0_4px_0_#5c0000] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-4 border-2 border-[#5c0000]"
+                disabled={!!wrongAnswerData}
+                className={`w-full py-6 text-[#f4e4bc] text-2xl font-black rounded-lg transition-all flex items-center justify-center gap-4 border-2 ${wrongAnswerData ? 'bg-slate-500 border-slate-600 cursor-not-allowed' : 'bg-[#8b0000] hover:bg-[#a50000] shadow-[0_4px_0_#5c0000] active:translate-y-1 active:shadow-none border-[#5c0000]'}`}
               >
                 <Swords size={28} />
                 {t.attack}

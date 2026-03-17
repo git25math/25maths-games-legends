@@ -1,197 +1,196 @@
 import type { Mission } from '../types';
 
-export function checkCorrectness(mission: Mission, inputs: { [key: string]: string }): boolean {
+export type CheckResult = {
+  correct: boolean;
+  /** Expected answers keyed by input field id (e.g. { x: '7' }, { m: '2', b: '-1' }) */
+  expected: Record<string, string>;
+};
+
+function round(v: number, decimals = 4): string {
+  return parseFloat(v.toFixed(decimals)).toString();
+}
+
+export function checkAnswer(mission: Mission, inputs: { [key: string]: string }): CheckResult {
   const { type, data, topic } = mission;
 
   if (type === 'SIMPLE_EQ') {
-    return parseFloat(inputs.x || '') === data.x;
+    return { correct: parseFloat(inputs.x || '') === data.x, expected: { x: String(data.x) } };
   }
   if (type === 'ESTIMATION') {
-    const correctVal = Math.round(Math.sqrt(data.value));
-    return parseInt(inputs.ans || '') === correctVal;
+    const val = Math.round(Math.sqrt(data.value));
+    return { correct: parseInt(inputs.ans || '') === val, expected: { ans: String(val) } };
   }
   if (type === 'PERCENTAGE') {
     const { initial, rate, years } = data;
-    const correctVal = initial * Math.pow(1 + rate, years);
-    return Math.abs(parseFloat(inputs.ans || '') - correctVal) < 0.01;
+    const val = initial * Math.pow(1 + rate, years);
+    return { correct: Math.abs(parseFloat(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
   }
   if (type === 'QUADRATIC' && topic === 'Calculus') {
-    return parseFloat(inputs.x || '') === data.p2[0];
+    return { correct: parseFloat(inputs.x || '') === data.p2[0], expected: { x: String(data.p2[0]) } };
   }
   if (type === 'LINEAR') {
-    if (!data.points) return false;
+    if (!data.points) return { correct: false, expected: {} };
     const [[x1, y1], [x2, y2]] = data.points;
-    const correctM = (y2 - y1) / (x2 - x1);
-    const correctB = y1 - correctM * x1;
-    const m = parseFloat(inputs.m || '');
-    const b = parseFloat(inputs.b || '');
-    return Math.abs(m - correctM) < 0.01 && Math.abs(b - correctB) < 0.01;
+    const m = (y2 - y1) / (x2 - x1);
+    const b = y1 - m * x1;
+    const ok = Math.abs(parseFloat(inputs.m || '') - m) < 0.01 && Math.abs(parseFloat(inputs.b || '') - b) < 0.01;
+    return { correct: ok, expected: { m: round(m), b: round(b) } };
   }
   if (type === 'FUNC_VAL') {
     const { m, b, x, a } = data;
     if (m !== undefined) {
-      const correctY = m * x + b;
-      return Math.abs(parseFloat(inputs.y || '') - correctY) < 0.01;
-    } else {
-      const correctT = -data.b / (2 * a);
-      return Math.abs(parseFloat(inputs.t || '') - correctT) < 0.01;
+      const val = m * x + b;
+      return { correct: Math.abs(parseFloat(inputs.y || '') - val) < 0.01, expected: { y: round(val) } };
     }
+    const val = -data.b / (2 * a);
+    return { correct: Math.abs(parseFloat(inputs.t || '') - val) < 0.01, expected: { t: round(val) } };
   }
   if (type === 'DERIVATIVE') {
     if (data.func === '3x^2-3') {
-      const x = parseFloat(inputs.x || '');
-      return Math.abs(x - data.x) < 0.01;
+      return { correct: Math.abs(parseFloat(inputs.x || '') - data.x) < 0.01, expected: { x: String(data.x) } };
     }
-    const correctK = 2 * data.x;
-    return Math.abs(parseFloat(inputs.k || '') - correctK) < 0.01;
+    const val = 2 * data.x;
+    return { correct: Math.abs(parseFloat(inputs.k || '') - val) < 0.01, expected: { k: round(val) } };
   }
   if (type === 'AREA') {
     const { length, width, r, pi, mode } = data;
+    let val: number;
     if (mode === 'sphere_area') {
-      const correctArea = 4 * pi * r * r;
-      return Math.abs(parseFloat(inputs.area || '') - correctArea) < 0.01;
+      val = 4 * pi * r * r;
+    } else if (data.a !== undefined && data.b !== undefined && data.h !== undefined) {
+      val = (data.a + data.b) * data.h / 2;
+    } else {
+      val = length * width;
     }
-    if (data.a !== undefined && data.b !== undefined && data.h !== undefined) {
-      const correctArea = (data.a + data.b) * data.h / 2;
-      return Math.abs(parseFloat(inputs.area || '') - correctArea) < 0.01;
-    }
-    const correctArea = length * width;
-    return Math.abs(parseFloat(inputs.area || '') - correctArea) < 0.01;
+    return { correct: Math.abs(parseFloat(inputs.area || '') - val) < 0.01, expected: { area: round(val) } };
   }
   if (type === 'QUADRATIC') {
-    if (!data.p1 || !data.p2) return false;
+    if (!data.p1 || !data.p2) return { correct: false, expected: {} };
     const [x1, y1] = data.p1;
     const [x2, y2] = data.p2;
-    const correctC = y1;
-    const correctA = (y2 - y1) / (x2 * x2);
-    const a = parseFloat(inputs.a || '');
-    const c = parseFloat(inputs.c || '');
-    return Math.abs(a - correctA) < 0.01 && Math.abs(c - correctC) < 0.01;
+    const cVal = y1;
+    const aVal = (y2 - y1) / (x2 * x2);
+    const ok = Math.abs(parseFloat(inputs.a || '') - aVal) < 0.01 && Math.abs(parseFloat(inputs.c || '') - cVal) < 0.01;
+    return { correct: ok, expected: { a: round(aVal), c: round(cVal) } };
   }
   if (type === 'INDICES') {
     const { e1, e2, op } = data;
-    const correctX = op === 'div' ? e1 - e2 : e1 + e2;
-    return parseFloat(inputs.x || '') === correctX;
+    const val = op === 'div' ? e1 - e2 : e1 + e2;
+    return { correct: parseFloat(inputs.x || '') === val, expected: { x: String(val) } };
   }
   if (type === 'PYTHAGORAS') {
     const { a, b, c } = data;
     if (c !== undefined) {
-      const correctB = Math.sqrt(c * c - a * a);
-      return Math.abs(parseFloat(inputs.c || '') - correctB) < 0.01;
+      const val = Math.sqrt(c * c - a * a);
+      return { correct: Math.abs(parseFloat(inputs.c || '') - val) < 0.01, expected: { c: round(val) } };
     }
-    const correctC = Math.sqrt(a * a + b * b);
-    return Math.abs(parseFloat(inputs.c || '') - correctC) < 0.01;
+    const val = Math.sqrt(a * a + b * b);
+    return { correct: Math.abs(parseFloat(inputs.c || '') - val) < 0.01, expected: { c: round(val) } };
   }
   if (type === 'SIMULTANEOUS') {
     if (data.eq1) {
       const [a1, b1, c1] = data.eq1;
       const [a2, b2, c2] = data.eq2;
       const det = a1 * b2 - a2 * b1;
-      const correctX = (c1 * b2 - c2 * b1) / det;
-      const correctY = (a1 * c2 - a2 * c1) / det;
-      const x = parseFloat(inputs.x || '');
-      const y = parseFloat(inputs.y || '');
-      return Math.abs(x - correctX) < 0.01 && Math.abs(y - correctY) < 0.01;
+      const xVal = (c1 * b2 - c2 * b1) / det;
+      const yVal = (a1 * c2 - a2 * c1) / det;
+      const ok = Math.abs(parseFloat(inputs.x || '') - xVal) < 0.01 && Math.abs(parseFloat(inputs.y || '') - yVal) < 0.01;
+      return { correct: ok, expected: { x: round(xVal), y: round(yVal) } };
     }
-    return parseFloat(inputs.x || '') === data.x && parseFloat(inputs.y || '') === data.y;
+    const ok = parseFloat(inputs.x || '') === data.x && parseFloat(inputs.y || '') === data.y;
+    return { correct: ok, expected: { x: String(data.x), y: String(data.y) } };
   }
   if (type === 'ANGLES') {
     const total = data.total || 180;
-    return parseFloat(inputs.x || '') === (total - data.angle);
+    const val = total - data.angle;
+    return { correct: parseFloat(inputs.x || '') === val, expected: { x: String(val) } };
   }
   if (type === 'VOLUME') {
     const { radius, height, pi, mode } = data;
-    let correctV = pi * radius * radius * height;
-    if (mode === 'cone') {
-      correctV = (1 / 3) * pi * radius * radius * height;
-    }
-    return Math.abs(parseFloat(inputs.v || '') - correctV) < 0.01;
+    let val = pi * radius * radius * height;
+    if (mode === 'cone') val = (1 / 3) * pi * radius * radius * height;
+    return { correct: Math.abs(parseFloat(inputs.v || '') - val) < 0.01, expected: { v: round(val) } };
   }
   if (type === 'TRIGONOMETRY') {
     if (data.func === 'sin') {
-      const { opposite, angle } = data;
-      const sinVal = angle === 30 ? 0.5 : Math.sin(angle * Math.PI / 180);
-      const correctHyp = opposite / sinVal;
-      return Math.abs(parseFloat(inputs.c || '') - correctHyp) < 0.01;
+      const sinVal = data.angle === 30 ? 0.5 : Math.sin(data.angle * Math.PI / 180);
+      const val = data.opposite / sinVal;
+      return { correct: Math.abs(parseFloat(inputs.c || '') - val) < 0.01, expected: { c: round(val) } };
     }
     if (data.func === 'tan_inv') {
-      const { opposite, adjacent } = data;
-      const correctAngle = Math.atan2(opposite, adjacent) * 180 / Math.PI;
-      return Math.abs(parseFloat(inputs.angle || '') - correctAngle) < 0.01;
+      const val = Math.atan2(data.opposite, data.adjacent) * 180 / Math.PI;
+      return { correct: Math.abs(parseFloat(inputs.angle || '') - val) < 0.01, expected: { angle: round(val) } };
     }
-    const { opposite, adjacent } = data;
-    const correctTan = opposite / adjacent;
-    return Math.abs(parseFloat(inputs.tan || '') - correctTan) < 0.01;
+    const val = data.opposite / data.adjacent;
+    return { correct: Math.abs(parseFloat(inputs.tan || '') - val) < 0.01, expected: { tan: round(val) } };
   }
   if (type === 'PROBABILITY') {
     if (data.p1 !== undefined) {
-      const correctP = data.p1 * data.p2;
-      return Math.abs(parseFloat(inputs.p || '') - correctP) < 0.01;
+      const val = data.p1 * data.p2;
+      return { correct: Math.abs(parseFloat(inputs.p || '') - val) < 0.01, expected: { p: round(val) } };
     }
-    const { total, target } = data;
-    const correctP = target / total;
-    return Math.abs(parseFloat(inputs.p || '') - correctP) < 0.01;
+    const val = data.target / data.total;
+    return { correct: Math.abs(parseFloat(inputs.p || '') - val) < 0.01, expected: { p: round(val) } };
   }
   if (type === 'INTEGRATION') {
     const { lower, upper, func, a, b } = data;
     const l = lower !== undefined ? lower : a;
     const u = upper !== undefined ? upper : b;
-    let correctArea = 0;
-    if (func === 'x') {
-      correctArea = 0.5 * (u * u - l * l);
-    } else if (func === '3x^2') {
-      correctArea = (u * u * u - l * l * l);
-    } else {
-      correctArea = u * u - l * l;
-    }
-    return Math.abs(parseFloat(inputs.area || '') - correctArea) < 0.01;
+    let val = 0;
+    if (func === 'x') val = 0.5 * (u * u - l * l);
+    else if (func === '3x^2') val = u * u * u - l * l * l;
+    else val = u * u - l * l;
+    return { correct: Math.abs(parseFloat(inputs.area || '') - val) < 0.01, expected: { area: round(val) } };
   }
   if (type === 'ARITHMETIC') {
-    const { a1, d, n } = data;
-    const correctAn = a1 + (n - 1) * d;
-    return parseFloat(inputs.ans || '') === correctAn;
+    const val = data.a1 + (data.n - 1) * data.d;
+    return { correct: parseFloat(inputs.ans || '') === val, expected: { ans: String(val) } };
   }
   if (type === 'ROOTS') {
     const { a, b, c } = data;
-    const discriminant = b * b - 4 * a * c;
-    const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
-    const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+    const disc = b * b - 4 * a * c;
+    const x1 = (-b + Math.sqrt(disc)) / (2 * a);
+    const x2 = (-b - Math.sqrt(disc)) / (2 * a);
     const inputX = parseFloat(inputs.x || '');
-    return Math.abs(inputX - x1) < 0.01 || Math.abs(inputX - x2) < 0.01;
+    const ok = Math.abs(inputX - x1) < 0.01 || Math.abs(inputX - x2) < 0.01;
+    return { correct: ok, expected: { x: `${round(x1)} or ${round(x2)}` } };
   }
   if (type === 'CIRCLE') {
     const { r, pi, mode } = data;
     if (mode === 'area') {
-      const correctA = pi * r * r;
-      return Math.abs(parseFloat(inputs.area || '') - correctA) < 0.01;
-    } else {
-      const correctC = 2 * pi * r;
-      return Math.abs(parseFloat(inputs.c || '') - correctC) < 0.01;
+      const val = pi * r * r;
+      return { correct: Math.abs(parseFloat(inputs.area || '') - val) < 0.01, expected: { area: round(val) } };
     }
+    const val = 2 * pi * r;
+    return { correct: Math.abs(parseFloat(inputs.c || '') - val) < 0.01, expected: { c: round(val) } };
   }
   if (type === 'STATISTICS') {
     const { values, mode } = data;
     if (mode === 'mean') {
-      const correctMean = values.reduce((a: number, b: number) => a + b, 0) / values.length;
-      return Math.abs(parseFloat(inputs.ans || '') - correctMean) < 0.01;
+      const val = values.reduce((a: number, b: number) => a + b, 0) / values.length;
+      return { correct: Math.abs(parseFloat(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
     }
     if (mode === 'median') {
       const sorted = [...values].sort((a: number, b: number) => a - b);
       const mid = Math.floor(sorted.length / 2);
-      const correctMedian = sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-      return Math.abs(parseFloat(inputs.ans || '') - correctMedian) < 0.01;
+      const val = sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+      return { correct: Math.abs(parseFloat(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
     }
   }
   if (type === 'RATIO') {
     const { a, b } = data;
     const x = parseFloat(inputs.x || '');
     const y = parseFloat(inputs.y || '');
-    return Math.abs(x / y - a / b) < 0.01;
+    return { correct: Math.abs(x / y - a / b) < 0.01, expected: { x: String(a), y: String(b) } };
   }
   if (type === 'SIMILARITY') {
-    const { a, b, c } = data;
-    const correctX = (a / b) * c;
-    return Math.abs(parseFloat(inputs.x || '') - correctX) < 0.01;
+    const val = (data.a / data.b) * data.c;
+    return { correct: Math.abs(parseFloat(inputs.x || '') - val) < 0.01, expected: { x: round(val) } };
   }
-  return false;
+  return { correct: false, expected: {} };
+}
+
+/** Backward-compatible wrapper — returns boolean only */
+export function checkCorrectness(mission: Mission, inputs: { [key: string]: string }): boolean {
+  return checkAnswer(mission, inputs).correct;
 }
