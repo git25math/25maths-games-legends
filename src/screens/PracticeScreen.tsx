@@ -43,7 +43,6 @@ export const PracticeScreen = ({
   } | null>(null);
   const [showCorrectFlash, setShowCorrectFlash] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
-  const [showTutorialForGreen, setShowTutorialForGreen] = useState(true);
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
   const [showBadge, setShowBadge] = useState(false);
@@ -51,7 +50,6 @@ export const PracticeScreen = ({
   const { playSuccess, playFail, playClick } = useAudio();
 
   const phaseIndex = PHASE_ORDER.indexOf(currentPhase);
-  const hasTutorial = currentPhase === 'green' && showTutorialForGreen && !!currentMission.tutorialSteps;
 
   // Interpolated texts
   const p = currentMission.data ?? {};
@@ -73,8 +71,6 @@ export const PracticeScreen = ({
       setShowCorrectFlash(true);
       setTimeout(() => {
         setShowCorrectFlash(false);
-        // After first green question, stop showing tutorial for subsequent ones
-        setShowTutorialForGreen(false);
         regenerateQuestion();
       }, 800);
     } else {
@@ -103,7 +99,6 @@ export const PracticeScreen = ({
     }
     const nextPhase = PHASE_ORDER[phaseIndex + 1];
     setCurrentPhase(nextPhase);
-    setShowTutorialForGreen(true);
     regenerateQuestion();
   };
 
@@ -111,7 +106,6 @@ export const PracticeScreen = ({
     if (phaseIndex === 0) return;
     const prevPhase = PHASE_ORDER[phaseIndex - 1];
     setCurrentPhase(prevPhase);
-    setShowTutorialForGreen(false); // Don't replay tutorial when going back
     regenerateQuestion();
   };
 
@@ -237,92 +231,95 @@ export const PracticeScreen = ({
             {/* Visual diagram */}
             <VisualData mission={currentMission} lang={lang} />
 
-            {/* Green phase: show formula too (after tutorial) */}
-            {currentPhase === 'green' && !hasTutorial && (
+            {/* Green phase: show formula in left panel as reference */}
+            {currentPhase === 'green' && (
               <div className="mt-4 p-3 bg-emerald-100 border-2 border-emerald-300 rounded-lg">
                 <div className="text-emerald-800 text-xs font-bold mb-1">{t.secretFormula}</div>
                 <MathView tex={currentMission.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-emerald-900" />
               </div>
             )}
-
-            {/* Amber phase: always show formula hint */}
-            {currentPhase === 'amber' && (
-              <div className="mt-4 p-3 bg-amber-100 border-2 border-amber-300 rounded-lg">
-                <div className="text-amber-800 text-xs font-bold mb-1">{t.secretFormula}</div>
-                <MathView tex={currentMission.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-amber-900" />
-              </div>
-            )}
-
-            {/* Red phase: no hints */}
           </div>
 
           {/* Right: Inputs and controls */}
           <div className="space-y-6">
-            {/* Tutorial overlay for Green mode (first question only) */}
-            {hasTutorial && currentMission.tutorialSteps && (
-              <AnimatedTutorial
-                tutorialSteps={currentMission.tutorialSteps}
-                equationSteps={currentMission.data?.tutorialEquationSteps}
-                characterId={character.id}
-                currentStep={tutorialStep}
-                lang={lang}
-              />
-            )}
+            {currentPhase === 'green' ? (
+              <>
+                {/* GREEN PHASE: Worked example — no input, just watch the solution */}
+                {currentMission.tutorialSteps && (
+                  <AnimatedTutorial
+                    tutorialSteps={currentMission.tutorialSteps}
+                    equationSteps={currentMission.data?.tutorialEquationSteps}
+                    characterId={character.id}
+                    currentStep={tutorialStep}
+                    lang={lang}
+                  />
+                )}
 
-            <InputFields
-              mission={currentMission}
-              inputs={inputs}
-              setInputs={setInputs}
-              difficultyMode={currentPhase as DifficultyMode}
-              tutorialStep={tutorialStep}
-              isTutorial={hasTutorial}
-            />
-
-            {/* Wrong answer review panel */}
-            {wrongAnswerData && (
-              <WrongAnswerPanel
-                questionType={currentMission.type}
-                userInputs={wrongAnswerData.userInputs}
-                expected={wrongAnswerData.expected}
-                formula={currentMission.secret.formula}
-                tutorialSteps={currentMission.tutorialSteps}
-                lang={lang}
-                onContinue={handleWrongAnswerContinue}
-                continueLabel={lang === 'zh' ? '明白了，下一题' : 'Got it, next question'}
-              />
-            )}
-
-            {/* Action buttons */}
-            {hasTutorial ? (
-              <button
-                onClick={() => {
-                  playClick();
-                  if (tutorialStep < (currentMission.tutorialSteps?.length || 0) - 1) {
-                    setTutorialStep(prev => prev + 1);
-                  } else {
-                    // Tutorial complete — switch to battle mode for this question
-                    setShowTutorialForGreen(false);
-                    setInputs({});
-                  }
-                }}
-                className="w-full py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
-              >
-                {tutorialStep < (currentMission.tutorialSteps?.length || 0) - 1 ? t.nextStep : t.tutorialStartBattle}
-                <ChevronRight size={20} />
-              </button>
+                {/* Step through tutorial, then offer "next example" or "advance" */}
+                {tutorialStep < (currentMission.tutorialSteps?.length || 1) - 1 ? (
+                  <button
+                    onClick={() => { playClick(); setTutorialStep(prev => prev + 1); }}
+                    className="w-full py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
+                  >
+                    {t.nextStep}
+                    <ChevronRight size={20} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => { playClick(); regenerateQuestion(); }}
+                    className="w-full py-4 bg-[#3d2b1f] text-[#f4e4bc] font-black rounded-lg shadow-lg hover:bg-[#5c4033] transition-all flex items-center justify-center gap-2 min-h-12"
+                  >
+                    {lang === 'zh' ? '再看一个例题' : 'See Another Example'}
+                    <ChevronRight size={20} />
+                  </button>
+                )}
+              </>
             ) : (
-              <button
-                onClick={handleSubmit}
-                disabled={!!wrongAnswerData || showCorrectFlash}
-                className={`w-full py-5 text-[#f4e4bc] text-xl font-black rounded-lg transition-all flex items-center justify-center gap-3 border-2 min-h-12 ${
-                  wrongAnswerData || showCorrectFlash
-                    ? 'bg-slate-500 border-slate-600 cursor-not-allowed'
-                    : 'bg-[#8b0000] hover:bg-[#a50000] shadow-[0_4px_0_#5c0000] active:translate-y-1 active:shadow-none border-[#5c0000]'
-                }`}
-              >
-                <Swords size={24} />
-                {t.attack}
-              </button>
+              <>
+                {/* AMBER / RED PHASE: Student answers */}
+                {currentPhase === 'amber' && (
+                  <div className="p-3 bg-amber-100 border-2 border-amber-300 rounded-lg mb-2">
+                    <div className="text-amber-800 text-xs font-bold mb-1">{t.secretFormula}</div>
+                    <MathView tex={currentMission.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-amber-900" />
+                  </div>
+                )}
+
+                <InputFields
+                  mission={currentMission}
+                  inputs={inputs}
+                  setInputs={setInputs}
+                  difficultyMode={currentPhase as DifficultyMode}
+                  tutorialStep={0}
+                  isTutorial={false}
+                />
+
+                {/* Wrong answer review panel */}
+                {wrongAnswerData && (
+                  <WrongAnswerPanel
+                    questionType={currentMission.type}
+                    userInputs={wrongAnswerData.userInputs}
+                    expected={wrongAnswerData.expected}
+                    formula={currentMission.secret.formula}
+                    tutorialSteps={currentMission.tutorialSteps}
+                    lang={lang}
+                    onContinue={handleWrongAnswerContinue}
+                    continueLabel={lang === 'zh' ? '明白了，下一题' : 'Got it, next question'}
+                  />
+                )}
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={!!wrongAnswerData || showCorrectFlash}
+                  className={`w-full py-5 text-[#f4e4bc] text-xl font-black rounded-lg transition-all flex items-center justify-center gap-3 border-2 min-h-12 ${
+                    wrongAnswerData || showCorrectFlash
+                      ? 'bg-slate-500 border-slate-600 cursor-not-allowed'
+                      : 'bg-[#8b0000] hover:bg-[#a50000] shadow-[0_4px_0_#5c0000] active:translate-y-1 active:shadow-none border-[#5c0000]'
+                  }`}
+                >
+                  <Swords size={24} />
+                  {t.attack}
+                </button>
+              </>
             )}
 
             {/* Phase navigation */}
