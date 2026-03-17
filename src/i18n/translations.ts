@@ -127,6 +127,15 @@ export const translations = {
     practiceComplete: "练习通关！",
     nextQuestion: "下一题",
     enterChallenge: "进入闯关模式",
+    loginRequired: "请先登录或选择游客模式",
+    leave: "退出",
+    change: "修改",
+    correct: "正确！",
+    back: "返回",
+    backToMap: "返回地图",
+    seeAnotherExample: "再看一个例题",
+    gotItNextQuestion: "明白了，下一题",
+    imReady: "我准备好了！",
   },
   en: {
     title: "Three Kingdoms Math",
@@ -254,6 +263,15 @@ export const translations = {
     practiceComplete: "Practice Complete!",
     nextQuestion: "Next Question",
     enterChallenge: "Enter Challenge Mode",
+    loginRequired: "Please login or use guest mode first",
+    leave: "Leave",
+    change: "change",
+    correct: "Correct!",
+    back: "Back",
+    backToMap: "Back to Map",
+    seeAnotherExample: "See Another Example",
+    gotItNextQuestion: "Got it, next question",
+    imReady: "I'm Ready!",
   }
 } as const;
 

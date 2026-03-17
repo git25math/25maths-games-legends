@@ -57,7 +57,7 @@ export const LobbyScreen = ({
         </div>
         <div className="flex gap-4">
           <button onClick={onLeave} className="flex-1 py-5 bg-slate-100 text-slate-600 font-black rounded-2xl hover:bg-slate-200 transition-all">
-            {lang === 'zh' ? '退出' : 'Leave'}
+            {t.leave}
           </button>
           <button
             onClick={onReady}

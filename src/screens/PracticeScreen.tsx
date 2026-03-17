@@ -143,7 +143,7 @@ export const PracticeScreen = ({
             >
               <CheckCircle2 size={32} className="text-white" />
               <span className="text-white text-2xl font-black">
-                {lang === 'zh' ? '正确！' : 'Correct!'}
+                {t.correct}
               </span>
             </motion.div>
           </motion.div>
@@ -206,7 +206,7 @@ export const PracticeScreen = ({
               className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-xs font-bold min-h-10"
             >
               <ChevronLeft size={16} />
-              {lang === 'zh' ? '返回' : 'Back'}
+              {t.back}
             </button>
           </div>
         </div>
@@ -271,7 +271,7 @@ export const PracticeScreen = ({
                     onClick={() => { playClick(); regenerateQuestion(); }}
                     className="w-full py-4 bg-[#3d2b1f] text-[#f4e4bc] font-black rounded-lg shadow-lg hover:bg-[#5c4033] transition-all flex items-center justify-center gap-2 min-h-12"
                   >
-                    {lang === 'zh' ? '再看一个例题' : 'See Another Example'}
+                    {t.seeAnotherExample}
                     <ChevronRight size={20} />
                   </button>
                 )}
@@ -293,6 +293,7 @@ export const PracticeScreen = ({
                   difficultyMode={currentPhase as DifficultyMode}
                   tutorialStep={0}
                   isTutorial={false}
+                  lang={lang}
                 />
 
                 {/* Wrong answer review panel */}
@@ -305,7 +306,7 @@ export const PracticeScreen = ({
                     tutorialSteps={currentMission.tutorialSteps}
                     lang={lang}
                     onContinue={handleWrongAnswerContinue}
-                    continueLabel={lang === 'zh' ? '明白了，下一题' : 'Got it, next question'}
+                    continueLabel={t.gotItNextQuestion}
                   />
                 )}
 
@@ -354,7 +355,7 @@ export const PracticeScreen = ({
               className="w-full py-2 text-[#3d2b1f]/50 hover:text-[#3d2b1f] text-xs font-bold transition-colors flex items-center justify-center gap-1"
             >
               <ChevronLeft size={14} />
-              {lang === 'zh' ? '返回地图' : 'Back to Map'}
+              {t.backToMap}
             </button>
           </div>
         </div>

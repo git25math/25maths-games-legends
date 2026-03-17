@@ -93,7 +93,7 @@ export const WelcomeScreen = ({
             {t.startJourney}
           </button>
           {!isLoggedIn && selectedCharId && (
-            <p className="text-amber-400/80 text-sm font-bold">{lang === 'zh' ? '请先登录或选择游客模式' : 'Please login or use guest mode first'}</p>
+            <p className="text-amber-400/80 text-sm font-bold">{t.loginRequired}</p>
           )}
 
           {!isLoggedIn && !showAuthForm && (

@@ -44,7 +44,7 @@ export function WrongAnswerPanel({
   continueLabel,
 }: Props) {
   const t = LABELS[lang];
-  const fields = INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || [];
+  const fields = (INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || { zh: [], en: [] })[lang] || [];
 
   // Only show fields that have expected values
   const relevantFields = fields.filter(f => expected[f.id] !== undefined);

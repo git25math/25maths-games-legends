@@ -62,7 +62,7 @@ export const MapScreen = ({
                 onClick={onGradeChange}
                 className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-white/40 hover:text-white transition-colors"
               >
-                {t.year} {profile.grade} ({lang === 'zh' ? '修改' : 'change'})
+                {t.year} {profile.grade} ({t.change})
               </button>
             </div>
           </div>

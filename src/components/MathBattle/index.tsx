@@ -400,6 +400,7 @@ export const MathBattle = ({
               difficultyMode={difficultyMode}
               tutorialStep={tutorialStep}
               isTutorial={isTutorial}
+              lang={lang}
             />
 
             {/* Wrong answer review panel */}

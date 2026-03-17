@@ -9,6 +9,7 @@ export const InputFields = ({
   difficultyMode,
   tutorialStep,
   isTutorial,
+  lang = 'zh',
 }: {
   mission: Mission;
   inputs: { [key: string]: string };
@@ -16,8 +17,9 @@ export const InputFields = ({
   difficultyMode: DifficultyMode;
   tutorialStep: number;
   isTutorial: boolean;
+  lang?: Language;
 }) => {
-  const currentFields = INPUT_FIELDS[mission.type] || [];
+  const currentFields = (INPUT_FIELDS[mission.type] || { zh: [], en: [] })[lang] || [];
 
   return (
     <div className="space-y-6">

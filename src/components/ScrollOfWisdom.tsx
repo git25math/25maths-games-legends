@@ -54,7 +54,7 @@ export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; l
             onClick={onClose}
             className="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white font-black rounded-2xl shadow-xl transition-all min-h-12"
           >
-            {lang === 'zh' ? '我准备好了！' : "I'm Ready!"}
+            {t.imReady}
           </button>
         </div>
       </div>
