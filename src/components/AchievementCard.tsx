@@ -31,7 +31,7 @@ const LABELS = {
     hp: 'HP',
     difficulty: 'Difficulty',
     returnMap: 'Return to Map',
-    brand: '25 数学三国',
+    brand: '25 Math Legends',
     difficultyNames: { green: "Master's Guide", amber: 'Tactical Hints', red: 'Solo Command' },
   },
 } as const;

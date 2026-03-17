@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { MapIcon, Crown, CheckCircle2, Lock, Users, Swords, BookOpen } from 'lucide-react';
+import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { MathView, LatexText } from '../components/MathView';
@@ -79,35 +79,14 @@ export const MapScreen = ({
         </div>
       </div>
 
-      {/* Multiplayer */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <button
-          onClick={() => onCreateRoom('team', gradeMissions[0]?.id || 1)}
-          className="p-5 md:p-8 bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-3xl text-white flex items-center justify-between group overflow-hidden relative min-h-12"
-        >
-          <div className="relative z-10 text-left">
-            <h4 className="text-lg md:text-2xl font-black mb-1">{t.teamMode}</h4>
-            <p className="text-indigo-200 text-sm">{t.multiplayer}</p>
-          </div>
-          <Users size={48} className="text-white/20 group-hover:scale-110 transition-transform" />
-        </button>
-        <button
-          onClick={() => onCreateRoom('pk', gradeMissions[0]?.id || 1)}
-          className="p-5 md:p-8 bg-gradient-to-br from-rose-600 to-rose-800 rounded-3xl text-white flex items-center justify-between group overflow-hidden relative min-h-12"
-        >
-          <div className="relative z-10 text-left">
-            <h4 className="text-lg md:text-2xl font-black mb-1">{t.pkMode}</h4>
-            <p className="text-rose-200 text-sm">{t.multiplayer}</p>
-          </div>
-          <Swords size={48} className="text-white/20 group-hover:scale-110 transition-transform" />
-        </button>
-      </div>
+      {/* Multiplayer — hidden until Phase 5 */}
 
       {/* Mission Grid with World Map Background */}
-      <div className="relative rounded-3xl overflow-hidden">
+      <div className="relative rounded-3xl overflow-hidden bg-[#1a1a2e]">
         <img
           src={lang === 'zh' ? './map/world-map-zh.png' : './map/world-map-en.png'}
           alt="Three Kingdoms Map"
+          loading="lazy"
           className="w-full rounded-3xl opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
         />
         <div className="relative z-10 space-y-16 p-4 md:p-8">

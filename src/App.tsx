@@ -11,7 +11,6 @@ import { useMissions } from './hooks/useMissions';
 import { useMultiplayer } from './hooks/useMultiplayer';
 
 import { ScrollOfWisdom } from './components/ScrollOfWisdom';
-import { DifficultySelector } from './components/DifficultySelector';
 import { MathBattle } from './components/MathBattle';
 import { generateMission } from './utils/generateMission';
 import { MISSIONS as LOCAL_MISSIONS } from './data/missions';
@@ -32,10 +31,10 @@ class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; er
         <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
           <div className="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 text-center max-w-md">
             <XCircle size={64} className="text-rose-500 mx-auto mb-6" />
-            <h2 className="text-2xl font-black text-white mb-4">系统错误</h2>
-            <p className="text-slate-400 mb-8">出错了，请稍后再试。</p>
+            <h2 className="text-2xl font-black text-white mb-4">系统错误 / System Error</h2>
+            <p className="text-slate-400 mb-8">出错了，请稍后再试。/ Something went wrong. Please try again.</p>
             <button onClick={() => window.location.reload()} className="px-8 py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-all">
-              刷新页面
+              刷新页面 / Refresh
             </button>
           </div>
         </div>
@@ -89,8 +88,7 @@ export default function App() {
     return null;
   });
   const [showSecret, setShowSecret] = useState(false);
-  const [showDifficultySelector, setShowDifficultySelector] = useState(false);
-  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyMode>('green');
+  const [selectedDifficulty] = useState<DifficultyMode>('red');
   const [isGuest, setIsGuest] = useState(persisted.isGuest);
 
   const { user, signIn, signUp, signOut } = useAuth();
@@ -125,23 +123,12 @@ export default function App() {
       battleMission = generateMission(mission);
     }
     setActiveMission(battleMission);
-    setSelectedDifficulty('red'); // Challenge = no hints
     setShowSecret(true);
   };
 
   const handlePracticeStart = (mission: Mission) => {
     setActiveMission(mission);
     setGameState('practice');
-  };
-
-  const handleDifficultySelect = (mode: DifficultyMode) => {
-    setSelectedDifficulty(mode);
-    setShowDifficultySelector(false);
-    // Randomize: if mission has generatorType, generate new data
-    if (activeMission?.data?.generatorType) {
-      setActiveMission(generateMission(activeMission));
-    }
-    setShowSecret(true);
   };
 
   const handleBattleComplete = async (success: boolean, score = 0, durationSecs = 0, hpRemaining = 0) => {
@@ -199,17 +186,6 @@ export default function App() {
         </div>
 
         {/* Overlays */}
-        <AnimatePresence>
-          {showDifficultySelector && activeMission && (
-            <DifficultySelector
-              lang={lang}
-              completion={profile?.completed_missions[String(activeMission.id)]}
-              onSelect={handleDifficultySelect}
-              onClose={() => setShowDifficultySelector(false)}
-            />
-          )}
-        </AnimatePresence>
-
         <AnimatePresence>
           {showSecret && activeMission && (
             <ScrollOfWisdom

@@ -442,13 +442,6 @@ export const MathBattle = ({
               </button>
             )}
 
-            <div className="flex justify-center gap-4 pt-2">
-              {([t.cards.kill, t.cards.dodge, t.cards.peach] as string[]).map(card => (
-                <div key={card} className="w-10 h-14 bg-[#3d2b1f] rounded border border-[#f4e4bc]/20 flex items-center justify-center text-[#f4e4bc] opacity-50">
-                  <span className="text-[10px] font-black">{card}</span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
 
