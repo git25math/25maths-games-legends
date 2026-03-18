@@ -236,9 +236,62 @@ export function generateIndicesMission(template: Mission): Mission {
 
   const narrator = pickRandom(['曹操', '孙权', '关羽']);
   const tutorialSteps = [
-    { text: { zh: `${narrator}：$${base}^{${e1}} ${op === 'div' ? '\\div' : '\\times'} ${base}^{${e2}} = ${base}^x$`, en: `${narrator}: "$${base}^{${e1}} ${op === 'div' ? '\\div' : '\\times'} ${base}^{${e2}} = ${base}^x$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：${op === 'div' ? '底数相同，指数相减' : '底数相同，指数相加'}：$x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$`, en: `${narrator}: "${op === 'div' ? 'Same base, subtract exponents' : 'Same base, add exponents'}: $x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：所以 $x = ${ans}$！`, en: `${narrator}: "So $x = ${ans}$!"` }, highlightField: 'x' },
+    {
+      text: {
+        zh: `${narrator}：什么是指数(index/power)?\n$2^{3}$ 表示 $2 \\times 2 \\times 2 = 8$\n右上角的小数字告诉你要乘多少次。`,
+        en: `${narrator}: "What is an index (power)?\n$2^{3}$ means $2 \\times 2 \\times 2 = 8$\nThe small number on top tells you how many times to multiply."`,
+      },
+      hint: {
+        zh: '底数(base)是被乘的数\n指数(index)是乘的次数',
+        en: 'The base is the number being multiplied\nThe index (power) is how many times',
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：看这道题：$${base}^{${e1}} ${sym} ${base}^{${e2}} = ${base}^{x}$\n底数是 $${base}$，两个指数分别是 $${e1}$ 和 $${e2}$。`,
+        en: `${narrator}: "Look at this expression: $${base}^{${e1}} ${sym} ${base}^{${e2}} = ${base}^{x}$\nThe base is $${base}$, and the two powers are $${e1}$ and $${e2}$."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: op === 'div' ? {
+        zh: `${narrator}：指数除法法则：$a^{m} \\div a^{n} = a^{m-n}$\n底数不变，指数相减。`,
+        en: `${narrator}: "Index law for division: $a^{m} \\div a^{n} = a^{m-n}$\nThe base stays the same, subtract the powers."`,
+      } : {
+        zh: `${narrator}：指数乘法法则：$a^{m} \\times a^{n} = a^{m+n}$\n底数不变，指数相加。`,
+        en: `${narrator}: "Index law for multiplication: $a^{m} \\times a^{n} = a^{m+n}$\nThe base stays the same, add the powers."`,
+      },
+      hint: op === 'div' ? {
+        zh: '底数相同时，除法就是把指数减掉',
+        en: 'When the bases are the same, division means subtract the powers',
+      } : {
+        zh: '底数相同时，乘法就是把指数加起来',
+        en: 'When the bases are the same, multiplication means add the powers',
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：代入数值：$x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$`,
+        en: `${narrator}: "Substitute the numbers: $x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算：$${e1} ${op === 'div' ? '-' : '+'} ${e2} = ${ans}$`,
+        en: `${narrator}: "Calculate: $${e1} ${op === 'div' ? '-' : '+'} ${e2} = ${ans}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案：$x = ${ans}$`,
+        en: `${narrator}: "Answer: $x = ${ans}$"`,
+      },
+      highlightField: 'x',
+    },
   ];
 
   return {
@@ -382,9 +435,49 @@ export function generateAreaRectMission(template: Mission): Mission {
 
   const area = length * width;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：长方形面积 = 长 × 宽`, en: `${narrator}: "Rectangle area = length × width"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：${length} × ${width} = ?`, en: `${narrator}: "${length} × ${width} = ?"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：面积 = ${area} 平方丈！`, en: `${narrator}: "Area = ${area} square units!"` }, highlightField: 'area' },
+    {
+      text: {
+        zh: `${narrator}：什么是面积?\n面积是一个形状里面的空间大小，用平方单位来量。`,
+        en: `${narrator}: "What is area?\nArea is the space inside a shape, measured in square units."`,
+      },
+      hint: {
+        zh: '想象用小方块铺满这个形状，数一数有多少个',
+        en: 'Imagine filling the shape with small squares and counting them',
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：长方形的面积公式：$\\text{Area} = \\text{length} \\times \\text{width}$`,
+        en: `${narrator}: "Rectangle area formula: $\\text{Area} = \\text{length} \\times \\text{width}$"`,
+      },
+      hint: {
+        zh: '数一数里面能放多少个单位正方形',
+        en: 'Count how many unit squares fit inside',
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：代入数值：$\\text{Area} = ${length} \\times ${width}$`,
+        en: `${narrator}: "Substitute: $\\text{Area} = ${length} \\times ${width}$"`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算：$${length} \\times ${width} = ${area}$`,
+        en: `${narrator}: "Calculate: $${length} \\times ${width} = ${area}$"`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案：面积 = $${area}$ 平方单位`,
+        en: `${narrator}: "Answer: Area = $${area}$ square units"`,
+      },
+      highlightField: 'area',
+    },
   ];
 
   return {
@@ -417,10 +510,55 @@ export function generateAreaTrapMission(template: Mission): Mission {
     en: `Calculate trapezoid area: $(a+b)h/2$.`,
   };
 
+  const sumAB = a + b;
+  const areaVal = (a + b) * h / 2;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：梯形面积 = (上底+下底)×高÷2`, en: `${narrator}: "Trapezoid area = (top+bottom)×height÷2"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：(${a}+${b})×${h}÷2 = ?`, en: `${narrator}: "(${a}+${b})×${h}÷2 = ?"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：面积 = ${(a + b) * h / 2}！`, en: `${narrator}: "Area = ${(a + b) * h / 2}!"` }, highlightField: 'area' },
+    {
+      text: {
+        zh: `${narrator}：什么是梯形?\n梯形有一对平行的边(上底和下底)，另外两条边不平行。`,
+        en: `${narrator}: "What is a trapezoid?\nA shape with one pair of parallel sides (top and bottom). The other two sides are not parallel."`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：梯形面积公式：$\\text{Area} = \\frac{(a + b) \\times h}{2}$`,
+        en: `${narrator}: "Trapezoid area formula: $\\text{Area} = \\frac{(a + b) \\times h}{2}$"`,
+      },
+      hint: {
+        zh: '把两条平行边加起来，乘以高，再除以2',
+        en: 'Add the two parallel sides, multiply by height, then halve',
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：找出已知量：\n上底 $a = ${a}$，下底 $b = ${b}$，高 $h = ${h}$`,
+        en: `${narrator}: "Identify the values:\nTop $a = ${a}$, Bottom $b = ${b}$, Height $h = ${h}$"`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：先把两条平行边加起来：$${a} + ${b} = ${sumAB}$`,
+        en: `${narrator}: "First add the two parallel sides: $${a} + ${b} = ${sumAB}$"`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：乘以高，再除以2：$\\frac{${sumAB} \\times ${h}}{2} = \\frac{${sumAB * h}}{2} = ${areaVal}$`,
+        en: `${narrator}: "Multiply by height, then divide by 2: $\\frac{${sumAB} \\times ${h}}{2} = \\frac{${sumAB * h}}{2} = ${areaVal}$"`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案：面积 = $${areaVal}$`,
+        en: `${narrator}: "Answer: Area = $${areaVal}$"`,
+      },
+      highlightField: 'area',
+    },
   ];
 
   return {
@@ -585,11 +723,65 @@ export function generatePercentageMission(template: Mission): Mission {
     ? { zh: `计算折后价：$${initial} \\times (1 - ${pct}\\%)$`, en: `Calculate discounted price: $${initial} \\times (1 - ${pct}\\%)$` }
     : { zh: `计算总额：$${initial} \\times (1 + ${pct}\\%)$`, en: `Calculate total: $${initial} \\times (1 + ${pct}\\%)$` };
 
-  const formulaStr = isDiscount ? `${initial} × (1 - ${pct}%)` : `${initial} × (1 + ${pct}%)`;
+  const decimal = pct / 100;
+  const multiplier = isDiscount ? 1 - decimal : 1 + decimal;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：${isDiscount ? '折扣' : '加税'}计算：原价 × (1 ${isDiscount ? '-' : '+'} 百分比)`, en: `${narrator}: "${isDiscount ? 'Discount' : 'Tax'}: original × (1 ${isDiscount ? '-' : '+'} rate)"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：${formulaStr} = ?`, en: `${narrator}: "${formulaStr} = ?"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：答案 = ${result}！`, en: `${narrator}: "Answer = ${result}!"` }, highlightField: 'ans' },
+    {
+      text: {
+        zh: `${narrator}：什么是百分比?\n"百分"就是"每一百份中"。\n$${pct}\\% = \\frac{${pct}}{100} = ${decimal}$`,
+        en: `${narrator}: "What is a percentage?\n'Per cent' means 'out of 100'.\n$${pct}\\% = \\frac{${pct}}{100} = ${decimal}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：题目信息：\n起始值 = $${initial}$\n百分比 = $${pct}\\%$${isDiscount ? '(减少)' : '(增加)'}`,
+        en: `${narrator}: "Given information:\nStarting value = $${initial}$\nPercentage = $${pct}\\%$${isDiscount ? ' (decrease)' : ' (increase)'}"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：把百分比转成小数：$${pct}\\% = ${decimal}$`,
+        en: `${narrator}: "Convert percentage to decimal: $${pct}\\% = ${decimal}$"`,
+      },
+      hint: {
+        zh: '除以100就行：把小数点往左移两位',
+        en: 'Just divide by 100: move the decimal point two places left',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: isDiscount ? {
+        zh: `${narrator}：减少用这个公式：\n新值 = 原值 $\\times$ $(1 - ${decimal})$ = 原值 $\\times$ $${multiplier}$`,
+        en: `${narrator}: "For decrease, use this formula:\nNew = Original $\\times$ $(1 - ${decimal})$ = Original $\\times$ $${multiplier}$"`,
+      } : {
+        zh: `${narrator}：增加用这个公式：\n新值 = 原值 $\\times$ $(1 + ${decimal})$ = 原值 $\\times$ $${multiplier}$`,
+        en: `${narrator}: "For increase, use this formula:\nNew = Original $\\times$ $(1 + ${decimal})$ = Original $\\times$ $${multiplier}$"`,
+      },
+      hint: isDiscount ? {
+        zh: '减少就是用1减去小数，得到保留的比例',
+        en: 'Decrease means subtract the decimal from 1 to get the remaining fraction',
+      } : {
+        zh: '增加就是用1加上小数，得到总的比例',
+        en: 'Increase means add the decimal to 1 to get the total fraction',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算：$${initial} \\times ${multiplier} = ${result}$`,
+        en: `${narrator}: "Calculate: $${initial} \\times ${multiplier} = ${result}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案：$${result}$`,
+        en: `${narrator}: "Answer: $${result}$"`,
+      },
+      highlightField: 'ans',
+    },
   ];
 
   return {
@@ -785,10 +977,48 @@ export function generateRatioMission(template: Mission): Mission {
     en: `Ratio $${a}:${b}$, first term is ${a * multiplier}, find second term.`,
   };
 
+  const knownValue = a * multiplier;
+  const answerValue = b * multiplier;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：比例 ${a}:${b}，前项 ${a * multiplier}`, en: `${narrator}: "Ratio ${a}:${b}, first term ${a * multiplier}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：倍率 = ${a * multiplier} ÷ ${a} = ${multiplier}`, en: `${narrator}: "Multiplier = ${a * multiplier} ÷ ${a} = ${multiplier}"` }, highlightField: 'y' },
-    { text: { zh: `${narrator}：后项 = ${b} × ${multiplier} = ${b * multiplier}`, en: `${narrator}: "Second term = ${b} × ${multiplier} = ${b * multiplier}"` }, highlightField: 'y' },
+    {
+      text: {
+        zh: `${narrator}：什么是比例?\n比例是比较两个量的方式。\n$${a}:${b}$ 意思是"每 $${a}$ 份的一种，就有 $${b}$ 份的另一种"。`,
+        en: `${narrator}: "What is a ratio?\nA ratio compares two quantities.\n$${a}:${b}$ means 'for every $${a}$ of one, there are $${b}$ of the other'."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：已知信息：\n比例是 $${a}:${b}$\n前项的实际值 = $${knownValue}$\n求后项的实际值。`,
+        en: `${narrator}: "Given information:\nRatio is $${a}:${b}$\nFirst term actual value = $${knownValue}$\nFind the second term."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：找倍率(scale factor)：\n用已知量除以它对应的比例份数：$${knownValue} \\div ${a} = ${multiplier}$`,
+        en: `${narrator}: "Find the scale factor:\nDivide the known value by its ratio part: $${knownValue} \\div ${a} = ${multiplier}$"`,
+      },
+      hint: {
+        zh: '倍率告诉你每一份代表多少',
+        en: 'The scale factor tells you how much each part is worth',
+      },
+      highlightField: 'y',
+    },
+    {
+      text: {
+        zh: `${narrator}：用倍率乘以另一个比例份数：$${b} \\times ${multiplier} = ${answerValue}$`,
+        en: `${narrator}: "Multiply the other ratio part by the scale factor: $${b} \\times ${multiplier} = ${answerValue}$"`,
+      },
+      highlightField: 'y',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案：后项 = $${answerValue}$`,
+        en: `${narrator}: "Answer: second term = $${answerValue}$"`,
+      },
+      highlightField: 'y',
+    },
   ];
 
   return {
@@ -860,10 +1090,47 @@ export function generateStatsMeanMission(template: Mission): Mission {
     en: `Find the mean of ${values.join(', ')}.`,
   };
 
+  const meanRounded = Math.round(mean * 100) / 100;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：平均值 = 总和 ÷ 个数`, en: `${narrator}: "Mean = sum ÷ count"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：(${values.join('+')}) ÷ ${count} = ${sum} ÷ ${count}`, en: `${narrator}: "(${values.join('+')}) ÷ ${count} = ${sum} ÷ ${count}"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：平均值 = ${Math.round(mean * 100) / 100}`, en: `${narrator}: "Mean = ${Math.round(mean * 100) / 100}"` }, highlightField: 'ans' },
+    {
+      text: {
+        zh: `${narrator}：什么是平均数(mean)?\n把所有数加起来，再除以数的个数。`,
+        en: `${narrator}: "What is the mean (average)?\nAdd up all the numbers, then divide by how many there are."`,
+      },
+      hint: {
+        zh: '平均数就是把总量平均分给每一个',
+        en: 'The mean is the total shared equally among all values',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：列出所有数：$${values.join(', ')}$\n一共有 $${count}$ 个数。`,
+        en: `${narrator}: "List all numbers: $${values.join(', ')}$\nThere are $${count}$ numbers in total."`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：把它们加起来：\n$${values.join(' + ')} = ${sum}$`,
+        en: `${narrator}: "Add them up:\n$${values.join(' + ')} = ${sum}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：除以个数：$\\frac{${sum}}{${count}}$`,
+        en: `${narrator}: "Divide by the count: $\\frac{${sum}}{${count}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案：平均数 = $${meanRounded}$`,
+        en: `${narrator}: "Answer: Mean = $${meanRounded}$"`,
+      },
+      highlightField: 'ans',
+    },
   ];
 
   return {
