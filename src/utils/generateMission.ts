@@ -106,14 +106,37 @@ export function generateSimpleEqMission(template: Mission): Mission {
   const result = a * x;
 
   const tutorialSteps = [
-    { text: { zh: `军师：${a}x = ${result}，如何求出 x？`, en: `Strategist: "${a}x = ${result}, how do we find x?"` }, highlightField: 'x' },
-    { text: { zh: `军师：等式两边同时除以 ${a}`, en: `Strategist: "Divide both sides by ${a}"` }, hint: { zh: `${a}x ÷ ${a} = ${result} ÷ ${a}`, en: `${a}x ÷ ${a} = ${result} ÷ ${a}` }, highlightField: 'x' },
-    { text: { zh: `军师：所以 x = ${x}！`, en: `Strategist: "So x = ${x}!"` }, highlightField: 'x' },
+    {
+      text: { zh: `军师：方程就是一个等式，左边等于右边。我们要找到 $x$ 的值`, en: `Strategist: "An equation means both sides are equal. We need to find $x$"` },
+      hint: { zh: `$${a}x = ${result}$ 表示 ${a} 个 $x$ 等于 ${result}`, en: `$${a}x = ${result}$ means ${a} copies of $x$ equal ${result}` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：$${a}x = ${result}$，也就是 ${a} 个 $x$ 加在一起等于 ${result}`, en: `Strategist: "$${a}x = ${result}$, meaning ${a} groups of $x$ add up to ${result}"` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：要把 $x$ 单独留在一边，就把两边同时除以 $${a}$`, en: `Strategist: "To get $x$ alone, divide both sides by $${a}$"` },
+      hint: { zh: '等式两边做相同的运算，等式依然成立\n这叫做"等式性质"', en: 'Doing the same operation to both sides keeps the equation balanced\nThis is the "balance principle"' },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：左边 $${a}x \\div ${a} = x$（${a}消掉了）`, en: `Strategist: "Left side: $${a}x \\div ${a} = x$ (the ${a} cancels out)"` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：右边 $${result} \\div ${a} = ${x}$`, en: `Strategist: "Right side: $${result} \\div ${a} = ${x}$"` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：所以 $x = ${x}$`, en: `Strategist: "Therefore $x = ${x}$"` },
+      highlightField: 'x',
+    },
   ];
 
   const tutorialEquationSteps = [
-    { tex: `${a}x = ${result}`, annotation: { zh: '列方程', en: 'Equation' } },
-    { tex: `${a}x \\div ${a} = ${result} \\div ${a}`, annotation: { zh: `两边÷${a}`, en: `÷${a} both sides` } },
+    { tex: `${a}x = ${result}`, annotation: { zh: '原方程', en: 'Original equation' } },
+    { tex: `\\frac{${a}x}{${a}} = \\frac{${result}}{${a}}`, annotation: { zh: `两边÷${a}`, en: `÷${a} both sides` } },
     { tex: `x = ${x}`, annotation: { zh: '求解', en: 'Solution' } },
   ];
 
@@ -141,13 +164,36 @@ export function generateAddEqMission(template: Mission): Mission {
   const result = x + a;
 
   const tutorialSteps = [
-    { text: { zh: `军师：x + ${a} = ${result}，如何求出 x？`, en: `Strategist: "x + ${a} = ${result}, how do we find x?"` }, highlightField: 'x' },
-    { text: { zh: `军师：等式两边同时减去 ${a}`, en: `Strategist: "Subtract ${a} from both sides"` }, hint: { zh: `x + ${a} − ${a} = ${result} − ${a}`, en: `x + ${a} − ${a} = ${result} − ${a}` }, highlightField: 'x' },
-    { text: { zh: `军师：所以 x = ${x}！`, en: `Strategist: "So x = ${x}!"` }, highlightField: 'x' },
+    {
+      text: { zh: `军师：方程 $x + ${a} = ${result}$，我们要找到 $x$ 是多少`, en: `Strategist: "Equation $x + ${a} = ${result}$, we need to find $x$"` },
+      hint: { zh: '$x$ 是一个未知数，代表我们要求的值', en: '$x$ is an unknown — it represents the value we need to find' },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：$x$ 旁边有个 $+ ${a}$，我们要把它去掉，让 $x$ 单独留下`, en: `Strategist: "There's a $+ ${a}$ next to $x$. We need to remove it to isolate $x$"` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：怎么去掉 $+ ${a}$？两边同时减去 $${a}$`, en: `Strategist: "How to remove $+ ${a}$? Subtract $${a}$ from both sides"` },
+      hint: { zh: `加了 ${a}，就减去 ${a} 来抵消\n这就是"逆运算"`, en: `Added ${a}, so subtract ${a} to undo it\nThis is the "inverse operation"` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：左边 $x + ${a} - ${a} = x$（$+ ${a}$ 和 $- ${a}$ 抵消了）`, en: `Strategist: "Left side: $x + ${a} - ${a} = x$ ($+ ${a}$ and $- ${a}$ cancel out)"` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：右边 $${result} - ${a} = ${x}$`, en: `Strategist: "Right side: $${result} - ${a} = ${x}$"` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `军师：所以 $x = ${x}$`, en: `Strategist: "Therefore $x = ${x}$"` },
+      highlightField: 'x',
+    },
   ];
 
   const tutorialEquationSteps = [
-    { tex: `x + ${a} = ${result}`, annotation: { zh: '列方程', en: 'Equation' } },
+    { tex: `x + ${a} = ${result}`, annotation: { zh: '原方程', en: 'Original equation' } },
     { tex: `x + ${a} - ${a} = ${result} - ${a}`, annotation: { zh: `两边-${a}`, en: `-${a} both sides` } },
     { tex: `x = ${x}`, annotation: { zh: '求解', en: 'Solution' } },
   ];
@@ -225,9 +271,52 @@ export function generateAnglesMission(template: Mission): Mission {
 
   const narrator = pickRandom(['关羽', '赵云', '张飞']);
   const tutorialSteps = [
-    { text: { zh: `${narrator}：已知角 ${angle}°，求${kind.zh}。`, en: `${narrator}: "Given angle ${angle}°, find ${kind.en}."` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：${kind.zh}之和为 ${total}°：x = ${total} − ${angle}`, en: `${narrator}: "${kind.en} angles sum to ${total}°: x = ${total} − ${angle}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：所以 x = ${ans}°！`, en: `${narrator}: "So x = ${ans}°!"` }, highlightField: 'x' },
+    {
+      text: {
+        zh: `${narrator}：什么是${kind.zh}？`,
+        en: `${narrator}: "What are ${kind.en} angles?"`,
+      },
+      hint: total === 90 ? {
+        zh: '两个角加起来刚好等于 $90°$（一个直角）\n这两个角就互为余角',
+        en: 'Two angles that add up to exactly $90°$ (a right angle)\nare called complementary angles',
+      } : {
+        zh: '两个角加起来刚好等于 $180°$（一条直线）\n这两个角就互为补角',
+        en: 'Two angles that add up to exactly $180°$ (a straight line)\nare called supplementary angles',
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：已知其中一个角是 $${angle}°$，求另一个角 $x$`,
+        en: `${narrator}: "One angle is $${angle}°$, find the other angle $x$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：因为两个角加起来等于 $${total}°$，所以 $${angle} + x = ${total}$`,
+        en: `${narrator}: "Since both angles sum to $${total}°$: $${angle} + x = ${total}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：用 $${total}$ 减去 $${angle}$：$x = ${total} - ${angle}$`,
+        en: `${narrator}: "Subtract: $x = ${total} - ${angle}$"`,
+      },
+      hint: {
+        zh: `$${total} - ${angle} = ${ans}$`,
+        en: `$${total} - ${angle} = ${ans}$`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：所以 $x = ${ans}°$`,
+        en: `${narrator}: "Therefore $x = ${ans}°$"`,
+      },
+      highlightField: 'x',
+    },
   ];
 
   return {

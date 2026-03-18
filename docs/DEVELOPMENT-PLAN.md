@@ -2,7 +2,7 @@
 
 > **项目地址**：https://play.25maths.com
 > **仓库**：git25math/25maths-games-legends
-> **版本**：v2.2.0 | 最后更新：2026-03-18
+> **版本**：v3.0.0 | 最后更新：2026-03-18
 
 ## Context
 
@@ -645,5 +645,8 @@ Step 5: 最终结果 — y = mx + b
 | 2026-03-18 | v2.0.1 | 数学正确性审查：6 项错误修复（3 CRITICAL 概念错误 + 3 数据不匹配） |
 | 2026-03-18 | v2.1.0 | 数学输入系统：分数(3/4)/根号(√5)/负数 + 概率分数显示 + 科学计算器(🧮) |
 | 2026-03-18 | v2.2.0 | Phase 3.6: 可视化引导框架 — AnimatedQuadraticPlane + Amber图像 + LINEAR教学法重写(概念→公式→代入) |
-| — | v3.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |
-| — | v4.0.0 | Phase 5: 章节地图 + 视频三位一体 + 离线支持 |
+| 2026-03-18 | v2.3.0 | LINEAR 完整教学法(7步 y=mx+c) + 上/下一步导航 + LatexText换行 + 各种UI修复 |
+| 2026-03-18 | **v3.0.0** | **Y7 内容扩展**: 5新题型(HCF/LCM/INTEGER_ADD/FRAC_ADD/FRAC_MUL) + 13 missions(Unit 0/0A/0B) + 5生成器教学法重写(每步一概念) |
+| — | v3.1.0 | Y7 补全: Y7 剩余知识点 + Y8 现有 mission 教学法升级 |
+| — | v4.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |
+| — | v5.0.0 | Phase 5: 章节地图 + 视频三位一体 + 离线支持 |
