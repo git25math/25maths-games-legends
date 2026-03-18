@@ -8,7 +8,7 @@ export const MISSIONS: Mission[] = [
     topic: 'Algebra', type: 'HCF',
     title: { zh: '整编队伍', en: 'Organizing Troops' },
     skillName: { zh: '公因数术', en: 'Common Factor' },
-    skillSummary: { zh: 'HCF：分解质因数，找相同的，取小的那个', en: 'HCF: prime factorize, then take common primes to lowest power' },
+    skillSummary: { zh: '最大公因数(HCF)就是两个数共有的最大因数', en: 'HCF: prime factorize, then take common primes to lowest power' },
     story: { zh: '桃园结义后，刘关张三兄弟开始整编队伍。现有两营士兵，要分成人数相同的小队操练。', en: 'After the oath, the three brothers organize their troops. Two camps must be split into equal-sized squads.' },
     description: { zh: '求最大公因数 (HCF)。', en: 'Find the Highest Common Factor (HCF).' },
     data: { numbers: [24, 36], generatorType: 'HCF_RANDOM' }, difficulty: 'Easy', reward: 50,
@@ -27,7 +27,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       },
       {
-        text: { zh: '刘备："找相同的质因数，取小的那个：$2^2 \\times 3 = 12$"', en: 'Liu Bei: "Take common primes to lowest power: $2^2 \\times 3 = 12$"' },
+        text: { zh: '刘备："找共有的质因数，取较小的次幂，乘起来：$2^2 \\times 3 = 12$"', en: 'Liu Bei: "Take common primes to lowest power: $2^2 \\times 3 = 12$"' },
         hint: { zh: '公共质因数是 2 和 3\n2 的最低次幂是 $2^2$（取 24 的）\n3 的最低次幂是 $3^1$（取 24 的）', en: 'Common primes are 2 and 3\nLowest power of 2 is $2^2$ (from 24)\nLowest power of 3 is $3^1$ (from 24)' },
         highlightField: 'ans'
       },
@@ -36,7 +36,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 是两个数共有的最大因数。', en: 'HCF is the largest factor common to both numbers.' }, formula: '$\\text{HCF}: \\text{找相同的质因数，取小的那个}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
+    secret: { concept: { zh: 'HCF 是两个数共有的最大因数。', en: 'HCF is the largest factor common to both numbers.' }, formula: '$\\text{HCF} = \\text{两个数共有的最大因数}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
   },
   {
     id: 702, grade: 7, unitId: 0, order: 2,

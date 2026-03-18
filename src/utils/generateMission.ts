@@ -1233,7 +1233,7 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：找相同的质因数，取小的那个，乘起来`,
+        zh: `${narrator}：找两个数共有的质因数，取较小的次幂，乘起来`,
         en: `${narrator}: "Multiply the common prime factors, each to its lowest power"`,
       },
       hint: {
