@@ -178,9 +178,9 @@ export function generateIndicesMission(template: Mission): Mission {
 
   const narrator = pickRandom(['曹操', '孙权', '关羽']);
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「${base}^{${e1}} ${op === 'div' ? '÷' : '×'} ${base}^{${e2}} = ${base}^x」`, en: `${narrator}: "${base}^{${e1}} ${op === 'div' ? '÷' : '×'} ${base}^{${e2}} = ${base}^x"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「${op === 'div' ? '底数相同，指数相减' : '底数相同，指数相加'}：x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}」`, en: `${narrator}: "${op === 'div' ? 'Same base, subtract exponents' : 'Same base, add exponents'}: x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「所以 x = ${ans}！」`, en: `${narrator}: "So x = ${ans}!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：「$${base}^{${e1}} ${op === 'div' ? '\\div' : '\\times'} ${base}^{${e2}} = ${base}^x$」`, en: `${narrator}: "$${base}^{${e1}} ${op === 'div' ? '\\div' : '\\times'} ${base}^{${e2}} = ${base}^x$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：「${op === 'div' ? '底数相同，指数相减' : '底数相同，指数相加'}：$x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$」`, en: `${narrator}: "${op === 'div' ? 'Same base, subtract exponents' : 'Same base, add exponents'}: $x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：「所以 $x = ${ans}$！」`, en: `${narrator}: "So $x = ${ans}$!"` }, highlightField: 'x' },
   ];
 
   return {
