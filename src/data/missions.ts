@@ -19,7 +19,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：注意——1 不是质数，2 是唯一的偶数质数', en: 'Zhuge Liang: "Note: 1 is NOT prime. 2 is the only even prime"' }, hint: { zh: '1 不算（只有 1 个因数）\n2 是质数（只能被 1 和 2 整除）\n所有其他偶数都能被 2 整除 → 不是质数', en: '1 doesn\'t count (only 1 factor)\n2 is prime (only 1 and 2)\nAll other even numbers are divisible by 2 → not prime' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：前 10 个质数：$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$', en: 'Zhuge Liang: "First 10 primes: $2, 3, 5, 7, 11, 13, 17, 19, 23, 29$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: '$\\text{质数 = 只能被 1 和自己整除}$', tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorize.' }] }
+    secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: '$\\text{质数 = 只被 1 和自己整除}$', tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorize.' }] }
   },
   {
     id: 700, grade: 7, unitId: 0, order: 0,
