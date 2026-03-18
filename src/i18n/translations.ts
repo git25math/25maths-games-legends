@@ -30,6 +30,7 @@ export const translations = {
     tutorialTitle: "名师指路",
     tutorialStartBattle: "开始实战",
     nextStep: "下一步",
+    prevStep: "上一步",
     tutorialComplete: "领悟成功！现在开始实战演练。",
     topics: { Algebra: "中原代数", Geometry: "江南几何", Functions: "巴蜀函数", Calculus: "北伐微积分", Statistics: "战后统计" },
     questionTypes: {
@@ -169,6 +170,7 @@ export const translations = {
     tutorialTitle: "Master's Guidance",
     tutorialStartBattle: "Start Battle",
     nextStep: "Next Step",
+    prevStep: "Previous Step",
     tutorialComplete: "Mastered! Now, let the real battle begin.",
     topics: { Algebra: "Central Algebra", Geometry: "Southern Geometry", Functions: "Western Functions", Calculus: "Northern Calculus", Statistics: "Post-war Stats" },
     questionTypes: {

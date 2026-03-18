@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, Volume2, VolumeX, Flame } from 'lucide-react';
+import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Volume2, VolumeX, Flame } from 'lucide-react';
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
 import { checkAnswer } from '../../utils/checkCorrectness';
@@ -478,21 +478,32 @@ export const MathBattle = ({
             )}
 
             {isTutorial ? (
-              <button
-                onClick={() => {
-                  playClick();
-                  if (tutorialStep < (mission.tutorialSteps?.length || 0) - 1) {
-                    setTutorialStep(prev => prev + 1);
-                  } else {
-                    setMode('battle');
-                    setInputs({});
-                  }
-                }}
-                className="w-full py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
-              >
-                {tutorialStep < (mission.tutorialSteps?.length || 0) - 1 ? t.nextStep : t.tutorialStartBattle}
-                <ChevronRight size={20} />
-              </button>
+              <div className="flex gap-2">
+                {tutorialStep > 0 && (
+                  <button
+                    onClick={() => { playClick(); setTutorialStep(prev => prev - 1); }}
+                    className="flex-1 py-4 bg-slate-500 text-white font-black rounded-lg shadow-lg hover:bg-slate-600 transition-all flex items-center justify-center gap-2 min-h-12"
+                  >
+                    <ChevronLeft size={20} />
+                    {t.prevStep}
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    playClick();
+                    if (tutorialStep < (mission.tutorialSteps?.length || 0) - 1) {
+                      setTutorialStep(prev => prev + 1);
+                    } else {
+                      setMode('battle');
+                      setInputs({});
+                    }
+                  }}
+                  className="flex-1 py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
+                >
+                  {tutorialStep < (mission.tutorialSteps?.length || 0) - 1 ? t.nextStep : t.tutorialStartBattle}
+                  <ChevronRight size={20} />
+                </button>
+              </div>
             ) : (
               <button
                 onClick={handleSubmit}

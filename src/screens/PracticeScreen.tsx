@@ -326,24 +326,35 @@ export const PracticeScreen = ({
                   />
                 )}
 
-                {/* Step through tutorial, then offer "next example" or "advance" */}
-                {tutorialStep < (currentMission.tutorialSteps?.length || 1) - 1 ? (
-                  <button
-                    onClick={() => { playClick(); setTutorialStep(prev => prev + 1); }}
-                    className="w-full py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
-                  >
-                    {t.nextStep}
-                    <ChevronRight size={20} />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => { playClick(); regenerateQuestion(); }}
-                    className="w-full py-4 bg-[#3d2b1f] text-[#f4e4bc] font-black rounded-lg shadow-lg hover:bg-[#5c4033] transition-all flex items-center justify-center gap-2 min-h-12"
-                  >
-                    {t.seeAnotherExample}
-                    <ChevronRight size={20} />
-                  </button>
-                )}
+                {/* Step through tutorial with prev/next, then offer "next example" */}
+                <div className="flex gap-2">
+                  {tutorialStep > 0 && (
+                    <button
+                      onClick={() => { playClick(); setTutorialStep(prev => prev - 1); }}
+                      className="flex-1 py-4 bg-slate-500 text-white font-black rounded-lg shadow-lg hover:bg-slate-600 transition-all flex items-center justify-center gap-2 min-h-12"
+                    >
+                      <ChevronLeft size={20} />
+                      {t.prevStep}
+                    </button>
+                  )}
+                  {tutorialStep < (currentMission.tutorialSteps?.length || 1) - 1 ? (
+                    <button
+                      onClick={() => { playClick(); setTutorialStep(prev => prev + 1); }}
+                      className="flex-1 py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
+                    >
+                      {t.nextStep}
+                      <ChevronRight size={20} />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => { playClick(); regenerateQuestion(); }}
+                      className="flex-1 py-4 bg-[#3d2b1f] text-[#f4e4bc] font-black rounded-lg shadow-lg hover:bg-[#5c4033] transition-all flex items-center justify-center gap-2 min-h-12"
+                    >
+                      {t.seeAnotherExample}
+                      <ChevronRight size={20} />
+                    </button>
+                  )}
+                </div>
               </>
             ) : (
               <>
