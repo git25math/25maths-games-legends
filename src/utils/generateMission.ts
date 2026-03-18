@@ -2224,7 +2224,7 @@ export function generateHcfMission(template: Mission): Mission {
   return {
     ...template,
     description,
-    data: { numbers: [a, b], generatorType: 'HCF_RANDOM' },
+    data: { numbers: [a, b], generatorType: 'HCF_RANDOM', sdA: a, sdB: b, sdSteps: sd.steps, sdBottomA: sd.bottomA, sdBottomB: sd.bottomB },
     tutorialSteps,
   };
 }
@@ -2525,7 +2525,7 @@ export function generateLcmMission(template: Mission): Mission {
   return {
     ...template,
     description,
-    data: { numbers: [a, b], generatorType: 'LCM_RANDOM' },
+    data: { numbers: [a, b], generatorType: 'LCM_RANDOM', sdA: a, sdB: b, sdSteps: sdL.steps, sdBottomA: sdL.bottomA, sdBottomB: sdL.bottomB },
     tutorialSteps,
   };
 }

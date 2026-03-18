@@ -16,6 +16,7 @@ import { SkillBadgeCard } from '../components/SkillBadgeCard';
 import { CalculatorWidget } from '../components/Calculator';
 import { AnimatedCoordinatePlane } from '../components/diagrams/AnimatedCoordinatePlane';
 import { AnimatedQuadraticPlane } from '../components/diagrams/AnimatedQuadraticPlane';
+import { ShortDivision } from '../components/diagrams/ShortDivision';
 import { useAudio } from '../hooks/useAudio';
 
 type PracticePhase = 'green' | 'amber' | 'red';
@@ -305,6 +306,17 @@ export const PracticeScreen = ({
                   />
                 );
               })()
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && (currentMission.type === 'HCF' || currentMission.type === 'LCM') && currentMission.data?.sdSteps ? (
+              <ShortDivision
+                a={currentMission.data.sdA as number}
+                b={currentMission.data.sdB as number}
+                steps={currentMission.data.sdSteps as any[]}
+                bottomA={currentMission.data.sdBottomA as number}
+                bottomB={currentMission.data.sdBottomB as number}
+                revealSteps={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep - 6)}
+                showHCF={currentPhase === 'amber' || tutorialStep >= 10}
+                showLCM={currentPhase === 'amber' || tutorialStep >= 11}
+              />
             ) : currentPhase !== 'red' ? (
               <VisualData mission={currentMission} lang={lang} />
             ) : null}
