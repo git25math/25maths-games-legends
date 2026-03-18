@@ -40,6 +40,7 @@ export type QuestionType =
   | 'SIMILARITY'
   | 'HCF'
   | 'LCM'
+  | 'FACTOR_TREE'
   | 'INTEGER_ADD'
   | 'FRAC_ADD'
   | 'FRAC_MUL';

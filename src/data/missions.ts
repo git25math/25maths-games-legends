@@ -3,6 +3,25 @@ import type { Mission } from '../types';
 export const MISSIONS: Mission[] = [
   // --- Year 7 Unit 0: 桃园点兵·数论篇 (Number Foundations) ---
   {
+    id: 700, grade: 7, unitId: 0, order: 0,
+    unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
+    topic: 'Algebra', type: 'FACTOR_TREE',
+    title: { zh: '拆解兵力', en: 'Breaking Down Forces' },
+    skillName: { zh: '质因数分解术', en: 'Prime Factorization' },
+    skillSummary: { zh: '把一个数拆成质数的乘积', en: 'Break a number into a product of primes' },
+    story: { zh: '桃园结义后要编制军队。一批新兵要拆成最小的战斗单元——每个单元只有"质数"人。', en: 'After the oath, the army needs organizing. New recruits must be split into smallest units — each with a prime number of soldiers.' },
+    description: { zh: '把这个数拆成质因数，数一数共几个。', en: 'Factorize this number into primes and count them.' },
+    data: { n: 24, primeCount: 4, generatorType: 'FACTOR_TREE_RANDOM' }, difficulty: 'Easy', reward: 40,
+    kpId: 'kp-1.1-08', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：24 个新兵，怎么拆成最小的战斗单元？', en: 'Zhuge Liang: "24 recruits — how to split into smallest units?"' }, hint: { zh: '最小单元就是质数：2, 3, 5, 7...\n质数只能被 1 和自己整除', en: 'Smallest units are primes: 2, 3, 5, 7...\nPrimes are only divisible by 1 and themselves' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：从 2 开始试。24÷2=12，记下 2', en: 'Zhuge Liang: "Start with 2. 24÷2=12, note 2"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：12÷2=6，记下 2。6÷2=3，记下 2。3 是质数，停！', en: 'Zhuge Liang: "12÷2=6, note 2. 6÷2=3, note 2. 3 is prime, stop!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：$24 = 2 \\times 2 \\times 2 \\times 3 = 2^3 \\times 3$，共 4 个质因数', en: 'Zhuge Liang: "$24 = 2 \\times 2 \\times 2 \\times 3 = 2^3 \\times 3$, 4 prime factors total"' }, highlightField: 'ans' }
+    ],
+    secret: { concept: { zh: '任何大于 1 的整数都能唯一地分解为质数的乘积。', en: 'Every integer greater than 1 can be uniquely expressed as a product of primes.' }, formula: '$\\text{因数树：从上往下拆到全是质数}$', tips: [{ zh: '诸葛亮提示：知己知彼，先把自己的兵力拆解清楚。', en: 'Zhuge Liang Tip: Know yourself — first break down your own forces clearly.' }] }
+  },
+  {
     id: 701, grade: 7, unitId: 0, order: 1,
     unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
     topic: 'Algebra', type: 'HCF',

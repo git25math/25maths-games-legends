@@ -13,6 +13,7 @@ type TreeNode = {
 type Props = {
   root: TreeNode;
   interactive?: boolean;
+  revealDepth?: number;  // how many levels to show (undefined = all)
 };
 
 const COLORS = {
@@ -27,7 +28,8 @@ function getDepth(node: TreeNode): number {
   return 1 + Math.max(getDepth(node.children[0]), getDepth(node.children[1]));
 }
 
-function renderNode(node: TreeNode, x: number, y: number, spread: number, depth: number): ReactNode[] {
+function renderNode(node: TreeNode, x: number, y: number, spread: number, depth: number, maxReveal: number): ReactNode[] {
+  if (depth > maxReveal) return []; // Don't render beyond reveal depth
   const elements: ReactNode[] = [];
   const isPrime = node.isPrime || !node.children;
   const r = 18;
@@ -45,8 +47,8 @@ function renderNode(node: TreeNode, x: number, y: number, spread: number, depth:
       <line key={`${key}-lr`} x1={x} y1={y + r} x2={rx} y2={nextY - r} stroke={COLORS.wood} strokeWidth={1.5} />,
     );
 
-    elements.push(...renderNode(left, lx, nextY, spread / 2, depth + 1));
-    elements.push(...renderNode(right, rx, nextY, spread / 2, depth + 1));
+    elements.push(...renderNode(left, lx, nextY, spread / 2, depth + 1, maxReveal));
+    elements.push(...renderNode(right, rx, nextY, spread / 2, depth + 1, maxReveal));
   }
 
   // Node circle
@@ -58,15 +60,16 @@ function renderNode(node: TreeNode, x: number, y: number, spread: number, depth:
   return elements;
 }
 
-export function FactorTree({ root }: Props) {
+export function FactorTree({ root, revealDepth }: Props) {
   const depth = getDepth(root);
+  const maxReveal = revealDepth ?? depth;
   const height = 60 + depth * 60 + 40;
   const width = Math.max(300, Math.pow(2, depth) * 50);
   const spread = width / 4;
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-md mx-auto" role="img" aria-label="Factor tree">
-      {renderNode(root, width / 2, 35, spread, 0)}
+      {renderNode(root, width / 2, 35, spread, 0, maxReveal)}
     </svg>
   );
 }

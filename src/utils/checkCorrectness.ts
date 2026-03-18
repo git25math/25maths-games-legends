@@ -237,6 +237,10 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const expectedStr = simpDen === 1 ? String(simpNum) : `${simpNum}/${simpDen}`;
     return { correct, expected: { ans: expectedStr } };
   }
+  if (type === 'FACTOR_TREE') {
+    // data.primeCount is the total number of prime factors (with repetition)
+    return { correct: parse(inputs.ans || '') === data.primeCount, expected: { ans: String(data.primeCount) } };
+  }
   return { correct: false, expected: {} };
 }
 

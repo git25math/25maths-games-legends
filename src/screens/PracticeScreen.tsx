@@ -17,6 +17,7 @@ import { CalculatorWidget } from '../components/Calculator';
 import { AnimatedCoordinatePlane } from '../components/diagrams/AnimatedCoordinatePlane';
 import { AnimatedQuadraticPlane } from '../components/diagrams/AnimatedQuadraticPlane';
 import { ShortDivision } from '../components/diagrams/ShortDivision';
+import { FactorTree } from '../components/diagrams/FactorTree';
 import { useAudio } from '../hooks/useAudio';
 
 type PracticePhase = 'green' | 'amber' | 'red';
@@ -316,6 +317,11 @@ export const PracticeScreen = ({
                 revealSteps={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep - 6)}
                 showHCF={currentPhase === 'amber' || tutorialStep >= 10}
                 showLCM={currentPhase === 'amber' || tutorialStep >= 11}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'FACTOR_TREE' && currentMission.data?.tree ? (
+              <FactorTree
+                root={currentMission.data.tree}
+                revealDepth={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep - 1)}
               />
             ) : currentPhase !== 'red' ? (
               <VisualData mission={currentMission} lang={lang} />

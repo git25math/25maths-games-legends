@@ -41,7 +41,8 @@ export type GeneratorType =
   | 'LCM_RANDOM'
   | 'INTEGER_ADD_RANDOM'
   | 'FRAC_ADD_RANDOM'
-  | 'FRAC_MUL_RANDOM';
+  | 'FRAC_MUL_RANDOM'
+  | 'FACTOR_TREE_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -74,6 +75,7 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   VOLUME_RANDOM: generateVolumeMission,
   FUNC_VAL_RANDOM: generateFuncValMission,
   STATISTICS_MEDIAN_RANDOM: generateStatsMedianMission,
+  FACTOR_TREE_RANDOM: generateFactorTreeMission,
   HCF_RANDOM: generateHcfMission,
   LCM_RANDOM: generateLcmMission,
   INTEGER_ADD_RANDOM: generateIntegerAddMission,
@@ -1911,6 +1913,160 @@ function shortDivision(a: number, b: number): { steps: { prime: number; quotient
     }
   }
   return { steps, bottomA: curA, bottomB: curB };
+}
+
+/* ══════════════════════════════════════════════════════════
+   FACTOR_TREE generator: prime factorization of a single number
+   ══════════════════════════════════════════════════════════ */
+
+type FactorTreeNode = {
+  value: number;
+  isPrime?: boolean;
+  children?: [FactorTreeNode, FactorTreeNode];
+};
+
+function buildFactorTree(n: number): FactorTreeNode {
+  if (n <= 1) return { value: n, isPrime: true };
+  for (let d = 2; d * d <= n; d++) {
+    if (n % d === 0) {
+      return {
+        value: n,
+        children: [
+          { value: d, isPrime: true },
+          buildFactorTree(n / d),
+        ],
+      };
+    }
+  }
+  // n is prime
+  return { value: n, isPrime: true };
+}
+
+function getTreeDepth(node: FactorTreeNode): number {
+  if (!node.children) return 0;
+  return 1 + Math.max(getTreeDepth(node.children[0]), getTreeDepth(node.children[1]));
+}
+
+function getLeaves(node: FactorTreeNode): number[] {
+  if (!node.children) return [node.value];
+  return [...getLeaves(node.children[0]), ...getLeaves(node.children[1])];
+}
+
+export function generateFactorTreeMission(template: Mission): Mission {
+  const tier = getTier();
+  const pools = {
+    1: [12, 18, 20, 24, 28, 30],
+    2: [36, 40, 42, 48, 54, 56, 60],
+    3: [72, 84, 90, 96, 120, 180],
+  };
+  const n = pickRandom(pools[tier]);
+  const tree = buildFactorTree(n);
+  const leaves = getLeaves(tree);
+  const depth = getTreeDepth(tree);
+  const primeCount = leaves.length;
+  const factorization = formatFactorization(n);
+
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[：:]/)?.[0]) || '军师';
+
+  const description: BilingualText = {
+    zh: `把 $${n}$ 拆成质数的乘积，一共有几个质因数？（重复的也算）`,
+    en: `Break $${n}$ into prime factors — how many prime factors total? (count repeats)`,
+  };
+
+  // Build step-by-step factorization process for hints
+  const factSteps: string[] = [];
+  const factStepsEn: string[] = [];
+  let remaining = n;
+  let d = 2;
+  while (d * d <= remaining) {
+    if (remaining % d === 0) {
+      factSteps.push(`${remaining} ÷ ${d} = ${remaining / d}`);
+      factStepsEn.push(`${remaining} ÷ ${d} = ${remaining / d}`);
+      remaining = remaining / d;
+    } else {
+      d++;
+    }
+  }
+  if (remaining > 1) {
+    factSteps.push(`${remaining} 是质数，停！`);
+    factStepsEn.push(`${remaining} is prime, stop!`);
+  }
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：${n} 个新兵要拆成最小的战斗单元。怎么拆？`,
+        en: `${narrator}: "${n} recruits need to be split into the smallest units. How?"`,
+      },
+      hint: {
+        zh: '"最小单元"就是质数——只能被 1 和自己整除的数\n比如 2, 3, 5, 7, 11 都是质数\n4 不是（4=2×2），6 不是（6=2×3）',
+        en: '"Smallest units" are primes — only divisible by 1 and themselves\nE.g. 2, 3, 5, 7, 11\n4 is not (4=2×2), 6 is not (6=2×3)',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：画"因数树"——从 ${n} 开始，一层一层往下拆`,
+        en: `${narrator}: "Draw a factor tree — start with ${n}, split layer by layer"`,
+      },
+      hint: {
+        zh: `方法：从最小的质数 2 开始试\n能整除就拆成两个数，不能就试下一个质数\n直到所有数都是质数为止`,
+        en: `Method: start with smallest prime 2\nIf it divides evenly, split into two numbers\nKeep going until all numbers are prime`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：一步步拆 ${n}`,
+        en: `${narrator}: "Break down ${n} step by step"`,
+      },
+      hint: {
+        zh: factSteps.join('\n'),
+        en: factStepsEn.join('\n'),
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：看因数树的"叶子"——最底部不能再拆的数`,
+        en: `${narrator}: "Look at the 'leaves' — the numbers at the bottom that can't be split further"`,
+      },
+      hint: {
+        zh: `叶子们：${leaves.join(', ')}\n一共 ${primeCount} 个质因数`,
+        en: `Leaves: ${leaves.join(', ')}\nTotal: ${primeCount} prime factors`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：所以 $${n} = ${factorization}$`,
+        en: `${narrator}: "So $${n} = ${factorization}$"`,
+      },
+      hint: {
+        zh: `一共 ${primeCount} 个质因数（重复的也要算）\n验算：${leaves.join(' × ')} = ${n} ✓`,
+        en: `Total ${primeCount} prime factors (count repeats)\nVerify: ${leaves.join(' × ')} = ${n} ✓`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：不管怎么拆，最终结果都一样——这叫"算术基本定理"`,
+        en: `${narrator}: "No matter how you split it, the result is always the same — this is the Fundamental Theorem of Arithmetic"`,
+      },
+      hint: {
+        zh: '试试从不同的数开始拆（比如先拆成 6×6 而不是 2×18）\n最终叶子排列出来一定相同',
+        en: 'Try splitting differently (e.g. 6×6 instead of 2×18)\nThe leaves will always be the same',
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n, primeCount, tree, leaves, generatorType: 'FACTOR_TREE_RANDOM' },
+    tutorialSteps,
+  };
 }
 
 export function generateHcfMission(template: Mission): Mission {

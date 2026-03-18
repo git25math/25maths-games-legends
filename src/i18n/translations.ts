@@ -60,6 +60,7 @@ export const translations = {
       DERIVATIVE: "导数计算",
       HCF: "最大公因数",
       LCM: "最小公倍数",
+      FACTOR_TREE: "因数树",
       INTEGER_ADD: "正负数运算",
       FRAC_ADD: "分数加减",
       FRAC_MUL: "分数乘除"
@@ -205,6 +206,7 @@ export const translations = {
       DERIVATIVE: "Derivative",
       HCF: "Highest Common Factor",
       LCM: "Least Common Multiple",
+      FACTOR_TREE: "Factor Tree",
       INTEGER_ADD: "Integer Operations",
       FRAC_ADD: "Fraction Add/Sub",
       FRAC_MUL: "Fraction Mul/Div"

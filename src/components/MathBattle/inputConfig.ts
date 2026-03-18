@@ -109,6 +109,10 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'ans', label: 'LCM', placeholder: 'LCM = ?' }],
     en: [{ id: 'ans', label: 'LCM', placeholder: 'LCM = ?' }],
   },
+  FACTOR_TREE: {
+    zh: [{ id: 'ans', label: '质因数个数', placeholder: '共几个质因数？' }],
+    en: [{ id: 'ans', label: 'Prime factor count', placeholder: 'How many prime factors?' }],
+  },
   INTEGER_ADD: {
     zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
     en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
