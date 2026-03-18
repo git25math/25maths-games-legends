@@ -19,7 +19,15 @@ export const InputFields = ({
   isTutorial: boolean;
   lang?: Language;
 }) => {
-  const currentFields = (INPUT_FIELDS[mission.type] || { zh: [], en: [] })[lang] || [];
+  const allFields = (INPUT_FIELDS[mission.type] || { zh: [], en: [] })[lang] || [];
+
+  // For types with multiple possible fields (e.g. FUNC_VAL has y and t),
+  // only show the field that the mission actually uses (based on highlightField in tutorialSteps)
+  const usedFieldIds = mission.tutorialSteps
+    ?.map(s => s.highlightField).filter(Boolean) as string[] | undefined;
+  const currentFields = usedFieldIds && usedFieldIds.length > 0
+    ? allFields.filter(f => usedFieldIds.includes(f.id))
+    : allFields;
 
   return (
     <div className="space-y-6">
