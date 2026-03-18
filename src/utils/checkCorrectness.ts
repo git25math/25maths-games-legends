@@ -35,10 +35,16 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: parse(inputs.x || '') === data.x, expected: { x: String(data.x) } };
   }
   if (type === 'ESTIMATION') {
+    if (data.answer !== undefined) {
+      return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+    }
     const val = Math.round(Math.sqrt(data.value));
     return { correct: parseInt(inputs.ans || '') === val, expected: { ans: String(val) } };
   }
   if (type === 'PERCENTAGE') {
+    if (data.answer !== undefined) {
+      return { correct: Math.abs(parse(inputs.ans || '') - data.answer) < 0.01, expected: { ans: round(data.answer) } };
+    }
     const { initial, rate, years } = data;
     const val = initial * Math.pow(1 + rate, years);
     return { correct: Math.abs(parse(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
@@ -71,6 +77,9 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: Math.abs(parse(inputs.k || '') - val) < 0.01, expected: { k: round(val) } };
   }
   if (type === 'AREA') {
+    if (data.answer !== undefined) {
+      return { correct: Math.abs(parse(inputs.area || '') - data.answer) < 0.01, expected: { area: round(data.answer) } };
+    }
     const { length, width, r, pi, mode } = data;
     let val: number;
     if (mode === 'sphere_area') {
@@ -194,6 +203,11 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
       const val = sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
       return { correct: Math.abs(parse(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
     }
+    if (mode === 'range') {
+      const sorted = [...values].sort((a: number, b: number) => a - b);
+      const val = sorted[sorted.length - 1] - sorted[0];
+      return { correct: Math.abs(parse(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
+    }
   }
   if (type === 'RATIO') {
     const { a, b } = data;
@@ -249,6 +263,12 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
   }
   if (type === 'SQUARE_ROOT') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'SUBSTITUTION') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'PERIMETER') {
     return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
   }
   return { correct: false, expected: {} };

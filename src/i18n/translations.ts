@@ -66,7 +66,9 @@ export const translations = {
       FRAC_ADD: "分数加减",
       FRAC_MUL: "分数乘除",
       SQUARE_CUBE: "平方与立方",
-      SQUARE_ROOT: "平方根与立方根"
+      SQUARE_ROOT: "平方根与立方根",
+      SUBSTITUTION: "代入求值",
+      PERIMETER: "周长计算"
     },
     difficulty: {
       Easy: "简单",
@@ -215,7 +217,9 @@ export const translations = {
       FRAC_ADD: "Fraction Add/Sub",
       FRAC_MUL: "Fraction Mul/Div",
       SQUARE_CUBE: "Squares & Cubes",
-      SQUARE_ROOT: "Square & Cube Roots"
+      SQUARE_ROOT: "Square & Cube Roots",
+      SUBSTITUTION: "Substitution",
+      PERIMETER: "Perimeter"
     },
     difficulty: {
       Easy: "Easy",

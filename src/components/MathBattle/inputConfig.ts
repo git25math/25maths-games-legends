@@ -137,4 +137,12 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
     en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
   },
+  SUBSTITUTION: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
+  },
+  PERIMETER: {
+    zh: [{ id: 'ans', label: '周长', placeholder: '周长 = ?' }],
+    en: [{ id: 'ans', label: 'Perimeter', placeholder: 'P = ?' }],
+  },
 };

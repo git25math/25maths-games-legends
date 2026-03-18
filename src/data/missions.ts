@@ -426,6 +426,39 @@ export const MISSIONS: Mission[] = [
     ],
     secret: { concept: { zh: '等式两边同时乘除同一个非零数，等式依然成立。', en: 'Multiplying or dividing both sides by the same non-zero number keeps the equation balanced.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '关羽提示：买东西一定要算清楚！', en: 'Guan Yu Tip: Always count correctly when shopping!' }] }
   },
+  // --- Year 7 Unit 1 续: 代入求值 ---
+  {
+    id: 717, grade: 7, unitId: 1, order: 3,
+    unitTitle: { zh: "Unit 1: 结义与代数入门", en: "Unit 1: Oath & Intro to Algebra" },
+    topic: 'Algebra', type: 'SUBSTITUTION',
+    title: { zh: '军情密码', en: 'Military Code' },
+    skillName: { zh: '代入求值术', en: 'Substitution' },
+    skillSummary: { zh: '把具体数字代替字母，算出表达式的值', en: 'Replace the letter with a number and evaluate the expression' },
+    story: { zh: '诸葛亮用密码传递军情——用公式 $ax + b$ 加密。已知密钥 $x$，算出密文！', en: 'Zhuge Liang uses a code formula $ax + b$ to encrypt messages. Given the key $x$, calculate the output!' },
+    description: { zh: '代入 $x$ 的值，计算表达式。', en: 'Substitute the value of $x$ and evaluate.' },
+    data: { a: 3, b: 5, x: 4, answer: 17, mode: 'linear', generatorType: 'SUBSTITUTION_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-2.2-01', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：代入就是——把字母换成数字', en: 'Zhuge Liang: "Substitution means replacing the letter with a number"' }, hint: { zh: '$3x + 5$，当 $x=4$ 时：\n$3 \\times 4 + 5 = 12 + 5 = 17$', en: '$3x + 5$, when $x=4$:\n$3 \\times 4 + 5 = 12 + 5 = 17$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '代入就是用具体数值替换变量，然后按运算顺序计算。', en: 'Substitution means replacing variables with values, then computing step by step.' }, formula: '$\\text{代入 } x \\text{ 的值，按顺序计算}$', tips: [{ zh: '诸葛亮提示：先乘除，后加减！', en: 'Zhuge Liang Tip: Multiply/divide first, then add/subtract!' }] }
+  },
+  {
+    id: 718, grade: 7, unitId: 1, order: 4,
+    unitTitle: { zh: "Unit 1: 结义与代数入门", en: "Unit 1: Oath & Intro to Algebra" },
+    topic: 'Algebra', type: 'SUBSTITUTION',
+    title: { zh: '投石车射程', en: 'Catapult Range' },
+    skillName: { zh: '含幂代入术', en: 'Substitution with Powers' },
+    skillSummary: { zh: '先算幂，再算乘，最后加减', en: 'Powers first, then multiply, then add/subtract' },
+    story: { zh: '投石车的射程公式含有 $x^2$。赵云需要代入参数计算准确的射程！', en: 'The catapult range formula contains $x^2$. Zhao Yun needs to substitute parameters for accurate range!' },
+    description: { zh: '代入 $x$ 的值，计算含幂的表达式。', en: 'Substitute $x$ and evaluate the expression with powers.' },
+    data: { a: 2, b: 3, x: 3, answer: 21, mode: 'power', generatorType: 'SUBSTITUTION_RANDOM' }, difficulty: 'Medium', reward: 55,
+    kpId: 'kp-2.2-02', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '赵云：含 $x^2$ 的式子——先算平方，再算乘法', en: 'Zhao Yun: "Expression with $x^2$ — square first, then multiply"' }, hint: { zh: '$2x^2 + 3$，当 $x=3$：\n先算 $3^2 = 9$\n再算 $2 \\times 9 = 18$\n最后 $18 + 3 = 21$', en: '$2x^2 + 3$, when $x=3$:\nFirst $3^2 = 9$\nThen $2 \\times 9 = 18$\nFinally $18 + 3 = 21$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '运算顺序：幂 → 乘除 → 加减。代入后要严格按顺序计算。', en: 'Order of operations: Powers → Multiply/Divide → Add/Subtract.' }, formula: '$\\text{Powers} \\rightarrow \\times\\div \\rightarrow +\\,-$', tips: [{ zh: '赵云提示：先算指数，才能射得准！', en: 'Zhao Yun Tip: Powers first for accurate aim!' }] }
+  },
   {
     id: 721, grade: 7, unitId: 2, order: 1,
     unitTitle: { zh: "Unit 2: 粮草调度与比例", en: "Unit 2: Logistics & Ratios" },
@@ -495,6 +528,39 @@ export const MISSIONS: Mission[] = [
       }
     ],
     secret: { concept: { zh: '除法是乘法的逆运算：知道总量和份数，就能求每份。', en: 'Division is the inverse of multiplication: knowing total and parts, find each part.' }, formula: '$x = \\frac{b}{a}$', tips: [{ zh: '张飞提示：算清楚，才公平！', en: 'Zhang Fei Tip: Count right, keep it fair!' }] }
+  },
+  // --- Year 7 Unit 2 续: 百分比 ---
+  {
+    id: 723, grade: 7, unitId: 2, order: 3,
+    unitTitle: { zh: "Unit 2: 粮草调度与比例", en: "Unit 2: Logistics & Ratios" },
+    topic: 'Algebra', type: 'PERCENTAGE',
+    title: { zh: '军饷提成', en: 'Military Stipend' },
+    skillName: { zh: '百分比计算术', en: 'Percentage Calculation' },
+    skillSummary: { zh: 'p% of n = n × p/100', en: 'p% of n = n × p/100' },
+    story: { zh: '曹操规定军饷按百分比发放。算出实际该发多少金！', en: 'Cao Cao distributes stipends by percentage. Calculate the actual amount!' },
+    description: { zh: '计算百分比。', en: 'Calculate the percentage.' },
+    data: { n: 200, pct: 25, answer: 50, generatorType: 'PERCENTAGE_OF_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-1.12-02', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '曹操：百分比就是"每一百份里取几份"', en: 'Cao Cao: "Percentage means out of every 100"' }, hint: { zh: '$25\\%$ of $200$：\n$200 \\times \\frac{25}{100} = 200 \\times 0.25 = 50$', en: '$25\\%$ of $200$:\n$200 \\times \\frac{25}{100} = 200 \\times 0.25 = 50$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '百分比就是"每百份中的份数"。求 p% of n，用 n × p ÷ 100。', en: 'Percentage means "parts per hundred". To find p% of n, use n × p ÷ 100.' }, formula: '$p\\% \\text{ of } n = n \\times \\frac{p}{100}$', tips: [{ zh: '曹操提示：百分比是商业和军事的通用语言！', en: 'Cao Cao Tip: Percentages are the universal language of business and warfare!' }] }
+  },
+  {
+    id: 724, grade: 7, unitId: 2, order: 4,
+    unitTitle: { zh: "Unit 2: 粮草调度与比例", en: "Unit 2: Logistics & Ratios" },
+    topic: 'Algebra', type: 'PERCENTAGE',
+    title: { zh: '粮价涨跌', en: 'Grain Price Change' },
+    skillName: { zh: '百分比增减术', en: 'Percentage Increase/Decrease' },
+    skillSummary: { zh: '增加 p% → 乘以 (1 + p/100)；减少 p% → 乘以 (1 - p/100)', en: 'Increase p% → multiply by (1+p/100); Decrease p% → multiply by (1-p/100)' },
+    story: { zh: '战乱导致粮价变动。算出涨价或降价后的新价格！', en: 'War causes grain price changes. Calculate the new price after increase or decrease!' },
+    description: { zh: '计算百分比增减后的结果。', en: 'Calculate the result after percentage change.' },
+    data: { initial: 200, rate: 0.2, years: 1, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Medium', reward: 55,
+    kpId: 'kp-1.12-03', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '曹操：增加 20% 就是乘以 1.2', en: 'Cao Cao: "Increase 20% means multiply by 1.2"' }, hint: { zh: '$200 \\times (1 + 0.2) = 200 \\times 1.2 = 240$', en: '$200 \\times (1 + 0.2) = 200 \\times 1.2 = 240$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '增减百分比的关键是乘法因子：增加用 (1+r)，减少用 (1-r)。', en: 'The key to percentage change is the multiplier: increase (1+r), decrease (1-r).' }, formula: '$\\text{新值} = \\text{原值} \\times (1 \\pm r)$', tips: [{ zh: '曹操提示：涨跌之间，尽在掌控！', en: 'Cao Cao Tip: Master the rise and fall!' }] }
   },
   {
     id: 731, grade: 7, unitId: 3, order: 1,
@@ -618,6 +684,205 @@ export const MISSIONS: Mission[] = [
       }
     ],
     secret: { concept: { zh: '补角的实际应用：方向角合成一条直线，互为补角。', en: 'Practical use of supplementary angles: direction angles forming a straight line are supplementary.' }, formula: '$x = 180° - y$', tips: [{ zh: '诸葛亮提示：阵法变幻，皆在术数。', en: 'Zhuge Tip: The changes in the formation are all in the numbers.' }] }
+  },
+  // --- Year 7 Unit 3 续: 三角形内角 & 周角 ---
+  {
+    id: 734, grade: 7, unitId: 3, order: 4,
+    unitTitle: { zh: "Unit 3: 关隘与角度", en: "Unit 3: Passes & Angles" },
+    topic: 'Geometry', type: 'ANGLES',
+    title: { zh: '三角旗阵', en: 'Triangular Banner' },
+    skillName: { zh: '三角内角和', en: 'Triangle Angle Sum' },
+    skillSummary: { zh: '三角形三个内角之和 = 180°', en: 'The three interior angles of a triangle sum to 180°' },
+    story: { zh: '关羽布置三角旗阵，需要计算旗帜的第三个角度。三角形内角和永远是 180°！', en: 'Guan Yu sets up a triangular banner formation. The angles in a triangle always sum to 180°!' },
+    description: { zh: '求三角形的第三个角。', en: 'Find the missing angle in the triangle.' },
+    data: { angle: 110, total: 180, a1: 60, a2: 50, generatorType: 'ANGLES_TRIANGLE_RANDOM' }, difficulty: 'Easy', reward: 50,
+    kpId: 'kp-4.3-01', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '关羽：三角形内角和 = $180°$', en: 'Guan Yu: "Angles in a triangle sum to $180°$"' }, hint: { zh: '不管什么形状的三角形，三个角加起来永远是 180°', en: 'No matter the shape, the three angles always add to 180°' }, highlightField: 'x' },
+      { text: { zh: '关羽：第三个角 = $180° - 60° - 50° = 70°$', en: 'Guan Yu: "Third angle = $180° - 60° - 50° = 70°$"' }, highlightField: 'x' },
+    ],
+    secret: { concept: { zh: '三角形内角和定理：任何三角形的三个内角之和 = 180°。', en: 'Triangle angle sum theorem: the three interior angles of any triangle sum to 180°.' }, formula: '$a + b + c = 180°$', tips: [{ zh: '关羽提示：三角旗阵，角度精准才能列阵如山！', en: 'Guan Yu Tip: Precise angles make an immovable formation!' }] }
+  },
+  {
+    id: 735, grade: 7, unitId: 3, order: 5,
+    unitTitle: { zh: "Unit 3: 关隘与角度", en: "Unit 3: Passes & Angles" },
+    topic: 'Geometry', type: 'ANGLES',
+    title: { zh: '瞭望全景', en: 'Watchtower Panorama' },
+    skillName: { zh: '周角计算术', en: 'Angles at a Point' },
+    skillSummary: { zh: '围绕一点的所有角之和 = 360°', en: 'All angles around a point sum to 360°' },
+    story: { zh: '诸葛亮在瞭望台上标记各方向角度。绕一圈的总角度是 360°！', en: 'Zhuge Liang marks directional angles from the watchtower. A full turn is 360°!' },
+    description: { zh: '求围绕一点的未知角。', en: 'Find the missing angle around a point.' },
+    data: { angle: 260, total: 360, angles: [120, 140], generatorType: 'ANGLES_POINT_RANDOM' }, difficulty: 'Easy', reward: 50,
+    kpId: 'kp-4.3-02', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：绕一点一圈 = $360°$', en: 'Zhuge Liang: "All the way around a point = $360°$"' }, hint: { zh: '转一整圈回到原位就是 360°', en: 'A full rotation back to the start is 360°' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：$x = 360° - 120° - 140° = 100°$', en: 'Zhuge Liang: "$x = 360° - 120° - 140° = 100°$"' }, highlightField: 'x' },
+    ],
+    secret: { concept: { zh: '围绕一点的所有角加起来等于 360°（一整圈）。', en: 'Angles around a point sum to 360° (a full turn).' }, formula: '$\\text{全部角之和} = 360°$', tips: [{ zh: '诸葛亮提示：知天知地，全景掌控！', en: 'Zhuge Liang Tip: Know all directions for full control!' }] }
+  },
+  // --- Year 7 Unit 4: 行军数列·序列篇 ---
+  {
+    id: 741, grade: 7, unitId: 4, order: 1,
+    unitTitle: { zh: "Unit 4: 行军数列·序列篇", en: "Unit 4: March Sequence — Sequences" },
+    topic: 'Algebra', type: 'ARITHMETIC',
+    title: { zh: '增兵步伐', en: 'Troop Buildup Pattern' },
+    skillName: { zh: '数列续写术', en: 'Sequence Next Term' },
+    skillSummary: { zh: '找规律：每次加多少？下一个就再加那么多', en: 'Find the pattern: what\'s added each time? Add it again for the next term' },
+    story: { zh: '刘备每天招募新兵，人数呈规律增长。观察规律，预测明天的新兵人数！', en: 'Liu Bei recruits daily in a pattern. Observe and predict tomorrow\'s count!' },
+    description: { zh: '找出数列的下一项。', en: 'Find the next term in the sequence.' },
+    data: { a1: 3, d: 4, n: 5, mode: 'next', generatorType: 'SEQUENCE_Y7_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '刘备：每天比前天多招 4 人——这就是"公差"', en: 'Liu Bei: "4 more each day — that\'s the common difference"' }, hint: { zh: '$3, 7, 11, 15, ?$\n$7-3=4$，$11-7=4$，$15-11=4$\n下一个：$15+4=19$', en: '$3, 7, 11, 15, ?$\n$7-3=4$, $11-7=4$, $15-11=4$\nNext: $15+4=19$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '等差数列：每项与前一项的差（公差）恒定。下一项 = 最后一项 + 公差。', en: 'Arithmetic sequence: the difference between consecutive terms is constant. Next = last + common difference.' }, formula: '$\\text{下一项} = \\text{末项} + d$', tips: [{ zh: '刘备提示：找到规律，就能预见未来！', en: 'Liu Bei Tip: Find the pattern, predict the future!' }] }
+  },
+  {
+    id: 742, grade: 7, unitId: 4, order: 2,
+    unitTitle: { zh: "Unit 4: 行军数列·序列篇", en: "Unit 4: March Sequence — Sequences" },
+    topic: 'Algebra', type: 'ARITHMETIC',
+    title: { zh: '远征推算', en: 'Expedition Projection' },
+    skillName: { zh: '通项公式术', en: 'Nth Term Formula' },
+    skillSummary: { zh: '第 n 项 = 首项 + (n-1) × 公差', en: 'nth term = first term + (n-1) × common difference' },
+    story: { zh: '赵云远征在外，需要推算第 n 天的补给量。用通项公式直接算！', en: 'Zhao Yun is on expedition — calculate the supply for day n using the formula!' },
+    description: { zh: '用通项公式求第 $n$ 项。', en: 'Use the nth term formula to find term $n$.' },
+    data: { a1: 5, d: 3, n: 8, mode: 'nth', generatorType: 'SEQUENCE_Y7_RANDOM' }, difficulty: 'Medium', reward: 55,
+    kpId: 'kp-2.7-02', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '赵云：通项公式 $a_n = a_1 + (n-1) \\times d$', en: 'Zhao Yun: "nth term formula: $a_n = a_1 + (n-1) \\times d$"' }, hint: { zh: '$a_1=5$, $d=3$, $n=8$\n$a_8 = 5 + (8-1) \\times 3 = 5 + 21 = 26$', en: '$a_1=5$, $d=3$, $n=8$\n$a_8 = 5 + (8-1) \\times 3 = 5 + 21 = 26$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '通项公式让你不必逐项数，直接跳到第 n 项。', en: 'The nth term formula lets you jump directly to any term without counting one by one.' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '赵云提示：兵贵神速，公式比逐个数快！', en: 'Zhao Yun Tip: Speed matters — formulas beat counting one by one!' }] }
+  },
+  // --- Year 7 Unit 5: 估算篇 ---
+  {
+    id: 751, grade: 7, unitId: 5, order: 1,
+    unitTitle: { zh: "Unit 5: 斥候估算·近似值篇", en: "Unit 5: Scout Estimation — Rounding" },
+    topic: 'Algebra', type: 'ESTIMATION',
+    title: { zh: '斥候报数', en: 'Scout Headcount' },
+    skillName: { zh: '四舍五入术', en: 'Rounding Numbers' },
+    skillSummary: { zh: '看要舍去的那一位：0-4 舍，5-9 入', en: 'Look at the digit to remove: 0-4 round down, 5-9 round up' },
+    story: { zh: '斥候回报敌军人数，但不需要精确数字——四舍五入到大概即可！', en: 'Scouts report enemy numbers — an approximate round figure is enough!' },
+    description: { zh: '四舍五入。', en: 'Round the number.' },
+    data: { n: 347, place: 10, answer: 350, generatorType: 'ESTIMATION_ROUND_RANDOM' }, difficulty: 'Easy', reward: 40,
+    kpId: 'kp-1.9-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：四舍五入——看要舍去的那一位', en: 'Zhuge Liang: "Rounding — look at the digit being removed"' }, hint: { zh: '$347$ 四舍五入到十位：\n看个位 $7$（$\\geq 5$），进 1\n$347 \\approx 350$', en: 'Round $347$ to nearest 10:\nLook at ones digit $7$ ($\\geq 5$), round up\n$347 \\approx 350$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '四舍五入：看要去掉的那一位，0-4 不变，5-9 前一位加 1。', en: 'Rounding: look at the digit being removed. 0-4 stays, 5-9 rounds up.' }, formula: '$\\text{看下一位：} < 5 \\text{ 舍，} \\geq 5 \\text{ 入}$', tips: [{ zh: '诸葛亮提示：战场上要的是大局观，不纠结零头！', en: 'Zhuge Liang Tip: On the battlefield, focus on the big picture!' }] }
+  },
+  {
+    id: 752, grade: 7, unitId: 5, order: 2,
+    unitTitle: { zh: "Unit 5: 斥候估算·近似值篇", en: "Unit 5: Scout Estimation — Rounding" },
+    topic: 'Algebra', type: 'ESTIMATION',
+    title: { zh: '大军估数', en: 'Army Estimate' },
+    skillName: { zh: '大数估算术', en: 'Large Number Rounding' },
+    skillSummary: { zh: '四舍五入到百位或千位', en: 'Round to the nearest hundred or thousand' },
+    story: { zh: '大军压境，需要快速估算双方兵力差距。大数估算派上用场！', en: 'With a massive army approaching, quickly estimate the force difference!' },
+    description: { zh: '四舍五入到更高位。', en: 'Round to a higher place value.' },
+    data: { n: 3847, place: 100, answer: 3800, generatorType: 'ESTIMATION_ROUND_RANDOM' }, difficulty: 'Medium', reward: 50,
+    kpId: 'kp-1.9-02', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：大数估算——先找到要舍入的位', en: 'Zhuge Liang: "Large numbers — find the place value first"' }, hint: { zh: '$3847$ 四舍五入到百位：\n看十位 $4$（$< 5$），舍\n$3847 \\approx 3800$', en: 'Round $3847$ to nearest 100:\nLook at tens digit $4$ ($< 5$), round down\n$3847 \\approx 3800$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '四舍五入到百位看十位，到千位看百位——总是看"下一位"。', en: 'To round to hundreds look at tens, to round to thousands look at hundreds — always check the next digit.' }, formula: '$\\text{看"下一位"决定舍入}$', tips: [{ zh: '诸葛亮提示：知己知彼，估算也要精准到位！', en: 'Zhuge Liang Tip: Know your enemy — even estimates should be strategic!' }] }
+  },
+  // --- Year 7 Unit 6: 营寨丈量·周长与面积篇 ---
+  {
+    id: 761, grade: 7, unitId: 6, order: 1,
+    unitTitle: { zh: "Unit 6: 营寨丈量·周长与面积篇", en: "Unit 6: Camp Survey — Perimeter & Area" },
+    topic: 'Geometry', type: 'PERIMETER',
+    title: { zh: '围栅建营', en: 'Building the Camp Fence' },
+    skillName: { zh: '周长计算术', en: 'Perimeter Calculation' },
+    skillSummary: { zh: '长方形周长 = 2 × (长 + 宽)', en: 'Rectangle perimeter = 2 × (length + width)' },
+    story: { zh: '刘备安营扎寨，需要计算围栅的总长度——这就是周长！', en: 'Liu Bei sets up camp — calculate the total fence length needed. That\'s the perimeter!' },
+    description: { zh: '计算长方形周长。', en: 'Calculate the rectangle perimeter.' },
+    data: { length: 12, width: 8, answer: 40, generatorType: 'PERIMETER_RECT_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-4.5-01', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '刘备：周长就是绕一圈的总长度', en: 'Liu Bei: "Perimeter is the total distance around"' }, hint: { zh: '长方形有两条长、两条宽\n$P = 2(12 + 8) = 2 \\times 20 = 40$', en: 'A rectangle has 2 lengths and 2 widths\n$P = 2(12 + 8) = 2 \\times 20 = 40$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '周长是图形一圈的总长度。长方形：P = 2(l+w)。', en: 'Perimeter is the total distance around a shape. Rectangle: P = 2(l+w).' }, formula: '$P = 2(l + w)$', tips: [{ zh: '刘备提示：围栅不够长，敌人就攻进来了！', en: 'Liu Bei Tip: If the fence is too short, the enemy gets in!' }] }
+  },
+  {
+    id: 762, grade: 7, unitId: 6, order: 2,
+    unitTitle: { zh: "Unit 6: 营寨丈量·周长与面积篇", en: "Unit 6: Camp Survey — Perimeter & Area" },
+    topic: 'Geometry', type: 'AREA',
+    title: { zh: '营地面积', en: 'Camp Ground Area' },
+    skillName: { zh: '长方形面积术', en: 'Rectangle Area' },
+    skillSummary: { zh: '长方形面积 = 长 × 宽', en: 'Rectangle area = length × width' },
+    story: { zh: '张飞负责规划营地面积。长方形营地的面积 = 长 × 宽。', en: 'Zhang Fei plans the camp ground. Rectangle area = length × width.' },
+    description: { zh: '计算长方形面积。', en: 'Calculate the rectangle area.' },
+    data: { length: 15, width: 8, generatorType: 'AREA_RECT_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-4.5-02', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '张飞：面积就是形状里面有多大', en: 'Zhang Fei: "Area is how much space is inside the shape"' }, hint: { zh: '长方形面积 = 长 × 宽\n$15 \\times 8 = 120$ 平方单位', en: 'Rectangle area = length × width\n$15 \\times 8 = 120$ square units' }, highlightField: 'area' },
+    ],
+    secret: { concept: { zh: '面积是图形内部的大小。长方形面积 = 长 × 宽。', en: 'Area is the space inside a shape. Rectangle area = length × width.' }, formula: '$A = l \\times w$', tips: [{ zh: '张飞提示：营地够大，才能屯兵万千！', en: 'Zhang Fei Tip: A big camp holds a big army!' }] }
+  },
+  {
+    id: 763, grade: 7, unitId: 6, order: 3,
+    unitTitle: { zh: "Unit 6: 营寨丈量·周长与面积篇", en: "Unit 6: Camp Survey — Perimeter & Area" },
+    topic: 'Geometry', type: 'AREA',
+    title: { zh: '三角旗帜', en: 'Triangular Banner' },
+    skillName: { zh: '三角形面积术', en: 'Triangle Area' },
+    skillSummary: { zh: '三角形面积 = 底 × 高 ÷ 2', en: 'Triangle area = base × height ÷ 2' },
+    story: { zh: '赵云要制作三角军旗。三角形面积 = 底 × 高 ÷ 2——是长方形的一半！', en: 'Zhao Yun makes triangular banners. Triangle area = base × height ÷ 2 — half a rectangle!' },
+    description: { zh: '计算三角形面积。', en: 'Calculate the triangle area.' },
+    data: { base: 10, height: 6, answer: 30, generatorType: 'AREA_TRIANGLE_RANDOM' }, difficulty: 'Easy', reward: 50,
+    kpId: 'kp-4.5-03', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '赵云：三角形面积 = 底 × 高 ÷ 2', en: 'Zhao Yun: "Triangle area = base × height ÷ 2"' }, hint: { zh: '为什么除以 2？三角形是长方形对角切一半\n$\\frac{10 \\times 6}{2} = \\frac{60}{2} = 30$', en: 'Why ÷ 2? A triangle is half a rectangle cut diagonally\n$\\frac{10 \\times 6}{2} = \\frac{60}{2} = 30$' }, highlightField: 'area' },
+    ],
+    secret: { concept: { zh: '三角形面积 = 底 × 高 ÷ 2。可以理解为长方形面积的一半。', en: 'Triangle area = base × height ÷ 2. It\'s half the area of a rectangle.' }, formula: '$A = \\frac{b \\times h}{2}$', tips: [{ zh: '赵云提示：旗帜虽小，面积公式却大有用处！', en: 'Zhao Yun Tip: Small banner, big formula!' }] }
+  },
+  // --- Year 7 Unit 7: 战后统计·数据篇 ---
+  {
+    id: 771, grade: 7, unitId: 7, order: 1,
+    unitTitle: { zh: "Unit 7: 战后统计·数据篇", en: "Unit 7: Post-battle Stats — Data" },
+    topic: 'Statistics', type: 'STATISTICS',
+    title: { zh: '平均战力', en: 'Average Strength' },
+    skillName: { zh: '平均数计算术', en: 'Mean Calculation' },
+    skillSummary: { zh: '平均数 = 所有数之和 ÷ 个数', en: 'Mean = sum of all values ÷ number of values' },
+    story: { zh: '曹操统计各营战斗力，用平均数来评估整体水平。', en: 'Cao Cao evaluates battalion strength using the mean (average).' },
+    description: { zh: '求平均数。', en: 'Find the mean.' },
+    data: { values: [8, 12, 15, 10, 5], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-6.1-01', sectionId: 'statistics',
+    tutorialSteps: [
+      { text: { zh: '曹操：平均数 = 加起来 ÷ 个数', en: 'Cao Cao: "Mean = add them up ÷ how many"' }, hint: { zh: '$(8+12+15+10+5) \\div 5 = 50 \\div 5 = 10$', en: '$(8+12+15+10+5) \\div 5 = 50 \\div 5 = 10$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '平均数把总量平均分给每个数据。它代表数据的"中心水平"。', en: 'The mean shares the total equally. It represents the "center" of the data.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '曹操提示：知道全军平均水平，才能精准调度！', en: 'Cao Cao Tip: Know the average to optimize deployment!' }] }
+  },
+  {
+    id: 772, grade: 7, unitId: 7, order: 2,
+    unitTitle: { zh: "Unit 7: 战后统计·数据篇", en: "Unit 7: Post-battle Stats — Data" },
+    topic: 'Statistics', type: 'STATISTICS',
+    title: { zh: '中位排名', en: 'Median Rank' },
+    skillName: { zh: '中位数计算术', en: 'Median Calculation' },
+    skillSummary: { zh: '排序后取中间的数', en: 'Sort the values, then pick the middle one' },
+    story: { zh: '诸葛亮要找出"中间水平"的士兵——先排序，再取中间值。', en: 'Zhuge Liang finds the "middle level" soldier — sort first, then pick the middle.' },
+    description: { zh: '求中位数。', en: 'Find the median.' },
+    data: { values: [3, 7, 8, 12, 15], mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-6.1-02', sectionId: 'statistics',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：先排序，再找中间', en: 'Zhuge Liang: "Sort first, then find the middle"' }, hint: { zh: '排序后：$3, 7, 8, 12, 15$\n5 个数，中间是第 3 个 = $8$', en: 'Sorted: $3, 7, 8, 12, 15$\n5 values, middle is 3rd = $8$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '中位数是排序后正中间的值。它不受极端值影响。', en: 'Median is the middle value after sorting. It\'s not affected by outliers.' }, formula: '$\\text{排序后取中间值}$', tips: [{ zh: '诸葛亮提示：中位数比平均数更稳定——一个极端值不会带偏它！', en: 'Zhuge Liang Tip: Median is more stable than mean — one outlier won\'t skew it!' }] }
+  },
+  {
+    id: 773, grade: 7, unitId: 7, order: 3,
+    unitTitle: { zh: "Unit 7: 战后统计·数据篇", en: "Unit 7: Post-battle Stats — Data" },
+    topic: 'Statistics', type: 'STATISTICS',
+    title: { zh: '战力差距', en: 'Strength Spread' },
+    skillName: { zh: '极差计算术', en: 'Range Calculation' },
+    skillSummary: { zh: '极差 = 最大值 - 最小值', en: 'Range = Maximum - Minimum' },
+    story: { zh: '张飞要看各营战力差距有多大——用极差（Range）来衡量！', en: 'Zhang Fei measures the gap between battalions using the range!' },
+    description: { zh: '求极差（Range）。', en: 'Find the range.' },
+    data: { values: [5, 8, 12, 15, 20], mode: 'range', generatorType: 'STATISTICS_RANGE_RANDOM' }, difficulty: 'Easy', reward: 40,
+    kpId: 'kp-6.1-03', sectionId: 'statistics',
+    tutorialSteps: [
+      { text: { zh: '张飞：极差 = 最大的 - 最小的', en: 'Zhang Fei: "Range = biggest − smallest"' }, hint: { zh: '最大 $20$，最小 $5$\nRange = $20 - 5 = 15$', en: 'Max $20$, Min $5$\nRange = $20 - 5 = 15$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '极差衡量数据的"分散程度"——差越大，数据越分散。', en: 'Range measures how spread out the data is — bigger range means more spread.' }, formula: '$\\text{Range} = \\text{Max} - \\text{Min}$', tips: [{ zh: '张飞提示：差距太大就要整训，差距小说明水平齐整！', en: 'Zhang Fei Tip: Big gap means more training needed!' }] }
   },
 
   // --- Year 8: The Yellow Turban Rebellion (Expansion) ---

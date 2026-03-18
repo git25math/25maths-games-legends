@@ -45,7 +45,16 @@ export type GeneratorType =
   | 'FACTOR_TREE_RANDOM'
   | 'PRIME_RANDOM'
   | 'SQUARE_CUBE_RANDOM'
-  | 'SQUARE_ROOT_RANDOM';
+  | 'SQUARE_ROOT_RANDOM'
+  | 'SUBSTITUTION_RANDOM'
+  | 'PERIMETER_RECT_RANDOM'
+  | 'PERCENTAGE_OF_RANDOM'
+  | 'ESTIMATION_ROUND_RANDOM'
+  | 'ANGLES_TRIANGLE_RANDOM'
+  | 'ANGLES_POINT_RANDOM'
+  | 'SEQUENCE_Y7_RANDOM'
+  | 'STATISTICS_RANGE_RANDOM'
+  | 'AREA_TRIANGLE_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -87,6 +96,15 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   FRAC_MUL_RANDOM: generateFracMulMission,
   SQUARE_CUBE_RANDOM: generateSquareCubeMission,
   SQUARE_ROOT_RANDOM: generateSquareRootMission,
+  SUBSTITUTION_RANDOM: generateSubstitutionMission,
+  PERIMETER_RECT_RANDOM: generatePerimeterRectMission,
+  PERCENTAGE_OF_RANDOM: generatePercentageOfMission,
+  ESTIMATION_ROUND_RANDOM: generateEstimationRoundMission,
+  ANGLES_TRIANGLE_RANDOM: generateAnglesTriangleMission,
+  ANGLES_POINT_RANDOM: generateAnglesPointMission,
+  SEQUENCE_Y7_RANDOM: generateSequenceY7Mission,
+  STATISTICS_RANGE_RANDOM: generateStatsRangeMission,
+  AREA_TRIANGLE_RANDOM: generateAreaTriangleMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -3632,6 +3650,498 @@ export function generateSquareRootMission(template: Mission): Mission {
     ...template,
     description,
     data: { n, answer, op, mode, generatorType: 'SQUARE_ROOT_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   SUBSTITUTION generator: evaluate expression for given x
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSubstitutionMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+  const mode: 'linear' | 'power' = template.data?.mode ?? 'linear';
+
+  let a: number, b: number, x: number, answer: number, expr: string, exprEn: string;
+
+  if (mode === 'power') {
+    const xPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7], 3: [3, 4, 5, 6, 7, 8, 9] };
+    const aPools: Record<DifficultyTier, number[]> = { 1: [1, 2, 3], 2: [2, 3, 4, 5], 3: [2, 3, 4, 5, 6] };
+    x = pickRandom(xPools[tier]);
+    a = pickRandom(aPools[tier]);
+    b = randInt(-10, 10);
+    answer = a * x * x + b;
+    const bStr = b >= 0 ? `+ ${b}` : `- ${Math.abs(b)}`;
+    expr = `${a}x^2 ${bStr}`;
+    exprEn = expr;
+  } else {
+    const xPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5, 6], 2: [2, 3, 4, 5, 6, 7, 8, 9, 10], 3: [5, 6, 7, 8, 9, 10, 12, 15] };
+    const aPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8], 3: [3, 5, 6, 7, 8, 9, 10, 12] };
+    x = pickRandom(xPools[tier]);
+    a = pickRandom(aPools[tier]);
+    b = randInt(-10, 15);
+    answer = a * x + b;
+    const bStr = b >= 0 ? `+ ${b}` : `- ${Math.abs(b)}`;
+    expr = `${a}x ${bStr}`;
+    exprEn = expr;
+  }
+
+  const description: BilingualText = {
+    zh: `当 $x = ${x}$ 时，求 $${expr}$ 的值。`,
+    en: `When $x = ${x}$, find the value of $${exprEn}$.`,
+  };
+
+  const tutorialSteps = mode === 'power' ? [
+    {
+      text: { zh: `${narrator}：代入就是——把字母换成数字`, en: `${narrator}: "Substitution means replacing the letter with a number"` },
+      hint: { zh: `$x = ${x}$，所以把式子里所有的 $x$ 都换成 $${x}$`, en: `$x = ${x}$, so replace every $x$ with $${x}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：$${expr}$ 中把 $x = ${x}$ 代入`, en: `${narrator}: "Substitute $x = ${x}$ into $${expr}$"` },
+      hint: { zh: `$${a} \\times ${x}^2 ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a} \\times ${x*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a*x*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${answer}$`, en: `$${a} \\times ${x}^2 ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a} \\times ${x*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a*x*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：注意——先算幂，再算乘，最后算加减`, en: `${narrator}: "Remember — powers first, then multiply, then add/subtract"` },
+      highlightField: 'ans',
+    },
+  ] : [
+    {
+      text: { zh: `${narrator}：代入就是——把字母换成数字`, en: `${narrator}: "Substitution means replacing the letter with a number"` },
+      hint: { zh: `$x = ${x}$，所以把式子里的 $x$ 换成 $${x}$`, en: `$x = ${x}$, so replace $x$ with $${x}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：$${expr}$ 中把 $x = ${x}$ 代入`, en: `${narrator}: "Substitute $x = ${x}$ into $${expr}$"` },
+      hint: { zh: `$${a} \\times ${x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${answer}$`, en: `$${a} \\times ${x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：$${a}x$ 意思就是 $${a} \\times x$，字母前面的数字叫"系数"`, en: `${narrator}: "$${a}x$ means $${a} \\times x$ — the number in front is called the 'coefficient'"` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { a, b, x, answer, mode, expr, generatorType: 'SUBSTITUTION_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   PERIMETER (rectangle) generator
+   ══════════════════════════════════════════════════════════ */
+
+export function generatePerimeterRectMission(template: Mission): Mission {
+  const tier = getTier();
+  const lPools: Record<DifficultyTier, number[]> = { 1: [3, 4, 5, 6, 7, 8, 10], 2: [5, 8, 10, 12, 15, 18, 20], 3: [10, 15, 20, 25, 30, 35, 40, 50] };
+  const wPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5, 6], 2: [3, 5, 7, 8, 10, 12, 15], 3: [8, 10, 15, 20, 25, 30] };
+  const length = pickRandom(lPools[tier]);
+  const width = pickRandom(wPools[tier]);
+  const answer = 2 * (length + width);
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '刘备';
+
+  const description: BilingualText = {
+    zh: `长方形营地：长 $${length}$，宽 $${width}$，求周长。`,
+    en: `Rectangle camp: length $${length}$, width $${width}$. Find the perimeter.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：什么是周长？绕着图形走一圈的总长度`, en: `${narrator}: "What is perimeter? The total distance around a shape"` },
+      hint: { zh: '想象蚂蚁沿着围墙走一圈，走了多远就是周长', en: 'Imagine an ant walking along the fence — how far it walks is the perimeter' },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：长方形有 4 条边——两条长、两条宽`, en: `${narrator}: "A rectangle has 4 sides — two lengths, two widths"` },
+      hint: { zh: `长 = $${length}$（出现 2 次）\n宽 = $${width}$（出现 2 次）`, en: `Length = $${length}$ (appears twice)\nWidth = $${width}$ (appears twice)` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：周长公式 $P = 2(l + w)$`, en: `${narrator}: "Perimeter formula: $P = 2(l + w)$"` },
+      hint: { zh: `$P = 2(${length} + ${width}) = 2 \\times ${length + width} = ${answer}$`, en: `$P = 2(${length} + ${width}) = 2 \\times ${length + width} = ${answer}$` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { length, width, answer, generatorType: 'PERIMETER_RECT_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   PERCENTAGE_OF generator: "what is p% of n?"
+   ══════════════════════════════════════════════════════════ */
+
+export function generatePercentageOfMission(template: Mission): Mission {
+  const tier = getTier();
+  const pctPools: Record<DifficultyTier, number[]> = { 1: [10, 20, 25, 50], 2: [5, 10, 15, 20, 25, 30, 40, 50, 75], 3: [5, 12, 15, 18, 22, 35, 45, 60, 75, 80] };
+  const nPools: Record<DifficultyTier, number[]> = { 1: [40, 50, 60, 80, 100, 200], 2: [60, 80, 100, 120, 150, 200, 250, 300, 400, 500], 3: [120, 150, 200, 250, 300, 400, 500, 800, 1000] };
+  const pct = pickRandom(pctPools[tier]);
+  const n = pickRandom(nPools[tier]);
+  const answer = n * pct / 100;
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '曹操';
+
+  const description: BilingualText = {
+    zh: `$${n}$ 的 $${pct}\\%$ 是多少？`,
+    en: `What is $${pct}\\%$ of $${n}$?`,
+  };
+
+  const decimal = pct / 100;
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：百分比就是"每一百份里取几份"`, en: `${narrator}: "Percentage means 'out of every 100'"` },
+      hint: { zh: `$${pct}\\%$ 就是 $\\frac{${pct}}{100} = ${decimal}$`, en: `$${pct}\\%$ means $\\frac{${pct}}{100} = ${decimal}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：求 $${n}$ 的 $${pct}\\%$——用乘法`, en: `${narrator}: "Find $${pct}\\%$ of $${n}$ — use multiplication"` },
+      hint: { zh: `$${n} \\times ${decimal} = ${answer}$\n\n或者：$${n} \\times \\frac{${pct}}{100} = \\frac{${n * pct}}{100} = ${answer}$`, en: `$${n} \\times ${decimal} = ${answer}$\n\nOr: $${n} \\times \\frac{${pct}}{100} = \\frac{${n * pct}}{100} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：小技巧——10% 就是除以 10，50% 就是除以 2`, en: `${narrator}: "Quick trick — 10% = divide by 10, 50% = divide by 2"` },
+      hint: { zh: `$10\\%$ of $${n}$ = $${n/10}$\n$50\\%$ of $${n}$ = $${n/2}$\n$25\\%$ of $${n}$ = $${n/4}$`, en: `$10\\%$ of $${n}$ = $${n/10}$\n$50\\%$ of $${n}$ = $${n/2}$\n$25\\%$ of $${n}$ = $${n/4}$` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n, pct, answer, generatorType: 'PERCENTAGE_OF_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   ESTIMATION_ROUND generator: rounding to nearest 10/100/1000
+   ══════════════════════════════════════════════════════════ */
+
+export function generateEstimationRoundMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+
+  let n: number, place: number, placeNameZh: string, placeNameEn: string, answer: number;
+
+  if (tier === 1) {
+    n = randInt(15, 95);
+    place = 10;
+    placeNameZh = '十位';
+    placeNameEn = 'nearest 10';
+  } else if (tier === 2) {
+    const choices: [number, number, string, string][] = [
+      [randInt(15, 995), 10, '十位', 'nearest 10'],
+      [randInt(150, 9950), 100, '百位', 'nearest 100'],
+    ];
+    const pick = pickRandom(choices);
+    [n, place, placeNameZh, placeNameEn] = pick;
+  } else {
+    const choices: [number, number, string, string][] = [
+      [randInt(150, 9950), 100, '百位', 'nearest 100'],
+      [randInt(1500, 99500), 1000, '千位', 'nearest 1000'],
+    ];
+    const pick = pickRandom(choices);
+    [n, place, placeNameZh, placeNameEn] = pick;
+  }
+  answer = Math.round(n / place) * place;
+
+  const description: BilingualText = {
+    zh: `把 $${n}$ 四舍五入到${placeNameZh}。`,
+    en: `Round $${n}$ to the ${placeNameEn}.`,
+  };
+
+  const digit = Math.floor((n % (place * 10)) / place);
+  const decider = Math.floor((n % place) / (place / 10));
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：四舍五入——看要舍去的那一位`, en: `${narrator}: "Rounding — look at the digit you're removing"` },
+      hint: { zh: '如果那一位是 0-4，直接去掉（舍）\n如果是 5-9，前面一位加 1（入）', en: 'If that digit is 0-4, round down\nIf 5-9, round up' },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：$${n}$ 四舍五入到${placeNameZh}`, en: `${narrator}: "Round $${n}$ to the ${placeNameEn}"` },
+      hint: { zh: `看${placeNameZh}后面的数字：$${decider}$\n${decider >= 5 ? `$${decider} \\geq 5$，往上进` : `$${decider} < 5$，直接舍`}\n答案 = $${answer}$`, en: `Look at the digit after: $${decider}$\n${decider >= 5 ? `$${decider} \\geq 5$, round up` : `$${decider} < 5$, round down`}\nAnswer = $${answer}$` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n, place, answer, generatorType: 'ESTIMATION_ROUND_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   ANGLES_TRIANGLE generator: find missing angle in a triangle
+   ══════════════════════════════════════════════════════════ */
+
+export function generateAnglesTriangleMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '关羽';
+
+  const ranges: Record<DifficultyTier, [number, number]> = { 1: [30, 80], 2: [20, 90], 3: [15, 120] };
+  const a1 = randInt(ranges[tier][0], ranges[tier][1]);
+  const maxA2 = Math.min(ranges[tier][1], 180 - a1 - 10);
+  const minA2 = Math.max(ranges[tier][0], 10);
+  const a2 = randInt(Math.min(minA2, maxA2), maxA2);
+  const answer = 180 - a1 - a2;
+
+  const description: BilingualText = {
+    zh: `三角形两个角分别是 $${a1}°$ 和 $${a2}°$，第三个角是多少？`,
+    en: `A triangle has angles $${a1}°$ and $${a2}°$. Find the third angle.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：三角形内角和恒等于 $180°$`, en: `${narrator}: "The angles in a triangle always add up to $180°$"` },
+      hint: { zh: '不管什么形状的三角形，三个角加起来一定是 180°', en: 'No matter the shape, the three angles of a triangle always sum to 180°' },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：已知两个角：$${a1}°$ 和 $${a2}°$`, en: `${narrator}: "Two angles are known: $${a1}°$ and $${a2}°$"` },
+      hint: { zh: `两角之和 = $${a1} + ${a2} = ${a1 + a2}°$`, en: `Sum of two angles = $${a1} + ${a2} = ${a1 + a2}°$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：第三个角 = $180° - ${a1}° - ${a2}° = ${answer}°$`, en: `${narrator}: "Third angle = $180° - ${a1}° - ${a2}° = ${answer}°$"` },
+      highlightField: 'x',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { ...template.data, angle: a1 + a2, total: 180, a1, a2, generatorType: 'ANGLES_TRIANGLE_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   ANGLES_POINT generator: angles at a point sum to 360°
+   ══════════════════════════════════════════════════════════ */
+
+export function generateAnglesPointMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+
+  // Generate 2-3 known angles, find the missing one
+  const numKnown = tier === 1 ? 2 : tier === 2 ? pickRandom([2, 3]) : 3;
+  const angles: number[] = [];
+  let remaining = 360;
+  for (let i = 0; i < numKnown; i++) {
+    const maxAngle = remaining - (numKnown - i) * 20;
+    const a = randInt(40, Math.min(160, maxAngle));
+    angles.push(a);
+    remaining -= a;
+  }
+  const answer = remaining;
+
+  const anglesStr = angles.map(a => `$${a}°$`).join('、');
+  const anglesStrEn = angles.map(a => `$${a}°$`).join(', ');
+  const sum = angles.reduce((s, a) => s + a, 0);
+
+  const description: BilingualText = {
+    zh: `围绕一点的角度分别是 ${anglesStr} 和 $x°$，求 $x$。`,
+    en: `Angles around a point are ${anglesStrEn} and $x°$. Find $x$.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：围绕一点的所有角加起来 = $360°$`, en: `${narrator}: "All angles around a point sum to $360°$"` },
+      hint: { zh: '想象转一整圈就是 360°', en: 'Think of turning a full circle — that\'s 360°' },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：已知角的总和 = $${angles.join(' + ')} = ${sum}°$`, en: `${narrator}: "Sum of known angles = $${angles.join(' + ')} = ${sum}°$"` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：$x = 360° - ${sum}° = ${answer}°$`, en: `${narrator}: "$x = 360° - ${sum}° = ${answer}°$"` },
+      highlightField: 'x',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { ...template.data, angle: sum, total: 360, angles, generatorType: 'ANGLES_POINT_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   SEQUENCE_Y7 generator: simple linear sequences for Y7
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSequenceY7Mission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+  const mode: 'next' | 'nth' = template.data?.mode ?? 'next';
+
+  const a1Pools: Record<DifficultyTier, number[]> = { 1: [1, 2, 3, 5, 10], 2: [1, 2, 3, 4, 5, 7, 10, 12], 3: [3, 5, 7, 8, 10, 12, 15, 20] };
+  const dPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8], 3: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12] };
+  const a1 = pickRandom(a1Pools[tier]);
+  const d = pickRandom(dPools[tier]);
+
+  if (mode === 'next') {
+    // Show first 4-5 terms, ask for the next
+    const showCount = tier === 1 ? 4 : 5;
+    const terms = Array.from({ length: showCount }, (_, i) => a1 + i * d);
+    const answer = a1 + showCount * d;
+    const n = showCount + 1;
+    const termsStr = terms.join(', ');
+
+    const description: BilingualText = {
+      zh: `数列 $${termsStr}, ?$，下一项是什么？`,
+      en: `Sequence $${termsStr}, ?$ — what comes next?`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: { zh: `${narrator}：观察规律——每一项比前一项多几？`, en: `${narrator}: "Spot the pattern — what's the difference between each term?"` },
+        hint: { zh: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n每次都加 $${d}$——公差是 $${d}$`, en: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\nAlways adding $${d}$ — common difference is $${d}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：下一项 = 最后一项 + 公差`, en: `${narrator}: "Next term = last term + common difference"` },
+        hint: { zh: `$${terms[showCount - 1]} + ${d} = ${answer}$`, en: `$${terms[showCount - 1]} + ${d} = ${answer}$` },
+        highlightField: 'ans',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { a1, d, n, generatorType: 'SEQUENCE_Y7_RANDOM', mode },
+      tutorialSteps,
+    };
+  } else {
+    // Find nth term using formula
+    const nPools: Record<DifficultyTier, number[]> = { 1: [5, 6, 7, 8], 2: [6, 8, 10, 12], 3: [10, 15, 20, 25] };
+    const n = pickRandom(nPools[tier]);
+    const terms = Array.from({ length: 4 }, (_, i) => a1 + i * d);
+    const answer = a1 + (n - 1) * d;
+    const termsStr = terms.join(', ');
+
+    const description: BilingualText = {
+      zh: `数列 $${termsStr}, \\ldots$，第 $${n}$ 项是多少？`,
+      en: `Sequence $${termsStr}, \\ldots$ — what is term $${n}$?`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: { zh: `${narrator}：找公差——每项增加多少？`, en: `${narrator}: "Find the common difference"` },
+        hint: { zh: `$${terms[1]} - ${terms[0]} = ${d}$，公差 $d = ${d}$`, en: `$${terms[1]} - ${terms[0]} = ${d}$, common difference $d = ${d}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：第 $n$ 项公式 $a_n = a_1 + (n-1) \\times d$`, en: `${narrator}: "nth term formula: $a_n = a_1 + (n-1) \\times d$"` },
+        hint: { zh: `$a_1 = ${a1}$，$d = ${d}$，$n = ${n}$`, en: `$a_1 = ${a1}$, $d = ${d}$, $n = ${n}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：$a_{${n}} = ${a1} + (${n}-1) \\times ${d} = ${a1} + ${(n-1)*d} = ${answer}$`, en: `${narrator}: "$a_{${n}} = ${a1} + (${n}-1) \\times ${d} = ${a1} + ${(n-1)*d} = ${answer}$"` },
+        highlightField: 'ans',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { a1, d, n, generatorType: 'SEQUENCE_Y7_RANDOM', mode },
+      tutorialSteps,
+    };
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   STATISTICS_RANGE generator
+   ══════════════════════════════════════════════════════════ */
+
+export function generateStatsRangeMission(template: Mission): Mission {
+  const tier = getTier();
+  const countPools: Record<DifficultyTier, number[]> = { 1: [5], 2: [5, 6, 7], 3: [7, 8, 9, 10] };
+  const valRanges: Record<DifficultyTier, [number, number]> = { 1: [3, 20], 2: [5, 50], 3: [10, 100] };
+  const count = pickRandom(countPools[tier]);
+  const values = Array.from({ length: count }, () => randInt(valRanges[tier][0], valRanges[tier][1]));
+  const sorted = [...values].sort((a, b) => a - b);
+  const answer = sorted[sorted.length - 1] - sorted[0];
+  const narrator = pickRandom(['诸葛亮', '曹操']);
+
+  const description: BilingualText = {
+    zh: `求数据 $${sorted.join(', ')}$ 的极差（Range）。`,
+    en: `Find the range of $${sorted.join(', ')}$.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：极差(Range) = 最大值 - 最小值`, en: `${narrator}: "Range = Maximum - Minimum"` },
+      hint: { zh: '极差衡量数据的"分散程度"——差越大越分散', en: 'Range measures how spread out the data is' },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：最大值 = $${sorted[sorted.length - 1]}$，最小值 = $${sorted[0]}$`, en: `${narrator}: "Maximum = $${sorted[sorted.length - 1]}$, Minimum = $${sorted[0]}$"` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：Range = $${sorted[sorted.length - 1]} - ${sorted[0]} = ${answer}$`, en: `${narrator}: "Range = $${sorted[sorted.length - 1]} - ${sorted[0]} = ${answer}$"` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { values: sorted, mode: 'range', generatorType: 'STATISTICS_RANGE_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   AREA_TRIANGLE generator: base × height ÷ 2
+   ══════════════════════════════════════════════════════════ */
+
+export function generateAreaTriangleMission(template: Mission): Mission {
+  const tier = getTier();
+  const bPools: Record<DifficultyTier, number[]> = { 1: [4, 6, 8, 10], 2: [6, 8, 10, 12, 14, 16, 20], 3: [10, 12, 15, 18, 20, 24, 30] };
+  const hPools: Record<DifficultyTier, number[]> = { 1: [3, 4, 5, 6], 2: [4, 5, 6, 7, 8, 10], 3: [6, 8, 9, 10, 12, 15] };
+  const base = pickRandom(bPools[tier]);
+  const height = pickRandom(hPools[tier]);
+  const answer = base * height / 2;
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+
+  const description: BilingualText = {
+    zh: `三角形底 $${base}$，高 $${height}$，求面积。`,
+    en: `Triangle with base $${base}$ and height $${height}$. Find the area.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：三角形面积 = 底 × 高 ÷ 2`, en: `${narrator}: "Triangle area = base × height ÷ 2"` },
+      hint: { zh: '为什么除以 2？因为三角形是长方形对角线切开的一半', en: 'Why ÷ 2? A triangle is half of a rectangle cut diagonally' },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：底 = $${base}$，高 = $${height}$`, en: `${narrator}: "Base = $${base}$, Height = $${height}$"` },
+      hint: { zh: `$\\text{面积} = \\frac{${base} \\times ${height}}{2} = \\frac{${base * height}}{2} = ${answer}$`, en: `$\\text{Area} = \\frac{${base} \\times ${height}}{2} = \\frac{${base * height}}{2} = ${answer}$` },
+      highlightField: 'area',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { base, height, answer, generatorType: 'AREA_TRIANGLE_RANDOM' },
     tutorialSteps,
   };
 }

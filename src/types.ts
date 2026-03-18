@@ -46,7 +46,9 @@ export type QuestionType =
   | 'FRAC_ADD'
   | 'FRAC_MUL'
   | 'SQUARE_CUBE'
-  | 'SQUARE_ROOT';
+  | 'SQUARE_ROOT'
+  | 'SUBSTITUTION'
+  | 'PERIMETER';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 
