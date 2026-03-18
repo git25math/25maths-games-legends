@@ -1923,19 +1923,8 @@ export function generateHcfMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：要把 $${a}$ 和 $${b}$ 平均分组，每组最多几个？这就是求最大公因数`,
-        en: `${narrator}: "We need to split $${a}$ and $${b}$ into equal groups — what's the biggest group size? That's the HCF"`,
-      },
-      hint: {
-        zh: '什么是"因数"？能整除一个数的数就叫因数\n"公因数"就是两个数共同拥有的因数\n"最大公因数"就是这些公因数中最大的那个',
-        en: 'What is a "factor"? A number that divides another exactly\n"Common factor" = a factor shared by both numbers\n"HCF" = the largest of these common factors',
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：先认识"质数"——只能被 1 和自己整除的数`,
-        en: `${narrator}: "First, let's learn about 'primes' — numbers only divisible by 1 and themselves"`,
+        zh: `${narrator}：先认识"质数"——只能被 1 和它本身整除的数就叫质数`,
+        en: `${narrator}: "First, learn about 'primes' — a prime is a number divisible only by 1 and itself"`,
       },
       hint: {
         zh: '质数举例：$2, 3, 5, 7, 11, 13$...\n$4$ 不是质数，因为 $4 = 2 \\times 2$\n$6$ 不是质数，因为 $6 = 2 \\times 3$',
@@ -1945,12 +1934,12 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：现在把数拆成质数的乘积，这叫"质因数分解"`,
-        en: `${narrator}: "Now break the numbers into products of primes — this is called 'prime factorization'"`,
+        zh: `${narrator}：要找 $${a}$ 和 $${b}$ 最多能共同分成几队，先把每个数拆成质数的乘积——这叫"质因数分解"`,
+        en: `${narrator}: "To find the largest equal group for $${a}$ and $${b}$, break each into a product of primes — this is 'prime factorization'"`,
       },
       hint: {
-        zh: '就像拆机器，拆开才能看到哪些零件相同',
-        en: 'Like taking apart a machine to find which parts are the same',
+        zh: '就像把机器拆成零件，拆开才能看到哪些零件相同',
+        en: 'Like taking a machine apart to see which parts are the same',
       },
       highlightField: 'ans',
     },
@@ -2016,8 +2005,8 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：两个数都有的"零件"——就像两营都有的兵种，找出来！`,
-        en: `${narrator}: "Parts that both numbers share — like troop types both camps have — find them!"`,
+        zh: `${narrator}：两营的"零件清单"都列好了，现在找两边都出现的零件`,
+        en: `${narrator}: "Both camps' 'parts lists' are ready — now find parts that appear in both"`,
       },
       hint: {
         zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n哪些质数两边都出现了？`,
@@ -2027,8 +2016,8 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：对于每个相同的质数，取出现次数少的那个`,
-        en: `${narrator}: "For each common prime, take the smaller power"`,
+        zh: `${narrator}：对每个相同的质数，取出现次数少的那个`,
+        en: `${narrator}: "For each common prime, take the one with fewer occurrences"`,
       },
       hint: (() => {
         const fA = primeFactors(a);
@@ -2043,23 +2032,23 @@ export function generateHcfMission(template: Mission): Mission {
             enLines.push(`Prime $${p}$: appears $${expA}$ times in $${a}$, $${expB}$ times in $${b}$\n→ take smaller = $${p}^{${minExp}}$`);
           }
         }
-        lines.push(`\n为什么取少的？就像 A 营有 3 连骑兵，B 营只有 2 连——两营"共同"最多凑 2 连。多的那边凑不出来，所以取少的`);
-        enLines.push(`\nWhy take the smaller? Like Camp A has 3 cavalry units, Camp B only has 2 — both camps can only muster 2 together. The extra from one side can't be matched, so take the smaller`);
+        lines.push(`\n就像 A 营有 3 个骑兵连，B 营只有 2 个——两营"共同都有"的最多只能是 2 个，B 营凑不出第 3 个`);
+        enLines.push(`\nLike Camp A has 3 cavalry units, Camp B only has 2 — both camps can only muster 2 together. Camp B can't produce a 3rd`);
         return { zh: lines.join('\n'), en: enLines.join('\n') };
       })(),
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：把共有的零件组装起来：$${formatFactorization(h)} = ${h}$`,
-        en: `${narrator}: "Assemble the common parts: $${formatFactorization(h)} = ${h}$"`,
+        zh: `${narrator}：把共有的零件乘起来：$${formatFactorization(h)} = ${h}$`,
+        en: `${narrator}: "Multiply the common parts together: $${formatFactorization(h)} = ${h}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：$\\text{HCF}(${a}, ${b}) = ${h}$！验算：$${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓ 分组完成！`,
-        en: `${narrator}: "$\\text{HCF}(${a}, ${b}) = ${h}$! Check: $${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓ Grouping done!"`,
+        zh: `${narrator}：$\\text{HCF}(${a}, ${b}) = ${h}$！验算：$${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓ 每小队 ${h} 人，整编完成！`,
+        en: `${narrator}: "$\\text{HCF}(${a}, ${b}) = ${h}$! Check: $${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓ ${h} per squad, troops organized!"`,
       },
       highlightField: 'ans',
     },
@@ -2104,8 +2093,8 @@ export function generateLcmMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：$${a}$ 和 $${b}$ 什么时候能"碰到一起"？找它们共同的最小倍数就行`,
-        en: `${narrator}: "When do $${a}$ and $${b}$ 'meet up'? Find their smallest common multiple"`,
+        zh: `${narrator}：甲将军 $${a}$ 天一次，乙将军 $${b}$ 天一次，什么时候能同一天碰上？找最小公倍数`,
+        en: `${narrator}: "General A patrols every $${a}$ days, General B every $${b}$ days. When do they meet? Find the LCM"`,
       },
       hint: {
         zh: '比如 12 能被 3 整除，也能被 4 整除\n所以 12 是 3 和 4 的公倍数',
@@ -2115,11 +2104,11 @@ export function generateLcmMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：怎么找呢？先把每个数拆成质因数的乘积`,
-        en: `${narrator}: "How to find it? First break each number into prime factors"`,
+        zh: `${narrator}：先把两个数分别拆成质数的乘积`,
+        en: `${narrator}: "First break each number into a product of primes"`,
       },
       hint: {
-        zh: '质因数就是只能被 1 和自己整除的数\n比如 2, 3, 5, 7, 11 都是质数',
+        zh: '质数是只能被 1 和自己整除的数\n比如 2, 3, 5, 7, 11 都是质数',
         en: 'Prime numbers can only be divided by 1 and themselves\nE.g. 2, 3, 5, 7, 11 are primes',
       },
       highlightField: 'ans',
@@ -2144,8 +2133,8 @@ export function generateLcmMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：现在找出所有出现过的质因数`,
-        en: `${narrator}: "Now find ALL prime factors that appear in either number"`,
+        zh: `${narrator}：把两边所有出现过的质因数都列出来`,
+        en: `${narrator}: "List ALL prime factors that appear in either number"`,
       },
       hint: {
         zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n列出所有出现过的质因数（不管在哪边出现的）`,
@@ -2155,12 +2144,12 @@ export function generateLcmMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：注意！HCF 取少的，LCM 取多的——为什么？`,
-        en: `${narrator}: "Note! HCF takes the smaller power, LCM takes the larger — why?"`,
+        zh: `${narrator}：注意——这里和 HCF 正好相反！HCF 取小的，LCM 取大的`,
+        en: `${narrator}: "Note — this is the OPPOSITE of HCF! HCF takes the smaller, LCM takes the larger"`,
       },
       hint: {
-        zh: 'HCF 是"共有"的，两边都要够 → 取少的\nLCM 是"都能被整除"的，要包含两边所有 → 取多的',
-        en: 'HCF is "common" — both must have enough → take smaller\nLCM must be "divisible by both" — include everything → take larger',
+        zh: `HCF 是找两边"共有"的，所以取小的；LCM 是要能被两个数同时整除，所以取大的。比如 $${a}$ 里有 ${(() => { const fA = primeFactors(a); const first = [...fA.entries()][0]; return first ? `${first[1]} 个 ${first[0]}` : ''; })()}，$${b}$ 里有 ${(() => { const fB = primeFactors(b); const first = [...fB.entries()][0]; return first ? `${first[1]} 个 ${first[0]}` : ''; })()}——LCM 必须能被 $${a}$ 整除，所以必须取大的`,
+        en: `HCF finds what's "common" → take smaller; LCM must be divisible by both → take larger. E.g. $${a}$ has ${(() => { const fA = primeFactors(a); const first = [...fA.entries()][0]; return first ? `${first[1]} of prime ${first[0]}` : ''; })()}, $${b}$ has ${(() => { const fB = primeFactors(b); const first = [...fB.entries()][0]; return first ? `${first[1]} of prime ${first[0]}` : ''; })()} — LCM must be divisible by $${a}$, so take the larger`,
       },
       highlightField: 'ans',
     },
@@ -2194,8 +2183,8 @@ export function generateLcmMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：$\\text{LCM}(${a}, ${b}) = ${lcm}$！验算：$${lcm} \\div ${a} = ${lcm/a}$ ✓  $${lcm} \\div ${b} = ${lcm/b}$ ✓`,
-        en: `${narrator}: "$\\text{LCM}(${a}, ${b}) = ${lcm}$! Check: $${lcm} \\div ${a} = ${lcm/a}$ ✓  $${lcm} \\div ${b} = ${lcm/b}$ ✓"`,
+        zh: `${narrator}：$\\text{LCM}(${a}, ${b}) = ${lcm}$！验算：$${lcm} \\div ${a} = ${lcm/a}$ ✓  $${lcm} \\div ${b} = ${lcm/b}$ ✓ 第 ${lcm} 天，两位将军同时巡营！`,
+        en: `${narrator}: "$\\text{LCM}(${a}, ${b}) = ${lcm}$! Check: $${lcm} \\div ${a} = ${lcm/a}$ ✓  $${lcm} \\div ${b} = ${lcm/b}$ ✓ On day ${lcm}, both generals patrol together!"`,
       },
       highlightField: 'ans',
     },
@@ -2494,12 +2483,12 @@ export function generateFracAddMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：现在分母一样了！直接${isSubtract ? '减' : '加'}分子：$${recalcAdjN1} ${op} ${recalcAdjN2} = ${rawAns}$，结果是 $\\frac{${rawAns}}{${recalcLcd}}$`,
-        en: `${narrator}: "Now the denominators match! ${isSubtract ? 'Subtract' : 'Add'} numerators: $${recalcAdjN1} ${op} ${recalcAdjN2} = ${rawAns}$, result is $\\frac{${rawAns}}{${recalcLcd}}$"`,
+        zh: `${narrator}：分母统一了！直接${isSubtract ? '减' : '加'}分子：$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$`,
+        en: `${narrator}: "Denominators match! ${isSubtract ? 'Subtract' : 'Add'} numerators: $\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$"`,
       },
       hint: {
-        zh: `分母相同时，只需要${isSubtract ? '减' : '加'}分子，分母不变`,
-        en: `When denominators match, just ${isSubtract ? 'subtract' : 'add'} numerators, keep denominator`,
+        zh: `分母相同时，只${isSubtract ? '减' : '加'}分子，分母保持不动`,
+        en: `When denominators match, just ${isSubtract ? 'subtract' : 'add'} numerators — denominator stays`,
       },
       highlightField: 'ans',
     },
@@ -2586,8 +2575,8 @@ export function generateFracMulMission(template: Mission): Mission {
         en: `${narrator}: "Fraction division means 'flip and multiply' — why? Dividing by a half is the same as multiplying by 2, same idea!"`,
       },
       hint: {
-        zh: '翻过来的数叫"倒数"\n就是把分子和分母交换位置',
-        en: 'The flipped fraction is called the "reciprocal"\nJust swap numerator and denominator',
+        zh: `有 $\\frac{1}{2}$ 袋粮，每户分 $\\frac{1}{4}$ 袋，能分几户？答案是 $2$ 户——因为 $\\frac{1}{2} \\div \\frac{1}{4} = \\frac{1}{2} \\times 4 = 2$。除以一个数，就是乘以它的倒数`,
+        en: `You have $\\frac{1}{2}$ bag of grain, each household gets $\\frac{1}{4}$ bag. How many households? Answer: $2$ — because $\\frac{1}{2} \\div \\frac{1}{4} = \\frac{1}{2} \\times 4 = 2$. Dividing by a number means multiplying by its reciprocal`,
       },
       highlightField: 'ans',
     },
@@ -2633,8 +2622,8 @@ export function generateFracMulMission(template: Mission): Mission {
         en: `${narrator}: "Fraction multiplication means 'taking a part of a part'"`,
       },
       hint: {
-        zh: '比如 $\\frac{1}{2} \\times \\frac{1}{3}$ 就是"三分之一的一半"',
-        en: 'E.g. $\\frac{1}{2} \\times \\frac{1}{3}$ means "half of one third"',
+        zh: '比如一袋粮食的 $\\frac{1}{3}$，再取那 $\\frac{1}{3}$ 里的 $\\frac{1}{2}$——就是整袋粮食的 $\\frac{1}{6}$。分数越乘越小',
+        en: 'E.g. take $\\frac{1}{3}$ of a bag of grain, then take $\\frac{1}{2}$ of that $\\frac{1}{3}$ — that is $\\frac{1}{6}$ of the whole bag. Multiplying fractions makes them smaller',
       },
       highlightField: 'ans',
     },

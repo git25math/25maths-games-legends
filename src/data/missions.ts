@@ -9,7 +9,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '整编队伍', en: 'Organizing Troops' },
     skillName: { zh: '公因数术', en: 'Common Factor' },
     skillSummary: { zh: '最大公因数(HCF)就是两个数共有的最大因数', en: 'HCF: prime factorize, then take common primes to lowest power' },
-    story: { zh: '桃园结义后，刘关张三兄弟开始整编队伍。现有两营士兵，要分成人数相同的小队操练。', en: 'After the oath, the three brothers organize their troops. Two camps must be split into equal-sized squads.' },
+    story: { zh: '桃园结义后，刘关张三兄弟开始整编队伍。两营士兵人数不同，要分成人数相同的小队一起操练——每队最多能有几个人？', en: 'After the oath, the brothers organize troops. Two camps with different numbers must split into equal squads for training — what\'s the largest squad size?' },
     description: { zh: '求最大公因数 (HCF)。', en: 'Find the Highest Common Factor (HCF).' },
     data: { numbers: [24, 36], generatorType: 'HCF_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-1.1-08', sectionId: 'number',
@@ -36,7 +36,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 是两个数共有的最大因数。', en: 'HCF is the largest factor common to both numbers.' }, formula: '$\\text{HCF} = \\text{两个数共有的最大因数}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
+    secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: '$\\text{HCF} = \\text{两个数共有质因数（每个取次幂小的）的乘积}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
   },
   {
     id: 702, grade: 7, unitId: 0, order: 2,
@@ -45,7 +45,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '巡营排班', en: 'Patrol Schedule' },
     skillName: { zh: '公倍数术', en: 'Common Multiple' },
     skillSummary: { zh: 'LCM：分解质因数，每个质因数取大的那个，乘起来', en: 'LCM: prime factorize, then take all primes to highest power' },
-    story: { zh: '三位将军分别每隔一段时间巡营。需要安排所有人同时巡营的日子。', en: 'Three generals patrol at different intervals. Find when they all patrol together.' },
+    story: { zh: '甲将军每隔一段时间巡营一次，乙将军也是。上次同日巡营后，下一次两人再次同日是第几天？', en: 'General A patrols at one interval, General B at another. After their last shared patrol day, when is the next time both patrol on the same day?' },
     description: { zh: '求最小公倍数 (LCM)。', en: 'Find the Least Common Multiple (LCM).' },
     data: { numbers: [6, 8], generatorType: 'LCM_RANDOM' }, difficulty: 'Easy', reward: 55,
     kpId: 'kp-1.1-09', sectionId: 'number',
@@ -72,7 +72,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'LCM 是两个数共有的最小倍数。', en: 'LCM is the smallest number divisible by both.' }, formula: '$\\text{LCM}: \\text{每个质因数取大的那个，乘起来}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
+    secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: '$\\text{LCM}: \\text{每个质因数取大的那个，乘起来}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
   },
   {
     id: 703, grade: 7, unitId: 0, order: 3,
@@ -81,7 +81,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '平分军粮', en: 'Dividing Grain Equally' },
     skillName: { zh: '因数分解术', en: 'Factorization' },
     skillSummary: { zh: '用 HCF 解决实际均分问题', en: 'Use HCF to solve real equal-sharing problems' },
-    story: { zh: '桃园起义前，需要把军粮和兵器分给各村。要保证每村分到的数量完全相同。', en: 'Before the uprising, grain and weapons must be distributed equally to villages.' },
+    story: { zh: '桃园起义前，需要把军粮和兵器分给各村。每村拿到的粮食数量要完全相同，兵器数量也要完全相同，且不能有剩余。最多能分给几个村？', en: 'Before the uprising, grain and weapons must be distributed to villages. Each village gets exactly the same amount of grain and weapons, with nothing left over. What is the maximum number of villages?' },
     description: { zh: '求最大公因数 (HCF)。', en: 'Find the Highest Common Factor (HCF).' },
     data: { numbers: [48, 60], generatorType: 'HCF_RANDOM' }, difficulty: 'Medium', reward: 65,
     kpId: 'kp-1.1-08', sectionId: 'number',
@@ -108,7 +108,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 用于解决平均分配问题。', en: 'HCF solves equal distribution problems.' }, formula: '$\\text{HCF}(a, b) = \\text{公共质因数（取小次幂）的乘积}$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
+    secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: '$\\text{HCF}(a, b) = \\text{公共质因数（取小次幂）的乘积}$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
   },
   // --- Year 7 Unit 0A: 行军算账·正负数篇 ---
   {
@@ -127,7 +127,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮："加一个负数 = 减去它的绝对值。$50 + (-30) = 50 - 30$"', en: 'Zhuge Liang: "Adding a negative = subtracting its absolute value. $50 + (-30) = 50 - 30$"' }, hint: { zh: '正数表示增加，负数表示减少\n加负数就是减去', en: 'Positive = gain, negative = loss\nAdding negative = subtracting' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮："$50 - 30 = 20$！还剩 20 袋粮草。"', en: 'Zhuge Liang: "$50 - 30 = 20$! 20 bags remaining."' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '加一个负数等于减去它的绝对值。', en: 'Adding a negative equals subtracting its absolute value.' }, formula: '$a + (-b) = a - b$', tips: [{ zh: '诸葛亮提示：知彼知己，粮草先行。', en: 'Zhuge Liang Tip: Know your supplies before you march.' }] }
+    secret: { concept: { zh: '加一个负数等于减去它的绝对值；负负得负，两个亏损叠加。', en: 'Adding a negative equals subtracting its absolute value; two negatives compound the loss.' }, formula: '$a + (-b) = a - b$', tips: [{ zh: '诸葛亮提示：知彼知己，粮草先行。', en: 'Zhuge Liang Tip: Know your supplies before you march.' }] }
   },
   {
     id: 705, grade: 7, unitId: 0, order: 5,
@@ -183,7 +183,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '关羽："$\\frac{1}{3} = \\frac{4}{12}$，$\\frac{1}{4} = \\frac{3}{12}$"', en: 'Guan Yu: "$\\frac{1}{3} = \\frac{4}{12}$, $\\frac{1}{4} = \\frac{3}{12}$"' }, hint: { zh: '分子分母同乘以相同的数\n$\\frac{1}{3} \\times \\frac{4}{4} = \\frac{4}{12}$', en: 'Multiply top and bottom by the same number\n$\\frac{1}{3} \\times \\frac{4}{4} = \\frac{4}{12}$' }, highlightField: 'ans' },
       { text: { zh: '关羽："$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"', en: 'Guan Yu: "$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '异分母分数相加，先通分再加。', en: 'To add fractions with different denominators, find a common denominator first.' }, formula: '$\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd}$', tips: [{ zh: '关羽提示：合兵一处，粮草先算。', en: 'Guan Yu Tip: Before merging troops, count the grain.' }] }
+    secret: { concept: { zh: '异分母分数相加：先通分（找 LCD），再加分子，最后约分。', en: 'Adding fractions with different denominators: find LCD, add numerators, then simplify.' }, formula: '$\\text{异分母分数相加：先通分（找 LCD），再加分子，最后约分}$', tips: [{ zh: '关羽提示：合兵一处，粮草先算。', en: 'Guan Yu Tip: Before merging troops, count the grain.' }] }
   },
   {
     id: 708, grade: 7, unitId: 0, order: 8,
@@ -202,7 +202,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮："$\\frac{3}{4} = \\frac{9}{12}$，$\\frac{1}{6} = \\frac{2}{12}$"', en: 'Zhuge Liang: "$\\frac{3}{4} = \\frac{9}{12}$, $\\frac{1}{6} = \\frac{2}{12}$"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮："$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"', en: 'Zhuge Liang: "$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '异分母分数相减，通分后减分子。', en: 'Subtracting fractions: find LCD, then subtract numerators.' }, formula: '$\\frac{a}{b} - \\frac{c}{d} = \\frac{ad - bc}{bd}$', tips: [{ zh: '诸葛亮提示：粮草不可不算，算清方能持久。', en: 'Zhuge Liang Tip: Always track your supplies — accurate counts sustain campaigns.' }] }
+    secret: { concept: { zh: '异分母分数相减：通分后减分子，最后约分。', en: 'Subtracting fractions: find LCD, subtract numerators, then simplify.' }, formula: '$\\text{异分母分数相减：先通分（找 LCD），再减分子，最后约分}$', tips: [{ zh: '诸葛亮提示：粮草不可不算，算清方能持久。', en: 'Zhuge Liang Tip: Always track your supplies — accurate counts sustain campaigns.' }] }
   },
   {
     id: 709, grade: 7, unitId: 0, order: 9,
@@ -256,39 +256,38 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-2.1-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '诸葛亮：三位将军要平分美酒。总酒量减去已分的 ${a}$ 坛，剩下的就是每人的量 $x$', en: 'Zhuge Liang: "Three brothers share wine. Total minus the ${a}$ jars already set aside — the rest is each person\'s share $x$"' },
-        hint: { zh: '方程 $x + {a} = {result}$ 的意思是：\n每人的酒 $x$ 加上已留出的 {a} 坛 = 总共 {result} 坛', en: 'The equation $x + {a} = {result}$ means:\nEach share $x$ plus {a} jars set aside = {result} total' },
+        text: { zh: '诸葛亮：三位将军平分美酒——总共 {result} 坛，已留出 {a} 坛作祭酒，剩下的 $x$ 坛三人平分', en: 'Zhuge Liang: "Three brothers share wine — {result} jars total, {a} set aside for the ceremony, the remaining $x$ jars split three ways"' },
+        hint: { zh: '方程 $x + {a} = {result}$ 的意思是：每人的酒 $x$，加上已留出的 {a} 坛，等于总共 {result} 坛', en: 'Equation $x + {a} = {result}$ means: each share $x$ plus {a} set aside = {result} total' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：要找到 $x$，就要让它单独在等号一边。现在 $x$ 旁边多了个 $+ {a}$，要把它"移走"', en: 'Zhuge Liang: "To find $x$, we need it alone on one side. Right now there\'s a $+ {a}$ next to $x$ — we need to remove it"' },
-        hint: { zh: '为什么？只有 $x$ 单独在一边时，我们才能直接看出每人分几坛', en: 'Why? Only when $x$ is alone on one side can we directly see each person\'s share' },
+        text: { zh: '诸葛亮：要找到 $x$，就要让它单独在等号左边。现在 $x$ 旁边多了个 $+{a}$，要把它"移走"', en: 'Zhuge Liang: "To find $x$, get it alone on one side. There\'s a $+{a}$ next to it — we need to remove it"' },
+        hint: { zh: '只有 $x$ 单独在一边，才能直接看出每人分几坛', en: 'Only when $x$ is alone can we directly see each person\'s share' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：怎么去掉"加 {a}"？用反操作——减去 {a}', en: 'Zhuge Liang: "How to remove \'plus {a}\'? Use the opposite — subtract {a}"' },
-        hint: { zh: '加法的反操作是减法\n加了 {a} 再减 {a}，就被抵消了', en: 'The opposite of addition is subtraction\nAdd {a} then subtract {a} — they cancel out' },
+        text: { zh: '诸葛亮：怎么移走"$+{a}$"？用它的反操作——减去 {a}', en: 'Zhuge Liang: "How to remove \'+{a}\'? Use the opposite — subtract {a}"' },
+        hint: { zh: '加法的反操作是减法。加了 {a} 再减 {a}，刚好抵消', en: 'The opposite of addition is subtraction. Add {a} then subtract {a} — they cancel' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：但是！等式就像天平，两边必须做同样的事', en: 'Zhuge Liang: "But! An equation is like a balance scale — both sides must be treated equally"' },
-        hint: { zh: '只减左边不行，右边也要减 {a}\n否则等式就不平衡了', en: 'Can\'t just subtract from the left — must also subtract {a} from the right\nOtherwise the equation breaks' },
+        text: { zh: '诸葛亮：等式就像天平——只对左边减，天平就倾斜了。左右两边必须同时减 {a}', en: 'Zhuge Liang: "An equation is like a balance — subtract from just one side and it tips. Both sides must subtract {a}"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：左边 $x + {a} - {a} = x$，加减抵消了！', en: 'Zhuge Liang: "Left side: $x + {a} - {a} = x$ — addition and subtraction cancel!"' },
+        text: { zh: '诸葛亮：左边 $x + {a} - {a} = x$，加减抵消了！', en: 'Zhuge Liang: "Left: $x + {a} - {a} = x$ — addition and subtraction cancel!"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：右边 ${result} - {a} = {x}$', en: 'Zhuge Liang: "Right side: ${result} - {a} = {x}$"' },
+        text: { zh: '诸葛亮：右边 ${result} - {a} = {x}$', en: 'Zhuge Liang: "Right: ${result} - {a} = {x}$"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：所以 $x = {x}$！每人分 {x} 坛美酒！', en: 'Zhuge Liang: "So $x = {x}$! Each brother gets {x} jars of wine!"' },
+        text: { zh: '诸葛亮：所以 $x = {x}$！每人分 {x} 坛美酒！', en: 'Zhuge Liang: "So $x = {x}$! Each brother gets {x} jars!"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：验算一下：${x} + {a} = {result}$ ✓ 酒量算对了，结义大吉！', en: 'Zhuge Liang: "Verify: ${x} + {a} = {result}$ ✓ The wine math checks out — the oath is sealed!"' },
+        text: { zh: '诸葛亮：验算：${x} + {a} = {result}$ ✓ 酒量算对，结义大吉！', en: 'Zhuge Liang: "Verify: ${x} + {a} = {result}$ ✓ Wine math correct — the oath is sealed!"' },
         highlightField: 'x'
       }
     ],
@@ -322,8 +321,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '关羽：等式两边都要除以 {a}', en: 'Guan Yu: "Divide both sides by {a}"' },
-        hint: { zh: '为什么两边都要除？等式就像天平——只对一边操作，天平就倾斜了，等式就不成立了', en: 'Why divide both sides? An equation is like a balance scale — operating on only one side tips it over, and the equation breaks' },
+        text: { zh: '关羽：等式就像天平——只对一边除，天平就倾斜了。两边必须同时除以 {a}，等式才依然成立', en: 'Guan Yu: "An equation is like a balance — divide just one side and it tips. Both sides must be divided by {a} to stay equal"' },
         highlightField: 'x'
       },
       {
@@ -368,8 +366,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '曹操：总量除以营数，就是每营的量。两边同时除以 {a}', en: 'Cao Cao: "Total divided by number of camps = per-camp amount. Divide both sides by {a}"' },
-        hint: { zh: '为什么两边都要除？\n等式像天平，两边做同样的事才能保持平衡', en: 'Why divide both sides?\nAn equation is like scales — both sides need the same operation to stay balanced' },
+        text: { zh: '曹操：要把 $x$ 找出来，得去掉"乘以 {a}"——两边同时除以 {a}', en: 'Cao Cao: "To find $x$, remove \'times {a}\' — divide both sides by {a}"' },
+        hint: { zh: '为什么两边都要除？等式像天平，只对一边动，两边就不再相等了', en: 'Why divide both sides? An equation is like scales — operate on just one side and they\'re no longer equal' },
         highlightField: 'x'
       },
       {
@@ -381,7 +379,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '曹操：$x = {x}$！每营 {x} 斛粮草，分配完毕！', en: 'Cao Cao: "$x = {x}$! {x} units per camp — distribution complete!"' },
+        text: { zh: '曹操：$x = {x}$！每营 {x} 斛粮草', en: 'Cao Cao: "$x = {x}$! {x} units per camp"' },
+        hint: { zh: '注意：这里的结果是"比例均等"的分配，不是随意猜测——这就是用比例关系建模的力量', en: 'Note: this result is proportional distribution, not guessing — this is the power of ratio modeling' },
         highlightField: 'x'
       },
       {
@@ -389,7 +388,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '比例是代数的基础。', en: 'Ratios are the foundation of algebra.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '关羽提示：公平分配，方能稳定军心。', en: 'Guan Yu Tip: Fair distribution keeps the army stable.' }] }
+    secret: { concept: { zh: '比例关系建模：总量 = 份数 x 每份，再用除法求每份。', en: 'Proportional modeling: total = parts x each, use division to find each part.' }, formula: '$ax = b \\Rightarrow x = b/a$（比例建模：总量 = 份数 × 每份）', tips: [{ zh: '关羽提示：公平分配，方能稳定军心。', en: 'Guan Yu Tip: Fair distribution keeps the army stable.' }] }
   },
   {
     id: 722, grade: 7, unitId: 2, order: 2,
@@ -409,7 +408,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '张飞：每村出的人就是 $x$，总人数除以村数就行了', en: 'Zhang Fei: "Each village\'s share is $x$ — just divide total by number of villages"' },
+        text: { zh: '张飞：$x$ 被 {a} 乘着——怎么把 $x$ 单独找出来？', en: 'Zhang Fei: "$x$ is multiplied by {a} — how do we isolate $x$?"' },
         highlightField: 'x'
       },
       {
@@ -426,7 +425,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '除法是乘法的逆运算。', en: 'Division is the inverse of multiplication.' }, formula: '$x = \\frac{b}{a}$', tips: [{ zh: '张昭提示：内政管理，贵在精准。', en: 'Zhang Zhao Tip: Internal management relies on precision.' }] }
+    secret: { concept: { zh: '除法是乘法的逆运算：知道总量和份数，就能求每份。', en: 'Division is the inverse of multiplication: knowing total and parts, find each part.' }, formula: '$x = \\frac{b}{a}$', tips: [{ zh: '张昭提示：内政管理，贵在精准。', en: 'Zhang Zhao Tip: Internal management relies on precision.' }] }
   },
   {
     id: 731, grade: 7, unitId: 3, order: 1,
@@ -445,12 +444,13 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '吕布：虎牢关城墙一侧角度 ${angle}^\\circ$，要在另一侧布置弩床', en: 'Lu Bu: "The wall angle at Hulao Pass is ${angle}^\\circ$. We need to place a ballista on the other side"' },
+        text: { zh: '吕布：虎牢关城墙是一条直线，总角度是 $180°$。一侧已知 ${angle}°$，另一侧就是剩下的部分', en: 'Lu Bu: "The wall at Hulao Pass is a straight line — total angle $180°$. One side is ${angle}°$, the other is the remainder"' },
+        hint: { zh: '一条直线的角度永远是 $180°$——这是几何的基本规则', en: 'A straight line always measures $180°$ — this is a fundamental rule of geometry' },
         highlightField: 'x'
       },
       {
-        text: { zh: '吕布：城墙是一条直线，直线的角度是 $180^\\circ$。两侧的角加起来就是 $180^\\circ$，这叫做"补角"', en: 'Lu Bu: "The wall is a straight line — $180^\\circ$. The angles on both sides add up to $180^\\circ$ — these are called supplementary angles"' },
-        hint: { zh: '一条直线的角度是 $180^\\circ$\n城墙是直的，两侧角加起来刚好 $180^\\circ$', en: 'A straight line measures $180^\\circ$\nThe wall is straight, so both sides add up to $180^\\circ$' },
+        text: { zh: '吕布：像这样"两个角加起来等于 $180°$"，就叫互为"补角"', en: 'Lu Bu: "When two angles add up to $180°$, they are called supplementary angles"' },
+        hint: { zh: '补角不一定要紧靠在一起，只要两角之和为 $180°$ 就互为补角', en: 'Supplementary angles don\'t have to be next to each other — they just need to sum to $180°$' },
         highlightField: 'x'
       },
       {
@@ -496,12 +496,12 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺：已知一角 ${angle}^\\circ$，它和 $x$ 加起来等于 $90^\\circ$，所以 ${angle} + x = 90$', en: 'Gao Shun: "One angle is ${angle}^\\circ$, it and $x$ add up to $90^\\circ$, so ${angle} + x = 90$"' },
+        text: { zh: '高顺：写成方程：${angle} + x = 90$', en: 'Gao Shun: "Write the equation: ${angle} + x = 90$"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺：怎么算 $x$？用总角度 $90$ 减去已知的 ${angle}$', en: 'Gao Shun: "How to find $x$? Subtract the known ${angle}$ from the total $90$"' },
-        hint: { zh: '因为两者加起来必须等于 $90$，知道一个就能算另一个', en: 'Because the two must add up to $90$ — knowing one lets you find the other' },
+        text: { zh: '高顺：怎么算 $x$？用总角度 $90$ 减去已知的 ${angle}$——总和已知，去掉已知的，剩下就是未知的', en: 'Gao Shun: "How to find $x$? Subtract known ${angle}$ from total $90$ — total is known, remove the known part, the rest is unknown"' },
+        hint: { zh: '和补角一样的思路：$90 - {angle} = ?$', en: 'Same idea as supplementary angles: $90 - {angle} = ?$' },
         highlightField: 'x'
       },
       {
@@ -509,7 +509,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺：交叉火力角度 ${ans}^\\circ$！验算：${angle} + {ans} = 90$ ✓ 陷阵营，出击！', en: 'Gao Shun: "Crossfire angle ${ans}^\\circ$! Verify: ${angle} + {ans} = 90$ ✓ Camp Crushers, attack!"' },
+        text: { zh: '高顺：交叉火力角度 ${ans}°$！验算：${angle} + {ans} = 90$ ✓ 陷阵营，出击！', en: 'Gao Shun: "Crossfire angle ${ans}°$! Verify: ${angle} + {ans} = 90$ ✓ Camp Crushers, attack!"' },
         highlightField: 'x'
       }
     ],
@@ -522,13 +522,13 @@ export const MISSIONS: Mission[] = [
     title: { zh: '八卦阵位', en: 'Eight Trigrams Position' },
     skillName: { zh: '角度推演术', en: 'Angle Deduction' },
     skillSummary: { zh: '已知一角求其补角或余角', en: 'Find supplementary or complementary angle' },
-    story: { zh: '布置八卦阵。已知阵法中心发出的两个方位角互为补角，其中一个是 ${angle}^\\circ$。', en: 'Setting up the Eight Trigrams. Two central angles are supplementary, one is ${angle}^\\circ$.' },
+    story: { zh: '诸葛亮布置八卦阵。阵眼向东射出一道令旗，方向角 ${angle}°$；另一道令旗与它正好成一条直线。', en: 'Zhuge Liang sets up the Eight Trigrams. A command flag points east at ${angle}°$; another flag forms a straight line with it.' },
     description: { zh: '求另一个角 $x$。', en: 'Find the other angle $x$.' },
     data: { angle: 45, total: 180, generatorType: 'ANGLES_RANDOM' }, difficulty: 'Medium', reward: 90,
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '诸葛亮：八卦阵的阵眼向两个方向发出指令，两个方向正好成一条直线。已知一个方向的角度是 ${angle}^\\circ$', en: 'Zhuge Liang: "The formation\'s center sends commands in two directions, forming a straight line. One direction\'s angle is ${angle}^\\circ$"' },
+        text: { zh: '诸葛亮：八卦阵中两道令旗方向合成一条直线，总角度是 $180°$。已知一角 ${angle}°$，另一角是阵法变换的关键', en: 'Zhuge Liang: "Two command flags form a straight line — total angle $180°$. One angle is ${angle}°$, the other is the key to the formation\'s transformation"' },
         highlightField: 'x'
       },
       {
@@ -542,6 +542,7 @@ export const MISSIONS: Mission[] = [
       },
       {
         text: { zh: '诸葛亮：$x = 180 - {angle} = {ans}$', en: 'Zhuge Liang: "$x = 180 - {angle} = {ans}$"' },
+        hint: { zh: '总和已知，去掉已知的，剩下就是未知的——和 Mission 731 一样的思路', en: 'Total is known, remove known part, rest is unknown — same idea as Mission 731' },
         highlightField: 'x'
       },
       {
@@ -549,7 +550,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '补角原理在阵法布局中的应用：两个方位角之和 = $180^\\circ$', en: 'Supplementary angle principle in formation layout: sum of two bearing angles = $180^\\circ$' }, formula: '$x = 180^\\circ - y$', tips: [{ zh: '诸葛亮提示：阵法变幻，皆在术数。', en: 'Zhuge Tip: The changes in the formation are all in the numbers.' }] }
+    secret: { concept: { zh: '补角的实际应用：方向角合成一条直线，互为补角。', en: 'Practical use of supplementary angles: direction angles forming a straight line are supplementary.' }, formula: '$x = 180° - y$', tips: [{ zh: '诸葛亮提示：阵法变幻，皆在术数。', en: 'Zhuge Tip: The changes in the formation are all in the numbers.' }] }
   },
 
   // --- Year 8: The Yellow Turban Rebellion (Expansion) ---
