@@ -112,7 +112,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '除法是乘法的逆运算。', en: 'Division is the inverse of multiplication.' }, formula: '$x = b / a$', tips: [{ zh: '张昭提示：内政管理，贵在精准。', en: 'Zhang Zhao Tip: Internal management relies on precision.' }] }
+    secret: { concept: { zh: '除法是乘法的逆运算。', en: 'Division is the inverse of multiplication.' }, formula: '$x = \\frac{b}{a}$', tips: [{ zh: '张昭提示：内政管理，贵在精准。', en: 'Zhang Zhao Tip: Internal management relies on precision.' }] }
   },
   {
     id: 731, grade: 7, unitId: 3, order: 1,
@@ -230,7 +230,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'b'
       }
     ],
-    secret: { concept: { zh: '斜率 $m$ 代表变化率，截距 $b$ 代表初始值。', en: 'Slope $m$ is the rate of change, intercept $b$ is the initial value.' }, formula: '$m = (y_2 - y_1)/(x_2 - x_1), b = y_1 - mx_1$', tips: [{ zh: '曹操提示：兵贵神速，路线必须精准！', en: 'Cao Tip: Speed is vital, the route must be precise!' }] }
+    secret: { concept: { zh: '斜率 $m$ 代表变化率，截距 $b$ 代表初始值。', en: 'Slope $m$ is the rate of change, intercept $b$ is the initial value.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1},\\quad b = y_1 - mx_1$', tips: [{ zh: '曹操提示：兵贵神速，路线必须精准！', en: 'Cao Tip: Speed is vital, the route must be precise!' }] }
   },
   {
     id: 812, grade: 8, unitId: 1, order: 2,
@@ -277,7 +277,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'm'
       },
       {
-        text: { zh: '曹仁："斜率公式：$m = (y_2 - y_1)/(x_2 - x_1) = (18-10)/(4-2)$"', en: 'Cao Ren: "Slope formula: $m = (y_2 - y_1)/(x_2 - x_1) = (18-10)/(4-2)$"' },
+        text: { zh: '曹仁："斜率公式：$m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{18-10}{4-2}$"', en: 'Cao Ren: "Slope formula: $m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{18-10}{4-2}$"' },
         hint: { zh: '8 除以 2 等于多少？', en: 'What is 8 divided by 2?' },
         highlightField: 'm'
       },
@@ -286,7 +286,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'b'
       }
     ],
-    secret: { concept: { zh: '斜率公式：$m = (y_2 - y_1)/(x_2 - x_1)$。', en: 'Slope formula: $m = (y_2 - y_1)/(x_2 - x_1)$.' }, formula: '$m = \\Delta y / \\Delta x$', tips: [{ zh: '曹仁提示：守如泰山，攻如雷霆。', en: 'Cao Ren Tip: Defend like a mountain, attack like thunder.' }] }
+    secret: { concept: { zh: '斜率公式：$m = \\frac{y_2 - y_1}{x_2 - x_1}$。', en: 'Slope formula: $m = \\frac{y_2 - y_1}{x_2 - x_1}$.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1},\\quad b = y_1 - mx_1$', tips: [{ zh: '曹仁提示：守如泰山，攻如雷霆。', en: 'Cao Ren Tip: Defend like a mountain, attack like thunder.' }] }
   },
   {
     id: 821, grade: 8, unitId: 2, order: 1,

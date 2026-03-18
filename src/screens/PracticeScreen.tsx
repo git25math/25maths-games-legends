@@ -15,6 +15,7 @@ import { CharacterAvatar } from '../components/CharacterAvatar';
 import { SkillBadgeCard } from '../components/SkillBadgeCard';
 import { CalculatorWidget } from '../components/Calculator';
 import { AnimatedCoordinatePlane } from '../components/diagrams/AnimatedCoordinatePlane';
+import { AnimatedQuadraticPlane } from '../components/diagrams/AnimatedQuadraticPlane';
 import { useAudio } from '../hooks/useAudio';
 
 type PracticePhase = 'green' | 'amber' | 'red';
@@ -269,17 +270,37 @@ export const PracticeScreen = ({
               <LatexText text={descText} />
             </div>
 
-            {/* Visual diagram — animated for LINEAR in Green phase */}
-            {currentPhase === 'green' && currentMission.type === 'LINEAR' && currentMission.data?.points ? (
+            {/* Visual diagram — animated for LINEAR/QUADRATIC in Green phase, static in Amber */}
+            {(currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'LINEAR' && currentMission.data?.points ? (
               <AnimatedCoordinatePlane
-                step={tutorialStep}
+                step={currentPhase === 'amber' ? 999 : tutorialStep}
                 points={currentMission.data.points}
                 m={currentMission.data.points ? (currentMission.data.points[1][1] - currentMission.data.points[0][1]) / (currentMission.data.points[1][0] - currentMission.data.points[0][0]) : undefined}
                 b={currentMission.data.points ? currentMission.data.points[0][1] - ((currentMission.data.points[1][1] - currentMission.data.points[0][1]) / (currentMission.data.points[1][0] - currentMission.data.points[0][0])) * currentMission.data.points[0][0] : undefined}
               />
-            ) : (
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'QUADRATIC' && currentMission.data?.p1 ? (
+              (() => {
+                const p1 = currentMission.data!.p1 as [number, number];
+                const p2 = currentMission.data!.p2 as [number, number];
+                const isCal = currentMission.topic === 'Calculus';
+                const cVal = isCal ? 0 : p1[1];
+                const aVal = isCal
+                  ? (p2[0] !== 0 ? -p2[1] / (p2[0] * p2[0]) : 1)
+                  : (p2[0] !== 0 ? (p2[1] - cVal) / (p2[0] * p2[0]) : 1);
+                const bVal = isCal && p2[0] !== 0 ? 2 * p2[1] / p2[0] : 0;
+                return (
+                  <AnimatedQuadraticPlane
+                    step={currentPhase === 'amber' ? 999 : tutorialStep}
+                    points={[p1, p2]}
+                    a={aVal}
+                    b={bVal}
+                    c={cVal}
+                  />
+                );
+              })()
+            ) : currentPhase !== 'red' ? (
               <VisualData mission={currentMission} lang={lang} />
-            )}
+            ) : null}
 
             {/* Green phase: show formula in left panel as reference */}
             {currentPhase === 'green' && (

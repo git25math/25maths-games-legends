@@ -511,9 +511,45 @@ export function generateLinearMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「斜率 $m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = ${m}$」`, en: `${narrator}: "Slope $m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = ${m}$"` }, highlightField: 'm' },
-    { text: { zh: `${narrator}：「$m = ${m}$，代入 $b = y_1 - mx_1 = ${y1} - ${m} \\times (${x1}) = ${b}$」`, en: `${narrator}: "$m = ${m}$, substitute $b = y_1 - mx_1 = ${y1} - ${m} \\times (${x1}) = ${b}$"` }, highlightField: 'b' },
-    { text: { zh: `${narrator}：「直线方程 $y = ${m}x ${b >= 0 ? '+' : ''} ${b}$」`, en: `${narrator}: "Line equation $y = ${m}x ${b >= 0 ? '+' : ''} ${b}$"` }, highlightField: 'b' },
+    {
+      text: {
+        zh: `${narrator}：「斜率的含义：$\\text{gradient}(m) = \\frac{y\\text{的变化值}}{x\\text{的变化值}}$」`,
+        en: `${narrator}: "What is gradient? $\\text{gradient}(m) = \\frac{\\text{change in } y}{\\text{change in } x}$"`,
+      },
+      hint: {
+        zh: '斜率就是"y 变了多少"除以"x 变了多少"',
+        en: 'Gradient is "how much y changes" divided by "how much x changes"',
+      },
+      highlightField: 'm',
+    },
+    {
+      text: {
+        zh: `${narrator}：「用坐标表示：$m = \\frac{y_2 - y_1}{x_2 - x_1}$」`,
+        en: `${narrator}: "In coordinates: $m = \\frac{y_2 - y_1}{x_2 - x_1}$"`,
+      },
+      highlightField: 'm',
+    },
+    {
+      text: {
+        zh: `${narrator}：「代入 A(${x1}, ${y1}) 和 B(${x2}, ${y2})：$m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$」`,
+        en: `${narrator}: "Substitute A(${x1}, ${y1}) and B(${x2}, ${y2}): $m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$"`,
+      },
+      highlightField: 'm',
+    },
+    {
+      text: {
+        zh: `${narrator}：「求截距：$b = y_1 - m \\times x_1 = ${y1} - ${m} \\times (${x1}) = ${b}$」`,
+        en: `${narrator}: "Find intercept: $b = y_1 - m \\times x_1 = ${y1} - ${m} \\times (${x1}) = ${b}$"`,
+      },
+      highlightField: 'b',
+    },
+    {
+      text: {
+        zh: `${narrator}：「直线方程：$y = ${m}x ${b >= 0 ? '+' : ''} ${b}$」`,
+        en: `${narrator}: "Line equation: $y = ${m}x ${b >= 0 ? '+' : ''} ${b}$"`,
+      },
+      highlightField: 'b',
+    },
   ];
 
   return {
