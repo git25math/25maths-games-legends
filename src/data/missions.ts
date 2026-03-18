@@ -361,8 +361,8 @@ export const MISSIONS: Mission[] = [
     title: { zh: '桃园结义', en: 'Oath in the Garden' },
     skillName: { zh: '等式平衡术', en: 'Equation Balance' },
     skillSummary: { zh: '等式两边同时加减同一个数，等号保持不变', en: 'Add or subtract the same number from both sides, the equation stays balanced' },
-    story: { zh: '桃园结义，刘备备了 {result} 坛酒。祭天用了 {a} 坛，还剩几坛？', en: 'At the Peach Garden oath, Liu Bei prepared {result} jars of wine. {a} were used for the ceremony — how many remain?' },
-    description: { zh: '解方程 $x+{a}={result}$，求 $x$。', en: 'Solve $x+{a}={result}$ for $x$.' },
+    story: { zh: '桃园三结义——刘关张焚香祭天。刘备备了 {result} 坛桃花酿，祭天仪式要用 {a} 坛。三兄弟要算清楚：仪式之后还能剩几坛庆功？', en: 'The Peach Garden Oath — Liu Bei, Guan Yu, and Zhang Fei burn incense to heaven. Liu Bei prepared {result} jars of peach wine. The ceremony needs {a} jars. The brothers must figure out: how many jars remain for the celebration?' },
+    description: { zh: '解方程 $x+{a}={result}$，求剩余的酒坛数 $x$。', en: 'Solve $x+{a}={result}$. Find the remaining jars $x$.' },
     data: { x: 7, a: 5, result: 12, generatorType: 'SIMPLE_EQ_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-2.1-01', sectionId: 'algebra',
     tutorialSteps: [
@@ -397,8 +397,8 @@ export const MISSIONS: Mission[] = [
     title: { zh: '招兵买马', en: 'Recruiting Soldiers' },
     skillName: { zh: '方程破解术', en: 'Equation Solver' },
     skillSummary: { zh: '等式两边同时乘除同一个非零数', en: 'Multiply or divide both sides by the same non-zero number' },
-    story: { zh: '为了起义，需要购买兵器。已知 {a} 把长剑的价格是 {result} 金，即 ${a}x={result}$。', en: 'To start the rebellion, weapons are needed. {a} swords cost {result} gold: ${a}x={result}$.' },
-    description: { zh: '解方程 ${a}x={result}$，求单价 $x$。', en: 'Solve ${a}x={result}$ for the unit price $x$.' },
+    story: { zh: '结义之后，三兄弟要招兵买马。关羽去铁匠铺买剑——{a} 把青龙剑总价 {result} 金。铁匠不肯还价，关羽得算清楚每把多少钱，免得被坑！', en: 'After the oath, the brothers arm up. Guan Yu visits the blacksmith — {a} Green Dragon swords cost {result} gold total. The smith won\'t haggle, so Guan Yu must calculate the price per sword!' },
+    description: { zh: '解方程 ${a}x={result}$，求每把剑的单价 $x$。', en: 'Solve ${a}x={result}$ for the price per sword $x$.' },
     data: { x: 5, a: 3, result: 15, generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 60,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
@@ -537,8 +537,8 @@ export const MISSIONS: Mission[] = [
     title: { zh: '军饷提成', en: 'Military Stipend' },
     skillName: { zh: '百分比计算术', en: 'Percentage Calculation' },
     skillSummary: { zh: 'p% of n = n × p/100', en: 'p% of n = n × p/100' },
-    story: { zh: '曹操规定军饷按百分比发放。算出实际该发多少金！', en: 'Cao Cao distributes stipends by percentage. Calculate the actual amount!' },
-    description: { zh: '计算百分比。', en: 'Calculate the percentage.' },
+    story: { zh: '曹操治军严明：本月军粮总计 {n} 石，前锋营立了战功，按规矩可以优先领取总粮草的 {pct}%。司库问曹操：到底拨多少石给前锋？', en: 'Cao Cao rules with discipline: this month\'s total grain is {n} units. The vanguard earned merit and gets {pct}% of the total supply first. The treasurer asks: how much goes to the vanguard?' },
+    description: { zh: '求 ${n}$ 的 ${pct}\\%$ 是多少。', en: 'Find ${pct}\\%$ of ${n}$.' },
     data: { n: 200, pct: 25, answer: 50, generatorType: 'PERCENTAGE_OF_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-1.12-02', sectionId: 'number',
     tutorialSteps: [
@@ -553,14 +553,18 @@ export const MISSIONS: Mission[] = [
     title: { zh: '粮价涨跌', en: 'Grain Price Change' },
     skillName: { zh: '百分比增减术', en: 'Percentage Increase/Decrease' },
     skillSummary: { zh: '增加 p% → 乘以 (1 + p/100)；减少 p% → 乘以 (1 - p/100)', en: 'Increase p% → multiply by (1+p/100); Decrease p% → multiply by (1-p/100)' },
-    story: { zh: '战乱导致粮价变动。算出涨价或降价后的新价格！', en: 'War causes grain price changes. Calculate the new price after increase or decrease!' },
-    description: { zh: '计算百分比增减后的结果。', en: 'Calculate the result after percentage change.' },
+    story: { zh: '曹操正在囤粮备战。探子来报：前方战区粮价涨了！原来每石 {initial} 金的粟米，现在贵了 {rate}。曹操必须快速算出新价格——是继续采购，还是另寻粮道？', en: 'Cao Cao is stockpiling grain for war. A spy reports: grain prices in the war zone have risen! Millet that cost {initial} gold per unit is now more expensive. Cao Cao must quickly calculate the new price — keep buying or find another route?' },
+    description: { zh: '计算百分比增减后的新价格。', en: 'Calculate the new price after percentage change.' },
     data: { initial: 200, rate: 0.2, years: 1, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-1.12-03', sectionId: 'number',
+    storyConsequence: {
+      correct: { zh: '曹操：算得好！知道了新价格，本相可以从容调度——从南方走水路运粮，成本更低！', en: 'Cao Cao: "Well calculated! Knowing the new price, I can reroute supplies by river from the south — cheaper!"' },
+      wrong: { zh: '曹操：算错了？军国大事岂能儿戏！重新算来！', en: 'Cao Cao: "Wrong?! Military affairs are no game! Calculate again!"' },
+    },
     tutorialSteps: [
       { text: { zh: '曹操：增加 20% 就是乘以 1.2', en: 'Cao Cao: "Increase 20% means multiply by 1.2"' }, hint: { zh: '$200 \\times (1 + 0.2) = 200 \\times 1.2 = 240$', en: '$200 \\times (1 + 0.2) = 200 \\times 1.2 = 240$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '增减百分比的关键是乘法因子：增加用 (1+r)，减少用 (1-r)。', en: 'The key to percentage change is the multiplier: increase (1+r), decrease (1-r).' }, formula: '$\\text{新值} = \\text{原值} \\times (1 \\pm r)$', tips: [{ zh: '曹操提示：涨跌之间，尽在掌控！', en: 'Cao Cao Tip: Master the rise and fall!' }] }
+    secret: { concept: { zh: '增减百分比的关键是乘法因子：增加用 (1+r)，减少用 (1-r)。', en: 'The key to percentage change is the multiplier: increase (1+r), decrease (1-r).' }, formula: '$\\text{新值} = \\text{原值} \\times (1 \\pm r)$', tips: [{ zh: '曹操提示：粮价涨跌关乎国运，算清楚才能决策！', en: 'Cao Cao Tip: Grain prices affect the nation — calculate clearly to decide wisely!' }] }
   },
   {
     id: 731, grade: 7, unitId: 3, order: 1,
@@ -710,15 +714,20 @@ export const MISSIONS: Mission[] = [
     title: { zh: '瞭望全景', en: 'Watchtower Panorama' },
     skillName: { zh: '周角计算术', en: 'Angles at a Point' },
     skillSummary: { zh: '围绕一点的所有角之和 = 360°', en: 'All angles around a point sum to 360°' },
-    story: { zh: '诸葛亮在瞭望台上标记各方向角度。绕一圈的总角度是 360°！', en: 'Zhuge Liang marks directional angles from the watchtower. A full turn is 360°!' },
+    story: { zh: '诸葛亮登上瞭望台，把四周分成几个监视区域。每个区域由不同的将领负责。已知其他区域的角度，只剩一个方向没有标注——那正是敌军最可能偷袭的方向！', en: 'Zhuge Liang climbs the watchtower and divides the surroundings into patrol sectors. Each sector is assigned to a general. All angles are marked except one — and that\'s exactly where the enemy is most likely to attack!' },
     description: { zh: '求围绕一点的未知角。', en: 'Find the missing angle around a point.' },
     data: { angle: 260, total: 360, angles: [120, 140], generatorType: 'ANGLES_POINT_RANDOM' }, difficulty: 'Easy', reward: 50,
+    storyConsequence: {
+      correct: { zh: '诸葛亮：好！$x$ 度方向正是敌军来路——立刻派赵云镇守此方！全方位无死角！', en: 'Zhuge Liang: "That $x°$ direction is the enemy\'s approach — send Zhao Yun to guard it immediately! Full 360° coverage, no blind spots!"' },
+      wrong: { zh: '诸葛亮：角度算错了...那个方向留出了漏洞，敌军趁夜偷袭！重新计算！', en: 'Zhuge Liang: "Wrong angle... that gap left a blind spot. The enemy attacked at night! Recalculate!"' },
+    },
     kpId: 'kp-4.3-02', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：绕一点一圈 = $360°$', en: 'Zhuge Liang: "All the way around a point = $360°$"' }, hint: { zh: '转一整圈回到原位就是 360°', en: 'A full rotation back to the start is 360°' }, highlightField: 'x' },
-      { text: { zh: '诸葛亮：$x = 360° - 120° - 140° = 100°$', en: 'Zhuge Liang: "$x = 360° - 120° - 140° = 100°$"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：想象你站在瞭望台正中央，转一整圈看遍所有方向', en: 'Zhuge Liang: "Imagine standing at the center of the watchtower, turning a full circle to see every direction"' }, hint: { zh: '面朝北 → 转向东 → 转向南 → 转向西 → 回到北\n一整圈 = $360°$\n\n所有监视区域的角度加起来，必须刚好等于 $360°$\n少一度都有盲区！', en: 'Face North → turn East → South → West → back to North\nOne full turn = $360°$\n\nAll patrol sector angles must add up to exactly $360°$\nEven 1° missing creates a blind spot!' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：已知的区域已经覆盖了多少度？', en: 'Zhuge Liang: "How many degrees are already covered?"' }, hint: { zh: '$120° + 140° = 260°$\n\n已覆盖 $260°$，总共需要 $360°$', en: '$120° + 140° = 260°$\n\nAlready covered $260°$, need $360°$ total' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：剩下的缺口就是未知角', en: 'Zhuge Liang: "The remaining gap is the unknown angle"' }, hint: { zh: '$x = 360° - 260° = 100°$\n\n这 $100°$ 的方向就是要重点防守的位置！', en: '$x = 360° - 260° = 100°$\n\nThis $100°$ direction is where we need the most defense!' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '围绕一点的所有角加起来等于 360°（一整圈）。', en: 'Angles around a point sum to 360° (a full turn).' }, formula: '$\\text{全部角之和} = 360°$', tips: [{ zh: '诸葛亮提示：知天知地，全景掌控！', en: 'Zhuge Liang Tip: Know all directions for full control!' }] }
+    secret: { concept: { zh: '围绕一点的所有角加起来等于 360°（一整圈）。少一度都是防御漏洞！', en: 'Angles around a point sum to 360° (a full turn). Even 1° missing is a gap in defense!' }, formula: '$\\text{全部角之和} = 360°$', tips: [{ zh: '诸葛亮提示：三百六十度无死角，方可高枕无忧！', en: 'Zhuge Liang Tip: Full 360° coverage — only then can you sleep soundly!' }] }
   },
   // --- Year 7 Unit 4: 行军数列·序列篇 ---
   {
