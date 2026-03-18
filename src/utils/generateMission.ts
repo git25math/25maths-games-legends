@@ -1057,10 +1057,55 @@ export function generateTrigonometryMission(template: Mission): Mission {
       zh: `已知角 $${angle}^\\circ$，对边 ${opposite}，求斜边 $c$。`,
       en: `Given angle $${angle}^\\circ$, opposite ${opposite}, find hypotenuse $c$.`,
     };
+    const sinValRounded = Math.round(sinVal * 10000) / 10000;
+    const hypRounded = Math.round(hyp * 10000) / 10000;
     const tutorialSteps = [
-      { text: { zh: `${narrator}：$\\sin(${angle}^\\circ)$ 联系对边和斜边`, en: `${narrator}: "$\\sin(${angle}^\\circ)$ connects opposite and hypotenuse"` }, highlightField: 'c' },
-      { text: { zh: `${narrator}：$c = ${opposite} / \\sin(${angle}^\\circ) = ${opposite} / ${Math.round(sinVal * 10000) / 10000}$`, en: `${narrator}: "$c = ${opposite} / \\sin(${angle}^\\circ) = ${opposite} / ${Math.round(sinVal * 10000) / 10000}$"` }, highlightField: 'c' },
-      { text: { zh: `${narrator}：$c = ${Math.round(hyp * 10000) / 10000}$！`, en: `${narrator}: "$c = ${Math.round(hyp * 10000) / 10000}$!"` }, highlightField: 'c' },
+      {
+        text: {
+          zh: `${narrator}：三角函数可以用来算直角三角形中的未知边长`,
+          en: `${narrator}: "Trig functions help us find unknown sides in a right triangle"`,
+        },
+        hint: {
+          zh: 'SOH-CAH-TOA 是记忆口诀\nSin = Opposite / Hypotenuse\nCos = Adjacent / Hypotenuse\nTan = Opposite / Adjacent',
+          en: 'SOH-CAH-TOA is the memory trick\nSin = Opposite / Hypotenuse\nCos = Adjacent / Hypotenuse\nTan = Opposite / Adjacent',
+        },
+        highlightField: 'c',
+      },
+      {
+        text: {
+          zh: `${narrator}：这里用 $\\sin$，因为已知对边 = ${opposite}，要求斜边 $c$`,
+          en: `${narrator}: "We use $\\sin$ because we know the opposite = ${opposite} and need hypotenuse $c$"`,
+        },
+        highlightField: 'c',
+      },
+      {
+        text: {
+          zh: `${narrator}：写出等式：$\\sin(${angle}^\\circ) = \\frac{\\text{opposite}}{\\text{hypotenuse}} = \\frac{${opposite}}{c}$`,
+          en: `${narrator}: "Write the equation: $\\sin(${angle}^\\circ) = \\frac{\\text{opposite}}{\\text{hypotenuse}} = \\frac{${opposite}}{c}$"`,
+        },
+        highlightField: 'c',
+      },
+      {
+        text: {
+          zh: `${narrator}：变形求 $c$：$c = \\frac{${opposite}}{\\sin(${angle}^\\circ)}$`,
+          en: `${narrator}: "Rearrange for $c$: $c = \\frac{${opposite}}{\\sin(${angle}^\\circ)}$"`,
+        },
+        highlightField: 'c',
+      },
+      {
+        text: {
+          zh: `${narrator}：代入计算：$c = \\frac{${opposite}}{${sinValRounded}} = ${hypRounded}$`,
+          en: `${narrator}: "Calculate: $c = \\frac{${opposite}}{${sinValRounded}} = ${hypRounded}$"`,
+        },
+        highlightField: 'c',
+      },
+      {
+        text: {
+          zh: `${narrator}：所以斜边 $c = ${hypRounded}$!`,
+          en: `${narrator}: "So the hypotenuse $c = ${hypRounded}$!"`,
+        },
+        highlightField: 'c',
+      },
     ];
     return { ...template, description, data: { angle, opposite, func: 'sin', generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
   }
@@ -1083,9 +1128,45 @@ export function generateTrigonometryMission(template: Mission): Mission {
       en: `Given opposite ${chosen.opp}, adjacent ${chosen.adj}, find angle $\\theta$.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：$\\tan(\\theta) = ${chosen.opp}/${chosen.adj}$`, en: `${narrator}: "$\\tan(\\theta) = ${chosen.opp}/${chosen.adj}$"` }, highlightField: 'angle' },
-      { text: { zh: `${narrator}：$\\theta = \\arctan(${chosen.opp / chosen.adj})$`, en: `${narrator}: "$\\theta = \\arctan(${chosen.opp / chosen.adj})$"` }, highlightField: 'angle' },
-      { text: { zh: `${narrator}：$\\theta = ${chosen.angle}^\\circ$！`, en: `${narrator}: "$\\theta = ${chosen.angle}^\\circ$!"` }, highlightField: 'angle' },
+      {
+        text: {
+          zh: `${narrator}：三角函数可以用来算直角三角形中的未知边长`,
+          en: `${narrator}: "Trig functions help us find unknown sides in a right triangle"`,
+        },
+        hint: {
+          zh: 'SOH-CAH-TOA 是记忆口诀\nSin = Opposite / Hypotenuse\nCos = Adjacent / Hypotenuse\nTan = Opposite / Adjacent',
+          en: 'SOH-CAH-TOA is the memory trick\nSin = Opposite / Hypotenuse\nCos = Adjacent / Hypotenuse\nTan = Opposite / Adjacent',
+        },
+        highlightField: 'angle',
+      },
+      {
+        text: {
+          zh: `${narrator}：已知对边和邻边，可以用 $\\tan$ 来求角度`,
+          en: `${narrator}: "Given opposite and adjacent sides, we can use $\\tan$ to find the angle"`,
+        },
+        highlightField: 'angle',
+      },
+      {
+        text: {
+          zh: `${narrator}：$\\tan(\\theta) = \\frac{\\text{opposite}}{\\text{adjacent}} = \\frac{${chosen.opp}}{${chosen.adj}}$`,
+          en: `${narrator}: "$\\tan(\\theta) = \\frac{\\text{opposite}}{\\text{adjacent}} = \\frac{${chosen.opp}}{${chosen.adj}}$"`,
+        },
+        highlightField: 'angle',
+      },
+      {
+        text: {
+          zh: `${narrator}：用反正切(arctan)求角度：$\\theta = \\tan^{-1}\\left(\\frac{${chosen.opp}}{${chosen.adj}}\\right) = \\tan^{-1}(${chosen.opp / chosen.adj})$`,
+          en: `${narrator}: "Use inverse tan (arctan) to find the angle: $\\theta = \\tan^{-1}\\left(\\frac{${chosen.opp}}{${chosen.adj}}\\right) = \\tan^{-1}(${chosen.opp / chosen.adj})$"`,
+        },
+        highlightField: 'angle',
+      },
+      {
+        text: {
+          zh: `${narrator}：所以 $\\theta = ${chosen.angle}^\\circ$!`,
+          en: `${narrator}: "So $\\theta = ${chosen.angle}^\\circ$!"`,
+        },
+        highlightField: 'angle',
+      },
     ];
     return { ...template, description, data: { opposite: chosen.opp, adjacent: chosen.adj, func: 'tan_inv', generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
   }
@@ -1370,9 +1451,45 @@ export function generateFuncValMission(template: Mission): Mission {
       en: `Find $y = ${m}x ${b >= 0 ? '+' : ''}${b}$ at $x=${x}$.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：$y = ${m}x ${b >= 0 ? '+' : ''}${b}$，代入 $x=${x}$`, en: `${narrator}: "$y = ${m}x ${b >= 0 ? '+' : ''}${b}$, substitute $x=${x}$"` }, highlightField: 'y' },
-      { text: { zh: `${narrator}：$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b} = ${m * x} ${b >= 0 ? '+' : ''}${b}$`, en: `${narrator}: "$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b} = ${m * x} ${b >= 0 ? '+' : ''}${b}$"` }, highlightField: 'y' },
-      { text: { zh: `${narrator}：$y = ${y}$！`, en: `${narrator}: "$y = ${y}$!"` }, highlightField: 'y' },
+      {
+        text: {
+          zh: `${narrator}：我们要计算函数在某一点的值`,
+          en: `${narrator}: "We need to calculate the value of a function at a specific point"`,
+        },
+        hint: {
+          zh: '函数就是一个"计算规则"——给它一个 x，它会算出一个 y',
+          en: 'A function is a "calculation rule" — give it an x, it produces a y',
+        },
+        highlightField: 'y',
+      },
+      {
+        text: {
+          zh: `${narrator}：函数是 $y = ${m}x ${b >= 0 ? '+' : ''}${b}$，要求 $x = ${x}$ 时 $y$ 是多少`,
+          en: `${narrator}: "The function is $y = ${m}x ${b >= 0 ? '+' : ''}${b}$, find $y$ when $x = ${x}$"`,
+        },
+        highlightField: 'y',
+      },
+      {
+        text: {
+          zh: `${narrator}：把 $x = ${x}$ 代入公式，就是把公式里的 $x$ 换成 ${x}\n$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b}$`,
+          en: `${narrator}: "Substitute $x = ${x}$ into the formula — replace $x$ with ${x}\n$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b}$"`,
+        },
+        highlightField: 'y',
+      },
+      {
+        text: {
+          zh: `${narrator}：先算乘法 $${m} \\times ${x} = ${m * x}$，再加上 ${b}\n$y = ${m * x} ${b >= 0 ? '+' : ''}${b} = ${y}$`,
+          en: `${narrator}: "First multiply $${m} \\times ${x} = ${m * x}$, then add ${b}\n$y = ${m * x} ${b >= 0 ? '+' : ''}${b} = ${y}$"`,
+        },
+        highlightField: 'y',
+      },
+      {
+        text: {
+          zh: `${narrator}：所以 $y = ${y}$!`,
+          en: `${narrator}: "So $y = ${y}$!"`,
+        },
+        highlightField: 'y',
+      },
     ];
     return { ...template, description, data: { m, b, x, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
   }
@@ -1387,9 +1504,52 @@ export function generateFuncValMission(template: Mission): Mission {
     zh: `求 $f(x) = ${a}x^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$ 的顶点 $t$。`,
     en: `Find vertex $t$ of $f(x) = ${a}x^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$.`,
   };
+  const negBCoeff = -bCoeff;
+  const twoA = 2 * a;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：$t = -b/(2a) = -${bCoeff}/(2 \\times ${a})$`, en: `${narrator}: "$t = -b/(2a) = -${bCoeff}/(2 \\times ${a})$"` }, highlightField: 't' },
-    { text: { zh: `${narrator}：$t = ${t}$！`, en: `${narrator}: "$t = ${t}$!"` }, highlightField: 't' },
+    {
+      text: {
+        zh: `${narrator}：求二次函数的顶点横坐标 $t$`,
+        en: `${narrator}: "Find the x-coordinate of the vertex, $t$"`,
+      },
+      hint: {
+        zh: '顶点是抛物线最高点或最低点的位置',
+        en: 'The vertex is the highest or lowest point of the parabola',
+      },
+      highlightField: 't',
+    },
+    {
+      text: {
+        zh: `${narrator}：函数 $f(x) = ${a}x^{2} ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$，顶点公式 $t = \\frac{-b}{2a}$`,
+        en: `${narrator}: "Function $f(x) = ${a}x^{2} ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$, vertex formula $t = \\frac{-b}{2a}$"`,
+      },
+      hint: {
+        zh: `这个公式告诉我们顶点在哪里\n其中 $a = ${a}$，$b = ${bCoeff}$`,
+        en: `This formula tells us where the vertex is\nHere $a = ${a}$, $b = ${bCoeff}$`,
+      },
+      highlightField: 't',
+    },
+    {
+      text: {
+        zh: `${narrator}：代入：$t = \\frac{-(${bCoeff})}{2 \\times ${a}}$`,
+        en: `${narrator}: "Substitute: $t = \\frac{-(${bCoeff})}{2 \\times ${a}}$"`,
+      },
+      highlightField: 't',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算：$t = \\frac{${negBCoeff}}{2 \\times ${a}} = \\frac{${negBCoeff}}{${twoA}} = ${t}$`,
+        en: `${narrator}: "Calculate: $t = \\frac{${negBCoeff}}{2 \\times ${a}} = \\frac{${negBCoeff}}{${twoA}} = ${t}$"`,
+      },
+      highlightField: 't',
+    },
+    {
+      text: {
+        zh: `${narrator}：所以顶点横坐标 $t = ${t}$!`,
+        en: `${narrator}: "So the vertex x-coordinate is $t = ${t}$!"`,
+      },
+      highlightField: 't',
+    },
   ];
   return { ...template, description, data: { a, b: bCoeff, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
 }

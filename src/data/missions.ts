@@ -832,7 +832,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: '中位数是将数据按大小排列后处于中间位置的数。', en: 'Median is the middle value when data is sorted.' }, formula: 'Sorted: 1.7, 1.8, 1.8, 1.9, 2.0', tips: [{ zh: '典韦提示：俺这身高，在队里也是数一数二的！', en: 'Dian Wei Tip: My height is among the top in the squad!' }] }
+    secret: { concept: { zh: '中位数是将数据按大小排列后处于中间位置的数。', en: 'Median is the middle value when data is sorted.' }, formula: '$\\text{Median} = \\text{middle value after sorting}$', tips: [{ zh: '典韦提示：俺这身高，在队里也是数一数二的！', en: 'Dian Wei Tip: My height is among the top in the squad!' }] }
   },
 
   // --- Year 9: The Battle of Guandu (Strategy) ---
