@@ -223,7 +223,7 @@ export const MISSIONS: Mission[] = [
   },
   // --- Year 7 Unit 0A 续: 整数乘除 ---
   {
-    id: 706, grade: 7, unitId: 0, order: 6.5,
+    id: 693, grade: 7, unitId: 0, order: 6.5,
     unitTitle: { zh: "Unit 0A: 行军算账·正负数篇", en: "Unit 0A: March Accounting — Integers" },
     topic: 'Algebra', type: 'INTEGER_MUL',
     title: { zh: '敌退我进', en: 'Enemy Retreats, We Advance' },
@@ -317,7 +317,7 @@ export const MISSIONS: Mission[] = [
   },
   // --- Year 7 Unit 0B 续: 分数↔小数↔百分比 桥梁 ---
   {
-    id: 710, grade: 7, unitId: 0, order: 10.5,
+    id: 694, grade: 7, unitId: 0, order: 10.5,
     unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },
     topic: 'Algebra', type: 'FDP_CONVERT',
     title: { zh: '情报三译', en: 'Intelligence in Three Formats' },
@@ -407,7 +407,7 @@ export const MISSIONS: Mission[] = [
   },
   // --- Year 7 Unit 1 前置: 运算顺序 BODMAS ---
   {
-    id: 710, grade: 7, unitId: 1, order: 0,
+    id: 695, grade: 7, unitId: 1, order: 0,
     unitTitle: { zh: "Unit 1: 结义与代数入门", en: "Unit 1: Oath & Intro to Algebra" },
     topic: 'Algebra', type: 'BODMAS',
     title: { zh: '军令如山', en: 'Orders of Command' },
@@ -494,6 +494,24 @@ export const MISSIONS: Mission[] = [
       }
     ],
     secret: { concept: { zh: '等式两边同时乘除同一个非零数，等式依然成立。', en: 'Multiplying or dividing both sides by the same non-zero number keeps the equation balanced.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '关羽提示：买东西一定要算清楚！', en: 'Guan Yu Tip: Always count correctly when shopping!' }] }
+  },
+  // --- Year 7 Unit 1 续: 两步方程 ---
+  {
+    id: 696, grade: 7, unitId: 1, order: 2.5,
+    unitTitle: { zh: "Unit 1: 结义与代数入门", en: "Unit 1: Oath & Intro to Algebra" },
+    topic: 'Algebra', type: 'SIMPLE_EQ',
+    title: { zh: '攻城双关', en: 'Two-Gate Siege' },
+    skillName: { zh: '两步方程术', en: 'Two-Step Equations' },
+    skillSummary: { zh: '两步方程 ax+b=c：先减 b，再除以 a——像拆礼物，先外层后内层', en: 'Two-step equation ax+b=c: subtract b first, then divide by a — unwrap layer by layer' },
+    story: { zh: '攻城时要破两道关卡：外门和内门。两步方程也一样——$x$ 被两层运算包裹，要一层一层拆开。先拆外层（加减），再拆内层（乘除）！', en: 'Siege requires breaking two gates: outer and inner. Two-step equations are the same — $x$ is wrapped in two operations. Remove the outer layer (add/sub) first, then inner (mul/div)!' },
+    description: { zh: '解两步方程 ${a}x+{b}={result}$，求 $x$。', en: 'Solve ${a}x+{b}={result}$ for $x$.' },
+    data: { x: 5, a: 3, b: 4, result: 19, left: '3x + 4', right: '19', generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM' }, difficulty: 'Medium', reward: 65,
+    kpId: 'kp-2.5-02', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：$3x + 4 = 19$——$x$ 被两层包裹，先拆外层', en: 'Zhuge Liang: "$3x + 4 = 19$ — $x$ is double-wrapped, remove outer layer first"' }, hint: { zh: '外层是 $+4$，用反操作 $-4$ 消除\n$3x + 4 - 4 = 19 - 4$\n$3x = 15$', en: 'Outer layer: $+4$, reverse: $-4$\n$3x + 4 - 4 = 19 - 4$\n$3x = 15$' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：内层是 $\\times 3$，用反操作 $\\div 3$ 消除', en: 'Zhuge Liang: "Inner layer: $\\times 3$, reverse: $\\div 3$"' }, hint: { zh: '$3x \\div 3 = 15 \\div 3$\n$x = 5$\n\n验算：$3 \\times 5 + 4 = 15 + 4 = 19$ ✓', en: '$3x \\div 3 = 15 \\div 3$\n$x = 5$\n\nCheck: $3 \\times 5 + 4 = 15 + 4 = 19$ ✓' }, highlightField: 'x' },
+    ],
+    secret: { concept: { zh: '两步方程：先去掉加减（外层），再去掉乘除（内层）。顺序不能反！', en: 'Two-step equations: remove add/sub (outer) first, then mul/div (inner). Order matters!' }, formula: '$ax + b = c \\Rightarrow x = \\frac{c - b}{a}$', tips: [{ zh: '诸葛亮提示：攻城先破外门，解方程先去外层！', en: 'Zhuge Liang Tip: Siege the outer gate first, solve outer operations first!' }] }
   },
   // --- Year 7 Unit 1 续: 代入求值 ---
   {
@@ -848,6 +866,23 @@ export const MISSIONS: Mission[] = [
     ],
     secret: { concept: { zh: '通项公式让你不必逐项数，直接跳到第 n 项。', en: 'The nth term formula lets you jump directly to any term without counting one by one.' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '赵云提示：兵贵神速，公式比逐个数快！', en: 'Zhao Yun Tip: Speed matters — formulas beat counting one by one!' }] }
   },
+  // --- Year 7 Unit 4 续: 递减数列（跨单元：负数+数列）---
+  {
+    id: 743, grade: 7, unitId: 4, order: 3,
+    unitTitle: { zh: "Unit 4: 行军数列·序列篇", en: "Unit 4: March Sequence — Sequences" },
+    topic: 'Algebra', type: 'ARITHMETIC',
+    title: { zh: '粮草日减', en: 'Dwindling Supplies' },
+    skillName: { zh: '递减数列术', en: 'Decreasing Sequences' },
+    skillSummary: { zh: '公差为负数——每一项比前一项少，数列在递减', en: 'Negative common difference — each term is smaller, sequence decreases' },
+    story: { zh: '远征军的粮草每天消耗固定量。第一天有 30 石，每天减少 3 石。第 10 天还剩多少？什么时候彻底断粮？', en: 'The expedition army consumes a fixed amount of grain daily. Starting with 30 units, losing 3 each day. How much on day 10? When do supplies run out?' },
+    description: { zh: '递减数列：求第 $n$ 项。', en: 'Decreasing sequence: find term $n$.' },
+    data: { a1: 30, d: -3, n: 10, mode: 'nth', generatorType: 'SEQUENCE_Y7_RANDOM' }, difficulty: 'Medium', reward: 55,
+    kpId: 'kp-2.7-03', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '赵云：公差可以是负数——每天减少就是"加一个负数"', en: 'Zhao Yun: "Common difference can be negative — daily decrease means adding a negative"' }, hint: { zh: '$30, 27, 24, 21, \\ldots$\n$27 - 30 = -3$（公差 $d = -3$）\n\n第 $n$ 项 $= 30 + (n-1) \\times (-3)$\n第 10 项 $= 30 + 9 \\times (-3) = 30 - 27 = 3$', en: '$30, 27, 24, 21, \\ldots$\n$27 - 30 = -3$ (common difference $d = -3$)\n\nTerm $n$ $= 30 + (n-1) \\times (-3)$\nTerm 10 $= 30 + 9 \\times (-3) = 30 - 27 = 3$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '公差为负数时数列递减。公式不变：$a_n = a_1 + (n-1)d$，只是 $d < 0$。', en: 'Negative common difference = decreasing sequence. Same formula, just $d < 0$.' }, formula: '$a_n = a_1 + (n-1)d,\\quad d < 0$', tips: [{ zh: '赵云提示：知道粮草何时耗尽，才能提前安排补给线！', en: 'Zhao Yun Tip: Know when supplies run out to plan the supply line ahead!' }] }
+  },
   // --- Year 7 Unit 5: 估算篇 ---
   {
     id: 751, grade: 7, unitId: 5, order: 1,
@@ -929,6 +964,43 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '赵云：三角形面积 = 底 × 高 ÷ 2', en: 'Zhao Yun: "Triangle area = base × height ÷ 2"' }, hint: { zh: '为什么除以 2？三角形是长方形对角切一半\n$\\frac{10 \\times 6}{2} = \\frac{60}{2} = 30$', en: 'Why ÷ 2? A triangle is half a rectangle cut diagonally\n$\\frac{10 \\times 6}{2} = \\frac{60}{2} = 30$' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '三角形面积 = 底 × 高 ÷ 2。可以理解为长方形面积的一半。', en: 'Triangle area = base × height ÷ 2. It\'s half the area of a rectangle.' }, formula: '$A = \\frac{b \\times h}{2}$', tips: [{ zh: '赵云提示：旗帜虽小，面积公式却大有用处！', en: 'Zhao Yun Tip: Small banner, big formula!' }] }
+  },
+  // --- Year 7 Unit 6 续: 跨单元应用（方程+周长，代入+面积）---
+  {
+    id: 764, grade: 7, unitId: 6, order: 4,
+    unitTitle: { zh: "Unit 6: 营寨丈量·周长与面积篇", en: "Unit 6: Camp Survey — Perimeter & Area" },
+    topic: 'Geometry', type: 'SIMPLE_EQ',
+    title: { zh: '围栅反推', en: 'Fence Reverse Problem' },
+    skillName: { zh: '逆向周长术', en: 'Reverse Perimeter' },
+    skillSummary: { zh: '已知周长和一条边，反推另一条边——周长公式反着用', en: 'Given perimeter and one side, find the other — use the perimeter formula in reverse' },
+    story: { zh: '刘备有 $2 \\times ({a} + x) = {result}$ 根围栅（周长 {result}），营地宽已经确定为 {a}。营地能做多长？', en: 'Liu Bei has {result} fence posts (perimeter {result}), camp width is fixed at {a}. How long can the camp be?' },
+    description: { zh: '已知周长和宽，求长。解方程 $2({a} + x) = {result}$。', en: 'Given perimeter and width, find length. Solve $2({a} + x) = {result}$.' },
+    data: { x: 8, a: 12, result: 40, generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM' }, difficulty: 'Medium', reward: 60,
+    kpId: 'kp-4.5-01', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '刘备：周长 = $2(长 + 宽)$，已知周长和宽，反推长', en: 'Liu Bei: "Perimeter = $2(l + w)$, known P and w, find l"' }, hint: { zh: '周长 $= 40$，宽 $= 12$\n$2(x + 12) = 40$\n$x + 12 = 20$（两边 $\\div 2$）\n$x = 8$（两边 $-12$）\n\n验算：$2(8 + 12) = 2 \\times 20 = 40$ ✓', en: 'Perimeter $= 40$, width $= 12$\n$2(x + 12) = 40$\n$x + 12 = 20$ (÷2 both sides)\n$x = 8$ (−12 both sides)\n\nCheck: $2(8 + 12) = 2 \\times 20 = 40$ ✓' }, highlightField: 'x' },
+    ],
+    storyConsequence: {
+      correct: { zh: '刘备：长 8 宽 12，刚好围起来！营地开建！', en: 'Liu Bei: "Length 8, width 12 — perfect fit! Start building!"' },
+      wrong: { zh: '刘备：围栅不够长...重新算！', en: 'Liu Bei: "Not enough fencing... recalculate!"' },
+    },
+    secret: { concept: { zh: '周长公式可以反着用：已知周长求边长，就是解方程。几何和代数是一家！', en: 'The perimeter formula works in reverse: finding a side from the perimeter IS solving an equation. Geometry and algebra are one!' }, formula: '$2(l + w) = P \\Rightarrow l = \\frac{P}{2} - w$', tips: [{ zh: '刘备提示：正着算是求周长，反着算就是解方程——同一个公式，两种用法！', en: 'Liu Bei Tip: Forward = find perimeter. Reverse = solve equation. Same formula, two uses!' }] }
+  },
+  {
+    id: 765, grade: 7, unitId: 6, order: 5,
+    unitTitle: { zh: "Unit 6: 营寨丈量·周长与面积篇", en: "Unit 6: Camp Survey — Perimeter & Area" },
+    topic: 'Geometry', type: 'SUBSTITUTION',
+    title: { zh: '营地蓝图', en: 'Camp Blueprint' },
+    skillName: { zh: '代入面积术', en: 'Substitution into Area' },
+    skillSummary: { zh: '把代数表达式代入面积公式——代数和几何的结合', en: 'Substitute algebraic expressions into area formulas — where algebra meets geometry' },
+    story: { zh: '赵云设计营地蓝图：长用公式 $2x + 3$ 表示，宽固定为 5。军师说 $x = 4$，算出营地面积！', en: 'Zhao Yun designs the camp: length is $2x + 3$, width is 5. The strategist says $x = 4$. Find the camp area!' },
+    description: { zh: '先代入求长，再算面积。', en: 'Substitute to find length, then calculate area.' },
+    data: { a: 2, b: 3, x: 4, answer: 55, mode: 'linear', expr: '2x + 3', generatorType: 'SUBSTITUTION_RANDOM' }, difficulty: 'Medium', reward: 60,
+    kpId: 'kp-2.2-01', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '赵云：分两步走——先代入求长，再算面积', en: 'Zhao Yun: "Two steps: substitute to find length, then calculate area"' }, hint: { zh: '第一步：长 $= 2x + 3 = 2 \\times 4 + 3 = 8 + 3 = 11$\n第二步：面积 $= 11 \\times 5 = 55$\n\n这就是代数 + 几何的结合！', en: 'Step 1: length $= 2x + 3 = 2 \\times 4 + 3 = 8 + 3 = 11$\nStep 2: area $= 11 \\times 5 = 55$\n\nThis is algebra + geometry combined!' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '代数和几何可以结合：用公式表示边长，代入后就能算面积。这是高中数学的基础！', en: 'Algebra + geometry combine: express sides as formulas, substitute to find area. This is the foundation of advanced math!' }, formula: '$A = (2x + 3) \\times w$', tips: [{ zh: '赵云提示：会画蓝图还不够，还要会算面积！', en: 'Zhao Yun Tip: Drawing blueprints isn\'t enough — you must calculate the area!' }] }
   },
   // --- Year 7 Unit 7: 战后统计·数据篇 ---
   {

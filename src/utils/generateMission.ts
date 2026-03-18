@@ -60,7 +60,8 @@ export type GeneratorType =
   | 'FDP_CONVERT_RANDOM'
   | 'BODMAS_RANDOM'
   | 'SIMPLIFY_RANDOM'
-  | 'STATISTICS_MODE_RANDOM';
+  | 'STATISTICS_MODE_RANDOM'
+  | 'SIMPLE_EQ_TWOSTEP_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -117,6 +118,7 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   BODMAS_RANDOM: generateBodmasMission,
   SIMPLIFY_RANDOM: generateSimplifyMission,
   STATISTICS_MODE_RANDOM: generateStatsModeMission,
+  SIMPLE_EQ_TWOSTEP_RANDOM: generateTwoStepEqMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -4760,6 +4762,68 @@ export function generateStatsModeMission(template: Mission): Mission {
     ...template,
     description,
     data: { values: sorted, mode: 'mode', modeValue, modeCount, generatorType: 'STATISTICS_MODE_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   TWO-STEP EQUATION generator: ax + b = c
+   ══════════════════════════════════════════════════════════ */
+
+export function generateTwoStepEqMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+
+  const aPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7], 3: [3, 4, 5, 6, 7, 8, 9] };
+  const xPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [3, 4, 5, 6, 7, 8], 3: [4, 5, 6, 7, 8, 9, 10] };
+  const bPools: Record<DifficultyTier, number[]> = { 1: [1, 2, 3, 4, 5], 2: [2, 3, 4, 5, 7, 8], 3: [3, 5, 7, 9, 11] };
+
+  const a = pickRandom(aPools[tier]);
+  const x = pickRandom(xPools[tier]);
+  const b = pickRandom(bPools[tier]);
+  const result = a * x + b;
+
+  const description: BilingualText = {
+    zh: `解方程 $${a}x + ${b} = ${result}$，求 $x$。`,
+    en: `Solve $${a}x + ${b} = ${result}$ for $x$.`,
+  };
+
+  const step1Result = result - b;
+
+  const tutorialEquationSteps = [
+    { tex: `${a}x + ${b} = ${result}`, annotation: { zh: '原方程', en: 'Original equation' } },
+    { tex: `${a}x + ${b} - ${b} = ${result} - ${b}`, annotation: { zh: `两边 -${b}`, en: `-${b} both sides` } },
+    { tex: `${a}x = ${step1Result}`, annotation: { zh: '化简', en: 'Simplify' } },
+    { tex: `\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}`, annotation: { zh: `两边 ÷${a}`, en: `÷${a} both sides` } },
+    { tex: `x = ${x}`, annotation: { zh: '求解', en: 'Solution' } },
+  ];
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：两步方程——要做两次"反操作"才能解出 $x$`, en: `${narrator}: "Two-step equation — we need TWO reverse operations to isolate $x$"` },
+      hint: { zh: `$${a}x + ${b} = ${result}$\n\n$x$ 被两层"包裹"：\n① 先被乘了 $${a}$（内层）\n② 再被加了 $${b}$（外层）\n\n解方程就像拆礼物——先拆外层，再拆内层`, en: `$${a}x + ${b} = ${result}$\n\n$x$ is wrapped in two layers:\n① Multiplied by $${a}$ (inner)\n② Added $${b}$ (outer)\n\nSolving = unwrapping — outer layer first, then inner` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：第一步——先去掉外层（$+${b}$），两边减 $${b}$`, en: `${narrator}: "Step 1 — remove outer layer ($+${b}$), subtract $${b}$ from both sides"` },
+      hint: { zh: `$${a}x + ${b} - ${b} = ${result} - ${b}$\n$${a}x = ${step1Result}$\n\n（$+${b}$ 和 $-${b}$ 抵消了）`, en: `$${a}x + ${b} - ${b} = ${result} - ${b}$\n$${a}x = ${step1Result}$\n\n($+${b}$ and $-${b}$ cancel out)` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：第二步——再去掉内层（$\\times ${a}$），两边除以 $${a}$`, en: `${narrator}: "Step 2 — remove inner layer ($\\times ${a}$), divide both sides by $${a}$"` },
+      hint: { zh: `$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n$x = ${x}$`, en: `$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n$x = ${x}$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：验算——把 $x = ${x}$ 代回原方程`, en: `${narrator}: "Verify — substitute $x = ${x}$ back into the original"` },
+      hint: { zh: `$${a} \\times ${x} + ${b} = ${a * x} + ${b} = ${result}$ ✓\n\n两步走：先减后除\n记住口诀：拆礼物先拆外层！`, en: `$${a} \\times ${x} + ${b} = ${a * x} + ${b} = ${result}$ ✓\n\nTwo steps: subtract first, then divide\nRemember: unwrap the outer layer first!` },
+      highlightField: 'x',
+    },
+  ];
+
+  return {
+    ...template,
+    data: { ...template.data, x, a, b, result, left: `${a}x + ${b}`, right: `${result}`, generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM', tutorialEquationSteps },
     tutorialSteps,
   };
 }
