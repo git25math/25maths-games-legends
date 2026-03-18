@@ -237,11 +237,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 进军与线性方程", en: "Unit 1: Marching & Linear Equations" },
     topic: 'Functions', type: 'FUNC_VAL',
     title: { zh: '追击哨兵', en: 'Intercepting Scouts' },
-    skillName: { zh: '追击计算术', en: 'Pursuit Calculation' },
-    skillSummary: { zh: '两点确定一条直线', en: 'Two points determine a line' },
-    story: { zh: '发现敌军哨兵！哨兵位置符合 $y = x + 4$，我军需在 $x=2$ 处拦截。', en: "Enemy scouts spotted! Their position follows $y = x + 4$. Intercept at $x=2$." },
+    skillName: { zh: '追击函数术', en: 'Pursuit Function' },
+    skillSummary: { zh: '代入求函数值', en: 'Substitute to find function value' },
+    story: { zh: '发现敌军哨兵！哨兵位置符合 $y = {m}x + {b}$，我军需在 $x={x}$ 处拦截。', en: "Enemy scouts spotted! Their position follows $y = {m}x + {b}$. Intercept at $x={x}$." },
     description: { zh: '计算拦截点的 $y$ 坐标。', en: 'Calculate the $y$ coordinate of the intercept point.' },
-    data: { m: 1, b: 4, x: 2 }, difficulty: 'Medium', reward: 160,
+    data: { m: 1, b: 4, x: 2, generatorType: 'FUNC_VAL_RANDOM' }, difficulty: 'Medium', reward: 160,
     kpId: 'kp-3.5-01', sectionId: 'functions',
     tutorialSteps: [
       {
@@ -321,9 +321,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 2: 营地与几何面积", en: "Unit 2: Camps & Geometric Area" },
     topic: 'Geometry', type: 'VOLUME',
     title: { zh: '修筑粮仓', en: 'Building Granaries' },
-    story: { zh: '建立圆柱形粮仓。底面半径 5 丈，高 10 丈。', en: 'Build a cylindrical granary. Base radius 5, height 10.' },
+    skillName: { zh: '粮仓容积术', en: 'Granary Volume' },
+    skillSummary: { zh: '圆柱体积公式', en: 'Cylinder volume formula' },
+    story: { zh: '建立圆柱形粮仓。底面半径 {radius} 丈，高 {height} 丈。', en: 'Build a cylindrical granary. Base radius {radius}, height {height}.' },
     description: { zh: '计算体积：$V = \\pi r^2 h$（取 $\\pi = 3$）。', en: 'Calculate volume: $V = \\pi r^2 h$ (use $\\pi = 3$).' },
-    data: { radius: 5, height: 10, pi: 3 }, difficulty: 'Medium', reward: 180,
+    data: { radius: 5, height: 10, pi: 3, generatorType: 'VOLUME_RANDOM' }, difficulty: 'Medium', reward: 180,
     kpId: 'kp-5.4-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -459,9 +461,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 4: 军籍与数据", en: "Unit 4: Census & Data" },
     topic: 'Statistics', type: 'STATISTICS',
     title: { zh: '身高分布', en: 'Height Distribution' },
+    skillName: { zh: '身高中位术', en: 'Height Median' },
+    skillSummary: { zh: '排序后找中间值', en: 'Sort and find the middle value' },
     story: { zh: '测量亲卫队的身高（丈）：1.7, 1.8, 1.8, 1.9, 2.0。', en: 'Measuring guard heights: 1.7, 1.8, 1.8, 1.9, 2.0.' },
     description: { zh: '计算中位数（Median）。', en: 'Calculate the Median height.' },
-    data: { values: [1.7, 1.8, 1.8, 1.9, 2.0], mode: 'median' }, difficulty: 'Medium', reward: 220,
+    data: { values: [1.7, 1.8, 1.8, 1.9, 2.0], mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' }, difficulty: 'Medium', reward: 220,
     kpId: 'kp-9.3-01', sectionId: 'statistics',
     tutorialSteps: [
       {
@@ -603,9 +607,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 2: 攻城与勾股定理", en: "Unit 2: Siege & Pythagoras" },
     topic: 'Geometry', type: 'TRIGONOMETRY',
     title: { zh: '望楼侦察', en: 'Scouting from the Tower' },
-    story: { zh: '从望楼俯瞰敌营。已知望楼高 12 丈，与敌营水平距离 16 丈。', en: 'Scouting from a tower. Height 12, horizontal distance 16.' },
+    skillName: { zh: '望楼测距术', en: 'Tower Ranging' },
+    skillSummary: { zh: '用正切值计算距离', en: 'Calculate distance using tangent' },
+    story: { zh: '从望楼俯瞰敌营。已知望楼高 {opposite} 丈，与敌营水平距离 {adjacent} 丈。', en: 'Scouting from a tower. Height {opposite}, horizontal distance {adjacent}.' },
     description: { zh: '求正切值 $\\tan(\\theta) = \\text{对边} / \\text{邻边}$。', en: 'Find $\\tan(\\theta) = \\text{opposite} / \\text{adjacent}$.' },
-    data: { opposite: 12, adjacent: 16 }, difficulty: 'Medium', reward: 220,
+    data: { opposite: 12, adjacent: 16, generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Medium', reward: 220,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -771,9 +777,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 火攻轨迹与二次函数", en: "Unit 1: Fire Attack & Quadratic Functions" },
     topic: 'Functions', type: 'QUADRATIC',
     title: { zh: '草船借箭', en: 'Straw Boats Borrow Arrows' },
+    skillName: { zh: '投石轨迹术', en: 'Catapult Trajectory' },
+    skillSummary: { zh: '抛物线系数求解', en: 'Solve parabola coefficients' },
     story: { zh: '大雾弥漫，诸葛亮草船借箭。箭矢高度 $h = -x^2 + 10x$，求最高点 $x$。', en: 'Dense fog covers the river. Zhuge Liang borrows arrows with straw boats. Arrow height $h = -x^2 + 10x$, find the peak $x$.' },
     description: { zh: '求箭矢飞行的最高点坐标。', en: 'Find the peak coordinates of the arrow trajectory.' },
-    data: { p1: [0, 0], p2: [5, 25] }, difficulty: 'Easy', reward: 300,
+    data: { p1: [0, 0], p2: [5, 25], generatorType: 'QUADRATIC_RANDOM' }, difficulty: 'Easy', reward: 300,
     kpId: 'kp-2.10-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -797,9 +805,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 火攻轨迹与二次函数", en: "Unit 1: Fire Attack & Quadratic Functions" },
     topic: 'Functions', type: 'ROOTS',
     title: { zh: '火烧赤壁', en: 'Burning Red Cliffs' },
+    skillName: { zh: '赤壁破阵术', en: 'Red Cliffs Breakthrough' },
+    skillSummary: { zh: '求二次方程的根', en: 'Find roots of a quadratic equation' },
     story: { zh: "火船冲向曹营。火势蔓延范围由 $y = -x^2 + 16$ 描述。", en: "Fire ships rush Cao's camp. Fire spread range: $y = -x^2 + 16$." },
     description: { zh: '求火势覆盖的水平宽度（即两根之差）。', en: 'Find the horizontal width of the fire (difference between roots).' },
-    data: { a: -1, b: 0, c: 16 }, difficulty: 'Medium', reward: 350,
+    data: { a: -1, b: 0, c: 16, generatorType: 'ROOTS_RANDOM' }, difficulty: 'Medium', reward: 350,
     kpId: 'kp-2.10-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -823,9 +833,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 火攻轨迹与二次函数", en: "Unit 1: Fire Attack & Quadratic Functions" },
     topic: 'Functions', type: 'ROOTS',
     title: { zh: '投石射程', en: 'Catapult Range' },
+    skillName: { zh: '射程计算术', en: 'Range Calculation' },
+    skillSummary: { zh: '用求根公式计算射程', en: 'Calculate range using quadratic formula' },
     story: { zh: '曹军在岸边架起投石机。石块轨迹为 $y = -x^2 + 100$。', en: 'Cao army sets up catapults. Stone trajectory: $y = -x^2 + 100$.' },
     description: { zh: '求石块落地的位置 $x$（即 $y=0$ 且 $x>0$ 的根）。', en: 'Find where the stone hits the ground $x$ (root of $y=0$ where $x>0$).' },
-    data: { a: -1, b: 0, c: 100 }, difficulty: 'Hard', reward: 480,
+    data: { a: -1, b: 0, c: 100, generatorType: 'ROOTS_RANDOM' }, difficulty: 'Hard', reward: 480,
     kpId: 'kp-2.10-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -1021,9 +1033,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 4: 水战风云与三角函数", en: "Unit 4: Naval Warfare & Trigonometry" },
     topic: 'Geometry', type: 'TRIGONOMETRY',
     title: { zh: '战船间距', en: 'Ship Distance' },
-    story: { zh: '江面上烟雾缭绕。已知我军旗舰与敌舰连线与江岸成 $30^\\circ$ 角，对边距离为 50 丈。', en: "Mist on the river. The line between flagship and enemy is $30^\\circ$ to the bank, opposite distance is 50." },
-    description: { zh: '求斜边距离 $c$（已知 $\\sin(30^\\circ) = 0.5$）。', en: 'Find hypotenuse distance $c$ (given $\\sin(30^\\circ) = 0.5$).' },
-    data: { angle: 30, opposite: 50, func: 'sin' }, difficulty: 'Easy', reward: 400,
+    skillName: { zh: '战船测距术', en: 'Ship Distance' },
+    skillSummary: { zh: '用正弦值求斜边', en: 'Find hypotenuse using sine' },
+    story: { zh: '江面上烟雾缭绕。已知我军旗舰与敌舰连线与江岸成 ${angle}^\\circ$ 角，对边距离为 {opposite} 丈。', en: "Mist on the river. The line between flagship and enemy is ${angle}^\\circ$ to the bank, opposite distance is {opposite}." },
+    description: { zh: '求斜边距离 $c$。', en: 'Find hypotenuse distance $c$.' },
+    data: { angle: 30, opposite: 50, func: 'sin', generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Easy', reward: 400,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -1047,9 +1061,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 4: 水战风云与三角函数", en: "Unit 4: Naval Warfare & Trigonometry" },
     topic: 'Geometry', type: 'TRIGONOMETRY',
     title: { zh: '旗舰夹角', en: 'Flagship Angle' },
-    story: { zh: '计算旗舰与护卫舰的夹角。已知对边 30 丈，邻边 30 丈。', en: 'Calculate the angle between flagship and escort. Opposite 30, adjacent 30.' },
-    description: { zh: '求 $\\tan(\\theta) = 1$ 对应的角度 $\\theta$。', en: 'Find angle $\\theta$ where $\\tan(\\theta) = 1$.' },
-    data: { opposite: 30, adjacent: 30, func: 'tan_inv' }, difficulty: 'Medium', reward: 650,
+    skillName: { zh: '旗舰夹角术', en: 'Flagship Angle' },
+    skillSummary: { zh: '反正切求角度', en: 'Find angle using inverse tangent' },
+    story: { zh: '计算旗舰与护卫舰的夹角。已知对边 {opposite} 丈，邻边 {adjacent} 丈。', en: 'Calculate the angle between flagship and escort. Opposite {opposite}, adjacent {adjacent}.' },
+    description: { zh: '求角度 $\\theta$。', en: 'Find angle $\\theta$.' },
+    data: { opposite: 30, adjacent: 30, func: 'tan_inv', generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Medium', reward: 650,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -1073,9 +1089,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 4: 水战风云与三角函数", en: "Unit 4: Naval Warfare & Trigonometry" },
     topic: 'Geometry', type: 'TRIGONOMETRY',
     title: { zh: '火攻仰角', en: 'Fire Attack Angle' },
-    story: { zh: "火船冲向曹营。已知火船与曹营水平距离 100 丈，高度差 100 丈。", en: "Fire ships rush Cao's camp. Horizontal distance 100, height difference 100." },
+    skillName: { zh: '火攻仰角术', en: 'Fire Attack Angle' },
+    skillSummary: { zh: '反正切求仰角', en: 'Find elevation angle using inverse tangent' },
+    story: { zh: "火船冲向曹营。已知火船与曹营水平距离 {adjacent} 丈，高度差 {opposite} 丈。", en: "Fire ships rush Cao's camp. Horizontal distance {adjacent}, height difference {opposite}." },
     description: { zh: '求仰角 $\\theta$。', en: 'Find elevation angle $\\theta$.' },
-    data: { opposite: 100, adjacent: 100, func: 'tan_inv' }, difficulty: 'Hard', reward: 700,
+    data: { opposite: 100, adjacent: 100, func: 'tan_inv', generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Hard', reward: 700,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -1185,9 +1203,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 出师表与微分优化", en: "Unit 1: Memorial & Differentiation" },
     topic: 'Calculus', type: 'QUADRATIC',
     title: { zh: '出师北伐', en: 'Northern Expedition' },
+    skillName: { zh: '出师推演术', en: 'Campaign Projection' },
+    skillSummary: { zh: '求顶点找最优解', en: 'Find vertex for optimal solution' },
     story: { zh: "诸葛亮六出祁山，需优化粮草运输路径。路径损耗函数为 $f(x) = -x^2 + 8x$。", en: "Zhuge Liang's expeditions need optimal supply routes. Loss function: $f(x) = -x^2 + 8x$." },
     description: { zh: '求 $f(x)$ 达到最大值时的 $x$（即导数为0的点）。', en: 'Find $x$ where $f(x)$ is maximum (derivative is 0).' },
-    data: { p1: [0, 0], p2: [4, 16] }, difficulty: 'Hard', reward: 800,
+    data: { p1: [0, 0], p2: [4, 16], generatorType: 'QUADRATIC_RANDOM' }, difficulty: 'Hard', reward: 800,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -1211,9 +1231,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 出师表与微分优化", en: "Unit 1: Memorial & Differentiation" },
     topic: 'Calculus', type: 'DERIVATIVE',
     title: { zh: '剑阁栈道', en: 'Jiange Pass' },
-    story: { zh: '蜀军修筑栈道。山坡曲线为 $y = x^2$。在点 $(2, 4)$ 处需修筑一条切线支架。', en: 'Shu army builds a plank road. Slope curve $y = x^2$. Build a tangent support at $(2, 4)$.' },
-    description: { zh: '求切线的斜率 $k$（即 $y=x^2$ 在 $x=2$ 处的导数）。', en: 'Find tangent slope $k$ (derivative of $y=x^2$ at $x=2$).' },
-    data: { x: 2, func: 'x^2' }, difficulty: 'Hard', reward: 850,
+    skillName: { zh: '栈道极值术', en: 'Mountain Pass Optimization' },
+    skillSummary: { zh: '求导数得切线斜率', en: 'Differentiate to find tangent slope' },
+    story: { zh: '蜀军修筑栈道。山坡曲线为 $y = x^2$。在点 $({x}, {x}^2)$ 处需修筑一条切线支架。', en: 'Shu army builds a plank road. Slope curve $y = x^2$. Build a tangent support at $({x}, {x}^2)$.' },
+    description: { zh: '求切线的斜率 $k$（即 $y=x^2$ 在 $x={x}$ 处的导数）。', en: 'Find tangent slope $k$ (derivative of $y=x^2$ at $x={x}$).' },
+    data: { x: 2, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Hard', reward: 850,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -1237,9 +1259,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 2: 屯田与定积分", en: "Unit 2: Farming & Integration" },
     topic: 'Calculus', type: 'INTEGRATION',
     title: { zh: '测量农田', en: 'Surveying Farmland' },
-    story: { zh: '在汉中屯田。农田边界由 $y = x$ 和 $x$ 轴以及 $x=4$ 围成。', en: 'Farming in Hanzhong. Field bounded by $y=x$, x-axis, and $x=4$.' },
-    description: { zh: '求该区域的面积（即 $\\int_0^4 x dx$）。', en: 'Find the area (integral of $x$ from 0 to 4).' },
-    data: { lower: 0, upper: 4, func: 'x' }, difficulty: 'Hard', reward: 900,
+    skillName: { zh: '农田丈量术', en: 'Field Measurement' },
+    skillSummary: { zh: '定积分求面积', en: 'Find area using definite integral' },
+    story: { zh: '在汉中屯田。农田边界由 $y = x$ 和 $x$ 轴以及 $x={upper}$ 围成。', en: 'Farming in Hanzhong. Field bounded by $y=x$, x-axis, and $x={upper}$.' },
+    description: { zh: '求该区域的面积。', en: 'Find the area of the region.' },
+    data: { lower: 0, upper: 4, func: 'x', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 900,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -1263,9 +1287,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 2: 屯田与定积分", en: "Unit 2: Farming & Integration" },
     topic: 'Calculus', type: 'INTEGRATION',
     title: { zh: '河道流量', en: 'River Flow' },
+    skillName: { zh: '河道流量术', en: 'River Flow' },
+    skillSummary: { zh: '积分求总流量', en: 'Find total flow using integration' },
     story: { zh: '计算河道流量。流速函数为 $v(t) = 3t^2$。', en: 'Calculate river flow. Velocity function: $v(t) = 3t^2$.' },
-    description: { zh: '求从 $t=0$ 到 $t=2$ 的总流量（即 $\\int_0^2 3t^2 dt$）。', en: 'Find total flow from $t=0$ to $t=2$ (integral of $3t^2$).' },
-    data: { lower: 0, upper: 2, func: '3x^2' }, difficulty: 'Hard', reward: 950,
+    description: { zh: '求总流量。', en: 'Find total flow.' },
+    data: { lower: 0, upper: 2, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 950,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -1319,9 +1345,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 归晋与综合微积分", en: "Unit 1: Unification & Advanced Calculus" },
     topic: 'Calculus', type: 'DERIVATIVE',
     title: { zh: '最后的防线', en: 'The Final Stand' },
+    skillName: { zh: '防线极值术', en: 'Defense Optimization' },
+    skillSummary: { zh: '令导数为零求极值', en: 'Set derivative to zero for extremum' },
     story: { zh: '守卫成都。城墙受力函数为 $f(x) = x^3 - 3x$。', en: 'Defending Chengdu. Wall stress function: $f(x) = x^3 - 3x$.' },
     description: { zh: '求函数的极小值点 $x$（$x > 0$）。', en: 'Find the local minimum point $x$ ($x > 0$).' },
-    data: { x: 1, func: '3x^2-3' }, difficulty: 'Hard', reward: 1000,
+    data: { x: 1, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Hard', reward: 1000,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {

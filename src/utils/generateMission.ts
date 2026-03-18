@@ -28,7 +28,15 @@ export type GeneratorType =
   | 'SIMULTANEOUS_RANDOM'
   | 'RATIO_RANDOM'
   | 'SIMILARITY_RANDOM'
-  | 'STATISTICS_MEAN_RANDOM';
+  | 'STATISTICS_MEAN_RANDOM'
+  | 'TRIGONOMETRY_RANDOM'
+  | 'QUADRATIC_RANDOM'
+  | 'ROOTS_RANDOM'
+  | 'DERIVATIVE_RANDOM'
+  | 'INTEGRATION_RANDOM'
+  | 'VOLUME_RANDOM'
+  | 'FUNC_VAL_RANDOM'
+  | 'STATISTICS_MEDIAN_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -53,6 +61,14 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   RATIO_RANDOM: generateRatioMission,
   SIMILARITY_RANDOM: generateSimilarityMission,
   STATISTICS_MEAN_RANDOM: generateStatsMeanMission,
+  TRIGONOMETRY_RANDOM: generateTrigonometryMission,
+  QUADRATIC_RANDOM: generateQuadraticMission,
+  ROOTS_RANDOM: generateRootsMission,
+  DERIVATIVE_RANDOM: generateDerivativeMission,
+  INTEGRATION_RANDOM: generateIntegrationMission,
+  VOLUME_RANDOM: generateVolumeMission,
+  FUNC_VAL_RANDOM: generateFuncValMission,
+  STATISTICS_MEDIAN_RANDOM: generateStatsMedianMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -597,6 +613,370 @@ export function generateStatsMeanMission(template: Mission): Mission {
     ...template,
     description,
     data: { values, mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   TRIGONOMETRY generator: tan, sin, or tan_inv
+   Reads template data.func to decide mode.
+   ══════════════════════════════════════════════════════════ */
+
+export function generateTrigonometryMission(template: Mission): Mission {
+  const func = template.data?.func as string | undefined;
+  const narrator = pickRandom(['甘宁', '乐进', '赵云']);
+
+  if (func === 'sin') {
+    // sin mode: opposite / sin(angle) = hypotenuse → input c
+    const angle = pickRandom([30, 45, 60]);
+    const sinVal = angle === 30 ? 0.5 : angle === 45 ? Math.SQRT2 / 2 : Math.sqrt(3) / 2;
+    // Pick opposite so hyp is clean-ish
+    const oppPool = angle === 30 ? [3, 4, 5, 6, 8, 10, 50] : [3, 4, 5, 6, 8, 10];
+    const opposite = pickRandom(oppPool);
+    const hyp = opposite / sinVal;
+
+    const description: BilingualText = {
+      zh: `已知角 $${angle}^\\circ$，对边 ${opposite}，求斜边 $c$。`,
+      en: `Given angle $${angle}^\\circ$, opposite ${opposite}, find hypotenuse $c$.`,
+    };
+    const tutorialSteps = [
+      { text: { zh: `${narrator}：「$\\sin(${angle}^\\circ)$ 联系对边和斜边」`, en: `${narrator}: "$\\sin(${angle}^\\circ)$ connects opposite and hypotenuse"` }, highlightField: 'c' },
+      { text: { zh: `${narrator}：「$c = ${opposite} / \\sin(${angle}^\\circ) = ${opposite} / ${Math.round(sinVal * 10000) / 10000}$」`, en: `${narrator}: "$c = ${opposite} / \\sin(${angle}^\\circ) = ${opposite} / ${Math.round(sinVal * 10000) / 10000}$"` }, highlightField: 'c' },
+      { text: { zh: `${narrator}：「$c = ${Math.round(hyp * 10000) / 10000}$！」`, en: `${narrator}: "$c = ${Math.round(hyp * 10000) / 10000}$!"` }, highlightField: 'c' },
+    ];
+    return { ...template, description, data: { angle, opposite, func: 'sin', generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
+  }
+
+  if (func === 'tan_inv') {
+    // tan_inv mode: atan2(opposite, adjacent) → input angle
+    const pairs: [number, number][] = [[1, 1], [3, 3], [5, 5], [10, 10], [30, 30], [100, 100],
+      [1, Math.round(Math.tan(Math.PI / 6) * 1000) / 1000 > 0 ? 1 : 1], // fallback
+    ];
+    // Use known-angle combos for clean results
+    const knownAngles: { opp: number; adj: number; angle: number }[] = [
+      { opp: 1, adj: 1, angle: 45 }, { opp: 5, adj: 5, angle: 45 }, { opp: 10, adj: 10, angle: 45 },
+      { opp: 30, adj: 30, angle: 45 }, { opp: 100, adj: 100, angle: 45 },
+    ];
+    const chosen = pickRandom(knownAngles);
+
+    const description: BilingualText = {
+      zh: `已知对边 ${chosen.opp}，邻边 ${chosen.adj}，求角度 $\\theta$。`,
+      en: `Given opposite ${chosen.opp}, adjacent ${chosen.adj}, find angle $\\theta$.`,
+    };
+    const tutorialSteps = [
+      { text: { zh: `${narrator}：「$\\tan(\\theta) = ${chosen.opp}/${chosen.adj}$」`, en: `${narrator}: "$\\tan(\\theta) = ${chosen.opp}/${chosen.adj}$"` }, highlightField: 'angle' },
+      { text: { zh: `${narrator}：「$\\theta = \\arctan(${chosen.opp / chosen.adj})$」`, en: `${narrator}: "$\\theta = \\arctan(${chosen.opp / chosen.adj})$"` }, highlightField: 'angle' },
+      { text: { zh: `${narrator}：「$\\theta = ${chosen.angle}^\\circ$！」`, en: `${narrator}: "$\\theta = ${chosen.angle}^\\circ$!"` }, highlightField: 'angle' },
+    ];
+    return { ...template, description, data: { opposite: chosen.opp, adjacent: chosen.adj, func: 'tan_inv', generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
+  }
+
+  // Default: tan mode — opposite / adjacent → input tan
+  const opposite = pickRandom([3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 20]);
+  const adjacent = pickRandom([4, 5, 8, 10, 12, 15, 16, 20, 25]);
+  const tanVal = opposite / adjacent;
+
+  const description: BilingualText = {
+    zh: `求正切值 $\\tan(\\theta) = ${opposite} / ${adjacent}$。`,
+    en: `Find $\\tan(\\theta) = ${opposite} / ${adjacent}$.`,
+  };
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：「$\\tan(\\theta) = \\text{对边}/\\text{邻边}$」`, en: `${narrator}: "$\\tan(\\theta) = \\text{opposite}/\\text{adjacent}$"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：「$= ${opposite} / ${adjacent}$」`, en: `${narrator}: "$= ${opposite} / ${adjacent}$"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：「$\\tan(\\theta) = ${Math.round(tanVal * 10000) / 10000}$！」`, en: `${narrator}: "$\\tan(\\theta) = ${Math.round(tanVal * 10000) / 10000}$!"` }, highlightField: 'tan' },
+  ];
+  return { ...template, description, data: { opposite, adjacent, generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
+}
+
+/* ══════════════════════════════════════════════════════════
+   QUADRATIC generator: y = ax² + c from two points
+   topic==='Calculus' → student finds x = p2[0] (vertex x)
+   otherwise → student finds a and c
+   ══════════════════════════════════════════════════════════ */
+
+export function generateQuadraticMission(template: Mission): Mission {
+  const isCal = template.topic === 'Calculus';
+  const narrator = pickRandom(['周瑜', '诸葛亮']);
+
+  if (isCal) {
+    // Calculus mode: f(x) = ax² + bx, vertex at x = -b/(2a). Student enters x = p2[0].
+    const a = pickRandom([-3, -2, -1]);
+    const b = pickRandom([4, 6, 8, 10, 12]);
+    const vertexX = -b / (2 * a);
+    // Ensure clean integer
+    if (vertexX !== Math.round(vertexX)) return generateQuadraticMission(template);
+    const vertexY = a * vertexX * vertexX + b * vertexX;
+
+    const description: BilingualText = {
+      zh: `求 $f(x)$ 达到最大值时的 $x$。`,
+      en: `Find $x$ where $f(x)$ is maximum.`,
+    };
+    const tutorialSteps = [
+      { text: { zh: `${narrator}：「二次函数 $f(x) = ${a}x^2 + ${b}x$，顶点公式 $x = -b/(2a)$。」`, en: `${narrator}: "Quadratic $f(x) = ${a}x^2 + ${b}x$, vertex at $x = -b/(2a)$."` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：「$x = -${b}/(2 \\times ${a}) = ${vertexX}$」`, en: `${narrator}: "$x = -${b}/(2 \\times ${a}) = ${vertexX}$"` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：「$x = ${vertexX}$！最优解！」`, en: `${narrator}: "$x = ${vertexX}$! Optimal!"` }, highlightField: 'x' },
+    ];
+    return { ...template, description, data: { p1: [0, 0], p2: [vertexX, vertexY], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
+  }
+
+  // Functions mode: y = ax² + c, p1=[0,c], p2=[x2, a*x2²+c]. Student finds a and c.
+  const a = pickRandom([-3, -2, -1, 1, 2, 3]);
+  const c = pickRandom([-5, -3, 0, 3, 5, 10]);
+  const x2 = pickRandom([1, 2, 3, 4, 5]);
+  const y2 = a * x2 * x2 + c;
+
+  const description: BilingualText = {
+    zh: `求抛物线 $y = ax^2 + c$ 的系数 $a$ 和 $c$。`,
+    en: `Find coefficients $a$ and $c$ of $y = ax^2 + c$.`,
+  };
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：「过 $(0, ${c})$ 和 $(${x2}, ${y2})$，$y = ax^2 + c$。」`, en: `${narrator}: "Through $(0, ${c})$ and $(${x2}, ${y2})$, $y = ax^2 + c$."` }, highlightField: 'a' },
+    { text: { zh: `${narrator}：「$x=0$ 时 $y=c=${c}$。代入第二点：$a = (${y2}-${c})/${x2}^2 = ${a}$」`, en: `${narrator}: "At $x=0$, $y=c=${c}$. Substitute: $a = (${y2}-${c})/${x2}^2 = ${a}$"` }, highlightField: 'a' },
+    { text: { zh: `${narrator}：「$a=${a}, c=${c}$！」`, en: `${narrator}: "$a=${a}, c=${c}$!"` }, highlightField: 'c' },
+  ];
+  return { ...template, description, data: { p1: [0, c], p2: [x2, y2], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
+}
+
+/* ══════════════════════════════════════════════════════════
+   ROOTS generator: ax² + bx + c = 0 from factored form
+   Student enters either root x
+   ══════════════════════════════════════════════════════════ */
+
+export function generateRootsMission(template: Mission): Mission {
+  const r1 = pickRandom([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]);
+  let r2 = pickRandom([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]);
+  // Avoid r1 === r2 for variety (but it's not wrong)
+  if (r1 === r2) r2 = r1 + pickRandom([1, 2, -1, -2]);
+  // a=1: (x - r1)(x - r2) = x² - (r1+r2)x + r1*r2
+  const a = 1;
+  const b = -(r1 + r2);
+  const c = r1 * r2;
+  // Verify discriminant >= 0 (always true for real roots from factored form)
+  const narrator = pickRandom(['周瑜', '曹仁', '诸葛亮']);
+
+  const description: BilingualText = {
+    zh: `求方程 $x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$ 的一个根。`,
+    en: `Find a root of $x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$.`,
+  };
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：「$x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$」`, en: `${narrator}: "$x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：「因式分解：$(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0$」`, en: `${narrator}: "Factor: $(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：「$x = ${r1}$ 或 $x = ${r2}$！」`, en: `${narrator}: "$x = ${r1}$ or $x = ${r2}$!"` }, highlightField: 'x' },
+  ];
+  return { ...template, description, data: { a, b, c, generatorType: 'ROOTS_RANDOM' }, tutorialSteps };
+}
+
+/* ══════════════════════════════════════════════════════════
+   DERIVATIVE generator
+   func='3x^2-3': critical point → input x (data.x)
+   default (x^2): slope at point → input k = 2*data.x
+   ══════════════════════════════════════════════════════════ */
+
+export function generateDerivativeMission(template: Mission): Mission {
+  const func = template.data?.func as string | undefined;
+  const narrator = pickRandom(['姜维', '诸葛亮', '刘禅']);
+
+  if (func === '3x^2-3') {
+    // f(x) = x³ - 3x → f'(x) = 3x² - 3 = 0 → x² = 1 → x = 1 (x>0)
+    // Always x=1 for this function form (critical point at x=1)
+    const x = 1;
+    const description: BilingualText = {
+      zh: `求 $f'(x) = 3x^2 - 3 = 0$ 的正根 $x$。`,
+      en: `Find positive root $x$ of $f'(x) = 3x^2 - 3 = 0$.`,
+    };
+    const tutorialSteps = [
+      { text: { zh: `${narrator}：「$f'(x) = 3x^2 - 3 = 0$」`, en: `${narrator}: "$f'(x) = 3x^2 - 3 = 0$"` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：「$3x^2 = 3 \\Rightarrow x^2 = 1$」`, en: `${narrator}: "$3x^2 = 3 \\Rightarrow x^2 = 1$"` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：「$x = ${x}$（取正值）！」`, en: `${narrator}: "$x = ${x}$ (positive)!"` }, highlightField: 'x' },
+    ];
+    return { ...template, description, data: { x, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
+  }
+
+  // Default: y = x², slope k = 2x at point x
+  const x = pickRandom([1, 2, 3, 4, 5, -1, -2, -3]);
+  const k = 2 * x;
+  const y = x * x;
+
+  const description: BilingualText = {
+    zh: `求 $y = x^2$ 在 $x = ${x}$ 处的切线斜率 $k$。`,
+    en: `Find tangent slope $k$ of $y = x^2$ at $x = ${x}$.`,
+  };
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：「$y = x^2$，导数 $y' = 2x$」`, en: `${narrator}: "$y = x^2$, derivative $y' = 2x$"` }, highlightField: 'k' },
+    { text: { zh: `${narrator}：「在 $x=${x}$ 处：$k = 2 \\times ${x}$」`, en: `${narrator}: "At $x=${x}$: $k = 2 \\times ${x}$"` }, highlightField: 'k' },
+    { text: { zh: `${narrator}：「$k = ${k}$！」`, en: `${narrator}: "$k = ${k}$!"` }, highlightField: 'k' },
+  ];
+  return { ...template, description, data: { x, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
+}
+
+/* ══════════════════════════════════════════════════════════
+   INTEGRATION generator: definite integral
+   func='x': ∫ x dx = 0.5*(u²-l²)
+   func='3x^2': ∫ 3x² dx = u³-l³
+   else: ∫ 2x dx = u²-l²
+   ══════════════════════════════════════════════════════════ */
+
+export function generateIntegrationMission(template: Mission): Mission {
+  const func = template.data?.func as string;
+  const narrator = pickRandom(['邓艾', '钟会', '诸葛亮']);
+
+  if (func === 'x') {
+    const lower = pickRandom([0, 1, 2]);
+    const upper = lower + pickRandom([2, 3, 4, 5]);
+    const area = 0.5 * (upper * upper - lower * lower);
+
+    const description: BilingualText = {
+      zh: `求 $\\int_{${lower}}^{${upper}} x\\,dx$。`,
+      en: `Find $\\int_{${lower}}^{${upper}} x\\,dx$.`,
+    };
+    const tutorialSteps = [
+      { text: { zh: `${narrator}：「$\\int x\\,dx = \\frac{1}{2}x^2$」`, en: `${narrator}: "$\\int x\\,dx = \\frac{1}{2}x^2$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：「$= \\frac{1}{2}(${upper}^2 - ${lower}^2) = \\frac{1}{2}(${upper * upper} - ${lower * lower})$」`, en: `${narrator}: "$= \\frac{1}{2}(${upper}^2 - ${lower}^2) = \\frac{1}{2}(${upper * upper} - ${lower * lower})$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：「面积 = ${area}！」`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
+    ];
+    return { ...template, description, data: { lower, upper, func: 'x', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
+  }
+
+  if (func === '3x^2') {
+    const lower = pickRandom([0, 1]);
+    const upper = lower + pickRandom([1, 2, 3]);
+    const area = upper * upper * upper - lower * lower * lower;
+
+    const description: BilingualText = {
+      zh: `求 $\\int_{${lower}}^{${upper}} 3x^2\\,dx$。`,
+      en: `Find $\\int_{${lower}}^{${upper}} 3x^2\\,dx$.`,
+    };
+    const tutorialSteps = [
+      { text: { zh: `${narrator}：「$\\int 3x^2\\,dx = x^3$」`, en: `${narrator}: "$\\int 3x^2\\,dx = x^3$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：「$= ${upper}^3 - ${lower}^3 = ${upper * upper * upper} - ${lower * lower * lower}$」`, en: `${narrator}: "$= ${upper}^3 - ${lower}^3 = ${upper * upper * upper} - ${lower * lower * lower}$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：「面积 = ${area}！」`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
+    ];
+    return { ...template, description, data: { lower, upper, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
+  }
+
+  // else: ∫ 2x dx = u² - l²
+  const lower = pickRandom([0, 1, 2]);
+  const upper = lower + pickRandom([2, 3, 4]);
+  const area = upper * upper - lower * lower;
+
+  const description: BilingualText = {
+    zh: `求 $\\int_{${lower}}^{${upper}} 2x\\,dx$。`,
+    en: `Find $\\int_{${lower}}^{${upper}} 2x\\,dx$.`,
+  };
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：「$\\int 2x\\,dx = x^2$」`, en: `${narrator}: "$\\int 2x\\,dx = x^2$"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：「$= ${upper}^2 - ${lower}^2 = ${upper * upper} - ${lower * lower}$」`, en: `${narrator}: "$= ${upper}^2 - ${lower}^2 = ${upper * upper} - ${lower * lower}$"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：「面积 = ${area}！」`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
+  ];
+  return { ...template, description, data: { lower, upper, func: '2x', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
+}
+
+/* ══════════════════════════════════════════════════════════
+   VOLUME generator: cylinder V = pi*r²*h (or cone V = 1/3*pi*r²*h)
+   ══════════════════════════════════════════════════════════ */
+
+export function generateVolumeMission(template: Mission): Mission {
+  const mode = template.data?.mode as string | undefined;
+  const isCone = mode === 'cone';
+  const radius = pickRandom([2, 3, 4, 5, 6, 8, 10]);
+  const height = pickRandom([5, 6, 8, 10, 12, 15, 20]);
+  const pi = template.data?.pi || 3;
+  const vol = isCone ? (1 / 3) * pi * radius * radius * height : pi * radius * radius * height;
+  const narrator = pickRandom(['满宠', '曹操', '刘备']);
+
+  const description: BilingualText = isCone
+    ? { zh: `求圆锥体积 $V = \\frac{1}{3}\\pi r^2 h$（$\\pi=${pi}$）。`, en: `Find cone volume $V = \\frac{1}{3}\\pi r^2 h$ ($\\pi=${pi}$).` }
+    : { zh: `求圆柱体积 $V = \\pi r^2 h$（$\\pi=${pi}$）。`, en: `Find cylinder volume $V = \\pi r^2 h$ ($\\pi=${pi}$).` };
+
+  const baseArea = pi * radius * radius;
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：「半径 ${radius}，高 ${height}，$\\pi=${pi}$」`, en: `${narrator}: "Radius ${radius}, height ${height}, $\\pi=${pi}$"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：「底面积 = $\\pi r^2 = ${pi} \\times ${radius}^2 = ${baseArea}$」`, en: `${narrator}: "Base area = $\\pi r^2 = ${pi} \\times ${radius}^2 = ${baseArea}$"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：「$V = ${Math.round(vol * 100) / 100}$！」`, en: `${narrator}: "$V = ${Math.round(vol * 100) / 100}$!"` }, highlightField: 'v' },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { radius, height, pi, ...(isCone ? { mode: 'cone' } : {}), generatorType: 'VOLUME_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   FUNC_VAL generator
+   If m defined: y = mx + b, input y
+   Else: vertex t = -b/(2a), input t
+   ══════════════════════════════════════════════════════════ */
+
+export function generateFuncValMission(template: Mission): Mission {
+  const hasM = template.data?.m !== undefined;
+  const narrator = pickRandom(['夏侯惇', '曹操', '赵云']);
+
+  if (hasM) {
+    const m = pickRandom([1, 2, 3, -1, -2]);
+    const b = pickRandom([-5, -3, -1, 0, 1, 2, 4, 5, 8]);
+    const x = pickRandom([1, 2, 3, 4, 5, -1, -2]);
+    const y = m * x + b;
+
+    const description: BilingualText = {
+      zh: `求 $y = ${m}x ${b >= 0 ? '+' : ''}${b}$ 在 $x=${x}$ 处的值。`,
+      en: `Find $y = ${m}x ${b >= 0 ? '+' : ''}${b}$ at $x=${x}$.`,
+    };
+    const tutorialSteps = [
+      { text: { zh: `${narrator}：「$y = ${m}x ${b >= 0 ? '+' : ''}${b}$，代入 $x=${x}$」`, en: `${narrator}: "$y = ${m}x ${b >= 0 ? '+' : ''}${b}$, substitute $x=${x}$"` }, highlightField: 'y' },
+      { text: { zh: `${narrator}：「$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b} = ${m * x} ${b >= 0 ? '+' : ''}${b}$」`, en: `${narrator}: "$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b} = ${m * x} ${b >= 0 ? '+' : ''}${b}$"` }, highlightField: 'y' },
+      { text: { zh: `${narrator}：「$y = ${y}$！」`, en: `${narrator}: "$y = ${y}$!"` }, highlightField: 'y' },
+    ];
+    return { ...template, description, data: { m, b, x, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
+  }
+
+  // Vertex form: t = -b/(2a)
+  const a = pickRandom([-3, -2, -1, 1, 2, 3]);
+  const bCoeff = pickRandom([2, 4, 6, 8, 10, 12, -2, -4, -6]);
+  const t = -bCoeff / (2 * a);
+  if (t !== Math.round(t * 100) / 100) return generateFuncValMission(template);
+
+  const description: BilingualText = {
+    zh: `求 $f(x) = ${a}x^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$ 的顶点 $t$。`,
+    en: `Find vertex $t$ of $f(x) = ${a}x^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$.`,
+  };
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：「$t = -b/(2a) = -${bCoeff}/(2 \\times ${a})$」`, en: `${narrator}: "$t = -b/(2a) = -${bCoeff}/(2 \\times ${a})$"` }, highlightField: 't' },
+    { text: { zh: `${narrator}：「$t = ${t}$！」`, en: `${narrator}: "$t = ${t}$!"` }, highlightField: 't' },
+  ];
+  return { ...template, description, data: { a, b: bCoeff, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
+}
+
+/* ══════════════════════════════════════════════════════════
+   STATISTICS MEDIAN generator
+   ══════════════════════════════════════════════════════════ */
+
+export function generateStatsMedianMission(template: Mission): Mission {
+  const count = pickRandom([5, 7]);
+  const values = Array.from({ length: count }, () => {
+    // Heights in the range 1.5–2.1 (one decimal)
+    return Math.round((1.5 + Math.random() * 0.6) * 10) / 10;
+  });
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  const median = sorted[mid]; // odd count, so exact middle
+
+  const narrator = pickRandom(['典韦', '曹操']);
+  const description: BilingualText = {
+    zh: `求数据 ${sorted.join(', ')} 的中位数。`,
+    en: `Find the median of ${sorted.join(', ')}.`,
+  };
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：「先排序，再找中间值。${count} 个数，中间是第 ${mid + 1} 个。」`, en: `${narrator}: "Sort first, find middle. ${count} numbers, middle is position ${mid + 1}."` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：「排序后：${sorted.join(', ')}」`, en: `${narrator}: "Sorted: ${sorted.join(', ')}"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：「中位数 = ${median}！」`, en: `${narrator}: "Median = ${median}!"` }, highlightField: 'ans' },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { values: sorted, mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' },
     tutorialSteps,
   };
 }
