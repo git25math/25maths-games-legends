@@ -2,7 +2,7 @@
 
 > **项目地址**：https://play.25maths.com
 > **仓库**：git25math/25maths-games-legends
-> **版本**：v3.1.0 | 最后更新：2026-03-18
+> **版本**：v4.0.0 | 最后更新：2026-03-18
 
 ## Context
 
@@ -647,6 +647,11 @@ Step 5: 最终结果 — y = mx + b
 | 2026-03-18 | v2.2.0 | Phase 3.6: 可视化引导框架 — AnimatedQuadraticPlane + Amber图像 + LINEAR教学法重写(概念→公式→代入) |
 | 2026-03-18 | v2.3.0 | LINEAR 完整教学法(7步 y=mx+c) + 上/下一步导航 + LatexText换行 + 各种UI修复 |
 | 2026-03-18 | **v3.0.0** | **Y7 内容扩展**: 5新题型(HCF/LCM/INTEGER_ADD/FRAC_ADD/FRAC_MUL) + 13 missions(Unit 0/0A/0B) + 5生成器教学法重写(每步一概念) |
-| 2026-03-18 | **v3.1.0** | **故事融合 + 全面质量升级**: tutorialSteps插值架构 + 7个mission模板故事化(SIMPLE_EQ×4+ANGLES×3) + 11个生成器教学法升级(WHY+HOW) + 5个FAIL生成器修复 + 5个生成器故事化语言 |
-| — | v4.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |
-| — | v5.0.0 | Phase 5: 章节地图 + 视频三位一体 + 离线支持 |
+| 2026-03-18 | **v3.1.0** | **故事融合 + 全面质量升级**: tutorialSteps插值架构 + 7个mission模板故事化 + 11个生成器WHY+HOW + 故事化语言 |
+| 2026-03-18 | v3.2.0 | 极限起点版：17关全部重写(每步一概念+WHY解释+验算)，4轮打磨审查 |
+| 2026-03-18 | v3.3.0 | 短除法：shortDivision()算法 + ShortDivision SVG组件 + HCF/LCM三种方法教学 |
+| 2026-03-18 | v3.4.0 | 2新题型(PRIME+FACTOR_TREE) + Mission 699质数 + Mission 700因数树 |
+| 2026-03-18 | **v4.0.0** | **19/19 SVG视觉体系**: AnimatedNumberLine + FractionPie + NumberGrid/BalanceScale/AngleArc集成 |
+| — | v4.1.0 | Y8 内容升级（故事融合 + 极限起点版教学法） |
+| — | v5.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |
+| — | v6.0.0 | Phase 5: 章节地图 + 视频三位一体 + 离线支持 |
