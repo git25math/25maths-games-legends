@@ -1217,9 +1217,45 @@ export function generateQuadraticMission(template: Mission): Mission {
       en: `Find $x$ where $f(x)$ is maximum.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：二次函数 $f(x) = ${a}x^2 + ${b}x$，顶点公式 $x = -b/(2a)$。`, en: `${narrator}: "Quadratic $f(x) = ${a}x^2 + ${b}x$, vertex at $x = -b/(2a)$."` }, highlightField: 'x' },
-      { text: { zh: `${narrator}：$x = -${b}/(2 \\times ${a}) = ${vertexX}$`, en: `${narrator}: "$x = -${b}/(2 \\times ${a}) = ${vertexX}$"` }, highlightField: 'x' },
-      { text: { zh: `${narrator}：$x = ${vertexX}$！最优解！`, en: `${narrator}: "$x = ${vertexX}$! Optimal!"` }, highlightField: 'x' },
+      {
+        text: {
+          zh: `${narrator}：要找抛物线的顶点 -- 就是曲线的最高点或最低点`,
+          en: `${narrator}: "We need to find the vertex of the parabola — the highest or lowest point on the curve"`,
+        },
+        hint: {
+          zh: '顶点横坐标的公式是 $x = \\frac{-b}{2a}$',
+          en: 'The formula for the vertex x-coordinate is $x = \\frac{-b}{2a}$',
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：我们的函数是 $f(x) = ${a}x^{2} + ${b}x$，其中 $a = ${a}$，$b = ${b}$`,
+          en: `${narrator}: "Our function is $f(x) = ${a}x^{2} + ${b}x$, where $a = ${a}$, $b = ${b}$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：代入公式：$x = \\frac{-(${b})}{2 \\times (${a})}$`,
+          en: `${narrator}: "Substitute into the formula: $x = \\frac{-(${b})}{2 \\times (${a})}$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：计算分子：$-(${b}) = ${-b}$\n计算分母：$2 \\times (${a}) = ${2 * a}$\n所以 $x = \\frac{${-b}}{${2 * a}} = ${vertexX}$`,
+          en: `${narrator}: "Numerator: $-(${b}) = ${-b}$\nDenominator: $2 \\times (${a}) = ${2 * a}$\nSo $x = \\frac{${-b}}{${2 * a}} = ${vertexX}$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：答案 $x = ${vertexX}$! 顶点在 $x = ${vertexX}$ 处，此时 $f(${vertexX}) = ${vertexY}$`,
+          en: `${narrator}: "Answer: $x = ${vertexX}$! The vertex is at $x = ${vertexX}$, where $f(${vertexX}) = ${vertexY}$"`,
+        },
+        highlightField: 'x',
+      },
     ];
     return { ...template, description, data: { p1: [0, 0], p2: [vertexX, vertexY], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
   }
@@ -1237,9 +1273,52 @@ export function generateQuadraticMission(template: Mission): Mission {
     en: `Find coefficients $a$ and $c$ of $y = ax^2 + c$.`,
   };
   const tutorialSteps = [
-    { text: { zh: `${narrator}：过 $(0, ${c})$ 和 $(${x2}, ${y2})$，$y = ax^2 + c$。`, en: `${narrator}: "Through $(0, ${c})$ and $(${x2}, ${y2})$, $y = ax^2 + c$."` }, highlightField: 'a' },
-    { text: { zh: `${narrator}：$x=0$ 时 $y=c=${c}$。代入第二点：$a = (${y2}-${c})/${x2}^2 = ${a}$`, en: `${narrator}: "At $x=0$, $y=c=${c}$. Substitute: $a = (${y2}-${c})/${x2}^2 = ${a}$"` }, highlightField: 'a' },
-    { text: { zh: `${narrator}：$a=${a}, c=${c}$！`, en: `${narrator}: "$a=${a}, c=${c}$!"` }, highlightField: 'c' },
+    {
+      text: {
+        zh: `${narrator}：抛物线 $y = ax^{2} + c$ 经过两个点，我们要求出系数 $a$ 和 $c$`,
+        en: `${narrator}: "The parabola $y = ax^{2} + c$ passes through two points — we need to find coefficients $a$ and $c$"`,
+      },
+      highlightField: 'a',
+    },
+    {
+      text: {
+        zh: `${narrator}：先看第一个点 $(0, ${c})$，代入 $x = 0$：$y = a \\times 0^{2} + c = c$，所以 $c = ${c}$`,
+        en: `${narrator}: "Look at the first point $(0, ${c})$: substitute $x = 0$: $y = a \\times 0^{2} + c = c$, so $c = ${c}$"`,
+      },
+      hint: {
+        zh: '为什么? $a \\times 0^{2} + c = c$，$x=0$ 时 $a$ 项消失了',
+        en: 'Why? $a \\times 0^{2} + c = c$ — when $x=0$, the $a$ term vanishes',
+      },
+      highlightField: 'c',
+    },
+    {
+      text: {
+        zh: `${narrator}：现在知道 $c = ${c}$，代入第二个点 $(${x2}, ${y2})$`,
+        en: `${narrator}: "Now we know $c = ${c}$, substitute the second point $(${x2}, ${y2})$"`,
+      },
+      highlightField: 'a',
+    },
+    {
+      text: {
+        zh: `${narrator}：$${y2} = a \\times ${x2}^{2} + ${c}$，解出 $a$`,
+        en: `${narrator}: "$${y2} = a \\times ${x2}^{2} + ${c}$, solve for $a$"`,
+      },
+      highlightField: 'a',
+    },
+    {
+      text: {
+        zh: `${narrator}：$a = \\frac{${y2} - ${c}}{${x2}^{2}} = \\frac{${y2 - c}}{${x2 * x2}} = ${a}$`,
+        en: `${narrator}: "$a = \\frac{${y2} - ${c}}{${x2}^{2}} = \\frac{${y2 - c}}{${x2 * x2}} = ${a}$"`,
+      },
+      highlightField: 'a',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案：$a = ${a}$，$c = ${c}$!`,
+        en: `${narrator}: "Answer: $a = ${a}$, $c = ${c}$!"`,
+      },
+      highlightField: 'c',
+    },
   ];
   return { ...template, description, data: { p1: [0, c], p2: [x2, y2], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
 }
@@ -1300,9 +1379,41 @@ export function generateDerivativeMission(template: Mission): Mission {
       en: `Find positive root $x$ of $f'(x) = 3x^2 - 3 = 0$.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：$f'(x) = 3x^2 - 3 = 0$`, en: `${narrator}: "$f'(x) = 3x^2 - 3 = 0$"` }, highlightField: 'x' },
-      { text: { zh: `${narrator}：$3x^2 = 3 \\Rightarrow x^2 = 1$`, en: `${narrator}: "$3x^2 = 3 \\Rightarrow x^2 = 1$"` }, highlightField: 'x' },
-      { text: { zh: `${narrator}：$x = ${x}$（取正值）！`, en: `${narrator}: "$x = ${x}$ (positive)!"` }, highlightField: 'x' },
+      {
+        text: {
+          zh: `${narrator}：导数等于零的点就是函数的极值点 -- 最高或最低点`,
+          en: `${narrator}: "Points where the derivative equals zero are extrema — the highest or lowest points"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：我们要解 $f'(x) = 3x^{2} - 3 = 0$`,
+          en: `${narrator}: "We need to solve $f'(x) = 3x^{2} - 3 = 0$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：移项：$3x^{2} = 3$`,
+          en: `${narrator}: "Rearrange: $3x^{2} = 3$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：两边除以 3：$x^{2} = 1$，开方得 $x = 1$（取正值）`,
+          en: `${narrator}: "Divide both sides by 3: $x^{2} = 1$, take the square root: $x = 1$ (positive value)"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：答案 $x = ${x}$! 这就是函数的极值点`,
+          en: `${narrator}: "Answer: $x = ${x}$! This is the extremum of the function"`,
+        },
+        highlightField: 'x',
+      },
     ];
     return { ...template, description, data: { x, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
   }
@@ -1318,9 +1429,45 @@ export function generateDerivativeMission(template: Mission): Mission {
     en: `Find tangent slope $k$ of $y = x^2$ at $x = ${x}$.`,
   };
   const tutorialSteps = [
-    { text: { zh: `${narrator}：$y = x^2$，导数 $y' = 2x$`, en: `${narrator}: "$y = x^2$, derivative $y' = 2x$"` }, highlightField: 'k' },
-    { text: { zh: `${narrator}：在 $x=${x}$ 处：$k = 2 \\times ${x}$`, en: `${narrator}: "At $x=${x}$: $k = 2 \\times ${x}$"` }, highlightField: 'k' },
-    { text: { zh: `${narrator}：$k = ${k}$！`, en: `${narrator}: "$k = ${k}$!"` }, highlightField: 'k' },
+    {
+      text: {
+        zh: `${narrator}：导数就是函数在某一点的"变化速度"（切线斜率）`,
+        en: `${narrator}: "The derivative is the 'rate of change' of a function at a specific point (slope of the tangent line)"`,
+      },
+      hint: {
+        zh: '对于 $y = x^{2}$，导数公式是 $y\\prime = 2x$',
+        en: 'For $y = x^{2}$, the derivative formula is $y\\prime = 2x$',
+      },
+      highlightField: 'k',
+    },
+    {
+      text: {
+        zh: `${narrator}：我们要求 $x = ${x}$ 处的斜率`,
+        en: `${narrator}: "We need to find the slope at $x = ${x}$"`,
+      },
+      highlightField: 'k',
+    },
+    {
+      text: {
+        zh: `${narrator}：代入公式：$k = 2 \\times ${x}$`,
+        en: `${narrator}: "Substitute into the formula: $k = 2 \\times ${x}$"`,
+      },
+      highlightField: 'k',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算：$k = ${k}$`,
+        en: `${narrator}: "Calculate: $k = ${k}$"`,
+      },
+      highlightField: 'k',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案 $k = ${k}$! 在 $x = ${x}$ 处，曲线的倾斜程度是 ${k}`,
+        en: `${narrator}: "Answer: $k = ${k}$! At $x = ${x}$, the steepness of the curve is ${k}"`,
+      },
+      highlightField: 'k',
+    },
   ];
   return { ...template, description, data: { x, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
 }
@@ -1349,10 +1496,52 @@ export function generateIntegrationMission(template: Mission): Mission {
       zh: `求 $\\int_{${lower}}^{${upper}} x\\,dx$。`,
       en: `Find $\\int_{${lower}}^{${upper}} x\\,dx$.`,
     };
+    const fUpper = 0.5 * upper * upper;
+    const fLower = 0.5 * lower * lower;
     const tutorialSteps = [
-      { text: { zh: `${narrator}：$\\int x\\,dx = \\frac{1}{2}x^2$`, en: `${narrator}: "$\\int x\\,dx = \\frac{1}{2}x^2$"` }, highlightField: 'area' },
-      { text: { zh: `${narrator}：$= \\frac{1}{2}(${upper}^2 - ${lower}^2) = \\frac{1}{2}(${upper * upper} - ${lower * lower})$`, en: `${narrator}: "$= \\frac{1}{2}(${upper}^2 - ${lower}^2) = \\frac{1}{2}(${upper * upper} - ${lower * lower})$"` }, highlightField: 'area' },
-      { text: { zh: `${narrator}：面积 = ${area}！`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
+      {
+        text: {
+          zh: `${narrator}：积分就是求曲线下面围成的面积`,
+          en: `${narrator}: "Integration means finding the area under the curve"`,
+        },
+        hint: {
+          zh: `从 $x = ${lower}$ 到 $x = ${upper}$，$y = x$ 曲线下面有多大面积?`,
+          en: `From $x = ${lower}$ to $x = ${upper}$, how much area is under the $y = x$ curve?`,
+        },
+        highlightField: 'area',
+      },
+      {
+        text: {
+          zh: `${narrator}：反导数（原函数）是什么? $\\int x\\,dx = \\frac{x^{2}}{2}$`,
+          en: `${narrator}: "What is the antiderivative? $\\int x\\,dx = \\frac{x^{2}}{2}$"`,
+        },
+        hint: {
+          zh: '求原函数就是"导数的逆运算"',
+          en: 'Finding the antiderivative is the "reverse of differentiation"',
+        },
+        highlightField: 'area',
+      },
+      {
+        text: {
+          zh: `${narrator}：代入上下限：$F(${upper}) - F(${lower})$`,
+          en: `${narrator}: "Substitute the limits: $F(${upper}) - F(${lower})$"`,
+        },
+        highlightField: 'area',
+      },
+      {
+        text: {
+          zh: `${narrator}：计算 $F(${upper}) = \\frac{${upper}^{2}}{2} = ${fUpper}$，$F(${lower}) = \\frac{${lower}^{2}}{2} = ${fLower}$`,
+          en: `${narrator}: "Calculate $F(${upper}) = \\frac{${upper}^{2}}{2} = ${fUpper}$, $F(${lower}) = \\frac{${lower}^{2}}{2} = ${fLower}$"`,
+        },
+        highlightField: 'area',
+      },
+      {
+        text: {
+          zh: `${narrator}：相减得到面积：$${fUpper} - ${fLower} = ${area}$!`,
+          en: `${narrator}: "Subtract to get the area: $${fUpper} - ${fLower} = ${area}$!"`,
+        },
+        highlightField: 'area',
+      },
     ];
     return { ...template, description, data: { lower, upper, func: 'x', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
   }
@@ -1366,10 +1555,52 @@ export function generateIntegrationMission(template: Mission): Mission {
       zh: `求 $\\int_{${lower}}^{${upper}} 3x^2\\,dx$。`,
       en: `Find $\\int_{${lower}}^{${upper}} 3x^2\\,dx$.`,
     };
+    const fUpper = upper * upper * upper;
+    const fLower = lower * lower * lower;
     const tutorialSteps = [
-      { text: { zh: `${narrator}：$\\int 3x^2\\,dx = x^3$`, en: `${narrator}: "$\\int 3x^2\\,dx = x^3$"` }, highlightField: 'area' },
-      { text: { zh: `${narrator}：$= ${upper}^3 - ${lower}^3 = ${upper * upper * upper} - ${lower * lower * lower}$`, en: `${narrator}: "$= ${upper}^3 - ${lower}^3 = ${upper * upper * upper} - ${lower * lower * lower}$"` }, highlightField: 'area' },
-      { text: { zh: `${narrator}：面积 = ${area}！`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
+      {
+        text: {
+          zh: `${narrator}：积分就是求曲线下面围成的面积`,
+          en: `${narrator}: "Integration means finding the area under the curve"`,
+        },
+        hint: {
+          zh: `从 $x = ${lower}$ 到 $x = ${upper}$，$y = 3x^{2}$ 曲线下面有多大面积?`,
+          en: `From $x = ${lower}$ to $x = ${upper}$, how much area is under the $y = 3x^{2}$ curve?`,
+        },
+        highlightField: 'area',
+      },
+      {
+        text: {
+          zh: `${narrator}：反导数（原函数）是什么? $\\int 3x^{2}\\,dx = x^{3}$`,
+          en: `${narrator}: "What is the antiderivative? $\\int 3x^{2}\\,dx = x^{3}$"`,
+        },
+        hint: {
+          zh: '求原函数就是"导数的逆运算"',
+          en: 'Finding the antiderivative is the "reverse of differentiation"',
+        },
+        highlightField: 'area',
+      },
+      {
+        text: {
+          zh: `${narrator}：代入上下限：$F(${upper}) - F(${lower})$`,
+          en: `${narrator}: "Substitute the limits: $F(${upper}) - F(${lower})$"`,
+        },
+        highlightField: 'area',
+      },
+      {
+        text: {
+          zh: `${narrator}：计算 $F(${upper}) = ${upper}^{3} = ${fUpper}$，$F(${lower}) = ${lower}^{3} = ${fLower}$`,
+          en: `${narrator}: "Calculate $F(${upper}) = ${upper}^{3} = ${fUpper}$, $F(${lower}) = ${lower}^{3} = ${fLower}$"`,
+        },
+        highlightField: 'area',
+      },
+      {
+        text: {
+          zh: `${narrator}：相减得到面积：$${fUpper} - ${fLower} = ${area}$!`,
+          en: `${narrator}: "Subtract to get the area: $${fUpper} - ${fLower} = ${area}$!"`,
+        },
+        highlightField: 'area',
+      },
     ];
     return { ...template, description, data: { lower, upper, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
   }
@@ -1383,10 +1614,52 @@ export function generateIntegrationMission(template: Mission): Mission {
     zh: `求 $\\int_{${lower}}^{${upper}} 2x\\,dx$。`,
     en: `Find $\\int_{${lower}}^{${upper}} 2x\\,dx$.`,
   };
+  const fUpper = upper * upper;
+  const fLower = lower * lower;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：$\\int 2x\\,dx = x^2$`, en: `${narrator}: "$\\int 2x\\,dx = x^2$"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：$= ${upper}^2 - ${lower}^2 = ${upper * upper} - ${lower * lower}$`, en: `${narrator}: "$= ${upper}^2 - ${lower}^2 = ${upper * upper} - ${lower * lower}$"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：面积 = ${area}！`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
+    {
+      text: {
+        zh: `${narrator}：积分就是求曲线下面围成的面积`,
+        en: `${narrator}: "Integration means finding the area under the curve"`,
+      },
+      hint: {
+        zh: `从 $x = ${lower}$ 到 $x = ${upper}$，$y = 2x$ 曲线下面有多大面积?`,
+        en: `From $x = ${lower}$ to $x = ${upper}$, how much area is under the $y = 2x$ curve?`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：反导数（原函数）是什么? $\\int 2x\\,dx = x^{2}$`,
+        en: `${narrator}: "What is the antiderivative? $\\int 2x\\,dx = x^{2}$"`,
+      },
+      hint: {
+        zh: '求原函数就是"导数的逆运算"',
+        en: 'Finding the antiderivative is the "reverse of differentiation"',
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：代入上下限：$F(${upper}) - F(${lower})$`,
+        en: `${narrator}: "Substitute the limits: $F(${upper}) - F(${lower})$"`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算 $F(${upper}) = ${upper}^{2} = ${fUpper}$，$F(${lower}) = ${lower}^{2} = ${fLower}$`,
+        en: `${narrator}: "Calculate $F(${upper}) = ${upper}^{2} = ${fUpper}$, $F(${lower}) = ${lower}^{2} = ${fLower}$"`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：相减得到面积：$${fUpper} - ${fLower} = ${area}$!`,
+        en: `${narrator}: "Subtract to get the area: $${fUpper} - ${fLower} = ${area}$!"`,
+      },
+      highlightField: 'area',
+    },
   ];
   return { ...template, description, data: { lower, upper, func: '2x', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
 }
