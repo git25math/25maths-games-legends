@@ -1859,26 +1859,51 @@ export function generateFuncValMission(template: Mission): Mission {
 
 export function generateStatsMedianMission(template: Mission): Mission {
   const tier = getTier();
-  const countPools = { 1: [5], 2: [5, 7], 3: [7, 9] };
-  const ranges = { 1: [1.5, 0.4] as const, 2: [1.5, 0.6] as const, 3: [1.4, 0.7] as const };
+  const countPools: Record<DifficultyTier, number[]> = { 1: [5], 2: [5, 7], 3: [7, 9] };
+  const valRanges: Record<DifficultyTier, [number, number]> = { 1: [3, 20], 2: [5, 50], 3: [10, 100] };
   const count = pickRandom(countPools[tier]);
-  const values = Array.from({ length: count }, () => {
-    // Heights in a tier-dependent range (one decimal)
-    return Math.round((ranges[tier][0] + Math.random() * ranges[tier][1]) * 10) / 10;
-  });
+  // Use integers for Y7 (simpler than decimals)
+  const values = Array.from({ length: count }, () => randInt(valRanges[tier][0], valRanges[tier][1]));
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
   const median = sorted[mid]; // odd count, so exact middle
 
-  const narrator = pickRandom(['典韦', '曹操']);
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
   const description: BilingualText = {
-    zh: `求数据 ${sorted.join(', ')} 的中位数。`,
-    en: `Find the median of ${sorted.join(', ')}.`,
+    zh: `求数据 $${sorted.join(', ')}$ 的中位数。`,
+    en: `Find the median of $${sorted.join(', ')}$.`,
   };
+
+  // Build position markers for visual
+  const posLabels = sorted.map((v, i) => i === mid ? `**[${v}]**` : `${v}`);
+  const posLabelsEn = posLabels;
+
   const tutorialSteps = [
-    { text: { zh: `${narrator}：先排序，再找中间值。${count} 个数，中间是第 ${mid + 1} 个。`, en: `${narrator}: "Sort first, find middle. ${count} numbers, middle is position ${mid + 1}."` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：排序后：${sorted.join(', ')}`, en: `${narrator}: "Sorted: ${sorted.join(', ')}"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：中位数 = ${median}！`, en: `${narrator}: "Median = ${median}!"` }, highlightField: 'ans' },
+    {
+      text: { zh: `${narrator}：什么是"中位数"？——排好队，站在正中间的那个人`, en: `${narrator}: "What is the median? — Line everyone up, and pick the person standing in the exact middle"` },
+      hint: { zh: `想象 ${count} 个士兵按身高从矮到高站成一排\n中位数就是站在正中间的那个人的身高\n\n为什么不用平均数？\n因为平均数会被极端值"带偏"——如果队伍里混了一个巨人，平均身高会被拉高\n但中位数不受影响——巨人再高，中间那个人还是那个人`, en: `Imagine ${count} soldiers lined up by height, shortest to tallest\nThe median is the height of the person standing in the exact middle\n\nWhy not use the mean (average)?\nBecause the mean gets "pulled" by extreme values — if a giant joins, the average shoots up\nBut the median doesn't change — the middle person is still the same` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第一步——把数据从小到大排列`, en: `${narrator}: "Step 1 — arrange the data from smallest to largest"` },
+      hint: { zh: `原始数据：$${values.join(', ')}$\n\n排序后：$${sorted.join(', ')}$\n\n（如果已经排好了，这步可以跳过）`, en: `Original data: $${values.join(', ')}$\n\nSorted: $${sorted.join(', ')}$\n\n(If already sorted, skip this step)` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第二步——数一数有几个数，找到正中间的位置`, en: `${narrator}: "Step 2 — count how many values, find the exact middle position"` },
+      hint: { zh: `一共 $${count}$ 个数\n中间位置 = 第 $${mid + 1}$ 个\n\n怎么算？$(${count} + 1) \\div 2 = ${(count + 1) / 2}$\n所以中间是第 $${mid + 1}$ 个\n\n口诀：总数加 1 除以 2 = 中间位置`, en: `Total: $${count}$ values\nMiddle position = ${mid + 1}th\n\nHow? $(${count} + 1) \\div 2 = ${(count + 1) / 2}$\nSo middle is the ${mid + 1}th value\n\nRule: (total + 1) ÷ 2 = middle position` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第三步——从排好的数据中取第 $${mid + 1}$ 个`, en: `${narrator}: "Step 3 — pick the ${mid + 1}th value from the sorted list"` },
+      hint: { zh: `排序后：$${sorted.join(', ')}$\n\n数到第 $${mid + 1}$ 个：\n${sorted.map((v, i) => `第 ${i+1} 个 = $${v}$${i === mid ? ' ← 就是这个！' : ''}`).join('\n')}\n\n中位数 = $${median}$`, en: `Sorted: $${sorted.join(', ')}$\n\nCount to position ${mid + 1}:\n${sorted.map((v, i) => `${i+1}th = $${v}$${i === mid ? ' ← this one!' : ''}`).join('\n')}\n\nMedian = $${median}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——中位数合理吗？`, en: `${narrator}: "Verify — does the median make sense?"` },
+      hint: { zh: `中位数 = $${median}$\n\n检查：\n• 比它小的有 ${mid} 个：$${sorted.slice(0, mid).join(', ')}$ ✓\n• 比它大的有 ${mid} 个：$${sorted.slice(mid + 1).join(', ')}$ ✓\n• 两边数量相等！中位数就是"正中间"的意思`, en: `Median = $${median}$\n\nCheck:\n• Values smaller: ${mid} values: $${sorted.slice(0, mid).join(', ')}$ ✓\n• Values larger: ${mid} values: $${sorted.slice(mid + 1).join(', ')}$ ✓\n• Equal count on both sides! Median means "exactly in the middle"` },
+      highlightField: 'ans',
+    },
   ];
 
   return {
