@@ -177,7 +177,7 @@ export default function App() {
         <div className="bg-indigo-600 p-4 rounded-2xl shadow-xl animate-pulse">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </div>
-        <p className="text-white/40 text-sm font-bold">{lang === 'zh' ? '25 数学三国' : '25 Math Legends'}</p>
+        <p className="text-white/40 text-sm font-bold">{lang === 'zh' ? '25 数学三国' : lang === 'zh_TW' ? '25 數學三國' : '25 Math Legends'}</p>
       </div>
     );
   }
@@ -188,11 +188,11 @@ export default function App() {
         {/* Top controls */}
         <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
           <button
-            onClick={() => setLang(lang === 'zh' ? 'en' : 'zh')}
+            onClick={() => setLang(lang === 'zh' ? 'zh_TW' : lang === 'zh_TW' ? 'en' : 'zh')}
             className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-bold hover:bg-white/20 transition-all"
           >
             <Languages size={18} />
-            {lang === 'zh' ? 'EN' : '中文'}
+            {lang === 'zh' ? '繁體' : lang === 'zh_TW' ? 'EN' : '简体'}
           </button>
           {(user || isGuest) && (
             <button

@@ -3,6 +3,7 @@ import { CharacterAvatar } from '../CharacterAvatar';
 import { DialogueBubble } from '../DialogueBubble';
 import { LatexText } from '../MathView';
 import { EquationSteps } from '../diagrams/EquationSteps';
+import { lt } from '../../i18n/resolveText';
 
 type TutorialStep = {
   text: { zh: string; en: string };
@@ -62,9 +63,9 @@ export function AnimatedTutorial({
   const step = tutorialSteps[currentStep];
   if (!step) return null;
 
-  const rawText = step.text[lang];
+  const rawText = lt(step.text, lang);
   const { speaker, dialogue } = extractSpeaker(rawText);
-  const hint = step.hint?.[lang];
+  const hint = step.hint ? lt(step.hint, lang) : undefined;
 
   return (
     <motion.div
@@ -101,7 +102,7 @@ export function AnimatedTutorial({
             steps={equationSteps.map(s => ({
               tex: s.tex,
               annotation: s.annotation
-                ? (typeof s.annotation === 'string' ? s.annotation : s.annotation[lang])
+                ? (typeof s.annotation === 'string' ? s.annotation : lt(s.annotation, lang))
                 : undefined,
             }))}
             currentStep={currentStep}

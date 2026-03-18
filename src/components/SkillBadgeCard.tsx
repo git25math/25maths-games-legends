@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { motion } from 'motion/react';
 import { CharacterAvatar } from './CharacterAvatar';
 import { MathView } from './MathView';
+import { lt } from '../i18n/resolveText';
 
 type Props = {
   characterId: string;
@@ -93,7 +94,7 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
           </div>
 
           {/* Mission title (small) */}
-          <p className="text-white/40 text-xs mb-1">{missionTitle[lang]}</p>
+          <p className="text-white/40 text-xs mb-1">{lt(missionTitle, lang)}</p>
 
           {/* Skill name (large, golden) */}
           <motion.h2
@@ -103,7 +104,7 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
             className="font-black text-2xl tracking-wider mb-4"
             style={{ color: '#daa520' }}
           >
-            {skillName[lang]}
+            {lt(skillName, lang)}
           </motion.h2>
 
           {/* Mastered badge */}
@@ -123,7 +124,7 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
               {t.summary}
             </div>
             <p className="text-white/80 text-sm leading-relaxed mb-3">
-              {skillSummary[lang]}
+              {lt(skillSummary, lang)}
             </p>
             {formula && (
               <div className="flex justify-center">

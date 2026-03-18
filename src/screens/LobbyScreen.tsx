@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { Timer } from 'lucide-react';
 import type { Language, Room } from '../types';
 import { translations } from '../i18n/translations';
+import { lt } from '../i18n/resolveText';
 import { CHARACTERS } from '../data/characters';
 
 export const LobbyScreen = ({
@@ -46,7 +47,7 @@ export const LobbyScreen = ({
                 </div>
                 <div>
                   <p className="font-black text-slate-800">{p.name}</p>
-                  <p className="text-xs text-indigo-500 font-bold">{CHARACTERS.find(c => c.id === p.charId)?.role[lang]}</p>
+                  <p className="text-xs text-indigo-500 font-bold">{(() => { const ch = CHARACTERS.find(c => c.id === p.charId); return ch ? lt(ch.role, lang) : ''; })()}</p>
                 </div>
               </div>
               <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase ${p.isReady ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200 text-slate-400'}`}>

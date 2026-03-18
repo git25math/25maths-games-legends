@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import type { Character, Language } from '../types';
 import { translations } from '../i18n/translations';
+import { lt } from '../i18n/resolveText';
 import { MathView, LatexText } from './MathView';
 import { CharacterAvatar } from './CharacterAvatar';
 
@@ -16,12 +17,12 @@ export const CharacterCard = ({ character, isSelected, onSelect, lang }: { chara
     <div className="mx-auto mb-4 flex justify-center">
       <CharacterAvatar characterId={character.id} size={96} />
     </div>
-    <h3 className="text-lg font-bold text-white text-center">{character.name[lang]}</h3>
-    <p className="text-yellow-300 text-xs text-center font-medium mb-3">{character.role[lang]}</p>
+    <h3 className="text-lg font-bold text-white text-center">{lt(character.name, lang)}</h3>
+    <p className="text-yellow-300 text-xs text-center font-medium mb-3">{lt(character.role, lang)}</p>
 
     <div className="bg-black/20 p-2 rounded-lg mb-3">
       <p className="text-[10px] text-indigo-300 font-bold mb-1">{lang === 'zh' ? '武将技能' : 'Skill'}:</p>
-      <LatexText text={character.skill[lang]} className="text-[10px] text-white/80 leading-tight italic" />
+      <LatexText text={lt(character.skill, lang)} className="text-[10px] text-white/80 leading-tight italic" />
     </div>
 
     <div className="space-y-1 mb-3">
@@ -35,6 +36,6 @@ export const CharacterCard = ({ character, isSelected, onSelect, lang }: { chara
         </div>
       ))}
     </div>
-    <p className="text-gray-400 text-[10px] text-center leading-tight">{character.description[lang]}</p>
+    <p className="text-gray-400 text-[10px] text-center leading-tight">{lt(character.description, lang)}</p>
   </motion.div>
 );

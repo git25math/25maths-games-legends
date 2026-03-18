@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
+import { lt } from '../i18n/resolveText';
 import { MathView, LatexText } from '../components/MathView';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { interpolate } from '../utils/interpolate';
@@ -74,7 +75,7 @@ export const MapScreen = ({
               <Crown size={20} className="text-yellow-400" />
             </h3>
             <div className="flex flex-wrap items-center gap-2 mt-1">
-              <p className="text-indigo-400 font-bold text-sm">{selectedChar?.name[lang]}</p>
+              <p className="text-indigo-400 font-bold text-sm">{selectedChar ? lt(selectedChar.name, lang) : ''}</p>
               <span className="text-white/20">|</span>
               <button
                 onClick={onGradeChange}
@@ -114,7 +115,7 @@ export const MapScreen = ({
           className="w-full rounded-3xl opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
         />
         <div className="relative z-10 space-y-16 p-4 md:p-8">
-        {Array.from(new Set(gradeMissions.map(m => m.unitTitle[lang]))).map((unitTitle, unitIndex) => (
+        {Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang)))).map((unitTitle, unitIndex) => (
           <div key={unitTitle} className="space-y-6">
             <div className="flex items-center gap-4">
               <div className="h-px flex-1 bg-white/10" />
@@ -133,7 +134,7 @@ export const MapScreen = ({
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {gradeMissions
-                .filter(m => m.unitTitle[lang] === unitTitle)
+                .filter(m => lt(m.unitTitle, lang) === unitTitle)
                 .sort((a, b) => a.order - b.order)
                 .map(mission => {
                   const comp = profile.completed_missions[String(mission.id)];
@@ -161,9 +162,9 @@ export const MapScreen = ({
                             </div>
                           ) : isLocked ? <Lock className="text-slate-400" size={28} /> : null}
                         </div>
-                        <h4 className="text-lg md:text-2xl font-black text-slate-800 mb-1">{mission.title[lang]}</h4>
+                        <h4 className="text-lg md:text-2xl font-black text-slate-800 mb-1">{lt(mission.title, lang)}</h4>
                         <p className="text-indigo-600 text-[10px] font-bold mb-3 uppercase">{t.questionTypes[mission.type]}</p>
-                        <LatexText text={interpolate(mission.description[lang], mission.data ?? {})} className="text-slate-500 text-sm mb-8 line-clamp-3 block" />
+                        <LatexText text={interpolate(lt(mission.description, lang), mission.data ?? {})} className="text-slate-500 text-sm mb-8 line-clamp-3 block" />
                         <div className="flex gap-2">
                           <button
                             disabled={!!isLocked}

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { XCircle, BookOpen, ChevronRight, ChevronLeft, Swords, MapIcon, CheckCircle2 } from 'lucide-react';
 import type { Mission, Character, Language, DifficultyMode } from '../types';
 import { translations } from '../i18n/translations';
+import { lt } from '../i18n/resolveText';
 import { generateMission, type DifficultyTier } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
 import { interpolate } from '../utils/interpolate';
@@ -70,8 +71,8 @@ export const PracticeScreen = ({
 
   // Interpolated texts
   const p = currentMission.data ?? {};
-  const storyText = interpolate(currentMission.story[lang], p);
-  const descText = interpolate(currentMission.description[lang], p);
+  const storyText = interpolate(lt(currentMission.story, lang), p);
+  const descText = interpolate(lt(currentMission.description, lang), p);
 
   // Interpolate tutorialSteps with mission data (same as story/description)
   const interpolatedTutorialSteps = currentMission.tutorialSteps?.map(step => ({
@@ -217,7 +218,7 @@ export const PracticeScreen = ({
             <div>
               <h2 className="text-base md:text-xl font-black tracking-widest flex items-center gap-2">
                 <BookOpen size={18} />
-                {mission.title[lang]}
+                {lt(mission.title, lang)}
               </h2>
               {/* Phase indicator */}
               <div className="flex items-center gap-2 mt-1">

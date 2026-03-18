@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { motion } from 'motion/react';
 import { CharacterAvatar } from './CharacterAvatar';
+import { lt } from '../i18n/resolveText';
 
 type Props = {
   characterId: string;
@@ -97,7 +98,7 @@ export const AchievementCard = memo(function AchievementCard({
           className="text-center font-bold text-lg px-6 pb-3"
           style={{ color: '#3d2b1f' }}
         >
-          {missionTitle[lang]}
+          {lt(missionTitle, lang)}
         </p>
 
         {/* === Stats Grid (2x2) === */}

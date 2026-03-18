@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import type { Language } from '../types';
 import { translations } from '../i18n/translations';
+import { lt } from '../i18n/resolveText';
 import { useAudio } from '../audio';
 
 export type SkillCard = {
@@ -125,13 +126,13 @@ export const SkillCardSelector = ({
               <div className={`bg-gradient-to-b ${card.color} p-6 pb-4 flex flex-col items-center`}>
                 <span className="text-5xl md:text-6xl mb-3 drop-shadow-lg">{card.icon}</span>
                 <h3 className="text-xl md:text-2xl font-black text-white tracking-wider drop-shadow">
-                  {card.name[lang]}
+                  {lt(card.name, lang)}
                 </h3>
               </div>
               {/* Card description area */}
               <div className="bg-slate-900/90 border-t-2 border-amber-700/30 px-4 py-4">
                 <p className="text-sm text-slate-300 font-bold leading-relaxed">
-                  {card.description[lang]}
+                  {lt(card.description, lang)}
                 </p>
               </div>
 

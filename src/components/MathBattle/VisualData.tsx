@@ -3,6 +3,7 @@ import type { Mission, Language } from '../../types';
 import { MathView } from '../MathView';
 import { interpolate } from '../../utils/interpolate';
 import { translations } from '../../i18n/translations';
+import { lt } from '../../i18n/resolveText';
 import {
   NumberLine,
   VennDiagram,
@@ -112,7 +113,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     return (
       <div className="bg-white/30 p-6 rounded-lg border border-[#3d2b1f]/10 text-center">
         <div className="text-4xl font-black text-[#3d2b1f] mb-2">
-          <MathView tex={interpolate(mission.description[lang], mission.data ?? {}).match(/\$(.*?)\$/)?.[1] || ''} />
+          <MathView tex={interpolate(lt(mission.description, lang), mission.data ?? {}).match(/\$(.*?)\$/)?.[1] || ''} />
         </div>
         <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">{vl.simpleEq}</p>
       </div>

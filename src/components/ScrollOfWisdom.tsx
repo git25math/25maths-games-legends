@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { BookOpen, XCircle, Sparkles, Zap } from 'lucide-react';
 import type { Mission, Language } from '../types';
 import { translations } from '../i18n/translations';
+import { lt } from '../i18n/resolveText';
 import { MathView, LatexText } from './MathView';
 
 export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; lang: Language; onClose: () => void }) => {
@@ -28,7 +29,7 @@ export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; l
               <Sparkles size={18} />
               {t.secretConcept}
             </h3>
-            <LatexText text={mission.secret.concept[lang]} className="text-amber-900/80 leading-relaxed" />
+            <LatexText text={lt(mission.secret.concept, lang)} className="text-amber-900/80 leading-relaxed" />
           </section>
           <section className="bg-white/50 p-4 rounded-2xl border-2 border-amber-100">
             <h3 className="text-amber-800 font-bold mb-2 uppercase text-xs tracking-widest">{t.secretFormula}</h3>
@@ -45,7 +46,7 @@ export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; l
               {mission.secret.tips.map((tip, i) => (
                 <li key={i} className="flex items-start gap-2 text-amber-900/70">
                   <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
-                  <LatexText text={tip[lang]} />
+                  <LatexText text={lt(tip, lang)} />
                 </li>
               ))}
             </ul>

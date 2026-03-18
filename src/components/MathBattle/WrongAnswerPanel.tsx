@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { AlertTriangle, ChevronRight } from 'lucide-react';
 import type { Language } from '../../types';
 import { MathView } from '../MathView';
+import { lt } from '../../i18n/resolveText';
 import { INPUT_FIELDS } from './inputConfig';
 
 const LABELS = {
@@ -104,7 +105,7 @@ export function WrongAnswerPanel({
       {/* Tutorial steps if available (show last step = solution) */}
       {tutorialSteps && tutorialSteps.length > 0 && (
         <div className="bg-white/60 rounded-lg p-3 border border-red-100 text-sm text-slate-700 leading-relaxed">
-          {tutorialSteps[tutorialSteps.length - 1].text[lang]}
+          {lt(tutorialSteps[tutorialSteps.length - 1].text, lang)}
         </div>
       )}
 

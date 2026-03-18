@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Volume2, VolumeX, Flame } from 'lucide-react';
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
+import { lt } from '../../i18n/resolveText';
 import { checkAnswer } from '../../utils/checkCorrectness';
 import { interpolate } from '../../utils/interpolate';
 import { LatexText, MathView } from '../MathView';
@@ -93,8 +94,8 @@ export const MathBattle = ({
 
   // Interpolate {param} placeholders using current question's data
   const p = currentQuestion.data ?? {};
-  const storyText = interpolate(currentQuestion.story[lang], p);
-  const descText = interpolate(currentQuestion.description[lang], p);
+  const storyText = interpolate(lt(currentQuestion.story, lang), p);
+  const descText = interpolate(lt(currentQuestion.description, lang), p);
 
   // Interpolate tutorialSteps with mission data (same as story/description)
   const interpolatedTutorialSteps = currentQuestion.tutorialSteps?.map(step => ({
@@ -344,7 +345,7 @@ export const MathBattle = ({
           <div className="flex items-center gap-4">
             <CharacterAvatar characterId={character.id} size={56} />
             <div>
-              <h2 className="text-base md:text-xl font-black tracking-widest">{character.name[lang]} - {mission.title[lang]}</h2>
+              <h2 className="text-base md:text-xl font-black tracking-widest">{lt(character.name, lang)} - {lt(mission.title, lang)}</h2>
               <div className="flex gap-1 mt-1 items-center">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className={`w-4 h-4 rounded-full border border-black ${i < hp ? 'bg-red-600 shadow-[0_0_5px_rgba(220,38,38,0.8)]' : 'bg-slate-800'}`} />
@@ -489,7 +490,7 @@ export const MathBattle = ({
                 tutorialSteps={interpolatedTutorialSteps}
                 lang={lang}
                 onContinue={handleWrongAnswerContinue}
-                storyText={mission.storyConsequence?.wrong[lang]}
+                storyText={mission.storyConsequence ? lt(mission.storyConsequence.wrong, lang) : undefined}
               />
             )}
 
@@ -567,7 +568,7 @@ export const MathBattle = ({
                   <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-2">{t.successTitle}</h3>
                   <p className="text-slate-600 font-bold">{t.successDesc}</p>
                   {mission.storyConsequence && (
-                    <p className="text-emerald-600 font-bold mt-3 italic text-sm">{mission.storyConsequence.correct[lang]}</p>
+                    <p className="text-emerald-600 font-bold mt-3 italic text-sm">{lt(mission.storyConsequence.correct, lang)}</p>
                   )}
                 </motion.div>
               ) : (
@@ -576,7 +577,7 @@ export const MathBattle = ({
                   <h3 className="text-3xl md:text-5xl font-black text-white mb-4">{t.failTitle}</h3>
                   <p className="text-slate-400 mb-2">{t.failDesc}</p>
                   {mission.storyConsequence ? (
-                    <p className="text-amber-400 font-bold mb-8 italic">{mission.storyConsequence.wrong[lang]}</p>
+                    <p className="text-amber-400 font-bold mb-8 italic">{lt(mission.storyConsequence.wrong, lang)}</p>
                   ) : (
                     <p className="text-indigo-400 font-bold mb-8 italic">"{encouragement}"</p>
                   )}

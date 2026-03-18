@@ -1,4 +1,4 @@
-export type Language = 'zh' | 'en';
+export type Language = 'zh' | 'zh_TW' | 'en';
 
 export type BilingualText = { zh: string; en: string };
 
