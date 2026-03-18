@@ -31,8 +31,9 @@ export const InputFields = ({
               <LatexText text={field.label} />
             </label>
             <input
-              type="number"
-              step="any"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
               disabled={isTutorial && !isHighlighted}
               value={inputs[field.id] || ''}
               onChange={(e) => setInputs({ ...inputs, [field.id]: e.target.value })}
@@ -41,6 +42,9 @@ export const InputFields = ({
                 isHighlighted ? 'border-indigo-500 ring-4 ring-indigo-500/20' : 'border-[#3d2b1f]'
               }`}
             />
+            <div className="mt-1 text-[9px] text-[#5c4033]/40 px-2">
+              {lang === 'zh' ? '支持分数(3/4)、根号(√5)、负数(-3)' : 'Supports fractions(3/4), roots(√5), negatives(-3)'}
+            </div>
           </div>
         );
       })}
