@@ -14,6 +14,7 @@ import { WrongAnswerPanel } from '../components/MathBattle/WrongAnswerPanel';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { SkillBadgeCard } from '../components/SkillBadgeCard';
 import { CalculatorWidget } from '../components/Calculator';
+import { AnimatedCoordinatePlane } from '../components/diagrams/AnimatedCoordinatePlane';
 import { useAudio } from '../hooks/useAudio';
 
 type PracticePhase = 'green' | 'amber' | 'red';
@@ -268,8 +269,17 @@ export const PracticeScreen = ({
               <LatexText text={descText} />
             </div>
 
-            {/* Visual diagram */}
-            <VisualData mission={currentMission} lang={lang} />
+            {/* Visual diagram — animated for LINEAR in Green phase */}
+            {currentPhase === 'green' && currentMission.type === 'LINEAR' && currentMission.data?.points ? (
+              <AnimatedCoordinatePlane
+                step={tutorialStep}
+                points={currentMission.data.points}
+                m={currentMission.data.points ? (currentMission.data.points[1][1] - currentMission.data.points[0][1]) / (currentMission.data.points[1][0] - currentMission.data.points[0][0]) : undefined}
+                b={currentMission.data.points ? currentMission.data.points[0][1] - ((currentMission.data.points[1][1] - currentMission.data.points[0][1]) / (currentMission.data.points[1][0] - currentMission.data.points[0][0])) * currentMission.data.points[0][0] : undefined}
+              />
+            ) : (
+              <VisualData mission={currentMission} lang={lang} />
+            )}
 
             {/* Green phase: show formula in left panel as reference */}
             {currentPhase === 'green' && (
