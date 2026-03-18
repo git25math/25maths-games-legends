@@ -276,7 +276,7 @@ export const PracticeScreen = ({
                 step={currentPhase === 'amber' ? 999 : tutorialStep}
                 points={currentMission.data.points}
                 m={currentMission.data.points ? (currentMission.data.points[1][1] - currentMission.data.points[0][1]) / (currentMission.data.points[1][0] - currentMission.data.points[0][0]) : undefined}
-                b={currentMission.data.points ? currentMission.data.points[0][1] - ((currentMission.data.points[1][1] - currentMission.data.points[0][1]) / (currentMission.data.points[1][0] - currentMission.data.points[0][0])) * currentMission.data.points[0][0] : undefined}
+                c={currentMission.data.points ? currentMission.data.points[0][1] - ((currentMission.data.points[1][1] - currentMission.data.points[0][1]) / (currentMission.data.points[1][0] - currentMission.data.points[0][0])) * currentMission.data.points[0][0] : undefined}
               />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'QUADRATIC' && currentMission.data?.p1 ? (
               (() => {

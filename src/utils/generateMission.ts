@@ -490,24 +490,24 @@ export function generatePercentageMission(template: Mission): Mission {
 }
 
 /* ══════════════════════════════════════════════════════════
-   LINEAR generator: y = mx + b from two points
+   LINEAR generator: y = mx + c from two points
    ══════════════════════════════════════════════════════════ */
 
 export function generateLinearMission(template: Mission): Mission {
   const tier = getTier();
   const mPools = { 1: [1, 2, -1, -2], 2: [1, 2, 3, -1, -2, -3], 3: [-4, -3, -2, 2, 3, 4, 5] };
-  const bPools = { 1: [0, 1, 2, 3, -1], 2: [-5, -3, -1, 0, 1, 3, 5], 3: [-8, -5, -3, 3, 5, 7, 10] };
+  const cPools = { 1: [0, 1, 2, 3, -1], 2: [-5, -3, -1, 0, 1, 3, 5], 3: [-8, -5, -3, 3, 5, 7, 10] };
   const m = pickRandom(mPools[tier]);
-  const b = pickRandom(bPools[tier]);
+  const c = pickRandom(cPools[tier]);
   const x1 = pickRandom([-2, -1, 0, 1, 2, 3]);
   const x2 = x1 + pickRandom([1, 2, 3]);
-  const y1 = m * x1 + b;
-  const y2 = m * x2 + b;
+  const y1 = m * x1 + c;
+  const y2 = m * x2 + c;
 
   const narrator = pickRandom(['诸葛亮', '曹操']);
   const description: BilingualText = {
-    zh: `求经过 A(${x1}, ${y1}) 和 B(${x2}, ${y2}) 的直线方程 $y = mx + b$。`,
-    en: `Find the equation $y = mx + b$ through A(${x1}, ${y1}) and B(${x2}, ${y2}).`,
+    zh: `求经过 A(${x1}, ${y1}) 和 B(${x2}, ${y2}) 的直线方程 $y = mx + c$。`,
+    en: `Find the equation $y = mx + c$ through A(${x1}, ${y1}) and B(${x2}, ${y2}).`,
   };
 
   const tutorialSteps = [
@@ -538,17 +538,17 @@ export function generateLinearMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：「求截距：$b = y_1 - m \\times x_1 = ${y1} - ${m} \\times (${x1}) = ${b}$」`,
-        en: `${narrator}: "Find intercept: $b = y_1 - m \\times x_1 = ${y1} - ${m} \\times (${x1}) = ${b}$"`,
+        zh: `${narrator}：「求截距：$c = y_1 - m \\times x_1 = ${y1} - ${m} \\times (${x1}) = ${c}$」`,
+        en: `${narrator}: "Find intercept: $c = y_1 - m \\times x_1 = ${y1} - ${m} \\times (${x1}) = ${c}$"`,
       },
-      highlightField: 'b',
+      highlightField: 'c',
     },
     {
       text: {
-        zh: `${narrator}：「直线方程：$y = ${m}x ${b >= 0 ? '+' : ''} ${b}$」`,
-        en: `${narrator}: "Line equation: $y = ${m}x ${b >= 0 ? '+' : ''} ${b}$"`,
+        zh: `${narrator}：「直线方程：$y = ${m}x ${c >= 0 ? '+' : ''} ${c}$」`,
+        en: `${narrator}: "Line equation: $y = ${m}x ${c >= 0 ? '+' : ''} ${c}$"`,
       },
-      highlightField: 'b',
+      highlightField: 'c',
     },
   ];
 

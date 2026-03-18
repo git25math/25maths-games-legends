@@ -6,8 +6,8 @@ type BilingualInputFields = { zh: InputField[]; en: InputField[] };
 
 export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
   LINEAR: {
-    zh: [{ id: 'm', label: '斜率 m', placeholder: 'm = ?' }, { id: 'b', label: '截距 b', placeholder: 'b = ?' }],
-    en: [{ id: 'm', label: 'Slope m', placeholder: 'm = ?' }, { id: 'b', label: 'Intercept b', placeholder: 'b = ?' }],
+    zh: [{ id: 'm', label: '斜率 m', placeholder: 'm = ?' }, { id: 'c', label: '截距 c', placeholder: 'c = ?' }],
+    en: [{ id: 'm', label: 'Slope m', placeholder: 'm = ?' }, { id: 'c', label: 'Intercept c', placeholder: 'c = ?' }],
   },
   AREA: {
     zh: [{ id: 'area', label: '面积', placeholder: '面积 = ?' }],

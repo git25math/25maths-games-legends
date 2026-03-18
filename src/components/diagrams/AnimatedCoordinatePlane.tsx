@@ -3,7 +3,7 @@
  * Syncs with tutorial steps: each step reveals more elements (points, lines, labels)
  *
  * Usage in PracticeScreen Green phase:
- *   <AnimatedCoordinatePlane step={tutorialStep} points={...} m={2} b={-1} />
+ *   <AnimatedCoordinatePlane step={tutorialStep} points={...} m={2} c={-1} />
  *
  * Step 0: Show empty coordinate plane
  * Step 1: Plot point A with animation
@@ -19,8 +19,8 @@ type Props = {
   points: [number, number][];
   /** Slope (shown at step 2+) */
   m?: number;
-  /** Intercept (shown at step 2+) */
-  b?: number;
+  /** Y-intercept (shown at step 2+) */
+  c?: number;
   /** Equation type label */
   label?: string;
 };
@@ -29,7 +29,7 @@ const PADDING = 35;
 const SIZE = 320;
 const PLOT = SIZE - PADDING * 2;
 
-export function AnimatedCoordinatePlane({ step, points, m, b, label }: Props) {
+export function AnimatedCoordinatePlane({ step, points, m, c, label }: Props) {
   // Auto-calculate range from points
   const allX = points.map(p => p[0]);
   const allY = points.map(p => p[1]);
@@ -64,14 +64,14 @@ export function AnimatedCoordinatePlane({ step, points, m, b, label }: Props) {
   // Extended line through both points (for step 2+)
   let lineX1 = xMin, lineX2 = xMax;
   let lineY1 = yMin, lineY2 = yMax;
-  if (m !== undefined && b !== undefined && points.length >= 2) {
-    lineY1 = m * lineX1 + b;
-    lineY2 = m * lineX2 + b;
+  if (m !== undefined && c !== undefined && points.length >= 2) {
+    lineY1 = m * lineX1 + c;
+    lineY2 = m * lineX2 + c;
     // Clip to visible area
-    if (lineY1 < yMin) { lineX1 = (yMin - b) / m; lineY1 = yMin; }
-    if (lineY1 > yMax) { lineX1 = (yMax - b) / m; lineY1 = yMax; }
-    if (lineY2 < yMin) { lineX2 = (yMin - b) / m; lineY2 = yMin; }
-    if (lineY2 > yMax) { lineX2 = (yMax - b) / m; lineY2 = yMax; }
+    if (lineY1 < yMin) { lineX1 = (yMin - c) / m; lineY1 = yMin; }
+    if (lineY1 > yMax) { lineX1 = (yMax - c) / m; lineY1 = yMax; }
+    if (lineY2 < yMin) { lineX2 = (yMin - c) / m; lineY2 = yMin; }
+    if (lineY2 > yMax) { lineX2 = (yMax - c) / m; lineY2 = yMax; }
   }
 
   return (
@@ -112,7 +112,7 @@ export function AnimatedCoordinatePlane({ step, points, m, b, label }: Props) {
           </motion.g>
 
           {/* Animated line drawing */}
-          {m !== undefined && b !== undefined && (
+          {m !== undefined && c !== undefined && (
             <motion.line
               x1={toX(lineX1)} y1={toY(lineY1)}
               x2={toX(lineX2)} y2={toY(lineY2)}
@@ -125,7 +125,7 @@ export function AnimatedCoordinatePlane({ step, points, m, b, label }: Props) {
           )}
 
           {/* Equation label */}
-          {m !== undefined && b !== undefined && (
+          {m !== undefined && c !== undefined && (
             <motion.text
               x={SIZE - PADDING - 5}
               y={PADDING + 16}
@@ -137,7 +137,7 @@ export function AnimatedCoordinatePlane({ step, points, m, b, label }: Props) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
             >
-              y = {m}x {b >= 0 ? '+' : ''}{b}
+              y = {m}x {c >= 0 ? '+' : ''}{c}
             </motion.text>
           )}
         </>

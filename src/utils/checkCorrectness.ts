@@ -50,9 +50,9 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     if (!data.points) return { correct: false, expected: {} };
     const [[x1, y1], [x2, y2]] = data.points;
     const m = (y2 - y1) / (x2 - x1);
-    const b = y1 - m * x1;
-    const ok = Math.abs(parse(inputs.m || '') - m) < 0.01 && Math.abs(parse(inputs.b || '') - b) < 0.01;
-    return { correct: ok, expected: { m: round(m), b: round(b) } };
+    const c = y1 - m * x1;
+    const ok = Math.abs(parse(inputs.m || '') - m) < 0.01 && Math.abs(parse(inputs.c || '') - c) < 0.01;
+    return { correct: ok, expected: { m: round(m), c: round(c) } };
   }
   if (type === 'FUNC_VAL') {
     const { m, b, x, a } = data;

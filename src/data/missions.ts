@@ -210,9 +210,9 @@ export const MISSIONS: Mission[] = [
     topic: 'Functions', type: 'LINEAR',
     title: { zh: '急行军', en: 'Forced March' },
     skillName: { zh: '行军路线术', en: 'March Route' },
-    skillSummary: { zh: '斜率 m = (y₂-y₁)/(x₂-x₁)，截距 b = y₁ - mx₁', en: 'Slope m = (y₂-y₁)/(x₂-x₁), intercept b = y₁ - mx₁' },
+    skillSummary: { zh: '斜率 m = (y₂-y₁)/(x₂-x₁)，截距 c = y₁ - mx₁', en: 'Slope m = (y₂-y₁)/(x₂-x₁), intercept c = y₁ - mx₁' },
     story: { zh: '黄巾军作乱，曹操率部急行军。已知出发点为 $({x1}, {y1})$，1小时后到达 $({x2}, {y2})$。', en: "Yellow Turbans are rebelling. Cao Cao leads a forced march. Start at $({x1}, {y1})$, reach $({x2}, {y2})$ in 1 hour." },
-    description: { zh: '求行军路线的函数表达式 $y = mx + b$。', en: 'Find the function $y = mx + b$ for the march route.' },
+    description: { zh: '求行军路线的函数表达式 $y = mx + c$。', en: 'Find the function $y = mx + c$ for the march route.' },
     data: { points: [[0, 2], [1, 5]], x1: 0, y1: 2, x2: 1, y2: 5, generatorType: 'LINEAR_RANDOM' }, difficulty: 'Medium', reward: 150,
     kpId: 'kp-3.5-01', sectionId: 'functions',
     tutorialSteps: [
@@ -221,16 +221,16 @@ export const MISSIONS: Mission[] = [
         highlightField: 'm'
       },
       {
-        text: { zh: '曹操："$m = (5-2)/(1-0) = 3$。斜率就是行军速度！再看截距 $b$。"', en: 'Cao Cao: "$m = (5-2)/(1-0) = 3$. The slope is the march speed! Now the intercept $b$."' },
-        hint: { zh: '起点 $(0,2)$ 的 $y$ 值就是截距 $b$', en: 'The $y$ value at starting point $(0,2)$ is the intercept $b$' },
-        highlightField: 'b'
+        text: { zh: '曹操："$m = (5-2)/(1-0) = 3$。斜率就是行军速度！再看截距 $c$。"', en: 'Cao Cao: "$m = (5-2)/(1-0) = 3$. The slope is the march speed! Now the intercept $c$."' },
+        hint: { zh: '起点 $(0,2)$ 的 $y$ 值就是截距 $c$', en: 'The $y$ value at starting point $(0,2)$ is the intercept $c$' },
+        highlightField: 'c'
       },
       {
-        text: { zh: '曹操："$b = 2$！行军路线为 $y = 3x + 2$。兵贵神速！"', en: 'Cao Cao: "$b = 2$! The march route is $y = 3x + 2$. Speed is vital!"' },
-        highlightField: 'b'
+        text: { zh: '曹操："$c = 2$！行军路线为 $y = 3x + 2$。兵贵神速！"', en: 'Cao Cao: "$c = 2$! The march route is $y = 3x + 2$. Speed is vital!"' },
+        highlightField: 'c'
       }
     ],
-    secret: { concept: { zh: '斜率 $m$ 代表变化率，截距 $b$ 代表初始值。', en: 'Slope $m$ is the rate of change, intercept $b$ is the initial value.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1},\\quad b = y_1 - mx_1$', tips: [{ zh: '曹操提示：兵贵神速，路线必须精准！', en: 'Cao Tip: Speed is vital, the route must be precise!' }] }
+    secret: { concept: { zh: '斜率 $m$ 代表变化率，截距 $c$ 代表初始值。', en: 'Slope $m$ is the rate of change, intercept $c$ is the initial value.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1},\\quad c = y_1 - mx_1$', tips: [{ zh: '曹操提示：兵贵神速，路线必须精准！', en: 'Cao Tip: Speed is vital, the route must be precise!' }] }
   },
   {
     id: 812, grade: 8, unitId: 1, order: 2,
@@ -266,7 +266,7 @@ export const MISSIONS: Mission[] = [
     topic: 'Functions', type: 'LINEAR',
     title: { zh: '合围之势', en: 'Encirclement' },
     skillName: { zh: '合围路线术', en: 'Encirclement Route' },
-    skillSummary: { zh: '直线方程 y = mx + b', en: 'Line equation y = mx + b' },
+    skillSummary: { zh: '直线方程 y = mx + c', en: 'Line equation y = mx + c' },
     story: { zh: '两路大军合围。已知路线经过 $({x1}, {y1})$ 和 $({x2}, {y2})$。', en: 'Two armies encircle. The route passes through $({x1}, {y1})$ and $({x2}, {y2})$.' },
     description: { zh: '求斜率 $m$。', en: 'Find the slope $m$.' },
     data: { points: [[2, 10], [4, 18]], x1: 2, y1: 10, x2: 4, y2: 18, generatorType: 'LINEAR_RANDOM' }, difficulty: 'Medium', reward: 170,
@@ -282,11 +282,11 @@ export const MISSIONS: Mission[] = [
         highlightField: 'm'
       },
       {
-        text: { zh: '曹仁："$m = 4$！然后求截距 $b = y_1 - mx_1 = 10 - 4 \\times 2 = 2$"', en: 'Cao Ren: "$m = 4$! Then intercept $b = y_1 - mx_1 = 10 - 4 \\times 2 = 2$"' },
-        highlightField: 'b'
+        text: { zh: '曹仁："$m = 4$！然后求截距 $c = y_1 - mx_1 = 10 - 4 \\times 2 = 2$"', en: 'Cao Ren: "$m = 4$! Then intercept $c = y_1 - mx_1 = 10 - 4 \\times 2 = 2$"' },
+        highlightField: 'c'
       }
     ],
-    secret: { concept: { zh: '斜率公式：$m = \\frac{y_2 - y_1}{x_2 - x_1}$。', en: 'Slope formula: $m = \\frac{y_2 - y_1}{x_2 - x_1}$.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1},\\quad b = y_1 - mx_1$', tips: [{ zh: '曹仁提示：守如泰山，攻如雷霆。', en: 'Cao Ren Tip: Defend like a mountain, attack like thunder.' }] }
+    secret: { concept: { zh: '斜率公式：$m = \\frac{y_2 - y_1}{x_2 - x_1}$。', en: 'Slope formula: $m = \\frac{y_2 - y_1}{x_2 - x_1}$.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1},\\quad c = y_1 - mx_1$', tips: [{ zh: '曹仁提示：守如泰山，攻如雷霆。', en: 'Cao Ren Tip: Defend like a mountain, attack like thunder.' }] }
   },
   {
     id: 821, grade: 8, unitId: 2, order: 1,
