@@ -1208,37 +1208,88 @@ export function generateHcfMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：最大公因数(HCF)就是两个数共有的最大因数`,
-        en: `${narrator}: "The Highest Common Factor (HCF) is the largest number that divides both numbers exactly"`,
+        zh: `${narrator}：什么是最大公因数(HCF)？就是能同时整除这两个数的最大的那个数`,
+        en: `${narrator}: "What is HCF? It's the largest number that can divide both numbers exactly"`,
       },
       hint: {
-        zh: '方法：先做质因数分解，再找公共部分',
-        en: 'Method: prime factorize both numbers, then find common factors',
+        zh: '比如 4 能整除 8，也能整除 12\n所以 4 是 8 和 12 的公因数',
+        en: 'For example, 4 divides 8 and 12 exactly\nSo 4 is a common factor of 8 and 12',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：对 $${a}$ 做质因数分解：$${a} = ${factA}$`,
-        en: `${narrator}: "Prime factorize $${a}$: $${a} = ${factA}$"`,
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：对 $${b}$ 做质因数分解：$${b} = ${factB}$`,
-        en: `${narrator}: "Prime factorize $${b}$: $${b} = ${factB}$"`,
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：找两个数共有的质因数，取较小的次幂，乘起来`,
-        en: `${narrator}: "Multiply the common prime factors, each to its lowest power"`,
+        zh: `${narrator}：怎么找 HCF 呢？先把每个数拆成质因数的乘积`,
+        en: `${narrator}: "How to find HCF? First break each number into prime factors"`,
       },
       hint: {
-        zh: `公共因数相乘得到 HCF\n$\\text{HCF} = ${formatFactorization(h)}$`,
-        en: `Multiply common factors to get HCF\n$\\text{HCF} = ${formatFactorization(h)}$`,
+        zh: '质因数就是只能被 1 和自己整除的数\n比如 2, 3, 5, 7, 11 都是质数',
+        en: 'Prime numbers can only be divided by 1 and themselves\nE.g. 2, 3, 5, 7, 11 are primes',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：拆第一个数 $${a}$：$${a} = ${factA}$`,
+        en: `${narrator}: "Break down $${a}$: $${a} = ${factA}$"`,
+      },
+      hint: {
+        zh: `不断除以最小的质数\n${a} 一直除到不能再除`,
+        en: `Keep dividing by the smallest prime\nDivide ${a} until you can't anymore`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：拆第二个数 $${b}$：$${b} = ${factB}$`,
+        en: `${narrator}: "Break down $${b}$: $${b} = ${factB}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：现在把两个结果放在一起，找相同的质因数`,
+        en: `${narrator}: "Now put both results side by side and find the common prime factors"`,
+      },
+      hint: {
+        zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n看看哪些质因数两边都有`,
+        en: `$${a} = ${factA}$\n$${b} = ${factB}$\nSee which prime factors appear in both`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：相同的质因数，取出现次数少的那个`,
+        en: `${narrator}: "For each common prime, take the one with the smaller power"`,
+      },
+      hint: (() => {
+        const fA = primeFactors(a);
+        const fB = primeFactors(b);
+        const common: string[] = [];
+        for (const [p, expA] of fA) {
+          const expB = fB.get(p);
+          if (expB !== undefined) {
+            common.push(`${p}: ${a} 里有 $${p}^{${expA}}$，${b} 里有 $${p}^{${expB}}$，取小的 → $${p}^{${Math.min(expA, expB)}}$`);
+          }
+        }
+        const enCommon: string[] = [];
+        for (const [p, expA] of fA) {
+          const expB = fB.get(p);
+          if (expB !== undefined) {
+            enCommon.push(`${p}: $${p}^{${expA}}$ in ${a}, $${p}^{${expB}}$ in ${b} → take $${p}^{${Math.min(expA, expB)}}$`);
+          }
+        }
+        return {
+          zh: common.join('\n'),
+          en: enCommon.join('\n'),
+        };
+      })(),
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：把取出来的乘在一起：$${formatFactorization(h)} = ${h}$`,
+        en: `${narrator}: "Multiply them together: $${formatFactorization(h)} = ${h}$"`,
       },
       highlightField: 'ans',
     },
@@ -1290,37 +1341,80 @@ export function generateLcmMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：最小公倍数(LCM)就是两个数共有的最小倍数`,
-        en: `${narrator}: "The Least Common Multiple (LCM) is the smallest number that both numbers divide into exactly"`,
+        zh: `${narrator}：什么是最小公倍数(LCM)？就是两个数共有的最小的倍数`,
+        en: `${narrator}: "What is LCM? It's the smallest number that both numbers divide into"`,
       },
       hint: {
-        zh: '方法：先做质因数分解，再取每个质因数的最高次幂',
-        en: 'Method: prime factorize both, then take each prime to its highest power',
+        zh: '比如 12 能被 3 整除，也能被 4 整除\n所以 12 是 3 和 4 的公倍数',
+        en: 'For example, 12 is divisible by 3 and by 4\nSo 12 is a common multiple of 3 and 4',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：对 $${a}$ 做质因数分解：$${a} = ${factA}$`,
-        en: `${narrator}: "Prime factorize $${a}$: $${a} = ${factA}$"`,
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：对 $${b}$ 做质因数分解：$${b} = ${factB}$`,
-        en: `${narrator}: "Prime factorize $${b}$: $${b} = ${factB}$"`,
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：每个质因数取大的那个，乘起来`,
-        en: `${narrator}: "Multiply all prime factors, each to its highest power"`,
+        zh: `${narrator}：怎么找 LCM 呢？先把每个数拆成质因数的乘积`,
+        en: `${narrator}: "How to find LCM? First break each number into prime factors"`,
       },
       hint: {
-        zh: `所有质因数取最高次幂相乘得到 LCM\n$\\text{LCM} = ${formatFactorization(lcm)}$`,
-        en: `Take highest powers and multiply for LCM\n$\\text{LCM} = ${formatFactorization(lcm)}$`,
+        zh: '质因数就是只能被 1 和自己整除的数\n比如 2, 3, 5, 7, 11 都是质数',
+        en: 'Prime numbers can only be divided by 1 and themselves\nE.g. 2, 3, 5, 7, 11 are primes',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：拆第一个数 $${a}$：$${a} = ${factA}$`,
+        en: `${narrator}: "Break down $${a}$: $${a} = ${factA}$"`,
+      },
+      hint: {
+        zh: `不断除以最小的质数\n${a} 一直除到不能再除`,
+        en: `Keep dividing by the smallest prime\nDivide ${a} until you can't anymore`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：拆第二个数 $${b}$：$${b} = ${factB}$`,
+        en: `${narrator}: "Break down $${b}$: $${b} = ${factB}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：现在找出所有出现过的质因数`,
+        en: `${narrator}: "Now find ALL prime factors that appear in either number"`,
+      },
+      hint: {
+        zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n列出所有出现过的质因数（不管在哪边出现的）`,
+        en: `$${a} = ${factA}$\n$${b} = ${factB}$\nList all primes that appear (in either number)`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：每个质因数，取出现次数多的那个`,
+        en: `${narrator}: "For each prime factor, take the one with the LARGER power"`,
+      },
+      hint: (() => {
+        const fA = primeFactors(a);
+        const fB = primeFactors(b);
+        const allPrimes = new Set([...fA.keys(), ...fB.keys()]);
+        const lines: string[] = [];
+        const enLines: string[] = [];
+        for (const p of [...allPrimes].sort((x, y) => x - y)) {
+          const expA = fA.get(p) || 0;
+          const expB = fB.get(p) || 0;
+          lines.push(`${p}: ${a} 里有 $${p}^{${expA}}$，${b} 里有 $${p}^{${expB}}$，取大的 → $${p}^{${Math.max(expA, expB)}}$`);
+          enLines.push(`${p}: $${p}^{${expA}}$ in ${a}, $${p}^{${expB}}$ in ${b} → take $${p}^{${Math.max(expA, expB)}}$`);
+        }
+        return { zh: lines.join('\n'), en: enLines.join('\n') };
+      })(),
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：把取出来的乘在一起：$${formatFactorization(lcm)} = ${lcm}$`,
+        en: `${narrator}: "Multiply them together: $${formatFactorization(lcm)} = ${lcm}$"`,
       },
       highlightField: 'ans',
     },
@@ -1380,16 +1474,15 @@ export function generateIntegerAddMission(template: Mission): Mission {
     en: `Calculate $${exprStr}$`,
   };
 
-  // Build tutorial explanation based on mode
   const tutorialSteps = [
     {
       text: {
         zh: `${narrator}：正数表示"增加"，负数表示"减少"`,
-        en: `${narrator}: "Positive means 'gain', negative means 'loss'"`,
+        en: `${narrator}: "Positive numbers mean 'gain', negative numbers mean 'loss'"`,
       },
       hint: {
-        zh: '可以想象一条数轴\n向右走是正数，向左走是负数',
-        en: 'Imagine a number line\nRight is positive, left is negative',
+        zh: '想象一条数轴\n向右走是正数（增加）\n向左走是负数（减少）',
+        en: 'Imagine a number line\nGoing right is positive (gain)\nGoing left is negative (loss)',
       },
       highlightField: 'ans',
     },
@@ -1400,22 +1493,92 @@ export function generateIntegerAddMission(template: Mission): Mission {
       },
       highlightField: 'ans',
     },
-    {
-      text: op === '+' && a >= 0 && b < 0 ? {
-        zh: `${narrator}：加一个负数，等于减去它的绝对值\n$${a} + (${b}) = ${a} - ${Math.abs(b)}$`,
-        en: `${narrator}: "Adding a negative = subtracting its absolute value\n$${a} + (${b}) = ${a} - ${Math.abs(b)}$"`,
-      } : op === '+' && a < 0 && b < 0 ? {
-        zh: `${narrator}：两个负数相加，绝对值相加，结果为负\n$|${a}| + |${b}| = ${Math.abs(a)} + ${Math.abs(b)} = ${Math.abs(a) + Math.abs(b)}$`,
-        en: `${narrator}: "Two negatives: add absolute values, result is negative\n$|${a}| + |${b}| = ${Math.abs(a)} + ${Math.abs(b)} = ${Math.abs(a) + Math.abs(b)}$"`,
-      } : op === '-' && a >= 0 ? {
-        zh: `${narrator}：从 $${a}$ 减去 $${b}$${b > a ? '，减去的比原来大，结果为负' : ''}`,
-        en: `${narrator}: "Subtract $${b}$ from $${a}$${b > a ? ' — subtracting more than you have gives a negative' : ''}"`,
-      } : {
-        zh: `${narrator}：$${a} - ${b}$，负数减正数，相当于往负方向走得更远\n$${a} - ${b} = -(${Math.abs(a)} + ${b}) = ${answer}$`,
-        en: `${narrator}: "$${a} - ${b}$, negative minus positive goes further negative\n$${a} - ${b} = -(${Math.abs(a)} + ${b}) = ${answer}$"`,
+    // Step 3: explain the rule for this specific case
+    ...(op === '+' && a >= 0 && b < 0 ? [
+      {
+        text: {
+          zh: `${narrator}：加一个负数，就等于减去它。什么是绝对值？就是去掉正负号后的数`,
+          en: `${narrator}: "Adding a negative number is the same as subtracting it. Absolute value = the number without its sign"`,
+        },
+        hint: {
+          zh: `$${b}$ 的绝对值是 $${Math.abs(b)}$\n所以"加 $${b}$"就是"减 $${Math.abs(b)}$"`,
+          en: `The absolute value of $${b}$ is $${Math.abs(b)}$\nSo "add $${b}$" means "subtract $${Math.abs(b)}$"`,
+        },
+        highlightField: 'ans',
       },
-      highlightField: 'ans',
-    },
+      {
+        text: {
+          zh: `${narrator}：$${a} + (${b}) = ${a} - ${Math.abs(b)}$`,
+          en: `${narrator}: "$${a} + (${b}) = ${a} - ${Math.abs(b)}$"`,
+        },
+        highlightField: 'ans',
+      },
+    ] : op === '+' && a < 0 && b < 0 ? [
+      {
+        text: {
+          zh: `${narrator}：两个负数相加，先不管负号，把数字加起来`,
+          en: `${narrator}: "Adding two negatives: ignore the signs first, add the numbers"`,
+        },
+        hint: {
+          zh: `去掉负号后：$${Math.abs(a)}$ 和 $${Math.abs(b)}$\n加起来：$${Math.abs(a)} + ${Math.abs(b)} = ${Math.abs(a) + Math.abs(b)}$`,
+          en: `Without signs: $${Math.abs(a)}$ and $${Math.abs(b)}$\nAdd them: $${Math.abs(a)} + ${Math.abs(b)} = ${Math.abs(a) + Math.abs(b)}$`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：两个都是负数，所以结果也是负数，加上负号`,
+          en: `${narrator}: "Both are negative, so the result is also negative — add the minus sign"`,
+        },
+        highlightField: 'ans',
+      },
+    ] : op === '-' && a >= 0 ? [
+      {
+        text: {
+          zh: `${narrator}：从 $${a}$ 里减去 $${b}$`,
+          en: `${narrator}: "Take $${b}$ away from $${a}$"`,
+        },
+        hint: b > a ? {
+          zh: `$${b}$ 比 $${a}$ 大，减去的比拥有的多\n结果会变成负数`,
+          en: `$${b}$ is bigger than $${a}$, taking away more than you have\nThe result will be negative`,
+        } : {
+          zh: `$${a}$ 比 $${b}$ 大，够减\n直接算 $${a} - ${b}$`,
+          en: `$${a}$ is bigger than $${b}$, enough to subtract\nJust calculate $${a} - ${b}$`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: b > a ? {
+          zh: `${narrator}：反过来算差值：$${b} - ${a} = ${b - a}$，然后加负号 → $${answer}$`,
+          en: `${narrator}: "Find the difference: $${b} - ${a} = ${b - a}$, then add minus sign → $${answer}$"`,
+        } : {
+          zh: `${narrator}：$${a} - ${b} = ${answer}$`,
+          en: `${narrator}: "$${a} - ${b} = ${answer}$"`,
+        },
+        highlightField: 'ans',
+      },
+    ] : [
+      // a < 0, op === '-'
+      {
+        text: {
+          zh: `${narrator}：一个负数再减去一个正数，就是往负方向走得更远`,
+          en: `${narrator}: "A negative number minus a positive number goes even further negative"`,
+        },
+        hint: {
+          zh: `已经在 $${a}$ 的位置（数轴左边）\n再往左走 $${b}$ 步`,
+          en: `Already at $${a}$ (left side of number line)\nGo $${b}$ more steps left`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：去掉符号，数字相加：$${Math.abs(a)} + ${b} = ${Math.abs(a) + b}$，结果取负号`,
+          en: `${narrator}: "Ignore signs, add numbers: $${Math.abs(a)} + ${b} = ${Math.abs(a) + b}$, result is negative"`,
+        },
+        highlightField: 'ans',
+      },
+    ]),
+    // Final step: answer
     {
       text: {
         zh: `${narrator}：所以 $${exprStr} = ${answer}$`,
@@ -1493,50 +1656,67 @@ export function generateFracAddMission(template: Mission): Mission {
   const recalcAdjN1 = dispN1 * (recalcLcd / dispD1);
   const recalcAdjN2 = dispN2 * (recalcLcd / dispD2);
   const ansDisplay = ansDen === 1 ? `${ansNum}` : `\\frac{${ansNum}}{${ansDen}}`;
+  const rawAns = isSubtract ? recalcAdjN1 - recalcAdjN2 : recalcAdjN1 + recalcAdjN2;
+  const needsSimplify = ansNum !== rawAns || ansDen !== recalcLcd;
 
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：分数${isSubtract ? '减' : '加'}法，分母不同要先通分`,
-        en: `${narrator}: "For fraction ${isSubtract ? 'subtraction' : 'addition'} with different denominators, first find a common denominator"`,
+        zh: `${narrator}：分母不一样的分数，不能直接${isSubtract ? '减' : '加'}`,
+        en: `${narrator}: "Fractions with different denominators can't be ${isSubtract ? 'subtracted' : 'added'} directly"`,
       },
       hint: {
-        zh: '通分就是把两个分数的分母变成一样的\n方法：找最小公倍数 (LCM)',
-        en: 'Finding a common denominator means making both denominators the same\nMethod: find the LCM',
+        zh: '要先把分母变成一样的，这叫做"通分"\n就像把不同单位统一成同一个单位',
+        en: 'First make the denominators the same — this is called "finding a common denominator"\nLike converting different units to the same unit',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：$${dispD1}$ 和 $${dispD2}$ 的最小公倍数是 $${recalcLcd}$`,
-        en: `${narrator}: "The LCM of $${dispD1}$ and $${dispD2}$ is $${recalcLcd}$"`,
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：通分后 $\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$，$\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$`,
-        en: `${narrator}: "Convert: $\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$, $\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$"`,
+        zh: `${narrator}：$${dispD1}$ 和 $${dispD2}$ 的最小公倍数是 $${recalcLcd}$，我们要把分母都变成 $${recalcLcd}$`,
+        en: `${narrator}: "The LCM of $${dispD1}$ and $${dispD2}$ is $${recalcLcd}$. We'll convert both denominators to $${recalcLcd}$"`,
       },
       hint: {
-        zh: `分子和分母同时乘以相同的数\n$\\frac{${dispN1}}{${dispD1}} \\times \\frac{${recalcLcd/dispD1}}{${recalcLcd/dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
-        en: `Multiply numerator and denominator by the same number\n$\\frac{${dispN1}}{${dispD1}} \\times \\frac{${recalcLcd/dispD1}}{${recalcLcd/dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
+        zh: `$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$`,
+        en: `$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：分母相同后，分子直接${isSubtract ? '相减' : '相加'}：$\\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}} = \\frac{${isSubtract ? recalcAdjN1 - recalcAdjN2 : recalcAdjN1 + recalcAdjN2}}{${recalcLcd}}$`,
-        en: `${narrator}: "Same denominator, so ${isSubtract ? 'subtract' : 'add'} numerators: $\\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}} = \\frac{${isSubtract ? recalcAdjN1 - recalcAdjN2 : recalcAdjN1 + recalcAdjN2}}{${recalcLcd}}$"`,
+        zh: `${narrator}：第一个分数，分子分母都乘以 $${recalcLcd/dispD1}$：$\\frac{${dispN1}}{${dispD1}} = \\frac{${dispN1} \\times ${recalcLcd/dispD1}}{${dispD1} \\times ${recalcLcd/dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
+        en: `${narrator}: "First fraction, multiply top and bottom by $${recalcLcd/dispD1}$: $\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$"`,
       },
       highlightField: 'ans',
     },
     {
-      text: ansNum !== (isSubtract ? recalcAdjN1 - recalcAdjN2 : recalcAdjN1 + recalcAdjN2) || ansDen !== recalcLcd ? {
-        zh: `${narrator}：约分后得 $${ansDisplay}$`,
-        en: `${narrator}: "Simplify to get $${ansDisplay}$"`,
-      } : {
-        zh: `${narrator}：所以结果是 $${ansDisplay}$`,
+      text: {
+        zh: `${narrator}：第二个分数，分子分母都乘以 $${recalcLcd/dispD2}$：$\\frac{${dispN2}}{${dispD2}} = \\frac{${dispN2} \\times ${recalcLcd/dispD2}}{${dispD2} \\times ${recalcLcd/dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$`,
+        en: `${narrator}: "Second fraction, multiply top and bottom by $${recalcLcd/dispD2}$: $\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：现在分母一样了！分子直接${isSubtract ? '相减' : '相加'}：$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$`,
+        en: `${narrator}: "Now denominators match! ${isSubtract ? 'Subtract' : 'Add'} the numerators: $\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    ...(needsSimplify ? [{
+      text: {
+        zh: `${narrator}：$\\frac{${rawAns}}{${recalcLcd}}$ 可以约分，分子分母都除以 $${gcdCalc(rawAns, recalcLcd)}$`,
+        en: `${narrator}: "$\\frac{${rawAns}}{${recalcLcd}}$ can be simplified — divide top and bottom by $${gcdCalc(rawAns, recalcLcd)}$"`,
+      },
+      hint: {
+        zh: `$\\frac{${rawAns} \\div ${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd} \\div ${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$`,
+        en: `$\\frac{${rawAns} \\div ${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd} \\div ${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$`,
+      },
+      highlightField: 'ans',
+    }] : []),
+    {
+      text: {
+        zh: `${narrator}：所以答案是 $${ansDisplay}$`,
         en: `${narrator}: "So the answer is $${ansDisplay}$"`,
       },
       highlightField: 'ans',
@@ -1591,45 +1771,74 @@ export function generateFracMulMission(template: Mission): Mission {
   };
 
   const ansDisplay = ansDen === 1 ? `${ansNum}` : `\\frac{${ansNum}}{${ansDen}}`;
+  const rawNum = isDivide ? n1 * d2 : n1 * n2;
+  const rawDen = isDivide ? d1 * n2 : d1 * d2;
+  const simplifyG = gcdCalc(rawNum, rawDen);
+  const needsSimplify = simplifyG > 1;
 
   const tutorialSteps = isDivide ? [
     {
       text: {
-        zh: `${narrator}：分数除法 = 乘以倒数`,
-        en: `${narrator}: "Dividing by a fraction = multiplying by its reciprocal"`,
+        zh: `${narrator}：分数除法怎么算？除以一个分数 = 乘以它翻过来的数`,
+        en: `${narrator}: "How to divide fractions? Dividing by a fraction = multiplying by its flip"`,
       },
       hint: {
-        zh: '把除号变乘号，同时把第二个分数翻转\n$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c}$',
-        en: 'Change / to *, and flip the second fraction\n$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c}$',
+        zh: '翻过来的数叫"倒数"\n就是把分子和分母交换位置',
+        en: 'The flipped fraction is called the "reciprocal"\nJust swap numerator and denominator',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：翻转第二个分数：$\\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$`,
-        en: `${narrator}: "Flip the second fraction: $\\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$"`,
+        zh: `${narrator}：$\\frac{${n2}}{${d2}}$ 的倒数是 $\\frac{${d2}}{${n2}}$（分子分母交换）`,
+        en: `${narrator}: "The reciprocal of $\\frac{${n2}}{${d2}}$ is $\\frac{${d2}}{${n2}}$ (swap top and bottom)"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：分子乘分子，分母乘分母：$\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${n1 * d2}}{${d1 * n2}}$`,
-        en: `${narrator}: "Multiply numerators, multiply denominators: $\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${n1 * d2}}{${d1 * n2}}$"`,
+        zh: `${narrator}：所以 $\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$`,
+        en: `${narrator}: "So $\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：约分后得 $${ansDisplay}$`,
-        en: `${narrator}: "Simplify to get $${ansDisplay}$"`,
+        zh: `${narrator}：分子乘分子，分母乘分母：$\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${rawNum}}{${rawDen}}$`,
+        en: `${narrator}: "Multiply tops, multiply bottoms: $\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${rawNum}}{${rawDen}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    ...(needsSimplify ? [{
+      text: {
+        zh: `${narrator}：约分，分子分母都除以 $${simplifyG}$：$\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$`,
+        en: `${narrator}: "Simplify, divide both by $${simplifyG}$: $\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$"`,
+      },
+      highlightField: 'ans',
+    }] : []),
+    {
+      text: {
+        zh: `${narrator}：所以答案是 $${ansDisplay}$`,
+        en: `${narrator}: "So the answer is $${ansDisplay}$"`,
       },
       highlightField: 'ans',
     },
   ] : [
     {
       text: {
-        zh: `${narrator}：分数乘法很简单：分子乘分子，分母乘分母`,
-        en: `${narrator}: "Fraction multiplication is simple: multiply numerators, multiply denominators"`,
+        zh: `${narrator}：分数乘法是什么意思？就是"取一个数的几分之几"`,
+        en: `${narrator}: "What does fraction multiplication mean? It means 'taking a fraction of a fraction'"`,
+      },
+      hint: {
+        zh: '比如 $\\frac{1}{2} \\times \\frac{1}{3}$ 就是"三分之一的一半"',
+        en: 'E.g. $\\frac{1}{2} \\times \\frac{1}{3}$ means "half of one third"',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：规则很简单：分子乘分子，分母乘分母`,
+        en: `${narrator}: "The rule is simple: multiply tops, multiply bottoms"`,
       },
       hint: {
         zh: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$',
@@ -1639,15 +1848,22 @@ export function generateFracMulMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${n1 * n2}}{${d1 * d2}}$`,
-        en: `${narrator}: "$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${n1 * n2}}{${d1 * d2}}$"`,
+        zh: `${narrator}：代入：$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$`,
+        en: `${narrator}: "Substitute: $\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$"`,
       },
       highlightField: 'ans',
     },
+    ...(needsSimplify ? [{
+      text: {
+        zh: `${narrator}：约分，$${rawNum}$ 和 $${rawDen}$ 的公因数是 $${simplifyG}$，都除以它：$${ansDisplay}$`,
+        en: `${narrator}: "Simplify: $${rawNum}$ and $${rawDen}$ share factor $${simplifyG}$, divide both: $${ansDisplay}$"`,
+      },
+      highlightField: 'ans',
+    }] : []),
     {
       text: {
-        zh: `${narrator}：约分后得 $${ansDisplay}$`,
-        en: `${narrator}: "Simplify to get $${ansDisplay}$"`,
+        zh: `${narrator}：所以答案是 $${ansDisplay}$`,
+        en: `${narrator}: "So the answer is $${ansDisplay}$"`,
       },
       highlightField: 'ans',
     },
