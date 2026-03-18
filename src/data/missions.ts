@@ -3,6 +3,24 @@ import type { Mission } from '../types';
 export const MISSIONS: Mission[] = [
   // --- Year 7 Unit 0: 桃园点兵·数论篇 (Number Foundations) ---
   {
+    id: 698, grade: 7, unitId: 0, order: -2,
+    unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
+    topic: 'Algebra', type: 'FACTORS_LIST',
+    title: { zh: '点兵编队', en: 'Troop Formation Count' },
+    skillName: { zh: '因数列举术', en: 'Listing Factors' },
+    skillSummary: { zh: '因数就是能整除一个数的数——把士兵分成几种等分方式', en: 'Factors are numbers that divide evenly — find all ways to split soldiers into equal groups' },
+    story: { zh: '刘备刚招募了一批新兵，要想办法编队。24 个士兵可以分成几种等人数的队？2 人一队、3 人一队、4 人一队...把所有可能的分法都找出来！', en: 'Liu Bei just recruited soldiers and needs to form squads. 24 soldiers — how many ways to divide them into equal groups? 2 per squad, 3 per squad, 4 per squad... find all possible divisions!' },
+    description: { zh: '这个数有几个因数？', en: 'How many factors does this number have?' },
+    data: { n: 24, factors: [1, 2, 3, 4, 6, 8, 12, 24], answer: 8, generatorType: 'FACTORS_LIST_RANDOM' }, difficulty: 'Easy', reward: 35,
+    kpId: 'kp-1.1-02', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '刘备：24 个新兵怎么分队？先搞懂"因数"——能把 24 平均分开的数', en: 'Liu Bei: "24 recruits — how to divide? First understand \'factors\' — numbers that divide 24 evenly"' }, hint: { zh: '$24 \\div 2 = 12$（整除 ✓）→ 2 是因数\n$24 \\div 5 = 4.8$（有余数 ✗）→ 5 不是因数', en: '$24 \\div 2 = 12$ (exact ✓) → 2 is a factor\n$24 \\div 5 = 4.8$ (remainder ✗) → 5 is not' }, highlightField: 'ans' },
+      { text: { zh: '刘备：因数成对出现——$1 \\times 24 = 24$，$2 \\times 12 = 24$，$3 \\times 8 = 24$，$4 \\times 6 = 24$', en: 'Liu Bei: "Factors come in pairs: $1 \\times 24$, $2 \\times 12$, $3 \\times 8$, $4 \\times 6$"' }, highlightField: 'ans' },
+      { text: { zh: '刘备：所以 24 的全部因数是 $1, 2, 3, 4, 6, 8, 12, 24$——共 8 个', en: 'Liu Bei: "All factors of 24: $1, 2, 3, 4, 6, 8, 12, 24$ — total 8"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '因数是能整除一个数的数。因数成对出现，一对乘起来等于原数。', en: 'Factors divide a number evenly. They come in pairs whose product is the original number.' }, formula: '$n = a \\times b \\Rightarrow a, b \\text{ 都是 } n \\text{ 的因数}$', tips: [{ zh: '刘备提示：编队方式越多，战术越灵活！', en: 'Liu Bei Tip: More ways to divide = more tactical flexibility!' }] }
+  },
+  {
     id: 699, grade: 7, unitId: 0, order: -1,
     unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
     topic: 'Algebra', type: 'PRIME',
@@ -203,6 +221,23 @@ export const MISSIONS: Mission[] = [
     ],
     secret: { concept: { zh: '减去比自己大的数，结果为负。', en: 'Subtracting more than you have gives a negative.' }, formula: '$a - b = -(b - a)$ when $b > a$', tips: [{ zh: '关羽提示：胜败之间，一算便知。', en: 'Guan Yu Tip: Between victory and defeat, the numbers tell all.' }] }
   },
+  // --- Year 7 Unit 0A 续: 整数乘除 ---
+  {
+    id: 706, grade: 7, unitId: 0, order: 6.5,
+    unitTitle: { zh: "Unit 0A: 行军算账·正负数篇", en: "Unit 0A: March Accounting — Integers" },
+    topic: 'Algebra', type: 'INTEGER_MUL',
+    title: { zh: '敌退我进', en: 'Enemy Retreats, We Advance' },
+    skillName: { zh: '正负数乘除术', en: 'Integer Multiply/Divide' },
+    skillSummary: { zh: '同号得正，异号得负——先定符号，再算数值', en: 'Same signs → positive, different signs → negative' },
+    story: { zh: '张飞在追击中发现规律：敌人每天后退（负方向）5 里，连续后退了 3 天。敌人的总位移是多少？负数乘以正数，还是负的！但如果取消撤退呢？', en: 'Zhang Fei spots a pattern while pursuing: the enemy retreats (negative) 5 li per day, for 3 days. What\'s the total displacement? Negative times positive stays negative! But what if the retreat is cancelled?' },
+    description: { zh: '计算正负数的乘法或除法。', en: 'Calculate with negative multiplication or division.' },
+    data: { a: -5, b: 3, answer: -15, op: '×', mode: 'mul', generatorType: 'INTEGER_MUL_RANDOM' }, difficulty: 'Medium', reward: 50,
+    kpId: 'kp-1.6-03', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '张飞：正负数乘除——口诀：同号得正，异号得负', en: 'Zhang Fei: "Rule: same signs → positive, different signs → negative"' }, hint: { zh: '正 × 正 = 正\n负 × 负 = 正（敌退我进！）\n正 × 负 = 负\n负 × 正 = 负', en: 'Pos × Pos = Pos\nNeg × Neg = Pos (enemy retreats, we advance!)\nPos × Neg = Neg\nNeg × Pos = Neg' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '同号相乘得正，异号相乘得负。除法规则相同。', en: 'Same signs multiply to positive, different signs to negative. Same rule for division.' }, formula: '$(-a) \\times (-b) = ab,\\quad (-a) \\times b = -(ab)$', tips: [{ zh: '张飞提示：负负得正——敌人的敌人就是朋友！', en: 'Zhang Fei Tip: Neg × Neg = Pos — the enemy of my enemy is my friend!' }] }
+  },
   // --- Year 7 Unit 0B: 军粮分配·分数篇 ---
   {
     id: 707, grade: 7, unitId: 0, order: 7,
@@ -280,6 +315,23 @@ export const MISSIONS: Mission[] = [
     ],
     secret: { concept: { zh: '分数除法：除以一个分数 = 乘以它的倒数。', en: 'Fraction division: dividing by a fraction = multiplying by its reciprocal.' }, formula: '$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c} = \\frac{ad}{bc}$', tips: [{ zh: '关羽提示：翻转乾坤，化除为乘！', en: 'Guan Yu Tip: Flip and multiply — turn division into multiplication!' }] }
   },
+  // --- Year 7 Unit 0B 续: 分数↔小数↔百分比 桥梁 ---
+  {
+    id: 710, grade: 7, unitId: 0, order: 10.5,
+    unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },
+    topic: 'Algebra', type: 'FDP_CONVERT',
+    title: { zh: '情报三译', en: 'Intelligence in Three Formats' },
+    skillName: { zh: '分小百互转术', en: 'F-D-P Conversion' },
+    skillSummary: { zh: '分数 ÷ 得小数 × 100 得百分比——三种写法，一个数', en: 'Fraction ÷ = decimal × 100 = percentage — three forms, one number' },
+    story: { zh: '诸葛亮收到三路探子的情报，分别用分数、小数、百分比汇报粮草损耗率。看似不同，其实说的是同一个数！学会互相转换，才能统一分析。', en: 'Zhuge Liang receives intelligence from three scouts — one reports in fractions, one in decimals, one in percentages. They look different but say the same thing! Master conversion to unify the analysis.' },
+    description: { zh: '完成分数、小数、百分比之间的转换。', en: 'Convert between fractions, decimals, and percentages.' },
+    data: { frac: '1/4', num: 1, den: 4, dec: 0.25, pct: 25, dir: 'frac_to_pct', answer: 25, generatorType: 'FDP_CONVERT_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-1.4-03', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：$\\frac{1}{4} = 0.25 = 25\\%$——三种写法，同一个数', en: 'Zhuge Liang: "$\\frac{1}{4} = 0.25 = 25\\%$ — three forms, same value"' }, hint: { zh: '分数 → 小数：分子 ÷ 分母（$1 \\div 4 = 0.25$）\n小数 → 百分比：× 100（$0.25 \\times 100 = 25\\%$）\n百分比 → 小数：÷ 100（$25\\% \\div 100 = 0.25$）', en: 'Fraction → Decimal: numerator ÷ denominator ($1 ÷ 4 = 0.25$)\nDecimal → Percentage: × 100 ($0.25 × 100 = 25\\%$)\nPercentage → Decimal: ÷ 100 ($25\\% ÷ 100 = 0.25$)' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '分数、小数、百分比是同一个数的三种写法。关键转换：分子÷分母=小数，小数×100=百分比。', en: 'Fractions, decimals, and percentages are three representations of the same number.' }, formula: '$\\frac{a}{b} = a \\div b = \\text{decimal} \\times 100\\%$', tips: [{ zh: '诸葛亮提示：情报统一格式，才能准确决策！', en: 'Zhuge Liang Tip: Unified format means accurate decisions!' }] }
+  },
   // --- Year 7 Unit 0C: 排兵布阵·幂与根篇 (Powers & Roots) ---
   {
     id: 713, grade: 7, unitId: 0, order: 11,
@@ -352,6 +404,23 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：看清符号！$\\sqrt{\\ }$ 是平方根，$\\sqrt[3]{\\ }$ 是立方根', en: 'Zhuge Liang: "Read the symbol! $\\sqrt{\\ }$ is square root, $\\sqrt[3]{\\ }$ is cube root"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '平方根和立方根分别是平方和立方的逆运算。看清根号上的小数字！', en: 'Square root and cube root are the inverses of squaring and cubing. Watch the index on the radical!' }, formula: '$\\sqrt{n^2} = n,\\quad \\sqrt[3]{n^3} = n$', tips: [{ zh: '诸葛亮提示：方阵用平方根，粮仓用立方根——看清题目再下笔！', en: 'Zhuge Liang Tip: Formations use square root, warehouses use cube root — read carefully before answering!' }] }
+  },
+  // --- Year 7 Unit 1 前置: 运算顺序 BODMAS ---
+  {
+    id: 710, grade: 7, unitId: 1, order: 0,
+    unitTitle: { zh: "Unit 1: 结义与代数入门", en: "Unit 1: Oath & Intro to Algebra" },
+    topic: 'Algebra', type: 'BODMAS',
+    title: { zh: '军令如山', en: 'Orders of Command' },
+    skillName: { zh: '运算顺序术', en: 'Order of Operations (BODMAS)' },
+    skillSummary: { zh: '括号 → 幂 → 乘除 → 加减——军令有先后，运算也有顺序', en: 'Brackets → Orders → Division/Multiplication → Addition/Subtraction' },
+    story: { zh: '军令如山——先执行紧急命令（括号），再执行高级命令（乘除），最后执行一般命令（加减）。算错顺序，全军溃散！', en: 'Military orders have priority! Execute urgent orders (brackets) first, then senior orders (multiply/divide), then general orders (add/subtract). Wrong order = army collapses!' },
+    description: { zh: '按正确顺序计算。', en: 'Calculate in the correct order.' },
+    data: { answer: 14, expr: '2 + 3 \\times 4', generatorType: 'BODMAS_RANDOM' }, difficulty: 'Easy', reward: 40,
+    kpId: 'kp-1.6-03', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：$2 + 3 \\times 4 = ?$——你觉得答案是 20 还是 14？', en: 'Zhuge Liang: "$2 + 3 \\times 4 = ?$ — do you think it\'s 20 or 14?"' }, hint: { zh: '如果从左到右：$(2+3) \\times 4 = 20$ ✗\n正确做法：先乘后加 $2 + (3 \\times 4) = 2 + 12 = 14$ ✓\n\n口诀 BODMAS：\nB 括号 → O 幂 → DM 乘除 → AS 加减', en: 'Left to right: $(2+3) \\times 4 = 20$ ✗\nCorrect: multiply first $2 + (3 \\times 4) = 2 + 12 = 14$ ✓\n\nBODMAS:\nB Brackets → O Orders → DM Div/Mul → AS Add/Sub' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '运算顺序：括号最先，然后幂，再乘除，最后加减。不是从左到右！', en: 'Order of operations: Brackets first, then powers, then multiply/divide, finally add/subtract. NOT left to right!' }, formula: '$\\text{B → O → DM → AS}$', tips: [{ zh: '诸葛亮提示：军令如山，顺序错了全盘皆输！', en: 'Zhuge Liang Tip: Like military orders — wrong sequence means total defeat!' }] }
   },
   // --- Year 7: The Peach Garden Oath (Foundations) ---
   {
@@ -458,6 +527,23 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '赵云：含 $x^2$ 的式子——先算平方，再算乘法', en: 'Zhao Yun: "Expression with $x^2$ — square first, then multiply"' }, hint: { zh: '$2x^2 + 3$，当 $x=3$：\n先算 $3^2 = 9$\n再算 $2 \\times 9 = 18$\n最后 $18 + 3 = 21$', en: '$2x^2 + 3$, when $x=3$:\nFirst $3^2 = 9$\nThen $2 \\times 9 = 18$\nFinally $18 + 3 = 21$' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '运算顺序：幂 → 乘除 → 加减。代入后要严格按顺序计算。', en: 'Order of operations: Powers → Multiply/Divide → Add/Subtract.' }, formula: '$\\text{Powers} \\rightarrow \\times\\div \\rightarrow +\\,-$', tips: [{ zh: '赵云提示：先算指数，才能射得准！', en: 'Zhao Yun Tip: Powers first for accurate aim!' }] }
+  },
+  // --- Year 7 Unit 1 续: 化简同类项 ---
+  {
+    id: 719, grade: 7, unitId: 1, order: 5,
+    unitTitle: { zh: "Unit 1: 结义与代数入门", en: "Unit 1: Oath & Intro to Algebra" },
+    topic: 'Algebra', type: 'SIMPLIFY',
+    title: { zh: '合兵一处', en: 'Combining Forces' },
+    skillName: { zh: '合并同类项术', en: 'Collecting Like Terms' },
+    skillSummary: { zh: '同类项（字母相同的项）可以合并——系数相加，字母不变', en: 'Like terms (same letter) can be combined — add coefficients, keep the letter' },
+    story: { zh: '战场上来了多路援军，都是步兵（$x$）。3 路来了 $3x$，2 路来了 $2x$——合兵一处就是 $5x$！但骑兵（$y$）和步兵不能混编。', en: 'Reinforcements arrive from multiple routes, all infantry ($x$). 3 routes bring $3x$, 2 routes bring $2x$ — combine to $5x$! But cavalry ($y$) and infantry can\'t merge.' },
+    description: { zh: '化简表达式，求 $x$ 的系数。', en: 'Simplify the expression, find the coefficient of $x$.' },
+    data: { a: 3, b: 2, c: null, answer: 5, expr: '3x + 2x', simplified: '5x', generatorType: 'SIMPLIFY_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-2.2-03', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：$3x + 2x$——同类项合并：$3 + 2 = 5$，字母照抄 → $5x$', en: 'Zhuge Liang: "$3x + 2x$ — like terms: $3 + 2 = 5$, keep letter → $5x$"' }, hint: { zh: '同类项 = 字母部分相同的项\n$3x$ 和 $2x$ 都是"$x$ 的倍数"→ 可以合并\n$3x + 2y$ 不能合并——步兵和骑兵不能混编！', en: 'Like terms = same letter part\n$3x$ and $2x$ are both "multiples of $x$" → can combine\n$3x + 2y$ can\'t combine — infantry and cavalry don\'t mix!' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '同类项（字母和指数完全相同）可以合并，只需把系数相加减。', en: 'Like terms (same letter and power) can be combined by adding/subtracting coefficients.' }, formula: '$ax + bx = (a+b)x$', tips: [{ zh: '诸葛亮提示：合兵一处，势如破竹！', en: 'Zhuge Liang Tip: United forces are unstoppable!' }] }
   },
   {
     id: 721, grade: 7, unitId: 2, order: 1,
@@ -845,6 +931,22 @@ export const MISSIONS: Mission[] = [
     secret: { concept: { zh: '三角形面积 = 底 × 高 ÷ 2。可以理解为长方形面积的一半。', en: 'Triangle area = base × height ÷ 2. It\'s half the area of a rectangle.' }, formula: '$A = \\frac{b \\times h}{2}$', tips: [{ zh: '赵云提示：旗帜虽小，面积公式却大有用处！', en: 'Zhao Yun Tip: Small banner, big formula!' }] }
   },
   // --- Year 7 Unit 7: 战后统计·数据篇 ---
+  {
+    id: 770, grade: 7, unitId: 7, order: 0,
+    unitTitle: { zh: "Unit 7: 战后统计·数据篇", en: "Unit 7: Post-battle Stats — Data" },
+    topic: 'Statistics', type: 'STATISTICS',
+    title: { zh: '兵器清点', en: 'Weapon Inventory' },
+    skillName: { zh: '众数辨识术', en: 'Mode (Most Common)' },
+    skillSummary: { zh: '众数 = 出现次数最多的数——数据里的"人气王"', en: 'Mode = the value that appears most often' },
+    story: { zh: '张飞清点缴获的兵器：刀、枪、剑、戟...哪种兵器数量最多？出现次数最多的那个就是"众数"！', en: 'Zhang Fei inventories captured weapons: swords, spears, halberds... Which type is most common? The most frequent value is the "mode"!' },
+    description: { zh: '找出数据的众数（出现次数最多的数）。', en: 'Find the mode (most frequent value).' },
+    data: { values: [3, 5, 5, 5, 7, 8, 12], mode: 'mode', modeValue: 5, modeCount: 3, generatorType: 'STATISTICS_MODE_RANDOM' }, difficulty: 'Easy', reward: 40,
+    kpId: 'kp-9.3-01', sectionId: 'statistics',
+    tutorialSteps: [
+      { text: { zh: '张飞：众数就是出现次数最多的数——数据里的"人气王"', en: 'Zhang Fei: "Mode = the value appearing most — the \'most popular\' in the data"' }, hint: { zh: '$3, 5, 5, 5, 7, 8, 12$\n$3$ 出现 1 次\n$5$ 出现 3 次 ← 最多！\n$7$ 出现 1 次\n$8$ 出现 1 次\n$12$ 出现 1 次\n\n众数 = $5$', en: '$3, 5, 5, 5, 7, 8, 12$\n$3$: 1 time\n$5$: 3 times ← most!\n$7$: 1 time\n$8$: 1 time\n$12$: 1 time\n\nMode = $5$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '众数是出现频率最高的值。一组数据可以有多个众数，也可以没有众数。', en: 'Mode is the most frequent value. Data can have multiple modes or no mode.' }, formula: '$\\text{众数 = 频率最高的值}$', tips: [{ zh: '张飞提示：哪种兵器最多，就知道敌军的战术偏好！', en: 'Zhang Fei Tip: The most common weapon reveals the enemy\'s tactics!' }] }
+  },
   {
     id: 771, grade: 7, unitId: 7, order: 1,
     unitTitle: { zh: "Unit 7: 战后统计·数据篇", en: "Unit 7: Post-battle Stats — Data" },

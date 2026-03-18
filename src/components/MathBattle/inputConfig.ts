@@ -145,4 +145,24 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'ans', label: '周长', placeholder: '周长 = ?' }],
     en: [{ id: 'ans', label: 'Perimeter', placeholder: 'P = ?' }],
   },
+  FACTORS_LIST: {
+    zh: [{ id: 'ans', label: '因数个数', placeholder: '共几个因数？' }],
+    en: [{ id: 'ans', label: 'Factor count', placeholder: 'How many factors?' }],
+  },
+  INTEGER_MUL: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
+  },
+  FDP_CONVERT: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
+  },
+  BODMAS: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
+  },
+  SIMPLIFY: {
+    zh: [{ id: 'ans', label: '系数', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Coefficient', placeholder: '= ?' }],
+  },
 };

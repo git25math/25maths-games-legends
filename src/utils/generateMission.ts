@@ -54,7 +54,13 @@ export type GeneratorType =
   | 'ANGLES_POINT_RANDOM'
   | 'SEQUENCE_Y7_RANDOM'
   | 'STATISTICS_RANGE_RANDOM'
-  | 'AREA_TRIANGLE_RANDOM';
+  | 'AREA_TRIANGLE_RANDOM'
+  | 'FACTORS_LIST_RANDOM'
+  | 'INTEGER_MUL_RANDOM'
+  | 'FDP_CONVERT_RANDOM'
+  | 'BODMAS_RANDOM'
+  | 'SIMPLIFY_RANDOM'
+  | 'STATISTICS_MODE_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -105,6 +111,12 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   SEQUENCE_Y7_RANDOM: generateSequenceY7Mission,
   STATISTICS_RANGE_RANDOM: generateStatsRangeMission,
   AREA_TRIANGLE_RANDOM: generateAreaTriangleMission,
+  FACTORS_LIST_RANDOM: generateFactorsListMission,
+  INTEGER_MUL_RANDOM: generateIntegerMulMission,
+  FDP_CONVERT_RANDOM: generateFdpConvertMission,
+  BODMAS_RANDOM: generateBodmasMission,
+  SIMPLIFY_RANDOM: generateSimplifyMission,
+  STATISTICS_MODE_RANDOM: generateStatsModeMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -4300,6 +4312,454 @@ export function generateAreaTriangleMission(template: Mission): Mission {
     ...template,
     description,
     data: { base, height, answer, generatorType: 'AREA_TRIANGLE_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   FACTORS_LIST generator: list all factors of a number
+   ══════════════════════════════════════════════════════════ */
+
+export function generateFactorsListMission(template: Mission): Mission {
+  const tier = getTier();
+  const pools: Record<DifficultyTier, number[]> = {
+    1: [6, 8, 10, 12, 15, 18, 20],
+    2: [12, 16, 18, 20, 24, 28, 30, 36],
+    3: [24, 30, 36, 40, 48, 56, 60, 72],
+  };
+  const n = pickRandom(pools[tier]);
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '刘备';
+
+  // Find all factors
+  const factors: number[] = [];
+  for (let i = 1; i <= n; i++) {
+    if (n % i === 0) factors.push(i);
+  }
+  const answer = factors.length;
+
+  const description: BilingualText = {
+    zh: `$${n}$ 有几个因数？`,
+    en: `How many factors does $${n}$ have?`,
+  };
+
+  // Show factor pairs for tutorial
+  const pairs: string[] = [];
+  for (let i = 1; i * i <= n; i++) {
+    if (n % i === 0) pairs.push(`$${i} \\times ${n / i} = ${n}$`);
+  }
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：什么是"因数"？——能整除这个数的数`, en: `${narrator}: "What is a factor? — A number that divides evenly"` },
+      hint: { zh: `因数就是能把 $${n}$ 平均分开的数\n\n比如：$${n} \\div 2$${n % 2 === 0 ? ` = ${n/2}$，整除 ✓ → 2 是 $${n}$ 的因数` : `，除不尽 ✗ → 2 不是因数`}\n\n"整除"就是除完刚好，没有余数`, en: `A factor divides $${n}$ evenly (no remainder)\n\nE.g.: $${n} \\div 2$${n % 2 === 0 ? ` = ${n/2}$, exact ✓ → 2 is a factor of $${n}$` : `, has remainder ✗ → 2 is not a factor`}\n\n"Divides evenly" = no remainder` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：怎么找？——因数总是成对出现`, en: `${narrator}: "How to find them? — Factors come in pairs"` },
+      hint: { zh: `找一个因数，就自动找到另一个：\n${pairs.join('\n')}\n\n每一对乘起来都等于 $${n}$！`, en: `Find one factor, you automatically get another:\n${pairs.join('\n')}\n\nEach pair multiplies to $${n}$!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：列出所有因数`, en: `${narrator}: "List all factors"` },
+      hint: { zh: `$${n}$ 的全部因数：$${factors.join(', ')}$\n\n一共 $${answer}$ 个`, en: `All factors of $${n}$: $${factors.join(', ')}$\n\nTotal: $${answer}$ factors` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——每个因数都能整除 $${n}$ 吗？`, en: `${narrator}: "Verify — does each factor divide $${n}$ evenly?"` },
+      hint: { zh: `${factors.map(f => `$${n} \\div ${f} = ${n/f}$ ✓`).join('\n')}\n\n全部整除！答案 = $${answer}$ 个因数`, en: `${factors.map(f => `$${n} \\div ${f} = ${n/f}$ ✓`).join('\n')}\n\nAll divide evenly! Answer = $${answer}$ factors` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n, factors, answer, generatorType: 'FACTORS_LIST_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   INTEGER_MUL generator: multiply/divide with negatives
+   ══════════════════════════════════════════════════════════ */
+
+export function generateIntegerMulMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '张飞';
+  const mode: 'mul' | 'div' = template.data?.mode ?? 'mul';
+
+  let a: number, b: number, answer: number, op: string;
+
+  if (mode === 'div') {
+    // Generate division: ensure clean result
+    const resPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5, 6], 2: [3, 4, 5, 6, 7, 8], 3: [4, 5, 6, 7, 8, 9, 10] };
+    const divPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6], 3: [3, 4, 5, 6, 7, 8] };
+    const res = pickRandom(resPools[tier]);
+    b = pickRandom(divPools[tier]);
+    // Randomly negate
+    const negA = pickRandom([true, false]);
+    const negB = pickRandom([true, false]);
+    a = (negA ? -1 : 1) * res * b;
+    b = (negB ? -1 : 1) * b;
+    answer = a / b;
+    op = '÷';
+  } else {
+    const aPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5, 6], 2: [3, 4, 5, 6, 7, 8, 9], 3: [5, 6, 7, 8, 9, 10, 11, 12] };
+    const bPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7], 3: [3, 4, 5, 6, 7, 8, 9] };
+    a = pickRandom(aPools[tier]) * pickRandom([-1, 1]);
+    b = pickRandom(bPools[tier]) * pickRandom([-1, 1]);
+    answer = a * b;
+    op = '×';
+  }
+
+  const signRule = (a >= 0) === (b >= 0) ? 'positive' : 'negative';
+  const signRuleZh = signRule === 'positive' ? '同号得正' : '异号得负';
+  const signRuleEn = signRule === 'positive' ? 'same signs → positive' : 'different signs → negative';
+
+  const description: BilingualText = {
+    zh: `计算 $(${a}) ${op} (${b}) = ?$`,
+    en: `Calculate $(${a}) ${op} (${b}) = ?$`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：正负数乘除——先看符号，再算数字`, en: `${narrator}: "Multiplying/dividing with negatives — check signs first, then compute"` },
+      hint: { zh: `口诀：\n• 正 × 正 = 正（同号得正）\n• 负 × 负 = 正（同号得正）\n• 正 × 负 = 负（异号得负）\n• 负 × 正 = 负（异号得负）\n\n乘法和除法规则相同！`, en: `Rule:\n• (+) × (+) = (+) (same signs → positive)\n• (−) × (−) = (+) (same signs → positive)\n• (+) × (−) = (−) (different signs → negative)\n• (−) × (+) = (−) (different signs → negative)\n\nSame rule for division!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：为什么"负负得正"？`, en: `${narrator}: "Why does negative × negative = positive?"` },
+      hint: { zh: `想象敌人在撤退（负方向）\n如果我们"取消"撤退（再一个负）\n取消撤退 = 前进 = 正方向！\n\n负负得正，就像"敌退我进"`, en: `Imagine the enemy is retreating (negative direction)\nIf we "cancel" the retreat (another negative)\nCancelling retreat = advance = positive!\n\nNeg × Neg = Pos, like "enemy retreats, we advance"` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第一步——判断符号`, en: `${narrator}: "Step 1 — determine the sign"` },
+      hint: { zh: `$(${a})$ 是${a >= 0 ? '正' : '负'}数\n$(${b})$ 是${b >= 0 ? '正' : '负'}数\n\n${signRuleZh}！结果是${signRule === 'positive' ? '正' : '负'}数`, en: `$(${a})$ is ${a >= 0 ? 'positive' : 'negative'}\n$(${b})$ is ${b >= 0 ? 'positive' : 'negative'}\n\n${signRuleEn}! Result is ${signRule}` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第二步——只看绝对值（不管正负，算数字）`, en: `${narrator}: "Step 2 — compute with absolute values (ignore signs, just multiply/divide)"` },
+      hint: { zh: `$${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$\n\n加上符号：${answer >= 0 ? '+' : '−'}$${Math.abs(answer)}$ = $${answer}$`, en: `$${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$\n\nAdd sign: ${answer >= 0 ? '+' : '−'}$${Math.abs(answer)}$ = $${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算`, en: `${narrator}: "Verify"` },
+      hint: { zh: `$(${a}) ${op} (${b}) = ${answer}$ ✓\n\n符号规则：${signRuleZh} ✓\n数值计算：$${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$ ✓`, en: `$(${a}) ${op} (${b}) = ${answer}$ ✓\n\nSign rule: ${signRuleEn} ✓\nValue: $${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$ ✓` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { a, b, answer, op, mode, generatorType: 'INTEGER_MUL_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   FDP_CONVERT generator: fraction ↔ decimal ↔ percentage
+   ══════════════════════════════════════════════════════════ */
+
+export function generateFdpConvertMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+
+  // Common FDP equivalences
+  const fdpSets: { frac: string; num: number; den: number; dec: number; pct: number }[] = [
+    { frac: '1/2', num: 1, den: 2, dec: 0.5, pct: 50 },
+    { frac: '1/4', num: 1, den: 4, dec: 0.25, pct: 25 },
+    { frac: '3/4', num: 3, den: 4, dec: 0.75, pct: 75 },
+    { frac: '1/5', num: 1, den: 5, dec: 0.2, pct: 20 },
+    { frac: '2/5', num: 2, den: 5, dec: 0.4, pct: 40 },
+    { frac: '3/5', num: 3, den: 5, dec: 0.6, pct: 60 },
+    { frac: '1/10', num: 1, den: 10, dec: 0.1, pct: 10 },
+    { frac: '3/10', num: 3, den: 10, dec: 0.3, pct: 30 },
+    { frac: '1/8', num: 1, den: 8, dec: 0.125, pct: 12.5 },
+    { frac: '1/3', num: 1, den: 3, dec: 0.333, pct: 33.3 },
+  ];
+
+  const pool = tier === 1 ? fdpSets.slice(0, 4) : tier === 2 ? fdpSets.slice(0, 7) : fdpSets;
+  const chosen = pickRandom(pool);
+
+  // Decide conversion direction
+  const directions = ['frac_to_pct', 'pct_to_dec', 'dec_to_frac'] as const;
+  const dir = pickRandom(tier === 1 ? directions.slice(0, 1) : directions);
+
+  let answer: number;
+  let description: BilingualText;
+
+  if (dir === 'frac_to_pct') {
+    answer = chosen.pct;
+    description = {
+      zh: `$\\frac{${chosen.num}}{${chosen.den}}$ 等于百分之几？`,
+      en: `What percentage is $\\frac{${chosen.num}}{${chosen.den}}$?`,
+    };
+  } else if (dir === 'pct_to_dec') {
+    answer = chosen.dec;
+    description = {
+      zh: `$${chosen.pct}\\%$ 化成小数是多少？`,
+      en: `Convert $${chosen.pct}\\%$ to a decimal.`,
+    };
+  } else {
+    answer = chosen.pct;
+    description = {
+      zh: `$${chosen.dec}$ 等于百分之几？`,
+      en: `What percentage is $${chosen.dec}$?`,
+    };
+  }
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：分数、小数、百分比——三种写法，说的是同一个数`, en: `${narrator}: "Fractions, decimals, percentages — three ways to write the same number"` },
+      hint: { zh: `$\\frac{1}{2} = 0.5 = 50\\%$\n\n就像同一个人有大名、小名、绰号\n换个写法，但数值不变`, en: `$\\frac{1}{2} = 0.5 = 50\\%$\n\nLike the same person with a formal name, nickname, and title\nDifferent form, same value` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：转换秘诀——分数 → 小数 → 百分比`, en: `${narrator}: "Conversion chain: Fraction → Decimal → Percentage"` },
+      hint: { zh: `分数 → 小数：分子 ÷ 分母\n$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.num} \\div ${chosen.den} = ${chosen.dec}$\n\n小数 → 百分比：乘以 100\n$${chosen.dec} \\times 100 = ${chosen.pct}\\%$\n\n百分比 → 小数：除以 100\n$${chosen.pct}\\% \\div 100 = ${chosen.dec}$`, en: `Fraction → Decimal: numerator ÷ denominator\n$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.num} \\div ${chosen.den} = ${chosen.dec}$\n\nDecimal → Percentage: × 100\n$${chosen.dec} \\times 100 = ${chosen.pct}\\%$\n\nPercentage → Decimal: ÷ 100\n$${chosen.pct}\\% \\div 100 = ${chosen.dec}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：这道题的答案`, en: `${narrator}: "The answer to this question"` },
+      hint: { zh: `$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.dec} = ${chosen.pct}\\%$\n\n答案 = $${answer}$`, en: `$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.dec} = ${chosen.pct}\\%$\n\nAnswer = $${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：必背口诀——常见分数百分比对照表`, en: `${narrator}: "Must memorize — common fraction/percentage equivalents"` },
+      hint: { zh: `$\\frac{1}{2} = 50\\%$，$\\frac{1}{4} = 25\\%$，$\\frac{3}{4} = 75\\%$\n$\\frac{1}{5} = 20\\%$，$\\frac{2}{5} = 40\\%$，$\\frac{3}{5} = 60\\%$\n$\\frac{1}{10} = 10\\%$，$\\frac{1}{3} \\approx 33.3\\%$`, en: `$\\frac{1}{2} = 50\\%$, $\\frac{1}{4} = 25\\%$, $\\frac{3}{4} = 75\\%$\n$\\frac{1}{5} = 20\\%$, $\\frac{2}{5} = 40\\%$, $\\frac{3}{5} = 60\\%$\n$\\frac{1}{10} = 10\\%$, $\\frac{1}{3} \\approx 33.3\\%$` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { ...chosen, dir, answer, generatorType: 'FDP_CONVERT_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   BODMAS generator: order of operations
+   ══════════════════════════════════════════════════════════ */
+
+export function generateBodmasMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+
+  let a: number, b: number, c: number, answer: number, expr: string;
+
+  if (tier === 1) {
+    // a + b × c
+    a = randInt(2, 10);
+    b = randInt(2, 5);
+    c = randInt(2, 5);
+    answer = a + b * c;
+    expr = `${a} + ${b} \\times ${c}`;
+  } else if (tier === 2) {
+    // a × b + c × d or a + b × c - d
+    a = randInt(2, 8);
+    b = randInt(2, 6);
+    c = randInt(1, 10);
+    answer = a + b * c;
+    expr = `${a} + ${b} \\times ${c}`;
+    // Sometimes use subtraction
+    if (pickRandom([true, false])) {
+      const d = randInt(1, Math.min(5, a + b * c - 1));
+      answer = a + b * c - d;
+      expr = `${a} + ${b} \\times ${c} - ${d}`;
+    }
+  } else {
+    // With brackets: (a + b) × c
+    a = randInt(2, 8);
+    b = randInt(2, 8);
+    c = randInt(2, 6);
+    answer = (a + b) * c;
+    expr = `(${a} + ${b}) \\times ${c}`;
+  }
+
+  const wrongAnswer = tier <= 2 ? (a + b) * c : a + b * c; // Common mistake
+
+  const description: BilingualText = {
+    zh: `计算 $${expr}$`,
+    en: `Calculate $${expr}$`,
+  };
+
+  const tutorialSteps = tier <= 2 ? [
+    {
+      text: { zh: `${narrator}：军令有先后！——运算也有顺序`, en: `${narrator}: "Military orders have priority! — So do math operations"` },
+      hint: { zh: `运算顺序口诀：BODMAS\nB — Brackets 括号最先\nO — Orders 幂/根号\nDM — Division/Multiplication 乘除\nAS — Addition/Subtraction 加减\n\n先乘除，后加减！`, en: `Order of operations: BODMAS\nB — Brackets first\nO — Orders (powers/roots)\nDM — Division/Multiplication\nAS — Addition/Subtraction\n\nMultiply/divide BEFORE add/subtract!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：$${expr}$ ——先算哪一步？`, en: `${narrator}: "$${expr}$ — which part first?"` },
+      hint: { zh: `有乘法 $${b} \\times ${c}$，也有加法\n\n根据 BODMAS：先乘后加！\n第一步：$${b} \\times ${c} = ${b * c}$`, en: `There's multiplication $${b} \\times ${c}$ and addition\n\nBy BODMAS: multiply first!\nStep 1: $${b} \\times ${c} = ${b * c}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第二步——再算加减`, en: `${narrator}: "Step 2 — now add/subtract"` },
+      hint: { zh: `$${a} + ${b * c} = ${answer}$\n\n完整过程：$${expr} = ${a} + ${b * c} = ${answer}$`, en: `$${a} + ${b * c} = ${answer}$\n\nFull: $${expr} = ${a} + ${b * c} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：常见错误——从左到右算`, en: `${narrator}: "Common mistake — calculating left to right"` },
+      hint: { zh: `错误做法：$${a} + ${b} = ${a + b}$，然后 $${a + b} \\times ${c} = ${wrongAnswer}$ ✗\n正确做法：先乘 $${b} \\times ${c} = ${b * c}$，再加 $${a} + ${b * c} = ${answer}$ ✓\n\n记住：不是从左到右，是先乘除后加减！`, en: `Wrong: $${a} + ${b} = ${a + b}$, then $${a + b} \\times ${c} = ${wrongAnswer}$ ✗\nRight: multiply first $${b} \\times ${c} = ${b * c}$, then add $${a} + ${b * c} = ${answer}$ ✓\n\nRemember: not left to right — multiply/divide BEFORE add/subtract!` },
+      highlightField: 'ans',
+    },
+  ] : [
+    {
+      text: { zh: `${narrator}：括号——最高优先级的军令！`, en: `${narrator}: "Brackets — the highest priority order!"` },
+      hint: { zh: `BODMAS 的 B = Brackets（括号）\n括号里的内容永远最先计算\n\n就像将令比军令大——括号里的比乘除更优先`, en: `BODMAS: B = Brackets\nContent inside brackets ALWAYS comes first\n\nLike a general's order overrides a captain's` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：$${expr}$ ——先算括号里面`, en: `${narrator}: "$${expr}$ — brackets first"` },
+      hint: { zh: `第一步：$(${a} + ${b}) = ${a + b}$\n第二步：$${a + b} \\times ${c} = ${answer}$\n\n如果没有括号：$${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$ ← 结果不同！`, en: `Step 1: $(${a} + ${b}) = ${a + b}$\nStep 2: $${a + b} \\times ${c} = ${answer}$\n\nWithout brackets: $${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$ ← different!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：括号改变了计算结果`, en: `${narrator}: "Brackets change the result"` },
+      hint: { zh: `有括号：$(${a} + ${b}) \\times ${c} = ${answer}$\n无括号：$${a} + ${b} \\times ${c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$ ← 括号很重要！`, en: `With brackets: $(${a} + ${b}) \\times ${c} = ${answer}$\nWithout: $${a} + ${b} \\times ${c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$ ← brackets matter!` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { answer, expr, generatorType: 'BODMAS_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   SIMPLIFY generator: collecting like terms (ax + bx = (a+b)x)
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSimplifyMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+
+  const aPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7], 3: [3, 4, 5, 6, 7, 8, 9] };
+  const bPools: Record<DifficultyTier, number[]> = { 1: [1, 2, 3, 4], 2: [2, 3, 4, 5, 6], 3: [3, 4, 5, 6, 7, 8] };
+  const a = pickRandom(aPools[tier]);
+  const b = pickRandom(bPools[tier]);
+  const answer = a + b;
+
+  // Generate expression: ax + bx or ax + bx + c
+  let expr: string, exprEn: string;
+  let c: number | null = null;
+
+  if (tier >= 2 && pickRandom([true, false])) {
+    c = randInt(1, 10);
+    expr = `${a}x + ${b}x + ${c}`;
+    exprEn = expr;
+  } else {
+    expr = `${a}x + ${b}x`;
+    exprEn = expr;
+  }
+
+  const simplified = c !== null ? `${answer}x + ${c}` : `${answer}x`;
+
+  const description: BilingualText = {
+    zh: `化简 $${expr}$，$x$ 的系数是多少？`,
+    en: `Simplify $${expr}$. What is the coefficient of $x$?`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：什么是"化简"？——把能合并的合并`, en: `${narrator}: "What is 'simplifying'? — Combine what can be combined"` },
+      hint: { zh: `$3x + 2x$ 就像"3 箱苹果 + 2 箱苹果"\n苹果一样，箱子可以合并！\n$3x + 2x = 5x$（5 箱苹果）\n\n但 $3x + 2y$ 不能合并——苹果和橘子不能混！`, en: `$3x + 2x$ is like "3 boxes of apples + 2 boxes of apples"\nSame fruit, boxes can be combined!\n$3x + 2x = 5x$ (5 boxes of apples)\n\nBut $3x + 2y$ can't combine — apples and oranges don't mix!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：规则——只有"同类项"才能合并`, en: `${narrator}: "Rule — only 'like terms' can be combined"` },
+      hint: { zh: `同类项 = 字母部分完全相同\n\n✓ $${a}x$ 和 $${b}x$ 是同类项（都是 $x$）\n✗ $3x$ 和 $3y$ 不是同类项（一个 $x$ 一个 $y$）\n✗ $3x$ 和 $3x^2$ 不是同类项（一个 $x$ 一个 $x^2$）${c !== null ? `\n✗ $${a}x$ 和 $${c}$（常数）不是同类项` : ''}`, en: `Like terms = exact same letter part\n\n✓ $${a}x$ and $${b}x$ are like terms (both $x$)\n✗ $3x$ and $3y$ are NOT (different letters)\n✗ $3x$ and $3x^2$ are NOT ($x$ vs $x^2$)${c !== null ? `\n✗ $${a}x$ and $${c}$ (constant) are NOT like terms` : ''}` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：合并！——只加系数，字母不变`, en: `${narrator}: "Combine! — Add the coefficients, keep the letter"` },
+      hint: { zh: `$${a}x + ${b}x$\n= $(${a} + ${b})x$\n= $${answer}x$\n\n系数相加：$${a} + ${b} = ${answer}$\n字母照抄：$x$${c !== null ? `\n\n$${c}$ 是常数项，不能和 $x$ 合并，保留` : ''}`, en: `$${a}x + ${b}x$\n= $(${a} + ${b})x$\n= $${answer}x$\n\nCoefficients add: $${a} + ${b} = ${answer}$\nLetter stays: $x$${c !== null ? `\n\n$${c}$ is a constant, can't combine with $x$, keep it` : ''}` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：结果`, en: `${narrator}: "Result"` },
+      hint: { zh: `$${expr} = ${simplified}$\n\n$x$ 的系数 = $${answer}$\n\n验算：$${answer} \\times x${c !== null ? ` + ${c}` : ''}$ 和原来一样 ✓`, en: `$${expr} = ${simplified}$\n\nCoefficient of $x$ = $${answer}$\n\nCheck: $${answer} \\times x${c !== null ? ` + ${c}` : ''}$ same as original ✓` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { a, b, c, answer, expr, simplified, generatorType: 'SIMPLIFY_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   STATISTICS_MODE generator: find the most frequent value
+   ══════════════════════════════════════════════════════════ */
+
+export function generateStatsModeMission(template: Mission): Mission {
+  const tier = getTier();
+  const countPools: Record<DifficultyTier, number[]> = { 1: [7], 2: [7, 9], 3: [9, 11] };
+  const valRanges: Record<DifficultyTier, [number, number]> = { 1: [1, 10], 2: [1, 20], 3: [1, 30] };
+  const count = pickRandom(countPools[tier]);
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '张飞';
+
+  // Generate data with a clear mode (one value appears more often)
+  const modeValue = randInt(valRanges[tier][0], valRanges[tier][1]);
+  const modeCount = tier === 1 ? 3 : randInt(3, 4);
+  const values: number[] = Array(modeCount).fill(modeValue);
+  while (values.length < count) {
+    let v = randInt(valRanges[tier][0], valRanges[tier][1]);
+    // Ensure no other value ties with mode
+    if (v !== modeValue && values.filter(x => x === v).length < modeCount - 1) {
+      values.push(v);
+    }
+  }
+  // Shuffle
+  for (let i = values.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [values[i], values[j]] = [values[j], values[i]];
+  }
+
+  const sorted = [...values].sort((a, b) => a - b);
+
+  // Count frequencies
+  const freq: Record<number, number> = {};
+  for (const v of values) freq[v] = (freq[v] || 0) + 1;
+  const freqEntries = Object.entries(freq).map(([k, v]) => ({ val: Number(k), count: v })).sort((a, b) => b.count - a.count);
+
+  const description: BilingualText = {
+    zh: `求数据 $${sorted.join(', ')}$ 的众数（Mode）。`,
+    en: `Find the mode of $${sorted.join(', ')}$.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：什么是"众数"？——出现次数最多的数`, en: `${narrator}: "What is the mode? — The value that appears most often"` },
+      hint: { zh: `众数就是数据里的"人气王"\n出现频率最高的那个数\n\n和平均数、中位数不同：\n• 平均数看"总体水平"\n• 中位数看"中间位置"\n• 众数看"最常见"`, en: `The mode is the "most popular" value\nThe one that appears most frequently\n\nDifferent from mean and median:\n• Mean = overall level\n• Median = middle position\n• Mode = most common` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：怎么找？——数每个值出现了几次`, en: `${narrator}: "How to find it? — Count how many times each value appears"` },
+      hint: { zh: `数据：$${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$ 出现了 $${e.count}$ 次`).join('\n')}`, en: `Data: $${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$ appears $${e.count}$ times`).join('\n')}` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：出现最多的就是众数`, en: `${narrator}: "The one appearing most is the mode"` },
+      hint: { zh: `$${modeValue}$ 出现了 $${modeCount}$ 次——最多！\n\n众数 = $${modeValue}$`, en: `$${modeValue}$ appears $${modeCount}$ times — the most!\n\nMode = $${modeValue}$` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { values: sorted, mode: 'mode', modeValue, modeCount, generatorType: 'STATISTICS_MODE_RANDOM' },
     tutorialSteps,
   };
 }

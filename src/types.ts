@@ -48,7 +48,12 @@ export type QuestionType =
   | 'SQUARE_CUBE'
   | 'SQUARE_ROOT'
   | 'SUBSTITUTION'
-  | 'PERIMETER';
+  | 'PERIMETER'
+  | 'FACTORS_LIST'
+  | 'INTEGER_MUL'
+  | 'FDP_CONVERT'
+  | 'BODMAS'
+  | 'SIMPLIFY';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 

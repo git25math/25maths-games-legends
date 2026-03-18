@@ -68,7 +68,12 @@ export const translations = {
       SQUARE_CUBE: "平方与立方",
       SQUARE_ROOT: "平方根与立方根",
       SUBSTITUTION: "代入求值",
-      PERIMETER: "周长计算"
+      PERIMETER: "周长计算",
+      FACTORS_LIST: "因数与倍数",
+      INTEGER_MUL: "整数乘除",
+      FDP_CONVERT: "分数·小数·百分比",
+      BODMAS: "运算顺序",
+      SIMPLIFY: "化简表达式"
     },
     difficulty: {
       Easy: "简单",
@@ -219,7 +224,12 @@ export const translations = {
       SQUARE_CUBE: "Squares & Cubes",
       SQUARE_ROOT: "Square & Cube Roots",
       SUBSTITUTION: "Substitution",
-      PERIMETER: "Perimeter"
+      PERIMETER: "Perimeter",
+      FACTORS_LIST: "Factors & Multiples",
+      INTEGER_MUL: "Integer Multiply/Divide",
+      FDP_CONVERT: "Fraction·Decimal·Percent",
+      BODMAS: "Order of Operations",
+      SIMPLIFY: "Simplify Expressions"
     },
     difficulty: {
       Easy: "Easy",

@@ -208,6 +208,10 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
       const val = sorted[sorted.length - 1] - sorted[0];
       return { correct: Math.abs(parse(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
     }
+    if (mode === 'mode') {
+      // Mode = most frequent value
+      return { correct: parse(inputs.ans || '') === data.modeValue, expected: { ans: String(data.modeValue) } };
+    }
   }
   if (type === 'RATIO') {
     const { a, b } = data;
@@ -269,6 +273,21 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
   }
   if (type === 'PERIMETER') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'FACTORS_LIST') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'INTEGER_MUL') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'FDP_CONVERT') {
+    return { correct: Math.abs(parse(inputs.ans || '') - data.answer) < 0.01, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'BODMAS') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'SIMPLIFY') {
     return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
   }
   return { correct: false, expected: {} };
