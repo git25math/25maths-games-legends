@@ -3692,34 +3692,70 @@ export function generateSubstitutionMission(template: Mission): Mission {
     en: `When $x = ${x}$, find the value of $${exprEn}$.`,
   };
 
+  const bStr = b >= 0 ? `+ ${b}` : `- ${Math.abs(b)}`;
+  const bStrCalc = b >= 0 ? '+' : '-';
+  const bAbs = Math.abs(b);
+
   const tutorialSteps = mode === 'power' ? [
     {
-      text: { zh: `${narrator}：代入就是——把字母换成数字`, en: `${narrator}: "Substitution means replacing the letter with a number"` },
-      hint: { zh: `$x = ${x}$，所以把式子里所有的 $x$ 都换成 $${x}$`, en: `$x = ${x}$, so replace every $x$ with $${x}$` },
+      text: { zh: `${narrator}：军师用密码传令——把暗号 $x$ 代入公式，算出指令数字`, en: `${narrator}: "The strategist sends coded orders — substitute the code $x$ into the formula to decode"` },
+      hint: { zh: `为什么用字母？因为同一个公式可以换不同的数\n今天暗号 $x = 3$，明天可能 $x = 7$\n公式不变，代入不同的数，得到不同的结果`, en: `Why use letters? The same formula works with different numbers\nToday's code $x = 3$, tomorrow maybe $x = 7$\nSame formula, different inputs, different outputs` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：$${expr}$ 中把 $x = ${x}$ 代入`, en: `${narrator}: "Substitute $x = ${x}$ into $${expr}$"` },
-      hint: { zh: `$${a} \\times ${x}^2 ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a} \\times ${x*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a*x*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${answer}$`, en: `$${a} \\times ${x}^2 ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a} \\times ${x*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a*x*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${answer}$` },
+      text: { zh: `${narrator}：先搞懂——$${a}x^2$ 是什么意思？`, en: `${narrator}: "First — what does $${a}x^2$ mean?"` },
+      hint: { zh: `$x^2$ 读作"$x$ 的平方"，意思是 $x \\times x$\n$${a}x^2$ 意思是 $${a} \\times x \\times x$\n\n注意：$${a}x^2$ 不是 $(${a}x)^2$！\n$${a}x^2 = ${a} \\times (x^2)$，只有 $x$ 要平方`, en: `$x^2$ reads "$x$ squared", meaning $x \\times x$\n$${a}x^2$ means $${a} \\times x \\times x$\n\nNote: $${a}x^2$ is NOT $(${a}x)^2$!\n$${a}x^2 = ${a} \\times (x^2)$, only $x$ gets squared` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：注意——先算幂，再算乘，最后算加减`, en: `${narrator}: "Remember — powers first, then multiply, then add/subtract"` },
+      text: { zh: `${narrator}：第一步——把 $x = ${x}$ 代入，先算平方`, en: `${narrator}: "Step 1 — substitute $x = ${x}$, compute the square first"` },
+      hint: { zh: `$x^2 = ${x}^2 = ${x} \\times ${x} = ${x*x}$\n\n（平方就是自己乘自己，我们之前学过！）`, en: `$x^2 = ${x}^2 = ${x} \\times ${x} = ${x*x}$\n\n(Squaring means times itself — we learned this before!)` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第二步——乘以系数 $${a}$`, en: `${narrator}: "Step 2 — multiply by the coefficient $${a}$"` },
+      hint: { zh: `$${a} \\times ${x*x} = ${a*x*x}$`, en: `$${a} \\times ${x*x} = ${a*x*x}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第三步——最后 ${bStrCalc} ${bAbs}`, en: `${narrator}: "Step 3 — finally ${bStrCalc} ${bAbs}"` },
+      hint: { zh: `$${a*x*x} ${bStr} = ${answer}$`, en: `$${a*x*x} ${bStr} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：完整过程回顾`, en: `${narrator}: "Full process review"` },
+      hint: { zh: `运算顺序口诀：幂 → 乘除 → 加减\n\n$${expr}$，$x = ${x}$\n① 平方：$${x}^2 = ${x*x}$\n② 乘系数：$${a} \\times ${x*x} = ${a*x*x}$\n③ 加减：$${a*x*x} ${bStr} = ${answer}$\n\n答案 = $${answer}$ ✓`, en: `Order of operations: Powers → Multiply/Divide → Add/Subtract\n\n$${expr}$, $x = ${x}$\n① Square: $${x}^2 = ${x*x}$\n② Multiply: $${a} \\times ${x*x} = ${a*x*x}$\n③ Add/Sub: $${a*x*x} ${bStr} = ${answer}$\n\nAnswer = $${answer}$ ✓` },
       highlightField: 'ans',
     },
   ] : [
     {
-      text: { zh: `${narrator}：代入就是——把字母换成数字`, en: `${narrator}: "Substitution means replacing the letter with a number"` },
-      hint: { zh: `$x = ${x}$，所以把式子里的 $x$ 换成 $${x}$`, en: `$x = ${x}$, so replace $x$ with $${x}$` },
+      text: { zh: `${narrator}：军师用密码传令——$x$ 是暗号，代入公式就能解密`, en: `${narrator}: "The strategist sends coded orders — $x$ is the code, substitute to decode"` },
+      hint: { zh: `为什么用字母代替数字？\n因为同一个公式要反复使用：今天 $x=3$，明天 $x=7$\n公式像一台"计算机器"，放入不同的数，吐出不同的答案`, en: `Why use letters instead of numbers?\nBecause the same formula is reused: today $x=3$, tomorrow $x=7$\nA formula is like a "calculation machine" — different input, different output` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：$${expr}$ 中把 $x = ${x}$ 代入`, en: `${narrator}: "Substitute $x = ${x}$ into $${expr}$"` },
-      hint: { zh: `$${a} \\times ${x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${answer}$`, en: `$${a} \\times ${x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$\n$= ${a*x} ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${answer}$` },
+      text: { zh: `${narrator}：先搞懂——$${a}x$ 是什么意思？`, en: `${narrator}: "First — what does $${a}x$ mean?"` },
+      hint: { zh: `$${a}x$ 读作"${a} 乘以 $x$"\n就是 $${a} \\times x$\n\n字母前面的数字叫"系数"\n比如 $${a}x$ 的系数是 $${a}$\n\n注意：$${a}x$ 不是 $${a} + x$！是乘法！`, en: `$${a}x$ reads "${a} times $x$"\nIt means $${a} \\times x$\n\nThe number in front is the "coefficient"\n$${a}x$ has coefficient $${a}$\n\nNote: $${a}x$ is NOT $${a} + x$! It's multiplication!` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：$${a}x$ 意思就是 $${a} \\times x$，字母前面的数字叫"系数"`, en: `${narrator}: "$${a}x$ means $${a} \\times x$ — the number in front is called the 'coefficient'"` },
+      text: { zh: `${narrator}：现在代入！把 $x = ${x}$ 放进去`, en: `${narrator}: "Now substitute! Put $x = ${x}$ in"` },
+      hint: { zh: `$${a}x ${bStr}$\n\n把 $x$ 换成 $${x}$：\n$${a} \\times ${x} ${bStr}$`, en: `$${a}x ${bStr}$\n\nReplace $x$ with $${x}$:\n$${a} \\times ${x} ${bStr}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：先算乘法——$${a} \\times ${x}$`, en: `${narrator}: "First, multiply — $${a} \\times ${x}$"` },
+      hint: { zh: `$${a} \\times ${x} = ${a*x}$\n\n（先乘除，后加减！）`, en: `$${a} \\times ${x} = ${a*x}$\n\n(Multiply before adding/subtracting!)` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：再算加减——$${a*x} ${bStr}$`, en: `${narrator}: "Then add/subtract — $${a*x} ${bStr}$"` },
+      hint: { zh: `$${a*x} ${bStr} = ${answer}$`, en: `$${a*x} ${bStr} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——把答案代回去检查`, en: `${narrator}: "Verify — plug the answer back to check"` },
+      hint: { zh: `$${a} \\times ${x} ${bStr} = ${a*x} ${bStr} = ${answer}$ ✓\n\n完整步骤回顾：\n① 看清式子 $${expr}$\n② 把 $x$ 换成 $${x}$\n③ 先乘：$${a} \\times ${x} = ${a*x}$\n④ 后加减：$${a*x} ${bStr} = ${answer}$`, en: `$${a} \\times ${x} ${bStr} = ${a*x} ${bStr} = ${answer}$ ✓\n\nFull steps:\n① Read expression $${expr}$\n② Replace $x$ with $${x}$\n③ Multiply first: $${a} \\times ${x} = ${a*x}$\n④ Then add/sub: $${a*x} ${bStr} = ${answer}$` },
       highlightField: 'ans',
     },
   ];
@@ -3752,18 +3788,28 @@ export function generatePerimeterRectMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：什么是周长？绕着图形走一圈的总长度`, en: `${narrator}: "What is perimeter? The total distance around a shape"` },
-      hint: { zh: '想象蚂蚁沿着围墙走一圈，走了多远就是周长', en: 'Imagine an ant walking along the fence — how far it walks is the perimeter' },
+      text: { zh: `${narrator}：扎营第一步——算围栅需要多长。这就是"周长"`, en: `${narrator}: "First step in setting camp — calculate how much fencing we need. That's the perimeter"` },
+      hint: { zh: `周长就是沿着图形的边走一整圈，总共走了多远\n\n想象一只蚂蚁沿着营地围墙走一圈\n它走过的总距离 = 周长`, en: `Perimeter = the total distance walking around the edge of a shape\n\nImagine an ant walking along the camp fence\nTotal distance walked = perimeter` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：长方形有 4 条边——两条长、两条宽`, en: `${narrator}: "A rectangle has 4 sides — two lengths, two widths"` },
-      hint: { zh: `长 = $${length}$（出现 2 次）\n宽 = $${width}$（出现 2 次）`, en: `Length = $${length}$ (appears twice)\nWidth = $${width}$ (appears twice)` },
+      text: { zh: `${narrator}：长方形有几条边？分别多长？`, en: `${narrator}: "How many sides does a rectangle have? How long are they?"` },
+      hint: { zh: `长方形有 4 条边：\n• 上边 = $${length}$\n• 下边 = $${length}$（和上边一样长）\n• 左边 = $${width}$\n• 右边 = $${width}$（和左边一样长）\n\n对面的边总是相等的——这就是长方形的特点！`, en: `A rectangle has 4 sides:\n• Top = $${length}$\n• Bottom = $${length}$ (same as top)\n• Left = $${width}$\n• Right = $${width}$ (same as left)\n\nOpposite sides are always equal — that's what makes it a rectangle!` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：周长公式 $P = 2(l + w)$`, en: `${narrator}: "Perimeter formula: $P = 2(l + w)$"` },
-      hint: { zh: `$P = 2(${length} + ${width}) = 2 \\times ${length + width} = ${answer}$`, en: `$P = 2(${length} + ${width}) = 2 \\times ${length + width} = ${answer}$` },
+      text: { zh: `${narrator}：笨办法——把 4 条边加起来`, en: `${narrator}: "Simple way — add all 4 sides"` },
+      hint: { zh: `$${length} + ${width} + ${length} + ${width}$\n$= ${length + width} + ${length + width}$\n$= ${answer}$\n\n这就是周长！`, en: `$${length} + ${width} + ${length} + ${width}$\n$= ${length + width} + ${length + width}$\n$= ${answer}$\n\nThat's the perimeter!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：快捷公式——因为有两对相同的边`, en: `${narrator}: "Shortcut — since there are two pairs of equal sides"` },
+      hint: { zh: `先把一条长和一条宽加起来：$${length} + ${width} = ${length + width}$\n然后乘以 2（因为有两对）：$2 \\times ${length + width} = ${answer}$\n\n这就是公式 $P = 2(l + w)$ 的含义！`, en: `Add one length and one width: $${length} + ${width} = ${length + width}$\nMultiply by 2 (two pairs): $2 \\times ${length + width} = ${answer}$\n\nThat's what $P = 2(l + w)$ means!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——用笨办法检查`, en: `${narrator}: "Verify — check with the simple method"` },
+      hint: { zh: `$${length} + ${width} + ${length} + ${width} = ${answer}$ ✓\n$2 \\times (${length} + ${width}) = ${answer}$ ✓\n\n两种方法答案一样——围栅需要 $${answer}$ 单位长！`, en: `$${length} + ${width} + ${length} + ${width} = ${answer}$ ✓\n$2 \\times (${length} + ${width}) = ${answer}$ ✓\n\nBoth methods match — we need $${answer}$ units of fencing!` },
       highlightField: 'ans',
     },
   ];
@@ -3795,20 +3841,31 @@ export function generatePercentageOfMission(template: Mission): Mission {
   };
 
   const decimal = pct / 100;
+  const tenPct = n / 10;
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：百分比就是"每一百份里取几份"`, en: `${narrator}: "Percentage means 'out of every 100'"` },
-      hint: { zh: `$${pct}\\%$ 就是 $\\frac{${pct}}{100} = ${decimal}$`, en: `$${pct}\\%$ means $\\frac{${pct}}{100} = ${decimal}$` },
+      text: { zh: `${narrator}：军粮 $${n}$ 石，要拨出 $${pct}\\%$ 给前锋营。到底是多少？`, en: `${narrator}: "We have $${n}$ units of grain. $${pct}\\%$ goes to the vanguard. How much is that?"` },
+      hint: { zh: `"百分"两个字拆开看：\n"百" = 100\n"分" = 份\n百分比就是"每 100 份里取几份"\n\n$${pct}\\%$ 的意思：每 100 份里取 ${pct} 份`, en: `"Per cent" literally means "per hundred"\n\n$${pct}\\%$ means: out of every 100, take ${pct}` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：求 $${n}$ 的 $${pct}\\%$——用乘法`, en: `${narrator}: "Find $${pct}\\%$ of $${n}$ — use multiplication"` },
-      hint: { zh: `$${n} \\times ${decimal} = ${answer}$\n\n或者：$${n} \\times \\frac{${pct}}{100} = \\frac{${n * pct}}{100} = ${answer}$`, en: `$${n} \\times ${decimal} = ${answer}$\n\nOr: $${n} \\times \\frac{${pct}}{100} = \\frac{${n * pct}}{100} = ${answer}$` },
+      text: { zh: `${narrator}：先从简单的开始——如果只有 100 石粮草`, en: `${narrator}: "Let's start simple — what if we only had 100 units?"` },
+      hint: { zh: `100 石粮草的 $${pct}\\%$？\n直接取 ${pct} 石就好了！\n\n因为 $${pct}\\%$ = 每 100 里取 ${pct}\n$100$ 里取 $${pct}$ → 答案就是 $${pct}$`, en: `$${pct}\\%$ of 100?\nJust take ${pct}!\n\nBecause $${pct}\\%$ = ${pct} out of every 100\n$100$ → take $${pct}$` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：小技巧——10% 就是除以 10，50% 就是除以 2`, en: `${narrator}: "Quick trick — 10% = divide by 10, 50% = divide by 2"` },
-      hint: { zh: `$10\\%$ of $${n}$ = $${n/10}$\n$50\\%$ of $${n}$ = $${n/2}$\n$25\\%$ of $${n}$ = $${n/4}$`, en: `$10\\%$ of $${n}$ = $${n/10}$\n$50\\%$ of $${n}$ = $${n/2}$\n$25\\%$ of $${n}$ = $${n/4}$` },
+      text: { zh: `${narrator}：但我们有 $${n}$ 石，不是 100 石——怎么办？`, en: `${narrator}: "But we have $${n}$, not 100 — what do we do?"` },
+      hint: { zh: `方法：先算 $1\\%$（即 $\\frac{1}{100}$），再乘以 ${pct}\n\n$1\\%$ of $${n}$ = $${n} \\div 100 = ${n/100}$\n$${pct}\\%$ of $${n}$ = $${n/100} \\times ${pct} = ${answer}$\n\n或者一步算：$${n} \\times \\frac{${pct}}{100} = ${answer}$`, en: `Method: find $1\\%$ first ($\\frac{1}{100}$), then multiply by ${pct}\n\n$1\\%$ of $${n}$ = $${n} \\div 100 = ${n/100}$\n$${pct}\\%$ of $${n}$ = $${n/100} \\times ${pct} = ${answer}$\n\nOr in one step: $${n} \\times \\frac{${pct}}{100} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：小捷径——先算 $10\\%$，再凑其他`, en: `${narrator}: "Shortcut — find $10\\%$ first, then build from there"` },
+      hint: { zh: `$10\\%$ 就是除以 10：$${n} \\div 10 = ${tenPct}$\n$50\\%$ 就是除以 2：$${n} \\div 2 = ${n/2}$\n$25\\%$ 就是除以 4：$${n} \\div 4 = ${n/4}$\n$1\\%$ 就是除以 100：$${n} \\div 100 = ${n/100}$\n\n任何百分比都能用 $10\\%$ 和 $1\\%$ 凑出来！`, en: `$10\\%$ = divide by 10: $${n} \\div 10 = ${tenPct}$\n$50\\%$ = divide by 2: $${n} \\div 2 = ${n/2}$\n$25\\%$ = divide by 4: $${n} \\div 4 = ${n/4}$\n$1\\%$ = divide by 100: $${n} \\div 100 = ${n/100}$\n\nAny percentage can be built from $10\\%$ and $1\\%$!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——答案合理吗？`, en: `${narrator}: "Verify — does the answer make sense?"` },
+      hint: { zh: `$${pct}\\%$ of $${n}$ = $${answer}$\n\n合理性检查：\n• $${pct}\\%$ ${pct < 50 ? '不到一半' : pct === 50 ? '刚好一半' : '超过一半'}，$${n}$ 的一半是 $${n/2}$\n• $${answer}$ ${answer < n/2 ? '< ' + n/2 : answer === n/2 ? '= ' + n/2 : '> ' + n/2} ✓ 合理！`, en: `$${pct}\\%$ of $${n}$ = $${answer}$\n\nSense check:\n• $${pct}\\%$ is ${pct < 50 ? 'less than half' : pct === 50 ? 'exactly half' : 'more than half'}, half of $${n}$ is $${n/2}$\n• $${answer}$ ${answer < n/2 ? '< ' + n/2 : answer === n/2 ? '= ' + n/2 : '> ' + n/2} ✓ Makes sense!` },
       highlightField: 'ans',
     },
   ];
@@ -3858,17 +3915,33 @@ export function generateEstimationRoundMission(template: Mission): Mission {
     en: `Round $${n}$ to the ${placeNameEn}.`,
   };
 
-  const digit = Math.floor((n % (place * 10)) / place);
   const decider = Math.floor((n % place) / (place / 10));
+  const roundDown = Math.floor(n / place) * place;
+  const roundUp = roundDown + place;
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：四舍五入——看要舍去的那一位`, en: `${narrator}: "Rounding — look at the digit you're removing"` },
-      hint: { zh: '如果那一位是 0-4，直接去掉（舍）\n如果是 5-9，前面一位加 1（入）', en: 'If that digit is 0-4, round down\nIf 5-9, round up' },
+      text: { zh: `${narrator}：斥候回报敌军约 $${n}$ 人——但主公不需要精确数字，大概就行`, en: `${narrator}: "Scouts report about $${n}$ enemies — but the general just needs a rough number"` },
+      hint: { zh: `四舍五入就是——找到最接近的"整数"\n比如四舍五入到${placeNameZh}，就是找最近的 ${place} 的倍数\n\n为什么要四舍五入？\n• 快速估算（战场上没时间算精确）\n• 方便比较大小\n• 简化计算`, en: `Rounding means finding the nearest "round number"\nRounding to ${placeNameEn} = finding the nearest multiple of ${place}\n\nWhy round?\n• Quick estimates (no time for exact math in battle)\n• Easier to compare sizes\n• Simplifies calculations` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：$${n}$ 四舍五入到${placeNameZh}`, en: `${narrator}: "Round $${n}$ to the ${placeNameEn}"` },
-      hint: { zh: `看${placeNameZh}后面的数字：$${decider}$\n${decider >= 5 ? `$${decider} \\geq 5$，往上进` : `$${decider} < 5$，直接舍`}\n答案 = $${answer}$`, en: `Look at the digit after: $${decider}$\n${decider >= 5 ? `$${decider} \\geq 5$, round up` : `$${decider} < 5$, round down`}\nAnswer = $${answer}$` },
+      text: { zh: `${narrator}：$${n}$ 夹在哪两个"整数"之间？`, en: `${narrator}: "$${n}$ sits between which two round numbers?"` },
+      hint: { zh: `$${n}$ 在 $${roundDown}$ 和 $${roundUp}$ 之间\n\n想象一条数轴：\n$${roundDown}$ ←——— $${n}$ ———→ $${roundUp}$\n\n$${n}$ 离哪个更近？`, en: `$${n}$ is between $${roundDown}$ and $${roundUp}$\n\nImagine a number line:\n$${roundDown}$ ←——— $${n}$ ———→ $${roundUp}$\n\nWhich is $${n}$ closer to?` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：怎么判断？看关键的那一位数字`, en: `${narrator}: "How to decide? Look at the key digit"` },
+      hint: { zh: `看${placeNameZh}右边紧挨着的那个数字：$${decider}$\n\n规则：\n• $0, 1, 2, 3, 4$（小于 5）→ 靠近左边 → 舍（往小的走）\n• $5, 6, 7, 8, 9$（大于等于 5）→ 靠近右边 → 入（往大的走）\n\n$${decider}$ ${decider >= 5 ? `\\geq 5$ → 入！往大的走` : `< 5$ → 舍！往小的走`}`, en: `Look at the digit right after the ${placeNameEn} position: $${decider}$\n\nRule:\n• $0, 1, 2, 3, 4$ (less than 5) → closer to left → round DOWN\n• $5, 6, 7, 8, 9$ (5 or more) → closer to right → round UP\n\n$${decider}$ ${decider >= 5 ? `\\geq 5$ → round UP!` : `< 5$ → round DOWN!`}` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：所以 $${n}$ 四舍五入到${placeNameZh} = $${answer}$`, en: `${narrator}: "So $${n}$ rounded to ${placeNameEn} = $${answer}$"` },
+      hint: { zh: `关键数字 $${decider}$ ${decider >= 5 ? `$\\geq 5$，往上进到 $${roundUp}$` : `$< 5$，往下舍到 $${roundDown}$`}\n\n答案 = $${answer}$`, en: `Key digit $${decider}$ ${decider >= 5 ? `$\\geq 5$, round up to $${roundUp}$` : `$< 5$, round down to $${roundDown}$`}\n\nAnswer = $${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——答案合理吗？`, en: `${narrator}: "Verify — does it make sense?"` },
+      hint: { zh: `$${n}$ 四舍五入到${placeNameZh} = $${answer}$\n\n检查：\n• $${answer}$ 是 $${place}$ 的倍数吗？$${answer} \\div ${place} = ${answer/place}$ ✓\n• $${n}$ 和 $${answer}$ 差多少？$|${n} - ${answer}| = ${Math.abs(n - answer)}$\n• 差距不超过 $${place/2}$？$${Math.abs(n - answer)} ${Math.abs(n - answer) <= place/2 ? '\\leq' : '>'} ${place/2}$ ✓`, en: `$${n}$ rounded to ${placeNameEn} = $${answer}$\n\nCheck:\n• Is $${answer}$ a multiple of $${place}$? $${answer} \\div ${place} = ${answer/place}$ ✓\n• Difference: $|${n} - ${answer}| = ${Math.abs(n - answer)}$\n• Within $${place/2}$? $${Math.abs(n - answer)} ${Math.abs(n - answer) <= place/2 ? '\\leq' : '>'} ${place/2}$ ✓` },
       highlightField: 'ans',
     },
   ];
@@ -3903,17 +3976,28 @@ export function generateAnglesTriangleMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：三角形内角和恒等于 $180°$`, en: `${narrator}: "The angles in a triangle always add up to $180°$"` },
-      hint: { zh: '不管什么形状的三角形，三个角加起来一定是 180°', en: 'No matter the shape, the three angles of a triangle always sum to 180°' },
+      text: { zh: `${narrator}：三角旗阵已知两个角，要算第三个角才能裁旗`, en: `${narrator}: "Two angles of the triangular banner are known — find the third to cut the fabric"` },
+      hint: { zh: `什么是"角"？两条线相交形成的张开程度\n角度越大，两条线张得越开\n\n我们用"度"（°）来衡量：\n• 直角 = $90°$（像书角）\n• 半圈 = $180°$（一条直线）\n• 整圈 = $360°$`, en: `What is an "angle"? How far apart two lines spread when they meet\nBigger angle = wider spread\n\nWe measure in "degrees" (°):\n• Right angle = $90°$ (like a book corner)\n• Half turn = $180°$ (a straight line)\n• Full turn = $360°$` },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：已知两个角：$${a1}°$ 和 $${a2}°$`, en: `${narrator}: "Two angles are known: $${a1}°$ and $${a2}°$"` },
-      hint: { zh: `两角之和 = $${a1} + ${a2} = ${a1 + a2}°$`, en: `Sum of two angles = $${a1} + ${a2} = ${a1 + a2}°$` },
+      text: { zh: `${narrator}：重要定理——三角形三个内角之和 = $180°$`, en: `${narrator}: "Key theorem — the three angles inside a triangle sum to $180°$"` },
+      hint: { zh: `为什么？试试看：\n把三角形的三个角撕下来，拼在一起\n它们刚好拼成一条直线！\n一条直线 = $180°$\n\n所以不管什么形状的三角形——\n尖的、扁的、等边的——三个角加起来都是 $180°$`, en: `Why? Try this:\nTear off the three corners of a paper triangle\nArrange them together — they form a straight line!\nA straight line = $180°$\n\nSo ANY triangle — pointy, flat, equilateral —\nthe three angles always add to $180°$` },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：第三个角 = $180° - ${a1}° - ${a2}° = ${answer}°$`, en: `${narrator}: "Third angle = $180° - ${a1}° - ${a2}° = ${answer}°$"` },
+      text: { zh: `${narrator}：已知两个角——先加起来`, en: `${narrator}: "Two angles known — add them first"` },
+      hint: { zh: `角 1 = $${a1}°$\n角 2 = $${a2}°$\n\n两角之和：$${a1} + ${a2} = ${a1 + a2}°$\n\n三个角总共 $180°$，已经用掉了 $${a1 + a2}°$`, en: `Angle 1 = $${a1}°$\nAngle 2 = $${a2}°$\n\nSum of two: $${a1} + ${a2} = ${a1 + a2}°$\n\nThree angles total $180°$, already used $${a1 + a2}°$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：第三个角 = 总和 - 已知角`, en: `${narrator}: "Third angle = total − known angles"` },
+      hint: { zh: `$x = 180° - ${a1 + a2}°$\n$x = ${answer}°$`, en: `$x = 180° - ${a1 + a2}°$\n$x = ${answer}°$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：验算——三个角加起来是不是 $180°$？`, en: `${narrator}: "Verify — do all three angles add to $180°$?"` },
+      hint: { zh: `$${a1}° + ${a2}° + ${answer}° = ${a1 + a2 + answer}°$ ✓\n\n${answer < 90 ? `$${answer}°$ 是锐角（小于 $90°$）` : answer === 90 ? `$${answer}°$ 是直角` : `$${answer}°$ 是钝角（大于 $90°$）`}\n\n记住：三角形最多只能有一个钝角或直角！`, en: `$${a1}° + ${a2}° + ${answer}° = ${a1 + a2 + answer}°$ ✓\n\n${answer < 90 ? `$${answer}°$ is acute (less than $90°$)` : answer === 90 ? `$${answer}°$ is a right angle` : `$${answer}°$ is obtuse (greater than $90°$)`}\n\nRemember: a triangle can have at most ONE obtuse or right angle!` },
       highlightField: 'x',
     },
   ];
@@ -3957,16 +4041,28 @@ export function generateAnglesPointMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：围绕一点的所有角加起来 = $360°$`, en: `${narrator}: "All angles around a point sum to $360°$"` },
-      hint: { zh: '想象转一整圈就是 360°', en: 'Think of turning a full circle — that\'s 360°' },
+      text: { zh: `${narrator}：在瞭望台上四面观察——转一整圈看遍所有方向`, en: `${narrator}: "From the watchtower, look in every direction — a full turn covers them all"` },
+      hint: { zh: `想象你站在瞭望台上：\n• 面朝北开始\n• 慢慢转身，向东→南→西\n• 转回朝北 = 转了一整圈\n\n一整圈 = $360°$\n\n为什么是 360？古人把天空分成 360 份\n（大约每天太阳移动 1°，一年 ≈ 360 天）`, en: `Imagine standing on a watchtower:\n• Start facing North\n• Turn slowly: East → South → West\n• Back to North = one full turn\n\nOne full turn = $360°$\n\nWhy 360? Ancient people divided the sky into 360 parts\n(The sun moves about 1° per day, ~360 days in a year)` },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：已知角的总和 = $${angles.join(' + ')} = ${sum}°$`, en: `${narrator}: "Sum of known angles = $${angles.join(' + ')} = ${sum}°$"` },
+      text: { zh: `${narrator}：所以——围绕一点的所有角加起来 = $360°$`, en: `${narrator}: "So — all angles around a point add up to $360°$"` },
+      hint: { zh: `就像把一个圆饼切成几块\n不管切多少块，所有块合起来还是一个完整的圆\n完整的圆 = $360°$`, en: `Like cutting a round pie into pieces\nNo matter how many pieces, they all form a complete circle\nComplete circle = $360°$` },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：$x = 360° - ${sum}° = ${answer}°$`, en: `${narrator}: "$x = 360° - ${sum}° = ${answer}°$"` },
+      text: { zh: `${narrator}：已知的角加起来是多少？`, en: `${narrator}: "What do the known angles add up to?"` },
+      hint: { zh: `$${angles.join('° + ')}°$\n$= ${sum}°$\n\n还剩多少度没有被覆盖？`, en: `$${angles.join('° + ')}°$\n$= ${sum}°$\n\nHow many degrees are left uncovered?` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：未知角 = 总度数 - 已知角`, en: `${narrator}: "Unknown angle = total − known angles"` },
+      hint: { zh: `$x = 360° - ${sum}°$\n$x = ${answer}°$`, en: `$x = 360° - ${sum}°$\n$x = ${answer}°$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：验算——所有角加起来是不是 $360°$？`, en: `${narrator}: "Verify — do all angles sum to $360°$?"` },
+      hint: { zh: `$${angles.join('° + ')}° + ${answer}° = ${sum + answer}°$ ✓\n\n$${sum + answer} = 360$ ✓ 正好一整圈！`, en: `$${angles.join('° + ')}° + ${answer}° = ${sum + answer}°$ ✓\n\n$${sum + answer} = 360$ ✓ Exactly one full turn!` },
       highlightField: 'x',
     },
   ];
@@ -4008,13 +4104,23 @@ export function generateSequenceY7Mission(template: Mission): Mission {
 
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}：观察规律——每一项比前一项多几？`, en: `${narrator}: "Spot the pattern — what's the difference between each term?"` },
-        hint: { zh: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n每次都加 $${d}$——公差是 $${d}$`, en: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\nAlways adding $${d}$ — common difference is $${d}$` },
+        text: { zh: `${narrator}：每天招募新兵，看看人数有什么规律`, en: `${narrator}: "Daily recruitment numbers — spot the pattern"` },
+        hint: { zh: `数列：$${termsStr}$\n\n什么是"数列"？就是按一定规律排列的一串数\n就像每天记录新兵人数：\n第 1 天：${terms[0]} 人\n第 2 天：${terms[1]} 人\n第 3 天：${terms[2]} 人\n第 4 天：${terms[3]} 人`, en: `Sequence: $${termsStr}$\n\nWhat is a sequence? Numbers arranged in a pattern\nLike daily recruitment records:\nDay 1: ${terms[0]}\nDay 2: ${terms[1]}\nDay 3: ${terms[2]}\nDay 4: ${terms[3]}` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：怎么找规律？看相邻两个数的差`, en: `${narrator}: "How to find the pattern? Look at the difference between neighbours"` },
+        hint: { zh: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n$${terms[3]} - ${terms[2]} = ${d}$\n\n每次都差 $${d}$！这叫"公差"\n意思是：每一天比前一天多招 $${d}$ 人`, en: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n$${terms[3]} - ${terms[2]} = ${d}$\n\nAlways a difference of $${d}$! This is the "common difference"\nMeaning: each day recruits $${d}$ more than the last` },
         highlightField: 'ans',
       },
       {
         text: { zh: `${narrator}：下一项 = 最后一项 + 公差`, en: `${narrator}: "Next term = last term + common difference"` },
-        hint: { zh: `$${terms[showCount - 1]} + ${d} = ${answer}$`, en: `$${terms[showCount - 1]} + ${d} = ${answer}$` },
+        hint: { zh: `最后一项是 $${terms[showCount - 1]}$\n公差是 $${d}$\n\n下一项 = $${terms[showCount - 1]} + ${d} = ${answer}$`, en: `Last term is $${terms[showCount - 1]}$\nCommon difference is $${d}$\n\nNext term = $${terms[showCount - 1]} + ${d} = ${answer}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：验算——新数字符合规律吗？`, en: `${narrator}: "Verify — does the new number fit the pattern?"` },
+        hint: { zh: `完整数列：$${termsStr}, ${answer}$\n\n检查：$${answer} - ${terms[showCount - 1]} = ${d}$ ✓\n公差不变，规律成立！`, en: `Full sequence: $${termsStr}, ${answer}$\n\nCheck: $${answer} - ${terms[showCount - 1]} = ${d}$ ✓\nConstant difference — pattern holds!` },
         highlightField: 'ans',
       },
     ];
@@ -4040,17 +4146,28 @@ export function generateSequenceY7Mission(template: Mission): Mission {
 
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}：找公差——每项增加多少？`, en: `${narrator}: "Find the common difference"` },
-        hint: { zh: `$${terms[1]} - ${terms[0]} = ${d}$，公差 $d = ${d}$`, en: `$${terms[1]} - ${terms[0]} = ${d}$, common difference $d = ${d}$` },
+        text: { zh: `${narrator}：远征军第 $${n}$ 天的补给量是多少？不用逐天数，用公式直接算`, en: `${narrator}: "What's the supply on day $${n}$? Don't count day by day — use a formula"` },
+        hint: { zh: `数列：$${termsStr}, \\ldots$\n\n如果要求第 $${n}$ 项，逐个数太慢了\n我们需要一个"直达公式"——给出位置 $n$，直接算出值`, en: `Sequence: $${termsStr}, \\ldots$\n\nCounting to term $${n}$ one by one is too slow\nWe need a "direct formula" — give it position $n$, get the value` },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：第 $n$ 项公式 $a_n = a_1 + (n-1) \\times d$`, en: `${narrator}: "nth term formula: $a_n = a_1 + (n-1) \\times d$"` },
-        hint: { zh: `$a_1 = ${a1}$，$d = ${d}$，$n = ${n}$`, en: `$a_1 = ${a1}$, $d = ${d}$, $n = ${n}$` },
+        text: { zh: `${narrator}：第一步——找公差`, en: `${narrator}: "Step 1 — find the common difference"` },
+        hint: { zh: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n\n公差 $d = ${d}$（每次加 $${d}$）`, en: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n\nCommon difference $d = ${d}$ (adding $${d}$ each time)` },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：$a_{${n}} = ${a1} + (${n}-1) \\times ${d} = ${a1} + ${(n-1)*d} = ${answer}$`, en: `${narrator}: "$a_{${n}} = ${a1} + (${n}-1) \\times ${d} = ${a1} + ${(n-1)*d} = ${answer}$"` },
+        text: { zh: `${narrator}：第二步——理解公式为什么是 $(n-1)$ 而不是 $n$`, en: `${narrator}: "Step 2 — why $(n-1)$ and not $n$?"` },
+        hint: { zh: `第 1 项（起点）：$${a1}$，加了 $0$ 次公差\n第 2 项：$${a1} + ${d} \\times 1 = ${a1 + d}$，加了 $1$ 次\n第 3 项：$${a1} + ${d} \\times 2 = ${a1 + 2*d}$，加了 $2$ 次\n\n看到规律了吗？第 $n$ 项加了 $(n-1)$ 次公差！\n因为第 1 项还没开始加`, en: `Term 1 (start): $${a1}$, added $0$ differences\nTerm 2: $${a1} + ${d} \\times 1 = ${a1 + d}$, added $1$ time\nTerm 3: $${a1} + ${d} \\times 2 = ${a1 + 2*d}$, added $2$ times\n\nSee the pattern? Term $n$ adds $(n-1)$ differences!\nBecause term 1 hasn't added any yet` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：第三步——代入公式`, en: `${narrator}: "Step 3 — plug into the formula"` },
+        hint: { zh: `公式：第 $n$ 项 $= a_1 + (n-1) \\times d$\n\n$a_1 = ${a1}$（首项）\n$d = ${d}$（公差）\n$n = ${n}$（要求第几项）\n\n$= ${a1} + (${n} - 1) \\times ${d}$\n$= ${a1} + ${n-1} \\times ${d}$\n$= ${a1} + ${(n-1)*d}$\n$= ${answer}$`, en: `Formula: term $n$ $= a_1 + (n-1) \\times d$\n\n$a_1 = ${a1}$ (first term)\n$d = ${d}$ (common difference)\n$n = ${n}$ (which term)\n\n$= ${a1} + (${n} - 1) \\times ${d}$\n$= ${a1} + ${n-1} \\times ${d}$\n$= ${a1} + ${(n-1)*d}$\n$= ${answer}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：验算——答案合理吗？`, en: `${narrator}: "Verify — is the answer reasonable?"` },
+        hint: { zh: `第 $${n}$ 项 = $${answer}$\n\n快速检查：\n• 比第 1 项（$${a1}$）大？$${answer} > ${a1}$ ✓\n• 每次加 $${d}$，加了 $${n-1}$ 次\n• 总共多了 $${d} \\times ${n-1} = ${(n-1)*d}$\n• $${a1} + ${(n-1)*d} = ${answer}$ ✓`, en: `Term $${n}$ = $${answer}$\n\nQuick check:\n• Bigger than term 1 ($${a1}$)? $${answer} > ${a1}$ ✓\n• Adding $${d}$ a total of $${n-1}$ times\n• Total added: $${d} \\times ${n-1} = ${(n-1)*d}$\n• $${a1} + ${(n-1)*d} = ${answer}$ ✓` },
         highlightField: 'ans',
       },
     ];
@@ -4125,15 +4242,31 @@ export function generateAreaTriangleMission(template: Mission): Mission {
     en: `Triangle with base $${base}$ and height $${height}$. Find the area.`,
   };
 
+  const rectArea = base * height;
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：三角形面积 = 底 × 高 ÷ 2`, en: `${narrator}: "Triangle area = base × height ÷ 2"` },
-      hint: { zh: '为什么除以 2？因为三角形是长方形对角线切开的一半', en: 'Why ÷ 2? A triangle is half of a rectangle cut diagonally' },
+      text: { zh: `${narrator}：裁制三角军旗——先搞懂"底"和"高"`, en: `${narrator}: "Making a triangular banner — first understand 'base' and 'height'"` },
+      hint: { zh: `底（base）= 三角形最下面的那条边\n就是旗帜摊平后放在桌面上的那条边\n\n高（height）= 从底边到对面顶点的垂直距离\n就是旗帜从底部到尖端的"直上直下"距离\n\n注意：高一定是垂直的！不是斜边！`, en: `Base = the bottom edge of the triangle\nThe side resting on the table when you lay the banner flat\n\nHeight = the perpendicular distance from base to opposite corner\nThe "straight up" distance from bottom to tip\n\nNote: Height is always vertical! Not the slanted side!` },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：底 = $${base}$，高 = $${height}$`, en: `${narrator}: "Base = $${base}$, Height = $${height}$"` },
-      hint: { zh: `$\\text{面积} = \\frac{${base} \\times ${height}}{2} = \\frac{${base * height}}{2} = ${answer}$`, en: `$\\text{Area} = \\frac{${base} \\times ${height}}{2} = \\frac{${base * height}}{2} = ${answer}$` },
+      text: { zh: `${narrator}：为什么三角形面积要除以 2？`, en: `${narrator}: "Why do we divide by 2 for triangle area?"` },
+      hint: { zh: `想象做两面一模一样的三角旗\n把第二面翻转过来，和第一面拼在一起\n\n拼出来的形状是——长方形！\n长方形面积 = $${base} \\times ${height} = ${rectArea}$\n\n一面三角旗 = 长方形的一半\n所以三角形面积 = $${rectArea} \\div 2 = ${answer}$`, en: `Imagine making two identical triangular banners\nFlip one over and join them together\n\nThe combined shape is — a rectangle!\nRectangle area = $${base} \\times ${height} = ${rectArea}$\n\nOne triangle = half the rectangle\nSo triangle area = $${rectArea} \\div 2 = ${answer}$` },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：第一步——底 × 高`, en: `${narrator}: "Step 1 — base × height"` },
+      hint: { zh: `底 = $${base}$\n高 = $${height}$\n\n$${base} \\times ${height} = ${rectArea}$\n\n（这是完整长方形的面积）`, en: `Base = $${base}$\nHeight = $${height}$\n\n$${base} \\times ${height} = ${rectArea}$\n\n(This is the full rectangle area)` },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：第二步——除以 2`, en: `${narrator}: "Step 2 — divide by 2"` },
+      hint: { zh: `$${rectArea} \\div 2 = ${answer}$\n\n三角形面积 = $${answer}$ 平方单位`, en: `$${rectArea} \\div 2 = ${answer}$\n\nTriangle area = $${answer}$ square units` },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：验算——答案合理吗？`, en: `${narrator}: "Verify — does it make sense?"` },
+      hint: { zh: `三角形面积 = $${answer}$\n长方形面积 = $${rectArea}$\n\n$${answer}$ 是 $${rectArea}$ 的一半吗？\n$${answer} \\times 2 = ${rectArea}$ ✓\n\n三角旗面积 = $${answer}$ 平方单位`, en: `Triangle area = $${answer}$\nRectangle area = $${rectArea}$\n\nIs $${answer}$ half of $${rectArea}$?\n$${answer} \\times 2 = ${rectArea}$ ✓\n\nBanner area = $${answer}$ square units` },
       highlightField: 'area',
     },
   ];
