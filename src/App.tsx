@@ -273,6 +273,7 @@ export default function App() {
                 onMissionStart={handleMissionStart}
                 onPracticeStart={handlePracticeStart}
                 onGradeChange={() => updateProfile({ grade: null })}
+                onCharChange={() => { setSelectedCharId(null); setGameState('welcome'); }}
                 onCreateRoom={createRoom}
               />
             )}

@@ -26,6 +26,7 @@ export const MapScreen = ({
   onMissionStart,
   onPracticeStart,
   onGradeChange,
+  onCharChange,
   onCreateRoom,
 }: {
   lang: Language;
@@ -35,6 +36,7 @@ export const MapScreen = ({
   onMissionStart: (mission: Mission) => void;
   onPracticeStart: (mission: Mission) => void;
   onGradeChange: () => void;
+  onCharChange: () => void;
   onCreateRoom: (type: 'team' | 'pk', missionId: number) => void;
 }) => {
   const t = translations[lang];
@@ -47,22 +49,35 @@ export const MapScreen = ({
     <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12">
       {/* Profile Header */}
       <div className="flex flex-wrap items-center justify-between gap-6 bg-white/5 backdrop-blur-xl p-4 md:p-8 rounded-[2rem] border border-white/10">
-        <div className="flex items-center gap-6">
-          <div className="border-4 border-white/20 shadow-2xl rounded-full">
-            <CharacterAvatar characterId={selectedChar?.id || ''} size={72} />
-          </div>
+        <div className="flex items-center gap-4 md:gap-6">
+          {/* Avatar — clickable to change character */}
+          <button onClick={onCharChange} className="relative group">
+            <div className="border-4 border-white/20 shadow-2xl rounded-full group-hover:border-indigo-400 transition-colors">
+              <CharacterAvatar characterId={selectedChar?.id || ''} size={72} />
+            </div>
+            <div className="absolute -bottom-1 -right-1 bg-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="text-[10px]">↻</span>
+            </div>
+          </button>
           <div>
             <h3 className="text-white font-black text-lg md:text-2xl flex items-center gap-2">
               {profile.display_name}
               <Crown size={20} className="text-yellow-400" />
             </h3>
-            <div className="flex items-center gap-3">
-              <p className="text-indigo-400 font-bold text-lg">{selectedChar?.role[lang]}</p>
+            <div className="flex flex-wrap items-center gap-2 mt-1">
+              <p className="text-indigo-400 font-bold text-sm">{selectedChar?.name[lang]}</p>
+              <span className="text-white/20">|</span>
               <button
                 onClick={onGradeChange}
-                className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-white/40 hover:text-white transition-colors"
+                className="px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors"
               >
-                {t.year} {profile.grade} ({t.change})
+                {t.year} {profile.grade}
+              </button>
+              <button
+                onClick={onCharChange}
+                className="px-2 py-0.5 bg-indigo-600/20 border border-indigo-500/30 rounded text-xs text-indigo-300 hover:bg-indigo-600/40 transition-colors"
+              >
+                {lang === 'zh' ? '换主公' : 'Switch'}
               </button>
             </div>
           </div>
