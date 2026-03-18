@@ -23,7 +23,7 @@ import { FractionPie } from '../components/diagrams/FractionPie';
 import { NumberGrid } from '../components/diagrams/NumberGrid';
 import { BalanceScale } from '../components/diagrams/BalanceScale';
 import { AngleArc } from '../components/diagrams/AngleArc';
-import { useAudio } from '../hooks/useAudio';
+import { useAudio } from '../audio';
 
 type PracticePhase = 'green' | 'amber' | 'red';
 
@@ -61,7 +61,10 @@ export const PracticeScreen = ({
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
   const [consecutiveWrong, setConsecutiveWrong] = useState(0);
 
-  const { playSuccess, playFail, playClick } = useAudio();
+  const {
+    playSuccess, playFail, playClick,
+    playTierUp, playTierDown, playPhaseAdvance, playBadgeUnlock,
+  } = useAudio();
 
   const phaseIndex = PHASE_ORDER.indexOf(currentPhase);
 
@@ -95,6 +98,7 @@ export const PracticeScreen = ({
       setConsecutiveCorrect(newCorrect);
       setConsecutiveWrong(0);
       if (newCorrect >= 3 && adaptiveTier < 3 && currentPhase !== 'green') {
+        playTierUp();
         setAdaptiveTier(prev => Math.min(3, prev + 1) as DifficultyTier);
         setConsecutiveCorrect(0);
       }
@@ -111,6 +115,7 @@ export const PracticeScreen = ({
       setConsecutiveWrong(newWrong);
       setConsecutiveCorrect(0);
       if (newWrong >= 2 && adaptiveTier > 1 && currentPhase !== 'green') {
+        playTierDown();
         setAdaptiveTier(prev => Math.max(1, prev - 1) as DifficultyTier);
         setConsecutiveWrong(0);
       }
@@ -126,12 +131,14 @@ export const PracticeScreen = ({
   const handlePhaseForward = () => {
     if (currentPhase === 'red') {
       if (mission.skillName && mission.skillSummary) {
+        playBadgeUnlock();
         setShowBadge(true);
       } else {
         onComplete();
       }
       return;
     }
+    playPhaseAdvance();
     const nextPhase = PHASE_ORDER[phaseIndex + 1];
     setCurrentPhase(nextPhase);
     regenerateQuestion();
@@ -341,6 +348,7 @@ export const PracticeScreen = ({
                 denominator1={currentMission.data.d1 as number}
                 numerator2={currentMission.data.n2 as number}
                 denominator2={currentMission.data.d2 as number}
+                op={currentMission.data.op as string || '+'}
                 step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep)}
               />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'FRAC_MUL' && currentMission.data?.d1 ? (
