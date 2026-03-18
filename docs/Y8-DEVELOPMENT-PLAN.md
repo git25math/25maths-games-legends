@@ -3,98 +3,238 @@
 > 接手前请先阅读 `docs/DEVELOPMENT-PLAN.md` 了解项目全局
 > Y7 标准参考: `src/data/missions.ts` 中 grade:7 的关卡 + `src/utils/generateMission.ts` 中的生成器
 
+---
+
 ## 一、Y8 现状
 
-### 已有 Y8 关卡（需全面重写）
+### 现有 Y8 关卡清单（10 个，全部需重写教程）
 
-| ID | Type | 标题 | 问题 |
-|----|------|------|------|
-| 811 | LINEAR | 急行军 | 教程质量低，无 WHY |
-| 812 | LINEAR | 伏击战 | 同上 |
-| 813-842 | 多种 | Y8-Y11 混合 | 大部分是旧版手写关卡，教程 1-3 步 |
+| ID | unitId | Type | 标题(zh) | 标题(en) | 生成器 | 教程步数 | 问题 |
+|----|--------|------|---------|---------|--------|---------|------|
+| 811 | 1 | LINEAR | 急行军 | Forced March | LINEAR_RANDOM | 3 | 无WHY，步骤太少 |
+| 812 | 1 | FUNC_VAL | 追击哨兵 | Intercepting Scouts | FUNC_VAL_RANDOM | 3 | 同上 |
+| 813 | 1 | LINEAR | 合围之势 | Encirclement | LINEAR_RANDOM | 3 | 同上 |
+| 821 | 2 | AREA | 安营扎寨 | Setting Camp | AREA_RECT_RANDOM | 5 | 质量尚可但缺WHY |
+| 822 | 2 | VOLUME | 修筑粮仓 | Building Granaries | VOLUME_RANDOM | 3 | 步骤太少 |
+| 823 | 2 | AREA | 点将台 | Command Platform | AREA_TRAP_RANDOM | 3 | 步骤太少 |
+| 831 | 3 | PERCENTAGE | 征收粮税 | Collecting Grain Tax | PERCENTAGE_RANDOM | 6 | 质量可接受 |
+| 832 | 3 | PERCENTAGE | 军备折扣 | Armament Discount | PERCENTAGE_RANDOM | 6 | 同上 |
+| 841 | 4 | STATISTICS | 士兵平均年龄 | Average Soldier Age | STATISTICS_MEAN_RANDOM | 5 | 缺验算步骤 |
+| 842 | 4 | STATISTICS | 身高分布 | Height Distribution | STATISTICS_MEDIAN_RANDOM | 5 | 质量可接受 |
 
-### Y8 对 Y7 的前置依赖
+### Y8 对 Y7 的前置依赖（详细映射）
 
-Y7 已提供的基础：
-- ✅ 坐标系（745-746）→ Y8 线性图
-- ✅ 两步方程（696）→ Y8 多步方程
-- ✅ 负数乘除（693）→ Y8 负系数
-- ✅ BODMAS（695, 691）→ Y8 复杂表达式
-- ✅ 分数四则+互转（707-710, 692, 690）→ Y8 代数分数
-- ✅ 比例化简（725-726）→ Y8 比例问题
+| Y7 关卡 | Y7 技能 | Y8 依赖方 | 依赖关系 |
+|---------|---------|----------|---------|
+| 745-746 | 坐标系(COORDINATES) | 811-813 线性方程图 | 必须理解 (x,y) 才能画线 |
+| 696 | 两步方程(ax+b=c) | Y8 多步方程 | 基础解法 |
+| 693 | 整数乘除(负×负=正) | Y8 负系数方程 | 负数运算 |
+| 695,691 | BODMAS(含括号) | Y8 展开括号 | 运算顺序 |
+| 707-710,692,690 | 分数四则+互转 | Y8 代数分数 | 分数基础 |
+| 725-726 | 比例化简+分配 | Y8 正反比例 | 比例概念 |
+| 719 | 化简同类项 | Y8 展开+化简 | 代数表达式 |
+| 713-716 | 幂与根 | Y8 指数法则 | 幂的概念 |
+| 761-763 | 周长+面积(含三角形) | Y8 圆面积+体积 | 面积公式基础 |
+| 770-773 | 众数/均值/中位数/极差 | Y8 频率表统计 | 统计基础 |
 
-## 二、Y8 CIE 0580 核心知识点（按优先级）
+---
 
-### Tier 1: 必须覆盖（CIE Paper 2/4 高频）
+## 二、Y8 三国叙事时间线
 
-| 知识点 | CIE 参考 | 现有类型可复用？ | 新增需求 |
-|--------|---------|-----------------|---------|
-| 线性方程 y=mx+c | 2.10 | LINEAR 已有 | 重写教程至金标准 |
-| 展开单括号 a(b+c) | 2.2 | 需新类型 EXPAND | 新生成器 |
-| 因式分解（提公因子）| 2.3 | 需新类型 FACTORISE | 新生成器 |
-| 不等式 | 2.6 | 需新类型 INEQUALITY | 新生成器 |
-| 百分比应用（利息/折扣）| 1.12 | PERCENTAGE 可扩展 | 新生成器模式 |
-| 速度/距离/时间 | 5.1 | 需新类型 SPEED | 新生成器 |
-| 圆的周长和面积 | 5.2 | CIRCLE 已有 | 重写教程 |
-| 概率基础 | 8.1 | PROBABILITY 已有 | 重写教程 |
-| 平行线角度 | 4.3 | ANGLES 可扩展 | 新生成器模式 |
-| 数据频率表 | 9.3 | STATISTICS 可扩展 | 新生成器模式 |
+根据 `DEVELOPMENT-PLAN.md` 的史实编年：
 
-### Tier 2: 重要补充
+| Y8 单元 | 三国历史阶段 | 年代 | 叙事角色 | 数学主题 |
+|---------|------------|------|---------|---------|
+| Unit 1: 进军篇 | 讨伐董卓·虎牢关 | 190 AD | 吕布、关羽、张飞 | 线性方程(行军路线) |
+| Unit 2: 攻城篇 | 官渡之战前奏 | 199 AD | 曹操、袁绍 | 面积/体积(营地/粮仓) |
+| Unit 3: 治理篇 | 官渡胜后治理 | 200 AD | 曹操、荀彧 | 百分比/利息(赋税) |
+| Unit 4: 情报篇 | 官渡谍报 | 200 AD | 曹操情报系统 | 统计/概率(数据分析) |
+| Unit 5: 代数篇 | 隆中对前奏 | 205 AD | 诸葛亮初登场 | 展开/因式分解/不等式 |
+| Unit 6: 几何篇 | 虎牢关攻防 | 190 AD | 三英战吕布 | 平行线角/勾股定理 |
+| Unit 7: 度量篇 | 荆州治理 | 209 AD | 刘备治荆州 | 速度时间/标准式/比例 |
+| Unit 8: 图表篇 | 天下形势 | 207 AD | 诸葛亮隆中对 | 坐标图/方程图像 |
 
-| 知识点 | CIE 参考 | 备注 |
-|--------|---------|------|
-| 标准式 (Standard Form) | 1.8 | a × 10^n |
-| 正/反比例 | 1.11 | y = kx, y = k/x |
-| 勾股定理 | 6.1 | PYTHAGORAS 已有，重写教程 |
-| 对称与变换 | 7.1-7.4 | 平移/反射/旋转 |
-| 方程图像 | 3.2 | 画线性/二次图 |
+---
 
-## 三、实施标准（参照 Y7）
+## 三、Y8 CIE 0580 知识点 + 单元分组 + 关卡规划
 
-### 每个关卡必须满足
+### Tier 1: 必须覆盖（~30 关卡）
 
-1. **生成器**: ≥6 步教程，含 WHY + 验算 + 微操作
-2. **叙事**: 三国故事自然融入（Y8 对应讨伐董卓→官渡之战时期）
-3. **知识链**: 有明确前置依赖（order 字段排序）
-4. **SVG 可视化**: 尽量复用已有组件（AnimatedCoordinatePlane, NumberGrid 等）
-5. **三语**: 使用 BilingualText {zh, en}，繁体自动转换
-6. **校验**: checkCorrectness 数据字段对齐
-7. **交叉链接**: 至少 3 个跨单元应用关卡
+| 单元 | 知识点 | CIE Ref | 类型 | 关卡数 | ID 范围 |
+|------|--------|---------|------|--------|---------|
+| **Unit 1** | 线性方程 y=mx+c (重写811-813) | 2.10, 3.2 | LINEAR | 3 | 811-813 |
+| **Unit 1** | 函数求值 f(x) | 2.2 | FUNC_VAL | 1 | 814 |
+| **Unit 2** | 矩形/梯形面积 (重写821,823) | 5.2 | AREA | 2 | 821,823 |
+| **Unit 2** | 圆周长和面积 | 5.2 | CIRCLE | 2 | 824-825 |
+| **Unit 2** | 柱体体积 (重写822) | 5.2 | VOLUME | 1 | 822 |
+| **Unit 3** | 百分比增减 (重写831-832) | 1.12 | PERCENTAGE | 2 | 831-832 |
+| **Unit 3** | 单利/复利 | 1.12 | PERCENTAGE | 1 | 833 |
+| **Unit 4** | 频率表/柱状图 | 9.3 | STATISTICS | 2 | 841-842 |
+| **Unit 4** | 概率基础 | 8.1 | PROBABILITY | 2 | 843-844 |
+| **Unit 5** | 展开单括号 a(b+c) | 2.2 | **EXPAND** (新) | 2 | 851-852 |
+| **Unit 5** | 因式分解（提公因子）| 2.3 | **FACTORISE** (新) | 2 | 853-854 |
+| **Unit 5** | 不等式 | 2.6 | **INEQUALITY** (新) | 2 | 855-856 |
+| **Unit 6** | 平行线角度 | 4.3 | ANGLES | 2 | 861-862 |
+| **Unit 6** | 勾股定理 | 6.1 | PYTHAGORAS | 2 | 863-864 |
+| **Unit 7** | 速度/距离/时间 | 5.1 | **SPEED** (新) | 2 | 871-872 |
+| **Unit 7** | 标准式 a×10^n | 1.8 | **STD_FORM** (新) | 2 | 873-874 |
 
-### 命名规范
+### Tier 2: 重要补充（~10 关卡）
 
-- Y8 关卡 ID: 811-899
-- Y8 unitId: 从 1 开始（Y8 Unit 1, 2, 3...）
-- generatorType: `TYPE_Y8_RANDOM` 或 `TYPE_RANDOM`（通用）
+| 单元 | 知识点 | CIE Ref | 类型 | 关卡数 | ID 范围 |
+|------|--------|---------|------|--------|---------|
+| **Unit 7** | 正/反比例 | 1.11 | RATIO | 2 | 875-876 |
+| **Unit 6** | 对称(线/旋转) | 7.1-7.2 | **SYMMETRY** (新) | 2 | 865-866 |
+| **Unit 8** | 线性图绘制 | 3.2 | LINEAR | 2 | 881-882 |
+| **Unit 5** | 二元方程（代入法）| 2.5 | SIMULTANEOUS | 2 | 857-858 |
+| **Unit 8** | 交叉应用关卡 | 跨单元 | 混合 | 2 | 883-884 |
 
-## 四、建议开发顺序
+**总计: ~40 关卡 (10 重写 + ~30 新增)**
+
+---
+
+## 四、新增题型完整流程
+
+添加一个新题型（如 `EXPAND`）需要修改 **7 个文件**，按此顺序：
 
 ```
-Phase 1: 重写现有 Y8 关卡（811-842）的教程至金标准
-Phase 2: 补全 Tier 1 缺失知识点（~20 新关卡）
-Phase 3: 建立 Y8 知识链条 + 交叉链接
-Phase 4: 补全 Tier 2 知识点（~10 新关卡）
-Phase 5: 5 轮审查（功能正确性→教程质量→叙事→UI→最终验收）
+1. src/types.ts
+   → QuestionType 联合类型加 | 'EXPAND'
+
+2. src/i18n/translations.ts
+   → zh.questionTypes.EXPAND: "展开括号"
+   → zh_TW.questionTypes.EXPAND: "展開括號"
+   → en.questionTypes.EXPAND: "Expanding Brackets"
+
+3. src/components/MathBattle/inputConfig.ts
+   → INPUT_FIELDS.EXPAND: { zh: [...], en: [...] }
+
+4. src/utils/checkCorrectness.ts
+   → if (type === 'EXPAND') { ... return { correct, expected } }
+
+5. src/utils/generateMission.ts
+   → GeneratorType 加 | 'EXPAND_RANDOM'
+   → GENERATOR_MAP 加 EXPAND_RANDOM: generateExpandMission
+   → 文件末尾写 export function generateExpandMission(...)
+   → 教程 ≥6 步（金标准）
+
+6. src/data/missions.ts
+   → 新 mission 对象（grade:8, data.generatorType:'EXPAND_RANDOM'）
+   → BilingualText {zh, en}（繁体自动转换）
+
+7. src/screens/PracticeScreen.tsx（可选）
+   → 如有专属 SVG 图表，在 diagram 条件链中添加
 ```
 
-### 预估工作量
+---
 
-| Phase | 关卡数 | 新题型 | 新生成器 | 预估 |
-|-------|--------|--------|---------|------|
-| 1 | 30+ (重写) | 0 | 0 | 大 |
-| 2 | ~20 | ~5 | ~8 | 大 |
-| 3 | ~5 | 0 | 0 | 中 |
-| 4 | ~10 | ~3 | ~5 | 中 |
-| 5 | 0 (审查) | 0 | 0 | 中 |
+## 五、5 轮审查检查清单
 
-## 五、接手注意事项
+### 第 1 轮：功能正确性
+- [ ] `npm run build` 零错误
+- [ ] 每个新题型的 generator data 字段 ↔ checker 字段对齐
+- [ ] 每个 mission 的 `generatorType` 在 GENERATOR_MAP 中有对应函数
+- [ ] 无重复 mission ID（`grep -o 'id: [0-9]*' missions.ts | sort | uniq -d` 应为空）
+- [ ] 每个新 QuestionType 在 inputConfig.ts 中有条目
+
+### 第 2 轮：教程质量
+- [ ] 每个生成器 ≥6 步教程
+- [ ] 第 1 步是 WHY（不是定义/公式）
+- [ ] 有验算步骤（最后 1-2 步）
+- [ ] 无压缩计算（每步只做一个运算）
+- [ ] 前置知识有铺垫（不假设学生已知）
+
+### 第 3 轮：叙事与连贯性
+- [ ] 每个 mission 的 story 字段自然融入三国叙事
+- [ ] 角色语音一致（刘备=基础建设，曹操=治理经济，诸葛亮=策略分析...）
+- [ ] 单元内关卡有叙事递进（不是独立的）
+- [ ] storyConsequence 字段用在关键关卡
+- [ ] 知识链条无断点（每个知识点有前置）
+
+### 第 4 轮：UI 与渲染
+- [ ] 手机端（375px）公式不溢出
+- [ ] LatexText 中的 `$...$` 正确渲染
+- [ ] FractionPie 加减号正确（如有分数关卡）
+- [ ] SVG 图表在 green/amber 阶段正确显示
+- [ ] 三语切换全部正常（简体→繁体→英文）
+
+### 第 5 轮：最终验收
+- [ ] play.25maths.com 部署成功
+- [ ] Y8 每个关卡手动测试（练习模式 green→amber→red 完整流程）
+- [ ] 闯关模式 5 题能正常完成
+- [ ] 答错后 WrongAnswerPanel 显示正确解法
+- [ ] Y7→Y8 过渡体验流畅（Y7 最后一关 → Y8 第一关）
+
+---
+
+## 六、Y7 完整关卡清单（参考标杆）
+
+共 56 个 Y7 关卡：
+
+```
+Unit 0 数论: 698(因数) 699(质数) 700(因数树) 701(HCF) 702(LCM) 703(HCF应用)
+Unit 0A 整数: 704(正+负) 705(负+负) 706(混合) 693(整数乘除)
+Unit 0B 分数: 707(加) 708(减) 692(带→假) 690(假→带) 709(乘) 710(除) 694(F↔D↔P)
+Unit 0C 幂与根: 713(²) 714(³) 715(√) 716(∛)
+Unit 1 代数: 695(BODMAS) 691(括号) 711(x+a=b) 712(ax=b) 696(ax+b=c) 717(代入) 718(代入含幂) 719(化简)
+Unit 2 比例: 721(比例) 722(等分) 723(百分比) 724(增减%) 725(化简比) 726(按比分配)
+Unit 3 角度+坐标: 731(补角) 732(余角) 733(应用) 734(三角形) 735(周角) 745(坐标) 746(四象限)
+Unit 4 数列: 741(下一项) 742(第n项) 743(递减)
+Unit 5 估算: 751(十位) 752(百位)
+Unit 6 周长面积: 761(周长) 762(矩形面积) 763(三角面积) 764(反推周长) 765(代入+面积)
+Unit 7 统计: 770(众数) 771(均值) 772(中位数) 773(极差)
+```
+
+---
+
+## 七、本轮开发中发现的重要 bug + 修复记录
+
+| Bug | 严重性 | 修复 | 文件 |
+|-----|--------|------|------|
+| FracAdd 生成器随机加减号，不尊重 template op | CRITICAL | 改为读取 template.data.op | generateMission.ts:3110 |
+| FractionPie 硬编码 `+` 运算符 | HIGH | 加 `op` prop | FractionPie.tsx |
+| FractionPie step 映射偏移（step=0 时空白） | HIGH | step 0 显示第一个饼 | FractionPie.tsx |
+| FractionPie maxHeight:360 裁剪通分行 | HIGH | 移除限制 + 缩小饼图 | FractionPie.tsx |
+| 假分数结果只显示满圆 | MEDIUM | 多圆显示(整+余) | FractionPie.tsx |
+| SVG text 中 \frac 不渲染 | MEDIUM | 改用 SVG 手绘分数线 | FractionPie.tsx |
+| 公式文本溢出容器 | MEDIUM | LatexText inline-flex wrap | MathView.tsx |
+| 3 个重复 mission ID (706,710) | HIGH | 改为 693,694,695 | missions.ts |
+| src/audio/ 未提交导致部署失败 | CRITICAL | git add src/audio/ | 多文件 |
+| mission 707/708 的 formula 用长中文\text{} | LOW | 改为数学公式 | missions.ts |
+
+---
+
+## 八、FractionPie step 映射规则
+
+```
+PracticeScreen 传入: step = tutorialStep (0-based, green阶段递增)
+
+FractionPie 内部映射:
+  step 0 → 显示第一个饼图（原始分母）
+  step 1 → 显示第二个饼图 + 运算符
+  step 2 → 通分行（两个饼都切成 LCD 份）+ "↓ 通分 (LCD=N) ↓"
+  step 3 → 结果行（合并/相减的结果饼）+ SVG 带分数标签
+  step 999 → 显示全部（amber 阶段）
+
+假分数处理:
+  resultN > lcd → 多个饼图：wholeCount 个满圆 + 1 个余数圆
+  标签用 SVG 手绘（整数 + 分数线 + 分子分母），不用 LaTeX
+```
+
+---
+
+## 九、接手注意事项
 
 1. **先 `npm run build` 确认零错误**
 2. **Y7 是标杆**: 打开 play.25maths.com → Y7 → 任意关卡 → 练习模式 → 看教程流程
 3. **生成器在文件末尾追加**: `src/utils/generateMission.ts` 已经 5000+ 行
 4. **部署**: push main 自动触发 GitHub Actions → GitHub Pages
-5. **三语**: 新关卡只需写 `{zh, en}`，繁体自动转换
-6. **FractionPie**: 如果新关卡涉及分数，传 `op` 属性控制加减
-7. **音频**: 已迁移到 `src/audio/` 模块，不再用 `src/hooks/useAudio.ts`
-8. **kpId**: 参考 `src/data/curriculum/kp-registry.ts` 分配正确的知识点 ID
+5. **三语**: 新关卡只需写 `{zh, en}`，繁体自动转换（`lt()` 函数）
+6. **FractionPie**: 传 `op` 属性控制加减；step 从 0 开始
+7. **音频**: `src/audio/` 模块（不是旧的 `src/hooks/useAudio.ts`）
+8. **kpId**: 参考 `src/data/curriculum/kp-registry.ts`
+9. **translations.ts**: 新增 questionType 时，zh + zh_TW + en 三处都要加
+10. **INPUT_FIELDS**: 只有 zh/en，zh_TW 自动降级到 zh
+11. **测试**: 本地 `npm run dev` 后在浏览器打开 localhost 测试
+12. **ID 分配**: Y7 用 690-773，Y8 用 811-899，不要冲突
+13. **grade 字段**: Y7 用 `grade: 7`，Y8 用 `grade: 8`
