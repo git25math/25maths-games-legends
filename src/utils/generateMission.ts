@@ -4354,25 +4354,39 @@ export function generateFactorsListMission(template: Mission): Mission {
     if (n % i === 0) pairs.push(`$${i} \\times ${n / i} = ${n}$`);
   }
 
+  // Test a few specific divisions for tutorial demonstration
+  const testYes = factors.length > 2 ? factors[1] : 2;
+  const testNo = [5, 7, 9, 11].find(d => n % d !== 0) || 7;
+
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：什么是"因数"？——能整除这个数的数`, en: `${narrator}: "What is a factor? — A number that divides evenly"` },
-      hint: { zh: `因数就是能把 $${n}$ 平均分开的数\n\n比如：$${n} \\div 2$${n % 2 === 0 ? ` = ${n/2}$，整除 ✓ → 2 是 $${n}$ 的因数` : `，除不尽 ✗ → 2 不是因数`}\n\n"整除"就是除完刚好，没有余数`, en: `A factor divides $${n}$ evenly (no remainder)\n\nE.g.: $${n} \\div 2$${n % 2 === 0 ? ` = ${n/2}$, exact ✓ → 2 is a factor of $${n}$` : `, has remainder ✗ → 2 is not a factor`}\n\n"Divides evenly" = no remainder` },
+      text: { zh: `${narrator}：$${n}$ 个新兵要编队——有几种等人数的分法？这就是找"因数"`, en: `${narrator}: "$${n}$ recruits need squads — how many ways to form equal groups? That's finding 'factors'"` },
+      hint: { zh: `比如 $${n}$ 人分成 2 人一队，行不行？\n$${n} \\div 2 = ${n / 2}$${n % 2 === 0 ? '，刚好整除 ✓ → 可以！' : '... 有余数 ✗ → 不行！'}\n\n"因数"就是能把这个数平均分开的数`, en: `E.g., $${n}$ people in groups of 2 — possible?\n$${n} \\div 2 = ${n / 2}$${n % 2 === 0 ? ', exact ✓ → yes!' : '... remainder ✗ → no!'}\n\nA "factor" is a number that divides evenly` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：怎么找？——因数总是成对出现`, en: `${narrator}: "How to find them? — Factors come in pairs"` },
-      hint: { zh: `找一个因数，就自动找到另一个：\n${pairs.join('\n')}\n\n每一对乘起来都等于 $${n}$！`, en: `Find one factor, you automatically get another:\n${pairs.join('\n')}\n\nEach pair multiplies to $${n}$!` },
+      text: { zh: `${narrator}：怎么判断"能不能整除"？——看有没有余数`, en: `${narrator}: "How to tell if it divides evenly? — Check for remainders"` },
+      hint: { zh: `$${n} \\div ${testYes} = ${n / testYes}$，没有余数 → 整除 ✓ → $${testYes}$ 是因数\n$${n} \\div ${testNo} = ${Math.floor(n / testNo)}$ 余 $${n % testNo}$ → 不整除 ✗ → $${testNo}$ 不是因数\n\n整除 = 除得刚刚好，一点都不剩`, en: `$${n} \\div ${testYes} = ${n / testYes}$, no remainder → divides ✓ → $${testYes}$ is a factor\n$${n} \\div ${testNo} = ${Math.floor(n / testNo)}$ r $${n % testNo}$ → doesn't divide ✗ → $${testNo}$ is not\n\nDivides evenly = nothing left over` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：列出所有因数`, en: `${narrator}: "List all factors"` },
-      hint: { zh: `$${n}$ 的全部因数：$${factors.join(', ')}$\n\n一共 $${answer}$ 个`, en: `All factors of $${n}$: $${factors.join(', ')}$\n\nTotal: $${answer}$ factors` },
+      text: { zh: `${narrator}：秘诀——因数总是成对出现`, en: `${narrator}: "Secret — factors always come in pairs"` },
+      hint: { zh: `找到一个因数，就自动得到另一个：\n${pairs.join('\n')}\n\n每一对相乘都等于 $${n}$！\n所以我们不用从 1 试到 $${n}$，只要试到 $\\sqrt{${n}}$ 就够了`, en: `Find one factor, automatically get another:\n${pairs.join('\n')}\n\nEach pair multiplies to $${n}$!\nSo we only need to test up to $\\sqrt{${n}}$` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——每个因数都能整除 $${n}$ 吗？`, en: `${narrator}: "Verify — does each factor divide $${n}$ evenly?"` },
-      hint: { zh: `${factors.map(f => `$${n} \\div ${f} = ${n/f}$ ✓`).join('\n')}\n\n全部整除！答案 = $${answer}$ 个因数`, en: `${factors.map(f => `$${n} \\div ${f} = ${n/f}$ ✓`).join('\n')}\n\nAll divide evenly! Answer = $${answer}$ factors` },
+      text: { zh: `${narrator}：把所有因数对拆开，从小到大排列`, en: `${narrator}: "Unpack all pairs and list from smallest to largest"` },
+      hint: { zh: `$${n}$ 的全部因数：\n$${factors.join(', ')}$\n\n一共 $${answer}$ 个因数`, en: `All factors of $${n}$:\n$${factors.join(', ')}$\n\nTotal: $${answer}$ factors` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——每个因数都能整除 $${n}$`, en: `${narrator}: "Verify — every factor divides $${n}$ evenly"` },
+      hint: { zh: `${factors.map(f => `$${n} \\div ${f} = ${n / f}$ ✓`).join('\n')}\n\n全部整除！$${n}$ 有 $${answer}$ 种编队方式`, en: `${factors.map(f => `$${n} \\div ${f} = ${n / f}$ ✓`).join('\n')}\n\nAll check out! $${n}$ has $${answer}$ ways to form equal groups` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：规律——1 和自身永远是因数`, en: `${narrator}: "Pattern — 1 and the number itself are always factors"` },
+      hint: { zh: `任何数都能被 $1$ 整除（$${n} \\div 1 = ${n}$）\n任何数都能被自己整除（$${n} \\div ${n} = 1$）\n\n所以因数至少有 2 个\n如果只有 $1$ 和自己——那就是质数！（下一关会学）`, en: `Any number is divisible by $1$ ($${n} \\div 1 = ${n}$)\nAny number is divisible by itself ($${n} \\div ${n} = 1$)\n\nSo there are always at least 2 factors\nIf ONLY 1 and itself — that's a prime! (next mission)` },
       highlightField: 'ans',
     },
   ];
@@ -4594,39 +4608,59 @@ export function generateBodmasMission(template: Mission): Mission {
 
   const tutorialSteps = tier <= 2 ? [
     {
-      text: { zh: `${narrator}：军令有先后！——运算也有顺序`, en: `${narrator}: "Military orders have priority! — So do math operations"` },
-      hint: { zh: `运算顺序口诀：BODMAS\nB — Brackets 括号最先\nO — Orders 幂/根号\nDM — Division/Multiplication 乘除\nAS — Addition/Subtraction 加减\n\n先乘除，后加减！`, en: `Order of operations: BODMAS\nB — Brackets first\nO — Orders (powers/roots)\nDM — Division/Multiplication\nAS — Addition/Subtraction\n\nMultiply/divide BEFORE add/subtract!` },
+      text: { zh: `${narrator}：为什么不能从左到右算？——因为运算有"军衔"`, en: `${narrator}: "Why not just calculate left to right? — Because operations have 'ranks'"` },
+      hint: { zh: `日常生活中，我们从左到右读句子\n但数学不一样！运算有优先级：\n\n乘除 > 加减\n就像将军的命令比士兵的命令优先\n\n$2 + 3 \\times 4$：乘法（将军）先执行，加法（士兵）后执行`, en: `In everyday life, we read left to right\nBut math is different! Operations have priority:\n\nMultiply/Divide > Add/Subtract\nLike a general's order overrides a soldier's\n\n$2 + 3 \\times 4$: multiplication (general) first, addition (soldier) second` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：$${expr}$ ——先算哪一步？`, en: `${narrator}: "$${expr}$ — which part first?"` },
-      hint: { zh: `有乘法 $${b} \\times ${c}$，也有加法\n\n根据 BODMAS：先乘后加！\n第一步：$${b} \\times ${c} = ${b * c}$`, en: `There's multiplication $${b} \\times ${c}$ and addition\n\nBy BODMAS: multiply first!\nStep 1: $${b} \\times ${c} = ${b * c}$` },
+      text: { zh: `${narrator}：口诀 BODMAS——运算的军衔表`, en: `${narrator}: "BODMAS — the rank table of operations"` },
+      hint: { zh: `B — Brackets 括号（最高！统帅级）\nO — Orders 幂/根号（将军级）\nDM — Division/Multiplication 乘除（校官级）\nAS — Addition/Subtraction 加减（士兵级）\n\n遇到同级（比如既有乘又有除）→ 从左到右`, en: `B — Brackets (highest! Commander)\nO — Orders/Powers (General)\nDM — Division/Multiplication (Officer)\nAS — Addition/Subtraction (Soldier)\n\nSame rank (e.g., both × and ÷) → left to right` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——再算加减`, en: `${narrator}: "Step 2 — now add/subtract"` },
-      hint: { zh: `$${a} + ${b * c} = ${answer}$\n\n完整过程：$${expr} = ${a} + ${b * c} = ${answer}$`, en: `$${a} + ${b * c} = ${answer}$\n\nFull: $${expr} = ${a} + ${b * c} = ${answer}$` },
+      text: { zh: `${narrator}：看这道题——$${expr}$，有哪些运算？`, en: `${narrator}: "Look at $${expr}$ — what operations are there?"` },
+      hint: { zh: `$${expr}$ 包含：\n• 乘法 $${b} \\times ${c}$（校官级）\n• 加法 $+ ${a}$（士兵级）\n\n校官 > 士兵 → 先算乘法！`, en: `$${expr}$ contains:\n• Multiplication $${b} \\times ${c}$ (Officer rank)\n• Addition $+ ${a}$ (Soldier rank)\n\nOfficer > Soldier → multiply first!` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：常见错误——从左到右算`, en: `${narrator}: "Common mistake — calculating left to right"` },
-      hint: { zh: `错误做法：$${a} + ${b} = ${a + b}$，然后 $${a + b} \\times ${c} = ${wrongAnswer}$ ✗\n正确做法：先乘 $${b} \\times ${c} = ${b * c}$，再加 $${a} + ${b * c} = ${answer}$ ✓\n\n记住：不是从左到右，是先乘除后加减！`, en: `Wrong: $${a} + ${b} = ${a + b}$, then $${a + b} \\times ${c} = ${wrongAnswer}$ ✗\nRight: multiply first $${b} \\times ${c} = ${b * c}$, then add $${a} + ${b * c} = ${answer}$ ✓\n\nRemember: not left to right — multiply/divide BEFORE add/subtract!` },
+      text: { zh: `${narrator}：第一步——先算乘法（军衔高的先执行）`, en: `${narrator}: "Step 1 — multiply first (higher rank goes first)"` },
+      hint: { zh: `$${b} \\times ${c} = ${b * c}$\n\n现在式子变成：$${a} + ${b * c}$`, en: `$${b} \\times ${c} = ${b * c}$\n\nNow the expression becomes: $${a} + ${b * c}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第二步——再算加法`, en: `${narrator}: "Step 2 — now add"` },
+      hint: { zh: `$${a} + ${b * c} = ${answer}$`, en: `$${a} + ${b * c} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：对比——如果犯了"从左到右"的错误`, en: `${narrator}: "Compare — what if you made the 'left to right' mistake?"` },
+      hint: { zh: `错误做法（从左到右）：\n$${a} + ${b} = ${a + b}$，然后 $${a + b} \\times ${c} = ${wrongAnswer}$ ✗\n\n正确做法（先乘后加）：\n$${b} \\times ${c} = ${b * c}$，然后 $${a} + ${b * c} = ${answer}$ ✓\n\n$${wrongAnswer} \\neq ${answer}$——顺序不同，答案完全不同！`, en: `Wrong (left to right):\n$${a} + ${b} = ${a + b}$, then $${a + b} \\times ${c} = ${wrongAnswer}$ ✗\n\nCorrect (multiply first):\n$${b} \\times ${c} = ${b * c}$, then $${a} + ${b * c} = ${answer}$ ✓\n\n$${wrongAnswer} \\neq ${answer}$ — different order, totally different answer!` },
       highlightField: 'ans',
     },
   ] : [
     {
-      text: { zh: `${narrator}：括号——最高优先级的军令！`, en: `${narrator}: "Brackets — the highest priority order!"` },
-      hint: { zh: `BODMAS 的 B = Brackets（括号）\n括号里的内容永远最先计算\n\n就像将令比军令大——括号里的比乘除更优先`, en: `BODMAS: B = Brackets\nContent inside brackets ALWAYS comes first\n\nLike a general's order overrides a captain's` },
+      text: { zh: `${narrator}：括号——运算界的"统帅令"`, en: `${narrator}: "Brackets — the 'supreme command' of operations"` },
+      hint: { zh: `BODMAS 里 B = Brackets（括号）\n括号的军衔最高——比乘除还高\n\n有括号？先算括号里面的\n没括号？按乘除 > 加减的顺序`, en: `BODMAS: B = Brackets\nBrackets outrank everything — even multiply/divide\n\nBrackets present? Calculate inside first\nNo brackets? Follow multiply/divide > add/subtract` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：$${expr}$ ——先算括号里面`, en: `${narrator}: "$${expr}$ — brackets first"` },
-      hint: { zh: `第一步：$(${a} + ${b}) = ${a + b}$\n第二步：$${a + b} \\times ${c} = ${answer}$\n\n如果没有括号：$${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$ ← 结果不同！`, en: `Step 1: $(${a} + ${b}) = ${a + b}$\nStep 2: $${a + b} \\times ${c} = ${answer}$\n\nWithout brackets: $${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$ ← different!` },
+      text: { zh: `${narrator}：$${expr}$ ——发现括号了！先算它`, en: `${narrator}: "$${expr}$ — spot the brackets! Do them first"` },
+      hint: { zh: `第一步（括号内）：$${a} + ${b} = ${a + b}$\n\n现在式子变成：$${a + b} \\times ${c}$`, en: `Step 1 (inside brackets): $${a} + ${b} = ${a + b}$\n\nNow: $${a + b} \\times ${c}$` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：括号改变了计算结果`, en: `${narrator}: "Brackets change the result"` },
-      hint: { zh: `有括号：$(${a} + ${b}) \\times ${c} = ${answer}$\n无括号：$${a} + ${b} \\times ${c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$ ← 括号很重要！`, en: `With brackets: $(${a} + ${b}) \\times ${c} = ${answer}$\nWithout: $${a} + ${b} \\times ${c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$ ← brackets matter!` },
+      text: { zh: `${narrator}：第二步——括号消除后，正常算`, en: `${narrator}: "Step 2 — brackets done, calculate normally"` },
+      hint: { zh: `$${a + b} \\times ${c} = ${answer}$`, en: `$${a + b} \\times ${c} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：对比——有括号 vs 没括号`, en: `${narrator}: "Compare — with brackets vs without"` },
+      hint: { zh: `有括号：$(${a} + ${b}) \\times ${c} = ${a + b} \\times ${c} = ${answer}$\n无括号：$${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$\n\n括号把加法的军衔"临时提升"了——先算加法再算乘法！`, en: `With: $(${a} + ${b}) \\times ${c} = ${a + b} \\times ${c} = ${answer}$\nWithout: $${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$\n\nBrackets "temporarily promote" addition — add before multiply!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——答案 $${answer}$ 对吗？`, en: `${narrator}: "Verify — is $${answer}$ correct?"` },
+      hint: { zh: `$(${a} + ${b}) \\times ${c}$\n$= ${a + b} \\times ${c}$\n$= ${answer}$ ✓\n\nBODMAS 口诀：B 括号 → O 幂 → DM 乘除 → AS 加减`, en: `$(${a} + ${b}) \\times ${c}$\n$= ${a + b} \\times ${c}$\n$= ${answer}$ ✓\n\nBODMAS: B Brackets → O Orders → DM Div/Mul → AS Add/Sub` },
       highlightField: 'ans',
     },
   ];
@@ -4804,23 +4838,33 @@ export function generateTwoStepEqMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：两步方程——要做两次"反操作"才能解出 $x$`, en: `${narrator}: "Two-step equation — we need TWO reverse operations to isolate $x$"` },
-      hint: { zh: `$${a}x + ${b} = ${result}$\n\n$x$ 被两层"包裹"：\n① 先被乘了 $${a}$（内层）\n② 再被加了 $${b}$（外层）\n\n解方程就像拆礼物——先拆外层，再拆内层`, en: `$${a}x + ${b} = ${result}$\n\n$x$ is wrapped in two layers:\n① Multiplied by $${a}$ (inner)\n② Added $${b}$ (outer)\n\nSolving = unwrapping — outer layer first, then inner` },
+      text: { zh: `${narrator}：一步方程你已经会了——现在升级：两步方程`, en: `${narrator}: "You've mastered one-step equations — now level up: two-step equations"` },
+      hint: { zh: `一步方程：$${a}x = ${step1Result}$（只要除一次就解出 $x$）\n\n两步方程：$${a}x + ${b} = ${result}$（$x$ 被包了两层！）\n\n就像攻城——一步方程只有一道门\n两步方程有两道门：外门（$+${b}$）和内门（$\\times ${a}$）`, en: `One-step: $${a}x = ${step1Result}$ (one division solves it)\n\nTwo-step: $${a}x + ${b} = ${result}$ ($x$ is double-wrapped!)\n\nLike a siege — one-step has one gate\nTwo-step has two gates: outer ($+${b}$) and inner ($\\times ${a}$)` },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：第一步——先去掉外层（$+${b}$），两边减 $${b}$`, en: `${narrator}: "Step 1 — remove outer layer ($+${b}$), subtract $${b}$ from both sides"` },
-      hint: { zh: `$${a}x + ${b} - ${b} = ${result} - ${b}$\n$${a}x = ${step1Result}$\n\n（$+${b}$ 和 $-${b}$ 抵消了）`, en: `$${a}x + ${b} - ${b} = ${result} - ${b}$\n$${a}x = ${step1Result}$\n\n($+${b}$ and $-${b}$ cancel out)` },
+      text: { zh: `${narrator}：先看清"敌情"——$x$ 被怎么包的？`, en: `${narrator}: "First, assess the situation — how is $x$ wrapped?"` },
+      hint: { zh: `$${a}x + ${b} = ${result}$\n\n从 $x$ 出发，经历了什么？\n① $x$ 先被乘以 $${a}$ → 变成 $${a}x$（内层）\n② $${a}x$ 再加上 $${b}$ → 变成 $${a}x + ${b}$（外层）\n\n解方程 = 反过来拆：先拆外层，再拆内层`, en: `$${a}x + ${b} = ${result}$\n\nStarting from $x$, what happened?\n① $x$ multiplied by $${a}$ → becomes $${a}x$ (inner layer)\n② $${a}x$ plus $${b}$ → becomes $${a}x + ${b}$ (outer layer)\n\nSolving = reverse: outer layer first, then inner` },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：第二步——再去掉内层（$\\times ${a}$），两边除以 $${a}$`, en: `${narrator}: "Step 2 — remove inner layer ($\\times ${a}$), divide both sides by $${a}$"` },
-      hint: { zh: `$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n$x = ${x}$`, en: `$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n$x = ${x}$` },
+      text: { zh: `${narrator}：第一步——拆外门：两边减 $${b}$`, en: `${narrator}: "Step 1 — break outer gate: subtract $${b}$ from both sides"` },
+      hint: { zh: `$${a}x + ${b} - ${b} = ${result} - ${b}$\n\n左边：$+${b}$ 和 $-${b}$ 互相抵消！\n$${a}x = ${step1Result}$\n\n外门攻破！现在只剩内门了`, en: `$${a}x + ${b} - ${b} = ${result} - ${b}$\n\nLeft: $+${b}$ and $-${b}$ cancel!\n$${a}x = ${step1Result}$\n\nOuter gate broken! Only inner gate remains` },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：验算——把 $x = ${x}$ 代回原方程`, en: `${narrator}: "Verify — substitute $x = ${x}$ back into the original"` },
-      hint: { zh: `$${a} \\times ${x} + ${b} = ${a * x} + ${b} = ${result}$ ✓\n\n两步走：先减后除\n记住口诀：拆礼物先拆外层！`, en: `$${a} \\times ${x} + ${b} = ${a * x} + ${b} = ${result}$ ✓\n\nTwo steps: subtract first, then divide\nRemember: unwrap the outer layer first!` },
+      text: { zh: `${narrator}：第二步——拆内门：两边除以 $${a}$`, en: `${narrator}: "Step 2 — break inner gate: divide both sides by $${a}$"` },
+      hint: { zh: `$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n\n左边：$\\times ${a}$ 和 $\\div ${a}$ 抵消！\n$x = ${x}$\n\n城门全破！$x$ 被解放了`, en: `$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n\nLeft: $\\times ${a}$ and $\\div ${a}$ cancel!\n$x = ${x}$\n\nAll gates broken! $x$ is free` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：验算——把 $x = ${x}$ 代回原方程`, en: `${narrator}: "Verify — substitute $x = ${x}$ back"` },
+      hint: { zh: `$${a} \\times ${x} + ${b}$\n$= ${a * x} + ${b}$\n$= ${result}$ ✓ 和右边一样！`, en: `$${a} \\times ${x} + ${b}$\n$= ${a * x} + ${b}$\n$= ${result}$ ✓ matches the right side!` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：口诀总结`, en: `${narrator}: "Summary"` },
+      hint: { zh: `两步方程解法：\n① 看清两层：外层（加减）+ 内层（乘除）\n② 先拆外层：用反操作（加→减，减→加）\n③ 再拆内层：用反操作（乘→除，除→乘）\n④ 验算：代回原方程检查\n\n口诀：从外到内，逐层击破！`, en: `Two-step equation method:\n① Identify two layers: outer (add/sub) + inner (mul/div)\n② Remove outer layer with reverse operation\n③ Remove inner layer with reverse operation\n④ Verify: substitute back\n\nRule: outside in, layer by layer!` },
       highlightField: 'x',
     },
   ];
@@ -4936,20 +4980,32 @@ export function generateRatioY7Mission(template: Mission): Mission {
       en: `Divide $${total}$ in the ratio $${a}:${b}$. What is the smaller share?`,
     };
 
+    const eachPart = total / parts;
+
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}：按比例分配——先算总份数`, en: `${narrator}: "Divide in ratio — first find total parts"` },
-        hint: { zh: `比例 $${a}:${b}$ 意思是：\n一共分成 $${a} + ${b} = ${parts}$ 份\n第一份占 $${a}$ 份，第二份占 $${b}$ 份`, en: `Ratio $${a}:${b}$ means:\nTotal $${a} + ${b} = ${parts}$ parts\nFirst gets $${a}$ parts, second gets $${b}$ parts` },
+        text: { zh: `${narrator}：$${total}$ 金要按 $${a}:${b}$ 分——不是平均分，是按功劳分`, en: `${narrator}: "$${total}$ gold shared in ratio $${a}:${b}$ — not equal shares, but by merit"` },
+        hint: { zh: `$${a}:${b}$ 是什么意思？\n想象切蛋糕：一共切 ${parts} 块\n甲拿 ${a} 块，乙拿 ${b} 块\n\n比例不是具体的数量，而是"几份对几份"`, en: `What does $${a}:${b}$ mean?\nImagine cutting a cake into ${parts} pieces\nA gets ${a} pieces, B gets ${b} pieces\n\nRatio is not amounts — it's "how many parts each"` },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：每份值多少？总数 ÷ 总份数`, en: `${narrator}: "How much is each part? Total ÷ total parts"` },
-        hint: { zh: `每份 $= ${total} \\div ${parts} = ${total / parts}$`, en: `Each part $= ${total} \\div ${parts} = ${total / parts}$` },
+        text: { zh: `${narrator}：第一步——算总份数`, en: `${narrator}: "Step 1 — find total parts"` },
+        hint: { zh: `$${a}:${b}$ → 总份数 $= ${a} + ${b} = ${parts}$\n\n就像蛋糕一共切成 $${parts}$ 块`, en: `$${a}:${b}$ → total parts $= ${a} + ${b} = ${parts}$\n\nLike cutting the cake into $${parts}$ pieces` },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：各得多少？每份 × 对应份数`, en: `${narrator}: "Each share? Each part × number of parts"` },
-        hint: { zh: `第一份：$${a} \\times ${total / parts} = ${answerA}$\n第二份：$${b} \\times ${total / parts} = ${answerB}$\n\n验算：$${answerA} + ${answerB} = ${total}$ ✓`, en: `First: $${a} \\times ${total / parts} = ${answerA}$\nSecond: $${b} \\times ${total / parts} = ${answerB}$\n\nCheck: $${answerA} + ${answerB} = ${total}$ ✓` },
+        text: { zh: `${narrator}：第二步——算每份值多少`, en: `${narrator}: "Step 2 — find the value of each part"` },
+        hint: { zh: `总共 $${total}$ 金，分成 $${parts}$ 份\n每份 $= ${total} \\div ${parts} = ${eachPart}$ 金`, en: `Total $${total}$ gold, divided into $${parts}$ parts\nEach part $= ${total} \\div ${parts} = ${eachPart}$ gold` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：第三步——各方拿自己的份数 × 每份值`, en: `${narrator}: "Step 3 — each side takes their parts × value per part"` },
+        hint: { zh: `甲（$${a}$ 份）：$${a} \\times ${eachPart} = ${answerA}$ 金\n乙（$${b}$ 份）：$${b} \\times ${eachPart} = ${answerB}$ 金`, en: `A ($${a}$ parts): $${a} \\times ${eachPart} = ${answerA}$ gold\nB ($${b}$ parts): $${b} \\times ${eachPart} = ${answerB}$ gold` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：验算——两份加起来等于总数吗？`, en: `${narrator}: "Verify — do both shares add to the total?"` },
+        hint: { zh: `$${answerA} + ${answerB} = ${total}$ ✓\n\n而且比例对吗？$${answerA} : ${answerB}$\n$= ${answerA / eachPart} : ${answerB / eachPart}$\n$= ${a} : ${b}$ ✓`, en: `$${answerA} + ${answerB} = ${total}$ ✓\n\nRatio correct? $${answerA} : ${answerB}$\n$= ${answerA / eachPart} : ${answerB / eachPart}$\n$= ${a} : ${b}$ ✓` },
         highlightField: 'ans',
       },
     ];
@@ -4978,18 +5034,28 @@ export function generateRatioY7Mission(template: Mission): Mission {
 
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}：化简比——跟约分一样，找最大公因数`, en: `${narrator}: "Simplify ratio — like simplifying fractions, find the HCF"` },
-        hint: { zh: `化简比就像约分：\n$\\frac{${a}}{${b}}$ 约分 → $\\frac{${sa}}{${sb}}$\n$${a}:${b}$ 化简 → $${sa}:${sb}$\n\n方法：两个数都除以它们的最大公因数`, en: `Simplifying a ratio is like simplifying a fraction:\n$\\frac{${a}}{${b}}$ simplified → $\\frac{${sa}}{${sb}}$\n$${a}:${b}$ simplified → $${sa}:${sb}$\n\nMethod: divide both by their HCF` },
+        text: { zh: `${narrator}："步兵与骑兵 $${a}:${b}$"——比例是一种简洁的对比方式`, en: `${narrator}: "Infantry to cavalry $${a}:${b}$" — ratios are a concise way to compare"` },
+        hint: { zh: `$${a}:${b}$ 的意思：\n每 $${a}$ 个步兵配 $${b}$ 个骑兵\n\n比例和分数是亲戚：\n$${a}:${b}$ 就像 $\\frac{${a}}{${b}}$\n化简比就像约分——找最大公因数！`, en: `$${a}:${b}$ means:\nFor every $${a}$ infantry, there are $${b}$ cavalry\n\nRatios and fractions are related:\n$${a}:${b}$ is like $\\frac{${a}}{${b}}$\nSimplifying a ratio = simplifying a fraction — find the HCF!` },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：$${a}$ 和 $${b}$ 的最大公因数是 $${g}$`, en: `${narrator}: "HCF of $${a}$ and $${b}$ is $${g}$"` },
-        hint: { zh: `$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\n所以 $${a}:${b} = ${sa}:${sb}$`, en: `$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\nSo $${a}:${b} = ${sa}:${sb}$` },
+        text: { zh: `${narrator}：为什么要化简？$${a}:${b}$ 和 $${sa}:${sb}$ 不是一回事吗？`, en: `${narrator}: "Why simplify? Aren't $${a}:${b}$ and $${sa}:${sb}$ the same?"` },
+        hint: { zh: `是一回事！但 $${sa}:${sb}$ 更简洁\n就像 $\\frac{4}{8}$ 和 $\\frac{1}{2}$ 一样大\n但 $\\frac{1}{2}$ 更清楚\n\n化简 = 用最小的数字表达同一个关系`, en: `Yes, they're the same! But $${sa}:${sb}$ is cleaner\nLike $\\frac{4}{8}$ and $\\frac{1}{2}$ are equal\nBut $\\frac{1}{2}$ is clearer\n\nSimplify = express the same relationship with smallest numbers` },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：验算——$${sa}$ 和 $${sb}$ 还能再约吗？`, en: `${narrator}: "Verify — can $${sa}$ and $${sb}$ be simplified further?"` },
-        hint: { zh: `$${sa}$ 和 $${sb}$ 的公因数只有 $1$\n→ 已经是最简比 ✓\n\n$${a}:${b} = ${sa}:${sb}$\n第一项 = $${sa}$`, en: `HCF of $${sa}$ and $${sb}$ is $1$\n→ Already in simplest form ✓\n\n$${a}:${b} = ${sa}:${sb}$\nFirst term = $${sa}$` },
+        text: { zh: `${narrator}：怎么化简？——找 $${a}$ 和 $${b}$ 的最大公因数`, en: `${narrator}: "How? — Find the HCF of $${a}$ and $${b}$"` },
+        hint: { zh: `回忆 Unit 0 学的 HCF：\n$${a}$ 的因数：${Array.from({length: a}, (_, i) => i + 1).filter(i => a % i === 0).join(', ')}$\n$${b}$ 的因数：${Array.from({length: b}, (_, i) => i + 1).filter(i => b % i === 0).join(', ')}$\n\n最大公因数 = $${g}$`, en: `Recall HCF from Unit 0:\nFactors of $${a}$: ${Array.from({length: a}, (_, i) => i + 1).filter(i => a % i === 0).join(', ')}$\nFactors of $${b}$: ${Array.from({length: b}, (_, i) => i + 1).filter(i => b % i === 0).join(', ')}$\n\nHCF = $${g}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：两项同时除以 HCF`, en: `${narrator}: "Divide both terms by the HCF"` },
+        hint: { zh: `$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\n$${a}:${b} = ${sa}:${sb}$`, en: `$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\n$${a}:${b} = ${sa}:${sb}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：验算——$${sa}:${sb}$ 还能再化简吗？`, en: `${narrator}: "Verify — can $${sa}:${sb}$ be simplified further?"` },
+        hint: { zh: `$${sa}$ 和 $${sb}$ 的公因数只有 $1$（互质）\n→ 已经是最简比 ✓\n\n答案：$${a}:${b} = ${sa}:${sb}$\n第一项 = $${sa}$\n\n知识回环：HCF（Unit 0）→ 约分（Unit 0B）→ 化简比（这里！）`, en: `HCF of $${sa}$ and $${sb}$ is $1$ (coprime)\n→ Already simplest form ✓\n\nAnswer: $${a}:${b} = ${sa}:${sb}$\nFirst term = $${sa}$\n\nKnowledge loop: HCF (Unit 0) → Simplify fractions (Unit 0B) → Simplify ratios (here!)` },
         highlightField: 'ans',
       },
     ];
