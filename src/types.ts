@@ -39,7 +39,10 @@ export type QuestionType =
   | 'RATIO'
   | 'SIMILARITY'
   | 'HCF'
-  | 'LCM';
+  | 'LCM'
+  | 'INTEGER_ADD'
+  | 'FRAC_ADD'
+  | 'FRAC_MUL';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 

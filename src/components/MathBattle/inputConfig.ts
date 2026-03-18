@@ -109,4 +109,16 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'ans', label: 'LCM', placeholder: 'LCM = ?' }],
     en: [{ id: 'ans', label: 'LCM', placeholder: 'LCM = ?' }],
   },
+  INTEGER_ADD: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
+  },
+  FRAC_ADD: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '分数 = ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: 'Fraction = ?' }],
+  },
+  FRAC_MUL: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '分数 = ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: 'Fraction = ?' }],
+  },
 };

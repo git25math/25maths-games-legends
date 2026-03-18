@@ -38,7 +38,10 @@ export type GeneratorType =
   | 'FUNC_VAL_RANDOM'
   | 'STATISTICS_MEDIAN_RANDOM'
   | 'HCF_RANDOM'
-  | 'LCM_RANDOM';
+  | 'LCM_RANDOM'
+  | 'INTEGER_ADD_RANDOM'
+  | 'FRAC_ADD_RANDOM'
+  | 'FRAC_MUL_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -73,6 +76,9 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   STATISTICS_MEDIAN_RANDOM: generateStatsMedianMission,
   HCF_RANDOM: generateHcfMission,
   LCM_RANDOM: generateLcmMission,
+  INTEGER_ADD_RANDOM: generateIntegerAddMission,
+  FRAC_ADD_RANDOM: generateFracAddMission,
+  FRAC_MUL_RANDOM: generateFracMulMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -1331,6 +1337,317 @@ export function generateLcmMission(template: Mission): Mission {
     ...template,
     description,
     data: { numbers: [a, b], generatorType: 'LCM_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   INTEGER_ADD generator: positive/negative number addition/subtraction
+   ══════════════════════════════════════════════════════════ */
+
+export function generateIntegerAddMission(template: Mission): Mission {
+  const tier = getTier();
+  const posPools = { 1: [5, 10, 15, 20, 25, 30], 2: [10, 20, 30, 40, 50], 3: [25, 40, 55, 70, 85, 100] };
+  const negPools = { 1: [-5, -10, -15, -20], 2: [-10, -20, -30, -40, -50], 3: [-25, -40, -55, -70, -85] };
+
+  // Generate operation: positive+negative, negative+negative, or mixed
+  const mode = pickRandom(['pos_neg', 'neg_neg', 'mixed'] as const);
+  let a: number, b: number, op: string, answer: number;
+
+  if (mode === 'pos_neg') {
+    a = pickRandom(posPools[tier]);
+    b = pickRandom(negPools[tier]);
+    op = '+';
+    answer = a + b;
+  } else if (mode === 'neg_neg') {
+    a = pickRandom(negPools[tier]);
+    b = pickRandom(negPools[tier]);
+    op = '+';
+    answer = a + b;
+  } else {
+    a = pickRandom([...posPools[tier], ...negPools[tier]]);
+    b = pickRandom(posPools[tier]);
+    op = '-';
+    answer = a - b;
+  }
+
+  const narrator = pickRandom(['诸葛亮', '曹操', '关羽']);
+  const bStr = b < 0 ? `(${b})` : `${b}`;
+  const exprStr = `${a} ${op} ${bStr}`;
+
+  const description: BilingualText = {
+    zh: `计算 $${exprStr}$`,
+    en: `Calculate $${exprStr}$`,
+  };
+
+  // Build tutorial explanation based on mode
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：正数表示"增加"，负数表示"减少"`,
+        en: `${narrator}: "Positive means 'gain', negative means 'loss'"`,
+      },
+      hint: {
+        zh: '可以想象一条数轴\n向右走是正数，向左走是负数',
+        en: 'Imagine a number line\nRight is positive, left is negative',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：题目是 $${exprStr}$`,
+        en: `${narrator}: "The expression is $${exprStr}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: op === '+' && b < 0 ? {
+        zh: `${narrator}：加一个负数，等于减去它的绝对值。$${a} + (${b}) = ${a} - ${Math.abs(b)}$`,
+        en: `${narrator}: "Adding a negative is the same as subtracting its absolute value. $${a} + (${b}) = ${a} - ${Math.abs(b)}$"`,
+      } : op === '-' ? {
+        zh: `${narrator}：从 $${a}$ 减去 $${b}$`,
+        en: `${narrator}: "Subtract $${b}$ from $${a}$"`,
+      } : {
+        zh: `${narrator}：两个负数相加，绝对值相加，结果为负`,
+        en: `${narrator}: "Adding two negatives: add absolute values, result is negative"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：所以 $${exprStr} = ${answer}$`,
+        en: `${narrator}: "Therefore $${exprStr} = ${answer}$"`,
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { a, b, op, answer, generatorType: 'INTEGER_ADD_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   FRAC_ADD generator: fraction addition/subtraction
+   ══════════════════════════════════════════════════════════ */
+
+export function generateFracAddMission(template: Mission): Mission {
+  const tier = getTier();
+  const denPools = { 1: [2, 3, 4, 5, 6], 2: [3, 4, 5, 6, 8, 10], 3: [4, 5, 6, 7, 8, 9, 10, 12] };
+
+  const d1 = pickRandom(denPools[tier]);
+  let d2 = pickRandom(denPools[tier]);
+  while (d2 === d1) d2 = pickRandom(denPools[tier]); // different denominators
+
+  // Ensure numerators < denominators (proper fractions)
+  const n1 = pickRandom(Array.from({ length: d1 - 1 }, (_, i) => i + 1));
+  const n2 = pickRandom(Array.from({ length: d2 - 1 }, (_, i) => i + 1));
+
+  const isSubtract = pickRandom([true, false]);
+  const lcd = (d1 * d2) / gcdCalc(d1, d2);
+  const adjN1 = n1 * (lcd / d1);
+  const adjN2 = n2 * (lcd / d2);
+
+  let ansNum: number, ansDen: number;
+  if (isSubtract) {
+    // Make sure result is positive
+    if (adjN1 >= adjN2) {
+      ansNum = adjN1 - adjN2;
+    } else {
+      ansNum = adjN2 - adjN1;
+    }
+  } else {
+    ansNum = adjN1 + adjN2;
+  }
+  ansDen = lcd;
+
+  // Simplify
+  const g = gcdCalc(Math.abs(ansNum), ansDen);
+  ansNum = ansNum / g;
+  ansDen = ansDen / g;
+
+  // Make sure first fraction is larger for subtraction
+  let dispN1 = n1, dispD1 = d1, dispN2 = n2, dispD2 = d2;
+  if (isSubtract && adjN1 < adjN2) {
+    dispN1 = n2; dispD1 = d2; dispN2 = n1; dispD2 = d1;
+  }
+
+  const op = isSubtract ? '-' : '+';
+  const narrator = pickRandom(['关羽', '诸葛亮', '刘备']);
+
+  const description: BilingualText = {
+    zh: `计算 $\\frac{${dispN1}}{${dispD1}} ${op} \\frac{${dispN2}}{${dispD2}}$`,
+    en: `Calculate $\\frac{${dispN1}}{${dispD1}} ${op} \\frac{${dispN2}}{${dispD2}}$`,
+  };
+
+  const recalcLcd = (dispD1 * dispD2) / gcdCalc(dispD1, dispD2);
+  const recalcAdjN1 = dispN1 * (recalcLcd / dispD1);
+  const recalcAdjN2 = dispN2 * (recalcLcd / dispD2);
+  const ansDisplay = ansDen === 1 ? `${ansNum}` : `\\frac{${ansNum}}{${ansDen}}`;
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：分数${isSubtract ? '减' : '加'}法，分母不同要先通分`,
+        en: `${narrator}: "For fraction ${isSubtract ? 'subtraction' : 'addition'} with different denominators, first find a common denominator"`,
+      },
+      hint: {
+        zh: '通分就是把两个分数的分母变成一样的\n方法：找最小公倍数 (LCM)',
+        en: 'Finding a common denominator means making both denominators the same\nMethod: find the LCM',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：$${dispD1}$ 和 $${dispD2}$ 的最小公倍数是 $${recalcLcd}$`,
+        en: `${narrator}: "The LCM of $${dispD1}$ and $${dispD2}$ is $${recalcLcd}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：通分后 $\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$，$\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$`,
+        en: `${narrator}: "Convert: $\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$, $\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$"`,
+      },
+      hint: {
+        zh: `分子和分母同时乘以相同的数\n$\\frac{${dispN1}}{${dispD1}} \\times \\frac{${recalcLcd/dispD1}}{${recalcLcd/dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
+        en: `Multiply numerator and denominator by the same number\n$\\frac{${dispN1}}{${dispD1}} \\times \\frac{${recalcLcd/dispD1}}{${recalcLcd/dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：分母相同后，分子直接${isSubtract ? '相减' : '相加'}：$\\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}} = \\frac{${isSubtract ? recalcAdjN1 - recalcAdjN2 : recalcAdjN1 + recalcAdjN2}}{${recalcLcd}}$`,
+        en: `${narrator}: "Same denominator, so ${isSubtract ? 'subtract' : 'add'} numerators: $\\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}} = \\frac{${isSubtract ? recalcAdjN1 - recalcAdjN2 : recalcAdjN1 + recalcAdjN2}}{${recalcLcd}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：约分后得 $${ansDisplay}$`,
+        en: `${narrator}: "Simplify to get $${ansDisplay}$"`,
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n1: dispN1, d1: dispD1, n2: dispN2, d2: dispD2, op, ansNum, ansDen, generatorType: 'FRAC_ADD_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   FRAC_MUL generator: fraction multiplication/division
+   ══════════════════════════════════════════════════════════ */
+
+export function generateFracMulMission(template: Mission): Mission {
+  const tier = getTier();
+  const denPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8], 3: [3, 4, 5, 6, 7, 8, 9, 10] };
+
+  const d1 = pickRandom(denPools[tier]);
+  const d2 = pickRandom(denPools[tier]);
+  const n1 = pickRandom(Array.from({ length: d1 - 1 }, (_, i) => i + 1));
+  const n2 = pickRandom(Array.from({ length: d2 - 1 }, (_, i) => i + 1));
+
+  const isDivide = pickRandom([true, false]);
+
+  let ansNum: number, ansDen: number;
+  if (isDivide) {
+    // a/b / c/d = a/b * d/c = (a*d)/(b*c)
+    ansNum = n1 * d2;
+    ansDen = d1 * n2;
+  } else {
+    // a/b * c/d = (a*c)/(b*d)
+    ansNum = n1 * n2;
+    ansDen = d1 * d2;
+  }
+
+  // Simplify
+  const g = gcdCalc(Math.abs(ansNum), Math.abs(ansDen));
+  ansNum = ansNum / g;
+  ansDen = ansDen / g;
+
+  const op = isDivide ? '\\div' : '\\times';
+  const narrator = pickRandom(['张飞', '诸葛亮', '关羽']);
+
+  const description: BilingualText = {
+    zh: `计算 $\\frac{${n1}}{${d1}} ${op} \\frac{${n2}}{${d2}}$`,
+    en: `Calculate $\\frac{${n1}}{${d1}} ${op} \\frac{${n2}}{${d2}}$`,
+  };
+
+  const ansDisplay = ansDen === 1 ? `${ansNum}` : `\\frac{${ansNum}}{${ansDen}}`;
+
+  const tutorialSteps = isDivide ? [
+    {
+      text: {
+        zh: `${narrator}：分数除法 = 乘以倒数`,
+        en: `${narrator}: "Dividing by a fraction = multiplying by its reciprocal"`,
+      },
+      hint: {
+        zh: '把除号变乘号，同时把第二个分数翻转\n$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c}$',
+        en: 'Change / to *, and flip the second fraction\n$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c}$',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：翻转第二个分数：$\\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$`,
+        en: `${narrator}: "Flip the second fraction: $\\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：分子乘分子，分母乘分母：$\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${n1 * d2}}{${d1 * n2}}$`,
+        en: `${narrator}: "Multiply numerators, multiply denominators: $\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${n1 * d2}}{${d1 * n2}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：约分后得 $${ansDisplay}$`,
+        en: `${narrator}: "Simplify to get $${ansDisplay}$"`,
+      },
+      highlightField: 'ans',
+    },
+  ] : [
+    {
+      text: {
+        zh: `${narrator}：分数乘法很简单：分子乘分子，分母乘分母`,
+        en: `${narrator}: "Fraction multiplication is simple: multiply numerators, multiply denominators"`,
+      },
+      hint: {
+        zh: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$',
+        en: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${n1 * n2}}{${d1 * d2}}$`,
+        en: `${narrator}: "$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${n1 * n2}}{${d1 * d2}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：约分后得 $${ansDisplay}$`,
+        en: `${narrator}: "Simplify to get $${ansDisplay}$"`,
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n1, d1, n2, d2, op: isDivide ? 'div' : 'mul', ansNum, ansDen, generatorType: 'FRAC_MUL_RANDOM' },
     tutorialSteps,
   };
 }

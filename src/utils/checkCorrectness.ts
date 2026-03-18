@@ -223,6 +223,20 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     }
     return { correct: parse(inputs.ans || '') === result, expected: { ans: String(result) } };
   }
+  if (type === 'INTEGER_ADD') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'FRAC_ADD' || type === 'FRAC_MUL') {
+    // data.ansNum and data.ansDen store the simplified fraction answer
+    const userVal = parse(inputs.ans || '');
+    const expected = data.ansNum / data.ansDen;
+    const g = gcd(Math.abs(data.ansNum), Math.abs(data.ansDen));
+    const simpNum = data.ansNum / g;
+    const simpDen = data.ansDen / g;
+    const correct = Math.abs(userVal - expected) < 0.001;
+    const expectedStr = simpDen === 1 ? String(simpNum) : `${simpNum}/${simpDen}`;
+    return { correct, expected: { ans: expectedStr } };
+  }
   return { correct: false, expected: {} };
 }
 

@@ -110,6 +110,118 @@ export const MISSIONS: Mission[] = [
     ],
     secret: { concept: { zh: 'HCF 用于解决平均分配问题。', en: 'HCF solves equal distribution problems.' }, formula: '$\\text{HCF}(48, 60) = 2^2 \\times 3 = 12$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
   },
+  // --- Year 7 Unit 0A: 行军算账·正负数篇 ---
+  {
+    id: 704, grade: 7, unitId: 0, order: 4,
+    unitTitle: { zh: "Unit 0A: 行军算账·正负数篇", en: "Unit 0A: March Accounting — Integers" },
+    topic: 'Algebra', type: 'INTEGER_ADD',
+    title: { zh: '粮草盈亏', en: 'Grain Surplus & Loss' },
+    skillName: { zh: '正负加减术', en: 'Integer Addition' },
+    skillSummary: { zh: '正数+负数：绝对值大的决定符号', en: 'Positive + negative: the larger absolute value determines the sign' },
+    story: { zh: '行军途中，粮草有增有减。正数代表补给，负数代表消耗。', en: 'On the march, supplies rise and fall. Positive means resupply, negative means consumption.' },
+    description: { zh: '计算粮草变化。', en: 'Calculate the supply change.' },
+    data: { a: 50, b: -30, op: '+', answer: 20, generatorType: 'INTEGER_ADD_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-1.6-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮："粮仓补给 50 袋，消耗 30 袋。$50 + (-30) = ?$"', en: 'Zhuge Liang: "50 bags resupplied, 30 consumed. $50 + (-30) = ?$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："加一个负数 = 减去它的绝对值。$50 + (-30) = 50 - 30$"', en: 'Zhuge Liang: "Adding a negative = subtracting its absolute value. $50 + (-30) = 50 - 30$"' }, hint: { zh: '正数表示增加，负数表示减少\n加负数就是减去', en: 'Positive = gain, negative = loss\nAdding negative = subtracting' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："$50 - 30 = 20$！还剩 20 袋粮草。"', en: 'Zhuge Liang: "$50 - 30 = 20$! 20 bags remaining."' }, highlightField: 'ans' }
+    ],
+    secret: { concept: { zh: '加一个负数等于减去它的绝对值。', en: 'Adding a negative equals subtracting its absolute value.' }, formula: '$a + (-b) = a - b$', tips: [{ zh: '诸葛亮提示：知彼知己，粮草先行。', en: 'Zhuge Liang Tip: Know your supplies before you march.' }] }
+  },
+  {
+    id: 705, grade: 7, unitId: 0, order: 5,
+    unitTitle: { zh: "Unit 0A: 行军算账·正负数篇", en: "Unit 0A: March Accounting — Integers" },
+    topic: 'Algebra', type: 'INTEGER_ADD',
+    title: { zh: '连续损失', en: 'Consecutive Losses' },
+    skillName: { zh: '负数相加术', en: 'Adding Negatives' },
+    skillSummary: { zh: '两个负数相加：绝对值相加，结果为负', en: 'Adding two negatives: add absolute values, result is negative' },
+    story: { zh: '连续两场败仗，士兵不断减员。负数加负数，损失在累积。', en: 'Two consecutive defeats. Negative plus negative — losses accumulate.' },
+    description: { zh: '计算总损失。', en: 'Calculate total loss.' },
+    data: { a: -20, b: -15, op: '+', answer: -35, generatorType: 'INTEGER_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
+    kpId: 'kp-1.6-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '曹操："先损 20 人，又损 15 人。$(-20) + (-15) = ?$"', en: 'Cao Cao: "Lost 20 soldiers, then 15 more. $(-20) + (-15) = ?$"' }, highlightField: 'ans' },
+      { text: { zh: '曹操："两个负数相加，绝对值相加，结果还是负数"', en: 'Cao Cao: "Two negatives added: add absolute values, result stays negative"' }, hint: { zh: '$|-20| + |-15| = 20 + 15 = 35$\n两个都是损失，总损失更大', en: '$|-20| + |-15| = 20 + 15 = 35$\nBoth are losses, so total loss is larger' }, highlightField: 'ans' },
+      { text: { zh: '曹操："$(-20) + (-15) = -35$！共损失 35 人，必须补充兵力。"', en: 'Cao Cao: "$(-20) + (-15) = -35$! 35 soldiers lost, must recruit more."' }, highlightField: 'ans' }
+    ],
+    secret: { concept: { zh: '负数加负数，绝对值相加，符号取负。', en: 'Negative plus negative: add absolute values, keep negative sign.' }, formula: '$(-a) + (-b) = -(a+b)$', tips: [{ zh: '曹操提示：胜败乃兵家常事，关键是算清损失。', en: 'Cao Cao Tip: Victory and defeat are normal — the key is counting your losses.' }] }
+  },
+  {
+    id: 706, grade: 7, unitId: 0, order: 6,
+    unitTitle: { zh: "Unit 0A: 行军算账·正负数篇", en: "Unit 0A: March Accounting — Integers" },
+    topic: 'Algebra', type: 'INTEGER_ADD',
+    title: { zh: '攻守得失', en: 'Gains and Losses' },
+    skillName: { zh: '混合运算术', en: 'Mixed Operations' },
+    skillSummary: { zh: '正负数混合加减，注意符号', en: 'Mixed positive/negative operations — watch the signs' },
+    story: { zh: '一场战斗有得有失。先算总账，看看净变化是正还是负。', en: 'Every battle has gains and losses. Calculate the net change.' },
+    description: { zh: '计算净变化。', en: 'Calculate the net change.' },
+    data: { a: 40, b: 60, op: '-', answer: -20, generatorType: 'INTEGER_ADD_RANDOM' }, difficulty: 'Medium', reward: 55,
+    kpId: 'kp-1.6-02', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '关羽："战后先得 40 人投诚，又有 60 人离去。$40 - 60 = ?$"', en: 'Guan Yu: "After battle, 40 joined us but 60 left. $40 - 60 = ?$"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："减去的数比原来大，结果就变成负数了"', en: 'Guan Yu: "Subtracting more than you have gives a negative result"' }, hint: { zh: '减去比自己大的数 → 结果为负\n$40 - 60 = -(60 - 40) = -20$', en: 'Subtracting more than you have → negative\n$40 - 60 = -(60 - 40) = -20$' }, highlightField: 'ans' },
+      { text: { zh: '关羽："$40 - 60 = -20$！净减少 20 人。"', en: 'Guan Yu: "$40 - 60 = -20$! Net loss of 20."' }, highlightField: 'ans' }
+    ],
+    secret: { concept: { zh: '减去比自己大的数，结果为负。', en: 'Subtracting more than you have gives a negative.' }, formula: '$a - b = -(b - a)$ when $b > a$', tips: [{ zh: '关羽提示：胜败之间，一算便知。', en: 'Guan Yu Tip: Between victory and defeat, the numbers tell all.' }] }
+  },
+  // --- Year 7 Unit 0B: 军粮分配·分数篇 ---
+  {
+    id: 707, grade: 7, unitId: 0, order: 7,
+    unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },
+    topic: 'Algebra', type: 'FRAC_ADD',
+    title: { zh: '合并粮草', en: 'Combining Grain' },
+    skillName: { zh: '分数通分术', en: 'Common Denominator' },
+    skillSummary: { zh: '异分母分数相加：通分→加分子→约分', en: 'Adding fractions with different denominators: find LCD → add numerators → simplify' },
+    story: { zh: '两营粮草要合并运输。第一营占总量的一部分，第二营占另一部分。', en: 'Two camps combine their grain for transport. Each has a fraction of the total.' },
+    description: { zh: '计算合并后的分数。', en: 'Calculate the combined fraction.' },
+    data: { n1: 1, d1: 3, n2: 1, d2: 4, op: '+', ansNum: 7, ansDen: 12, generatorType: 'FRAC_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
+    kpId: 'kp-1.4-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '关羽："第一营有全军 $\\frac{1}{3}$ 的粮草，第二营有 $\\frac{1}{4}$。合起来是多少？"', en: 'Guan Yu: "First camp has $\\frac{1}{3}$ of the grain, second has $\\frac{1}{4}$. What is the total?"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："分母不同，要先通分。3 和 4 的最小公倍数是 12"', en: 'Guan Yu: "Different denominators — find LCD first. LCM of 3 and 4 is 12"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："$\\frac{1}{3} = \\frac{4}{12}$，$\\frac{1}{4} = \\frac{3}{12}$"', en: 'Guan Yu: "$\\frac{1}{3} = \\frac{4}{12}$, $\\frac{1}{4} = \\frac{3}{12}$"' }, hint: { zh: '分子分母同乘以相同的数\n$\\frac{1}{3} \\times \\frac{4}{4} = \\frac{4}{12}$', en: 'Multiply top and bottom by the same number\n$\\frac{1}{3} \\times \\frac{4}{4} = \\frac{4}{12}$' }, highlightField: 'ans' },
+      { text: { zh: '关羽："$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"', en: 'Guan Yu: "$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
+    ],
+    secret: { concept: { zh: '异分母分数相加，先通分再加。', en: 'To add fractions with different denominators, find a common denominator first.' }, formula: '$\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd}$', tips: [{ zh: '关羽提示：合兵一处，粮草先算。', en: 'Guan Yu Tip: Before merging troops, count the grain.' }] }
+  },
+  {
+    id: 708, grade: 7, unitId: 0, order: 8,
+    unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },
+    topic: 'Algebra', type: 'FRAC_ADD',
+    title: { zh: '消耗军粮', en: 'Consuming Grain' },
+    skillName: { zh: '分数减法术', en: 'Fraction Subtraction' },
+    skillSummary: { zh: '异分母分数相减：通分→减分子→约分', en: 'Subtracting fractions: find LCD → subtract numerators → simplify' },
+    story: { zh: '粮仓存粮消耗了一部分，需要计算剩余比例。', en: 'A portion of the grain has been consumed. Calculate what remains.' },
+    description: { zh: '计算剩余分数。', en: 'Calculate the remaining fraction.' },
+    data: { n1: 3, d1: 4, n2: 1, d2: 6, op: '-', ansNum: 7, ansDen: 12, generatorType: 'FRAC_ADD_RANDOM' }, difficulty: 'Easy', reward: 55,
+    kpId: 'kp-1.4-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮："粮仓有 $\\frac{3}{4}$ 满，消耗了 $\\frac{1}{6}$，还剩多少？"', en: 'Zhuge Liang: "Granary is $\\frac{3}{4}$ full, consumed $\\frac{1}{6}$. How much remains?"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："4 和 6 的最小公倍数是 12"', en: 'Zhuge Liang: "LCM of 4 and 6 is 12"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："$\\frac{3}{4} = \\frac{9}{12}$，$\\frac{1}{6} = \\frac{2}{12}$"', en: 'Zhuge Liang: "$\\frac{3}{4} = \\frac{9}{12}$, $\\frac{1}{6} = \\frac{2}{12}$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"', en: 'Zhuge Liang: "$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
+    ],
+    secret: { concept: { zh: '异分母分数相减，通分后减分子。', en: 'Subtracting fractions: find LCD, then subtract numerators.' }, formula: '$\\frac{a}{b} - \\frac{c}{d} = \\frac{ad - bc}{bd}$', tips: [{ zh: '诸葛亮提示：粮草不可不算，算清方能持久。', en: 'Zhuge Liang Tip: Always track your supplies — accurate counts sustain campaigns.' }] }
+  },
+  {
+    id: 709, grade: 7, unitId: 0, order: 9,
+    unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },
+    topic: 'Algebra', type: 'FRAC_MUL',
+    title: { zh: '翻倍缩减', en: 'Multiply & Divide' },
+    skillName: { zh: '分数乘除术', en: 'Fraction Mul/Div' },
+    skillSummary: { zh: '乘法：分子×分子，分母×分母；除法：乘以倒数', en: 'Multiply: top×top, bottom×bottom; Divide: multiply by reciprocal' },
+    story: { zh: '军粮调配需要按比例放大或缩小。分数乘除是核心技能。', en: 'Grain allocation requires scaling up or down. Fraction multiplication and division are key.' },
+    description: { zh: '计算结果。', en: 'Calculate the result.' },
+    data: { n1: 2, d1: 3, n2: 3, d2: 5, op: 'mul', ansNum: 2, ansDen: 5, generatorType: 'FRAC_MUL_RANDOM' }, difficulty: 'Easy', reward: 55,
+    kpId: 'kp-1.4-02', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '张飞："$\\frac{2}{3}$ 的粮草再分 $\\frac{3}{5}$，能分多少？$\\frac{2}{3} \\times \\frac{3}{5} = ?$"', en: 'Zhang Fei: "$\\frac{2}{3}$ of the grain, take $\\frac{3}{5}$ of that. $\\frac{2}{3} \\times \\frac{3}{5} = ?$"' }, highlightField: 'ans' },
+      { text: { zh: '张飞："分数乘法：分子乘分子，分母乘分母"', en: 'Zhang Fei: "Fraction multiplication: multiply tops, multiply bottoms"' }, hint: { zh: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$', en: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$' }, highlightField: 'ans' },
+      { text: { zh: '张飞："$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$，约分得 $\\frac{2}{5}$"', en: 'Zhang Fei: "$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$, simplify to $\\frac{2}{5}$"' }, highlightField: 'ans' }
+    ],
+    secret: { concept: { zh: '分数乘法：分子×分子，分母×分母，最后约分。', en: 'Fraction multiplication: numerator×numerator, denominator×denominator, then simplify.' }, formula: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{ac}{bd}$', tips: [{ zh: '张飞提示：俺虽粗人，乘法还是会的！', en: 'Zhang Fei Tip: I may be rough, but I can multiply!' }] }
+  },
   // --- Year 7: The Peach Garden Oath (Foundations) ---
   {
     id: 711, grade: 7, unitId: 1, order: 1,

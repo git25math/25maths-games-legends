@@ -59,7 +59,10 @@ export const translations = {
       FUNC_VAL: "函数求值",
       DERIVATIVE: "导数计算",
       HCF: "最大公因数",
-      LCM: "最小公倍数"
+      LCM: "最小公倍数",
+      INTEGER_ADD: "正负数运算",
+      FRAC_ADD: "分数加减",
+      FRAC_MUL: "分数乘除"
     },
     difficulty: {
       Easy: "简单",
@@ -201,7 +204,10 @@ export const translations = {
       FUNC_VAL: "Function Value",
       DERIVATIVE: "Derivative",
       HCF: "Highest Common Factor",
-      LCM: "Least Common Multiple"
+      LCM: "Least Common Multiple",
+      INTEGER_ADD: "Integer Operations",
+      FRAC_ADD: "Fraction Add/Sub",
+      FRAC_MUL: "Fraction Mul/Div"
     },
     difficulty: {
       Easy: "Easy",
