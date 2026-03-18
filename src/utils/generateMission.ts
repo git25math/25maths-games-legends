@@ -155,16 +155,18 @@ export function generateAddEqMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateIndicesMission(template: Mission): Mission {
-  const bases = [2, 3, 5];
-  const base = pickRandom(bases);
+  const tier = getTier();
+  const basePools = { 1: [2, 3], 2: [2, 3, 5], 3: [2, 3, 5, 7] };
+  const base = pickRandom(basePools[tier]);
   const op = template.data?.op === 'div' ? 'div' : pickRandom(['mul', 'div'] as const);
   let e1: number, e2: number;
+  const eRanges = { 1: [2, 3] as const, 2: [2, 5] as const, 3: [3, 8] as const };
   if (op === 'div') {
-    e1 = randInt(4, 9);
-    e2 = randInt(2, e1 - 1);
+    e1 = randInt(Math.max(eRanges[tier][0] + 1, 4), eRanges[tier][1] + 1);
+    e2 = randInt(eRanges[tier][0], e1 - 1);
   } else {
-    e1 = randInt(2, 5);
-    e2 = randInt(2, 5);
+    e1 = randInt(eRanges[tier][0], eRanges[tier][1]);
+    e2 = randInt(eRanges[tier][0], eRanges[tier][1]);
   }
   const ans = op === 'div' ? e1 - e2 : e1 + e2;
   const sym = op === 'div' ? '/' : '\\times';
@@ -195,8 +197,12 @@ export function generateIndicesMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateAnglesMission(template: Mission): Mission {
+  const tier = getTier();
   const total = template.data?.total || 180;
-  const angle = total === 90 ? randInt(10, 80) : randInt(20, 160);
+  const suppRanges = { 1: [30, 150] as const, 2: [20, 160] as const, 3: [10, 170] as const };
+  const compRanges = { 1: [20, 70] as const, 2: [10, 80] as const, 3: [5, 85] as const };
+  const range = total === 90 ? compRanges[tier] : suppRanges[tier];
+  const angle = randInt(range[0], range[1]);
   const ans = total - angle;
   const kind = total === 90 ? { zh: '余角', en: 'complementary' } : { zh: '补角', en: 'supplementary' };
 
@@ -226,9 +232,13 @@ export function generateAnglesMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateArithmeticMission(template: Mission): Mission {
-  const a1 = pickRandom([50, 80, 100, 150, 200, 300]);
-  const d = pickRandom([5, 8, 10, 15, 20, 25, 30, 50]);
-  const n = randInt(5, 15);
+  const tier = getTier();
+  const a1Pools = { 1: [50, 80, 100], 2: [50, 80, 100, 150, 200, 300], 3: [200, 500, 800] };
+  const dPools = { 1: [5, 8, 10], 2: [5, 8, 10, 15, 20, 25, 30, 50], 3: [15, 25, 50, 75] };
+  const nRanges = { 1: [3, 6] as const, 2: [5, 15] as const, 3: [10, 20] as const };
+  const a1 = pickRandom(a1Pools[tier]);
+  const d = pickRandom(dPools[tier]);
+  const n = randInt(nRanges[tier][0], nRanges[tier][1]);
   const ans = a1 + (n - 1) * d;
 
   const description: BilingualText = {
@@ -257,8 +267,11 @@ export function generateArithmeticMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateAreaRectMission(template: Mission): Mission {
-  const length = randInt(8, 40);
-  const width = randInt(5, 30);
+  const tier = getTier();
+  const lengthPools = { 1: [5, 8, 10], 2: [8, 10, 15, 20, 25, 30, 35, 40], 3: [20, 35, 50, 80] };
+  const widthPools = { 1: [3, 5, 7], 2: [5, 8, 10, 15, 20, 25, 30], 3: [15, 25, 40, 60] };
+  const length = tier === 2 ? randInt(8, 40) : pickRandom(lengthPools[tier]);
+  const width = tier === 2 ? randInt(5, 30) : pickRandom(widthPools[tier]);
   const narrator = pickRandom(['刘备', '曹操', '孙权']);
 
   const description: BilingualText = {
@@ -287,9 +300,13 @@ export function generateAreaRectMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateAreaTrapMission(template: Mission): Mission {
-  let a = randInt(5, 20);
-  let b = randInt(a + 2, a + 20);
-  let h = randInt(4, 15);
+  const tier = getTier();
+  const aPools = { 1: [3, 5, 8], 2: null, 3: [10, 15, 20] };
+  const bOffsets = { 1: [2, 5], 2: null, 3: [5, 15] };
+  const hPools = { 1: [3, 5, 7], 2: null, 3: [8, 12, 18] };
+  let a = tier === 2 ? randInt(5, 20) : pickRandom(aPools[tier]!);
+  let b = tier === 2 ? randInt(a + 2, a + 20) : a + pickRandom(bOffsets[tier]!);
+  let h = tier === 2 ? randInt(4, 15) : pickRandom(hPools[tier]!);
   // Ensure (a+b)*h is even so area is integer
   if (((a + b) * h) % 2 !== 0) h += 1;
   const narrator = pickRandom(['赵云', '关羽']);
@@ -319,8 +336,11 @@ export function generateAreaTrapMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateProbSimpleMission(template: Mission): Mission {
-  const total = pickRandom([20, 30, 36, 40, 50, 52, 60, 80, 100]);
-  const target = pickRandom([2, 3, 4, 5, 6, 8, 10, 12, 15]);
+  const tier = getTier();
+  const totalPools = { 1: [10, 12, 20], 2: [20, 30, 36, 40, 50, 52, 60, 80, 100], 3: [60, 80, 100, 200] };
+  const targetPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8, 10, 12, 15], 3: [7, 11, 13, 17, 19] };
+  const total = pickRandom(totalPools[tier]);
+  const target = pickRandom(targetPools[tier]);
   const narrator = '诸葛亮';
 
   const description: BilingualText = {
@@ -349,8 +369,10 @@ export function generateProbSimpleMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateProbIndMission(template: Mission): Mission {
-  const p1 = pickRandom([0.3, 0.4, 0.5, 0.6, 0.7, 0.8]);
-  const p2 = pickRandom([0.3, 0.4, 0.5, 0.6, 0.7, 0.8]);
+  const tier = getTier();
+  const pPools = { 1: [0.5, 0.5], 2: [0.3, 0.4, 0.5, 0.6, 0.7, 0.8], 3: [0.1, 0.2, 0.3, 0.7, 0.8, 0.9] };
+  const p1 = pickRandom(pPools[tier]);
+  const p2 = pickRandom(pPools[tier]);
   const narrator = '周瑜';
 
   const description: BilingualText = {
@@ -384,8 +406,18 @@ const PYTHAGOREAN_TRIPLES: [number, number, number][] = [
   [7, 24, 25], [9, 12, 15], [12, 16, 20], [9, 40, 41],
 ];
 
+const PYTHAGOREAN_TRIPLES_EXTRA: [number, number, number][] = [
+  [20, 21, 29], [11, 60, 61],
+];
+
 export function generatePythagorasMission(template: Mission): Mission {
-  const [triA, triB, triC] = pickRandom(PYTHAGOREAN_TRIPLES);
+  const tier = getTier();
+  const triplePools = {
+    1: PYTHAGOREAN_TRIPLES.slice(0, 3),
+    2: PYTHAGOREAN_TRIPLES,
+    3: [...PYTHAGOREAN_TRIPLES, ...PYTHAGOREAN_TRIPLES_EXTRA],
+  };
+  const [triA, triB, triC] = pickRandom(triplePools[tier]);
   // Template data determines mode: if template has 'c' key, it's find-leg; if 'b' key, find-hypotenuse
   const findC = !('c' in (template.data || {}));
   const narrator = pickRandom(['关羽', '赵云']);
@@ -426,9 +458,12 @@ export function generatePythagorasMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generatePercentageMission(template: Mission): Mission {
+  const tier = getTier();
   const isDiscount = (template.data?.rate ?? 0) < 0;
-  const initial = pickRandom([200, 500, 800, 1000, 1500, 2000, 3000, 5000]);
-  const pct = pickRandom([10, 15, 20, 25, 30, 40, 50]);
+  const initialPools = { 1: [100, 200, 500], 2: [200, 500, 800, 1000, 1500, 2000, 3000, 5000], 3: [2000, 5000, 8000] };
+  const pctPools = { 1: [10, 20, 50], 2: [10, 15, 20, 25, 30, 40, 50], 3: [12, 15, 18, 22, 35] };
+  const initial = pickRandom(initialPools[tier]);
+  const pct = pickRandom(pctPools[tier]);
   const rate = isDiscount ? -pct / 100 : pct / 100;
   const result = initial * (1 + rate);
   const narrator = '曹操';
@@ -492,13 +527,16 @@ export function generateLinearMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateSimultaneousMission(template: Mission): Mission {
+  const tier = getTier();
   // Generate solution first, then build equations
-  const x = pickRandom([-3, -2, -1, 1, 2, 3, 4, 5]);
-  const y = pickRandom([-3, -2, -1, 1, 2, 3, 4, 5]);
-  const a1 = pickRandom([1, 2, 3]);
-  const b1 = pickRandom([1, 2, -1]);
-  const a2 = pickRandom([1, -1, 2]);
-  const b2 = pickRandom([1, 2, 3]);
+  const xyPools = { 1: [-2, -1, 1, 2], 2: [-3, -2, -1, 1, 2, 3, 4, 5], 3: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5] };
+  const coeffPools = { 1: [1, 2], 2: [1, 2, 3, -1], 3: [1, 2, 3, -1, -2] };
+  const x = pickRandom(xyPools[tier]);
+  const y = pickRandom(xyPools[tier]);
+  const a1 = pickRandom(coeffPools[tier]);
+  const b1 = pickRandom(tier === 2 ? [1, 2, -1] : coeffPools[tier]);
+  const a2 = pickRandom(tier === 2 ? [1, -1, 2] : coeffPools[tier]);
+  const b2 = pickRandom(coeffPools[tier]);
   const c1 = a1 * x + b1 * y;
   const c2 = a2 * x + b2 * y;
 
@@ -531,9 +569,11 @@ export function generateSimultaneousMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateRatioMission(template: Mission): Mission {
+  const tier = getTier();
   const ratios: [number, number][] = [[2, 3], [2, 5], [3, 4], [3, 5], [3, 7], [4, 5], [1, 3], [1, 4]];
   const [a, b] = pickRandom(ratios);
-  const multiplier = pickRandom([100, 200, 300, 500, 50, 150]);
+  const multiplierPools = { 1: [10, 20, 50], 2: [50, 100, 150, 200, 300, 500], 3: [200, 500, 800, 1000] };
+  const multiplier = pickRandom(multiplierPools[tier]);
 
   const narrator = pickRandom(['曹操', '刘备']);
   const description: BilingualText = {
@@ -560,9 +600,15 @@ export function generateRatioMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateSimilarityMission(template: Mission): Mission {
-  const a = pickRandom([3, 4, 5, 6, 8, 10]);
-  const b = pickRandom([6, 8, 10, 12, 15, 20]);
-  const c = pickRandom([4, 5, 6, 7, 9, 12]);
+  const tier = getTier();
+  const sidePools = {
+    1: { a: [2, 3, 4, 6, 8, 12], b: [4, 6, 8, 12, 16, 24], c: [3, 4, 6, 8, 10, 12] },
+    2: { a: [3, 4, 5, 6, 8, 10], b: [6, 8, 10, 12, 15, 20], c: [4, 5, 6, 7, 9, 12] },
+    3: { a: [5, 8, 10, 15, 20, 25], b: [10, 16, 20, 30, 40, 50], c: [6, 8, 12, 15, 20, 25] },
+  };
+  const a = pickRandom(sidePools[tier].a);
+  const b = pickRandom(sidePools[tier].b);
+  const c = pickRandom(sidePools[tier].c);
   const correctX = (a / b) * c;
 
   // Ensure clean answer
@@ -592,8 +638,11 @@ export function generateSimilarityMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateStatsMeanMission(template: Mission): Mission {
-  const count = pickRandom([5, 6, 7, 8]);
-  const values = Array.from({ length: count }, () => randInt(10, 50));
+  const tier = getTier();
+  const countPools = { 1: [5], 2: [5, 6, 7, 8], 3: [8, 9, 10] };
+  const valRanges = { 1: [5, 20] as const, 2: [10, 50] as const, 3: [20, 100] as const };
+  const count = pickRandom(countPools[tier]);
+  const values = Array.from({ length: count }, () => randInt(valRanges[tier][0], valRanges[tier][1]));
   const sum = values.reduce((s, v) => s + v, 0);
   const mean = sum / count;
 
@@ -623,6 +672,7 @@ export function generateStatsMeanMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateTrigonometryMission(template: Mission): Mission {
+  const tier = getTier();
   const func = template.data?.func as string | undefined;
   const narrator = pickRandom(['甘宁', '乐进', '赵云']);
 
@@ -631,8 +681,12 @@ export function generateTrigonometryMission(template: Mission): Mission {
     const angle = pickRandom([30, 45, 60]);
     const sinVal = angle === 30 ? 0.5 : angle === 45 ? Math.SQRT2 / 2 : Math.sqrt(3) / 2;
     // Pick opposite so hyp is clean-ish
-    const oppPool = angle === 30 ? [3, 4, 5, 6, 8, 10, 50] : [3, 4, 5, 6, 8, 10];
-    const opposite = pickRandom(oppPool);
+    const oppPoolsTier = {
+      1: angle === 30 ? [3, 4, 5, 6] : [3, 4, 5, 6],
+      2: angle === 30 ? [3, 4, 5, 6, 8, 10, 50] : [3, 4, 5, 6, 8, 10],
+      3: [8, 10, 12, 15, 20],
+    };
+    const opposite = pickRandom(oppPoolsTier[tier]);
     const hyp = opposite / sinVal;
 
     const description: BilingualText = {
@@ -673,8 +727,10 @@ export function generateTrigonometryMission(template: Mission): Mission {
   }
 
   // Default: tan mode — opposite / adjacent → input tan
-  const opposite = pickRandom([3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 20]);
-  const adjacent = pickRandom([4, 5, 8, 10, 12, 15, 16, 20, 25]);
+  const tanOppPools = { 1: [3, 4, 5, 6], 2: [3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 20], 3: [8, 10, 12, 15, 20] };
+  const tanAdjPools = { 1: [4, 5, 8, 10], 2: [4, 5, 8, 10, 12, 15, 16, 20, 25], 3: [5, 8, 10, 12, 15, 20, 25] };
+  const opposite = pickRandom(tanOppPools[tier]);
+  const adjacent = pickRandom(tanAdjPools[tier]);
   const tanVal = opposite / adjacent;
 
   const description: BilingualText = {
@@ -696,13 +752,16 @@ export function generateTrigonometryMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateQuadraticMission(template: Mission): Mission {
+  const tier = getTier();
   const isCal = template.topic === 'Calculus';
   const narrator = pickRandom(['周瑜', '诸葛亮']);
 
   if (isCal) {
     // Calculus mode: f(x) = ax² + bx, vertex at x = -b/(2a). Student enters x = p2[0].
-    const a = pickRandom([-3, -2, -1]);
-    const b = pickRandom([4, 6, 8, 10, 12]);
+    const calAPools = { 1: [-1], 2: [-3, -2, -1], 3: [-3, -2, -1] };
+    const calBPools = { 1: [4, 6], 2: [4, 6, 8, 10, 12], 3: [4, 6, 8, 10, 12] };
+    const a = pickRandom(calAPools[tier]);
+    const b = pickRandom(calBPools[tier]);
     const vertexX = -b / (2 * a);
     // Ensure clean integer
     if (vertexX !== Math.round(vertexX)) return generateQuadraticMission(template);
@@ -721,8 +780,10 @@ export function generateQuadraticMission(template: Mission): Mission {
   }
 
   // Functions mode: y = ax² + c, p1=[0,c], p2=[x2, a*x2²+c]. Student finds a and c.
-  const a = pickRandom([-3, -2, -1, 1, 2, 3]);
-  const c = pickRandom([-5, -3, 0, 3, 5, 10]);
+  const funcAPools = { 1: [-1, 1], 2: [-3, -2, -1, 1, 2, 3], 3: [-3, -2, 2, 3, 4] };
+  const funcCPools = { 1: [0, 1, 2], 2: [-5, -3, 0, 3, 5, 10], 3: [-10, -5, 5, 10] };
+  const a = pickRandom(funcAPools[tier]);
+  const c = pickRandom(funcCPools[tier]);
   const x2 = pickRandom([1, 2, 3, 4, 5]);
   const y2 = a * x2 * x2 + c;
 
@@ -744,8 +805,10 @@ export function generateQuadraticMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateRootsMission(template: Mission): Mission {
-  const r1 = pickRandom([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]);
-  let r2 = pickRandom([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]);
+  const tier = getTier();
+  const rootPools = { 1: [-3, -2, -1, 1, 2, 3], 2: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5], 3: [-8, -5, -3, 3, 5, 7, 8] };
+  const r1 = pickRandom(rootPools[tier]);
+  let r2 = pickRandom(rootPools[tier]);
   // Avoid r1 === r2 for variety (but it's not wrong)
   if (r1 === r2) r2 = r1 + pickRandom([1, 2, -1, -2]);
   // a=1: (x - r1)(x - r2) = x² - (r1+r2)x + r1*r2
@@ -774,6 +837,7 @@ export function generateRootsMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateDerivativeMission(template: Mission): Mission {
+  const tier = getTier();
   const func = template.data?.func as string | undefined;
   const narrator = pickRandom(['姜维', '诸葛亮', '刘禅']);
 
@@ -794,7 +858,8 @@ export function generateDerivativeMission(template: Mission): Mission {
   }
 
   // Default: y = x², slope k = 2x at point x
-  const x = pickRandom([1, 2, 3, 4, 5, -1, -2, -3]);
+  const xPools = { 1: [1, 2, 3], 2: [1, 2, 3, 4, 5, -1, -2, -3], 3: [-5, -3, 3, 5, 7, 8] };
+  const x = pickRandom(xPools[tier]);
   const k = 2 * x;
   const y = x * x;
 
@@ -818,12 +883,16 @@ export function generateDerivativeMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateIntegrationMission(template: Mission): Mission {
+  const tier = getTier();
   const func = template.data?.func as string;
   const narrator = pickRandom(['邓艾', '钟会', '诸葛亮']);
 
+  const lowerPools = { 1: [0, 1], 2: [0, 1, 2], 3: [0, 2] };
+  const upperOffsets = { 1: [2, 3], 2: [2, 3, 4, 5], 3: [5, 6, 8] };
+
   if (func === 'x') {
-    const lower = pickRandom([0, 1, 2]);
-    const upper = lower + pickRandom([2, 3, 4, 5]);
+    const lower = pickRandom(lowerPools[tier]);
+    const upper = lower + pickRandom(upperOffsets[tier]);
     const area = 0.5 * (upper * upper - lower * lower);
 
     const description: BilingualText = {
@@ -839,8 +908,8 @@ export function generateIntegrationMission(template: Mission): Mission {
   }
 
   if (func === '3x^2') {
-    const lower = pickRandom([0, 1]);
-    const upper = lower + pickRandom([1, 2, 3]);
+    const lower = pickRandom(tier === 3 ? [0, 1, 2] : [0, 1]);
+    const upper = lower + pickRandom(tier === 1 ? [1, 2] : tier === 2 ? [1, 2, 3] : [2, 3, 4]);
     const area = upper * upper * upper - lower * lower * lower;
 
     const description: BilingualText = {
@@ -856,8 +925,8 @@ export function generateIntegrationMission(template: Mission): Mission {
   }
 
   // else: ∫ 2x dx = u² - l²
-  const lower = pickRandom([0, 1, 2]);
-  const upper = lower + pickRandom([2, 3, 4]);
+  const lower = pickRandom(lowerPools[tier]);
+  const upper = lower + pickRandom(tier === 1 ? [2, 3] : tier === 2 ? [2, 3, 4] : [3, 4, 6]);
   const area = upper * upper - lower * lower;
 
   const description: BilingualText = {
@@ -877,10 +946,13 @@ export function generateIntegrationMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateVolumeMission(template: Mission): Mission {
+  const tier = getTier();
   const mode = template.data?.mode as string | undefined;
   const isCone = mode === 'cone';
-  const radius = pickRandom([2, 3, 4, 5, 6, 8, 10]);
-  const height = pickRandom([5, 6, 8, 10, 12, 15, 20]);
+  const radiusPools = { 1: [2, 3, 4], 2: [2, 3, 4, 5, 6, 8, 10], 3: [6, 8, 10, 12] };
+  const heightPools = { 1: [3, 5, 6], 2: [5, 6, 8, 10, 12, 15, 20], 3: [10, 15, 20, 25] };
+  const radius = pickRandom(radiusPools[tier]);
+  const height = pickRandom(heightPools[tier]);
   const pi = template.data?.pi || 3;
   const vol = isCone ? (1 / 3) * pi * radius * radius * height : pi * radius * radius * height;
   const narrator = pickRandom(['满宠', '曹操', '刘备']);
@@ -911,13 +983,17 @@ export function generateVolumeMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateFuncValMission(template: Mission): Mission {
+  const tier = getTier();
   const hasM = template.data?.m !== undefined;
   const narrator = pickRandom(['夏侯惇', '曹操', '赵云']);
 
   if (hasM) {
-    const m = pickRandom([1, 2, 3, -1, -2]);
-    const b = pickRandom([-5, -3, -1, 0, 1, 2, 4, 5, 8]);
-    const x = pickRandom([1, 2, 3, 4, 5, -1, -2]);
+    const mPools = { 1: [1, 2], 2: [1, 2, 3, -1, -2], 3: [-3, -2, 3, 4] };
+    const bPools = { 1: [0, 1, 2], 2: [-5, -3, -1, 0, 1, 2, 4, 5, 8], 3: [-8, -5, 5, 8] };
+    const xPools = { 1: [1, 2, 3], 2: [1, 2, 3, 4, 5, -1, -2], 3: [-3, -2, 4, 5] };
+    const m = pickRandom(mPools[tier]);
+    const b = pickRandom(bPools[tier]);
+    const x = pickRandom(xPools[tier]);
     const y = m * x + b;
 
     const description: BilingualText = {
@@ -954,10 +1030,13 @@ export function generateFuncValMission(template: Mission): Mission {
    ══════════════════════════════════════════════════════════ */
 
 export function generateStatsMedianMission(template: Mission): Mission {
-  const count = pickRandom([5, 7]);
+  const tier = getTier();
+  const countPools = { 1: [5], 2: [5, 7], 3: [7, 9] };
+  const ranges = { 1: [1.5, 0.4] as const, 2: [1.5, 0.6] as const, 3: [1.4, 0.7] as const };
+  const count = pickRandom(countPools[tier]);
   const values = Array.from({ length: count }, () => {
-    // Heights in the range 1.5–2.1 (one decimal)
-    return Math.round((1.5 + Math.random() * 0.6) * 10) / 10;
+    // Heights in a tier-dependent range (one decimal)
+    return Math.round((ranges[tier][0] + Math.random() * ranges[tier][1]) * 10) / 10;
   });
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
