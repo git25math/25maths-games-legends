@@ -2716,6 +2716,11 @@ export function generateFracMulMission(template: Mission): Mission {
   const simplifyG = gcdCalc(rawNum, rawDen);
   const needsSimplify = simplifyG > 1;
 
+  // Integer preview for multiplication mode
+    const previewTotal = d1 * d2;
+    const previewFirst = previewTotal * n1 / d1; // n1/d1 of total
+    const previewSecond = previewFirst * n2 / d2; // n2/d2 of previewFirst
+
   const tutorialSteps = isDivide ? [
     {
       text: {
@@ -2724,7 +2729,7 @@ export function generateFracMulMission(template: Mission): Mission {
       },
       hint: {
         zh: `有 6 个苹果，每人分 2 个：$6 \\div 2 = 3$ 人\n有 6 个苹果，每人分 $\\frac{1}{2}$ 个：$6 \\div \\frac{1}{2} = 12$ 人\n注意：$6 \\div \\frac{1}{2} = 6 \\times 2 = 12$\n除以 $\\frac{1}{2}$，等于乘以 2`,
-        en: `6 apples, 2 per person: $6 \\div 2 = 3$ people\n6 apples, $\\frac{1}{2}$ per person: $6 \\div \\frac{1}{2} = 12$ people\nNotice: $6 \\div \\frac{1}{2} = 6 \\times 2 = 12$\nDividing by $\\frac{1}{2}$ is the same as multiplying by 2`,
+        en: `6 apples, 2 per person: $6 \\div 2 = 3$ people\n6 apples, $\\frac{1}{2}$ per person: $6 \\div \\frac{1}{2} = 12$ people\nNotice: $6 \\div \\frac{1}{2} = 6 \\times 2 = 12$\nDividing by $\\frac{1}{2}$ = multiplying by 2`,
       },
       highlightField: 'ans',
     },
@@ -2778,12 +2783,12 @@ export function generateFracMulMission(template: Mission): Mission {
   ] : [
     {
       text: {
-        zh: `${narrator}：分数乘法就是"取一部分的一部分"——结果通常比原来的数更小`,
-        en: `${narrator}: "Fraction multiplication means 'a part of a part' — the result is usually smaller than the original"`,
+        zh: `${narrator}：分数乘法就是"取一部分的一部分"——先用整数感受一下`,
+        en: `${narrator}: "Fraction multiplication means 'a part of a part' — let's feel it with whole numbers first"`,
       },
       hint: {
-        zh: `想象有 ${d1*d2} 袋粮食\n先取 $\\frac{${n1}}{${d1}}$：${d1*d2} x $\\frac{${n1}}{${d1}}$ = ${n1*d2} 袋\n再取其中的 $\\frac{${n2}}{${d2}}$：${n1*d2} x $\\frac{${n2}}{${d2}}$ = ${n1*n2} 袋\n${n1*n2} 袋占原来 ${d1*d2} 袋的 $\\frac{${n1*n2}}{${d1*d2}}$`,
-        en: `Imagine ${d1*d2} bags of grain\nTake $\\frac{${n1}}{${d1}}$: ${d1*d2} x $\\frac{${n1}}{${d1}}$ = ${n1*d2} bags\nThen take $\\frac{${n2}}{${d2}}$ of those: ${n1*d2} x $\\frac{${n2}}{${d2}}$ = ${n1*n2} bags\n${n1*n2} bags out of ${d1*d2} = $\\frac{${n1*n2}}{${d1*d2}}$`,
+        zh: `想象有 ${previewTotal} 袋粮食\n先取 $\\frac{${n1}}{${d1}}$：${previewTotal} × $\\frac{${n1}}{${d1}}$ = ${previewFirst} 袋\n再取其中的 $\\frac{${n2}}{${d2}}$：${previewFirst} × $\\frac{${n2}}{${d2}}$ = ${previewSecond} 袋\n${previewSecond} 袋占原来 ${previewTotal} 袋的 $\\frac{${previewSecond}}{${previewTotal}}$`,
+        en: `Imagine ${previewTotal} bags of grain\nTake $\\frac{${n1}}{${d1}}$: ${previewTotal} × $\\frac{${n1}}{${d1}}$ = ${previewFirst} bags\nThen take $\\frac{${n2}}{${d2}}$ of those: ${previewFirst} × $\\frac{${n2}}{${d2}}$ = ${previewSecond} bags\n${previewSecond} bags out of ${previewTotal} = $\\frac{${previewSecond}}{${previewTotal}}$`,
       },
       highlightField: 'ans',
     },
@@ -2822,8 +2827,8 @@ export function generateFracMulMission(template: Mission): Mission {
         en: `${narrator}: "The answer is $${ansDisplay}$"`,
       },
       hint: {
-        zh: `验算：${(ansNum/ansDen).toFixed(3)}`,
-        en: `Check: ${(ansNum/ansDen).toFixed(3)}`,
+        zh: `分数乘法的结果通常比原来的数更小——取一部分的一部分，当然更少\n验算：${(ansNum/ansDen).toFixed(3)}`,
+        en: `Fraction multiplication usually gives a smaller result — a part of a part is naturally less\nCheck: ${(ansNum/ansDen).toFixed(3)}`,
       },
       highlightField: 'ans',
     },

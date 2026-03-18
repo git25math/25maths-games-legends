@@ -256,24 +256,24 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-2.1-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '诸葛亮：总共 {result} 坛酒，已留出 {a} 坛祭天，剩下的 $x$ 坛三人平分。$x$ 是多少？', en: 'Zhuge Liang: "{result} jars total, {a} set aside. The rest $x$ is split three ways. What is $x$?"' },
-        hint: { zh: '$x + {a} = {result}$ 就是一道谜题："某个数加上 {a}，等于 {result}。这个数是多少？"', en: '$x + {a} = {result}$ is a puzzle: "What number plus {a} equals {result}?"' },
+        text: { zh: '诸葛亮：$x + {a} = {result}$——某个数加上 {a}，等于 {result}。这个数是多少？', en: 'Zhuge Liang: "$x + {a} = {result}$ — what number plus {a} equals {result}?"' },
+        hint: { zh: '凭感觉猜一下——如果猜对了也不用惊讶\n但数字变大了就不能靠猜，我们需要一个稳定的方法', en: 'Try guessing — but for bigger numbers we need a reliable method' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：等号就像天平——左边 $x + {a}$，右边 ${result}$，现在是平的。对一边做什么，另一边也必须做同样的事', en: 'Zhuge Liang: "The equals sign is like a balance — left $x+{a}$, right ${result}$. Whatever we do to one side, we must do to the other"' },
+        text: { zh: '诸葛亮：等号就像天平——左边 $x + {a}$，右边 ${result}$，现在是平的。对一边做什么，另一边必须做同样的事', en: 'Zhuge Liang: "The equals sign is a balance. Left: $x+{a}$, right: ${result}$. Whatever we do to one side, we must do to the other"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：$x$ 旁边有个 $+{a}$，要移走它。怎么移？用反操作——减去 {a}。加了再减，刚好抵消', en: 'Zhuge Liang: "$x$ has $+{a}$ next to it. Remove it using the opposite: subtract {a}. Add then subtract = cancel"' },
+        text: { zh: '诸葛亮：$x$ 旁边有个 $+{a}$，想把它移走。怎么移？用反操作——减 {a}。加了再减，刚好抵消', en: 'Zhuge Liang: "$x$ has $+{a}$ next to it. Remove it with the opposite: subtract {a}. Add then subtract = cancel"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：两边同时减 {a}：\n左边 $x + {a} - {a} = x$（抵消了）\n右边 ${result} - {a} = {x}$', en: 'Zhuge Liang: "Subtract {a} from both sides:\nLeft: $x + {a} - {a} = x$ (cancelled)\nRight: ${result} - {a} = {x}$"' },
+        text: { zh: '诸葛亮：天平两边同时减 {a}：\n左边 $x + {a} - {a} = x$（抵消了）\n右边 ${result} - {a} = {x}$', en: 'Zhuge Liang: "Subtract {a} from both sides:\nLeft: $x + {a} - {a} = x$ (cancelled)\nRight: ${result} - {a} = {x}$"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：$x = {x}$！验算：${x} + {a} = {result}$ ✓ 每人分 {x} 坛美酒，结义大吉！', en: 'Zhuge Liang: "$x = {x}$! Verify: ${x} + {a} = {result}$ ✓ {x} jars each — the oath is sealed!"' },
+        text: { zh: '诸葛亮：$x = {x}$！验算：${x} + {a} = {result}$ ✓ 每人 {x} 坛美酒，结义大吉！', en: 'Zhuge Liang: "$x = {x}$! Verify: ${x} + {a} = {result}$ ✓ {x} jars each — sealed!"' },
         highlightField: 'x'
       }
     ],
@@ -292,16 +292,16 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '关羽：{a} 把长剑总价 {result} 金，每把多少钱？', en: 'Guan Yu: "{a} swords cost {result} gold total — how much each?"' },
-        hint: { zh: '${a}x = {result}$ 的意思：{a} 个 $x$ 加在一起等于 {result}', en: '${a}x = {result}$ means: {a} copies of $x$ add up to {result}' },
+        text: { zh: '关羽：{a} 把长剑总价 {result} 金，每把多少钱？', en: 'Guan Yu: "{a} swords cost {result} gold — how much each?"' },
+        hint: { zh: '${a}x = {result}$ 就是 {a} 个 $x$ 加在一起等于 {result}\n凭感觉猜一下——但数字大了需要稳定方法', en: '${a}x = {result}$ means {a} copies of $x$ add up to {result}\nGuess first — but for bigger numbers we need a method' },
         highlightField: 'x'
       },
       {
-        text: { zh: '关羽：$x$ 被 {a} 乘着。要让 $x$ 单独出来，用反操作——除以 {a}。乘了再除，刚好抵消', en: 'Guan Yu: "$x$ is multiplied by {a}. To isolate it, use the opposite: divide by {a}. Multiply then divide = cancel"' },
+        text: { zh: '关羽：$x$ 被 {a} 乘着。要让 $x$ 单独出来，用反操作——除以 {a}。乘了再除，刚好抵消', en: 'Guan Yu: "$x$ is multiplied by {a}. Opposite: divide by {a}. Multiply then divide = cancel"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '关羽：天平两边必须做同样的事——左右两边同时除以 {a}', en: 'Guan Yu: "Both sides of the balance must be treated equally — divide both by {a}"' },
+        text: { zh: '关羽：天平两边必须做同样的事——左右两边同时除以 {a}', en: 'Guan Yu: "Balance: both sides must be treated equally — divide both by {a}"' },
         highlightField: 'x'
       },
       {
@@ -309,7 +309,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '关羽：$x = {x}$！验算：${a} \\times {x} = {result}$ ✓ 每把剑 {x} 金，买剑去！', en: 'Guan Yu: "$x = {x}$! Verify: ${a} \\times {x} = {result}$ ✓ {x} gold each — let\'s buy swords!"' },
+        text: { zh: '关羽：$x = {x}$！验算：${a} \\times {x} = {result}$ ✓ 每把剑 {x} 金，买剑去！', en: 'Guan Yu: "$x = {x}$! Verify: ${a} \\times {x} = {result}$ ✓ {x} gold each!"' },
         highlightField: 'x'
       }
     ],
@@ -328,25 +328,25 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '曹操：{a} 个营地共需 {result} 斛军粮，每营分多少？', en: 'Cao Cao: "{a} camps need {result} units total — how much per camp?"' },
-        hint: { zh: '份数 × 每份 = 总量\n{a} × $x$ = {result}，也就是 ${a}x = {result}$', en: 'Portions × each = total\n{a} × $x$ = {result}, i.e. ${a}x = {result}$' },
+        text: { zh: '曹操：{a} 个营地共需 {result} 斛军粮，每营分多少？', en: 'Cao Cao: "{a} camps need {result} units — how much per camp?"' },
+        hint: { zh: '这道题的结构是：份数 × 每份 = 总量\n{a} × $x$ = {result}，也就是 ${a}x = {result}$', en: 'Structure: portions × each = total\n{a} × $x$ = {result}, i.e. ${a}x = {result}$' },
         highlightField: 'x'
       },
       {
-        text: { zh: '曹操：直觉上：总量 ÷ 份数 = 每份。用方程来验证', en: 'Cao Cao: "Intuitively: total ÷ portions = each. Let\'s verify with the equation"' },
+        text: { zh: '曹操：直觉上——总量 ÷ 份数 = 每份。用方程来验证', en: 'Cao Cao: "Intuitively: total ÷ portions = each. Let\'s verify"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '曹操：两边同时除以 {a}：\n左边 ${a}x \\div {a} = x$\n右边 ${result} \\div {a} = {x}$', en: 'Cao Cao: "Divide both sides by {a}:\nLeft: ${a}x \\div {a} = x$\nRight: ${result} \\div {a} = {x}$"' },
+        text: { zh: '曹操：两边同时除以 {a}：\n左边 ${a}x \\div {a} = x$\n右边 ${result} \\div {a} = {x}$', en: 'Cao Cao: "Divide both by {a}:\nLeft: ${a}x \\div {a} = x$\nRight: ${result} \\div {a} = {x}$"' },
         highlightField: 'x'
       },
       {
         text: { zh: '曹操：$x = {x}$！每营 {x} 斛粮草', en: 'Cao Cao: "$x = {x}$! {x} units per camp"' },
-        hint: { zh: '记住这个结构：份数 × 每份 = 总量\n知道其中两个，就能求第三个', en: 'Remember: portions × each = total\nKnow two, find the third' },
+        hint: { zh: '记住这个结构：份数 × 每份 = 总量\n知道其中两个，就能求第三个\n这是很多实际问题的基本框架', en: 'Remember: portions × each = total\nKnow two, find the third\nThis is the basic framework for many real problems' },
         highlightField: 'x'
       },
       {
-        text: { zh: '曹操：验算：${a} \\times {x} = {result}$ ✓ 军粮无误，开拔！', en: 'Cao Cao: "Verify: ${a} \\times {x} = {result}$ ✓ Supplies confirmed — march!"' },
+        text: { zh: '曹操：验算：${a} \\times {x} = {result}$ ✓ 军粮无误，开拔！', en: 'Cao Cao: "Verify: ${a} \\times {x} = {result}$ ✓ March!"' },
         highlightField: 'x'
       }
     ],
@@ -365,12 +365,12 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '张飞：{a} 个村庄共出 {result} 人修工事，每村出几人？', en: 'Zhang Fei: "{a} villages sent {result} people — how many per village?"' },
+        text: { zh: '张飞：{a} 个村庄共出 {result} 人修工事，每村出几人？', en: 'Zhang Fei: "{a} villages sent {result} people — how many each?"' },
         hint: { zh: '${a}x = {result}$，$x$ 被 {a} 乘着', en: '${a}x = {result}$, $x$ is multiplied by {a}' },
         highlightField: 'x'
       },
       {
-        text: { zh: '张飞：乘法的反操作是除法。两边同时除以 {a}，把 {a} 消掉', en: 'Zhang Fei: "The opposite of multiplication is division. Divide both by {a} to cancel it"' },
+        text: { zh: '张飞：乘法的反操作是除法。两边同时除以 {a}，把 {a} 消掉', en: 'Zhang Fei: "Opposite of multiplication = division. Divide both by {a}"' },
         highlightField: 'x'
       },
       {
@@ -378,8 +378,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '张飞：$x = {x}$！验算：${a} \\times {x} = {result}$ ✓ 每村 {x} 人，公平合理！', en: 'Zhang Fei: "$x = {x}$! Verify: ${a} \\times {x} = {result}$ ✓ {x} per village — fair and square!"' },
-        hint: { zh: '除法把乘法"撤销"了：知道 ${a} \\times {x} = {result}$，反过来 ${result} \\div {a} = {x}$', en: 'Division undoes multiplication: ${a} \\times {x} = {result}$, reverse: ${result} \\div {a} = {x}$' },
+        text: { zh: '张飞：$x = {x}$！验算：${a} \\times {x} = {result}$ ✓ 每村 {x} 人，公平合理！', en: 'Zhang Fei: "$x = {x}$! Verify: ${a} \\times {x} = {result}$ ✓ Fair and square!"' },
+        hint: { zh: '除法把乘法"撤销"了\n我们知道 ${a} \\times {x} = {result}$\n反过来：${result} \\div {a} = {x}$', en: 'Division "undoes" multiplication\n${a} \\times {x} = {result}$\nReverse: ${result} \\div {a} = {x}$' },
         highlightField: 'x'
       }
     ],
@@ -403,29 +403,29 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       {
         text: { zh: '吕布：城墙是一条直线。先搞清楚——一条直线是多少度？', en: 'Lu Bu: "The wall is a straight line. First — how many degrees is a straight line?"' },
-        hint: { zh: '想象站在直路上：左边 90°，右边 90°\n两边加起来 = $180°$\n所以一条直线 = $180°$', en: 'Imagine standing on a road: 90° left, 90° right\nTogether = $180°$\nA straight line = $180°$' },
+        hint: { zh: '想象站在笔直的路上，面朝前方\n左边：脚下到正左方 = $90°$\n右边：脚下到正右方 = $90°$\n两边加起来 = $180°$\n所以一条直线 = $180°$', en: 'Imagine standing on a road facing forward\nLeft: foot to directly left = $90°$\nRight: foot to directly right = $90°$\nTotal = $180°$\nA straight line = $180°$' },
         highlightField: 'x'
       },
       {
-        text: { zh: '吕布：两个角加起来等于 $180°$，就叫互为"补角"', en: 'Lu Bu: "Two angles that add up to $180°$ are called supplementary angles"' },
-        hint: { zh: '比如 $120°$ 和 $60°$：$120+60=180$ → 互为补角\n比如 $90°$ 和 $90°$：两个直角也互为补角', en: 'E.g. $120°$ and $60°$: $120+60=180$ → supplementary\nE.g. $90°$ and $90°$: two right angles are also supplementary' },
+        text: { zh: '吕布：两个角加起来等于 $180°$，就叫互为"补角"', en: 'Lu Bu: "Two angles summing to $180°$ are called supplementary"' },
+        hint: { zh: '比如 $120°$ 和 $60°$：$120+60=180$ → 互为补角\n比如 $90°$ 和 $90°$：两个直角也互为补角', en: 'E.g. $120°+60°=180°$ → supplementary\n$90°+90°=180°$ → also supplementary' },
         highlightField: 'x'
       },
       {
-        text: { zh: '吕布：城墙一侧 ${angle}°$，另一侧 $x$，写方程：${angle} + x = 180$', en: 'Lu Bu: "Wall: one side ${angle}°$, other side $x$. Equation: ${angle} + x = 180$"' },
+        text: { zh: '吕布：城墙一侧 ${angle}°$，另一侧 $x$。方程：${angle} + x = 180$', en: 'Lu Bu: "Wall: one side ${angle}°$, other $x$. Equation: ${angle} + x = 180$"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '吕布：两边同时减 {angle}：$x = 180 - {angle} = {ans}$', en: 'Lu Bu: "Subtract {angle} from both sides: $x = 180 - {angle} = {ans}$"' },
+        text: { zh: '吕布：两边同时减 {angle}：$x = 180 - {angle} = {ans}$', en: 'Lu Bu: "Subtract {angle}: $x = 180 - {angle} = {ans}$"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '吕布：验算：${angle} + {ans} = 180$ ✓ 弩床仰角 ${ans}°$，万箭齐发！', en: 'Lu Bu: "Verify: ${angle} + {ans} = 180$ ✓ Ballista angle ${ans}°$ — fire at will!"' },
+        text: { zh: '吕布：验算：${angle} + {ans} = 180$ ✓ 弩床仰角 ${ans}°$，万箭齐发！', en: 'Lu Bu: "Verify: ${angle} + {ans} = 180$ ✓ Ballista ${ans}°$ — fire!"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '吕布：规律——一个角越大，它的补角越小。两个数加起来必须是 $180$', en: 'Lu Bu: "Pattern — the bigger one angle, the smaller its supplement. They must add to $180$"' },
-        hint: { zh: '角大 → 补角小\n角小 → 补角大\n一个变大，另一个就变小', en: 'Big angle → small supplement\nSmall angle → big supplement\nOne grows, the other shrinks' },
+        text: { zh: '吕布：规律——一个角越大，它的补角越小。两个数加起来必须是 $180$', en: 'Lu Bu: "Pattern: bigger angle = smaller supplement. Must sum to $180$"' },
+        hint: { zh: '$10°$ 配 $170°$\n$45°$ 配 $135°$\n$90°$ 配 $90°$\n$120°$ 配 $60°$\n一个变大，另一个就变小', en: '$10°+170°$\n$45°+135°$\n$90°+90°$\n$120°+60°$\nOne grows, other shrinks' },
         highlightField: 'x'
       }
     ],
@@ -444,17 +444,17 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '高顺：两条射击线垂直，成直角。直角是 $90°$', en: 'Gao Shun: "Two firing lines are perpendicular — a right angle. Right angle = $90°$"' },
-        hint: { zh: '直角到处都有：正方形的角、书本的角、3 点钟时针和分针的夹角', en: 'Right angles are everywhere: corners of squares, book corners, clock at 3 o\'clock' },
+        text: { zh: '高顺：两条射击线垂直，成直角。直角 = $90°$', en: 'Gao Shun: "Two firing lines perpendicular = right angle = $90°$"' },
+        hint: { zh: '直角到处都有：正方形的角、书本的角\n时钟 3 点整，时针和分针的夹角就是直角', en: 'Right angles are everywhere: square corners, book corners\nClock at 3:00 — hands form a right angle' },
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺：两个角加起来等于 $90°$，叫互为"余角"', en: 'Gao Shun: "Two angles adding to $90°$ are called complementary"' },
+        text: { zh: '高顺：两个角加起来 = $90°$，叫互为"余角"', en: 'Gao Shun: "Two angles summing to $90°$ are complementary"' },
         hint: { zh: '余角和补角的唯一区别是总数不同\n补角 = $180°$，余角 = $90°$\n方法完全一样', en: 'Only difference from supplementary: the total\nSupplementary = $180°$, Complementary = $90°$\nSame method' },
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺：一角 ${angle}°$，写方程：${angle} + x = 90$', en: 'Gao Shun: "One angle ${angle}°$, equation: ${angle} + x = 90$"' },
+        text: { zh: '高顺：一角 ${angle}°$，方程：${angle} + x = 90$', en: 'Gao Shun: "One angle ${angle}°$, equation: ${angle} + x = 90$"' },
         highlightField: 'x'
       },
       {
@@ -462,7 +462,11 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺：验算：${angle} + {ans} = 90$ ✓ 交叉火力 ${ans}°$，陷阵营出击！', en: 'Gao Shun: "Verify: ${angle} + {ans} = 90$ ✓ Crossfire ${ans}°$ — Camp Crushers, attack!"' },
+        text: { zh: '高顺：验算：${angle} + {ans} = 90$ ✓ 交叉火力 ${ans}°$，陷阵营出击！', en: 'Gao Shun: "Verify: ${angle} + {ans} = 90$ ✓ Crossfire ${ans}°$!"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '高顺：一眼分清——$180°$ 是补角（"补"笔画多，数字大），$90°$ 是余角（"余"笔画少，数字小）', en: 'Gao Shun: "Quick tip: Supplementary=$180°$ (bigger word, bigger number), Complementary=$90°$ (shorter word, smaller number)"' },
         highlightField: 'x'
       }
     ],
@@ -481,11 +485,11 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '诸葛亮：两道令旗合成一条直线——和 731 的城墙完全一样：两角加起来 $= 180°$', en: 'Zhuge Liang: "Two flags form a straight line — same as 731\'s wall: two angles sum to $180°$"' },
+        text: { zh: '诸葛亮：两道令旗合成一条直线——和 731 的城墙完全一样：两角加起来 $= 180°$', en: 'Zhuge Liang: "Two flags form a straight line — same as 731: angles sum to $180°$"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：一角 ${angle}°$，另一角 $x$，方程：${angle} + x = 180$', en: 'Zhuge Liang: "One angle ${angle}°$, other $x$. Equation: ${angle} + x = 180$"' },
+        text: { zh: '诸葛亮：一角 ${angle}°$，方程：${angle} + x = 180$', en: 'Zhuge Liang: "One angle ${angle}°$, equation: ${angle} + x = 180$"' },
         highlightField: 'x'
       },
       {
@@ -497,7 +501,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：检查技巧——给的角是锐角（$< 90°$），答案应该是钝角（$> 90°$），反之亦然。两个都是锐角？那一定算错了', en: 'Zhuge Liang: "Quick check — if the given angle is acute ($< 90°$), the answer should be obtuse ($> 90°$), and vice versa. Both acute? Then something is wrong"' },
+        text: { zh: '诸葛亮：自检规则——锐角（$< 90°$）配钝角（$> 90°$）。如果两个都是锐角，一定算错了', en: 'Zhuge Liang: "Self-check: acute ($< 90°$) pairs with obtuse ($> 90°$). If both are acute, something is wrong"' },
+        hint: { zh: '$45°$ 是锐角 → 补角应该是钝角 $135°$ ✓\n$120°$ 是钝角 → 补角应该是锐角 $60°$ ✓\n唯一例外：$90°$ 配 $90°$（两个直角）', en: '$45°$ acute → supplement should be obtuse $135°$ ✓\n$120°$ obtuse → supplement should be acute $60°$ ✓\nOnly exception: $90°+90°$' },
         highlightField: 'x'
       }
     ],
