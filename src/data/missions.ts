@@ -3,6 +3,25 @@ import type { Mission } from '../types';
 export const MISSIONS: Mission[] = [
   // --- Year 7 Unit 0: 桃园点兵·数论篇 (Number Foundations) ---
   {
+    id: 699, grade: 7, unitId: 0, order: -1,
+    unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
+    topic: 'Algebra', type: 'PRIME',
+    title: { zh: '选拔亲卫', en: 'Selecting Elite Guards' },
+    skillName: { zh: '质数辨识术', en: 'Prime Recognition' },
+    skillSummary: { zh: '质数只能被 1 和自己整除', en: 'Primes are only divisible by 1 and themselves' },
+    story: { zh: '桃园结义后要选拔精锐亲卫。"质数战士"不能被拆分——只听命于天子和自己。判断一个数是不是质数！', en: 'After the oath, elite guards must be selected. "Prime warriors" cannot be split — they answer only to the emperor and themselves. Determine if a number is prime!' },
+    description: { zh: '判断这个数是不是质数。', en: 'Determine if this number is prime.' },
+    data: { n: 17, isPrime: true, generatorType: 'PRIME_RANDOM' }, difficulty: 'Easy', reward: 35,
+    kpId: 'kp-1.1-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：什么是质数？只能被 1 和它自己整除的数', en: 'Zhuge Liang: "What is a prime? A number divisible only by 1 and itself"' }, hint: { zh: '比如 7：7÷2=3.5 ✗，7÷3=2.3 ✗，7÷4=1.75 ✗ ...\n除了 1 和 7，没有别的数能整除它 → 7 是质数', en: 'E.g. 7: 7÷2=3.5 ✗, 7÷3=2.3 ✗, 7÷4=1.75 ✗...\nNo number other than 1 and 7 divides it → 7 is prime' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：不是质数的叫"合数"——能被拆开', en: 'Zhuge Liang: "Non-primes are composites — they can be split"' }, hint: { zh: '比如 12 ÷ 2 = 6 ✓ → 12 不是质数\n12 = 2 × 6 = 2 × 2 × 3（能拆开）', en: 'E.g. 12 ÷ 2 = 6 ✓ → 12 is not prime\n12 = 2 × 6 = 2 × 2 × 3 (can be split)' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：注意——1 不是质数，2 是唯一的偶数质数', en: 'Zhuge Liang: "Note: 1 is NOT prime. 2 is the only even prime"' }, hint: { zh: '1 不算（只有 1 个因数）\n2 是质数（只能被 1 和 2 整除）\n所有其他偶数都能被 2 整除 → 不是质数', en: '1 doesn\'t count (only 1 factor)\n2 is prime (only 1 and 2)\nAll other even numbers are divisible by 2 → not prime' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：前 10 个质数：$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$', en: 'Zhuge Liang: "First 10 primes: $2, 3, 5, 7, 11, 13, 17, 19, 23, 29$"' }, highlightField: 'ans' }
+    ],
+    secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: '$\\text{质数 = 只能被 1 和自己整除}$', tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorize.' }] }
+  },
+  {
     id: 700, grade: 7, unitId: 0, order: 0,
     unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
     topic: 'Algebra', type: 'FACTOR_TREE',

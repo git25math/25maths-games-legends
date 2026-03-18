@@ -42,7 +42,8 @@ export type GeneratorType =
   | 'INTEGER_ADD_RANDOM'
   | 'FRAC_ADD_RANDOM'
   | 'FRAC_MUL_RANDOM'
-  | 'FACTOR_TREE_RANDOM';
+  | 'FACTOR_TREE_RANDOM'
+  | 'PRIME_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -76,6 +77,7 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   FUNC_VAL_RANDOM: generateFuncValMission,
   STATISTICS_MEDIAN_RANDOM: generateStatsMedianMission,
   FACTOR_TREE_RANDOM: generateFactorTreeMission,
+  PRIME_RANDOM: generatePrimeMission,
   HCF_RANDOM: generateHcfMission,
   LCM_RANDOM: generateLcmMission,
   INTEGER_ADD_RANDOM: generateIntegerAddMission,
@@ -1913,6 +1915,136 @@ function shortDivision(a: number, b: number): { steps: { prime: number; quotient
     }
   }
   return { steps, bottomA: curA, bottomB: curB };
+}
+
+/* ══════════════════════════════════════════════════════════
+   PRIME generator: is a number prime or not?
+   ══════════════════════════════════════════════════════════ */
+
+function isPrimeCheck(n: number): boolean {
+  if (n < 2) return false;
+  for (let d = 2; d * d <= n; d++) {
+    if (n % d === 0) return false;
+  }
+  return true;
+}
+
+export function generatePrimeMission(template: Mission): Mission {
+  const tier = getTier();
+  // Mix of primes and non-primes for variety
+  const primePools: Record<DifficultyTier, number[]> = { 1: [2, 3, 5, 7, 11, 13], 2: [17, 19, 23, 29, 31, 37], 3: [41, 43, 47, 53, 59, 61, 67, 71] };
+  const compositePools: Record<DifficultyTier, number[]> = { 1: [4, 6, 8, 9, 10, 12, 14, 15], 2: [16, 18, 20, 21, 22, 24, 25, 26, 27, 28], 3: [33, 35, 39, 49, 51, 55, 57, 63, 65, 69] };
+
+  // 50% chance prime, 50% composite
+  const usePrime = pickRandom([true, false]);
+  const n = usePrime ? pickRandom(primePools[tier]) : pickRandom(compositePools[tier]);
+  const result = isPrimeCheck(n);
+
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '\u8bf8\u845b\u4eae';
+
+  const description: BilingualText = {
+    zh: `$${n}$ \u662f\u8d28\u6570\u5417\uff1f\uff08\u662f = 1\uff0c\u5426 = 0\uff09`,
+    en: `Is $${n}$ prime? (yes = 1, no = 0)`,
+  };
+
+  // Build the trial division table for the hint
+  const trialSteps: string[] = [];
+  const trialStepsEn: string[] = [];
+  let foundFactor = false;
+  for (let d = 2; d * d <= n; d++) {
+    if (n % d === 0) {
+      trialSteps.push(`${n} \u00f7 ${d} = ${n/d} \u2713 \u6574\u9664\u4e86\uff01`);
+      trialStepsEn.push(`${n} \u00f7 ${d} = ${n/d} \u2713 Divides evenly!`);
+      foundFactor = true;
+      break;
+    } else {
+      trialSteps.push(`${n} \u00f7 ${d} = ${(n/d).toFixed(2)}... \u2717`);
+      trialStepsEn.push(`${n} \u00f7 ${d} = ${(n/d).toFixed(2)}... \u2717`);
+    }
+  }
+  if (!foundFactor) {
+    const stopAt = Math.ceil(Math.sqrt(n));
+    trialSteps.push(`${stopAt} \u00d7 ${stopAt} = ${stopAt*stopAt} > ${n}\uff0c\u4e0d\u7528\u518d\u8bd5\u4e86\uff01`);
+    trialStepsEn.push(`${stopAt} \u00d7 ${stopAt} = ${stopAt*stopAt} > ${n}, no need to try further!`);
+  }
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}\uff1a$${n}$ \u662f\u4e0d\u662f\u8d28\u6570\uff1f\u5148\u56de\u5fc6\u2014\u2014\u8d28\u6570\u5c31\u662f\u53ea\u80fd\u88ab $1$ \u548c\u5b83\u81ea\u5df1\u6574\u9664\u7684\u6570`,
+        en: `${narrator}: "Is $${n}$ prime? Remember \u2014 a prime can only be divided by $1$ and itself"`,
+      },
+      hint: {
+        zh: '\u8d28\u6570\u6218\u58eb\uff1a\u4e0d\u80fd\u88ab\u62c6\u5206\u7684\u6700\u5f3a\u4e2a\u4f53\n\u53ea\u542c\u547d\u4e8e\u5929\u5b50\uff081\uff09\u548c\u81ea\u5df1\n\u6bd4\u5982 2, 3, 5, 7, 11 \u90fd\u662f\u8d28\u6570',
+        en: 'Prime warriors: indivisible individuals\nOnly answer to the emperor (1) and themselves\nE.g. 2, 3, 5, 7, 11 are primes',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}\uff1a\u600e\u4e48\u5224\u65ad\uff1f\u4ece $2$ \u5f00\u59cb\uff0c\u9010\u4e2a\u8bd5\u9664`,
+        en: `${narrator}: "How to check? Start from $2$, try dividing one by one"`,
+      },
+      hint: {
+        zh: `\u7a8d\u95e8\uff1a\u4e0d\u7528\u8bd5\u5230 ${n}\uff0c\u8bd5\u5230\u201c\u67d0\u4e2a\u6570\u00d7\u81ea\u5df1\u8d85\u8fc7 ${n}\u201d\u5c31\u591f\u4e86\n\u56e0\u4e3a\u5982\u679c\u5b58\u5728\u5927\u7684\u56e0\u6570\uff0c\u4e00\u5b9a\u6709\u5bf9\u5e94\u7684\u5c0f\u56e0\u6570\uff08\u6211\u4eec\u5df2\u7ecf\u8bd5\u8fc7\u4e86\uff09`,
+        en: `Shortcut: don't test up to ${n}, stop when "a number \u00d7 itself > ${n}"\nIf a large factor exists, a corresponding small one must too (already tested)`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}\uff1a\u9010\u4e2a\u8bd5\u9664 $${n}$`,
+        en: `${narrator}: "Try dividing $${n}$ one by one"`,
+      },
+      hint: {
+        zh: trialSteps.join('\n'),
+        en: trialStepsEn.join('\n'),
+      },
+      highlightField: 'ans',
+    },
+    ...(result ? [
+      {
+        text: {
+          zh: `${narrator}\uff1a\u5168\u90e8\u9664\u4e0d\u5c3d\uff01\u9664\u4e86 $1$ \u548c $${n}$ \u81ea\u5df1\uff0c\u6ca1\u6709\u522b\u7684\u6570\u80fd\u6574\u9664\u5b83`,
+          en: `${narrator}: "None divide evenly! No number other than $1$ and $${n}$ divides it"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}\uff1a$${n}$ **\u662f\u8d28\u6570** \u2713 \u4e0d\u53ef\u62c6\u5206\u7684\u7cbe\u9510\u6218\u58eb\uff01`,
+          en: `${narrator}: "$${n}$ IS prime \u2713 An indivisible elite warrior!"`,
+        },
+        highlightField: 'ans',
+      },
+    ] : [
+      {
+        text: {
+          zh: `${narrator}\uff1a\u627e\u5230\u4e86\uff01$${n}$ \u80fd\u88ab ${(() => { for (let d=2;d*d<=n;d++) if(n%d===0) return d; return n; })()} \u6574\u9664`,
+          en: `${narrator}: "Found one! $${n}$ is divisible by ${(() => { for (let d=2;d*d<=n;d++) if(n%d===0) return d; return n; })()}"`,
+        },
+        hint: {
+          zh: `$${n} = ${(() => { for (let d=2;d*d<=n;d++) if(n%d===0) return `${d} \\times ${n/d}`; return `${n}`; })()}$\n\u80fd\u88ab\u62c6\u5f00\uff0c\u8bf4\u660e\u4e0d\u662f\u8d28\u6570`,
+          en: `$${n} = ${(() => { for (let d=2;d*d<=n;d++) if(n%d===0) return `${d} \\times ${n/d}`; return `${n}`; })()}$\nCan be split, so not prime`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}\uff1a$${n}$ **\u4e0d\u662f\u8d28\u6570**\uff08\u662f\u5408\u6570\uff09\u2717 \u80fd\u88ab\u62c6\u5206\u6210\u66f4\u5c0f\u7684\u6570`,
+          en: `${narrator}: "$${n}$ is NOT prime (it's composite) \u2717 Can be split into smaller numbers"`,
+        },
+        highlightField: 'ans',
+      },
+    ]),
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n, isPrime: result, generatorType: 'PRIME_RANDOM' },
+    tutorialSteps,
+  };
 }
 
 /* ══════════════════════════════════════════════════════════

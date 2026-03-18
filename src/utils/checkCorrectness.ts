@@ -241,6 +241,10 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     // data.primeCount is the total number of prime factors (with repetition)
     return { correct: parse(inputs.ans || '') === data.primeCount, expected: { ans: String(data.primeCount) } };
   }
+  if (type === 'PRIME') {
+    const isPrime = data.isPrime ? 1 : 0;
+    return { correct: parse(inputs.ans || '') === isPrime, expected: { ans: String(isPrime) } };
+  }
   return { correct: false, expected: {} };
 }
 

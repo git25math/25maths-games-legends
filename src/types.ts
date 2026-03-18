@@ -41,6 +41,7 @@ export type QuestionType =
   | 'HCF'
   | 'LCM'
   | 'FACTOR_TREE'
+  | 'PRIME'
   | 'INTEGER_ADD'
   | 'FRAC_ADD'
   | 'FRAC_MUL';
