@@ -511,9 +511,9 @@ export function generateLinearMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「斜率 m = (y₂-y₁)/(x₂-x₁) = (${y2}-${y1})/(${x2}-${x1})」`, en: `${narrator}: "Slope m = (y₂-y₁)/(x₂-x₁) = (${y2}-${y1})/(${x2}-${x1})"` }, highlightField: 'm' },
-    { text: { zh: `${narrator}：「m = ${m}，代入 b = y₁ - mx₁ = ${y1} - ${m}×${x1}」`, en: `${narrator}: "m = ${m}, substitute b = y₁ - mx₁ = ${y1} - ${m}×${x1}"` }, highlightField: 'b' },
-    { text: { zh: `${narrator}：「b = ${b}，直线方程 y = ${m}x + ${b}」`, en: `${narrator}: "b = ${b}, line equation y = ${m}x + ${b}"` }, highlightField: 'b' },
+    { text: { zh: `${narrator}：「斜率 $m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = ${m}$」`, en: `${narrator}: "Slope $m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = ${m}$"` }, highlightField: 'm' },
+    { text: { zh: `${narrator}：「$m = ${m}$，代入 $b = y_1 - mx_1 = ${y1} - ${m} \\times (${x1}) = ${b}$」`, en: `${narrator}: "$m = ${m}$, substitute $b = y_1 - mx_1 = ${y1} - ${m} \\times (${x1}) = ${b}$"` }, highlightField: 'b' },
+    { text: { zh: `${narrator}：「直线方程 $y = ${m}x ${b >= 0 ? '+' : ''} ${b}$」`, en: `${narrator}: "Line equation $y = ${m}x ${b >= 0 ? '+' : ''} ${b}$"` }, highlightField: 'b' },
   ];
 
   return {
