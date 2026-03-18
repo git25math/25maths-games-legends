@@ -1954,19 +1954,6 @@ export function generateHcfMission(template: Mission): Mission {
   const hcfFromSD = leftCol.reduce((p, c) => p * c, 1);
   const lcmFromSD = hcfFromSD * sd.bottomA * sd.bottomB;
 
-  // Build ASCII diagram step by step
-  const buildDiagram = (upToStep: number): string => {
-    const lines: string[] = [];
-    let prevA = a, prevB = b;
-    for (let i = 0; i < upToStep && i < sd.steps.length; i++) {
-      lines.push(`${sd.steps[i].prime} | ${prevA}   ${prevB}`);
-      lines.push('  |----------');
-      prevA = sd.steps[i].quotientA;
-      prevB = sd.steps[i].quotientB;
-    }
-    lines.push(`     ${prevA}    ${prevB}`);
-    return lines.join('\n');
-  };
 
   // Build "try primes" explanation for a given step
   const tryPrimesHint = (stepIdx: number): { zh: string; en: string } => {
@@ -1989,10 +1976,6 @@ export function generateHcfMission(template: Mission): Mission {
         enLines.push(`Does ${p} divide both ${prevA} and ${prevB}? ${enReason} ✗`);
       }
     }
-    zhLines.push('');
-    enLines.push('');
-    zhLines.push(buildDiagram(stepIdx + 1));
-    enLines.push(buildDiagram(stepIdx + 1));
     return { zh: zhLines.join('\n'), en: enLines.join('\n') };
   };
 
@@ -2029,7 +2012,7 @@ export function generateHcfMission(template: Mission): Mission {
         zh: `${narrator}：底部的 ${sd.bottomA} 和 ${sd.bottomB} 没有公因数了，停止`,
         en: `${narrator}: "${sd.bottomA} and ${sd.bottomB} at the bottom share no common factor — stop"`,
       },
-      hint: { zh: buildDiagram(sd.steps.length), en: buildDiagram(sd.steps.length) },
+      hint: { zh: `${sd.bottomA} 和 ${sd.bottomB} 互质（没有大于 1 的公因数）`, en: `${sd.bottomA} and ${sd.bottomB} are coprime (no common factor > 1)` },
       highlightField: 'ans',
     });
   } else if (sd.steps.length === 2) {
@@ -2047,7 +2030,7 @@ export function generateHcfMission(template: Mission): Mission {
         zh: `${narrator}：底部的 ${sd.bottomA} 和 ${sd.bottomB} 没有公因数了，停止`,
         en: `${narrator}: "${sd.bottomA} and ${sd.bottomB} at the bottom share no common factor — stop"`,
       },
-      hint: { zh: buildDiagram(sd.steps.length), en: buildDiagram(sd.steps.length) },
+      hint: { zh: `${sd.bottomA} 和 ${sd.bottomB} 互质，停止`, en: `${sd.bottomA} and ${sd.bottomB} are coprime — stop` },
       highlightField: 'ans',
     });
   } else {
@@ -2065,7 +2048,7 @@ export function generateHcfMission(template: Mission): Mission {
         zh: `${narrator}：继续除，直到底部两个数没有公因数`,
         en: `${narrator}: "Keep dividing until the bottom numbers share no common factor"`,
       },
-      hint: { zh: buildDiagram(sd.steps.length), en: buildDiagram(sd.steps.length) },
+      hint: { zh: `看左边的 SVG 图——所有除法步骤已完成`, en: `See the SVG diagram — all division steps complete` },
       highlightField: 'ans',
     });
   }
@@ -2270,19 +2253,6 @@ export function generateLcmMission(template: Mission): Mission {
   const hcfFromSDL = leftColL.reduce((p, c) => p * c, 1);
   const lcmFromSDL = hcfFromSDL * sdL.bottomA * sdL.bottomB;
 
-  const buildDiagramL = (upToStep: number): string => {
-    const lines: string[] = [];
-    let prevA = a, prevB = b;
-    for (let i = 0; i < upToStep && i < sdL.steps.length; i++) {
-      lines.push(`${sdL.steps[i].prime} | ${prevA}   ${prevB}`);
-      lines.push('  |----------');
-      prevA = sdL.steps[i].quotientA;
-      prevB = sdL.steps[i].quotientB;
-    }
-    lines.push(`     ${prevA}    ${prevB}`);
-    return lines.join('\n');
-  };
-
   const tryPrimesHintL = (stepIdx: number): { zh: string; en: string } => {
     const prevA = stepIdx === 0 ? a : sdL.steps[stepIdx - 1].quotientA;
     const prevB = stepIdx === 0 ? b : sdL.steps[stepIdx - 1].quotientB;
@@ -2302,10 +2272,6 @@ export function generateLcmMission(template: Mission): Mission {
         enLines.push(`Does ${p} divide both ${prevA} and ${prevB}? ${enReason} ✗`);
       }
     }
-    zhLines.push('');
-    enLines.push('');
-    zhLines.push(buildDiagramL(stepIdx + 1));
-    enLines.push(buildDiagramL(stepIdx + 1));
     return { zh: zhLines.join('\n'), en: enLines.join('\n') };
   };
 
@@ -2340,7 +2306,7 @@ export function generateLcmMission(template: Mission): Mission {
         zh: `${narrator}：底部的 ${sdL.bottomA} 和 ${sdL.bottomB} 没有公因数了，停止`,
         en: `${narrator}: "${sdL.bottomA} and ${sdL.bottomB} at the bottom share no common factor — stop"`,
       },
-      hint: { zh: buildDiagramL(sdL.steps.length), en: buildDiagramL(sdL.steps.length) },
+      hint: { zh: `看左边的图——除法已完成`, en: `See the diagram — division complete` },
       highlightField: 'ans',
     });
   } else if (sdL.steps.length === 2) {
@@ -2357,7 +2323,7 @@ export function generateLcmMission(template: Mission): Mission {
         zh: `${narrator}：底部的 ${sdL.bottomA} 和 ${sdL.bottomB} 没有公因数了，停止`,
         en: `${narrator}: "${sdL.bottomA} and ${sdL.bottomB} at the bottom share no common factor — stop"`,
       },
-      hint: { zh: buildDiagramL(sdL.steps.length), en: buildDiagramL(sdL.steps.length) },
+      hint: { zh: `看左边的图——除法已完成`, en: `See the diagram — division complete` },
       highlightField: 'ans',
     });
   } else {
@@ -2374,7 +2340,7 @@ export function generateLcmMission(template: Mission): Mission {
         zh: `${narrator}：继续除，直到底部两个数没有公因数`,
         en: `${narrator}: "Keep dividing until the bottom numbers share no common factor"`,
       },
-      hint: { zh: buildDiagramL(sdL.steps.length), en: buildDiagramL(sdL.steps.length) },
+      hint: { zh: `看左边的图——除法已完成`, en: `See the diagram — division complete` },
       highlightField: 'ans',
     });
   }
