@@ -8,7 +8,7 @@ export const MISSIONS: Mission[] = [
     topic: 'Algebra', type: 'HCF',
     title: { zh: '整编队伍', en: 'Organizing Troops' },
     skillName: { zh: '公因数术', en: 'Common Factor' },
-    skillSummary: { zh: 'HCF：质因数分解后取公共质因数的最低次幂', en: 'HCF: prime factorize, then take common primes to lowest power' },
+    skillSummary: { zh: 'HCF：分解质因数，找相同的，取小的那个', en: 'HCF: prime factorize, then take common primes to lowest power' },
     story: { zh: '桃园结义后，刘关张三兄弟开始整编队伍。现有两营士兵，要分成人数相同的小队操练。', en: 'After the oath, the three brothers organize their troops. Two camps must be split into equal-sized squads.' },
     description: { zh: '求最大公因数 (HCF)。', en: 'Find the Highest Common Factor (HCF).' },
     data: { numbers: [24, 36], generatorType: 'HCF_RANDOM' }, difficulty: 'Easy', reward: 50,
@@ -27,7 +27,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       },
       {
-        text: { zh: '刘备："取公共质因数的最低次幂：$2^2 \\times 3 = 12$"', en: 'Liu Bei: "Take common primes to lowest power: $2^2 \\times 3 = 12$"' },
+        text: { zh: '刘备："找相同的质因数，取小的那个：$2^2 \\times 3 = 12$"', en: 'Liu Bei: "Take common primes to lowest power: $2^2 \\times 3 = 12$"' },
         hint: { zh: '公共质因数是 2 和 3\n2 的最低次幂是 $2^2$（取 24 的）\n3 的最低次幂是 $3^1$（取 24 的）', en: 'Common primes are 2 and 3\nLowest power of 2 is $2^2$ (from 24)\nLowest power of 3 is $3^1$ (from 24)' },
         highlightField: 'ans'
       },
@@ -36,7 +36,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 是两个数共有的最大因数。', en: 'HCF is the largest factor common to both numbers.' }, formula: '$\\text{HCF}: \\text{取公共质因数的最低次幂}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
+    secret: { concept: { zh: 'HCF 是两个数共有的最大因数。', en: 'HCF is the largest factor common to both numbers.' }, formula: '$\\text{HCF}: \\text{找相同的质因数，取小的那个}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
   },
   {
     id: 702, grade: 7, unitId: 0, order: 2,
@@ -44,7 +44,7 @@ export const MISSIONS: Mission[] = [
     topic: 'Algebra', type: 'LCM',
     title: { zh: '巡营排班', en: 'Patrol Schedule' },
     skillName: { zh: '公倍数术', en: 'Common Multiple' },
-    skillSummary: { zh: 'LCM：质因数分解后取所有质因数的最高次幂', en: 'LCM: prime factorize, then take all primes to highest power' },
+    skillSummary: { zh: 'LCM：分解质因数，每个质因数取大的那个，乘起来', en: 'LCM: prime factorize, then take all primes to highest power' },
     story: { zh: '三位将军分别每隔一段时间巡营。需要安排所有人同时巡营的日子。', en: 'Three generals patrol at different intervals. Find when they all patrol together.' },
     description: { zh: '求最小公倍数 (LCM)。', en: 'Find the Least Common Multiple (LCM).' },
     data: { numbers: [6, 8], generatorType: 'LCM_RANDOM' }, difficulty: 'Easy', reward: 55,
@@ -63,7 +63,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       },
       {
-        text: { zh: '关羽："取所有质因数的最高次幂：$2^3 \\times 3 = 24$"', en: 'Guan Yu: "Take all primes to highest power: $2^3 \\times 3 = 24$"' },
+        text: { zh: '关羽："每个质因数取大的那个，乘起来：$2^3 \\times 3 = 24$"', en: 'Guan Yu: "Take all primes to highest power: $2^3 \\times 3 = 24$"' },
         hint: { zh: '出现过的质因数是 2 和 3\n2 的最高次幂是 $2^3$（取 8 的）\n3 的最高次幂是 $3^1$（取 6 的）', en: 'Primes that appear are 2 and 3\nHighest power of 2 is $2^3$ (from 8)\nHighest power of 3 is $3^1$ (from 6)' },
         highlightField: 'ans'
       },
@@ -72,7 +72,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'LCM 是两个数共有的最小倍数。', en: 'LCM is the smallest number divisible by both.' }, formula: '$\\text{LCM}: \\text{取所有质因数的最高次幂}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
+    secret: { concept: { zh: 'LCM 是两个数共有的最小倍数。', en: 'LCM is the smallest number divisible by both.' }, formula: '$\\text{LCM}: \\text{每个质因数取大的那个，乘起来}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
   },
   {
     id: 703, grade: 7, unitId: 0, order: 3,

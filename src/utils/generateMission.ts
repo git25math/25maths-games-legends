@@ -1233,7 +1233,7 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：取公共质因数的最低次幂相乘`,
+        zh: `${narrator}：找相同的质因数，取小的那个，乘起来`,
         en: `${narrator}: "Multiply the common prime factors, each to its lowest power"`,
       },
       hint: {
@@ -1315,7 +1315,7 @@ export function generateLcmMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：取所有质因数的最高次幂相乘`,
+        zh: `${narrator}：每个质因数取大的那个，乘起来`,
         en: `${narrator}: "Multiply all prime factors, each to its highest power"`,
       },
       hint: {
@@ -1401,15 +1401,18 @@ export function generateIntegerAddMission(template: Mission): Mission {
       highlightField: 'ans',
     },
     {
-      text: op === '+' && b < 0 ? {
-        zh: `${narrator}：加一个负数，等于减去它的绝对值。$${a} + (${b}) = ${a} - ${Math.abs(b)}$`,
-        en: `${narrator}: "Adding a negative is the same as subtracting its absolute value. $${a} + (${b}) = ${a} - ${Math.abs(b)}$"`,
-      } : op === '-' ? {
-        zh: `${narrator}：从 $${a}$ 减去 $${b}$`,
-        en: `${narrator}: "Subtract $${b}$ from $${a}$"`,
+      text: op === '+' && a >= 0 && b < 0 ? {
+        zh: `${narrator}：加一个负数，等于减去它的绝对值\n$${a} + (${b}) = ${a} - ${Math.abs(b)}$`,
+        en: `${narrator}: "Adding a negative = subtracting its absolute value\n$${a} + (${b}) = ${a} - ${Math.abs(b)}$"`,
+      } : op === '+' && a < 0 && b < 0 ? {
+        zh: `${narrator}：两个负数相加，绝对值相加，结果为负\n$|${a}| + |${b}| = ${Math.abs(a)} + ${Math.abs(b)} = ${Math.abs(a) + Math.abs(b)}$`,
+        en: `${narrator}: "Two negatives: add absolute values, result is negative\n$|${a}| + |${b}| = ${Math.abs(a)} + ${Math.abs(b)} = ${Math.abs(a) + Math.abs(b)}$"`,
+      } : op === '-' && a >= 0 ? {
+        zh: `${narrator}：从 $${a}$ 减去 $${b}$${b > a ? '，减去的比原来大，结果为负' : ''}`,
+        en: `${narrator}: "Subtract $${b}$ from $${a}$${b > a ? ' — subtracting more than you have gives a negative' : ''}"`,
       } : {
-        zh: `${narrator}：两个负数相加，绝对值相加，结果为负`,
-        en: `${narrator}: "Adding two negatives: add absolute values, result is negative"`,
+        zh: `${narrator}：$${a} - ${b}$，负数减正数，相当于往负方向走得更远\n$${a} - ${b} = -(${Math.abs(a)} + ${b}) = ${answer}$`,
+        en: `${narrator}: "$${a} - ${b}$, negative minus positive goes further negative\n$${a} - ${b} = -(${Math.abs(a)} + ${b}) = ${answer}$"`,
       },
       highlightField: 'ans',
     },
@@ -1450,6 +1453,9 @@ export function generateFracAddMission(template: Mission): Mission {
   const lcd = (d1 * d2) / gcdCalc(d1, d2);
   const adjN1 = n1 * (lcd / d1);
   const adjN2 = n2 * (lcd / d2);
+
+  // Guard: if subtraction would give 0 (equal fractions), regenerate
+  if (isSubtract && adjN1 === adjN2) return generateFracAddMission(template);
 
   let ansNum: number, ansDen: number;
   if (isSubtract) {
@@ -1526,9 +1532,12 @@ export function generateFracAddMission(template: Mission): Mission {
       highlightField: 'ans',
     },
     {
-      text: {
+      text: ansNum !== (isSubtract ? recalcAdjN1 - recalcAdjN2 : recalcAdjN1 + recalcAdjN2) || ansDen !== recalcLcd ? {
         zh: `${narrator}：约分后得 $${ansDisplay}$`,
         en: `${narrator}: "Simplify to get $${ansDisplay}$"`,
+      } : {
+        zh: `${narrator}：所以结果是 $${ansDisplay}$`,
+        en: `${narrator}: "So the answer is $${ansDisplay}$"`,
       },
       highlightField: 'ans',
     },
