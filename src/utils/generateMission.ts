@@ -96,9 +96,9 @@ export function generateSimpleEqMission(template: Mission): Mission {
   const result = a * x;
 
   const tutorialSteps = [
-    { text: { zh: `军师：「${a}x = ${result}，如何求出 x？」`, en: `Strategist: "${a}x = ${result}, how do we find x?"` }, highlightField: 'x' },
-    { text: { zh: `军师：「等式两边同时除以 ${a}」`, en: `Strategist: "Divide both sides by ${a}"` }, hint: { zh: `${a}x ÷ ${a} = ${result} ÷ ${a}`, en: `${a}x ÷ ${a} = ${result} ÷ ${a}` }, highlightField: 'x' },
-    { text: { zh: `军师：「所以 x = ${x}！」`, en: `Strategist: "So x = ${x}!"` }, highlightField: 'x' },
+    { text: { zh: `军师：${a}x = ${result}，如何求出 x？`, en: `Strategist: "${a}x = ${result}, how do we find x?"` }, highlightField: 'x' },
+    { text: { zh: `军师：等式两边同时除以 ${a}`, en: `Strategist: "Divide both sides by ${a}"` }, hint: { zh: `${a}x ÷ ${a} = ${result} ÷ ${a}`, en: `${a}x ÷ ${a} = ${result} ÷ ${a}` }, highlightField: 'x' },
+    { text: { zh: `军师：所以 x = ${x}！`, en: `Strategist: "So x = ${x}!"` }, highlightField: 'x' },
   ];
 
   const tutorialEquationSteps = [
@@ -131,9 +131,9 @@ export function generateAddEqMission(template: Mission): Mission {
   const result = x + a;
 
   const tutorialSteps = [
-    { text: { zh: `军师：「x + ${a} = ${result}，如何求出 x？」`, en: `Strategist: "x + ${a} = ${result}, how do we find x?"` }, highlightField: 'x' },
-    { text: { zh: `军师：「等式两边同时减去 ${a}」`, en: `Strategist: "Subtract ${a} from both sides"` }, hint: { zh: `x + ${a} − ${a} = ${result} − ${a}`, en: `x + ${a} − ${a} = ${result} − ${a}` }, highlightField: 'x' },
-    { text: { zh: `军师：「所以 x = ${x}！」`, en: `Strategist: "So x = ${x}!"` }, highlightField: 'x' },
+    { text: { zh: `军师：x + ${a} = ${result}，如何求出 x？`, en: `Strategist: "x + ${a} = ${result}, how do we find x?"` }, highlightField: 'x' },
+    { text: { zh: `军师：等式两边同时减去 ${a}`, en: `Strategist: "Subtract ${a} from both sides"` }, hint: { zh: `x + ${a} − ${a} = ${result} − ${a}`, en: `x + ${a} − ${a} = ${result} − ${a}` }, highlightField: 'x' },
+    { text: { zh: `军师：所以 x = ${x}！`, en: `Strategist: "So x = ${x}!"` }, highlightField: 'x' },
   ];
 
   const tutorialEquationSteps = [
@@ -180,9 +180,9 @@ export function generateIndicesMission(template: Mission): Mission {
 
   const narrator = pickRandom(['曹操', '孙权', '关羽']);
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「$${base}^{${e1}} ${op === 'div' ? '\\div' : '\\times'} ${base}^{${e2}} = ${base}^x$」`, en: `${narrator}: "$${base}^{${e1}} ${op === 'div' ? '\\div' : '\\times'} ${base}^{${e2}} = ${base}^x$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「${op === 'div' ? '底数相同，指数相减' : '底数相同，指数相加'}：$x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$」`, en: `${narrator}: "${op === 'div' ? 'Same base, subtract exponents' : 'Same base, add exponents'}: $x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「所以 $x = ${ans}$！」`, en: `${narrator}: "So $x = ${ans}$!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：$${base}^{${e1}} ${op === 'div' ? '\\div' : '\\times'} ${base}^{${e2}} = ${base}^x$`, en: `${narrator}: "$${base}^{${e1}} ${op === 'div' ? '\\div' : '\\times'} ${base}^{${e2}} = ${base}^x$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：${op === 'div' ? '底数相同，指数相减' : '底数相同，指数相加'}：$x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$`, en: `${narrator}: "${op === 'div' ? 'Same base, subtract exponents' : 'Same base, add exponents'}: $x = ${e1} ${op === 'div' ? '-' : '+'} ${e2}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：所以 $x = ${ans}$！`, en: `${narrator}: "So $x = ${ans}$!"` }, highlightField: 'x' },
   ];
 
   return {
@@ -215,9 +215,9 @@ export function generateAnglesMission(template: Mission): Mission {
 
   const narrator = pickRandom(['关羽', '赵云', '张飞']);
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「已知角 ${angle}°，求${kind.zh}。」`, en: `${narrator}: "Given angle ${angle}°, find ${kind.en}."` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「${kind.zh}之和为 ${total}°：x = ${total} − ${angle}」`, en: `${narrator}: "${kind.en} angles sum to ${total}°: x = ${total} − ${angle}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「所以 x = ${ans}°！」`, en: `${narrator}: "So x = ${ans}°!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：已知角 ${angle}°，求${kind.zh}。`, en: `${narrator}: "Given angle ${angle}°, find ${kind.en}."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：${kind.zh}之和为 ${total}°：x = ${total} − ${angle}`, en: `${narrator}: "${kind.en} angles sum to ${total}°: x = ${total} − ${angle}"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：所以 x = ${ans}°！`, en: `${narrator}: "So x = ${ans}°!"` }, highlightField: 'x' },
   ];
 
   return {
@@ -250,9 +250,9 @@ export function generateArithmeticMission(template: Mission): Mission {
 
   const narrator = pickRandom(['诸葛亮', '赵云', '曹操']);
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「等差数列，首项 ${a1}，公差 ${d}，求第 ${n} 项。」`, en: `${narrator}: "Arithmetic sequence: a1=${a1}, d=${d}, find term ${n}."` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「公式：a_n = ${a1} + (${n}-1)×${d}」`, en: `${narrator}: "Formula: a_n = ${a1} + (${n}-1)×${d}"` }, hint: { zh: `${a1} + ${(n - 1) * d} = ?`, en: `${a1} + ${(n - 1) * d} = ?` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「所以 a_${n} = ${ans}！」`, en: `${narrator}: "So a_${n} = ${ans}!"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：等差数列，首项 ${a1}，公差 ${d}，求第 ${n} 项。`, en: `${narrator}: "Arithmetic sequence: a1=${a1}, d=${d}, find term ${n}."` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：公式：a_n = ${a1} + (${n}-1)×${d}`, en: `${narrator}: "Formula: a_n = ${a1} + (${n}-1)×${d}"` }, hint: { zh: `${a1} + ${(n - 1) * d} = ?`, en: `${a1} + ${(n - 1) * d} = ?` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：所以 a_${n} = ${ans}！`, en: `${narrator}: "So a_${n} = ${ans}!"` }, highlightField: 'ans' },
   ];
 
   return {
@@ -283,9 +283,9 @@ export function generateAreaRectMission(template: Mission): Mission {
 
   const area = length * width;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「长方形面积 = 长 × 宽」`, en: `${narrator}: "Rectangle area = length × width"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：「${length} × ${width} = ?」`, en: `${narrator}: "${length} × ${width} = ?"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：「面积 = ${area} 平方丈！」`, en: `${narrator}: "Area = ${area} square units!"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：长方形面积 = 长 × 宽`, en: `${narrator}: "Rectangle area = length × width"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：${length} × ${width} = ?`, en: `${narrator}: "${length} × ${width} = ?"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：面积 = ${area} 平方丈！`, en: `${narrator}: "Area = ${area} square units!"` }, highlightField: 'area' },
   ];
 
   return {
@@ -319,9 +319,9 @@ export function generateAreaTrapMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「梯形面积 = (上底+下底)×高÷2」`, en: `${narrator}: "Trapezoid area = (top+bottom)×height÷2"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：「(${a}+${b})×${h}÷2 = ?」`, en: `${narrator}: "(${a}+${b})×${h}÷2 = ?"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：「面积 = ${(a + b) * h / 2}！」`, en: `${narrator}: "Area = ${(a + b) * h / 2}!"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：梯形面积 = (上底+下底)×高÷2`, en: `${narrator}: "Trapezoid area = (top+bottom)×height÷2"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：(${a}+${b})×${h}÷2 = ?`, en: `${narrator}: "(${a}+${b})×${h}÷2 = ?"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：面积 = ${(a + b) * h / 2}！`, en: `${narrator}: "Area = ${(a + b) * h / 2}!"` }, highlightField: 'area' },
   ];
 
   return {
@@ -352,9 +352,9 @@ export function generateProbSimpleMission(template: Mission): Mission {
 
   const p = target / total;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「概率 = 有利结果数 ÷ 总结果数」`, en: `${narrator}: "Probability = favorable ÷ total"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：「P = ${target} ÷ ${total}」`, en: `${narrator}: "P = ${target} ÷ ${total}"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：「P = ${Math.round(p * 10000) / 10000}！」`, en: `${narrator}: "P = ${Math.round(p * 10000) / 10000}!"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：概率 = 有利结果数 ÷ 总结果数`, en: `${narrator}: "Probability = favorable ÷ total"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：P = ${target} ÷ ${total}`, en: `${narrator}: "P = ${target} ÷ ${total}"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：P = ${Math.round(p * 10000) / 10000}！`, en: `${narrator}: "P = ${Math.round(p * 10000) / 10000}!"` }, highlightField: 'p' },
   ];
 
   return {
@@ -384,9 +384,9 @@ export function generateProbIndMission(template: Mission): Mission {
 
   const ans = p1 * p2;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「独立事件同时发生：P = P1 × P2」`, en: `${narrator}: "Independent events: P = P1 × P2"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：「P = ${p1} × ${p2}」`, en: `${narrator}: "P = ${p1} × ${p2}"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：「P = ${Math.round(ans * 100) / 100}！」`, en: `${narrator}: "P = ${Math.round(ans * 100) / 100}!"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：独立事件同时发生：P = P1 × P2`, en: `${narrator}: "Independent events: P = P1 × P2"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：P = ${p1} × ${p2}`, en: `${narrator}: "P = ${p1} × ${p2}"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：P = ${Math.round(ans * 100) / 100}！`, en: `${narrator}: "P = ${Math.round(ans * 100) / 100}!"` }, highlightField: 'p' },
   ];
 
   return {
@@ -445,9 +445,9 @@ export function generatePythagorasMission(template: Mission): Mission {
 
   const ans = findC ? triC : triA;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「勾股定理：a² + b² = c²」`, en: `${narrator}: "Pythagorean theorem: a² + b² = c²"` }, highlightField: 'c' },
-    { text: { zh: findC ? `${narrator}：「c = sqrt(${triA}² + ${triB}²) = sqrt(${triA * triA + triB * triB})」` : `${narrator}：「a = sqrt(${triC}² - ${triB}²) = sqrt(${triC * triC - triB * triB})」`, en: findC ? `${narrator}: "c = sqrt(${triA}² + ${triB}²) = sqrt(${triA * triA + triB * triB})"` : `${narrator}: "a = sqrt(${triC}² - ${triB}²) = sqrt(${triC * triC - triB * triB})"` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：「答案 = ${ans}！」`, en: `${narrator}: "Answer = ${ans}!"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：勾股定理：a² + b² = c²`, en: `${narrator}: "Pythagorean theorem: a² + b² = c²"` }, highlightField: 'c' },
+    { text: { zh: findC ? `${narrator}：c = sqrt(${triA}² + ${triB}²) = sqrt(${triA * triA + triB * triB})` : `${narrator}：a = sqrt(${triC}² - ${triB}²) = sqrt(${triC * triC - triB * triB})`, en: findC ? `${narrator}: "c = sqrt(${triA}² + ${triB}²) = sqrt(${triA * triA + triB * triB})"` : `${narrator}: "a = sqrt(${triC}² - ${triB}²) = sqrt(${triC * triC - triB * triB})"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：答案 = ${ans}！`, en: `${narrator}: "Answer = ${ans}!"` }, highlightField: 'c' },
   ];
 
   return { ...template, description, data, tutorialSteps };
@@ -476,9 +476,9 @@ export function generatePercentageMission(template: Mission): Mission {
 
   const formulaStr = isDiscount ? `${initial} × (1 - ${pct}%)` : `${initial} × (1 + ${pct}%)`;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「${isDiscount ? '折扣' : '加税'}计算：原价 × (1 ${isDiscount ? '-' : '+'} 百分比)」`, en: `${narrator}: "${isDiscount ? 'Discount' : 'Tax'}: original × (1 ${isDiscount ? '-' : '+'} rate)"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「${formulaStr} = ?」`, en: `${narrator}: "${formulaStr} = ?"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「答案 = ${result}！」`, en: `${narrator}: "Answer = ${result}!"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：${isDiscount ? '折扣' : '加税'}计算：原价 × (1 ${isDiscount ? '-' : '+'} 百分比)`, en: `${narrator}: "${isDiscount ? 'Discount' : 'Tax'}: original × (1 ${isDiscount ? '-' : '+'} rate)"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：${formulaStr} = ?`, en: `${narrator}: "${formulaStr} = ?"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：答案 = ${result}！`, en: `${narrator}: "Answer = ${result}!"` }, highlightField: 'ans' },
   ];
 
   return {
@@ -520,7 +520,7 @@ export function generateLinearMission(template: Mission): Mission {
     // Step 1: 斜率的定义
     {
       text: {
-        zh: `${narrator}：「斜率(gradient)就是直线的陡峭程度：$m = \\frac{y\\text{的变化量}}{x\\text{的变化量}}$」`,
+        zh: `${narrator}：斜率(gradient)就是直线的陡峭程度：$m = \\frac{y\\text{的变化量}}{x\\text{的变化量}}$`,
         en: `${narrator}: "Gradient measures the steepness of a line: $m = \\frac{\\text{change in } y}{\\text{change in } x}$"`,
       },
       hint: {
@@ -532,7 +532,7 @@ export function generateLinearMission(template: Mission): Mission {
     // Step 2: 用数学公式来表示
     {
       text: {
-        zh: `${narrator}：「用坐标点的公式表示：$m = \\frac{y_2 - y_1}{x_2 - x_1}$」`,
+        zh: `${narrator}：用坐标点的公式表示：$m = \\frac{y_2 - y_1}{x_2 - x_1}$`,
         en: `${narrator}: "Using coordinate formula: $m = \\frac{y_2 - y_1}{x_2 - x_1}$"`,
       },
       hint: {
@@ -544,7 +544,7 @@ export function generateLinearMission(template: Mission): Mission {
     // Step 3: 代入具体数值，算出 m
     {
       text: {
-        zh: `${narrator}：「代入 A(${x1}, ${y1}) 和 B(${x2}, ${y2})：$m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$」`,
+        zh: `${narrator}：代入 A(${x1}, ${y1}) 和 B(${x2}, ${y2})：$m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$`,
         en: `${narrator}: "Substitute A(${x1}, ${y1}) and B(${x2}, ${y2}): $m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$"`,
       },
       highlightField: 'm',
@@ -552,7 +552,7 @@ export function generateLinearMission(template: Mission): Mission {
     // Step 4: 把 m 代回直线方程
     {
       text: {
-        zh: `${narrator}：「把 $m = ${m}$ 代回直线方程：$y = ${m}x + c$」`,
+        zh: `${narrator}：把 $m = ${m}$ 代回直线方程：$y = ${m}x + c$`,
         en: `${narrator}: "Substitute $m = ${m}$ back into the equation: $y = ${m}x + c$"`,
       },
       hint: {
@@ -564,7 +564,7 @@ export function generateLinearMission(template: Mission): Mission {
     // Step 5: 用第一个点代入求 c
     {
       text: {
-        zh: `${narrator}：「用点 A(${x1}, ${y1}) 来求 $c$。这里 $x = ${x1}$，$y = ${y1}$，代入 $y = ${m}x + c$：$${y1} = ${m} \\times (${x1}) + c$」`,
+        zh: `${narrator}：用点 A(${x1}, ${y1}) 来求 $c$。这里 $x = ${x1}$，$y = ${y1}$，代入 $y = ${m}x + c$：$${y1} = ${m} \\times (${x1}) + c$`,
         en: `${narrator}: "Use point A(${x1}, ${y1}) to find $c$. Here $x = ${x1}$, $y = ${y1}$, substitute into $y = ${m}x + c$: $${y1} = ${m} \\times (${x1}) + c$"`,
       },
       hint: {
@@ -576,7 +576,7 @@ export function generateLinearMission(template: Mission): Mission {
     // Step 6: 算出 c
     {
       text: {
-        zh: `${narrator}：「解得：$c = ${cExpr} = ${c}$」`,
+        zh: `${narrator}：解得：$c = ${cExpr} = ${c}$`,
         en: `${narrator}: "Solving: $c = ${cExpr} = ${c}$"`,
       },
       highlightField: 'c',
@@ -584,7 +584,7 @@ export function generateLinearMission(template: Mission): Mission {
     // Step 7: 最终方程
     {
       text: {
-        zh: `${narrator}：「所以直线方程为：$y = ${m}x ${c >= 0 ? '+' : ''} ${c}$」`,
+        zh: `${narrator}：所以直线方程为：$y = ${m}x ${c >= 0 ? '+' : ''} ${c}$`,
         en: `${narrator}: "Therefore the equation of the line is: $y = ${m}x ${c >= 0 ? '+' : ''} ${c}$"`,
       },
       highlightField: 'c',
@@ -628,9 +628,9 @@ export function generateSimultaneousMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「联立方程 ${a1}x+${b1}y=${c1} 和 ${a2}x+${b2}y=${c2}」`, en: `${narrator}: "System: ${a1}x+${b1}y=${c1} and ${a2}x+${b2}y=${c2}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「消元得 x = ${x}」`, en: `${narrator}: "Eliminate to get x = ${x}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「代回得 y = ${y}」`, en: `${narrator}: "Substitute back: y = ${y}"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}：联立方程 ${a1}x+${b1}y=${c1} 和 ${a2}x+${b2}y=${c2}`, en: `${narrator}: "System: ${a1}x+${b1}y=${c1} and ${a2}x+${b2}y=${c2}"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：消元得 x = ${x}`, en: `${narrator}: "Eliminate to get x = ${x}"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：代回得 y = ${y}`, en: `${narrator}: "Substitute back: y = ${y}"` }, highlightField: 'y' },
   ];
 
   return {
@@ -659,9 +659,9 @@ export function generateRatioMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「比例 ${a}:${b}，前项 ${a * multiplier}」`, en: `${narrator}: "Ratio ${a}:${b}, first term ${a * multiplier}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「倍率 = ${a * multiplier} ÷ ${a} = ${multiplier}」`, en: `${narrator}: "Multiplier = ${a * multiplier} ÷ ${a} = ${multiplier}"` }, highlightField: 'y' },
-    { text: { zh: `${narrator}：「后项 = ${b} × ${multiplier} = ${b * multiplier}」`, en: `${narrator}: "Second term = ${b} × ${multiplier} = ${b * multiplier}"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}：比例 ${a}:${b}，前项 ${a * multiplier}`, en: `${narrator}: "Ratio ${a}:${b}, first term ${a * multiplier}"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：倍率 = ${a * multiplier} ÷ ${a} = ${multiplier}`, en: `${narrator}: "Multiplier = ${a * multiplier} ÷ ${a} = ${multiplier}"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}：后项 = ${b} × ${multiplier} = ${b * multiplier}`, en: `${narrator}: "Second term = ${b} × ${multiplier} = ${b * multiplier}"` }, highlightField: 'y' },
   ];
 
   return {
@@ -698,8 +698,8 @@ export function generateSimilarityMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「相似比 = ${a}/${b}」`, en: `${narrator}: "Similarity ratio = ${a}/${b}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「x = ${c} × ${a}/${b} = ${correctX}」`, en: `${narrator}: "x = ${c} × ${a}/${b} = ${correctX}"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：相似比 = ${a}/${b}`, en: `${narrator}: "Similarity ratio = ${a}/${b}"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：x = ${c} × ${a}/${b} = ${correctX}`, en: `${narrator}: "x = ${c} × ${a}/${b} = ${correctX}"` }, highlightField: 'x' },
   ];
 
   return {
@@ -730,9 +730,9 @@ export function generateStatsMeanMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「平均值 = 总和 ÷ 个数」`, en: `${narrator}: "Mean = sum ÷ count"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「(${values.join('+')}) ÷ ${count} = ${sum} ÷ ${count}」`, en: `${narrator}: "(${values.join('+')}) ÷ ${count} = ${sum} ÷ ${count}"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「平均值 = ${Math.round(mean * 100) / 100}」`, en: `${narrator}: "Mean = ${Math.round(mean * 100) / 100}"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：平均值 = 总和 ÷ 个数`, en: `${narrator}: "Mean = sum ÷ count"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：(${values.join('+')}) ÷ ${count} = ${sum} ÷ ${count}`, en: `${narrator}: "(${values.join('+')}) ÷ ${count} = ${sum} ÷ ${count}"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：平均值 = ${Math.round(mean * 100) / 100}`, en: `${narrator}: "Mean = ${Math.round(mean * 100) / 100}"` }, highlightField: 'ans' },
   ];
 
   return {
@@ -771,9 +771,9 @@ export function generateTrigonometryMission(template: Mission): Mission {
       en: `Given angle $${angle}^\\circ$, opposite ${opposite}, find hypotenuse $c$.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：「$\\sin(${angle}^\\circ)$ 联系对边和斜边」`, en: `${narrator}: "$\\sin(${angle}^\\circ)$ connects opposite and hypotenuse"` }, highlightField: 'c' },
-      { text: { zh: `${narrator}：「$c = ${opposite} / \\sin(${angle}^\\circ) = ${opposite} / ${Math.round(sinVal * 10000) / 10000}$」`, en: `${narrator}: "$c = ${opposite} / \\sin(${angle}^\\circ) = ${opposite} / ${Math.round(sinVal * 10000) / 10000}$"` }, highlightField: 'c' },
-      { text: { zh: `${narrator}：「$c = ${Math.round(hyp * 10000) / 10000}$！」`, en: `${narrator}: "$c = ${Math.round(hyp * 10000) / 10000}$!"` }, highlightField: 'c' },
+      { text: { zh: `${narrator}：$\\sin(${angle}^\\circ)$ 联系对边和斜边`, en: `${narrator}: "$\\sin(${angle}^\\circ)$ connects opposite and hypotenuse"` }, highlightField: 'c' },
+      { text: { zh: `${narrator}：$c = ${opposite} / \\sin(${angle}^\\circ) = ${opposite} / ${Math.round(sinVal * 10000) / 10000}$`, en: `${narrator}: "$c = ${opposite} / \\sin(${angle}^\\circ) = ${opposite} / ${Math.round(sinVal * 10000) / 10000}$"` }, highlightField: 'c' },
+      { text: { zh: `${narrator}：$c = ${Math.round(hyp * 10000) / 10000}$！`, en: `${narrator}: "$c = ${Math.round(hyp * 10000) / 10000}$!"` }, highlightField: 'c' },
     ];
     return { ...template, description, data: { angle, opposite, func: 'sin', generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
   }
@@ -796,9 +796,9 @@ export function generateTrigonometryMission(template: Mission): Mission {
       en: `Given opposite ${chosen.opp}, adjacent ${chosen.adj}, find angle $\\theta$.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：「$\\tan(\\theta) = ${chosen.opp}/${chosen.adj}$」`, en: `${narrator}: "$\\tan(\\theta) = ${chosen.opp}/${chosen.adj}$"` }, highlightField: 'angle' },
-      { text: { zh: `${narrator}：「$\\theta = \\arctan(${chosen.opp / chosen.adj})$」`, en: `${narrator}: "$\\theta = \\arctan(${chosen.opp / chosen.adj})$"` }, highlightField: 'angle' },
-      { text: { zh: `${narrator}：「$\\theta = ${chosen.angle}^\\circ$！」`, en: `${narrator}: "$\\theta = ${chosen.angle}^\\circ$!"` }, highlightField: 'angle' },
+      { text: { zh: `${narrator}：$\\tan(\\theta) = ${chosen.opp}/${chosen.adj}$`, en: `${narrator}: "$\\tan(\\theta) = ${chosen.opp}/${chosen.adj}$"` }, highlightField: 'angle' },
+      { text: { zh: `${narrator}：$\\theta = \\arctan(${chosen.opp / chosen.adj})$`, en: `${narrator}: "$\\theta = \\arctan(${chosen.opp / chosen.adj})$"` }, highlightField: 'angle' },
+      { text: { zh: `${narrator}：$\\theta = ${chosen.angle}^\\circ$！`, en: `${narrator}: "$\\theta = ${chosen.angle}^\\circ$!"` }, highlightField: 'angle' },
     ];
     return { ...template, description, data: { opposite: chosen.opp, adjacent: chosen.adj, func: 'tan_inv', generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
   }
@@ -815,9 +815,9 @@ export function generateTrigonometryMission(template: Mission): Mission {
     en: `Find $\\tan(\\theta) = ${opposite} / ${adjacent}$.`,
   };
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「$\\tan(\\theta) = \\text{对边}/\\text{邻边}$」`, en: `${narrator}: "$\\tan(\\theta) = \\text{opposite}/\\text{adjacent}$"` }, highlightField: 'tan' },
-    { text: { zh: `${narrator}：「$= ${opposite} / ${adjacent}$」`, en: `${narrator}: "$= ${opposite} / ${adjacent}$"` }, highlightField: 'tan' },
-    { text: { zh: `${narrator}：「$\\tan(\\theta) = ${Math.round(tanVal * 10000) / 10000}$！」`, en: `${narrator}: "$\\tan(\\theta) = ${Math.round(tanVal * 10000) / 10000}$!"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：$\\tan(\\theta) = \\text{对边}/\\text{邻边}$`, en: `${narrator}: "$\\tan(\\theta) = \\text{opposite}/\\text{adjacent}$"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：$= ${opposite} / ${adjacent}$`, en: `${narrator}: "$= ${opposite} / ${adjacent}$"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：$\\tan(\\theta) = ${Math.round(tanVal * 10000) / 10000}$！`, en: `${narrator}: "$\\tan(\\theta) = ${Math.round(tanVal * 10000) / 10000}$!"` }, highlightField: 'tan' },
   ];
   return { ...template, description, data: { opposite, adjacent, generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
 }
@@ -849,9 +849,9 @@ export function generateQuadraticMission(template: Mission): Mission {
       en: `Find $x$ where $f(x)$ is maximum.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：「二次函数 $f(x) = ${a}x^2 + ${b}x$，顶点公式 $x = -b/(2a)$。」`, en: `${narrator}: "Quadratic $f(x) = ${a}x^2 + ${b}x$, vertex at $x = -b/(2a)$."` }, highlightField: 'x' },
-      { text: { zh: `${narrator}：「$x = -${b}/(2 \\times ${a}) = ${vertexX}$」`, en: `${narrator}: "$x = -${b}/(2 \\times ${a}) = ${vertexX}$"` }, highlightField: 'x' },
-      { text: { zh: `${narrator}：「$x = ${vertexX}$！最优解！」`, en: `${narrator}: "$x = ${vertexX}$! Optimal!"` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：二次函数 $f(x) = ${a}x^2 + ${b}x$，顶点公式 $x = -b/(2a)$。`, en: `${narrator}: "Quadratic $f(x) = ${a}x^2 + ${b}x$, vertex at $x = -b/(2a)$."` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：$x = -${b}/(2 \\times ${a}) = ${vertexX}$`, en: `${narrator}: "$x = -${b}/(2 \\times ${a}) = ${vertexX}$"` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：$x = ${vertexX}$！最优解！`, en: `${narrator}: "$x = ${vertexX}$! Optimal!"` }, highlightField: 'x' },
     ];
     return { ...template, description, data: { p1: [0, 0], p2: [vertexX, vertexY], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
   }
@@ -869,9 +869,9 @@ export function generateQuadraticMission(template: Mission): Mission {
     en: `Find coefficients $a$ and $c$ of $y = ax^2 + c$.`,
   };
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「过 $(0, ${c})$ 和 $(${x2}, ${y2})$，$y = ax^2 + c$。」`, en: `${narrator}: "Through $(0, ${c})$ and $(${x2}, ${y2})$, $y = ax^2 + c$."` }, highlightField: 'a' },
-    { text: { zh: `${narrator}：「$x=0$ 时 $y=c=${c}$。代入第二点：$a = (${y2}-${c})/${x2}^2 = ${a}$」`, en: `${narrator}: "At $x=0$, $y=c=${c}$. Substitute: $a = (${y2}-${c})/${x2}^2 = ${a}$"` }, highlightField: 'a' },
-    { text: { zh: `${narrator}：「$a=${a}, c=${c}$！」`, en: `${narrator}: "$a=${a}, c=${c}$!"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：过 $(0, ${c})$ 和 $(${x2}, ${y2})$，$y = ax^2 + c$。`, en: `${narrator}: "Through $(0, ${c})$ and $(${x2}, ${y2})$, $y = ax^2 + c$."` }, highlightField: 'a' },
+    { text: { zh: `${narrator}：$x=0$ 时 $y=c=${c}$。代入第二点：$a = (${y2}-${c})/${x2}^2 = ${a}$`, en: `${narrator}: "At $x=0$, $y=c=${c}$. Substitute: $a = (${y2}-${c})/${x2}^2 = ${a}$"` }, highlightField: 'a' },
+    { text: { zh: `${narrator}：$a=${a}, c=${c}$！`, en: `${narrator}: "$a=${a}, c=${c}$!"` }, highlightField: 'c' },
   ];
   return { ...template, description, data: { p1: [0, c], p2: [x2, y2], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
 }
@@ -900,9 +900,9 @@ export function generateRootsMission(template: Mission): Mission {
     en: `Find a root of $x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$.`,
   };
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「$x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$」`, en: `${narrator}: "$x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「因式分解：$(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0$」`, en: `${narrator}: "Factor: $(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：「$x = ${r1}$ 或 $x = ${r2}$！」`, en: `${narrator}: "$x = ${r1}$ or $x = ${r2}$!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：$x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$`, en: `${narrator}: "$x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：因式分解：$(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0$`, en: `${narrator}: "Factor: $(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：$x = ${r1}$ 或 $x = ${r2}$！`, en: `${narrator}: "$x = ${r1}$ or $x = ${r2}$!"` }, highlightField: 'x' },
   ];
   return { ...template, description, data: { a, b, c, generatorType: 'ROOTS_RANDOM' }, tutorialSteps };
 }
@@ -927,9 +927,9 @@ export function generateDerivativeMission(template: Mission): Mission {
       en: `Find positive root $x$ of $f'(x) = 3x^2 - 3 = 0$.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：「$f'(x) = 3x^2 - 3 = 0$」`, en: `${narrator}: "$f'(x) = 3x^2 - 3 = 0$"` }, highlightField: 'x' },
-      { text: { zh: `${narrator}：「$3x^2 = 3 \\Rightarrow x^2 = 1$」`, en: `${narrator}: "$3x^2 = 3 \\Rightarrow x^2 = 1$"` }, highlightField: 'x' },
-      { text: { zh: `${narrator}：「$x = ${x}$（取正值）！」`, en: `${narrator}: "$x = ${x}$ (positive)!"` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：$f'(x) = 3x^2 - 3 = 0$`, en: `${narrator}: "$f'(x) = 3x^2 - 3 = 0$"` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：$3x^2 = 3 \\Rightarrow x^2 = 1$`, en: `${narrator}: "$3x^2 = 3 \\Rightarrow x^2 = 1$"` }, highlightField: 'x' },
+      { text: { zh: `${narrator}：$x = ${x}$（取正值）！`, en: `${narrator}: "$x = ${x}$ (positive)!"` }, highlightField: 'x' },
     ];
     return { ...template, description, data: { x, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
   }
@@ -945,9 +945,9 @@ export function generateDerivativeMission(template: Mission): Mission {
     en: `Find tangent slope $k$ of $y = x^2$ at $x = ${x}$.`,
   };
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「$y = x^2$，导数 $y' = 2x$」`, en: `${narrator}: "$y = x^2$, derivative $y' = 2x$"` }, highlightField: 'k' },
-    { text: { zh: `${narrator}：「在 $x=${x}$ 处：$k = 2 \\times ${x}$」`, en: `${narrator}: "At $x=${x}$: $k = 2 \\times ${x}$"` }, highlightField: 'k' },
-    { text: { zh: `${narrator}：「$k = ${k}$！」`, en: `${narrator}: "$k = ${k}$!"` }, highlightField: 'k' },
+    { text: { zh: `${narrator}：$y = x^2$，导数 $y' = 2x$`, en: `${narrator}: "$y = x^2$, derivative $y' = 2x$"` }, highlightField: 'k' },
+    { text: { zh: `${narrator}：在 $x=${x}$ 处：$k = 2 \\times ${x}$`, en: `${narrator}: "At $x=${x}$: $k = 2 \\times ${x}$"` }, highlightField: 'k' },
+    { text: { zh: `${narrator}：$k = ${k}$！`, en: `${narrator}: "$k = ${k}$!"` }, highlightField: 'k' },
   ];
   return { ...template, description, data: { x, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
 }
@@ -977,9 +977,9 @@ export function generateIntegrationMission(template: Mission): Mission {
       en: `Find $\\int_{${lower}}^{${upper}} x\\,dx$.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：「$\\int x\\,dx = \\frac{1}{2}x^2$」`, en: `${narrator}: "$\\int x\\,dx = \\frac{1}{2}x^2$"` }, highlightField: 'area' },
-      { text: { zh: `${narrator}：「$= \\frac{1}{2}(${upper}^2 - ${lower}^2) = \\frac{1}{2}(${upper * upper} - ${lower * lower})$」`, en: `${narrator}: "$= \\frac{1}{2}(${upper}^2 - ${lower}^2) = \\frac{1}{2}(${upper * upper} - ${lower * lower})$"` }, highlightField: 'area' },
-      { text: { zh: `${narrator}：「面积 = ${area}！」`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：$\\int x\\,dx = \\frac{1}{2}x^2$`, en: `${narrator}: "$\\int x\\,dx = \\frac{1}{2}x^2$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：$= \\frac{1}{2}(${upper}^2 - ${lower}^2) = \\frac{1}{2}(${upper * upper} - ${lower * lower})$`, en: `${narrator}: "$= \\frac{1}{2}(${upper}^2 - ${lower}^2) = \\frac{1}{2}(${upper * upper} - ${lower * lower})$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：面积 = ${area}！`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
     ];
     return { ...template, description, data: { lower, upper, func: 'x', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
   }
@@ -994,9 +994,9 @@ export function generateIntegrationMission(template: Mission): Mission {
       en: `Find $\\int_{${lower}}^{${upper}} 3x^2\\,dx$.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：「$\\int 3x^2\\,dx = x^3$」`, en: `${narrator}: "$\\int 3x^2\\,dx = x^3$"` }, highlightField: 'area' },
-      { text: { zh: `${narrator}：「$= ${upper}^3 - ${lower}^3 = ${upper * upper * upper} - ${lower * lower * lower}$」`, en: `${narrator}: "$= ${upper}^3 - ${lower}^3 = ${upper * upper * upper} - ${lower * lower * lower}$"` }, highlightField: 'area' },
-      { text: { zh: `${narrator}：「面积 = ${area}！」`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：$\\int 3x^2\\,dx = x^3$`, en: `${narrator}: "$\\int 3x^2\\,dx = x^3$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：$= ${upper}^3 - ${lower}^3 = ${upper * upper * upper} - ${lower * lower * lower}$`, en: `${narrator}: "$= ${upper}^3 - ${lower}^3 = ${upper * upper * upper} - ${lower * lower * lower}$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：面积 = ${area}！`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
     ];
     return { ...template, description, data: { lower, upper, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
   }
@@ -1011,9 +1011,9 @@ export function generateIntegrationMission(template: Mission): Mission {
     en: `Find $\\int_{${lower}}^{${upper}} 2x\\,dx$.`,
   };
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「$\\int 2x\\,dx = x^2$」`, en: `${narrator}: "$\\int 2x\\,dx = x^2$"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：「$= ${upper}^2 - ${lower}^2 = ${upper * upper} - ${lower * lower}$」`, en: `${narrator}: "$= ${upper}^2 - ${lower}^2 = ${upper * upper} - ${lower * lower}$"` }, highlightField: 'area' },
-    { text: { zh: `${narrator}：「面积 = ${area}！」`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：$\\int 2x\\,dx = x^2$`, en: `${narrator}: "$\\int 2x\\,dx = x^2$"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：$= ${upper}^2 - ${lower}^2 = ${upper * upper} - ${lower * lower}$`, en: `${narrator}: "$= ${upper}^2 - ${lower}^2 = ${upper * upper} - ${lower * lower}$"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：面积 = ${area}！`, en: `${narrator}: "Area = ${area}!"` }, highlightField: 'area' },
   ];
   return { ...template, description, data: { lower, upper, func: '2x', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
 }
@@ -1040,9 +1040,9 @@ export function generateVolumeMission(template: Mission): Mission {
 
   const baseArea = pi * radius * radius;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「半径 ${radius}，高 ${height}，$\\pi=${pi}$」`, en: `${narrator}: "Radius ${radius}, height ${height}, $\\pi=${pi}$"` }, highlightField: 'v' },
-    { text: { zh: `${narrator}：「底面积 = $\\pi r^2 = ${pi} \\times ${radius}^2 = ${baseArea}$」`, en: `${narrator}: "Base area = $\\pi r^2 = ${pi} \\times ${radius}^2 = ${baseArea}$"` }, highlightField: 'v' },
-    { text: { zh: `${narrator}：「$V = ${Math.round(vol * 100) / 100}$！」`, en: `${narrator}: "$V = ${Math.round(vol * 100) / 100}$!"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：半径 ${radius}，高 ${height}，$\\pi=${pi}$`, en: `${narrator}: "Radius ${radius}, height ${height}, $\\pi=${pi}$"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：底面积 = $\\pi r^2 = ${pi} \\times ${radius}^2 = ${baseArea}$`, en: `${narrator}: "Base area = $\\pi r^2 = ${pi} \\times ${radius}^2 = ${baseArea}$"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：$V = ${Math.round(vol * 100) / 100}$！`, en: `${narrator}: "$V = ${Math.round(vol * 100) / 100}$!"` }, highlightField: 'v' },
   ];
 
   return {
@@ -1078,9 +1078,9 @@ export function generateFuncValMission(template: Mission): Mission {
       en: `Find $y = ${m}x ${b >= 0 ? '+' : ''}${b}$ at $x=${x}$.`,
     };
     const tutorialSteps = [
-      { text: { zh: `${narrator}：「$y = ${m}x ${b >= 0 ? '+' : ''}${b}$，代入 $x=${x}$」`, en: `${narrator}: "$y = ${m}x ${b >= 0 ? '+' : ''}${b}$, substitute $x=${x}$"` }, highlightField: 'y' },
-      { text: { zh: `${narrator}：「$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b} = ${m * x} ${b >= 0 ? '+' : ''}${b}$」`, en: `${narrator}: "$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b} = ${m * x} ${b >= 0 ? '+' : ''}${b}$"` }, highlightField: 'y' },
-      { text: { zh: `${narrator}：「$y = ${y}$！」`, en: `${narrator}: "$y = ${y}$!"` }, highlightField: 'y' },
+      { text: { zh: `${narrator}：$y = ${m}x ${b >= 0 ? '+' : ''}${b}$，代入 $x=${x}$`, en: `${narrator}: "$y = ${m}x ${b >= 0 ? '+' : ''}${b}$, substitute $x=${x}$"` }, highlightField: 'y' },
+      { text: { zh: `${narrator}：$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b} = ${m * x} ${b >= 0 ? '+' : ''}${b}$`, en: `${narrator}: "$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b} = ${m * x} ${b >= 0 ? '+' : ''}${b}$"` }, highlightField: 'y' },
+      { text: { zh: `${narrator}：$y = ${y}$！`, en: `${narrator}: "$y = ${y}$!"` }, highlightField: 'y' },
     ];
     return { ...template, description, data: { m, b, x, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
   }
@@ -1096,8 +1096,8 @@ export function generateFuncValMission(template: Mission): Mission {
     en: `Find vertex $t$ of $f(x) = ${a}x^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$.`,
   };
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「$t = -b/(2a) = -${bCoeff}/(2 \\times ${a})$」`, en: `${narrator}: "$t = -b/(2a) = -${bCoeff}/(2 \\times ${a})$"` }, highlightField: 't' },
-    { text: { zh: `${narrator}：「$t = ${t}$！」`, en: `${narrator}: "$t = ${t}$!"` }, highlightField: 't' },
+    { text: { zh: `${narrator}：$t = -b/(2a) = -${bCoeff}/(2 \\times ${a})$`, en: `${narrator}: "$t = -b/(2a) = -${bCoeff}/(2 \\times ${a})$"` }, highlightField: 't' },
+    { text: { zh: `${narrator}：$t = ${t}$！`, en: `${narrator}: "$t = ${t}$!"` }, highlightField: 't' },
   ];
   return { ...template, description, data: { a, b: bCoeff, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
 }
@@ -1125,9 +1125,9 @@ export function generateStatsMedianMission(template: Mission): Mission {
     en: `Find the median of ${sorted.join(', ')}.`,
   };
   const tutorialSteps = [
-    { text: { zh: `${narrator}：「先排序，再找中间值。${count} 个数，中间是第 ${mid + 1} 个。」`, en: `${narrator}: "Sort first, find middle. ${count} numbers, middle is position ${mid + 1}."` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「排序后：${sorted.join(', ')}」`, en: `${narrator}: "Sorted: ${sorted.join(', ')}"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：「中位数 = ${median}！」`, en: `${narrator}: "Median = ${median}!"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：先排序，再找中间值。${count} 个数，中间是第 ${mid + 1} 个。`, en: `${narrator}: "Sort first, find middle. ${count} numbers, middle is position ${mid + 1}."` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：排序后：${sorted.join(', ')}`, en: `${narrator}: "Sorted: ${sorted.join(', ')}"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：中位数 = ${median}！`, en: `${narrator}: "Median = ${median}!"` }, highlightField: 'ans' },
   ];
 
   return {
