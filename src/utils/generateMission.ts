@@ -1478,7 +1478,7 @@ export function generateHcfMission(template: Mission): Mission {
   const a = h * m1;
   const b = h * m2;
 
-  const narrator = pickRandom(['刘备', '关羽', '张飞']);
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[：:]/)?.[0]) || '军师';
   const description: BilingualText = {
     zh: `求 $${a}$ 和 $${b}$ 的最大公因数 (HCF)。`,
     en: `Find the Highest Common Factor (HCF) of $${a}$ and $${b}$.`,
@@ -1490,8 +1490,8 @@ export function generateHcfMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：我们要找 $${a}$ 和 $${b}$ 的最大公因数 (HCF)`,
-        en: `${narrator}: "We need to find the HCF of $${a}$ and $${b}$"`,
+        zh: `${narrator}：要把 $${a}$ 和 $${b}$ 平均分组，每组最多几个？这就是求最大公因数`,
+        en: `${narrator}: "We need to split $${a}$ and $${b}$ into equal groups — what's the biggest group size? That's the HCF"`,
       },
       hint: {
         zh: '什么是"因数"？能整除一个数的数就叫因数\n"公因数"就是两个数共同拥有的因数\n"最大公因数"就是这些公因数中最大的那个',
@@ -1501,8 +1501,8 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：怎么找 HCF？用"质因数分解法"——把每个数拆成质数的乘积`,
-        en: `${narrator}: "How to find HCF? Use prime factorization — break each number into prime factors"`,
+        zh: `${narrator}：怎么算呢？把每个数拆成最小的"零件"——质因数`,
+        en: `${narrator}: "How to figure it out? Break each number into its smallest 'parts' — prime factors"`,
       },
       hint: {
         zh: '为什么要分解？因为分解后可以清楚地看到两个数的"组成零件"\n就像拆机器一样，拆开才能看到哪些零件是相同的',
@@ -1618,15 +1618,15 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：把取出来的乘在一起：$${formatFactorization(h)} = ${h}$`,
-        en: `${narrator}: "Multiply the common parts together: $${formatFactorization(h)} = ${h}$"`,
+        zh: `${narrator}：把共有的零件组装起来：$${formatFactorization(h)} = ${h}$`,
+        en: `${narrator}: "Assemble the common parts: $${formatFactorization(h)} = ${h}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：所以 $\\text{HCF}(${a}, ${b}) = ${h}$\n验算：$${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓`,
-        en: `${narrator}: "So $\\text{HCF}(${a}, ${b}) = ${h}$\nVerify: $${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓"`,
+        zh: `${narrator}：$\\text{HCF}(${a}, ${b}) = ${h}$！验算：$${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓ 分组完成！`,
+        en: `${narrator}: "$\\text{HCF}(${a}, ${b}) = ${h}$! Check: $${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓ Grouping done!"`,
       },
       highlightField: 'ans',
     },
@@ -1659,7 +1659,7 @@ export function generateLcmMission(template: Mission): Mission {
   const b = h * m2;
   const lcm = (a * b) / gcdCalc(a, b);
 
-  const narrator = pickRandom(['刘备', '关羽', '张飞']);
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[：:]/)?.[0]) || '军师';
   const description: BilingualText = {
     zh: `求 $${a}$ 和 $${b}$ 的最小公倍数 (LCM)。`,
     en: `Find the Least Common Multiple (LCM) of $${a}$ and $${b}$.`,
@@ -1671,8 +1671,8 @@ export function generateLcmMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是最小公倍数(LCM)？就是两个数共有的最小的倍数`,
-        en: `${narrator}: "What is LCM? It's the smallest number that both numbers divide into"`,
+        zh: `${narrator}：$${a}$ 和 $${b}$ 什么时候能"碰到一起"？找它们共同的最小倍数就行`,
+        en: `${narrator}: "When do $${a}$ and $${b}$ 'meet up'? Find their smallest common multiple"`,
       },
       hint: {
         zh: '比如 12 能被 3 整除，也能被 4 整除\n所以 12 是 3 和 4 的公倍数',
@@ -1682,8 +1682,8 @@ export function generateLcmMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：怎么找 LCM 呢？先把每个数拆成质因数的乘积`,
-        en: `${narrator}: "How to find LCM? First break each number into prime factors"`,
+        zh: `${narrator}：怎么找呢？先把每个数拆成质因数的乘积`,
+        en: `${narrator}: "How to find it? First break each number into prime factors"`,
       },
       hint: {
         zh: '质因数就是只能被 1 和自己整除的数\n比如 2, 3, 5, 7, 11 都是质数',
@@ -1750,8 +1750,8 @@ export function generateLcmMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：所以 $\\text{LCM}(${a}, ${b}) = ${lcm}$`,
-        en: `${narrator}: "Therefore $\\text{LCM}(${a}, ${b}) = ${lcm}$"`,
+        zh: `${narrator}：$\\text{LCM}(${a}, ${b}) = ${lcm}$！验算：$${lcm} \\div ${a} = ${lcm/a}$ ✓  $${lcm} \\div ${b} = ${lcm/b}$ ✓`,
+        en: `${narrator}: "$\\text{LCM}(${a}, ${b}) = ${lcm}$! Check: $${lcm} \\div ${a} = ${lcm/a}$ ✓  $${lcm} \\div ${b} = ${lcm/b}$ ✓"`,
       },
       highlightField: 'ans',
     },
@@ -1795,7 +1795,7 @@ export function generateIntegerAddMission(template: Mission): Mission {
     answer = a - b;
   }
 
-  const narrator = pickRandom(['诸葛亮', '曹操', '关羽']);
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[：:]/)?.[0]) || '军师';
   const bStr = b < 0 ? `(${b})` : `${b}`;
   const exprStr = `${a} ${op} ${bStr}`;
 
@@ -1807,8 +1807,8 @@ export function generateIntegerAddMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：正数表示"增加"，负数表示"减少"`,
-        en: `${narrator}: "Positive numbers mean 'gain', negative numbers mean 'loss'"`,
+        zh: `${narrator}：来算一笔账——正数是赚的，负数是亏的`,
+        en: `${narrator}: "Let's settle the books — positives are gains, negatives are losses"`,
       },
       hint: {
         zh: '想象一条数轴\n向右走是正数（增加）\n向左走是负数（减少）',
@@ -1827,8 +1827,8 @@ export function generateIntegerAddMission(template: Mission): Mission {
     ...(op === '+' && a >= 0 && b < 0 ? [
       {
         text: {
-          zh: `${narrator}：加一个负数，就等于减去它。什么是绝对值？就是去掉正负号后的数`,
-          en: `${narrator}: "Adding a negative number is the same as subtracting it. Absolute value = the number without its sign"`,
+          zh: `${narrator}：加一个负数，就是减去它。为什么？想象口袋里有钱（正数），花掉一些（负数），总数变少了`,
+          en: `${narrator}: "Adding a negative is just subtracting. Why? Imagine having money (positive) and spending some (negative) — your total drops"`,
         },
         hint: {
           zh: `$${b}$ 的绝对值是 $${Math.abs(b)}$\n所以"加 $${b}$"就是"减 $${Math.abs(b)}$"`,
@@ -1846,8 +1846,8 @@ export function generateIntegerAddMission(template: Mission): Mission {
     ] : op === '+' && a < 0 && b < 0 ? [
       {
         text: {
-          zh: `${narrator}：两个负数相加，先不管负号，把数字加起来`,
-          en: `${narrator}: "Adding two negatives: ignore the signs first, add the numbers"`,
+          zh: `${narrator}：两笔都是亏的，亏损加亏损，当然亏得更多`,
+          en: `${narrator}: "Both are losses — loss plus loss means even bigger loss"`,
         },
         hint: {
           zh: `去掉负号后：$${Math.abs(a)}$ 和 $${Math.abs(b)}$\n加起来：$${Math.abs(a)} + ${Math.abs(b)} = ${Math.abs(a) + Math.abs(b)}$`,
@@ -1911,8 +1911,8 @@ export function generateIntegerAddMission(template: Mission): Mission {
     // Final step: answer
     {
       text: {
-        zh: `${narrator}：所以 $${exprStr} = ${answer}$`,
-        en: `${narrator}: "Therefore $${exprStr} = ${answer}$"`,
+        zh: `${narrator}：$${exprStr} = ${answer}$，账算清了！`,
+        en: `${narrator}: "$${exprStr} = ${answer}$ — books balanced!"`,
       },
       highlightField: 'ans',
     },
@@ -1975,7 +1975,7 @@ export function generateFracAddMission(template: Mission): Mission {
   }
 
   const op = isSubtract ? '-' : '+';
-  const narrator = pickRandom(['关羽', '诸葛亮', '刘备']);
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[：:]/)?.[0]) || '军师';
 
   const description: BilingualText = {
     zh: `计算 $\\frac{${dispN1}}{${dispD1}} ${op} \\frac{${dispN2}}{${dispD2}}$`,
@@ -1992,15 +1992,15 @@ export function generateFracAddMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：我们要算 $\\frac{${dispN1}}{${dispD1}} ${op} \\frac{${dispN2}}{${dispD2}}$`,
-        en: `${narrator}: "We need to calculate $\\frac{${dispN1}}{${dispD1}} ${op} \\frac{${dispN2}}{${dispD2}}$"`,
+        zh: `${narrator}：来算算 $\\frac{${dispN1}}{${dispD1}} ${op} \\frac{${dispN2}}{${dispD2}}$`,
+        en: `${narrator}: "Let's work out $\\frac{${dispN1}}{${dispD1}} ${op} \\frac{${dispN2}}{${dispD2}}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：这两个分数的分母不一样（一个是 $${dispD1}$，一个是 $${dispD2}$），所以不能直接${isSubtract ? '减' : '加'}`,
-        en: `${narrator}: "These fractions have different denominators ($${dispD1}$ and $${dispD2}$), so we can't ${isSubtract ? 'subtract' : 'add'} them directly"`,
+        zh: `${narrator}：这两份粮草的计量单位不一样（分母 $${dispD1}$ 和 $${dispD2}$），不能直接合并`,
+        en: `${narrator}: "These two supplies use different units (denominators $${dispD1}$ and $${dispD2}$) — can't combine directly"`,
       },
       hint: {
         zh: `为什么分母不同就不能直接加减？\n想象把一个蛋糕切成 ${dispD1} 份和切成 ${dispD2} 份\n每份大小不一样，不能直接数份数`,
@@ -2010,8 +2010,8 @@ export function generateFracAddMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：所以我们要先"通分"——把两个分数的分母变成一样的`,
-        en: `${narrator}: "So we need to 'find a common denominator' — make both denominators the same"`,
+        zh: `${narrator}：要统一计量——就像把"斤"和"两"统一成同一个单位`,
+        en: `${narrator}: "We need to unify the units — like converting 'pounds' and 'ounces' to the same unit"`,
       },
       hint: {
         zh: `怎么变成一样？找两个分母的最小公倍数(LCM)\n就是能同时被 $${dispD1}$ 和 $${dispD2}$ 整除的最小的数`,
@@ -2129,7 +2129,7 @@ export function generateFracMulMission(template: Mission): Mission {
   ansDen = ansDen / g;
 
   const op = isDivide ? '\\div' : '\\times';
-  const narrator = pickRandom(['张飞', '诸葛亮', '关羽']);
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[：:]/)?.[0]) || '军师';
 
   const description: BilingualText = {
     zh: `计算 $\\frac{${n1}}{${d1}} ${op} \\frac{${n2}}{${d2}}$`,
@@ -2145,8 +2145,8 @@ export function generateFracMulMission(template: Mission): Mission {
   const tutorialSteps = isDivide ? [
     {
       text: {
-        zh: `${narrator}：分数除法怎么算？除以一个分数 = 乘以它翻过来的数`,
-        en: `${narrator}: "How to divide fractions? Dividing by a fraction = multiplying by its flip"`,
+        zh: `${narrator}：分数除法就是"翻过来再乘"——为什么？除以一半就是乘以 2，同理！`,
+        en: `${narrator}: "Fraction division means 'flip and multiply' — why? Dividing by a half is the same as multiplying by 2, same idea!"`,
       },
       hint: {
         zh: '翻过来的数叫"倒数"\n就是把分子和分母交换位置',
@@ -2192,8 +2192,8 @@ export function generateFracMulMission(template: Mission): Mission {
   ] : [
     {
       text: {
-        zh: `${narrator}：分数乘法是什么意思？就是"取一个数的几分之几"`,
-        en: `${narrator}: "What does fraction multiplication mean? It means 'taking a fraction of a fraction'"`,
+        zh: `${narrator}：分数乘法就是"取一部分的一部分"`,
+        en: `${narrator}: "Fraction multiplication means 'taking a part of a part'"`,
       },
       hint: {
         zh: '比如 $\\frac{1}{2} \\times \\frac{1}{3}$ 就是"三分之一的一半"',
