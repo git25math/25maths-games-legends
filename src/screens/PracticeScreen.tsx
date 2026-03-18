@@ -19,6 +19,7 @@ import { AnimatedQuadraticPlane } from '../components/diagrams/AnimatedQuadratic
 import { ShortDivision } from '../components/diagrams/ShortDivision';
 import { FactorTree } from '../components/diagrams/FactorTree';
 import { AnimatedNumberLine } from '../components/diagrams/AnimatedNumberLine';
+import { FractionPie } from '../components/diagrams/FractionPie';
 import { useAudio } from '../hooks/useAudio';
 
 type PracticePhase = 'green' | 'amber' | 'red';
@@ -330,6 +331,22 @@ export const PracticeScreen = ({
                 end={currentMission.data.answer as number}
                 movement={currentMission.data.op === '+' ? currentMission.data.b as number : -(currentMission.data.b as number)}
                 step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep - 1)}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'FRAC_ADD' && currentMission.data?.d1 ? (
+              <FractionPie
+                numerator1={currentMission.data.n1 as number}
+                denominator1={currentMission.data.d1 as number}
+                numerator2={currentMission.data.n2 as number}
+                denominator2={currentMission.data.d2 as number}
+                step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep)}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'FRAC_MUL' && currentMission.data?.d1 ? (
+              <FractionPie
+                numerator1={currentMission.data.n1 as number}
+                denominator1={currentMission.data.d1 as number}
+                numerator2={currentMission.data.n2 as number}
+                denominator2={currentMission.data.d2 as number}
+                step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep)}
               />
             ) : currentPhase !== 'red' ? (
               <VisualData mission={currentMission} lang={lang} />
