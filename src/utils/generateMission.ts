@@ -483,9 +483,11 @@ export function generateProbIndMission(template: Mission): Mission {
 
   const ans = p1 * p2;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：独立事件同时发生：P = P1 × P2`, en: `${narrator}: "Independent events: P = P1 × P2"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：P = ${p1} × ${p2}`, en: `${narrator}: "P = ${p1} × ${p2}"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：P = ${Math.round(ans * 100) / 100}！`, en: `${narrator}: "P = ${Math.round(ans * 100) / 100}!"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：什么是概率?\n概率是一个 0 到 1 之间的数，表示事件发生的可能性。\n$0$ = 不可能，$1$ = 一定发生。`, en: `${narrator}: "What is probability?\nA number from 0 to 1 that tells us how likely something is.\n$0$ = impossible, $1$ = certain."` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：什么是独立事件?\n两个事件互不影响，一个发生不会改变另一个的概率。\n例如：抛两次硬币，第一次不影响第二次。`, en: `${narrator}: "What are independent events?\nTwo events where one happening does not affect the other.\nExample: flipping a coin twice — the first flip does not affect the second."` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：已知条件：\n第一个事件的概率 $P_1 = ${p1}$\n第二个事件的概率 $P_2 = ${p2}$`, en: `${narrator}: "Given:\nFirst event probability $P_1 = ${p1}$\nSecond event probability $P_2 = ${p2}$"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：独立事件的乘法法则：\n两个独立事件同时发生的概率 = 各自概率相乘\n$P(\\text{both}) = P_1 \\times P_2$`, en: `${narrator}: "Rule for independent events:\nMultiply the probabilities\n$P(\\text{both}) = P_1 \\times P_2$"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：计算：\n$P = ${p1} \\times ${p2} = ${Math.round(ans * 100) / 100}$\n答案是 $${Math.round(ans * 100) / 100}$!`, en: `${narrator}: "Calculate:\n$P = ${p1} \\times ${p2} = ${Math.round(ans * 100) / 100}$\nThe answer is $${Math.round(ans * 100) / 100}$!"` }, highlightField: 'p' },
   ];
 
   return {
@@ -543,10 +545,20 @@ export function generatePythagorasMission(template: Mission): Mission {
   }
 
   const ans = findC ? triC : triA;
-  const tutorialSteps = [
-    { text: { zh: `${narrator}：勾股定理：a² + b² = c²`, en: `${narrator}: "Pythagorean theorem: a² + b² = c²"` }, highlightField: 'c' },
-    { text: { zh: findC ? `${narrator}：c = sqrt(${triA}² + ${triB}²) = sqrt(${triA * triA + triB * triB})` : `${narrator}：a = sqrt(${triC}² - ${triB}²) = sqrt(${triC * triC - triB * triB})`, en: findC ? `${narrator}: "c = sqrt(${triA}² + ${triB}²) = sqrt(${triA * triA + triB * triB})"` : `${narrator}: "a = sqrt(${triC}² - ${triB}²) = sqrt(${triC * triC - triB * triB})"` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：答案 = ${ans}！`, en: `${narrator}: "Answer = ${ans}!"` }, highlightField: 'c' },
+  const tutorialSteps = findC ? [
+    { text: { zh: `${narrator}：什么是勾股定理?\n在直角三角形中，$a^{2} + b^{2} = c^{2}$\n其中 $c$ 是最长的边，叫做斜边(hypotenuse)。`, en: `${narrator}: "What is the Pythagorean theorem?\nIn a right triangle, $a^{2} + b^{2} = c^{2}$\nwhere $c$ is the longest side, called the hypotenuse."` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：找出已知量：\n$a = ${triA}$，$b = ${triB}$\n我们需要求 $c$（斜边）。`, en: `${narrator}: "Identify the known values:\n$a = ${triA}$, $b = ${triB}$\nWe need to find $c$ (the hypotenuse)."` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：代入公式：\n$c^{2} = ${triA}^{2} + ${triB}^{2}$`, en: `${narrator}: "Substitute into the formula:\n$c^{2} = ${triA}^{2} + ${triB}^{2}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：计算平方：\n$c^{2} = ${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$`, en: `${narrator}: "Calculate the squares:\n$c^{2} = ${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：开平方根：\n$c = \\sqrt{${triA * triA + triB * triB}} = ${triC}$`, en: `${narrator}: "Take the square root:\n$c = \\sqrt{${triA * triA + triB * triB}} = ${triC}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：答案：$c = ${triC}$!`, en: `${narrator}: "Answer: $c = ${triC}$!"` }, highlightField: 'c' },
+  ] : [
+    { text: { zh: `${narrator}：什么是勾股定理?\n在直角三角形中，$a^{2} + b^{2} = c^{2}$\n其中 $c$ 是最长的边，叫做斜边(hypotenuse)。`, en: `${narrator}: "What is the Pythagorean theorem?\nIn a right triangle, $a^{2} + b^{2} = c^{2}$\nwhere $c$ is the longest side, called the hypotenuse."` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：找出已知量：\n斜边 $c = ${triC}$，一条直角边 $a = ${triB}$\n我们需要求另一条直角边 $b$。`, en: `${narrator}: "Identify the known values:\nHypotenuse $c = ${triC}$, one leg $a = ${triB}$\nWe need to find the other leg $b$."` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：变形公式：\n$b^{2} = c^{2} - a^{2}$`, en: `${narrator}: "Rearrange the formula:\n$b^{2} = c^{2} - a^{2}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：计算：\n$b^{2} = ${triC}^{2} - ${triB}^{2} = ${triC * triC} - ${triB * triB} = ${triC * triC - triB * triB}$`, en: `${narrator}: "Calculate:\n$b^{2} = ${triC}^{2} - ${triB}^{2} = ${triC * triC} - ${triB * triB} = ${triC * triC - triB * triB}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：开平方根：\n$b = \\sqrt{${triC * triC - triB * triB}} = ${triA}$`, en: `${narrator}: "Take the square root:\n$b = \\sqrt{${triC * triC - triB * triB}} = ${triA}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：答案：$b = ${triA}$!`, en: `${narrator}: "Answer: $b = ${triA}$!"` }, highlightField: 'c' },
   ];
 
   return { ...template, description, data, tutorialSteps };
@@ -726,10 +738,26 @@ export function generateSimultaneousMission(template: Mission): Mission {
     en: `Solve: $${a1}x + ${b1}y = ${c1}$, $${a2}x + ${b2}y = ${c2}$`,
   };
 
+  // Compute elimination intermediate values for tutorial
+  const elimMul1 = Math.abs(b2);
+  const elimMul2 = Math.abs(b1);
+  const newA1 = a1 * elimMul1;
+  const newB1 = b1 * elimMul1;
+  const newC1 = c1 * elimMul1;
+  const newA2 = a2 * elimMul2;
+  const newB2 = b2 * elimMul2;
+  const newC2 = c2 * elimMul2;
+  const elimA = newA1 - newA2;
+  const elimC = newC1 - newC2;
+
   const tutorialSteps = [
-    { text: { zh: `${narrator}：联立方程 ${a1}x+${b1}y=${c1} 和 ${a2}x+${b2}y=${c2}`, en: `${narrator}: "System: ${a1}x+${b1}y=${c1} and ${a2}x+${b2}y=${c2}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：消元得 x = ${x}`, en: `${narrator}: "Eliminate to get x = ${x}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：代回得 y = ${y}`, en: `${narrator}: "Substitute back: y = ${y}"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}：什么是联立方程?\n两个方程包含两个未知数，需要同时求解。`, en: `${narrator}: "What are simultaneous equations?\nTwo equations with two unknowns — solve both at the same time."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：写出两个方程：\n方程1: $${a1}x + ${b1}y = ${c1}$\n方程2: $${a2}x + ${b2}y = ${c2}$`, en: `${narrator}: "Write the two equations:\nEq1: $${a1}x + ${b1}y = ${c1}$\nEq2: $${a2}x + ${b2}y = ${c2}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：目标：让一个变量的系数相同，这样就能消去它。\n我们选择消去 $y$。`, en: `${narrator}: "Goal: make the coefficient of one variable the same in both equations, so we can eliminate it.\nLet's eliminate $y$."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：方程1 乘以 $${elimMul1}$: $${newA1}x + ${newB1}y = ${newC1}$\n方程2 乘以 $${elimMul2}$: $${newA2}x + ${newB2}y = ${newC2}$`, en: `${narrator}: "Multiply Eq1 by $${elimMul1}$: $${newA1}x + ${newB1}y = ${newC1}$\nMultiply Eq2 by $${elimMul2}$: $${newA2}x + ${newB2}y = ${newC2}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：两式相减，$y$ 消去：\n$${elimA}x = ${elimC}$\n$x = ${elimC} \\div ${elimA} = ${x}$`, en: `${narrator}: "Subtract one from the other, $y$ disappears:\n$${elimA}x = ${elimC}$\n$x = ${elimC} \\div ${elimA} = ${x}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：把 $x = ${x}$ 代回方程1：\n$${a1} \\times ${x} + ${b1}y = ${c1}$\n$${b1}y = ${c1 - a1 * x}$\n$y = ${y}$`, en: `${narrator}: "Substitute $x = ${x}$ back into Eq1:\n$${a1} \\times ${x} + ${b1}y = ${c1}$\n$${b1}y = ${c1 - a1 * x}$\n$y = ${y}$"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}：答案：$x = ${x}$，$y = ${y}$!`, en: `${narrator}: "Answer: $x = ${x}$, $y = ${y}$!"` }, highlightField: 'x' },
   ];
 
   return {
@@ -796,9 +824,13 @@ export function generateSimilarityMission(template: Mission): Mission {
     en: `Similar triangles: side ${a} corresponds to ${b}, side ${c} corresponds to $x$.`,
   };
 
+  const scaleFactor = a / b;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：相似比 = ${a}/${b}`, en: `${narrator}: "Similarity ratio = ${a}/${b}"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：x = ${c} × ${a}/${b} = ${correctX}`, en: `${narrator}: "x = ${c} × ${a}/${b} = ${correctX}"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：什么是"相似"?\n形状相同，大小不同。对应边的比例相同。`, en: `${narrator}: "What does 'similar' mean?\nSame shape, different size. Corresponding sides have the same ratio."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：求比例系数(scale factor)：\n$\\frac{${a}}{${b}} = ${scaleFactor}$`, en: `${narrator}: "Find the scale factor:\n$\\frac{${a}}{${b}} = ${scaleFactor}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：找出需要求的边：\n已知第二个三角形的对应边 = $${c}$\n我们要求 $x$。`, en: `${narrator}: "Identify which side we need:\nThe corresponding side in the second triangle = $${c}$\nWe need to find $x$."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：计算：\n$x = ${c} \\times ${scaleFactor} = ${correctX}$`, en: `${narrator}: "Calculate:\n$x = ${c} \\times ${scaleFactor} = ${correctX}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：答案：$x = ${correctX}$!`, en: `${narrator}: "Answer: $x = ${correctX}$!"` }, highlightField: 'x' },
   ];
 
   return {
@@ -998,10 +1030,15 @@ export function generateRootsMission(template: Mission): Mission {
     zh: `求方程 $x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$ 的一个根。`,
     en: `Find a root of $x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$.`,
   };
+  const eqStr = `x^{2} ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0`;
+  const factorStr = `(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0`;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：$x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$`, en: `${narrator}: "$x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：因式分解：$(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0$`, en: `${narrator}: "Factor: $(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：$x = ${r1}$ 或 $x = ${r2}$！`, en: `${narrator}: "$x = ${r1}$ or $x = ${r2}$!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：什么是"求根"?\n找到让方程等于零的 $x$ 值。`, en: `${narrator}: "What does 'finding roots' mean?\nFinding the values of $x$ that make the equation equal zero."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：方程是：\n$${eqStr}$`, en: `${narrator}: "The equation is:\n$${eqStr}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：方法：因式分解\n把方程写成 $(x - r_1)(x - r_2) = 0$ 的形式。\n我们需要两个数，乘积 = $${c}$，相加 = $${-b}$。`, en: `${narrator}: "Method: factorize\nWrite the equation as $(x - r_1)(x - r_2) = 0$.\nWe need two numbers that multiply to give $${c}$ and add to give $${-b}$."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：这两个数是 $${r1}$ 和 $${r2}$：\n验证：$${r1} \\times ${r2} = ${r1 * r2}$ (= $${c}$)\n验证：$${r1} + ${r2} = ${r1 + r2}$ (= $${-b}$)`, en: `${narrator}: "The two numbers are $${r1}$ and $${r2}$:\nCheck: $${r1} \\times ${r2} = ${r1 * r2}$ (= $${c}$)\nCheck: $${r1} + ${r2} = ${r1 + r2}$ (= $${-b}$)"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：所以 $${factorStr}$\n意味着 $x = ${r1}$ 或 $x = ${r2}$`, en: `${narrator}: "So $${factorStr}$\nThis means $x = ${r1}$ or $x = ${r2}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：答案：$x = ${r1}$ 或 $x = ${r2}$!`, en: `${narrator}: "Answer: $x = ${r1}$ or $x = ${r2}$!"` }, highlightField: 'x' },
   ];
   return { ...template, description, data: { a, b, c, generatorType: 'ROOTS_RANDOM' }, tutorialSteps };
 }
