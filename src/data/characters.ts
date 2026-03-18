@@ -46,7 +46,7 @@ export const CHARACTERS: Character[] = [
     name: { zh: '诸葛亮', en: 'Zhuge Liang' },
     role: { zh: '卧龙', en: 'Sleeping Dragon' },
     image: './avatars/zhugeliang.png',
-    color: 'bg-slate-600',
+    color: 'bg-purple-600',
     description: { zh: '运筹帷幄之中，决胜千里之外。', en: 'Planning within the tent, winning battles a thousand miles away.' },
     skill: { zh: '【观星】：练习模式看例题时显示额外解题思路。', en: '【Guanxing】: Extra solution insights during example viewing.' },
     stats: { power: 30, speed: 50, wisdom: 100 }
