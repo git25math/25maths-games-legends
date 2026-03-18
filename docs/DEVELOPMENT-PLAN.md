@@ -2,7 +2,7 @@
 
 > **项目地址**：https://play.25maths.com
 > **仓库**：git25math/25maths-games-legends
-> **版本**：v1.1.0 | 最后更新：2026-03-17
+> **版本**：v2.2.0 | 最后更新：2026-03-18
 
 ## Context
 
@@ -441,6 +441,48 @@ skillSummary: { zh: '等式两边做相同运算，等式不变', en: 'Same oper
 | 3.3 | **Roguelike 技能卡** | 闯关前 3 选 1：🛡️护盾(2 次免扣血)/⚡双倍(Q3 起 ×2)/🔮透视(Q1 显示公式)。SkillCardSelector 全屏选卡界面。 | ✅ |
 | 3.4 | **动态难度** | SIMPLE_EQ/ADD 生成器支持 tier 1-3，PracticeScreen Amber/Red 阶段连对 3 题 tier up，连错 2 题 tier down。★★★ 指示器。 | ✅ |
 | 3.5 | **剧情分支** | 3 个关键关卡（虎牢关/云梯攻城/借东风）答对/答错不同叙事后果。成功/失败 overlay + WrongAnswerPanel 显示。 | ✅ |
+| 3.6 | **可视化引导框架** | 分层选型：SVG+Motion(已有) → AnimatedQuadraticPlane(新) → Desmos API(函数) → GeoGebra(几何)。详见 Phase 3.6 小节。 | 🔄 |
+
+#### Phase 3.6: 可视化引导框架（难题的手把手引导核心）
+
+> **核心理念**：难题 = 概念→公式→代入→计算→结论，每一步都要有**视觉同步**。
+
+**技术分层：**
+
+| 层级 | 技术 | 覆盖题型 | 状态 |
+|------|------|---------|------|
+| L1 | SVG + Motion 动画 | 角度/相似/韦恩图/面积 | ✅ 已有 12 组件 |
+| L2 | AnimatedCoordinatePlane | LINEAR 直线 | ✅ 已有 |
+| L3 | AnimatedQuadraticPlane | QUADRATIC 抛物线 | ✅ v2.2.0 |
+| L4 | Desmos API 嵌入 | 函数图/不等式/多函数对比 | ⬜ |
+| L5 | GeoGebra 嵌入 | 几何作图/变换/尺规构造 | ⬜ 按需 |
+
+**教学法引导模板（已实施于 LINEAR）：**
+```
+Step 1: 概念引入 — gradient(m) = change in y / change in x
+Step 2: 公式呈现 — m = (y₂-y₁)/(x₂-x₁)
+Step 3: 代入数值 — m = (y₂-y₁)/(x₂-x₁) = 具体数
+Step 4: 下一步计算 — b = y₁ - mx₁ = 具体数
+Step 5: 最终结果 — y = mx + b
+```
+所有 LaTeX 公式使用 `\frac{}{}` 分数渲染。
+
+**Amber 阶段图像策略：**
+- Green: 动画逐步展开（跟随 tutorialStep）
+- Amber: 完整图像直接显示（step=999）+ 公式提示
+- Red: 不显示图像，完全独立
+
+**下一步任务：**
+
+| # | 任务 | 详情 | 状态 |
+|---|------|------|------|
+| 3.6.1 | AnimatedQuadraticPlane | 抛物线逐步绘制 + PracticeScreen 集成 | ✅ v2.2.0 |
+| 3.6.2 | Amber/Red 图像分级 | Green=动画, Amber=完整图, Red=无图 | ✅ v2.2.0 |
+| 3.6.3 | LINEAR 教学法重写 | 概念→公式→代入→截距→结果 5步 | ✅ v2.2.0 |
+| 3.6.4 | QUADRATIC 教学法重写 | 同 LINEAR 模式：概念→公式→代入 | ⬜ |
+| 3.6.5 | TRIG 动画三角形 | AnimatedTrianglePlane: SOH-CAH-TOA 逐步标注 | ⬜ |
+| 3.6.6 | Desmos API 集成 | `<DesmosGraph />` 组件，函数图/不等式 | ⬜ |
+| 3.6.7 | 其他生成器教学法升级 | 按 LINEAR 模板逐个优化 | ⬜ |
 
 **40 个高频 KP 候选范围**（基于 CIE 0580 分析管线 topic frequency）：
 - CH1 数论：1.1(数的类型), 1.4(四则运算), 1.7(分数/小数/百分比), 1.12(比例)
@@ -602,5 +644,6 @@ skillSummary: { zh: '等式两边做相同运算，等式不变', en: 'Same oper
 | 2026-03-18 | **v2.0.0** | **Phase 3 代码完成: 100% 生成器覆盖（49/49），24 种生成器，980 自动化测试** |
 | 2026-03-18 | v2.0.1 | 数学正确性审查：6 项错误修复（3 CRITICAL 概念错误 + 3 数据不匹配） |
 | 2026-03-18 | v2.1.0 | 数学输入系统：分数(3/4)/根号(√5)/负数 + 概率分数显示 + 科学计算器(🧮) |
+| 2026-03-18 | v2.2.0 | Phase 3.6: 可视化引导框架 — AnimatedQuadraticPlane + Amber图像 + LINEAR教学法重写(概念→公式→代入) |
 | — | v3.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |
 | — | v4.0.0 | Phase 5: 章节地图 + 视频三位一体 + 离线支持 |
