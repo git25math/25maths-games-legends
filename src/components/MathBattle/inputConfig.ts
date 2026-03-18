@@ -86,8 +86,8 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     en: [{ id: 'ans', label: 'Result', placeholder: 'Result = ?' }],
   },
   RATIO: {
-    zh: [{ id: 'x', label: '前项 x', placeholder: 'x = ?' }, { id: 'y', label: '后项 y', placeholder: 'y = ?' }],
-    en: [{ id: 'x', label: 'First term x', placeholder: 'x = ?' }, { id: 'y', label: 'Second term y', placeholder: 'y = ?' }],
+    zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
   },
   SIMILARITY: {
     zh: [{ id: 'x', label: '未知边 x', placeholder: 'x = ?' }],
@@ -164,5 +164,9 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
   SIMPLIFY: {
     zh: [{ id: 'ans', label: '系数', placeholder: '= ?' }],
     en: [{ id: 'ans', label: 'Coefficient', placeholder: '= ?' }],
+  },
+  COORDINATES: {
+    zh: [{ id: 'x', label: 'x 坐标', placeholder: 'x = ?' }, { id: 'y', label: 'y 坐标', placeholder: 'y = ?' }],
+    en: [{ id: 'x', label: 'x coordinate', placeholder: 'x = ?' }, { id: 'y', label: 'y coordinate', placeholder: 'y = ?' }],
   },
 };

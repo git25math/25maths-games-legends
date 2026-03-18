@@ -214,6 +214,9 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     }
   }
   if (type === 'RATIO') {
+    if (data.answer !== undefined && inputs.ans !== undefined) {
+      return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+    }
     const { a, b } = data;
     const x = parse(inputs.x || '');
     const y = parse(inputs.y || '');
@@ -289,6 +292,10 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   }
   if (type === 'SIMPLIFY') {
     return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'COORDINATES') {
+    const ok = parse(inputs.x || '') === data.targetX && parse(inputs.y || '') === data.targetY;
+    return { correct: ok, expected: { x: String(data.targetX), y: String(data.targetY) } };
   }
   return { correct: false, expected: {} };
 }

@@ -73,7 +73,8 @@ export const translations = {
       INTEGER_MUL: "整数乘除",
       FDP_CONVERT: "分数·小数·百分比",
       BODMAS: "运算顺序",
-      SIMPLIFY: "化简表达式"
+      SIMPLIFY: "化简表达式",
+      COORDINATES: "坐标读写"
     },
     difficulty: {
       Easy: "简单",
@@ -229,7 +230,8 @@ export const translations = {
       INTEGER_MUL: "Integer Multiply/Divide",
       FDP_CONVERT: "Fraction·Decimal·Percent",
       BODMAS: "Order of Operations",
-      SIMPLIFY: "Simplify Expressions"
+      SIMPLIFY: "Simplify Expressions",
+      COORDINATES: "Coordinates"
     },
     difficulty: {
       Easy: "Easy",

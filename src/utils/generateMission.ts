@@ -61,7 +61,9 @@ export type GeneratorType =
   | 'BODMAS_RANDOM'
   | 'SIMPLIFY_RANDOM'
   | 'STATISTICS_MODE_RANDOM'
-  | 'SIMPLE_EQ_TWOSTEP_RANDOM';
+  | 'SIMPLE_EQ_TWOSTEP_RANDOM'
+  | 'COORDINATES_RANDOM'
+  | 'RATIO_Y7_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -119,6 +121,8 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   SIMPLIFY_RANDOM: generateSimplifyMission,
   STATISTICS_MODE_RANDOM: generateStatsModeMission,
   SIMPLE_EQ_TWOSTEP_RANDOM: generateTwoStepEqMission,
+  COORDINATES_RANDOM: generateCoordinatesMission,
+  RATIO_Y7_RANDOM: generateRatioY7Mission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -4826,4 +4830,175 @@ export function generateTwoStepEqMission(template: Mission): Mission {
     data: { ...template.data, x, a, b, result, left: `${a}x + ${b}`, right: `${result}`, generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM', tutorialEquationSteps },
     tutorialSteps,
   };
+}
+
+/* ══════════════════════════════════════════════════════════
+   COORDINATES generator: read/identify coordinate points
+   ══════════════════════════════════════════════════════════ */
+
+export function generateCoordinatesMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+  const mode: 'read' | 'negative' = template.data?.mode ?? 'read';
+
+  let targetX: number, targetY: number;
+
+  if (mode === 'negative' || tier >= 2) {
+    // Include negative coordinates (quadrants II, III, IV)
+    const ranges: Record<DifficultyTier, [number, number]> = { 1: [-5, 5], 2: [-8, 8], 3: [-10, 10] };
+    const [lo, hi] = ranges[tier];
+    targetX = randInt(lo, hi);
+    targetY = randInt(lo, hi);
+    // Avoid origin for meaningful questions
+    if (targetX === 0 && targetY === 0) targetX = randInt(1, hi);
+  } else {
+    // First quadrant only (tier 1, mode 'read')
+    targetX = randInt(1, 8);
+    targetY = randInt(1, 8);
+  }
+
+  const quadrant = targetX > 0 && targetY > 0 ? 'I' : targetX < 0 && targetY > 0 ? 'II' : targetX < 0 && targetY < 0 ? 'III' : 'IV';
+  const quadrantZh = { I: '第一象限（右上）', II: '第二象限（左上）', III: '第三象限（左下）', IV: '第四象限（右下）' }[quadrant];
+  const quadrantEn = { I: 'Quadrant I (top-right)', II: 'Quadrant II (top-left)', III: 'Quadrant III (bottom-left)', IV: 'Quadrant IV (bottom-right)' }[quadrant];
+
+  const description: BilingualText = {
+    zh: `敌营位于坐标 $(${targetX}, ${targetY})$。输入 $x$ 和 $y$ 坐标。`,
+    en: `Enemy camp is at $(${targetX}, ${targetY})$. Enter the $x$ and $y$ coordinates.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：什么是坐标？——用两个数字标记地图上的位置`, en: `${narrator}: "What are coordinates? — Two numbers that mark a position on a map"` },
+      hint: { zh: `想象一张方格地图：\n• 横着看（→）= $x$ 轴\n• 竖着看（↑）= $y$ 轴\n• 两条轴交叉的点 = 原点 $(0, 0)$\n\n每个位置用 $(x, y)$ 表示：\n先走横的（$x$），再走竖的（$y$）\n\n口诀：先横后竖，先 $x$ 后 $y$`, en: `Imagine a grid map:\n• Horizontal (→) = $x$-axis\n• Vertical (↑) = $y$-axis\n• Where they cross = origin $(0, 0)$\n\nEvery position is written $(x, y)$:\nGo horizontal first ($x$), then vertical ($y$)\n\nRule: across first, then up — $x$ before $y$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：$x$ 坐标——往右为正，往左为负`, en: `${narrator}: "$x$ coordinate — right is positive, left is negative"` },
+      hint: { zh: `从原点出发：\n• 往右走 3 步 → $x = 3$\n• 往左走 2 步 → $x = -2$\n\n$x = ${targetX}$ 表示从原点往${targetX >= 0 ? `右走 $${targetX}$` : `左走 $${Math.abs(targetX)}$`} 步`, en: `From the origin:\n• 3 steps right → $x = 3$\n• 2 steps left → $x = -2$\n\n$x = ${targetX}$ means ${targetX >= 0 ? `$${targetX}$ steps right` : `$${Math.abs(targetX)}$ steps left`} from origin` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：$y$ 坐标——往上为正，往下为负`, en: `${narrator}: "$y$ coordinate — up is positive, down is negative"` },
+      hint: { zh: `接着刚才的位置：\n• 往上走 4 步 → $y = 4$\n• 往下走 1 步 → $y = -1$\n\n$y = ${targetY}$ 表示从那个位置往${targetY >= 0 ? `上走 $${targetY}$` : `下走 $${Math.abs(targetY)}$`} 步`, en: `From the current position:\n• 4 steps up → $y = 4$\n• 1 step down → $y = -1$\n\n$y = ${targetY}$ means ${targetY >= 0 ? `$${targetY}$ steps up` : `$${Math.abs(targetY)}$ steps down`}` },
+      highlightField: 'y',
+    },
+    {
+      text: { zh: `${narrator}：所以目标位置 = $(${targetX}, ${targetY})$`, en: `${narrator}: "So the target position = $(${targetX}, ${targetY})$"` },
+      hint: { zh: `从原点出发：\n① 先横走：${targetX >= 0 ? `右 $${targetX}$` : `左 $${Math.abs(targetX)}$`}\n② 再竖走：${targetY >= 0 ? `上 $${targetY}$` : `下 $${Math.abs(targetY)}$`}\n\n到达点 $(${targetX}, ${targetY})$，在${quadrantZh}\n\n$x = ${targetX}$，$y = ${targetY}$`, en: `From origin:\n① Horizontal: ${targetX >= 0 ? `right $${targetX}$` : `left $${Math.abs(targetX)}$`}\n② Vertical: ${targetY >= 0 ? `up $${targetY}$` : `down $${Math.abs(targetY)}$`}\n\nReaches $(${targetX}, ${targetY})$, in ${quadrantEn}\n\n$x = ${targetX}$, $y = ${targetY}$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：记住坐标的规矩`, en: `${narrator}: "Remember the coordinate rules"` },
+      hint: { zh: `① 永远先写 $x$（横），再写 $y$（竖）\n② 右和上 = 正数，左和下 = 负数\n③ 原点 $(0, 0)$ 是起点\n④ 四个象限：\n   I $(+,+)$ 右上  |  II $(-,+)$ 左上\n   III $(-,-)$ 左下  |  IV $(+,-)$ 右下`, en: `① Always write $x$ (horizontal) first, then $y$ (vertical)\n② Right/up = positive, left/down = negative\n③ Origin $(0, 0)$ is the starting point\n④ Four quadrants:\n   I $(+,+)$ top-right  |  II $(-,+)$ top-left\n   III $(-,-)$ bottom-left  |  IV $(+,-)$ bottom-right` },
+      highlightField: 'x',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { targetX, targetY, mode, generatorType: 'COORDINATES_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   RATIO_Y7 generator: simplify ratios and divide in ratio
+   ══════════════════════════════════════════════════════════ */
+
+export function generateRatioY7Mission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '曹操';
+  const mode: 'simplify' | 'divide' = template.data?.mode ?? 'simplify';
+
+  if (mode === 'divide') {
+    // Divide a total in a given ratio
+    const ratioPools: Record<DifficultyTier, [number, number][]> = {
+      1: [[1, 2], [1, 3], [2, 3], [1, 4]],
+      2: [[2, 3], [3, 4], [2, 5], [3, 5], [1, 4]],
+      3: [[3, 5], [2, 7], [3, 7], [4, 5], [5, 7]],
+    };
+    const [a, b] = pickRandom(ratioPools[tier]);
+    const parts = a + b;
+    const totalPools: Record<DifficultyTier, number[]> = {
+      1: [parts * 5, parts * 10, parts * 4, parts * 6],
+      2: [parts * 8, parts * 10, parts * 12, parts * 15],
+      3: [parts * 10, parts * 15, parts * 20, parts * 25],
+    };
+    const total = pickRandom(totalPools[tier]);
+    const answerA = total * a / parts;
+    const answerB = total * b / parts;
+    // Ask for the smaller share (x)
+    const answer = answerA;
+
+    const description: BilingualText = {
+      zh: `把 $${total}$ 按 $${a}:${b}$ 分配，较小份是多少？`,
+      en: `Divide $${total}$ in the ratio $${a}:${b}$. What is the smaller share?`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: { zh: `${narrator}：按比例分配——先算总份数`, en: `${narrator}: "Divide in ratio — first find total parts"` },
+        hint: { zh: `比例 $${a}:${b}$ 意思是：\n一共分成 $${a} + ${b} = ${parts}$ 份\n第一份占 $${a}$ 份，第二份占 $${b}$ 份`, en: `Ratio $${a}:${b}$ means:\nTotal $${a} + ${b} = ${parts}$ parts\nFirst gets $${a}$ parts, second gets $${b}$ parts` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：每份值多少？总数 ÷ 总份数`, en: `${narrator}: "How much is each part? Total ÷ total parts"` },
+        hint: { zh: `每份 $= ${total} \\div ${parts} = ${total / parts}$`, en: `Each part $= ${total} \\div ${parts} = ${total / parts}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：各得多少？每份 × 对应份数`, en: `${narrator}: "Each share? Each part × number of parts"` },
+        hint: { zh: `第一份：$${a} \\times ${total / parts} = ${answerA}$\n第二份：$${b} \\times ${total / parts} = ${answerB}$\n\n验算：$${answerA} + ${answerB} = ${total}$ ✓`, en: `First: $${a} \\times ${total / parts} = ${answerA}$\nSecond: $${b} \\times ${total / parts} = ${answerB}$\n\nCheck: $${answerA} + ${answerB} = ${total}$ ✓` },
+        highlightField: 'ans',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { a, b, total, answer, mode, generatorType: 'RATIO_Y7_RANDOM' },
+      tutorialSteps,
+    };
+  } else {
+    // Simplify a ratio
+    const gcdPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6], 3: [3, 4, 5, 6, 8, 10] };
+    const simplePairs: [number, number][] = [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [2, 5], [3, 5], [1, 5]];
+    const [sa, sb] = pickRandom(simplePairs);
+    const g = pickRandom(gcdPools[tier]);
+    const a = sa * g;
+    const b = sb * g;
+    // Answer is the simplified first term
+    const answer = sa;
+
+    const description: BilingualText = {
+      zh: `化简比 $${a}:${b}$，最简比的第一项是多少？`,
+      en: `Simplify $${a}:${b}$. What is the first term of the simplest ratio?`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: { zh: `${narrator}：化简比——跟约分一样，找最大公因数`, en: `${narrator}: "Simplify ratio — like simplifying fractions, find the HCF"` },
+        hint: { zh: `化简比就像约分：\n$\\frac{${a}}{${b}}$ 约分 → $\\frac{${sa}}{${sb}}$\n$${a}:${b}$ 化简 → $${sa}:${sb}$\n\n方法：两个数都除以它们的最大公因数`, en: `Simplifying a ratio is like simplifying a fraction:\n$\\frac{${a}}{${b}}$ simplified → $\\frac{${sa}}{${sb}}$\n$${a}:${b}$ simplified → $${sa}:${sb}$\n\nMethod: divide both by their HCF` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：$${a}$ 和 $${b}$ 的最大公因数是 $${g}$`, en: `${narrator}: "HCF of $${a}$ and $${b}$ is $${g}$"` },
+        hint: { zh: `$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\n所以 $${a}:${b} = ${sa}:${sb}$`, en: `$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\nSo $${a}:${b} = ${sa}:${sb}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：验算——$${sa}$ 和 $${sb}$ 还能再约吗？`, en: `${narrator}: "Verify — can $${sa}$ and $${sb}$ be simplified further?"` },
+        hint: { zh: `$${sa}$ 和 $${sb}$ 的公因数只有 $1$\n→ 已经是最简比 ✓\n\n$${a}:${b} = ${sa}:${sb}$\n第一项 = $${sa}$`, en: `HCF of $${sa}$ and $${sb}$ is $1$\n→ Already in simplest form ✓\n\n$${a}:${b} = ${sa}:${sb}$\nFirst term = $${sa}$` },
+        highlightField: 'ans',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { a, b, sa, sb, g, answer, mode, generatorType: 'RATIO_Y7_RANDOM' },
+      tutorialSteps,
+    };
+  }
 }

@@ -53,7 +53,8 @@ export type QuestionType =
   | 'INTEGER_MUL'
   | 'FDP_CONVERT'
   | 'BODMAS'
-  | 'SIMPLIFY';
+  | 'SIMPLIFY'
+  | 'COORDINATES';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 

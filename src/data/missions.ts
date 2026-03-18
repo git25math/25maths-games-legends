@@ -422,6 +422,22 @@ export const MISSIONS: Mission[] = [
     ],
     secret: { concept: { zh: '运算顺序：括号最先，然后幂，再乘除，最后加减。不是从左到右！', en: 'Order of operations: Brackets first, then powers, then multiply/divide, finally add/subtract. NOT left to right!' }, formula: '$\\text{B → O → DM → AS}$', tips: [{ zh: '诸葛亮提示：军令如山，顺序错了全盘皆输！', en: 'Zhuge Liang Tip: Like military orders — wrong sequence means total defeat!' }] }
   },
+  {
+    id: 691, grade: 7, unitId: 1, order: 0.5,
+    unitTitle: { zh: "Unit 1: 结义与代数入门", en: "Unit 1: Oath & Intro to Algebra" },
+    topic: 'Algebra', type: 'BODMAS',
+    title: { zh: '括号将令', en: 'Brackets Override' },
+    skillName: { zh: '括号优先术', en: 'Brackets First' },
+    skillSummary: { zh: '括号是最高优先级——括号里的永远先算', en: 'Brackets have highest priority — always calculate inside brackets first' },
+    story: { zh: '诸葛亮的加密升级了！加了括号的密令，括号内的运算优先执行——就像将军的命令比士兵的命令优先级更高！', en: 'Zhuge Liang upgrades his encryption with brackets! Operations inside brackets execute first — like a general\'s orders override a soldier\'s!' },
+    description: { zh: '含括号的运算——括号最先。', en: 'Calculate with brackets — brackets first.' },
+    data: { answer: 35, expr: '(3 + 4) \\times 5', generatorType: 'BODMAS_RANDOM' }, difficulty: 'Medium', reward: 50,
+    kpId: 'kp-1.6-03', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：有括号？括号最大！先算括号里面', en: 'Zhuge Liang: "Brackets? They\'re the boss! Calculate inside first"' }, hint: { zh: '$(3 + 4) \\times 5$\n\n第一步：括号内 $3 + 4 = 7$\n第二步：$7 \\times 5 = 35$\n\n如果没括号：$3 + 4 \\times 5 = 3 + 20 = 23$\n有括号 vs 没括号，结果完全不同！', en: '$(3 + 4) \\times 5$\n\nStep 1: inside brackets $3 + 4 = 7$\nStep 2: $7 \\times 5 = 35$\n\nWithout brackets: $3 + 4 \\times 5 = 3 + 20 = 23$\nWith vs without brackets — totally different!' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '括号改变运算顺序——括号内的永远最先算。有括号先算括号，没括号先算乘除。', en: 'Brackets change the order — inside brackets is always first. With brackets: brackets first. Without: multiply/divide first.' }, formula: '$\\text{B → O → DM → AS}$', tips: [{ zh: '诸葛亮提示：括号就像军令状——盖了印的优先执行！', en: 'Zhuge Liang Tip: Brackets are like sealed orders — they take priority!' }] }
+  },
   // --- Year 7: The Peach Garden Oath (Foundations) ---
   {
     id: 711, grade: 7, unitId: 1, order: 1,
@@ -670,6 +686,43 @@ export const MISSIONS: Mission[] = [
     ],
     secret: { concept: { zh: '增减百分比的关键是乘法因子：增加用 (1+r)，减少用 (1-r)。', en: 'The key to percentage change is the multiplier: increase (1+r), decrease (1-r).' }, formula: '$\\text{新值} = \\text{原值} \\times (1 \\pm r)$', tips: [{ zh: '曹操提示：粮价涨跌关乎国运，算清楚才能决策！', en: 'Cao Cao Tip: Grain prices affect the nation — calculate clearly to decide wisely!' }] }
   },
+  // --- Year 7 Unit 2 续: 比例化简与分配 ---
+  {
+    id: 725, grade: 7, unitId: 2, order: 5,
+    unitTitle: { zh: "Unit 2: 粮草调度与比例", en: "Unit 2: Logistics & Ratios" },
+    topic: 'Algebra', type: 'RATIO',
+    title: { zh: '精简军令', en: 'Simplify Orders' },
+    skillName: { zh: '比例化简术', en: 'Simplifying Ratios' },
+    skillSummary: { zh: '化简比就像约分——两项同时除以最大公因数', en: 'Simplify ratio like simplifying fractions — divide both terms by HCF' },
+    story: { zh: '曹操的军令写着"步兵与骑兵按 12:8 配比"。谋士荀彧说："丞相，比例可以化简——12:8 就是 3:2，更简洁明了！"', en: 'Cao Cao\'s order reads "infantry to cavalry ratio 12:8." Advisor Xun Yu says: "My lord, simplify — 12:8 is just 3:2, much clearer!"' },
+    description: { zh: '化简比，求最简比的第一项。', en: 'Simplify the ratio. Find the first term.' },
+    data: { a: 12, b: 8, sa: 3, sb: 2, g: 4, answer: 3, mode: 'simplify', generatorType: 'RATIO_Y7_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-1.11-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '荀彧：化简比跟约分一样——找最大公因数', en: 'Xun Yu: "Simplifying ratios is like simplifying fractions — find the HCF"' }, hint: { zh: '$12:8$\nHCF$(12, 8) = 4$\n$12 \\div 4 = 3$\n$8 \\div 4 = 2$\n最简比 = $3:2$', en: '$12:8$\nHCF$(12, 8) = 4$\n$12 \\div 4 = 3$\n$8 \\div 4 = 2$\nSimplest ratio = $3:2$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '化简比 = 两项同除以最大公因数。和约分原理完全相同！', en: 'Simplify ratio = divide both by HCF. Exact same principle as simplifying fractions!' }, formula: '$a:b = \\frac{a}{\\text{HCF}}:\\frac{b}{\\text{HCF}}$', tips: [{ zh: '荀彧提示：化简比和约分是一回事——Unit 0 学的 HCF 在这里又用上了！', en: 'Xun Yu Tip: Simplifying ratios IS simplifying fractions — the HCF from Unit 0 comes back!' }] }
+  },
+  {
+    id: 726, grade: 7, unitId: 2, order: 6,
+    unitTitle: { zh: "Unit 2: 粮草调度与比例", en: "Unit 2: Logistics & Ratios" },
+    topic: 'Algebra', type: 'RATIO',
+    title: { zh: '战利分配', en: 'Sharing War Spoils' },
+    skillName: { zh: '按比分配术', en: 'Dividing in a Ratio' },
+    skillSummary: { zh: '按比例分配：先算总份数，再算每份值，最后乘以各自份数', en: 'Divide in ratio: total parts first, then value per part, then multiply' },
+    story: { zh: '攻城胜利后缴获 120 金！按功劳 2:3 分给前锋营和主力营。前锋营虽然人少但冲在最前面，应该分到多少？', en: 'After the siege, 120 gold is captured! Share between vanguard and main army in ratio 2:3. The vanguard charged first — how much do they get?' },
+    description: { zh: '把总数按比例分配，求较小份。', en: 'Divide the total in the given ratio. Find the smaller share.' },
+    data: { a: 2, b: 3, total: 120, answer: 48, mode: 'divide', generatorType: 'RATIO_Y7_RANDOM' }, difficulty: 'Medium', reward: 55,
+    kpId: 'kp-1.11-02', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '曹操：按比分配——三步走', en: 'Cao Cao: "Divide by ratio — three steps"' }, hint: { zh: '① 总份数 $= 2 + 3 = 5$\n② 每份值 $= 120 \\div 5 = 24$\n③ 前锋 $= 2 \\times 24 = 48$，主力 $= 3 \\times 24 = 72$\n\n验算：$48 + 72 = 120$ ✓', en: '① Total parts $= 2 + 3 = 5$\n② Value per part $= 120 \\div 5 = 24$\n③ Vanguard $= 2 \\times 24 = 48$, Main $= 3 \\times 24 = 72$\n\nCheck: $48 + 72 = 120$ ✓' }, highlightField: 'ans' },
+    ],
+    storyConsequence: {
+      correct: { zh: '曹操：分配公正！前锋 48 金，主力 72 金——军心大振！', en: 'Cao Cao: "Fair distribution! Vanguard 48, main 72 — morale soars!"' },
+      wrong: { zh: '曹操：分配不均，前锋将士不服...重新算！', en: 'Cao Cao: "Unfair split — vanguard soldiers revolt! Recalculate!"' },
+    },
+    secret: { concept: { zh: '按比分配三步：总份数→每份值→各自乘。这连接了除法、乘法和比例三个技能！', en: 'Divide in ratio: total parts → value per part → multiply each. This connects division, multiplication, and ratios!' }, formula: '$\\text{份额} = \\text{总数} \\times \\frac{\\text{自己的份数}}{\\text{总份数}}$', tips: [{ zh: '曹操提示：功劳大的多分——但得算公平！', en: 'Cao Cao Tip: More merit, more reward — but it must be fair!' }] }
+  },
   {
     id: 731, grade: 7, unitId: 3, order: 1,
     unitTitle: { zh: "Unit 3: 关隘与角度", en: "Unit 3: Passes & Angles" },
@@ -832,6 +885,44 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：剩下的缺口就是未知角', en: 'Zhuge Liang: "The remaining gap is the unknown angle"' }, hint: { zh: '$x = 360° - 260° = 100°$\n\n这 $100°$ 的方向就是要重点防守的位置！', en: '$x = 360° - 260° = 100°$\n\nThis $100°$ direction is where we need the most defense!' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '围绕一点的所有角加起来等于 360°（一整圈）。少一度都是防御漏洞！', en: 'Angles around a point sum to 360° (a full turn). Even 1° missing is a gap in defense!' }, formula: '$\\text{全部角之和} = 360°$', tips: [{ zh: '诸葛亮提示：三百六十度无死角，方可高枕无忧！', en: 'Zhuge Liang Tip: Full 360° coverage — only then can you sleep soundly!' }] }
+  },
+  // --- Year 7 Unit 3A: 战场地图·坐标篇 ---
+  {
+    id: 745, grade: 7, unitId: 3, order: 6,
+    unitTitle: { zh: "Unit 3A: 战场地图·坐标篇", en: "Unit 3A: Battlefield Map — Coordinates" },
+    topic: 'Geometry', type: 'COORDINATES',
+    title: { zh: '读图定位', en: 'Map Reading' },
+    skillName: { zh: '坐标读写术', en: 'Reading Coordinates' },
+    skillSummary: { zh: '坐标 (x, y)：先横后竖，右上为正', en: 'Coordinates (x, y): horizontal first, then vertical; right/up = positive' },
+    story: { zh: '诸葛亮展开战场地图，上面标满了方格。"每个敌营都有一个坐标——先看横坐标（左右），再看纵坐标（上下）。读准坐标，才能精确打击！"', en: 'Zhuge Liang unfolds the battlefield map, covered in grid squares. "Every enemy camp has coordinates — read the x (horizontal) first, then y (vertical). Accurate coordinates mean precise strikes!"' },
+    description: { zh: '读出目标位置的坐标 $(x, y)$。', en: 'Read the coordinates $(x, y)$ of the target.' },
+    data: { targetX: 3, targetY: 5, mode: 'read', generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-3.1-01', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：坐标就是地图上的"地址"——用两个数字定位', en: 'Zhuge Liang: "Coordinates are the address on a map — two numbers pin a location"' }, hint: { zh: '$(x, y)$：先看 $x$（横着走几步），再看 $y$（竖着走几步）\n口诀：先横后竖，先 $x$ 后 $y$', en: '$(x, y)$: $x$ = horizontal steps, $y$ = vertical steps\nRule: horizontal first, vertical second' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：$x$ 往右为正，往左为负；$y$ 往上为正，往下为负', en: 'Zhuge Liang: "$x$: right = positive, left = negative; $y$: up = positive, down = negative"' }, highlightField: 'x' },
+    ],
+    secret: { concept: { zh: '坐标系用 (x,y) 两个数字标记位置。x 是左右，y 是上下。原点 (0,0) 是起点。', en: 'The coordinate system uses (x,y) to mark positions. x = left/right, y = up/down. Origin (0,0) is the start.' }, formula: '$(x, y)$：先横后竖', tips: [{ zh: '诸葛亮提示：读图如读兵法——坐标不准，全盘皆输！', en: 'Zhuge Liang Tip: Reading maps is like reading strategy — wrong coordinates mean total defeat!' }] }
+  },
+  {
+    id: 746, grade: 7, unitId: 3, order: 7,
+    unitTitle: { zh: "Unit 3A: 战场地图·坐标篇", en: "Unit 3A: Battlefield Map — Coordinates" },
+    topic: 'Geometry', type: 'COORDINATES',
+    title: { zh: '四象限侦察', en: 'Four Quadrant Recon' },
+    skillName: { zh: '负坐标辨识术', en: 'Negative Coordinates' },
+    skillSummary: { zh: '坐标可以是负数——左边和下面是负的，四个象限都要能定位', en: 'Coordinates can be negative — left/down are negative, locate in all four quadrants' },
+    story: { zh: '赵云奉命侦察四个方向的敌营。有的在右上（正正），有的在左下（负负）。坐标有正有负，四个象限都不能漏！', en: 'Zhao Yun scouts enemy camps in all directions. Some are top-right (+,+), others bottom-left (−,−). Coordinates can be positive or negative — cover all four quadrants!' },
+    description: { zh: '读出含负数的坐标。', en: 'Read coordinates with negative values.' },
+    data: { targetX: -3, targetY: 4, mode: 'negative', generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Medium', reward: 55,
+    kpId: 'kp-3.1-02', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '赵云：坐标有四个象限——正负数的组合', en: 'Zhao Yun: "Four quadrants — combinations of positive and negative"' }, hint: { zh: 'I $(+,+)$ 右上 | II $(-,+)$ 左上\nIII $(-,-)$ 左下 | IV $(+,-)$ 右下\n\n$(-3, 4)$：$x=-3$（左走 3），$y=4$（上走 4）→ 第 II 象限', en: 'I $(+,+)$ top-right | II $(-,+)$ top-left\nIII $(-,-)$ bottom-left | IV $(+,-)$ bottom-right\n\n$(-3, 4)$: $x=-3$ (left 3), $y=4$ (up 4) → Quadrant II' }, highlightField: 'x' },
+    ],
+    storyConsequence: {
+      correct: { zh: '赵云：坐标精确！敌营位置锁定，可以包抄！', en: 'Zhao Yun: "Precise coordinates! Enemy camp located — ready to flank!"' },
+      wrong: { zh: '赵云：坐标搞反了...侦察兵跑错方向！重新定位！', en: 'Zhao Yun: "Coordinates mixed up... scouts went the wrong way! Relocate!"' },
+    },
+    secret: { concept: { zh: '四个象限由 x 和 y 的正负决定。负坐标 = 反方向。', en: 'Four quadrants depend on signs of x and y. Negative = opposite direction.' }, formula: 'I$(+,+)$ II$(-,+)$ III$(-,-)$ IV$(+,-)$', tips: [{ zh: '赵云提示：正负不分，敌友不明！', en: 'Zhao Yun Tip: Mix up signs and you can\'t tell friend from foe!' }] }
   },
   // --- Year 7 Unit 4: 行军数列·序列篇 ---
   {
