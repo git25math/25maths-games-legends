@@ -13,6 +13,7 @@ import { AnimatedTutorial } from '../components/MathBattle/AnimatedTutorial';
 import { WrongAnswerPanel } from '../components/MathBattle/WrongAnswerPanel';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { SkillBadgeCard } from '../components/SkillBadgeCard';
+import { CalculatorWidget } from '../components/Calculator';
 import { useAudio } from '../hooks/useAudio';
 
 type PracticePhase = 'green' | 'amber' | 'red';
@@ -145,6 +146,16 @@ export const PracticeScreen = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto p-4 bg-slate-900/95 backdrop-blur-md">
     <div className="min-h-full flex items-center justify-center py-4">
+      <CalculatorWidget
+        lang={lang}
+        onUseResult={(val) => setInputs(prev => {
+          const fields = Object.keys(prev);
+          const emptyField = fields.find(f => !prev[f]) || fields[0];
+          if (emptyField) return { ...prev, [emptyField]: val };
+          return prev;
+        })}
+      />
+
       {/* Correct answer flash overlay */}
       <AnimatePresence>
         {showCorrectFlash && (

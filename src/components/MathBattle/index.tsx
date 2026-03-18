@@ -16,6 +16,7 @@ import { AchievementCard } from '../AchievementCard';
 import { WrongAnswerPanel } from './WrongAnswerPanel';
 import { generateMission } from '../../utils/generateMission';
 import { SKILL_CARDS } from '../SkillCardSelector';
+import { CalculatorWidget } from '../Calculator';
 
 const DIFFICULTY_MULTIPLIER: Record<DifficultyMode, number> = { green: 1, amber: 1.5, red: 2 };
 const TOTAL_QUESTIONS = 5;
@@ -290,6 +291,16 @@ export const MathBattle = ({
     <div className="fixed inset-0 z-50 overflow-y-auto p-4 bg-slate-900/95 backdrop-blur-md">
     <div className="min-h-full flex items-center justify-center py-4">
       <Confetti active={showConfetti} />
+      <CalculatorWidget
+        lang={lang}
+        onUseResult={(val) => setInputs(prev => {
+          // Put result in the first empty field, or the first field
+          const fields = Object.keys(prev);
+          const emptyField = fields.find(f => !prev[f]) || fields[0];
+          if (emptyField) return { ...prev, [emptyField]: val };
+          return prev;
+        })}
+      />
 
       {showAchievement && (
         <AchievementCard
