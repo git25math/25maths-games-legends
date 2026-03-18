@@ -158,7 +158,9 @@ export function generateIndicesMission(template: Mission): Mission {
   const tier = getTier();
   const basePools = { 1: [2, 3], 2: [2, 3, 5], 3: [2, 3, 5, 7] };
   const base = pickRandom(basePools[tier]);
-  const op = template.data?.op === 'div' ? 'div' : pickRandom(['mul', 'div'] as const);
+  // Follow template: if template has op='div', stay div; otherwise stay mul
+  // Don't randomize op — it must match the story context
+  const op = template.data?.op === 'div' ? 'div' : 'mul';
   let e1: number, e2: number;
   const eRanges = { 1: [2, 3] as const, 2: [2, 5] as const, 3: [3, 8] as const };
   if (op === 'div') {

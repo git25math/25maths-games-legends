@@ -20,7 +20,7 @@ export const CharacterCard = ({ character, isSelected, onSelect, lang }: { chara
     <p className="text-yellow-300 text-xs text-center font-medium mb-3">{character.role[lang]}</p>
 
     <div className="bg-black/20 p-2 rounded-lg mb-3">
-      <p className="text-[10px] text-indigo-300 font-bold mb-1">武将技能：</p>
+      <p className="text-[10px] text-indigo-300 font-bold mb-1">{lang === 'zh' ? '武将技能' : 'Skill'}:</p>
       <LatexText text={character.skill[lang]} className="text-[10px] text-white/80 leading-tight italic" />
     </div>
 
