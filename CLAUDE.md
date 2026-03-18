@@ -1,13 +1,16 @@
-# 25Maths Play (games-legends) — Claude Code 项目规范
+# 25Maths Play (games-legends) — 项目规范
+
+> **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
+> 本文件是 Claude Code 专用的启动协议补充。
 
 ## 启动协议
 
 每次新对话开始时，按此顺序执行：
 
-1. **读取项目状态**: `memory/project_play25maths_v5.md` → 当前版本、关卡数、架构
-2. **读取教学共识**: `memory/feedback_play25maths_pedagogy.md` → 金标准、学生画像、Anti-patterns
+1. **读取开发规范**: `docs/CONTRIBUTING.md` → 金标准、叙事原则、审查标准、Bug 防范规则
+2. **读取项目状态**: `memory/project_play25maths_v5.md` → 当前版本、关卡数、架构
 3. **读取开发计划**: `docs/DEVELOPMENT-PLAN.md` → 版本历程、下一步
-4. **如果做 Y8**: `docs/Y8-DEVELOPMENT-PLAN.md` → 完整接手计划（关卡清单/知识点/叙事/审查清单）
+4. **如果做 Y8**: `docs/Y8-DEVELOPMENT-PLAN.md` → 完整接手计划
 5. **构建确认**: `npm run build` → 必须零错误才能开始
 
 ## 项目信息
