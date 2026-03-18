@@ -63,7 +63,8 @@ export type GeneratorType =
   | 'STATISTICS_MODE_RANDOM'
   | 'SIMPLE_EQ_TWOSTEP_RANDOM'
   | 'COORDINATES_RANDOM'
-  | 'RATIO_Y7_RANDOM';
+  | 'RATIO_Y7_RANDOM'
+  | 'MIXED_IMPROPER_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -123,6 +124,7 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   SIMPLE_EQ_TWOSTEP_RANDOM: generateTwoStepEqMission,
   COORDINATES_RANDOM: generateCoordinatesMission,
   RATIO_Y7_RANDOM: generateRatioY7Mission,
+  MIXED_IMPROPER_RANDOM: generateMixedImproperMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -5085,6 +5087,108 @@ export function generateRatioY7Mission(template: Mission): Mission {
       ...template,
       description,
       data: { a, b, sa, sb, g, answer, mode, generatorType: 'RATIO_Y7_RANDOM' },
+      tutorialSteps,
+    };
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   MIXED_IMPROPER generator: convert between mixed numbers
+   and improper fractions
+   ══════════════════════════════════════════════════════════ */
+
+export function generateMixedImproperMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
+  const mode: 'to_improper' | 'to_mixed' = template.data?.mode ?? 'to_improper';
+
+  const wholePools: Record<DifficultyTier, number[]> = { 1: [1, 2, 3], 2: [1, 2, 3, 4, 5], 3: [2, 3, 4, 5, 6, 7] };
+  const denPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8], 3: [3, 4, 5, 6, 7, 8, 9, 10] };
+
+  const whole = pickRandom(wholePools[tier]);
+  const den = pickRandom(denPools[tier]);
+  const num = randInt(1, den - 1); // proper fraction part: 0 < num < den
+  const improperNum = whole * den + num; // e.g., 2⅗ → (2×5+3)/5 = 13/5
+
+  if (mode === 'to_improper') {
+    // Given mixed number → find improper fraction numerator
+    const answer = improperNum;
+
+    const description: BilingualText = {
+      zh: `把带分数 $${whole}\\frac{${num}}{${den}}$ 化成假分数，分子是多少？`,
+      en: `Convert $${whole}\\frac{${num}}{${den}}$ to an improper fraction. What is the numerator?`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: { zh: `${narrator}：什么是"带分数"和"假分数"？`, en: `${narrator}: "What are mixed numbers and improper fractions?"` },
+        hint: { zh: `带分数 = 整数 + 真分数\n例如 $${whole}\\frac{${num}}{${den}}$ = ${whole} 又 $\\frac{${num}}{${den}}$\n\n假分数 = 分子 ≥ 分母\n例如 $\\frac{${improperNum}}{${den}}$（${improperNum} ≥ ${den}）\n\n它们是同一个数的两种写法！`, en: `Mixed number = whole + proper fraction\nE.g., $${whole}\\frac{${num}}{${den}}$ = ${whole} and $\\frac{${num}}{${den}}$\n\nImproper fraction = numerator ≥ denominator\nE.g., $\\frac{${improperNum}}{${den}}$ (${improperNum} ≥ ${den})\n\nThey're the same number, two forms!` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：为什么要互转？`, en: `${narrator}: "Why convert between them?"` },
+        hint: { zh: `带分数好理解（"两块多一点"）\n假分数好计算（乘除法用假分数更方便）\n\n就像把整箱+散装的粮草全部拆成散装\n方便统一计算！`, en: `Mixed numbers are easy to understand ("two and a bit")\nImproper fractions are easy to calculate (better for × ÷)\n\nLike unpacking full crates + loose items into all loose items\nEasier to count uniformly!` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：转换方法——整数部分 × 分母 + 分子`, en: `${narrator}: "Conversion: whole × denominator + numerator"` },
+        hint: { zh: `$${whole}\\frac{${num}}{${den}}$ 怎么转？\n\n想象 ${whole} 个完整的饼，每个切成 ${den} 份：\n${whole} 个饼 = $${whole} \\times ${den} = ${whole * den}$ 份\n\n再加上零散的 ${num} 份：\n$${whole * den} + ${num} = ${improperNum}$ 份\n\n分母不变：还是 ${den}\n\n所以 $${whole}\\frac{${num}}{${den}} = \\frac{${improperNum}}{${den}}$`, en: `How to convert $${whole}\\frac{${num}}{${den}}$?\n\nImagine ${whole} whole pies, each cut into ${den} slices:\n${whole} pies = $${whole} \\times ${den} = ${whole * den}$ slices\n\nPlus ${num} loose slices:\n$${whole * den} + ${num} = ${improperNum}$ slices\n\nDenominator stays: still ${den}\n\nSo $${whole}\\frac{${num}}{${den}} = \\frac{${improperNum}}{${den}}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：公式一步到位`, en: `${narrator}: "Formula in one step"` },
+        hint: { zh: `$${whole}\\frac{${num}}{${den}} = \\frac{${whole} \\times ${den} + ${num}}{${den}} = \\frac{${improperNum}}{${den}}$\n\n分子 = $${improperNum}$`, en: `$${whole}\\frac{${num}}{${den}} = \\frac{${whole} \\times ${den} + ${num}}{${den}} = \\frac{${improperNum}}{${den}}$\n\nNumerator = $${improperNum}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：验算——反过来除一下`, en: `${narrator}: "Verify — divide back"` },
+        hint: { zh: `$${improperNum} \\div ${den} = ${whole}$ 余 $${num}$\n→ $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$ ✓\n\n口诀：整数×分母+分子，分母不变`, en: `$${improperNum} \\div ${den} = ${whole}$ remainder $${num}$\n→ $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$ ✓\n\nRule: whole × denominator + numerator, denominator stays` },
+        highlightField: 'ans',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { whole, num, den, improperNum, answer, mode, generatorType: 'MIXED_IMPROPER_RANDOM' },
+      tutorialSteps,
+    };
+  } else {
+    // Given improper fraction → find whole number part
+    const answer = whole;
+
+    const description: BilingualText = {
+      zh: `把假分数 $\\frac{${improperNum}}{${den}}$ 化成带分数，整数部分是多少？`,
+      en: `Convert $\\frac{${improperNum}}{${den}}$ to a mixed number. What is the whole number part?`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: { zh: `${narrator}：假分数——分子比分母大，说明超过了 1 个整体`, en: `${narrator}: "Improper fraction — numerator bigger than denominator, meaning more than 1 whole"` },
+        hint: { zh: `$\\frac{${improperNum}}{${den}}$：${improperNum} 份，每 ${den} 份是一个整体\n\n$${improperNum} > ${den}$，所以肯定超过 1 个整体\n具体超过多少？做除法就知道了`, en: `$\\frac{${improperNum}}{${den}}$: ${improperNum} slices, every ${den} makes one whole\n\n$${improperNum} > ${den}$, so definitely more than 1 whole\nHow many? Division tells us` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：方法——用分子 ÷ 分母`, en: `${narrator}: "Method — divide numerator by denominator"` },
+        hint: { zh: `$${improperNum} \\div ${den} = ?$\n\n$${den} \\times ${whole} = ${whole * den}$（还剩 $${improperNum} - ${whole * den} = ${num}$）\n\n商 = $${whole}$（整数部分）\n余数 = $${num}$（分子）\n分母不变 = $${den}$`, en: `$${improperNum} \\div ${den} = ?$\n\n$${den} \\times ${whole} = ${whole * den}$ (remaining: $${improperNum} - ${whole * den} = ${num}$)\n\nQuotient = $${whole}$ (whole part)\nRemainder = $${num}$ (numerator)\nDenominator stays = $${den}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：所以 $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$`, en: `${narrator}: "So $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$"` },
+        hint: { zh: `${improperNum} 份饼（每份 $\\frac{1}{${den}}$）\n= ${whole} 整个饼 + ${num} 份散装\n= $${whole}\\frac{${num}}{${den}}$\n\n整数部分 = $${whole}$`, en: `${improperNum} slices (each $\\frac{1}{${den}}$)\n= ${whole} whole pies + ${num} loose slices\n= $${whole}\\frac{${num}}{${den}}$\n\nWhole part = $${whole}$` },
+        highlightField: 'ans',
+      },
+      {
+        text: { zh: `${narrator}：验算——转回假分数`, en: `${narrator}: "Verify — convert back"` },
+        hint: { zh: `$${whole} \\times ${den} + ${num} = ${whole * den} + ${num} = ${improperNum}$\n$\\frac{${improperNum}}{${den}}$ ✓\n\n口诀：分子÷分母，商=整数，余数=新分子`, en: `$${whole} \\times ${den} + ${num} = ${whole * den} + ${num} = ${improperNum}$\n$\\frac{${improperNum}}{${den}}$ ✓\n\nRule: numerator ÷ denominator, quotient = whole, remainder = new numerator` },
+        highlightField: 'ans',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { whole, num, den, improperNum, answer, mode, generatorType: 'MIXED_IMPROPER_RANDOM' },
       tutorialSteps,
     };
   }

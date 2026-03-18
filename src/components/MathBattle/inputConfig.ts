@@ -165,6 +165,10 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'ans', label: '系数', placeholder: '= ?' }],
     en: [{ id: 'ans', label: 'Coefficient', placeholder: '= ?' }],
   },
+  MIXED_IMPROPER: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
+  },
   COORDINATES: {
     zh: [{ id: 'x', label: 'x 坐标', placeholder: 'x = ?' }, { id: 'y', label: 'y 坐标', placeholder: 'y = ?' }],
     en: [{ id: 'x', label: 'x coordinate', placeholder: 'x = ?' }, { id: 'y', label: 'y coordinate', placeholder: 'y = ?' }],

@@ -277,6 +277,43 @@ export const MISSIONS: Mission[] = [
     ],
     secret: { concept: { zh: '异分母分数相减：通分后减分子，最后约分。', en: 'Subtracting fractions: find LCD, subtract numerators, then simplify.' }, formula: '$\\frac{a}{b} - \\frac{c}{d} = \\frac{ad - bc}{bd}$', tips: [{ zh: '诸葛亮提示：粮草不可不算，算清方能持久。', en: 'Zhuge Liang Tip: Always track your supplies — accurate counts sustain campaigns.' }] }
   },
+  // --- Year 7 Unit 0B 续: 带分数↔假分数互转 ---
+  {
+    id: 692, grade: 7, unitId: 0, order: 8.3,
+    unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },
+    topic: 'Algebra', type: 'MIXED_IMPROPER',
+    title: { zh: '整箱拆零', en: 'Unpacking Crates' },
+    skillName: { zh: '带分数化假分数', en: 'Mixed to Improper' },
+    skillSummary: { zh: '整数×分母+分子 = 假分数的分子，分母不变', en: 'whole × denominator + numerator = improper numerator, denominator stays' },
+    story: { zh: '运粮队有 2 整箱加 $\\frac{3}{5}$ 箱散装粮草。为了过桥称重，需要全部拆成散装（假分数）。$2\\frac{3}{5}$ 拆成多少个 $\\frac{1}{5}$？', en: 'The supply convoy has 2 full crates plus $\\frac{3}{5}$ of a crate loose. To weigh for the bridge, unpack everything. $2\\frac{3}{5}$ = how many fifths?' },
+    description: { zh: '把带分数化成假分数，求分子。', en: 'Convert the mixed number to improper fraction. Find the numerator.' },
+    data: { whole: 2, num: 3, den: 5, improperNum: 13, answer: 13, mode: 'to_improper', generatorType: 'MIXED_IMPROPER_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-1.4-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：$2\\frac{3}{5}$——2 整箱加零散的 $\\frac{3}{5}$ 箱', en: 'Zhuge Liang: "$2\\frac{3}{5}$ — 2 full crates plus $\\frac{3}{5}$ loose"' }, hint: { zh: '每箱拆成 5 份：\n2 整箱 = $2 \\times 5 = 10$ 份\n加零散 3 份 = $10 + 3 = 13$ 份\n\n$2\\frac{3}{5} = \\frac{13}{5}$，分子 = 13', en: '5 parts per crate:\n2 crates = $2 \\times 5 = 10$ parts\nPlus 3 loose = $10 + 3 = 13$ parts\n\n$2\\frac{3}{5} = \\frac{13}{5}$, numerator = 13' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '带分数化假分数：整数×分母+分子=新分子，分母不变。', en: 'Mixed to improper: whole × denominator + numerator = new numerator.' }, formula: '$a\\frac{b}{c} = \\frac{ac + b}{c}$', tips: [{ zh: '诸葛亮提示：整箱拆零，方便过秤！', en: 'Zhuge Liang Tip: Unpack crates for easy weighing!' }] }
+  },
+  {
+    id: 690, grade: 7, unitId: 0, order: 8.6,
+    unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },
+    topic: 'Algebra', type: 'MIXED_IMPROPER',
+    title: { zh: '散装装箱', en: 'Repacking Loose Items' },
+    skillName: { zh: '假分数化带分数', en: 'Improper to Mixed' },
+    skillSummary: { zh: '分子÷分母：商=整数部分，余数=新分子，分母不变', en: 'Numerator ÷ denominator: quotient = whole, remainder = new numerator' },
+    story: { zh: '散装粮草 $\\frac{13}{5}$ 份，需要重新装箱方便运输。每 5 份装一箱，能装几整箱？还剩几份散装？', en: 'Loose grain: $\\frac{13}{5}$ parts. Repack into crates (5 per crate). How many full crates? How many loose parts remain?' },
+    description: { zh: '把假分数化成带分数，求整数部分。', en: 'Convert improper fraction to mixed number. Find the whole part.' },
+    data: { whole: 2, num: 3, den: 5, improperNum: 13, answer: 2, mode: 'to_mixed', generatorType: 'MIXED_IMPROPER_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-1.4-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：$\\frac{13}{5}$——13 份散装，每 5 份一箱', en: 'Zhuge Liang: "$\\frac{13}{5}$ — 13 loose parts, 5 per crate"' }, hint: { zh: '$13 \\div 5 = 2$ 余 $3$\n\n2 整箱（$2 \\times 5 = 10$ 份用掉了）\n还剩 3 份散装\n\n$\\frac{13}{5} = 2\\frac{3}{5}$，整数部分 = 2', en: '$13 \\div 5 = 2$ remainder $3$\n\n2 full crates ($2 \\times 5 = 10$ used)\n3 parts remain loose\n\n$\\frac{13}{5} = 2\\frac{3}{5}$, whole part = 2' }, highlightField: 'ans' },
+    ],
+    storyConsequence: {
+      correct: { zh: '诸葛亮：2 整箱 + 3 份散装，装车出发！', en: 'Zhuge Liang: "2 full crates + 3 loose — load up and march!"' },
+      wrong: { zh: '诸葛亮：装错了！粮草对不上数...重新清点！', en: 'Zhuge Liang: "Wrong count! Grain doesn\'t match... recount!"' },
+    },
+    secret: { concept: { zh: '假分数化带分数：做除法，商=整数，余数=分子，分母不变。', en: 'Improper to mixed: divide, quotient = whole, remainder = numerator.' }, formula: '$\\frac{n}{d} = (n \\div d)\\frac{n \\bmod d}{d}$', tips: [{ zh: '诸葛亮提示：散装装箱，做除法就对了！', en: 'Zhuge Liang Tip: Repacking = division!' }] }
+  },
   {
     id: 709, grade: 7, unitId: 0, order: 9,
     unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },

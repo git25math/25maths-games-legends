@@ -74,7 +74,8 @@ export const translations = {
       FDP_CONVERT: "分数·小数·百分比",
       BODMAS: "运算顺序",
       SIMPLIFY: "化简表达式",
-      COORDINATES: "坐标读写"
+      COORDINATES: "坐标读写",
+      MIXED_IMPROPER: "带分数与假分数"
     },
     difficulty: {
       Easy: "简单",
@@ -231,7 +232,8 @@ export const translations = {
       FDP_CONVERT: "Fraction·Decimal·Percent",
       BODMAS: "Order of Operations",
       SIMPLIFY: "Simplify Expressions",
-      COORDINATES: "Coordinates"
+      COORDINATES: "Coordinates",
+      MIXED_IMPROPER: "Mixed & Improper Fractions"
     },
     difficulty: {
       Easy: "Easy",

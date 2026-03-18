@@ -54,7 +54,8 @@ export type QuestionType =
   | 'FDP_CONVERT'
   | 'BODMAS'
   | 'SIMPLIFY'
-  | 'COORDINATES';
+  | 'COORDINATES'
+  | 'MIXED_IMPROPER';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 
