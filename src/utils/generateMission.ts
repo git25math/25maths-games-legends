@@ -535,6 +535,10 @@ export function generateLinearMission(template: Mission): Mission {
         zh: `${narrator}：「用坐标点的公式表示：$m = \\frac{y_2 - y_1}{x_2 - x_1}$」`,
         en: `${narrator}: "Using coordinate formula: $m = \\frac{y_2 - y_1}{x_2 - x_1}$"`,
       },
+      hint: {
+        zh: `$x_1, y_1$ 是第一个坐标 A 对应的值：$x_1 = ${x1}$，$y_1 = ${y1}$；$x_2, y_2$ 是第二个坐标 B 对应的值：$x_2 = ${x2}$，$y_2 = ${y2}$`,
+        en: `$x_1, y_1$ are from point A: $x_1 = ${x1}$, $y_1 = ${y1}$; $x_2, y_2$ are from point B: $x_2 = ${x2}$, $y_2 = ${y2}$`,
+      },
       highlightField: 'm',
     },
     // Step 3: 代入具体数值，算出 m
