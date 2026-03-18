@@ -81,7 +81,7 @@ export function AnimatedTutorial({
           <DialogueBubble text={dialogue} speaker={speaker} />
           {/* Hint box */}
           {hint && (
-            <div className="mt-2 px-3 py-1.5 rounded-lg bg-amber-100/80 border border-amber-300 text-xs text-amber-800 leading-relaxed">
+            <div className="mt-2 px-3 py-1.5 rounded-lg bg-amber-100/80 border border-amber-300 text-xs text-amber-800 leading-relaxed overflow-x-auto">
               <LatexText text={hint} />
             </div>
           )}

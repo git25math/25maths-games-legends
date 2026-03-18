@@ -154,7 +154,7 @@ export const MapScreen = ({
                         </div>
                         <h4 className="text-lg md:text-2xl font-black text-slate-800 mb-1">{mission.title[lang]}</h4>
                         <p className="text-indigo-600 text-[10px] font-bold mb-3 uppercase">{t.questionTypes[mission.type]}</p>
-                        <LatexText text={interpolate(mission.description[lang], mission.data ?? {})} className="text-slate-500 text-sm mb-8 line-clamp-2 block" />
+                        <LatexText text={interpolate(mission.description[lang], mission.data ?? {})} className="text-slate-500 text-sm mb-8 line-clamp-3 block" />
                         <div className="flex gap-2">
                           <button
                             disabled={!!isLocked}

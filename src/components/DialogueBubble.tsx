@@ -21,7 +21,7 @@ export const DialogueBubble = memo(function DialogueBubble({
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-      className="relative bg-white/90 rounded-2xl px-4 py-3 border-2 shadow-lg max-w-xs"
+      className="relative bg-white/90 rounded-2xl px-4 py-3 border-2 shadow-lg max-w-sm"
       style={{ borderColor: '#3d2b1f' }}
     >
       {/* Bubble tail pointing left */}

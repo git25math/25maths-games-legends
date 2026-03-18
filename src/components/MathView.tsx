@@ -16,14 +16,15 @@ export const LatexText = ({ text, className = "" }: { text: string; className?: 
   // Split by newlines first, then by LaTeX delimiters within each line
   const lines = text.split('\n');
   return (
-    <span className={className}>
+    <span className={`overflow-wrap-anywhere ${className}`} style={{ overflowWrap: 'anywhere' }}>
       {lines.map((line, li) => {
-        const parts = line.split(/(\$.*?\$)/g);
+        // Match $...$ but not empty $$ (which would be display math)
+        const parts = line.split(/(\$(?!\$).*?\$)/g);
         return (
           <span key={li}>
             {li > 0 && <br />}
             {parts.map((part, pi) => {
-              if (part.startsWith('$') && part.endsWith('$')) {
+              if (part.startsWith('$') && part.endsWith('$') && part.length > 2) {
                 return <MathView key={pi} tex={part.slice(1, -1)} />;
               }
               return part;

@@ -268,7 +268,7 @@ export const PracticeScreen = ({
         {/* Content */}
         <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {/* Left: Question area */}
-          <div className="bg-[#e8d5a7] rounded-lg p-6 border-2 border-[#3d2b1f]/20 shadow-inner">
+          <div className="bg-[#e8d5a7] rounded-lg p-3 md:p-6 border-2 border-[#3d2b1f]/20 shadow-inner">
             <div className="flex items-center gap-2 mb-4 text-[#3d2b1f] font-bold border-b border-[#3d2b1f]/10 pb-2">
               <MapIcon size={18} />
               <span>{t.practicePhase[currentPhase]}</span>
