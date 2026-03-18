@@ -107,29 +107,90 @@ export function generateSimpleEqMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `军师：方程就是一个等式，左边等于右边。我们要找到 $x$ 的值`, en: `Strategist: "An equation means both sides are equal. We need to find $x$"` },
-      hint: { zh: `$${a}x = ${result}$ 表示 ${a} 个 $x$ 等于 ${result}`, en: `$${a}x = ${result}$ means ${a} copies of $x$ equal ${result}` },
+      text: {
+        zh: `军师：我们要解方程 $${a}x = ${result}$，也就是找到 $x$ 等于多少`,
+        en: `Strategist: "We need to solve $${a}x = ${result}$, meaning find what $x$ equals"`,
+      },
+      hint: {
+        zh: '$x$ 是一个未知数，就像一个装了东西的盒子\n我们的任务就是打开盒子，看看里面是什么数',
+        en: '$x$ is an unknown — like a box with a number inside\nOur job is to open the box and find that number',
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `军师：$${a}x = ${result}$，也就是 ${a} 个 $x$ 加在一起等于 ${result}`, en: `Strategist: "$${a}x = ${result}$, meaning ${a} groups of $x$ add up to ${result}"` },
+      text: {
+        zh: `军师：$${a}x$ 是什么意思？就是 $${a}$ 个 $x$ 加在一起`,
+        en: `Strategist: "What does $${a}x$ mean? It means $${a}$ copies of $x$ added together"`,
+      },
+      hint: {
+        zh: `比如 $${a} \\times 5$ 就是 ${a} 个 5 加在一起\n$${a}x$ 就是 ${a} 个 $x$ 加在一起`,
+        en: `For example, $${a} \\times 5$ means ${a} fives added together\n$${a}x$ means ${a} copies of $x$ added together`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `军师：要把 $x$ 单独留在一边，就把两边同时除以 $${a}$`, en: `Strategist: "To get $x$ alone, divide both sides by $${a}$"` },
-      hint: { zh: '等式两边做相同的运算，等式依然成立\n这叫做"等式性质"', en: 'Doing the same operation to both sides keeps the equation balanced\nThis is the "balance principle"' },
+      text: {
+        zh: `军师：现在 $x$ 被乘了一个 $${a}$，我们要把这个 $${a}$ 去掉，让 $x$ 单独留下来`,
+        en: `Strategist: "Right now $x$ is multiplied by $${a}$. We need to remove that $${a}$ to get $x$ alone"`,
+      },
+      hint: {
+        zh: '为什么？因为只有 $x$ 单独在一边的时候，我们才能直接看出 $x$ 等于多少',
+        en: 'Why? Because only when $x$ is alone on one side can we directly see what $x$ equals',
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `军师：左边 $${a}x \\div ${a} = x$（${a}消掉了）`, en: `Strategist: "Left side: $${a}x \\div ${a} = x$ (the ${a} cancels out)"` },
+      text: {
+        zh: `军师：怎么去掉"乘以 $${a}$"？用它的反操作——除以 $${a}$`,
+        en: `Strategist: "How to remove 'times $${a}$'? Use the opposite operation — divide by $${a}$"`,
+      },
+      hint: {
+        zh: `乘法和除法是一对反操作\n$${a} \\times$ 什么 $\\div ${a}$ = 什么\n乘了再除，就被抵消了`,
+        en: `Multiplication and division are inverse operations\n$${a} \\times$ something $\\div ${a}$ = something\nMultiply then divide cancels out`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `军师：右边 $${result} \\div ${a} = ${x}$`, en: `Strategist: "Right side: $${result} \\div ${a} = ${x}$"` },
+      text: {
+        zh: `军师：但是！只除左边不行，右边也必须除以 $${a}$`,
+        en: `Strategist: "But! We can't just divide the left side — the right side must also be divided by $${a}$"`,
+      },
+      hint: {
+        zh: '为什么？等式就像天平，两边要做完全相同的事情\n否则天平就不平衡了，等式就不成立了',
+        en: 'Why? An equation is like a balance scale — both sides must be treated equally\nOtherwise the scale tips, and the equation breaks',
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `军师：所以 $x = ${x}$`, en: `Strategist: "Therefore $x = ${x}$"` },
+      text: {
+        zh: `军师：左边：$${a}x \\div ${a}$\n$${a}$ 被抵消了，只剩下 $x$`,
+        en: `Strategist: "Left side: $${a}x \\div ${a}$\nThe $${a}$ cancels out, leaving just $x$"`,
+      },
+      hint: {
+        zh: `$\\frac{${a}x}{${a}} = x$\n就像 ${a} 个苹果平分给 ${a} 个人，每人 1 个`,
+        en: `$\\frac{${a}x}{${a}} = x$\nLike sharing ${a} apples among ${a} people — 1 each`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `军师：右边：$${result} \\div ${a} = ?$\n算一下：$${result} \\div ${a} = ${x}$`,
+        en: `Strategist: "Right side: $${result} \\div ${a} = ?$\nCalculate: $${result} \\div ${a} = ${x}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `军师：现在等式变成了 $x = ${x}$`,
+        en: `Strategist: "Now the equation becomes $x = ${x}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `军师：验算一下：$${a} \\times ${x} = ${result}$ ✓\n答案正确！$x = ${x}$`,
+        en: `Strategist: "Let's verify: $${a} \\times ${x} = ${result}$ ✓\nCorrect! $x = ${x}$"`,
+      },
       highlightField: 'x',
     },
   ];
@@ -1601,95 +1662,143 @@ export function generateHcfMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是最大公因数(HCF)？就是能同时整除这两个数的最大的那个数`,
-        en: `${narrator}: "What is HCF? It's the largest number that can divide both numbers exactly"`,
+        zh: `${narrator}：我们要找 $${a}$ 和 $${b}$ 的最大公因数 (HCF)`,
+        en: `${narrator}: "We need to find the HCF of $${a}$ and $${b}$"`,
       },
       hint: {
-        zh: '比如 4 能整除 8，也能整除 12\n所以 4 是 8 和 12 的公因数',
-        en: 'For example, 4 divides 8 and 12 exactly\nSo 4 is a common factor of 8 and 12',
+        zh: '什么是"因数"？能整除一个数的数就叫因数\n"公因数"就是两个数共同拥有的因数\n"最大公因数"就是这些公因数中最大的那个',
+        en: 'What is a "factor"? A number that divides another exactly\n"Common factor" = a factor shared by both numbers\n"HCF" = the largest of these common factors',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：怎么找 HCF 呢？先把每个数拆成质因数的乘积`,
-        en: `${narrator}: "How to find HCF? First break each number into prime factors"`,
+        zh: `${narrator}：怎么找 HCF？用"质因数分解法"——把每个数拆成质数的乘积`,
+        en: `${narrator}: "How to find HCF? Use prime factorization — break each number into prime factors"`,
       },
       hint: {
-        zh: '质因数就是只能被 1 和自己整除的数\n比如 2, 3, 5, 7, 11 都是质数',
-        en: 'Prime numbers can only be divided by 1 and themselves\nE.g. 2, 3, 5, 7, 11 are primes',
+        zh: '为什么要分解？因为分解后可以清楚地看到两个数的"组成零件"\n就像拆机器一样，拆开才能看到哪些零件是相同的',
+        en: 'Why decompose? After breaking down, we can clearly see the "building blocks" of both numbers\nLike taking apart a machine to find which parts are the same',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：拆第一个数 $${a}$：$${a} = ${factA}$`,
-        en: `${narrator}: "Break down $${a}$: $${a} = ${factA}$"`,
+        zh: `${narrator}：什么是质数？只能被 1 和它自己整除的数`,
+        en: `${narrator}: "What is a prime number? A number that can only be divided by 1 and itself"`,
       },
       hint: {
-        zh: `不断除以最小的质数\n${a} 一直除到不能再除`,
-        en: `Keep dividing by the smallest prime\nDivide ${a} until you can't anymore`,
+        zh: '质数举例：$2, 3, 5, 7, 11, 13$...\n$4$ 不是质数，因为 $4 = 2 \\times 2$\n$6$ 不是质数，因为 $6 = 2 \\times 3$',
+        en: 'Examples of primes: $2, 3, 5, 7, 11, 13$...\n$4$ is NOT prime because $4 = 2 \\times 2$\n$6$ is NOT prime because $6 = 2 \\times 3$',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：拆第二个数 $${b}$：$${b} = ${factB}$`,
-        en: `${narrator}: "Break down $${b}$: $${b} = ${factB}$"`,
+        zh: `${narrator}：现在来拆 $${a}$——不断除以最小的质数`,
+        en: `${narrator}: "Now break down $${a}$ — keep dividing by the smallest prime"`,
+      },
+      hint: (() => {
+        let n = a;
+        const steps: string[] = [];
+        const enSteps: string[] = [];
+        let d = 2;
+        while (d * d <= n) {
+          while (n % d === 0) {
+            steps.push(`$${n} \\div ${d} = ${n/d}$`);
+            enSteps.push(`$${n} \\div ${d} = ${n/d}$`);
+            n /= d;
+          }
+          d++;
+        }
+        if (n > 1) { steps.push(`$${n}$ 是质数，停！`); enSteps.push(`$${n}$ is prime, stop!`); }
+        return { zh: steps.join('\n'), en: enSteps.join('\n') };
+      })(),
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：所以 $${a} = ${factA}$`,
+        en: `${narrator}: "So $${a} = ${factA}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：现在把两个结果放在一起，找相同的质因数`,
-        en: `${narrator}: "Now put both results side by side and find the common prime factors"`,
+        zh: `${narrator}：同样来拆 $${b}$`,
+        en: `${narrator}: "Now break down $${b}$ the same way"`,
+      },
+      hint: (() => {
+        let n = b;
+        const steps: string[] = [];
+        const enSteps: string[] = [];
+        let d = 2;
+        while (d * d <= n) {
+          while (n % d === 0) {
+            steps.push(`$${n} \\div ${d} = ${n/d}$`);
+            enSteps.push(`$${n} \\div ${d} = ${n/d}$`);
+            n /= d;
+          }
+          d++;
+        }
+        if (n > 1) { steps.push(`$${n}$ 是质数，停！`); enSteps.push(`$${n}$ is prime, stop!`); }
+        return { zh: steps.join('\n'), en: enSteps.join('\n') };
+      })(),
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：所以 $${b} = ${factB}$`,
+        en: `${narrator}: "So $${b} = ${factB}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：现在把两个分解放在一起，找"相同的零件"`,
+        en: `${narrator}: "Now compare both breakdowns — find the 'common parts'"`,
       },
       hint: {
-        zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n看看哪些质因数两边都有`,
-        en: `$${a} = ${factA}$\n$${b} = ${factB}$\nSee which prime factors appear in both`,
+        zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n哪些质数两边都出现了？`,
+        en: `$${a} = ${factA}$\n$${b} = ${factB}$\nWhich primes appear in both?`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：相同的质因数，取出现次数少的那个`,
-        en: `${narrator}: "For each common prime, take the one with the smaller power"`,
+        zh: `${narrator}：对于每个相同的质数，取出现次数少的那个`,
+        en: `${narrator}: "For each common prime, take the smaller power"`,
       },
       hint: (() => {
         const fA = primeFactors(a);
         const fB = primeFactors(b);
-        const common: string[] = [];
+        const lines: string[] = [];
+        const enLines: string[] = [];
         for (const [p, expA] of fA) {
           const expB = fB.get(p);
           if (expB !== undefined) {
-            common.push(`${p}: ${a} 里有 $${p}^{${expA}}$，${b} 里有 $${p}^{${expB}}$，取小的 → $${p}^{${Math.min(expA, expB)}}$`);
+            const minExp = Math.min(expA, expB);
+            lines.push(`质数 $${p}$：$${a}$ 里出现 $${expA}$ 次，$${b}$ 里出现 $${expB}$ 次\n→ 取少的 = $${p}^{${minExp}}$`);
+            enLines.push(`Prime $${p}$: appears $${expA}$ times in $${a}$, $${expB}$ times in $${b}$\n→ take smaller = $${p}^{${minExp}}$`);
           }
         }
-        const enCommon: string[] = [];
-        for (const [p, expA] of fA) {
-          const expB = fB.get(p);
-          if (expB !== undefined) {
-            enCommon.push(`${p}: $${p}^{${expA}}$ in ${a}, $${p}^{${expB}}$ in ${b} → take $${p}^{${Math.min(expA, expB)}}$`);
-          }
-        }
-        return {
-          zh: common.join('\n'),
-          en: enCommon.join('\n'),
-        };
+        lines.push(`\n为什么取少的？因为 HCF 是"共有"的\n只有两边都有的才算数，取少的保证两边都够`);
+        enLines.push(`\nWhy take the smaller? Because HCF means "common"\nOnly what both numbers share counts — taking the smaller ensures both have enough`);
+        return { zh: lines.join('\n'), en: enLines.join('\n') };
       })(),
       highlightField: 'ans',
     },
     {
       text: {
         zh: `${narrator}：把取出来的乘在一起：$${formatFactorization(h)} = ${h}$`,
-        en: `${narrator}: "Multiply them together: $${formatFactorization(h)} = ${h}$"`,
+        en: `${narrator}: "Multiply the common parts together: $${formatFactorization(h)} = ${h}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：所以 $\\text{HCF}(${a}, ${b}) = ${h}$`,
-        en: `${narrator}: "Therefore $\\text{HCF}(${a}, ${b}) = ${h}$"`,
+        zh: `${narrator}：所以 $\\text{HCF}(${a}, ${b}) = ${h}$\n验算：$${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓`,
+        en: `${narrator}: "So $\\text{HCF}(${a}, ${b}) = ${h}$\nVerify: $${a} \\div ${h} = ${a/h}$ ✓  $${b} \\div ${h} = ${b/h}$ ✓"`,
       },
       highlightField: 'ans',
     },
@@ -2055,62 +2164,97 @@ export function generateFracAddMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：分母不一样的分数，不能直接${isSubtract ? '减' : '加'}`,
-        en: `${narrator}: "Fractions with different denominators can't be ${isSubtract ? 'subtracted' : 'added'} directly"`,
+        zh: `${narrator}：我们要算 $\\frac{${dispN1}}{${dispD1}} ${op} \\frac{${dispN2}}{${dispD2}}$`,
+        en: `${narrator}: "We need to calculate $\\frac{${dispN1}}{${dispD1}} ${op} \\frac{${dispN2}}{${dispD2}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：这两个分数的分母不一样（一个是 $${dispD1}$，一个是 $${dispD2}$），所以不能直接${isSubtract ? '减' : '加'}`,
+        en: `${narrator}: "These fractions have different denominators ($${dispD1}$ and $${dispD2}$), so we can't ${isSubtract ? 'subtract' : 'add'} them directly"`,
       },
       hint: {
-        zh: '要先把分母变成一样的，这叫做"通分"\n就像把不同单位统一成同一个单位',
-        en: 'First make the denominators the same — this is called "finding a common denominator"\nLike converting different units to the same unit',
+        zh: `为什么分母不同就不能直接加减？\n想象把一个蛋糕切成 ${dispD1} 份和切成 ${dispD2} 份\n每份大小不一样，不能直接数份数`,
+        en: `Why can't we add fractions with different denominators?\nImagine cutting a cake into ${dispD1} pieces vs ${dispD2} pieces\nThe pieces are different sizes — we can't just count them together`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：$${dispD1}$ 和 $${dispD2}$ 的最小公倍数是 $${recalcLcd}$，我们要把分母都变成 $${recalcLcd}$`,
-        en: `${narrator}: "The LCM of $${dispD1}$ and $${dispD2}$ is $${recalcLcd}$. We'll convert both denominators to $${recalcLcd}$"`,
+        zh: `${narrator}：所以我们要先"通分"——把两个分数的分母变成一样的`,
+        en: `${narrator}: "So we need to 'find a common denominator' — make both denominators the same"`,
       },
       hint: {
-        zh: `$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$`,
-        en: `$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$`,
+        zh: `怎么变成一样？找两个分母的最小公倍数(LCM)\n就是能同时被 $${dispD1}$ 和 $${dispD2}$ 整除的最小的数`,
+        en: `How? Find the LCM of both denominators\nThe smallest number divisible by both $${dispD1}$ and $${dispD2}$`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：第一个分数，分子分母都乘以 $${recalcLcd/dispD1}$：$\\frac{${dispN1}}{${dispD1}} = \\frac{${dispN1} \\times ${recalcLcd/dispD1}}{${dispD1} \\times ${recalcLcd/dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
-        en: `${narrator}: "First fraction, multiply top and bottom by $${recalcLcd/dispD1}$: $\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$"`,
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：第二个分数，分子分母都乘以 $${recalcLcd/dispD2}$：$\\frac{${dispN2}}{${dispD2}} = \\frac{${dispN2} \\times ${recalcLcd/dispD2}}{${dispD2} \\times ${recalcLcd/dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$`,
-        en: `${narrator}: "Second fraction, multiply top and bottom by $${recalcLcd/dispD2}$: $\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$"`,
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：现在分母一样了！分子直接${isSubtract ? '相减' : '相加'}：$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$`,
-        en: `${narrator}: "Now denominators match! ${isSubtract ? 'Subtract' : 'Add'} the numerators: $\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$"`,
-      },
-      highlightField: 'ans',
-    },
-    ...(needsSimplify ? [{
-      text: {
-        zh: `${narrator}：$\\frac{${rawAns}}{${recalcLcd}}$ 可以约分，分子分母都除以 $${gcdCalc(rawAns, recalcLcd)}$`,
-        en: `${narrator}: "$\\frac{${rawAns}}{${recalcLcd}}$ can be simplified — divide top and bottom by $${gcdCalc(rawAns, recalcLcd)}$"`,
+        zh: `${narrator}：$${dispD1}$ 和 $${dispD2}$ 的最小公倍数是 $${recalcLcd}$`,
+        en: `${narrator}: "The LCM of $${dispD1}$ and $${dispD2}$ is $${recalcLcd}$"`,
       },
       hint: {
-        zh: `$\\frac{${rawAns} \\div ${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd} \\div ${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$`,
-        en: `$\\frac{${rawAns} \\div ${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd} \\div ${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$`,
+        zh: `$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$ ✓\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$ ✓\n所以 $${recalcLcd}$ 就是公分母`,
+        en: `$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$ ✓\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$ ✓\nSo $${recalcLcd}$ is the common denominator`,
       },
       highlightField: 'ans',
-    }] : []),
+    },
     {
       text: {
-        zh: `${narrator}：所以答案是 $${ansDisplay}$`,
-        en: `${narrator}: "So the answer is $${ansDisplay}$"`,
+        zh: `${narrator}：把第一个分数的分母变成 $${recalcLcd}$\n分母乘了 $${recalcLcd/dispD1}$，分子也要乘以 $${recalcLcd/dispD1}$`,
+        en: `${narrator}: "Convert the first fraction to denominator $${recalcLcd}$\nDenominator × $${recalcLcd/dispD1}$, so numerator must also × $${recalcLcd/dispD1}$"`,
+      },
+      hint: {
+        zh: `为什么分子也要乘？因为分子和分母要同时乘以相同的数\n分数的值才不会变（就像 $\\frac{1}{2} = \\frac{2}{4} = \\frac{3}{6}$）\n$\\frac{${dispN1}}{${dispD1}} = \\frac{${dispN1} \\times ${recalcLcd/dispD1}}{${dispD1} \\times ${recalcLcd/dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
+        en: `Why multiply the numerator too? Both top and bottom must be multiplied by the same number\nSo the fraction's value stays the same ($\\frac{1}{2} = \\frac{2}{4} = \\frac{3}{6}$)\n$\\frac{${dispN1}}{${dispD1}} = \\frac{${dispN1} \\times ${recalcLcd/dispD1}}{${dispD1} \\times ${recalcLcd/dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：把第二个分数的分母也变成 $${recalcLcd}$\n$\\frac{${dispN2}}{${dispD2}} = \\frac{${dispN2} \\times ${recalcLcd/dispD2}}{${dispD2} \\times ${recalcLcd/dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$`,
+        en: `${narrator}: "Convert the second fraction to denominator $${recalcLcd}$ too\n$\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：现在分母一样了！可以直接${isSubtract ? '减' : '加'}分子了`,
+        en: `${narrator}: "Now the denominators are the same! We can ${isSubtract ? 'subtract' : 'add'} the numerators directly"`,
+      },
+      hint: {
+        zh: `分母相同时，只需要${isSubtract ? '减' : '加'}分子，分母不变\n$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}}$`,
+        en: `When denominators match, just ${isSubtract ? 'subtract' : 'add'} numerators, keep denominator\n$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}}$`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：$${recalcAdjN1} ${op} ${recalcAdjN2} = ${rawAns}$\n所以结果是 $\\frac{${rawAns}}{${recalcLcd}}$`,
+        en: `${narrator}: "$${recalcAdjN1} ${op} ${recalcAdjN2} = ${rawAns}$\nSo the result is $\\frac{${rawAns}}{${recalcLcd}}$"`,
+      },
+      highlightField: 'ans',
+    },
+    ...(needsSimplify ? [
+      {
+        text: {
+          zh: `${narrator}：$\\frac{${rawAns}}{${recalcLcd}}$ 还可以约分（化简）`,
+          en: `${narrator}: "$\\frac{${rawAns}}{${recalcLcd}}$ can be simplified"`,
+        },
+        hint: {
+          zh: `什么是约分？找到分子和分母的公因数，同时除以它\n$${rawAns}$ 和 $${recalcLcd}$ 的公因数是 $${gcdCalc(rawAns, recalcLcd)}$\n$\\frac{${rawAns} \\div ${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd} \\div ${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$`,
+          en: `What is simplifying? Find a common factor of numerator and denominator, divide both by it\n$${rawAns}$ and $${recalcLcd}$ share factor $${gcdCalc(rawAns, recalcLcd)}$\n$\\frac{${rawAns} \\div ${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd} \\div ${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$`,
+        },
+        highlightField: 'ans',
+      },
+    ] : []),
+    {
+      text: {
+        zh: `${narrator}：答案是 $${ansDisplay}$`,
+        en: `${narrator}: "The answer is $${ansDisplay}$"`,
       },
       highlightField: 'ans',
     },
