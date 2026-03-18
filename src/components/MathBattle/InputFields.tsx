@@ -19,7 +19,8 @@ export const InputFields = ({
   isTutorial: boolean;
   lang?: Language;
 }) => {
-  const allFields = (INPUT_FIELDS[mission.type] || { zh: [], en: [] })[lang] || [];
+  const fieldConfig = INPUT_FIELDS[mission.type] || { zh: [], en: [] };
+  const allFields = fieldConfig[lang as keyof typeof fieldConfig] || fieldConfig[lang === 'zh_TW' ? 'zh' : 'zh'] || [];
 
   // For types with multiple possible fields (e.g. FUNC_VAL has y and t),
   // only show the field that the mission actually uses (based on highlightField in tutorialSteps)

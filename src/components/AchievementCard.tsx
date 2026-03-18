@@ -25,6 +25,16 @@ const LABELS = {
     brand: '25 数学三国',
     difficultyNames: { green: '名师指路', amber: '锦囊相助', red: '独当一面' },
   },
+  zh_TW: {
+    header: '戰果報告',
+    merit: '功勳',
+    time: '用時',
+    hp: '體力',
+    difficulty: '難度',
+    returnMap: '返回地圖',
+    brand: '25 數學三國',
+    difficultyNames: { green: '名師指路', amber: '錦囊相助', red: '獨當一面' },
+  },
   en: {
     header: 'Battle Report',
     merit: 'Merit',

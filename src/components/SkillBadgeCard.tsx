@@ -22,6 +22,13 @@ const LABELS = {
     continue: '继续',
     brand: '25 数学三国',
   },
+  zh_TW: {
+    header: '技能習得',
+    mastered: '已掌握',
+    summary: '技巧總結',
+    continue: '繼續',
+    brand: '25 數學三國',
+  },
   en: {
     header: 'Skill Acquired',
     mastered: 'Mastered',

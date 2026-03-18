@@ -13,6 +13,13 @@ const LABELS = {
     explanation: '解题过程',
     continue: '我明白了，继续',
   },
+  zh_TW: {
+    title: '解題回顧',
+    yourAnswer: '你的答案',
+    correctAnswer: '正確答案',
+    explanation: '解題過程',
+    continue: '我明白了，繼續',
+  },
   en: {
     title: 'Solution Review',
     yourAnswer: 'Your answer',
@@ -47,7 +54,8 @@ export function WrongAnswerPanel({
   storyText,
 }: Props) {
   const t = LABELS[lang];
-  const fields = (INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || { zh: [], en: [] })[lang] || [];
+  const fc = INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || { zh: [], en: [] };
+  const fields = fc[lang as keyof typeof fc] || fc[lang === 'zh_TW' ? 'zh' : 'zh'] || [];
 
   // Only show fields that have expected values
   const relevantFields = fields.filter(f => expected[f.id] !== undefined);

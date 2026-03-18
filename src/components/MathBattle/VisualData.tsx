@@ -21,6 +21,7 @@ import {
 
 const VIS_LABELS = {
   zh: { simpleEq: '基础代数方程', compound: '复利增长模型', estimation: '无理数估算', length: '长', width: '宽', start: '起点', end: '落点' },
+  zh_TW: { simpleEq: '基礎代數方程', compound: '複利增長模型', estimation: '無理數估算', length: '長', width: '寬', start: '起點', end: '落點' },
   en: { simpleEq: 'Simple Equation', compound: 'Compound Growth', estimation: 'Estimation', length: 'L', width: 'W', start: 'Start', end: 'End' },
 } as const;
 
