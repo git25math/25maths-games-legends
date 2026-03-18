@@ -1,7 +1,7 @@
 export const translations = {
   zh: {
-    title: "三国算：线性传奇",
-    subtitle: "运筹帷幄，决胜两点一线",
+    title: "25 数学三国",
+    subtitle: "用数学征战天下",
     chooseHero: "请选择你的主公",
     startJourney: "征战天下",
     totalScore: "功勋值",
@@ -139,8 +139,8 @@ export const translations = {
     chooseSkillCard: "选择一张技能卡",
   },
   en: {
-    title: "Three Kingdoms Math",
-    subtitle: "Strategy and Calculation",
+    title: "25 Math Legends",
+    subtitle: "Conquer with Mathematics",
     chooseHero: "Choose Your Lord",
     startJourney: "Conquer the World",
     totalScore: "Merit Points",

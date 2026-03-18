@@ -94,7 +94,7 @@ export default function App() {
   const [selectedDifficulty] = useState<DifficultyMode>('red');
   const [isGuest, setIsGuest] = useState(persisted.isGuest);
 
-  const { user, signIn, signUp, signOut } = useAuth();
+  const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
   const { profile, updateProfile, recordBattleComplete } = useProfile(user, isGuest);
   const { missions } = useMissions();
   const { activeRoom, createRoom, toggleReady, startGame, leaveRoom } = useMultiplayer(user, profile);
@@ -169,6 +169,18 @@ export default function App() {
   };
 
   const isLoggedIn = !!user || isGuest;
+
+  // Loading splash while auth initializes
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center gap-4">
+        <div className="bg-indigo-600 p-4 rounded-2xl shadow-xl animate-pulse">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p className="text-white/40 text-sm font-bold">{lang === 'zh' ? '25 数学三国' : '25 Math Legends'}</p>
+      </div>
+    );
+  }
 
   return (
     <ErrorBoundary>

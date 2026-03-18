@@ -60,10 +60,10 @@ export const WelcomeScreen = ({
           <Sparkles size={80} className="text-white" />
         </div>
       </motion.div>
-      <h1 className="text-7xl md:text-9xl font-black text-white mb-4 tracking-tighter">
-        MATH<span className="text-indigo-500">QUEST</span>
+      <h1 className="text-5xl md:text-7xl font-black text-white mb-2 tracking-tighter">
+        {t.title}
       </h1>
-      <p className="text-2xl text-slate-400 mb-12 font-medium">{t.subtitle}</p>
+      <p className="text-xl md:text-2xl text-slate-400 mb-12 font-medium">{t.subtitle}</p>
 
       <div className="w-full max-w-5xl">
         <h2 className="text-3xl font-black text-white mb-10 flex items-center justify-center gap-3">
