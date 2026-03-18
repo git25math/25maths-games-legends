@@ -3,6 +3,9 @@
 > **项目地址**：https://play.25maths.com
 > **仓库**：git25math/25maths-games-legends
 > **版本**：v5.0.0 | 最后更新：2026-03-19
+> **开发规范**：`docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）
+> **Bug 防范**：`docs/BUG-POSTMORTEM.md`（9 条规则 + 根因分析）
+> **Y8 计划**：`docs/Y8-DEVELOPMENT-PLAN.md`（完整接手方案）
 
 ## Context
 

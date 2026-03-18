@@ -1,7 +1,9 @@
 # Y8 课纲开发计划（v6.0.0 目标）
 
-> 接手前请先阅读 `docs/DEVELOPMENT-PLAN.md` 了解项目全局
-> Y7 标准参考: `src/data/missions.ts` 中 grade:7 的关卡 + `src/utils/generateMission.ts` 中的生成器
+> **必读**: `docs/CONTRIBUTING.md` — 开发规范（金标准、叙事原则、审查标准、Bug 防范规则）
+> **必读**: `docs/DEVELOPMENT-PLAN.md` — 项目全局 + 版本历程
+> **必读**: `docs/BUG-POSTMORTEM.md` — 10 个 Bug 根因分析 + 9 条防范规则
+> **参考**: `src/data/missions.ts` 中 grade:7 的关卡 + `src/utils/generateMission.ts` 中的生成器
 
 ---
 
