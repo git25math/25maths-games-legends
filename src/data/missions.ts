@@ -208,19 +208,39 @@ export const MISSIONS: Mission[] = [
     id: 709, grade: 7, unitId: 0, order: 9,
     unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },
     topic: 'Algebra', type: 'FRAC_MUL',
-    title: { zh: '翻倍缩减', en: 'Multiply & Divide' },
-    skillName: { zh: '分数乘除术', en: 'Fraction Mul/Div' },
-    skillSummary: { zh: '乘法：分子×分子，分母×分母；除法：乘以倒数', en: 'Multiply: top×top, bottom×bottom; Divide: multiply by reciprocal' },
-    story: { zh: '军粮调配需要按比例放大或缩小。分数乘除是核心技能。', en: 'Grain allocation requires scaling up or down. Fraction multiplication and division are key.' },
-    description: { zh: '计算结果。', en: 'Calculate the result.' },
+    title: { zh: '粮草翻倍', en: 'Grain Multiplication' },
+    skillName: { zh: '分数乘法术', en: 'Fraction Multiplication' },
+    skillSummary: { zh: '分子乘分子，分母乘分母，最后约分', en: 'Multiply tops, multiply bottoms, then simplify' },
+    story: { zh: '军粮需要按比例缩放。学会分数乘法才能精确调配。', en: 'Grain needs to be scaled proportionally. Master fraction multiplication for accurate allocation.' },
+    description: { zh: '计算分数乘法。', en: 'Calculate the fraction multiplication.' },
     data: { n1: 2, d1: 3, n2: 3, d2: 5, op: 'mul', ansNum: 2, ansDen: 5, generatorType: 'FRAC_MUL_RANDOM' }, difficulty: 'Easy', reward: 55,
     kpId: 'kp-1.4-02', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '张飞："$\\frac{2}{3}$ 的粮草再分 $\\frac{3}{5}$，能分多少？$\\frac{2}{3} \\times \\frac{3}{5} = ?$"', en: 'Zhang Fei: "$\\frac{2}{3}$ of the grain, take $\\frac{3}{5}$ of that. $\\frac{2}{3} \\times \\frac{3}{5} = ?$"' }, highlightField: 'ans' },
+      { text: { zh: '张飞："$\\frac{2}{3}$ 的粮草再取 $\\frac{3}{5}$，能取多少？$\\frac{2}{3} \\times \\frac{3}{5} = ?$"', en: 'Zhang Fei: "Take $\\frac{3}{5}$ of $\\frac{2}{3}$ of the grain. $\\frac{2}{3} \\times \\frac{3}{5} = ?$"' }, highlightField: 'ans' },
       { text: { zh: '张飞："分数乘法：分子乘分子，分母乘分母"', en: 'Zhang Fei: "Fraction multiplication: multiply tops, multiply bottoms"' }, hint: { zh: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$', en: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$' }, highlightField: 'ans' },
       { text: { zh: '张飞："$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$，约分得 $\\frac{2}{5}$"', en: 'Zhang Fei: "$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$, simplify to $\\frac{2}{5}$"' }, highlightField: 'ans' }
     ],
     secret: { concept: { zh: '分数乘法：分子×分子，分母×分母，最后约分。', en: 'Fraction multiplication: numerator×numerator, denominator×denominator, then simplify.' }, formula: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{ac}{bd}$', tips: [{ zh: '张飞提示：俺虽粗人，乘法还是会的！', en: 'Zhang Fei Tip: I may be rough, but I can multiply!' }] }
+  },
+  {
+    id: 710, grade: 7, unitId: 0, order: 10,
+    unitTitle: { zh: "Unit 0B: 军粮分配·分数篇", en: "Unit 0B: Grain Division — Fractions" },
+    topic: 'Algebra', type: 'FRAC_MUL',
+    title: { zh: '分粮入户', en: 'Grain Division' },
+    skillName: { zh: '分数除法术', en: 'Fraction Division' },
+    skillSummary: { zh: '除以一个分数 = 乘以它的倒数（分子分母交换）', en: 'Dividing by a fraction = multiplying by its reciprocal (swap top and bottom)' },
+    story: { zh: '要把粮草按户分配。除以一个分数，就是乘以它的倒数。', en: 'Distribute grain per household. Dividing by a fraction means multiplying by its reciprocal.' },
+    description: { zh: '计算分数除法。', en: 'Calculate the fraction division.' },
+    data: { n1: 2, d1: 3, n2: 3, d2: 5, op: 'div', ansNum: 10, ansDen: 9, generatorType: 'FRAC_MUL_RANDOM' }, difficulty: 'Medium', reward: 60,
+    kpId: 'kp-1.4-02', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '关羽："$\\frac{2}{3} \\div \\frac{3}{5} = ?$ 分数除法怎么算？"', en: 'Guan Yu: "$\\frac{2}{3} \\div \\frac{3}{5} = ?$ How to divide fractions?"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："除以一个分数 = 乘以它的倒数。倒数就是把分子分母交换"', en: 'Guan Yu: "Dividing by a fraction = multiplying by its reciprocal. Reciprocal = swap top and bottom"' }, hint: { zh: '$\\frac{3}{5}$ 的倒数是 $\\frac{5}{3}$\n（分子 3 和分母 5 交换位置）', en: 'Reciprocal of $\\frac{3}{5}$ is $\\frac{5}{3}$\n(swap 3 and 5)' }, highlightField: 'ans' },
+      { text: { zh: '关羽："$\\frac{2}{3} \\div \\frac{3}{5} = \\frac{2}{3} \\times \\frac{5}{3}$"', en: 'Guan Yu: "$\\frac{2}{3} \\div \\frac{3}{5} = \\frac{2}{3} \\times \\frac{5}{3}$"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："分子乘分子，分母乘分母：$\\frac{2 \\times 5}{3 \\times 3} = \\frac{10}{9}$"', en: 'Guan Yu: "Multiply tops, multiply bottoms: $\\frac{2 \\times 5}{3 \\times 3} = \\frac{10}{9}$"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："$\\frac{10}{9}$ 已经是最简分数，所以答案是 $\\frac{10}{9}$"', en: 'Guan Yu: "$\\frac{10}{9}$ is already in simplest form, so the answer is $\\frac{10}{9}$"' }, highlightField: 'ans' }
+    ],
+    secret: { concept: { zh: '分数除法：除以一个分数 = 乘以它的倒数。', en: 'Fraction division: dividing by a fraction = multiplying by its reciprocal.' }, formula: '$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c} = \\frac{ad}{bc}$', tips: [{ zh: '关羽提示：翻转乾坤，化除为乘！', en: 'Guan Yu Tip: Flip and multiply — turn division into multiplication!' }] }
   },
   // --- Year 7: The Peach Garden Oath (Foundations) ---
   {

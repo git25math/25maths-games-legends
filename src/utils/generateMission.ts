@@ -1744,7 +1744,8 @@ export function generateFracMulMission(template: Mission): Mission {
   const n1 = pickRandom(Array.from({ length: d1 - 1 }, (_, i) => i + 1));
   const n2 = pickRandom(Array.from({ length: d2 - 1 }, (_, i) => i + 1));
 
-  const isDivide = pickRandom([true, false]);
+  // Respect template's op: 'div' forces division, 'mul' forces multiplication, otherwise random
+  const isDivide = template.data?.op === 'div' ? true : template.data?.op === 'mul' ? false : pickRandom([true, false]);
 
   let ansNum: number, ansDen: number;
   if (isDivide) {
