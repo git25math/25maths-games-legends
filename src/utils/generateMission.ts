@@ -64,7 +64,16 @@ export type GeneratorType =
   | 'SIMPLE_EQ_TWOSTEP_RANDOM'
   | 'COORDINATES_RANDOM'
   | 'RATIO_Y7_RANDOM'
-  | 'MIXED_IMPROPER_RANDOM';
+  | 'MIXED_IMPROPER_RANDOM'
+  | 'EXPAND_RANDOM'
+  | 'FACTORISE_RANDOM'
+  | 'INEQUALITY_RANDOM'
+  | 'STD_FORM_RANDOM'
+  | 'SPEED_RANDOM'
+  | 'CIRCLE_Y8_RANDOM'
+  | 'VOLUME_Y8_RANDOM'
+  | 'PERCENTAGE_INTEREST_RANDOM'
+  | 'PARALLEL_ANGLES_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -125,6 +134,15 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   COORDINATES_RANDOM: generateCoordinatesMission,
   RATIO_Y7_RANDOM: generateRatioY7Mission,
   MIXED_IMPROPER_RANDOM: generateMixedImproperMission,
+  EXPAND_RANDOM: generateExpandMission,
+  FACTORISE_RANDOM: generateFactoriseMission,
+  INEQUALITY_RANDOM: generateInequalityMission,
+  STD_FORM_RANDOM: generateStdFormMission,
+  SPEED_RANDOM: generateSpeedMission,
+  CIRCLE_Y8_RANDOM: generateCircleY8Mission,
+  VOLUME_Y8_RANDOM: generateVolumeY8Mission,
+  PERCENTAGE_INTEREST_RANDOM: generatePercentageInterestMission,
+  PARALLEL_ANGLES_RANDOM: generateParallelAnglesMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -5192,4 +5210,727 @@ export function generateMixedImproperMission(template: Mission): Mission {
       tutorialSteps,
     };
   }
+}
+
+// ========== Y8 Generators ==========
+
+export function generateExpandMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrators = ['诸葛亮', '庞统', '徐庶'];
+  const narrator = pickRandom(narrators);
+
+  // Tier pools: a(bx + c)
+  const aPools: Record<number, number[]> = { 1: [2, 3], 2: [2, 3, 4, 5], 3: [3, 4, 5, 6, 7] };
+  const bPools: Record<number, number[]> = { 1: [1, 2], 2: [2, 3, 4], 3: [3, 4, 5, 6] };
+  const cPools: Record<number, number[]> = { 1: [1, 2, 3], 2: [2, 3, 4, 5], 3: [3, 4, 5, 6, 7, 8] };
+
+  const a = pickRandom(aPools[tier]);
+  const b = pickRandom(bPools[tier]);
+  const c = pickRandom(cPools[tier]);
+  const ab = a * b;
+  const ac = a * c;
+  const answer = ab;
+
+  const description = {
+    zh: `展开 $${a}(${b}x + ${c})$，$x$ 的系数是多少？`,
+    en: `Expand $${a}(${b}x + ${c})$. What is the coefficient of $x$?`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：为什么要学展开括号？`, en: `${narrator}: "Why learn to expand brackets?"` },
+      hint: { zh: `想象你是军需官，要给 ${a} 支小队分发装备\n每队需要 ${b} 把刀和 ${c} 张弓\n\n"展开"就是把每队的需求乘以队数\n——算出总共需要多少`, en: `Imagine you're a quartermaster supplying ${a} squads\nEach squad needs ${b} swords and ${c} bows\n\n"Expanding" means multiplying each item by the number of squads\n— to find the total needed` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：展开的规则——分配律`, en: `${narrator}: "The rule — distributive law"` },
+      hint: { zh: `外面的数要分别乘里面的每一项\n就像发东西，每人（每项）都要发到\n\n$${a}(${b}x + ${c})$\n= $${a} \\times ${b}x$ ＋ $${a} \\times ${c}$`, en: `The number outside multiplies EACH term inside\nLike handing out supplies — everyone gets some\n\n$${a}(${b}x + ${c})$\n= $${a} \\times ${b}x$ + $${a} \\times ${c}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第一步——外面 × 第一项`, en: `${narrator}: "Step 1 — outside × first term"` },
+      hint: { zh: `$${a} \\times ${b}x = ${ab}x$\n\n${a} 支队 × 每队 ${b} 把刀 = ${ab} 把刀`, en: `$${a} \\times ${b}x = ${ab}x$\n\n${a} squads × ${b} swords each = ${ab} swords` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第二步——外面 × 第二项`, en: `${narrator}: "Step 2 — outside × second term"` },
+      hint: { zh: `$${a} \\times ${c} = ${ac}$\n\n${a} 支队 × 每队 ${c} 张弓 = ${ac} 张弓`, en: `$${a} \\times ${c} = ${ac}$\n\n${a} squads × ${c} bows each = ${ac} bows` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：合并——写出展开结果`, en: `${narrator}: "Combine — write the expanded form"` },
+      hint: { zh: `$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\n$x$ 的系数是 $${ab}$`, en: `$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\nThe coefficient of $x$ is $${ab}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——代入 $x=1$ 检查`, en: `${narrator}: "Verify — substitute $x=1$"` },
+      hint: { zh: `左边：$${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\n右边：$${ab} \\times 1 + ${ac} = ${ab + ac}$\n\n$${a * (b + c)} = ${ab + ac}$ ✓ 两边相等！`, en: `Left: $${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\nRight: $${ab} \\times 1 + ${ac} = ${ab + ac}$\n\n$${a * (b + c)} = ${ab + ac}$ ✓ Both sides equal!` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { a, b, c, ab, ac, answer, generatorType: 'EXPAND_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+export function generateFactoriseMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrators = ['诸葛亮', '庞统', '徐庶'];
+  const narrator = pickRandom(narrators);
+
+  const factorPools: Record<number, number[]> = { 1: [2, 3], 2: [2, 3, 4, 5], 3: [3, 4, 5, 6, 7] };
+  const pPools: Record<number, number[]> = { 1: [1, 2], 2: [1, 2, 3], 3: [2, 3, 4, 5] };
+  const qPools: Record<number, number[]> = { 1: [1, 3], 2: [1, 3, 5, 7], 3: [1, 3, 5, 7, 9] };
+
+  const factor = pickRandom(factorPools[tier]);
+  const p = pickRandom(pPools[tier]);
+  const q = pickRandom(qPools[tier]);
+  const a = factor * p;
+  const b = factor * q;
+  const answer = factor;
+
+  const description = {
+    zh: `因式分解 $${a}x + ${b}$，最大公因数是？`,
+    en: `Factorise $${a}x + ${b}$. What is the HCF?`,
+  };
+
+  const getFactorsStrLocal = (n: number): string => {
+    const factors: number[] = [];
+    for (let i = 1; i <= n; i++) { if (n % i === 0) factors.push(i); }
+    return factors.join(', ');
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：因式分解是展开的反操作`, en: `${narrator}: "Factorising is the reverse of expanding"` },
+      hint: { zh: `展开：$${factor}(${p}x + ${q}) = ${a}x + ${b}$\n因式分解：$${a}x + ${b} = ?(... + ...)$\n\n就像把散装物资重新打包——找出每项的公因子`, en: `Expanding: $${factor}(${p}x + ${q}) = ${a}x + ${b}$\nFactorising: $${a}x + ${b} = ?(...+...)$\n\nLike re-packing supplies — find what's common to each term` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第一步——找 ${a} 和 ${b} 的最大公因数(HCF)`, en: `${narrator}: "Step 1 — find the HCF of ${a} and ${b}"` },
+      hint: { zh: `$${a}$ 的因数：${getFactorsStrLocal(a)}\n$${b}$ 的因数：${getFactorsStrLocal(b)}\n\n最大公因数 = $${factor}$`, en: `Factors of $${a}$: ${getFactorsStrLocal(a)}\nFactors of $${b}$: ${getFactorsStrLocal(b)}\n\nHCF = $${factor}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第二步——每项除以 HCF`, en: `${narrator}: "Step 2 — divide each term by HCF"` },
+      hint: { zh: `$${a}x \\div ${factor} = ${p}x$\n$${b} \\div ${factor} = ${q}$`, en: `$${a}x \\div ${factor} = ${p}x$\n$${b} \\div ${factor} = ${q}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第三步——组合成因式形式`, en: `${narrator}: "Step 3 — write in factored form"` },
+      hint: { zh: `$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nHCF 放外面，商放括号里`, en: `$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nHCF goes outside, quotients go inside brackets` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：答案——最大公因数 = ${factor}`, en: `${narrator}: "Answer — HCF = ${factor}"` },
+      hint: { zh: `$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\n最大公因数（提出来的公因子）= $${factor}$`, en: `$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nThe common factor (factored out) = $${factor}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——展开回去检查`, en: `${narrator}: "Verify — expand back to check"` },
+      hint: { zh: `$${factor}(${p}x + ${q})$\n= $${factor} \\times ${p}x + ${factor} \\times ${q}$\n= $${a}x + ${b}$ ✓`, en: `$${factor}(${p}x + ${q})$\n= $${factor} \\times ${p}x + ${factor} \\times ${q}$\n= $${a}x + ${b}$ ✓` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { factor, p, q, a, b, answer, generatorType: 'FACTORISE_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+export function generateInequalityMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrators = ['诸葛亮', '庞统', '荀彧'];
+  const narrator = pickRandom(narrators);
+
+  const aPools: Record<number, number[]> = { 1: [2, 3], 2: [2, 3, 4], 3: [3, 4, 5, 6] };
+  const bPools: Record<number, number[]> = { 1: [1, 2, 3], 2: [2, 3, 4, 5], 3: [3, 5, 7, 9] };
+
+  const a = pickRandom(aPools[tier]);
+  const b = pickRandom(bPools[tier]);
+  const answerVal = pickRandom([1, 2, 3, 4, 5, 6].slice(0, tier + 2));
+  const c = a * answerVal + b;
+  const ops = ['<', '>'];
+  const op = pickRandom(ops);
+  const answer = answerVal;
+
+  const description = {
+    zh: `解不等式 $${a}x + ${b} ${op} ${c}$，$x ${op}$ ?`,
+    en: `Solve $${a}x + ${b} ${op} ${c}$. $x ${op}$ ?`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：不等式和方程有什么不同？`, en: `${narrator}: "How is an inequality different from an equation?"` },
+      hint: { zh: `方程：$3x + 1 = 7$（等号，只有一个答案）\n不等式：$3x + 1 < 7$（不等号，有一个范围）\n\n不等号就像城门限高——不是刚好那个数\n而是"不能超过"或"必须超过"`, en: `Equation: $3x + 1 = 7$ (equals sign, one answer)\nInequality: $3x + 1 < 7$ (inequality sign, a range)\n\nLike a height limit at a gate — not exactly that number\nbut "must not exceed" or "must exceed"` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：解法和方程一样——两边做相同运算`, en: `${narrator}: "Solve it like an equation — same operation both sides"` },
+      hint: { zh: `$${a}x + ${b} ${op} ${c}$\n\n规则：不等号两边加/减/乘/除同一个正数，方向不变\n（注意：乘除负数时方向要反！但这次不需要）`, en: `$${a}x + ${b} ${op} ${c}$\n\nRule: add/subtract/multiply/divide both sides by the same positive number — direction stays\n(Note: multiplying by negative flips direction, but not needed here)` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第一步——两边减 ${b}`, en: `${narrator}: "Step 1 — subtract ${b} from both sides"` },
+      hint: { zh: `$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$`, en: `$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第二步——两边除以 ${a}`, en: `${narrator}: "Step 2 — divide both sides by ${a}"` },
+      hint: { zh: `$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n（${a} 是正数，不等号方向不变）`, en: `$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n(${a} is positive, so direction stays the same)` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：答案——临界值 = ${answerVal}`, en: `${narrator}: "Answer — critical value = ${answerVal}"` },
+      hint: { zh: `$x ${op} ${answerVal}$\n\n临界值就是不等号旁边的那个数`, en: `$x ${op} ${answerVal}$\n\nThe critical value is the number next to the inequality sign` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——代入检查`, en: `${narrator}: "Verify — substitute to check"` },
+      hint: {
+        zh: op === '<'
+          ? `试 $x = ${answerVal - 1}$：$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} < ${c}$ ✓ 成立！\n\n试 $x = ${answerVal + 1}$：$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} < ${c}$ ✗ 不成立！`
+          : `试 $x = ${answerVal + 1}$：$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} > ${c}$ ✓ 成立！\n\n试 $x = ${answerVal - 1}$：$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} > ${c}$ ✗ 不成立！`,
+        en: op === '<'
+          ? `Try $x = ${answerVal - 1}$: $${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} < ${c}$ ✓ True!\n\nTry $x = ${answerVal + 1}$: $${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} < ${c}$ ✗ False!`
+          : `Try $x = ${answerVal + 1}$: $${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} > ${c}$ ✓ True!\n\nTry $x = ${answerVal - 1}$: $${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} > ${c}$ ✗ False!`,
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { a, b, c, op, answer, generatorType: 'INEQUALITY_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+export function generateStdFormMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrators = ['诸葛亮', '曹操', '荀彧'];
+  const narrator = pickRandom(narrators);
+
+  const aPools: Record<number, number[]> = { 1: [2, 3, 5], 2: [1.5, 2.4, 3.6, 4.5], 3: [1.23, 2.56, 3.78, 4.91, 6.02] };
+  const nPools: Record<number, number[]> = { 1: [2, 3], 2: [3, 4, 5], 3: [4, 5, 6, 7] };
+
+  const a = pickRandom(aPools[tier]);
+  const n = pickRandom(nPools[tier]);
+  const number = a * Math.pow(10, n);
+  const numberStr = number.toLocaleString('en-US');
+
+  const description = {
+    zh: `把 $${numberStr}$ 写成标准式 $a \\times 10^n$`,
+    en: `Write $${numberStr}$ in standard form $a \\times 10^n$`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：为什么需要标准式？`, en: `${narrator}: "Why do we need standard form?"` },
+      hint: { zh: `大数字太长，写起来容易出错\n比如曹操的百万大军：$1,000,000$\n用标准式写：$1 \\times 10^6$\n\n简洁、准确、一眼就能比大小！`, en: `Big numbers are too long and error-prone\nLike Cao Cao's million-strong army: $1,000,000$\nIn standard form: $1 \\times 10^6$\n\nNeat, precise, and easy to compare!` },
+      highlightField: 'a',
+    },
+    {
+      text: { zh: `${narrator}：标准式的规则`, en: `${narrator}: "The rules of standard form"` },
+      hint: { zh: `$a \\times 10^n$ 其中：\n• $a$ 必须在 $1$ 和 $10$ 之间（$1 \\leq a < 10$）\n• $n$ 是整数（小数点移动的次数）\n\n所以 $25$ 不是标准式（$a=25>10$）\n$2.5 \\times 10^1$ 才是 ✓`, en: `$a \\times 10^n$ where:\n• $a$ must be between $1$ and $10$ ($1 \\leq a < 10$)\n• $n$ is an integer (number of places the decimal moves)\n\nSo $25$ is NOT standard form ($a=25>10$)\n$2.5 \\times 10^1$ is ✓` },
+      highlightField: 'a',
+    },
+    {
+      text: { zh: `${narrator}：第一步——找 $a$（把小数点移到第一个数字后面）`, en: `${narrator}: "Step 1 — find $a$ (move decimal after first digit)"` },
+      hint: { zh: `$${numberStr}$\n把小数点移到第一个非零数字后面\n→ $a = ${a}$`, en: `$${numberStr}$\nMove the decimal point after the first non-zero digit\n→ $a = ${a}$` },
+      highlightField: 'a',
+    },
+    {
+      text: { zh: `${narrator}：第二步——数小数点移了几位 → 就是 $n$`, en: `${narrator}: "Step 2 — count how many places the decimal moved → that's $n$"` },
+      hint: { zh: `从 $${numberStr}$ 到 $${a}$\n小数点向左移了 $${n}$ 位\n所以 $n = ${n}$`, en: `From $${numberStr}$ to $${a}$\nDecimal moved $${n}$ places to the left\nSo $n = ${n}$` },
+      highlightField: 'n',
+    },
+    {
+      text: { zh: `${narrator}：答案`, en: `${narrator}: "Answer"` },
+      hint: { zh: `$${numberStr} = ${a} \\times 10^{${n}}$\n\n$a = ${a}$，$n = ${n}$`, en: `$${numberStr} = ${a} \\times 10^{${n}}$\n\n$a = ${a}$, $n = ${n}$` },
+      highlightField: 'a',
+    },
+    {
+      text: { zh: `${narrator}：验算——还原回去`, en: `${narrator}: "Verify — convert back"` },
+      hint: { zh: `$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓`, en: `$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓` },
+      highlightField: 'a',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { number, a, n, generatorType: 'STD_FORM_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+export function generateSpeedMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrators = ['诸葛亮', '赵云', '曹操'];
+  const narrator = pickRandom(narrators);
+
+  const modes = ['speed', 'distance', 'time'] as const;
+  const mode = pickRandom([...modes]);
+
+  const speedPools: Record<number, number[]> = { 1: [5, 10, 20], 2: [8, 12, 15, 25], 3: [6, 14, 18, 22, 35] };
+  const timePools: Record<number, number[]> = { 1: [2, 3, 4], 2: [3, 4, 5, 6], 3: [3, 5, 7, 8] };
+
+  const speed = pickRandom(speedPools[tier]);
+  const time = pickRandom(timePools[tier]);
+  const distance = speed * time;
+
+  let answer: number;
+  let descZh: string;
+  let descEn: string;
+
+  if (mode === 'speed') {
+    answer = speed;
+    descZh = `行军 $${distance}$ 里用了 $${time}$ 小时，速度是多少？`;
+    descEn = `Marched $${distance}$ li in $${time}$ hours. What is the speed?`;
+  } else if (mode === 'distance') {
+    answer = distance;
+    descZh = `以 $${speed}$ 里/时的速度行军 $${time}$ 小时，走了多远？`;
+    descEn = `Marching at $${speed}$ li/hr for $${time}$ hours. How far?`;
+  } else {
+    answer = time;
+    descZh = `$${distance}$ 里路程，速度 $${speed}$ 里/时，需要多久？`;
+    descEn = `$${distance}$ li distance at $${speed}$ li/hr. How long?`;
+  }
+
+  const description = { zh: descZh, en: descEn };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：速度、距离、时间的关系`, en: `${narrator}: "The relationship between speed, distance, and time"` },
+      hint: { zh: `行军打仗，三个量密切相关：\n• 速度 = 距离 ÷ 时间\n• 距离 = 速度 × 时间\n• 时间 = 距离 ÷ 速度\n\n记住三角形：$D = S \\times T$`, en: `In marching, three quantities are linked:\n• Speed = Distance ÷ Time\n• Distance = Speed × Time\n• Time = Distance ÷ Speed\n\nRemember the triangle: $D = S \\times T$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：用生活例子理解`, en: `${narrator}: "Understand with a real example"` },
+      hint: { zh: `如果你走路速度是每小时 5 里\n走了 2 小时\n那你走了 $5 \\times 2 = 10$ 里\n\n知道任意两个，就能算第三个！`, en: `If you walk at 5 li per hour\nfor 2 hours\nyou've walked $5 \\times 2 = 10$ li\n\nKnow any two, find the third!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：找出已知量`, en: `${narrator}: "Identify what we know"` },
+      hint: mode === 'speed'
+        ? { zh: `已知：距离 = $${distance}$ 里，时间 = $${time}$ 小时\n求：速度 = ?`, en: `Known: distance = $${distance}$ li, time = $${time}$ hours\nFind: speed = ?` }
+        : mode === 'distance'
+        ? { zh: `已知：速度 = $${speed}$ 里/时，时间 = $${time}$ 小时\n求：距离 = ?`, en: `Known: speed = $${speed}$ li/hr, time = $${time}$ hours\nFind: distance = ?` }
+        : { zh: `已知：距离 = $${distance}$ 里，速度 = $${speed}$ 里/时\n求：时间 = ?`, en: `Known: distance = $${distance}$ li, speed = $${speed}$ li/hr\nFind: time = ?` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：选公式并代入`, en: `${narrator}: "Choose the formula and substitute"` },
+      hint: mode === 'speed'
+        ? { zh: `速度 = 距离 ÷ 时间\n$= ${distance} \\div ${time}$\n$= ${speed}$`, en: `Speed = Distance ÷ Time\n$= ${distance} \\div ${time}$\n$= ${speed}$` }
+        : mode === 'distance'
+        ? { zh: `距离 = 速度 × 时间\n$= ${speed} \\times ${time}$\n$= ${distance}$`, en: `Distance = Speed × Time\n$= ${speed} \\times ${time}$\n$= ${distance}$` }
+        : { zh: `时间 = 距离 ÷ 速度\n$= ${distance} \\div ${speed}$\n$= ${time}$`, en: `Time = Distance ÷ Speed\n$= ${distance} \\div ${speed}$\n$= ${time}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：答案 = ${answer}`, en: `${narrator}: "Answer = ${answer}"` },
+      hint: { zh: `答案是 $${answer}$`, en: `The answer is $${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——用三个量互相检查`, en: `${narrator}: "Verify — cross-check with all three"` },
+      hint: { zh: `速度 × 时间 = 距离\n$${speed} \\times ${time} = ${distance}$ ✓`, en: `Speed × Time = Distance\n$${speed} \\times ${time} = ${distance}$ ✓` },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { speed, distance, time, mode, answer, x: answer, generatorType: 'SPEED_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+export function generateCircleY8Mission(template: Mission): Mission {
+  const tier = getTier();
+  const narrators = ['鲁肃', '曹操', '刘备'];
+  const narrator = pickRandom(narrators);
+
+  const rPools: Record<number, number[]> = { 1: [3, 5, 7], 2: [4, 6, 8, 10], 3: [5, 9, 12, 14] };
+  const r = pickRandom(rPools[tier]);
+  const pi = 3.14;
+  const modes = ['circumference', 'area'] as const;
+  const mode = pickRandom([...modes]);
+
+  const circumference = parseFloat((2 * pi * r).toFixed(2));
+  const area = parseFloat((pi * r * r).toFixed(2));
+
+  let answer: number;
+  let descZh: string;
+  let descEn: string;
+
+  if (mode === 'circumference') {
+    answer = circumference;
+    descZh = `半径 $${r}$ 的圆营地周长是多少？($\\pi = ${pi}$)`;
+    descEn = `A circular camp with radius $${r}$. Find the circumference. ($\\pi = ${pi}$)`;
+  } else {
+    answer = area;
+    descZh = `半径 $${r}$ 的圆营地面积是多少？($\\pi = ${pi}$)`;
+    descEn = `A circular camp with radius $${r}$. Find the area. ($\\pi = ${pi}$)`;
+  }
+
+  const tutorialSteps = mode === 'circumference' ? [
+    {
+      text: { zh: `${narrator}：什么是圆的周长？`, en: `${narrator}: "What is the circumference of a circle?"` },
+      hint: { zh: `圆的周长就是圆的一圈有多长\n——如果用绳子绕营地围一圈，需要多长的绳子？\n\n古人发现：周长和直径的比值总是约 $3.14$\n这个比值就叫做 $\\pi$（读 pai）`, en: `Circumference = the distance around a circle\n— How much rope to go around the camp once?\n\nAncients discovered: circumference ÷ diameter ≈ $3.14$\nThis ratio is called $\\pi$ (pi)` },
+      highlightField: mode === 'circumference' ? 'c' : 'area',
+    },
+    {
+      text: { zh: `${narrator}：周长公式`, en: `${narrator}: "Circumference formula"` },
+      hint: { zh: `$C = 2\\pi r$\n\n$C$ = 周长\n$\\pi \\approx 3.14$\n$r$ = 半径 = $${r}$\n\n直径 $d = 2r$，所以也可以写成 $C = \\pi d$`, en: `$C = 2\\pi r$\n\n$C$ = circumference\n$\\pi \\approx 3.14$\n$r$ = radius = $${r}$\n\nDiameter $d = 2r$, so also $C = \\pi d$` },
+      highlightField: 'c',
+    },
+    {
+      text: { zh: `${narrator}：代入数值`, en: `${narrator}: "Substitute the values"` },
+      hint: { zh: `$C = 2 \\times ${pi} \\times ${r}$`, en: `$C = 2 \\times ${pi} \\times ${r}$` },
+      highlightField: 'c',
+    },
+    {
+      text: { zh: `${narrator}：计算`, en: `${narrator}: "Calculate"` },
+      hint: { zh: `$2 \\times ${r} = ${2 * r}$\n$${2 * r} \\times ${pi} = ${circumference}$\n\n$C = ${circumference}$`, en: `$2 \\times ${r} = ${2 * r}$\n$${2 * r} \\times ${pi} = ${circumference}$\n\n$C = ${circumference}$` },
+      highlightField: 'c',
+    },
+    {
+      text: { zh: `${narrator}：答案 = ${circumference}`, en: `${narrator}: "Answer = ${circumference}"` },
+      hint: { zh: `围住半径 $${r}$ 的圆营地需要 $${circumference}$ 的绳子`, en: `A fence around a camp with radius $${r}$ needs $${circumference}$ units of rope` },
+      highlightField: 'c',
+    },
+    {
+      text: { zh: `${narrator}：验算——用直径法`, en: `${narrator}: "Verify — using diameter method"` },
+      hint: { zh: `直径 $d = 2 \\times ${r} = ${2 * r}$\n$C = \\pi \\times d = ${pi} \\times ${2 * r} = ${circumference}$ ✓`, en: `Diameter $d = 2 \\times ${r} = ${2 * r}$\n$C = \\pi \\times d = ${pi} \\times ${2 * r} = ${circumference}$ ✓` },
+      highlightField: 'c',
+    },
+  ] : [
+    {
+      text: { zh: `${narrator}：什么是圆的面积？`, en: `${narrator}: "What is the area of a circle?"` },
+      hint: { zh: `面积就是圆内部的空间大小\n——这块圆形营地能容纳多少人扎帐篷？\n\n回忆长方形面积 = 长 × 宽\n圆形？也有公式，但和 $\\pi$ 有关`, en: `Area = the space inside the circle\n— How many tents fit in this circular camp?\n\nRecall rectangle area = length × width\nCircle? Also has a formula, involving $\\pi$` },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：面积公式`, en: `${narrator}: "Area formula"` },
+      hint: { zh: `$A = \\pi r^2$\n\n$A$ = 面积\n$\\pi \\approx 3.14$\n$r$ = 半径 = $${r}$\n$r^2$ = $r \\times r$（半径的平方）`, en: `$A = \\pi r^2$\n\n$A$ = area\n$\\pi \\approx 3.14$\n$r$ = radius = $${r}$\n$r^2$ = $r \\times r$ (radius squared)` },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：第一步——算 $r^2$`, en: `${narrator}: "Step 1 — calculate $r^2$"` },
+      hint: { zh: `$r^2 = ${r} \\times ${r} = ${r * r}$`, en: `$r^2 = ${r} \\times ${r} = ${r * r}$` },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：第二步——乘以 $\\pi$`, en: `${narrator}: "Step 2 — multiply by $\\pi$"` },
+      hint: { zh: `$A = ${pi} \\times ${r * r} = ${area}$`, en: `$A = ${pi} \\times ${r * r} = ${area}$` },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：答案 = ${area}`, en: `${narrator}: "Answer = ${area}"` },
+      hint: { zh: `圆营地面积 $= ${area}$ 平方单位`, en: `Circular camp area $= ${area}$ square units` },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：验算——估算检查`, en: `${narrator}: "Verify — estimation check"` },
+      hint: { zh: `圆面积 ≈ $3 \\times r^2 = 3 \\times ${r * r} = ${3 * r * r}$\n实际答案 $${area}$ 略大于 $${3 * r * r}$（因为 $\\pi > 3$）✓ 合理！`, en: `Circle area ≈ $3 \\times r^2 = 3 \\times ${r * r} = ${3 * r * r}$\nActual $${area}$ is slightly more than $${3 * r * r}$ (since $\\pi > 3$) ✓ Makes sense!` },
+      highlightField: 'area',
+    },
+  ];
+
+  return {
+    ...template,
+    description: { zh: descZh, en: descEn },
+    data: mode === 'circumference'
+      ? { r, pi, mode: 'circumference', answer, generatorType: 'CIRCLE_Y8_RANDOM' }
+      : { r, pi, mode: 'area', answer, generatorType: 'CIRCLE_Y8_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+export function generateVolumeY8Mission(template: Mission): Mission {
+  const tier = getTier();
+  const narrators = ['曹操', '荀彧', '袁绍'];
+  const narrator = pickRandom(narrators);
+
+  const rPools: Record<number, number[]> = { 1: [3, 5], 2: [4, 5, 6], 3: [5, 7, 8] };
+  const hPools: Record<number, number[]> = { 1: [5, 10], 2: [6, 8, 10, 12], 3: [8, 10, 12, 15] };
+
+  const radius = pickRandom(rPools[tier]);
+  const height = pickRandom(hPools[tier]);
+  const pi = 3.14;
+  const baseArea = parseFloat((pi * radius * radius).toFixed(2));
+  const volume = parseFloat((pi * radius * radius * height).toFixed(2));
+  const answer = volume;
+
+  const description = {
+    zh: `圆柱形粮仓：半径 $${radius}$，高 $${height}$，体积 = ? ($\\pi = ${pi}$)`,
+    en: `Cylindrical granary: radius $${radius}$, height $${height}$, volume = ? ($\\pi = ${pi}$)`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：粮仓是什么形状？`, en: `${narrator}: "What shape is the granary?"` },
+      hint: { zh: `粮仓是圆柱体——上下两个圆，中间直筒\n\n体积就是这个筒能装多少粮食\n\n回忆长方体体积 = 底面积 × 高\n圆柱体？一样！只是底面变成了圆`, en: `The granary is a cylinder — two circles top and bottom, straight sides\n\nVolume = how much grain it can hold\n\nRecall cuboid volume = base area × height\nCylinder? Same! Just the base is a circle` },
+      highlightField: 'v',
+    },
+    {
+      text: { zh: `${narrator}：圆柱体积公式`, en: `${narrator}: "Cylinder volume formula"` },
+      hint: { zh: `$V = \\pi r^2 h$\n\n就是：圆形底面积($\\pi r^2$) × 高($h$)\n\n$r = ${radius}$，$h = ${height}$，$\\pi = ${pi}$`, en: `$V = \\pi r^2 h$\n\nThat is: circular base area ($\\pi r^2$) × height ($h$)\n\n$r = ${radius}$, $h = ${height}$, $\\pi = ${pi}$` },
+      highlightField: 'v',
+    },
+    {
+      text: { zh: `${narrator}：第一步——算底面积 $\\pi r^2$`, en: `${narrator}: "Step 1 — base area $\\pi r^2$"` },
+      hint: { zh: `$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$`, en: `$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$` },
+      highlightField: 'v',
+    },
+    {
+      text: { zh: `${narrator}：第二步——底面积 × 高`, en: `${narrator}: "Step 2 — base area × height"` },
+      hint: { zh: `$V = ${baseArea} \\times ${height} = ${volume}$`, en: `$V = ${baseArea} \\times ${height} = ${volume}$` },
+      highlightField: 'v',
+    },
+    {
+      text: { zh: `${narrator}：答案 = ${volume}`, en: `${narrator}: "Answer = ${volume}"` },
+      hint: { zh: `粮仓体积 $V = ${volume}$ 立方单位`, en: `Granary volume $V = ${volume}$ cubic units` },
+      highlightField: 'v',
+    },
+    {
+      text: { zh: `${narrator}：验算——估算检查`, en: `${narrator}: "Verify — estimation check"` },
+      hint: { zh: `估算：$V \\approx 3 \\times ${radius}^2 \\times ${height} = 3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\n实际 $${volume}$ 略大（$\\pi > 3$）✓ 合理！`, en: `Estimate: $V \\approx 3 \\times ${radius}^2 \\times ${height} = 3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\nActual $${volume}$ is slightly more ($\\pi > 3$) ✓ Makes sense!` },
+      highlightField: 'v',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { radius, height, pi, answer, generatorType: 'VOLUME_Y8_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+export function generatePercentageInterestMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrators = ['曹操', '荀彧', '诸葛亮'];
+  const narrator = pickRandom(narrators);
+
+  const modes = ['simple', 'compound'] as const;
+  const mode = pickRandom([...modes]);
+
+  const principalPools: Record<number, number[]> = { 1: [100, 200, 500], 2: [200, 500, 800, 1000], 3: [500, 1000, 2000, 5000] };
+  const ratePools: Record<number, number[]> = { 1: [5, 10], 2: [5, 8, 10], 3: [3, 5, 8, 10, 12] };
+  const yearPools: Record<number, number[]> = { 1: [2], 2: [2, 3], 3: [2, 3, 4] };
+
+  const principal = pickRandom(principalPools[tier]);
+  const rate = pickRandom(ratePools[tier]);
+  const years = pickRandom(yearPools[tier]);
+  const rateDecimal = rate / 100;
+
+  const interest = principal * rateDecimal;
+  const totalSimple = principal + interest * years;
+  let answer: number;
+  if (mode === 'simple') {
+    answer = totalSimple;
+  } else {
+    answer = parseFloat((principal * Math.pow(1 + rateDecimal, years)).toFixed(2));
+  }
+
+  const description = {
+    zh: mode === 'simple'
+      ? `本金 $${principal}$ 两，年利率 $${rate}\\%$，${years} 年单利，最终金额？`
+      : `本金 $${principal}$ 两，年利率 $${rate}\\%$，${years} 年复利，最终金额？`,
+    en: mode === 'simple'
+      ? `Principal $${principal}$ liang, rate $${rate}\\%$, ${years} years simple interest. Final amount?`
+      : `Principal $${principal}$ liang, rate $${rate}\\%$, ${years} years compound interest. Final amount?`,
+  };
+
+  const tutorialSteps = mode === 'simple' ? [
+    {
+      text: { zh: `${narrator}：什么是单利？`, en: `${narrator}: "What is simple interest?"` },
+      hint: { zh: `借钱要付利息——利息就是"借钱的费用"\n\n单利：每年的利息只按本金算\n比如借 $${principal}$ 两，年利率 $${rate}\\%$\n每年利息固定 = $${principal} \\times ${rateDecimal} = ${interest}$`, en: `Borrowing costs interest — the "fee for borrowing"\n\nSimple interest: calculated on original amount only\nE.g., borrow $${principal}$ liang at $${rate}\\%$ per year\nYearly interest = $${principal} \\times ${rateDecimal} = ${interest}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：单利公式`, en: `${narrator}: "Simple interest formula"` },
+      hint: { zh: `总额 $= P + P \\times r \\times t$\n$= P(1 + r \\times t)$\n\n$P$ = 本金 = $${principal}$\n$r$ = 年利率 = $${rateDecimal}$\n$t$ = 年数 = $${years}$`, en: `Total $= P + P \\times r \\times t$\n$= P(1 + r \\times t)$\n\n$P$ = principal = $${principal}$\n$r$ = annual rate = $${rateDecimal}$\n$t$ = years = $${years}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：计算利息`, en: `${narrator}: "Calculate the interest"` },
+      hint: { zh: `利息 $= ${principal} \\times ${rateDecimal} \\times ${years} = ${interest * years}$`, en: `Interest $= ${principal} \\times ${rateDecimal} \\times ${years} = ${interest * years}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：加上本金`, en: `${narrator}: "Add the principal"` },
+      hint: { zh: `总额 $= ${principal} + ${interest * years} = ${totalSimple}$`, en: `Total $= ${principal} + ${interest * years} = ${totalSimple}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：答案 = ${totalSimple}`, en: `${narrator}: "Answer = ${totalSimple}"` },
+      hint: { zh: `$${years}$ 年后需还 $${totalSimple}$ 两`, en: `After $${years}$ years, repay $${totalSimple}$ liang` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算`, en: `${narrator}: "Verify"` },
+      hint: { zh: `每年利息 $${interest}$，共 $${years}$ 年\n利息合计 $= ${interest} \\times ${years} = ${interest * years}$\n本金 + 利息 $= ${principal} + ${interest * years} = ${totalSimple}$ ✓`, en: `Yearly interest $${interest}$, for $${years}$ years\nTotal interest $= ${interest} \\times ${years} = ${interest * years}$\nPrincipal + interest $= ${principal} + ${interest * years} = ${totalSimple}$ ✓` },
+      highlightField: 'ans',
+    },
+  ] : [
+    {
+      text: { zh: `${narrator}：什么是复利？`, en: `${narrator}: "What is compound interest?"` },
+      hint: { zh: `复利和单利的区别：\n单利：只按本金算利息（利息不生利息）\n复利：利息也算利息！（利滚利）\n\n曹操的军需库：去年的利息今年也要算利息`, en: `Compound vs simple interest:\nSimple: interest on original only\nCompound: interest on interest too! (snowball)\n\nCao Cao's treasury: last year's interest also earns interest` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：复利公式`, en: `${narrator}: "Compound interest formula"` },
+      hint: { zh: `$A = P \\times (1 + r)^t$\n\n$P = ${principal}$，$r = ${rateDecimal}$，$t = ${years}$\n\n$(1 + r)$ 就是"每年变成原来的多少倍"\n$1 + ${rateDecimal} = ${1 + rateDecimal}$`, en: `$A = P \\times (1 + r)^t$\n\n$P = ${principal}$, $r = ${rateDecimal}$, $t = ${years}$\n\n$(1 + r)$ = "multiply factor per year"\n$1 + ${rateDecimal} = ${1 + rateDecimal}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：逐年计算`, en: `${narrator}: "Calculate year by year"` },
+      hint: (() => {
+        let zh = '', en = '';
+        let amt = principal;
+        for (let y = 1; y <= years; y++) {
+          const prev = amt;
+          amt = parseFloat((amt * (1 + rateDecimal)).toFixed(2));
+          zh += `第 ${y} 年：$${prev} \\times ${1 + rateDecimal} = ${amt}$\n`;
+          en += `Year ${y}: $${prev} \\times ${1 + rateDecimal} = ${amt}$\n`;
+        }
+        return { zh, en };
+      })(),
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：用公式一步算`, en: `${narrator}: "Or use the formula in one step"` },
+      hint: { zh: `$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$`, en: `$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：答案 = ${answer}`, en: `${narrator}: "Answer = ${answer}"` },
+      hint: { zh: `$${years}$ 年复利后总额 $= ${answer}$ 两\n\n比单利多：$${answer} - ${totalSimple} = ${parseFloat((answer - totalSimple).toFixed(2))}$`, en: `After $${years}$ years of compound interest, total $= ${answer}$ liang\n\nMore than simple interest by: $${answer} - ${totalSimple} = ${parseFloat((answer - totalSimple).toFixed(2))}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——逐年追踪`, en: `${narrator}: "Verify — track year by year"` },
+      hint: (() => {
+        let zh = `从 $${principal}$ 开始：\n`, en = `Starting from $${principal}$:\n`;
+        let amt = principal;
+        for (let y = 1; y <= years; y++) {
+          amt = parseFloat((amt * (1 + rateDecimal)).toFixed(2));
+          zh += `第 ${y} 年末：$${amt}$\n`;
+          en += `End of year ${y}: $${amt}$\n`;
+        }
+        zh += `最终 $${amt}$ ✓`;
+        en += `Final $${amt}$ ✓`;
+        return { zh, en };
+      })(),
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { principal, rate, rateDecimal, years, mode, answer, generatorType: 'PERCENTAGE_INTEREST_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+export function generateParallelAnglesMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrators = ['关羽', '张飞', '赵云'];
+  const narrator = pickRandom(narrators);
+
+  const anglePools: Record<number, number[]> = { 1: [40, 50, 60, 70], 2: [35, 45, 55, 65, 75], 3: [32, 48, 53, 67, 78, 83] };
+  const givenAngle = pickRandom(anglePools[tier]);
+
+  const types = ['alternate', 'corresponding', 'co-interior'] as const;
+  const angleType = pickRandom([...types]);
+
+  let answer: number;
+  let typeZh: string;
+  let typeEn: string;
+  let reasonZh: string;
+  let reasonEn: string;
+
+  if (angleType === 'alternate') {
+    answer = givenAngle;
+    typeZh = '内错角';
+    typeEn = 'alternate angles';
+    reasonZh = '内错角相等（Z字形）';
+    reasonEn = 'Alternate angles are equal (Z-shape)';
+  } else if (angleType === 'corresponding') {
+    answer = givenAngle;
+    typeZh = '同位角';
+    typeEn = 'corresponding angles';
+    reasonZh = '同位角相等（F字形）';
+    reasonEn = 'Corresponding angles are equal (F-shape)';
+  } else {
+    answer = 180 - givenAngle;
+    typeZh = '同旁内角';
+    typeEn = 'co-interior angles';
+    reasonZh = '同旁内角互补（C字形/U字形）';
+    reasonEn = 'Co-interior angles are supplementary (C-shape/U-shape)';
+  }
+
+  const description = {
+    zh: `两平行线被一条直线截断。已知角 $= ${givenAngle}°$，求${typeZh} $x$。`,
+    en: `Two parallel lines cut by a transversal. Given angle $= ${givenAngle}°$. Find the ${typeEn} $x$.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: { zh: `${narrator}：攻城时为什么要关心角度？`, en: `${narrator}: "Why care about angles when besieging?"` },
+      hint: { zh: `城墙是平行线，攻城梯是截线\n梯子和城墙形成的角度决定了爬墙的难度\n\n两条平行线被一条直线截断\n会产生 3 种特殊角度关系`, en: `City walls are parallel lines, siege ladders are transversals\nThe angle between ladder and wall determines climbing difficulty\n\nTwo parallel lines cut by a transversal\ncreate 3 special angle relationships` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：三种平行线角度关系`, en: `${narrator}: "Three parallel line angle rules"` },
+      hint: { zh: `1. 同位角（F字形）：相等\n2. 内错角（Z字形）：相等\n3. 同旁内角（C字形）：互补（加起来 = 180°）\n\n记住字母形状就不会忘！`, en: `1. Corresponding (F-shape): equal\n2. Alternate (Z-shape): equal\n3. Co-interior (C/U-shape): supplementary (add to 180°)\n\nRemember the letter shapes!` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：这道题是哪种？`, en: `${narrator}: "Which type is this?"` },
+      hint: { zh: `已知角 $= ${givenAngle}°$\n这一对是${typeZh}\n\n${reasonZh}`, en: `Given angle $= ${givenAngle}°$\nThis pair is ${typeEn}\n\n${reasonEn}` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：计算`, en: `${narrator}: "Calculate"` },
+      hint: angleType === 'co-interior'
+        ? { zh: `同旁内角互补：\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$`, en: `Co-interior angles are supplementary:\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$` }
+        : { zh: `${typeZh}相等：\n$x = ${givenAngle}°$`, en: `${typeEn} are equal:\n$x = ${givenAngle}°$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：答案 = ${answer}°`, en: `${narrator}: "Answer = ${answer}°"` },
+      hint: { zh: `$x = ${answer}°$`, en: `$x = ${answer}°$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：验算`, en: `${narrator}: "Verify"` },
+      hint: angleType === 'co-interior'
+        ? { zh: `同旁内角之和 $= ${givenAngle}° + ${answer}° = 180°$ ✓`, en: `Co-interior sum $= ${givenAngle}° + ${answer}° = 180°$ ✓` }
+        : { zh: `${typeZh}应该相等：已知 $= ${givenAngle}°$，$x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓`, en: `${typeEn} should be equal: given $= ${givenAngle}°$, $x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓` },
+      highlightField: 'x',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { givenAngle, angleType, answer, total: angleType === 'co-interior' ? 180 : undefined, angle: angleType === 'co-interior' ? givenAngle : (180 - answer), generatorType: 'PARALLEL_ANGLES_RANDOM' },
+    tutorialSteps,
+  };
 }

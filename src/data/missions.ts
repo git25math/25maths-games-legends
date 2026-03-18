@@ -1196,286 +1196,480 @@ export const MISSIONS: Mission[] = [
     secret: { concept: { zh: '极差衡量数据的"分散程度"——差越大，数据越分散。', en: 'Range measures how spread out the data is — bigger range means more spread.' }, formula: '$\\text{Range} = \\text{Max} - \\text{Min}$', tips: [{ zh: '张飞提示：差距太大就要整训，差距小说明水平齐整！', en: 'Zhang Fei Tip: Big gap means more training needed!' }] }
   },
 
-  // --- Year 8: The Yellow Turban Rebellion (Expansion) ---
+  // === Year 8: 讨伐董卓 → 官渡之战 → 隆中对 (190-209 AD) ===
+  // 8 units, ~40 missions. Generators provide gold-standard tutorials (≥6 steps, WHY→verify).
+
+  // --- Unit 1: 进军篇 · 讨伐董卓·虎牢关 (190 AD) — 线性方程 ---
   {
     id: 811, grade: 8, unitId: 1, order: 1,
-    unitTitle: { zh: "Unit 1: 进军与线性方程", en: "Unit 1: Marching & Linear Equations" },
+    unitTitle: { zh: 'Unit 1: 进军篇 · 虎牢关', en: 'Unit 1: The March · Hulao Pass' },
     topic: 'Functions', type: 'LINEAR',
     title: { zh: '急行军', en: 'Forced March' },
-    skillName: { zh: '行军路线术', en: 'March Route' },
-    skillSummary: { zh: '斜率 m = (y₂-y₁)/(x₂-x₁)，截距 c = y₁ - mx₁', en: 'Slope m = (y₂-y₁)/(x₂-x₁), intercept c = y₁ - mx₁' },
-    story: { zh: '黄巾军作乱，曹操率部急行军。已知出发点为 $({x1}, {y1})$，1小时后到达 $({x2}, {y2})$。', en: "Yellow Turbans are rebelling. Cao Cao leads a forced march. Start at $({x1}, {y1})$, reach $({x2}, {y2})$ in 1 hour." },
-    description: { zh: '求行军路线的函数表达式 $y = mx + c$。', en: 'Find the function $y = mx + c$ for the march route.' },
-    data: { points: [[0, 2], [1, 5]], x1: 0, y1: 2, x2: 1, y2: 5, generatorType: 'LINEAR_RANDOM' }, difficulty: 'Medium', reward: 150,
-    kpId: 'kp-3.5-01', sectionId: 'functions',
-    tutorialSteps: [
-      {
-        text: { zh: '曹操："急行军路线经过 $(0,2)$ 和 $(1,5)$ 两点。先求斜率 $m$。"', en: 'Cao Cao: "The march route passes through $(0,2)$ and $(1,5)$. First find the slope $m$."' },
-        highlightField: 'm'
-      },
-      {
-        text: { zh: '曹操："$m = (5-2)/(1-0) = 3$。斜率就是行军速度！再看截距 $c$。"', en: 'Cao Cao: "$m = (5-2)/(1-0) = 3$. The slope is the march speed! Now the intercept $c$."' },
-        hint: { zh: '起点 $(0,2)$ 的 $y$ 值就是截距 $c$', en: 'The $y$ value at starting point $(0,2)$ is the intercept $c$' },
-        highlightField: 'c'
-      },
-      {
-        text: { zh: '曹操："$c = 2$！行军路线为 $y = 3x + 2$。兵贵神速！"', en: 'Cao Cao: "$c = 2$! The march route is $y = 3x + 2$. Speed is vital!"' },
-        highlightField: 'c'
-      }
-    ],
-    secret: { concept: { zh: '斜率 $m$ 代表变化率，截距 $c$ 代表初始值。', en: 'Slope $m$ is the rate of change, intercept $c$ is the initial value.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1},\\quad c = y_1 - mx_1$', tips: [{ zh: '曹操提示：兵贵神速，路线必须精准！', en: 'Cao Tip: Speed is vital, the route must be precise!' }] }
+    skillName: { zh: '行军路线术', en: 'March Route Planning' },
+    skillSummary: { zh: '从两个坐标点求直线方程 y=mx+c', en: 'Find y=mx+c from two coordinate points' },
+    story: { zh: '各路诸侯讨伐董卓，联军从 $({x1},{y1})$ 出发，经过 $({x2},{y2})$ 向虎牢关挺进。', en: 'Coalition forces march from $({x1},{y1})$ through $({x2},{y2})$ towards Hulao Pass.' },
+    description: { zh: '求行军路线 $y = mx + c$', en: 'Find the march route $y = mx + c$' },
+    data: { points: [[0, 2], [1, 5]], x1: 0, y1: 2, x2: 1, y2: 5, generatorType: 'LINEAR_RANDOM' },
+    difficulty: 'Medium', reward: 150, kpId: 'kp-2.5-01', sectionId: 'functions',
+    tutorialSteps: [],
+    secret: { concept: { zh: '斜率 $m$ 是变化率（每走 1 步升高多少），截距 $c$ 是起点高度。', en: 'Slope $m$ is rate of change, intercept $c$ is starting height.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}, \\quad c = y_1 - mx_1$', tips: [{ zh: '关羽提示：知道两个点，就能画出一条直线！', en: 'Guan Yu Tip: Two points determine a line!' }] },
+    storyConsequence: { correct: { zh: '联军路线精准，直奔虎牢关！', en: 'Coalition route is precise, heading straight for Hulao Pass!' }, wrong: { zh: '路线偏差，大军迷路了…', en: 'Route error — the army is lost...' } },
   },
   {
     id: 812, grade: 8, unitId: 1, order: 2,
-    unitTitle: { zh: "Unit 1: 进军与线性方程", en: "Unit 1: Marching & Linear Equations" },
+    unitTitle: { zh: 'Unit 1: 进军篇 · 虎牢关', en: 'Unit 1: The March · Hulao Pass' },
     topic: 'Functions', type: 'FUNC_VAL',
     title: { zh: '追击哨兵', en: 'Intercepting Scouts' },
-    skillName: { zh: '追击函数术', en: 'Pursuit Function' },
-    skillSummary: { zh: '代入求函数值', en: 'Substitute to find function value' },
-    story: { zh: '发现敌军哨兵！哨兵位置符合 $y = {m}x + {b}$，我军需在 $x={x}$ 处拦截。', en: "Enemy scouts spotted! Their position follows $y = {m}x + {b}$. Intercept at $x={x}$." },
-    description: { zh: '计算拦截点的 $y$ 坐标。', en: 'Calculate the $y$ coordinate of the intercept point.' },
-    data: { m: 1, b: 4, x: 2, generatorType: 'FUNC_VAL_RANDOM' }, difficulty: 'Medium', reward: 160,
-    kpId: 'kp-3.5-01', sectionId: 'functions',
-    tutorialSteps: [
-      {
-        text: { zh: '夏侯惇："哨兵位置符合 $y = x + 4$，需在 $x=2$ 处拦截。"', en: 'Xiahou Dun: "Scout position follows $y = x + 4$. Intercept at $x=2$."' },
-        highlightField: 'y'
-      },
-      {
-        text: { zh: '夏侯惇："将 $x=2$ 代入函数：$y = 2 + 4$"', en: 'Xiahou Dun: "Substitute $x=2$ into the function: $y = 2 + 4$"' },
-        hint: { zh: '2 加 4 等于多少？', en: 'What is 2 plus 4?' },
-        highlightField: 'y'
-      },
-      {
-        text: { zh: '夏侯惇："$y = 6$！拦截点坐标为 $(2, 6)$。锁定目标，绝不放过！"', en: 'Xiahou Dun: "$y = 6$! Intercept point is $(2, 6)$. Lock on target, let no one escape!"' },
-        highlightField: 'y'
-      }
-    ],
-    secret: { concept: { zh: '函数值随自变量变化。', en: 'Function values change with the independent variable.' }, formula: '$y = f(x)$', tips: [{ zh: '夏侯惇提示：锁定目标，绝不放过！', en: 'Xiahou Dun Tip: Lock on target, let no one escape!' }] }
+    skillName: { zh: '函数求值术', en: 'Function Evaluation' },
+    skillSummary: { zh: '把 x 代入函数求 y 值', en: 'Substitute x into function to find y' },
+    story: { zh: '发现董卓哨兵！其位置符合 $y = {m}x + {b}$，需在 $x = {x}$ 处拦截。', en: "Dong Zhuo's scouts spotted! Position follows $y = {m}x + {b}$. Intercept at $x = {x}$." },
+    description: { zh: '计算拦截点的 $y$ 坐标', en: 'Calculate the $y$ coordinate at the intercept point' },
+    data: { m: 2, b: 3, x: 4, generatorType: 'FUNC_VAL_RANDOM' },
+    difficulty: 'Medium', reward: 160, kpId: 'kp-2.2-01', sectionId: 'functions',
+    tutorialSteps: [],
+    secret: { concept: { zh: '函数就像一台机器：输入 $x$，输出 $y$。', en: 'A function is like a machine: input $x$, output $y$.' }, formula: '$y = mx + b$', tips: [{ zh: '张飞提示：代入就是把数字塞进去算！', en: 'Zhang Fei Tip: Substitution means plugging in the number!' }] },
   },
   {
     id: 813, grade: 8, unitId: 1, order: 3,
-    unitTitle: { zh: "Unit 1: 进军与线性方程", en: "Unit 1: Marching & Linear Equations" },
+    unitTitle: { zh: 'Unit 1: 进军篇 · 虎牢关', en: 'Unit 1: The March · Hulao Pass' },
     topic: 'Functions', type: 'LINEAR',
     title: { zh: '合围之势', en: 'Encirclement' },
     skillName: { zh: '合围路线术', en: 'Encirclement Route' },
-    skillSummary: { zh: '直线方程 y = mx + c', en: 'Line equation y = mx + c' },
-    story: { zh: '两路大军合围。已知路线经过 $({x1}, {y1})$ 和 $({x2}, {y2})$。', en: 'Two armies encircle. The route passes through $({x1}, {y1})$ and $({x2}, {y2})$.' },
-    description: { zh: '求斜率 $m$。', en: 'Find the slope $m$.' },
-    data: { points: [[2, 10], [4, 18]], x1: 2, y1: 10, x2: 4, y2: 18, generatorType: 'LINEAR_RANDOM' }, difficulty: 'Medium', reward: 170,
-    kpId: 'kp-3.3-01', sectionId: 'functions',
-    tutorialSteps: [
-      {
-        text: { zh: '曹仁："合围路线经过 $(2,10)$ 和 $(4,18)$。先求斜率 $m$。"', en: 'Cao Ren: "The encirclement route passes through $(2,10)$ and $(4,18)$. Find slope $m$."' },
-        highlightField: 'm'
-      },
-      {
-        text: { zh: '曹仁："斜率公式：$m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{18-10}{4-2}$"', en: 'Cao Ren: "Slope formula: $m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{18-10}{4-2}$"' },
-        hint: { zh: '8 除以 2 等于多少？', en: 'What is 8 divided by 2?' },
-        highlightField: 'm'
-      },
-      {
-        text: { zh: '曹仁："$m = 4$！然后求截距 $c = y_1 - mx_1 = 10 - 4 \\times 2 = 2$"', en: 'Cao Ren: "$m = 4$! Then intercept $c = y_1 - mx_1 = 10 - 4 \\times 2 = 2$"' },
-        highlightField: 'c'
-      }
-    ],
-    secret: { concept: { zh: '斜率公式：$m = \\frac{y_2 - y_1}{x_2 - x_1}$。', en: 'Slope formula: $m = \\frac{y_2 - y_1}{x_2 - x_1}$.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1},\\quad c = y_1 - mx_1$', tips: [{ zh: '曹仁提示：守如泰山，攻如雷霆。', en: 'Cao Ren Tip: Defend like a mountain, attack like thunder.' }] }
+    skillSummary: { zh: '两点确定直线方程', en: 'Two points determine a line equation' },
+    story: { zh: '关羽、张飞分兵合围，路线经过 $({x1},{y1})$ 和 $({x2},{y2})$。', en: 'Guan Yu and Zhang Fei split forces. Route through $({x1},{y1})$ and $({x2},{y2})$.' },
+    description: { zh: '求合围路线 $y = mx + c$', en: 'Find the encirclement route $y = mx + c$' },
+    data: { points: [[2, 10], [4, 18]], x1: 2, y1: 10, x2: 4, y2: 18, generatorType: 'LINEAR_RANDOM' },
+    difficulty: 'Medium', reward: 170, kpId: 'kp-2.5-01', sectionId: 'functions',
+    tutorialSteps: [],
+    secret: { concept: { zh: '斜率越大，路线越陡。', en: 'Steeper route means larger slope.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}$', tips: [{ zh: '关羽提示：斜率就是行军的陡峭程度。', en: 'Guan Yu Tip: Slope is the steepness of the march.' }] },
   },
   {
+    id: 814, grade: 8, unitId: 1, order: 4,
+    unitTitle: { zh: 'Unit 1: 进军篇 · 虎牢关', en: 'Unit 1: The March · Hulao Pass' },
+    topic: 'Functions', type: 'FUNC_VAL',
+    title: { zh: '虎牢会合', en: 'Hulao Rendezvous' },
+    skillName: { zh: '会合时间术', en: 'Rendezvous Timing' },
+    skillSummary: { zh: '函数求值确定会合点', en: 'Evaluate function to find meeting point' },
+    story: { zh: '三路大军约定在虎牢关前会合。刘备军位置 $y = {m}x + {b}$，$x = {x}$ 时到达会合点。', en: "Three armies converge at Hulao. Liu Bei's position: $y = {m}x + {b}$, arriving at $x = {x}$." },
+    description: { zh: '求会合点 $y$ 坐标', en: 'Find the $y$ coordinate of the rendezvous' },
+    data: { m: 3, b: 5, x: 3, generatorType: 'FUNC_VAL_RANDOM' },
+    difficulty: 'Hard', reward: 180, kpId: 'kp-2.2-01', sectionId: 'functions',
+    tutorialSteps: [],
+    secret: { concept: { zh: '多个函数的交点就是"会合点"。', en: 'Where functions meet is the "rendezvous point".' }, formula: '$y = f(x)$', tips: [{ zh: '刘备提示：兄弟齐心，其利断金！', en: 'Liu Bei Tip: United brothers can cut through metal!' }] },
+    storyConsequence: { correct: { zh: '三路大军准时会合，虎牢关前旌旗蔽空！', en: 'All three armies converge on time — banners fill the sky at Hulao!' }, wrong: { zh: '会合时间算错，错失战机…', en: 'Timing was off — the opportunity is lost...' } },
+  },
+
+  // --- Unit 2: 攻城篇 · 虎牢关攻防 (190 AD) — 平行线角度 + 勾股定理 ---
+  {
     id: 821, grade: 8, unitId: 2, order: 1,
-    unitTitle: { zh: "Unit 2: 营地与几何面积", en: "Unit 2: Camps & Geometric Area" },
-    topic: 'Geometry', type: 'AREA',
-    title: { zh: '安营扎寨', en: 'Setting Camp' },
-    skillName: { zh: '面积丈量术', en: 'Area Measurement' },
-    skillSummary: { zh: '长方形面积 = 长 × 宽', en: 'Rectangle area = length × width' },
-    story: { zh: '为了抵御黄巾军，需要建立一个长方形营地。长为 {length} 丈，宽为 {width} 丈。', en: 'To defend against rebels, a rectangular camp is needed. Length {length}, Width {width}.' },
-    description: { zh: '计算营地的总面积。', en: 'Calculate the total area of the camp.' },
-    data: { length: 20, width: 15, generatorType: 'AREA_RECT_RANDOM' }, difficulty: 'Easy', reward: 100,
-    kpId: 'kp-5.2-01', sectionId: 'geometry',
-    tutorialSteps: [
-      {
-        text: { zh: '荀彧："营地为长方形，长 20 丈，宽 15 丈。面积公式为长乘宽。"', en: 'Xun Yu: "The camp is rectangular, length 20, width 15. Area = length times width."' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '荀彧："$Area = 20 \\times 15$"', en: 'Xun Yu: "$Area = 20 \\times 15$"' },
-        hint: { zh: '20 乘以 15 等于多少？', en: 'What is 20 times 15?' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '荀彧："面积为 300 平方丈！营地规划完毕。"', en: 'Xun Yu: "The area is 300 square units! Camp planning is complete."' },
-        highlightField: 'area'
-      }
-    ],
-    secret: { concept: { zh: '长方形面积等于长乘以宽。', en: 'Area of a rectangle is length times width.' }, formula: '$Area = L \\times W$', tips: [{ zh: '荀彧提示：合理的营地布局是防守的关键。', en: 'Xun Yu Tip: A well-planned camp is key to defense.' }] }
+    unitTitle: { zh: 'Unit 2: 攻城篇 · 虎牢关攻防', en: 'Unit 2: Siege · Hulao Pass Battle' },
+    topic: 'Geometry', type: 'ANGLES',
+    title: { zh: '城墙角度', en: 'Wall Angles' },
+    skillName: { zh: '平行线截角术', en: 'Parallel Line Angles' },
+    skillSummary: { zh: '同位角相等、内错角相等、同旁内角互补', en: 'Corresponding equal, alternate equal, co-interior supplementary' },
+    story: { zh: '虎牢关城墙两面平行，攻城梯斜靠上去。已知梯与下墙夹角 ${givenAngle}°$，求与上墙的夹角。', en: 'Hulao walls are parallel. A ladder leans against them. Given angle with lower wall = ${givenAngle}°$, find angle with upper wall.' },
+    description: { zh: '求平行线截角 $x$', en: 'Find the angle $x$ between parallel lines' },
+    data: { givenAngle: 55, angleType: 'alternate', answer: 55, angle: 125, generatorType: 'PARALLEL_ANGLES_RANDOM' },
+    difficulty: 'Easy', reward: 140, kpId: 'kp-4.6-03', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '两条平行线被截线切过，产生同位角(F)、内错角(Z)、同旁内角(C)。', en: 'A transversal cutting parallel lines creates corresponding(F), alternate(Z), co-interior(C) angles.' }, formula: '$\\text{Alternate} = \\text{equal}, \\quad \\text{Co-interior} + \\text{given} = 180°$', tips: [{ zh: '关羽提示：记住 F、Z、C 三个字母形状！', en: 'Guan Yu Tip: Remember the F, Z, C letter shapes!' }] },
   },
   {
     id: 822, grade: 8, unitId: 2, order: 2,
-    unitTitle: { zh: "Unit 2: 营地与几何面积", en: "Unit 2: Camps & Geometric Area" },
-    topic: 'Geometry', type: 'VOLUME',
-    title: { zh: '修筑粮仓', en: 'Building Granaries' },
-    skillName: { zh: '粮仓容积术', en: 'Granary Volume' },
-    skillSummary: { zh: '圆柱体积公式', en: 'Cylinder volume formula' },
-    story: { zh: '建立圆柱形粮仓。底面半径 {radius} 丈，高 {height} 丈。', en: 'Build a cylindrical granary. Base radius {radius}, height {height}.' },
-    description: { zh: '计算体积：$V = \\pi r^2 h$（取 $\\pi = 3$）。', en: 'Calculate volume: $V = \\pi r^2 h$ (use $\\pi = 3$).' },
-    data: { radius: 5, height: 10, pi: 3, generatorType: 'VOLUME_RANDOM' }, difficulty: 'Medium', reward: 180,
-    kpId: 'kp-5.4-01', sectionId: 'geometry',
-    tutorialSteps: [
-      {
-        text: { zh: '满宠："粮仓为圆柱形，半径 5 丈，高 10 丈。体积公式为 $V = \\pi r^2 h$。"', en: 'Man Chong: "The granary is cylindrical, radius 5, height 10. Volume formula: $V = \\pi r^2 h$."' },
-        highlightField: 'v'
-      },
-      {
-        text: { zh: '满宠："先算底面积：$\\pi r^2 = 3 \\times 5^2 = 75$"', en: 'Man Chong: "First calculate base area: $\\pi r^2 = 3 \\times 5^2 = 75$"' },
-        hint: { zh: '再乘以高度 10', en: 'Then multiply by height 10' },
-        highlightField: 'v'
-      },
-      {
-        text: { zh: '满宠："$V = 75 \\times 10 = 750$ 立方丈！粮仓越深，存粮越多。"', en: 'Man Chong: "$V = 75 \\times 10 = 750$ cubic units! The deeper the granary, the more grain it holds."' },
-        highlightField: 'v'
-      }
-    ],
-    secret: { concept: { zh: '圆柱体积等于底面积乘以高。', en: 'Cylinder volume is base area times height.' }, formula: '$V = \\pi r^2 h$', tips: [{ zh: '满宠提示：粮仓越深，存粮越多。', en: 'Man Chong Tip: The deeper the granary, the more grain it holds.' }] }
+    unitTitle: { zh: 'Unit 2: 攻城篇 · 虎牢关攻防', en: 'Unit 2: Siege · Hulao Pass Battle' },
+    topic: 'Geometry', type: 'ANGLES',
+    title: { zh: '箭塔射角', en: 'Arrow Tower Angle' },
+    skillName: { zh: '同位角判定术', en: 'Corresponding Angle Rule' },
+    skillSummary: { zh: '同位角相等（F字形）', en: 'Corresponding angles are equal (F-shape)' },
+    story: { zh: '两排箭塔平行布置，弓箭手需要计算射击角度。已知一处射角 ${givenAngle}°$。', en: 'Two rows of arrow towers in parallel. Given one firing angle = ${givenAngle}°$.' },
+    description: { zh: '求同位角 $x$', en: 'Find the corresponding angle $x$' },
+    data: { givenAngle: 65, angleType: 'corresponding', answer: 65, angle: 115, generatorType: 'PARALLEL_ANGLES_RANDOM' },
+    difficulty: 'Medium', reward: 160, kpId: 'kp-4.6-03', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '同位角在截线同侧、平行线同方向，一定相等。', en: 'Corresponding angles: same side of transversal, same direction — always equal.' }, formula: '$\\text{Corresponding angles are equal}$', tips: [{ zh: '张飞提示：F字形一看就知道是同位角！', en: 'Zhang Fei Tip: F-shape = corresponding angles!' }] },
   },
   {
     id: 823, grade: 8, unitId: 2, order: 3,
-    unitTitle: { zh: "Unit 2: 营地与几何面积", en: "Unit 2: Camps & Geometric Area" },
-    topic: 'Geometry', type: 'AREA',
-    title: { zh: '点将台', en: 'Command Platform' },
-    skillName: { zh: '梯形面积术', en: 'Trapezoid Area' },
-    skillSummary: { zh: '梯形面积 = (上底+下底)×高÷2', en: 'Trapezoid area = (top+bottom)×height÷2' },
-    story: { zh: '修筑一个梯形点将台。上底 {a} 丈，下底 {b} 丈，高 {h} 丈。', en: 'Build a trapezoidal platform. Top base {a}, bottom base {b}, height {h}.' },
-    description: { zh: '计算梯形面积：$(a+b)h/2$。', en: 'Calculate trapezoid area: $(a+b)h/2$.' },
-    data: { a: 10, b: 20, h: 8, generatorType: 'AREA_TRAP_RANDOM' }, difficulty: 'Medium', reward: 190,
-    kpId: 'kp-5.2-01', sectionId: 'geometry',
-    tutorialSteps: [
-      {
-        text: { zh: '袁绍："点将台为梯形。上底 10 丈，下底 20 丈，高 8 丈。"', en: 'Yuan Shao: "The platform is trapezoidal. Top 10, bottom 20, height 8."' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '袁绍："梯形面积公式：$A = (a+b) \\times h / 2 = (10+20) \\times 8 / 2$"', en: 'Yuan Shao: "Trapezoid area: $A = (a+b) \\times h / 2 = (10+20) \\times 8 / 2$"' },
-        hint: { zh: '先算 $(10+20) = 30$，再算 $30 \\times 8 / 2$', en: 'First $(10+20) = 30$, then $30 \\times 8 / 2$' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '袁绍："面积为 120 平方丈！点将台必须高大威严！"', en: 'Yuan Shao: "Area is 120 square units! The platform must be grand and majestic!"' },
-        highlightField: 'area'
-      }
-    ],
-    secret: { concept: { zh: '梯形面积是底之和乘以高的一半。', en: 'Trapezoid area is sum of bases times half the height.' }, formula: '$A = (a+b)h/2$', tips: [{ zh: '袁绍提示：点将台一定要高大威严！', en: 'Yuan Shao Tip: The platform must be grand and majestic!' }] }
+    unitTitle: { zh: 'Unit 2: 攻城篇 · 虎牢关攻防', en: 'Unit 2: Siege · Hulao Pass Battle' },
+    topic: 'Geometry', type: 'PYTHAGORAS',
+    title: { zh: '攻城梯', en: 'Siege Ladder' },
+    skillName: { zh: '勾股定理', en: "Pythagoras' Theorem" },
+    skillSummary: { zh: '$a^2 + b^2 = c^2$，知二求一', en: '$a^2 + b^2 = c^2$, find the unknown' },
+    story: { zh: '城墙高 {a} 丈，梯子底端距墙 {b} 丈。梯子至少要多长才能搭到城墙顶？', en: 'Wall height {a}, ladder base {b} from wall. How long must the ladder be to reach the top?' },
+    description: { zh: '求梯子长度（斜边 $c$）', en: 'Find the ladder length (hypotenuse $c$)' },
+    data: { a: 3, b: 4, generatorType: 'PYTHAGORAS_RANDOM' },
+    difficulty: 'Medium', reward: 180, kpId: 'kp-6.1-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '直角三角形中，斜边的平方等于两条直角边的平方之和。', en: 'In a right triangle, hypotenuse² = sum of the other two sides².' }, formula: '$c = \\sqrt{a^2 + b^2}$', tips: [{ zh: '关羽提示：攻城梯太短搭不上去，太长又会倒！', en: 'Guan Yu Tip: Ladder too short won\'t reach; too long will topple!' }] },
+    storyConsequence: { correct: { zh: '攻城梯长度刚好！士兵成功攀上城头！', en: 'Ladder length is perfect! Soldiers scale the wall!' }, wrong: { zh: '梯子长度不对，攻城失败…', en: 'Wrong ladder length — siege fails...' } },
   },
   {
+    id: 824, grade: 8, unitId: 2, order: 4,
+    unitTitle: { zh: 'Unit 2: 攻城篇 · 虎牢关攻防', en: 'Unit 2: Siege · Hulao Pass Battle' },
+    topic: 'Geometry', type: 'PYTHAGORAS',
+    title: { zh: '吊桥长度', en: 'Drawbridge Length' },
+    skillName: { zh: '斜边计算术', en: 'Hypotenuse Calculation' },
+    skillSummary: { zh: '已知两直角边求斜边', en: 'Find hypotenuse from two legs' },
+    story: { zh: '虎牢关吊桥横跨护城河。河宽 {a} 丈，桥从高 {b} 丈处放下。', en: 'Hulao drawbridge spans the moat. River width {a}, bridge drops from height {b}.' },
+    description: { zh: '求吊桥最短长度', en: 'Find the minimum drawbridge length' },
+    data: { a: 5, b: 12, generatorType: 'PYTHAGORAS_RANDOM' },
+    difficulty: 'Hard', reward: 200, kpId: 'kp-6.1-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '勾股定理适用于所有直角三角形，不只是 3-4-5。', en: "Pythagoras' theorem works for ALL right triangles, not just 3-4-5." }, formula: '$c = \\sqrt{a^2 + b^2}$', tips: [{ zh: '吕布提示：本将军的吊桥，岂是等闲之辈能过！', en: "Lu Bu Tip: My drawbridge is not for the faint-hearted!" }] },
+  },
+
+  // --- Unit 3: 营地篇 · 官渡之战前奏 (199 AD) — 面积/圆/体积 ---
+  {
     id: 831, grade: 8, unitId: 3, order: 1,
-    unitTitle: { zh: "Unit 3: 赋税与百分比", en: "Unit 3: Tax & Percentages" },
-    topic: 'Algebra', type: 'PERCENTAGE',
-    title: { zh: '征收粮税', en: 'Collecting Grain Tax' },
-    skillName: { zh: '百分比征税术', en: 'Percentage Tax' },
-    skillSummary: { zh: '加税 = 原价 × (1 + 百分比)', en: 'Tax = original × (1 + rate)' },
-    story: { zh: '曹操在兖州推行屯田。已知农户产粮 {initial} 斛，加征 {pct}% 后，总产出为多少？', en: 'Cao Cao implements tuntian. A farmer yields {initial}, after adding {pct}% tax, what is the total?' },
-    description: { zh: '计算总额：${initial} \\times (1 + {pct}\\%)$。', en: 'Calculate total: ${initial} \\times (1 + {pct}\\%)$.' },
-    data: { initial: 1000, pct: 40, rate: 0.4, years: 1, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Easy', reward: 150,
-    kpId: 'kp-1.13-01', sectionId: 'number',
-    tutorialSteps: [
-      {
-        text: { zh: '枣祗："屯田之策，产粮 1000 斛，税率 40%。"', en: 'Zao Zhi: "Tuntian policy: yield 1000 units, tax rate 40%."' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '枣祗："百分比计算：$1000 \\times 0.4$"', en: 'Zao Zhi: "Percentage calculation: $1000 \\times 0.4$"' },
-        hint: { zh: '1000 乘以 0.4 等于多少？', en: 'What is 1000 times 0.4?' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '枣祗："应缴粮税 400 斛！屯田之策，乃强兵之本。"', en: 'Zao Zhi: "Tax amount is 400 units! Tuntian is the foundation of a strong army."' },
-        highlightField: 'ans'
-      }
-    ],
-    secret: { concept: { zh: '百分比是分母为 100 的分数。', en: 'Percentage is a fraction with denominator 100.' }, formula: '$Tax = Total \\times Rate$', tips: [{ zh: '枣祗提示：屯田之策，乃强兵之本。', en: 'Zao Zhi Tip: The tuntian policy is the foundation of a strong army.' }] }
+    unitTitle: { zh: 'Unit 3: 营地篇 · 官渡之战前奏', en: 'Unit 3: Camp · Prelude to Guandu' },
+    topic: 'Geometry', type: 'AREA',
+    title: { zh: '安营扎寨', en: 'Setting Camp' },
+    skillName: { zh: '矩形面积术', en: 'Rectangle Area' },
+    skillSummary: { zh: '面积 = 长 × 宽', en: 'Area = length × width' },
+    story: { zh: '曹操在官渡安营，需要一个长 {length} 丈、宽 {width} 丈的矩形营地。', en: 'Cao Cao camps at Guandu. Needs a rectangular camp: length {length}, width {width}.' },
+    description: { zh: '计算营地面积', en: 'Calculate the camp area' },
+    data: { length: 20, width: 15, generatorType: 'AREA_RECT_RANDOM' },
+    difficulty: 'Easy', reward: 100, kpId: 'kp-5.2-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '矩形面积 = 长 × 宽，单位是"平方"。', en: 'Rectangle area = length × width, in "square" units.' }, formula: '$A = l \\times w$', tips: [{ zh: '曹操提示：营地规划是战争的基础。', en: 'Cao Cao Tip: Camp planning is the foundation of war.' }] },
   },
   {
     id: 832, grade: 8, unitId: 3, order: 2,
-    unitTitle: { zh: "Unit 3: 赋税与百分比", en: "Unit 3: Tax & Percentages" },
-    topic: 'Algebra', type: 'PERCENTAGE',
-    title: { zh: '军备折扣', en: 'Armament Discount' },
-    skillName: { zh: '折扣计算术', en: 'Discount Calculation' },
-    skillSummary: { zh: '折后价 = 原价 × (1 - 百分比)', en: 'Discounted = original × (1 - rate)' },
-    story: { zh: '购买一批精铁。原价 {initial} 金，由于大批量采购，商家给予 {pct}% 的折扣。', en: 'Buying fine iron. Original price {initial}, {pct}% discount for bulk.' },
-    description: { zh: '计算折后价格：${initial} \\times (1 - {pct}\\%)$。', en: 'Calculate discounted price: ${initial} \\times (1 - {pct}\\%)$.' },
-    data: { initial: 5000, pct: 15, rate: -0.15, years: 1, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Medium', reward: 180,
-    kpId: 'kp-1.13-01', sectionId: 'number',
-    tutorialSteps: [
-      {
-        text: { zh: '韩浩："精铁原价 5000 金，打八五折（15% 折扣）。"', en: 'Han Hao: "Fine iron costs 5000 gold, with a 15% discount."' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '韩浩："折后价 = 原价 $\\times$ (1 - 折扣率) = $5000 \\times 0.85$"', en: 'Han Hao: "Discounted price = Original $\\times$ (1 - discount rate) = $5000 \\times 0.85$"' },
-        hint: { zh: '5000 乘以 0.85 等于多少？', en: 'What is 5000 times 0.85?' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '韩浩："折后价为 4250 金！精打细算，方能支撑长久战事。"', en: 'Han Hao: "Discounted price is 4250 gold! Careful planning supports long-term warfare."' },
-        highlightField: 'ans'
-      }
-    ],
-    secret: { concept: { zh: '折扣是在原价基础上减去的百分比。', en: 'Discount is a percentage subtracted from the original price.' }, formula: '$Price = Original \\times (1 - Discount)$', tips: [{ zh: '韩浩提示：精打细算，方能支撑长久战事。', en: 'Han Hao Tip: Careful planning supports long-term warfare.' }] }
+    unitTitle: { zh: 'Unit 3: 营地篇 · 官渡之战前奏', en: 'Unit 3: Camp · Prelude to Guandu' },
+    topic: 'Geometry', type: 'AREA',
+    title: { zh: '点将台', en: 'Command Platform' },
+    skillName: { zh: '梯形面积术', en: 'Trapezoid Area' },
+    skillSummary: { zh: '梯形面积 = (上底+下底)×高÷2', en: 'Trapezoid area = (a+b)×h÷2' },
+    story: { zh: '袁绍修筑梯形点将台，上底 {a} 丈，下底 {b} 丈，高 {h} 丈。', en: 'Yuan Shao builds a trapezoidal platform. Top {a}, bottom {b}, height {h}.' },
+    description: { zh: '计算梯形面积', en: 'Calculate the trapezoid area' },
+    data: { a: 10, b: 20, h: 8, generatorType: 'AREA_TRAP_RANDOM' },
+    difficulty: 'Medium', reward: 140, kpId: 'kp-5.2-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '梯形可以看成"两个三角形"或"一个平行四边形的一半"。', en: 'A trapezoid can be seen as two triangles or half a parallelogram.' }, formula: '$A = \\frac{(a+b) \\times h}{2}$', tips: [{ zh: '袁绍提示：点将台要宏伟壮观！', en: 'Yuan Shao Tip: The platform must be magnificent!' }] },
   },
   {
+    id: 833, grade: 8, unitId: 3, order: 3,
+    unitTitle: { zh: 'Unit 3: 营地篇 · 官渡之战前奏', en: 'Unit 3: Camp · Prelude to Guandu' },
+    topic: 'Geometry', type: 'CIRCLE',
+    title: { zh: '圆形瞭望塔', en: 'Circular Watchtower' },
+    skillName: { zh: '圆的周长与面积', en: 'Circle Circumference & Area' },
+    skillSummary: { zh: '$C = 2\\pi r$，$A = \\pi r^2$', en: '$C = 2\\pi r$, $A = \\pi r^2$' },
+    story: { zh: '曹操建造圆形瞭望塔，塔基半径 {r} 丈。', en: 'Cao Cao builds a circular watchtower, base radius {r}.' },
+    description: { zh: '计算塔基的周长或面积', en: 'Calculate the circumference or area of the tower base' },
+    data: { r: 5, pi: 3.14, mode: 'area', generatorType: 'CIRCLE_Y8_RANDOM' },
+    difficulty: 'Medium', reward: 170, kpId: 'kp-5.3-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '$\\pi$ 是周长与直径的比值，约 3.14。圆越大，$\\pi$ 不变。', en: '$\\pi$ is the ratio of circumference to diameter, ≈3.14. Same for all circles.' }, formula: '$C = 2\\pi r, \\quad A = \\pi r^2$', tips: [{ zh: '曹操提示：圆形结构最稳固！', en: 'Cao Cao Tip: Circular structures are the most stable!' }] },
+  },
+  {
+    id: 834, grade: 8, unitId: 3, order: 4,
+    unitTitle: { zh: 'Unit 3: 营地篇 · 官渡之战前奏', en: 'Unit 3: Camp · Prelude to Guandu' },
+    topic: 'Geometry', type: 'CIRCLE',
+    title: { zh: '围栏长度', en: 'Fence Length' },
+    skillName: { zh: '圆周长计算', en: 'Circumference Calculation' },
+    skillSummary: { zh: '周长 $C = 2\\pi r$', en: 'Circumference $C = 2\\pi r$' },
+    story: { zh: '给圆形马厩围一圈栅栏，半径 {r} 丈。需要多长的木材？', en: 'Fencing a circular stable with radius {r}. How much wood needed?' },
+    description: { zh: '计算圆形围栏长度', en: 'Calculate the circular fence length' },
+    data: { r: 7, pi: 3.14, mode: 'circumference', generatorType: 'CIRCLE_Y8_RANDOM' },
+    difficulty: 'Medium', reward: 160, kpId: 'kp-5.3-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '周长 = 绕一圈的总长度。直径 × $\\pi$ 就是周长。', en: 'Circumference = distance around once. Diameter × $\\pi$ = circumference.' }, formula: '$C = 2\\pi r = \\pi d$', tips: [{ zh: '荀彧提示：围栏不够长，马就跑了！', en: 'Xun Yu Tip: Not enough fence and the horses escape!' }] },
+  },
+  {
+    id: 835, grade: 8, unitId: 3, order: 5,
+    unitTitle: { zh: 'Unit 3: 营地篇 · 官渡之战前奏', en: 'Unit 3: Camp · Prelude to Guandu' },
+    topic: 'Geometry', type: 'VOLUME',
+    title: { zh: '修筑粮仓', en: 'Building Granaries' },
+    skillName: { zh: '圆柱体积术', en: 'Cylinder Volume' },
+    skillSummary: { zh: '$V = \\pi r^2 h$（底面积 × 高）', en: '$V = \\pi r^2 h$ (base area × height)' },
+    story: { zh: '官渡大营需建圆柱形粮仓。底面半径 {radius} 丈，高 {height} 丈。', en: 'Guandu camp needs a cylindrical granary. Radius {radius}, height {height}.' },
+    description: { zh: '计算粮仓体积', en: 'Calculate the granary volume' },
+    data: { radius: 5, height: 10, pi: 3.14, generatorType: 'VOLUME_Y8_RANDOM' },
+    difficulty: 'Hard', reward: 200, kpId: 'kp-5.4-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '圆柱体积 = 圆面积 × 高。先算底面积 $\\pi r^2$，再乘高。', en: 'Cylinder volume = circle area × height. First $\\pi r^2$, then × height.' }, formula: '$V = \\pi r^2 h$', tips: [{ zh: '曹操提示：粮草先行，兵马后动！', en: 'Cao Cao Tip: Supplies first, troops follow!' }] },
+    storyConsequence: { correct: { zh: '粮仓建成，官渡大军有了充足补给！', en: 'Granary built — Guandu army is well supplied!' }, wrong: { zh: '粮仓容量算错，存粮不足…', en: 'Volume miscalculated — not enough storage...' } },
+  },
+
+  // --- Unit 4: 治理篇 · 官渡胜后治理 (200 AD) — 百分比/利息 ---
+  {
     id: 841, grade: 8, unitId: 4, order: 1,
-    unitTitle: { zh: "Unit 4: 军籍与数据", en: "Unit 4: Census & Data" },
-    topic: 'Statistics', type: 'STATISTICS',
-    title: { zh: '士兵平均年龄', en: 'Average Soldier Age' },
-    skillName: { zh: '军情统计术', en: 'Military Statistics' },
-    skillSummary: { zh: '平均值 = 总和 ÷ 个数', en: 'Mean = sum ÷ count' },
-    story: { zh: '统计一队精锐士兵的年龄：20, 22, 24, 26, 28。', en: "Stats for elite soldiers' ages: 20, 22, 24, 26, 28." },
-    description: { zh: '计算平均年龄（Mean）。', en: 'Calculate the Mean age.' },
-    data: { values: [20, 22, 24, 26, 28], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Medium', reward: 200,
-    kpId: 'kp-9.3-01', sectionId: 'statistics',
-    tutorialSteps: [
-      {
-        text: { zh: '满宠："统计精锐士兵年龄：20, 22, 24, 26, 28。求平均年龄。"', en: 'Man Chong: "Elite soldier ages: 20, 22, 24, 26, 28. Find the mean."' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '满宠："平均数 = 所有数之和 $\\div$ 个数 = $(20+22+24+26+28) \\div 5$"', en: 'Man Chong: "Mean = sum of all values $\\div$ count = $(20+22+24+26+28) \\div 5$"' },
-        hint: { zh: '总和为 120，除以 5 等于多少？', en: 'Sum is 120, divided by 5 equals?' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '满宠："平均年龄为 24 岁！了解士兵，方能用兵如神。"', en: 'Man Chong: "The mean age is 24! Know your soldiers to lead them like a god."' },
-        highlightField: 'ans'
-      }
-    ],
-    secret: { concept: { zh: '平均数是所有数值之和除以个数。', en: 'Mean is the sum of all values divided by the count.' }, formula: '$\\bar{x} = \\sum x / n$', tips: [{ zh: '满宠提示：了解士兵，方能用兵如神。', en: 'Man Chong Tip: Know your soldiers to lead them like a god.' }] }
+    unitTitle: { zh: 'Unit 4: 治理篇 · 官渡胜后', en: 'Unit 4: Governance · Post-Guandu' },
+    topic: 'Algebra', type: 'PERCENTAGE',
+    title: { zh: '征收粮税', en: 'Collecting Grain Tax' },
+    skillName: { zh: '百分比增减术', en: 'Percentage Increase/Decrease' },
+    skillSummary: { zh: '增后 = 原值 × (1 + 百分比)', en: 'After increase = original × (1 + rate)' },
+    story: { zh: '官渡大胜后，曹操推行屯田。产粮 {initial} 斛，加征 {pct}%。', en: 'After Guandu victory, Cao Cao implements tuntian. Yield {initial}, add {pct}% tax.' },
+    description: { zh: '计算总产出', en: 'Calculate total output' },
+    data: { initial: 1000, pct: 40, rate: 0.4, years: 1, generatorType: 'PERCENTAGE_RANDOM' },
+    difficulty: 'Easy', reward: 150, kpId: 'kp-1.13-01', sectionId: 'number',
+    tutorialSteps: [],
+    secret: { concept: { zh: '"百分之"就是"每一百份中"。$40\\% = \\frac{40}{100} = 0.4$', en: '"Percent" means "per hundred". $40\\% = \\frac{40}{100} = 0.4$' }, formula: '$\\text{Total} = P \\times (1 + r)$', tips: [{ zh: '荀彧提示：屯田之策，乃强兵之本。', en: 'Xun Yu Tip: The tuntian policy is the foundation of a strong army.' }] },
   },
   {
     id: 842, grade: 8, unitId: 4, order: 2,
-    unitTitle: { zh: "Unit 4: 军籍与数据", en: "Unit 4: Census & Data" },
+    unitTitle: { zh: 'Unit 4: 治理篇 · 官渡胜后', en: 'Unit 4: Governance · Post-Guandu' },
+    topic: 'Algebra', type: 'PERCENTAGE',
+    title: { zh: '军备折扣', en: 'Armament Discount' },
+    skillName: { zh: '折扣计算术', en: 'Discount Calculation' },
+    skillSummary: { zh: '折后 = 原价 × (1 - 折扣率)', en: 'Discounted = original × (1 - rate)' },
+    story: { zh: '批量购买精铁，原价 {initial} 金，折扣 {pct}%。', en: 'Bulk iron purchase. Original {initial} gold, {pct}% discount.' },
+    description: { zh: '计算折后价', en: 'Calculate the discounted price' },
+    data: { initial: 5000, pct: 15, rate: -0.15, years: 1, generatorType: 'PERCENTAGE_RANDOM' },
+    difficulty: 'Medium', reward: 180, kpId: 'kp-1.13-01', sectionId: 'number',
+    tutorialSteps: [],
+    secret: { concept: { zh: '折扣是"减少"的百分比。打八五折 = 减15% = × 0.85。', en: 'Discount is the percentage "off". 15% off = ×0.85.' }, formula: '$\\text{Sale price} = P \\times (1 - r)$', tips: [{ zh: '曹操提示：精打细算，方能持久作战。', en: 'Cao Cao Tip: Careful budgeting supports prolonged campaigns.' }] },
+  },
+  {
+    id: 843, grade: 8, unitId: 4, order: 3,
+    unitTitle: { zh: 'Unit 4: 治理篇 · 官渡胜后', en: 'Unit 4: Governance · Post-Guandu' },
+    topic: 'Algebra', type: 'PERCENTAGE',
+    title: { zh: '军费放贷', en: 'Military Lending' },
+    skillName: { zh: '单利复利术', en: 'Simple & Compound Interest' },
+    skillSummary: { zh: '单利 P(1+rt)，复利 P(1+r)^t', en: 'Simple: P(1+rt), Compound: P(1+r)^t' },
+    story: { zh: '曹操借出军费 {principal} 两，年利率 {rate}%，{years} 年后收回。', en: 'Cao Cao lends {principal} liang at {rate}% per year for {years} years.' },
+    description: { zh: '计算最终金额', en: 'Calculate the final amount' },
+    data: { principal: 1000, rate: 10, rateDecimal: 0.1, years: 2, mode: 'compound', generatorType: 'PERCENTAGE_INTEREST_RANDOM' },
+    difficulty: 'Hard', reward: 220, kpId: 'kp-1.13-01', sectionId: 'number',
+    tutorialSteps: [],
+    secret: { concept: { zh: '单利：利息只按本金算。复利：利息也算利息（利滚利）！', en: 'Simple: interest on principal only. Compound: interest on interest (snowball)!' }, formula: '$A = P(1+r)^t$', tips: [{ zh: '荀彧提示：复利的威力是时间的魔法！', en: 'Xun Yu Tip: The power of compound interest is time\'s magic!' }] },
+    storyConsequence: { correct: { zh: '账目清晰，军费充足！', en: 'Accounts clear, funds sufficient!' }, wrong: { zh: '利息算错，财务混乱…', en: 'Interest wrong — finances in chaos...' } },
+  },
+
+  // --- Unit 5: 情报篇 · 官渡谍报 (200 AD) — 统计/概率 ---
+  {
+    id: 851, grade: 8, unitId: 5, order: 1,
+    unitTitle: { zh: 'Unit 5: 情报篇 · 官渡谍报', en: 'Unit 5: Intelligence · Guandu Espionage' },
     topic: 'Statistics', type: 'STATISTICS',
-    title: { zh: '身高分布', en: 'Height Distribution' },
-    skillName: { zh: '身高中位术', en: 'Height Median' },
-    skillSummary: { zh: '排序后找中间值', en: 'Sort and find the middle value' },
-    story: { zh: '测量亲卫队的身高（丈）：1.7, 1.8, 1.8, 1.9, 2.0。', en: 'Measuring guard heights: 1.7, 1.8, 1.8, 1.9, 2.0.' },
-    description: { zh: '计算中位数（Median）。', en: 'Calculate the Median height.' },
-    data: { values: [1.7, 1.8, 1.8, 1.9, 2.0], mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' }, difficulty: 'Medium', reward: 220,
-    kpId: 'kp-9.3-01', sectionId: 'statistics',
-    tutorialSteps: [
-      {
-        text: { zh: '典韦："亲卫队身高：1.7, 1.8, 1.8, 1.9, 2.0。求中位数。"', en: 'Dian Wei: "Guard heights: 1.7, 1.8, 1.8, 1.9, 2.0. Find the median."' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '典韦："先排序（已排好），再找中间那个数。5 个数，中间是第 3 个。"', en: 'Dian Wei: "Sort first (already sorted), then find the middle value. 5 numbers, middle is the 3rd."' },
-        hint: { zh: '第 3 个数是多少？', en: 'What is the 3rd number?' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '典韦："中位数是 1.8！俺这身高 2.0，在队里数一数二！"', en: 'Dian Wei: "The median is 1.8! My height of 2.0 is among the top!"' },
-        highlightField: 'ans'
-      }
-    ],
-    secret: { concept: { zh: '中位数是将数据按大小排列后处于中间位置的数。', en: 'Median is the middle value when data is sorted.' }, formula: '$\\text{Median} = \\text{middle value after sorting}$', tips: [{ zh: '典韦提示：俺这身高，在队里也是数一数二的！', en: 'Dian Wei Tip: My height is among the top in the squad!' }] }
+    title: { zh: '敌军平均兵力', en: 'Enemy Average Strength' },
+    skillName: { zh: '平均数统计术', en: 'Mean Calculation' },
+    skillSummary: { zh: '平均值 = 总和 ÷ 个数', en: 'Mean = sum ÷ count' },
+    story: { zh: '探子回报袁绍各营兵力，曹操需要算出平均每营多少人。', en: 'Scouts report Yuan Shao\'s camp sizes. Cao Cao needs the average.' },
+    description: { zh: '计算平均兵力', en: 'Calculate the mean troop count' },
+    data: { values: [200, 250, 300, 350, 400], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' },
+    difficulty: 'Easy', reward: 150, kpId: 'kp-9.3-01', sectionId: 'statistics',
+    tutorialSteps: [],
+    secret: { concept: { zh: '平均数 = 把所有数加起来，再平均分。', en: 'Mean = add all values, then share equally.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '曹操提示：知己知彼，百战不殆。', en: 'Cao Cao Tip: Know your enemy and yourself, win every battle.' }] },
+  },
+  {
+    id: 852, grade: 8, unitId: 5, order: 2,
+    unitTitle: { zh: 'Unit 5: 情报篇 · 官渡谍报', en: 'Unit 5: Intelligence · Guandu Espionage' },
+    topic: 'Statistics', type: 'STATISTICS',
+    title: { zh: '中位情报', en: 'Median Intelligence' },
+    skillName: { zh: '中位数分析术', en: 'Median Analysis' },
+    skillSummary: { zh: '排序后找中间值', en: 'Sort then find the middle value' },
+    story: { zh: '情报部门收集了各路军粮数据，需找出"中间水平"。', en: 'Intelligence has collected supply data from all routes. Find the "middle level".' },
+    description: { zh: '计算中位数', en: 'Calculate the median' },
+    data: { values: [120, 150, 180, 200, 250], mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' },
+    difficulty: 'Medium', reward: 170, kpId: 'kp-9.3-01', sectionId: 'statistics',
+    tutorialSteps: [],
+    secret: { concept: { zh: '中位数不受极端值影响，比平均数更"稳定"。', en: 'Median is not affected by outliers — more "stable" than mean.' }, formula: '$\\text{Median} = \\text{middle value after sorting}$', tips: [{ zh: '荀彧提示：极端数据会骗人，中位数更可靠！', en: 'Xun Yu Tip: Extreme data deceives — median is more reliable!' }] },
+  },
+  {
+    id: 853, grade: 8, unitId: 5, order: 3,
+    unitTitle: { zh: 'Unit 5: 情报篇 · 官渡谍报', en: 'Unit 5: Intelligence · Guandu Espionage' },
+    topic: 'Statistics', type: 'PROBABILITY',
+    title: { zh: '奇袭概率', en: 'Raid Probability' },
+    skillName: { zh: '概率基础术', en: 'Basic Probability' },
+    skillSummary: { zh: '概率 = 目标数 ÷ 总数', en: 'Probability = target ÷ total' },
+    story: { zh: '袁绍有 {total} 个粮仓，其中 {target} 个防守薄弱。随机选一个袭击。', en: 'Yuan Shao has {total} granaries, {target} are poorly guarded. Pick one to raid.' },
+    description: { zh: '成功概率 P = ?', en: 'Probability of success P = ?' },
+    data: { target: 3, total: 10, generatorType: 'PROBABILITY_SIMPLE_RANDOM' },
+    difficulty: 'Medium', reward: 180, kpId: 'kp-8.1-01', sectionId: 'statistics',
+    tutorialSteps: [],
+    secret: { concept: { zh: '概率在 0 到 1 之间。0 = 不可能，1 = 一定发生。', en: 'Probability is between 0 and 1. 0 = impossible, 1 = certain.' }, formula: '$P = \\frac{\\text{favourable}}{\\text{total}}$', tips: [{ zh: '曹操提示：概率越大，胜算越高！', en: 'Cao Cao Tip: Higher probability = better odds!' }] },
+    storyConsequence: { correct: { zh: '许攸献计，火烧乌巢！概率算对了！', en: 'Xu You\'s plan — burn Wuchao! Probability was right!' }, wrong: { zh: '概率算错，奇袭失败…', en: 'Wrong probability — the raid fails...' } },
+  },
+  {
+    id: 854, grade: 8, unitId: 5, order: 4,
+    unitTitle: { zh: 'Unit 5: 情报篇 · 官渡谍报', en: 'Unit 5: Intelligence · Guandu Espionage' },
+    topic: 'Statistics', type: 'PROBABILITY',
+    title: { zh: '双重情报', en: 'Double Intelligence' },
+    skillName: { zh: '独立事件概率', en: 'Independent Event Probability' },
+    skillSummary: { zh: '$P(A \\cap B) = P(A) \\times P(B)$', en: '$P(A \\cap B) = P(A) \\times P(B)$' },
+    story: { zh: '两名探子同时出动。第一人成功概率 {p1}，第二人 {p2}。两人都成功的概率？', en: 'Two spies deployed. First succeeds with P={p1}, second P={p2}. Both succeed?' },
+    description: { zh: '计算两人都成功的概率', en: 'Calculate probability that both succeed' },
+    data: { p1: 0.5, p2: 0.5, generatorType: 'PROBABILITY_IND_RANDOM' },
+    difficulty: 'Hard', reward: 200, kpId: 'kp-8.1-01', sectionId: 'statistics',
+    tutorialSteps: [],
+    secret: { concept: { zh: '独立事件：一件事的结果不影响另一件。两个独立事件同时发生 = 各自概率相乘。', en: 'Independent events: one outcome doesn\'t affect the other. Both happening = multiply probabilities.' }, formula: '$P(A \\text{ and } B) = P(A) \\times P(B)$', tips: [{ zh: '曹操提示：多线情报，成功率靠概率！', en: 'Cao Cao Tip: Multiple intel lines — success relies on probability!' }] },
+  },
+
+  // --- Unit 6: 代数篇 · 隆中对前奏 (205 AD) — 展开/因式分解/不等式 ---
+  {
+    id: 861, grade: 8, unitId: 6, order: 1,
+    unitTitle: { zh: 'Unit 6: 代数篇 · 隆中对前奏', en: 'Unit 6: Algebra · Prelude to Longzhong' },
+    topic: 'Algebra', type: 'EXPAND',
+    title: { zh: '兵力展开', en: 'Force Deployment' },
+    skillName: { zh: '展开括号术', en: 'Expanding Brackets' },
+    skillSummary: { zh: '$a(bx+c) = abx + ac$', en: '$a(bx+c) = abx + ac$' },
+    story: { zh: '诸葛亮初出茅庐，为刘备计算兵力展开部署。', en: 'Zhuge Liang emerges to help Liu Bei calculate troop deployment.' },
+    description: { zh: '展开括号，求 $x$ 的系数', en: 'Expand brackets, find the coefficient of $x$' },
+    data: { a: 3, b: 2, c: 4, ab: 6, ac: 12, answer: 6, generatorType: 'EXPAND_RANDOM' },
+    difficulty: 'Easy', reward: 150, kpId: 'kp-2.2-03', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '展开就是"分配"——外面的数要分给括号里的每一项。', en: 'Expanding = "distributing" — the outside number is given to each term inside.' }, formula: '$a(b + c) = ab + ac$', tips: [{ zh: '诸葛亮提示：分配律是代数的基石！', en: 'Zhuge Liang Tip: Distributive law is the cornerstone of algebra!' }] },
+  },
+  {
+    id: 862, grade: 8, unitId: 6, order: 2,
+    unitTitle: { zh: 'Unit 6: 代数篇 · 隆中对前奏', en: 'Unit 6: Algebra · Prelude to Longzhong' },
+    topic: 'Algebra', type: 'EXPAND',
+    title: { zh: '粮草分配', en: 'Supply Distribution' },
+    skillName: { zh: '分配律运用', en: 'Distributive Law' },
+    skillSummary: { zh: '用分配律展开表达式', en: 'Use distributive law to expand' },
+    story: { zh: '刘备有 {a} 支部队，每支需 ${b}x + {c}$ 份粮草。总共需要多少？', en: 'Liu Bei has {a} units, each needs ${b}x + {c}$ rations. How many total?' },
+    description: { zh: '展开 ${a}({b}x + {c})$', en: 'Expand ${a}({b}x + {c})$' },
+    data: { a: 4, b: 3, c: 5, ab: 12, ac: 20, answer: 12, generatorType: 'EXPAND_RANDOM' },
+    difficulty: 'Medium', reward: 170, kpId: 'kp-2.2-03', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '展开后检查：代入一个数，左右两边应该相等。', en: 'After expanding, check: substitute a number, both sides should match.' }, formula: '$a(bx+c) = abx + ac$', tips: [{ zh: '诸葛亮提示：代入 $x=1$ 是最快的验算方法。', en: 'Zhuge Liang Tip: Substituting $x=1$ is the fastest way to verify.' }] },
+  },
+  {
+    id: 863, grade: 8, unitId: 6, order: 3,
+    unitTitle: { zh: 'Unit 6: 代数篇 · 隆中对前奏', en: 'Unit 6: Algebra · Prelude to Longzhong' },
+    topic: 'Algebra', type: 'FACTORISE',
+    title: { zh: '情报归纳', en: 'Intelligence Summary' },
+    skillName: { zh: '因式分解术', en: 'Factorising' },
+    skillSummary: { zh: '找公因子，提取到括号外', en: 'Find common factor, extract outside brackets' },
+    story: { zh: '诸葛亮归纳刘备各路情报，发现数据有公因子。', en: 'Zhuge Liang summarises Liu Bei\'s intelligence — data shares a common factor.' },
+    description: { zh: '因式分解，找最大公因数', en: 'Factorise — find the HCF' },
+    data: { factor: 3, p: 2, q: 5, a: 6, b: 15, answer: 3, generatorType: 'FACTORISE_RANDOM' },
+    difficulty: 'Medium', reward: 180, kpId: 'kp-2.2-05', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '因式分解是展开的反操作：$ab + ac = a(b+c)$', en: 'Factorising reverses expanding: $ab + ac = a(b+c)$' }, formula: '$ab + ac = a(b+c)$', tips: [{ zh: '诸葛亮提示：归纳就是找出共同规律！', en: 'Zhuge Liang Tip: Summarising means finding the common pattern!' }] },
+  },
+  {
+    id: 864, grade: 8, unitId: 6, order: 4,
+    unitTitle: { zh: 'Unit 6: 代数篇 · 隆中对前奏', en: 'Unit 6: Algebra · Prelude to Longzhong' },
+    topic: 'Algebra', type: 'FACTORISE',
+    title: { zh: '军令简化', en: 'Simplify Orders' },
+    skillName: { zh: '提公因子术', en: 'Extracting Common Factor' },
+    skillSummary: { zh: '先找 HCF，再除', en: 'Find HCF first, then divide' },
+    story: { zh: '刘备军令太冗长，诸葛亮帮忙"因式分解"简化。', en: 'Liu Bei\'s orders are too verbose. Zhuge Liang "factorises" to simplify.' },
+    description: { zh: '提取公因子', en: 'Extract the common factor' },
+    data: { factor: 5, p: 3, q: 7, a: 15, b: 35, answer: 5, generatorType: 'FACTORISE_RANDOM' },
+    difficulty: 'Hard', reward: 200, kpId: 'kp-2.2-05', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '因式分解让表达式更简洁——就像军令要精炼。', en: 'Factorising makes expressions concise — like military orders must be brief.' }, formula: '$ab + ac = a(b+c)$', tips: [{ zh: '刘备提示：军令如山，越简越好！', en: 'Liu Bei Tip: Orders like mountains — the simpler the better!' }] },
+  },
+  {
+    id: 865, grade: 8, unitId: 6, order: 5,
+    unitTitle: { zh: 'Unit 6: 代数篇 · 隆中对前奏', en: 'Unit 6: Algebra · Prelude to Longzhong' },
+    topic: 'Algebra', type: 'INEQUALITY',
+    title: { zh: '兵力限制', en: 'Troop Limit' },
+    skillName: { zh: '不等式求解术', en: 'Solving Inequalities' },
+    skillSummary: { zh: '像解方程一样，但注意不等号方向', en: 'Solve like an equation, but watch the inequality sign' },
+    story: { zh: '刘备能动用的兵力有上限。诸葛亮用不等式计算安全范围。', en: 'Liu Bei\'s troops have a cap. Zhuge Liang uses inequalities to find the safe range.' },
+    description: { zh: '解不等式，求临界值', en: 'Solve the inequality, find the critical value' },
+    data: { a: 3, b: 2, c: 14, op: '<', answer: 4, generatorType: 'INEQUALITY_RANDOM' },
+    difficulty: 'Medium', reward: 180, kpId: 'kp-2.6-01', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '不等式给出范围而非单一答案。$x < 4$ 意思是 $x$ 可以是 3, 2, 1...', en: 'Inequalities give a range, not one answer. $x < 4$ means $x$ can be 3, 2, 1...' }, formula: '$ax + b < c \\Rightarrow x < \\frac{c-b}{a}$', tips: [{ zh: '诸葛亮提示：不等号像城门——有最大限度！', en: 'Zhuge Liang Tip: Inequality is like a gate — there\'s a maximum!' }] },
+  },
+  {
+    id: 866, grade: 8, unitId: 6, order: 6,
+    unitTitle: { zh: 'Unit 6: 代数篇 · 隆中对前奏', en: 'Unit 6: Algebra · Prelude to Longzhong' },
+    topic: 'Algebra', type: 'INEQUALITY',
+    title: { zh: '粮草底线', en: 'Supply Floor' },
+    skillName: { zh: '反向不等式', en: 'Reverse Inequality' },
+    skillSummary: { zh: '不等号方向 > 的解法', en: 'Solving with > direction' },
+    story: { zh: '最少需要多少粮草才能支撑战役？诸葛亮用"大于"不等式算底线。', en: 'Minimum supplies for the campaign? Zhuge Liang uses "greater than" inequality.' },
+    description: { zh: '解不等式', en: 'Solve the inequality' },
+    data: { a: 2, b: 5, c: 15, op: '>', answer: 5, generatorType: 'INEQUALITY_RANDOM' },
+    difficulty: 'Hard', reward: 200, kpId: 'kp-2.6-01', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '$x > 5$ 是"至少要 5 以上"——是底线，不是上限。', en: '$x > 5$ means "at least above 5" — a floor, not a ceiling.' }, formula: '$ax + b > c \\Rightarrow x > \\frac{c-b}{a}$', tips: [{ zh: '诸葛亮提示：底线不可突破，否则全军崩溃！', en: 'Zhuge Liang Tip: The floor must hold — otherwise the army collapses!' }] },
+    storyConsequence: { correct: { zh: '粮草充足，隆中对的三分天下之计初见端倪！', en: 'Supplies secured — Longzhong Plan for dividing the realm takes shape!' }, wrong: { zh: '粮草不足，计划推迟…', en: 'Insufficient supplies — the plan is delayed...' } },
+  },
+
+  // --- Unit 7: 图表篇 · 天下形势图 (207 AD) — 速度/标准式 ---
+  {
+    id: 871, grade: 8, unitId: 7, order: 1,
+    unitTitle: { zh: 'Unit 7: 图表篇 · 天下形势图', en: 'Unit 7: Charts · Map of the Realm' },
+    topic: 'Algebra', type: 'SIMPLE_EQ',
+    title: { zh: '急行军速度', en: 'March Speed' },
+    skillName: { zh: '速度公式术', en: 'Speed Formula' },
+    skillSummary: { zh: '速度=距离÷时间', en: 'Speed = Distance ÷ Time' },
+    story: { zh: '诸葛亮分析各路军队行军速度，规划天下形势。', en: 'Zhuge Liang analyses march speeds to plan the realm\'s future.' },
+    description: { zh: '计算行军速度/距离/时间', en: 'Calculate speed/distance/time' },
+    data: { speed: 10, distance: 60, time: 6, mode: 'speed', answer: 10, x: 10, generatorType: 'SPEED_RANDOM' },
+    difficulty: 'Easy', reward: 140, kpId: 'kp-1.12-01', sectionId: 'number',
+    tutorialSteps: [],
+    secret: { concept: { zh: '速度、距离、时间三者互相关联。知道两个就能算第三个。', en: 'Speed, distance, time are linked. Know any two, find the third.' }, formula: '$S = \\frac{D}{T}, \\quad D = S \\times T, \\quad T = \\frac{D}{S}$', tips: [{ zh: '诸葛亮提示：兵贵神速，速度决定战局！', en: 'Zhuge Liang Tip: Speed is everything in war!' }] },
+  },
+  {
+    id: 872, grade: 8, unitId: 7, order: 2,
+    unitTitle: { zh: 'Unit 7: 图表篇 · 天下形势图', en: 'Unit 7: Charts · Map of the Realm' },
+    topic: 'Algebra', type: 'SIMPLE_EQ',
+    title: { zh: '追击距离', en: 'Pursuit Distance' },
+    skillName: { zh: '距离计算术', en: 'Distance Calculation' },
+    skillSummary: { zh: '距离 = 速度 × 时间', en: 'Distance = Speed × Time' },
+    story: { zh: '赵云追击敌军，速度 {speed} 里/时，追了 {time} 小时。', en: 'Zhao Yun pursues the enemy at {speed} li/hr for {time} hours.' },
+    description: { zh: '计算追击距离', en: 'Calculate the pursuit distance' },
+    data: { speed: 15, distance: 75, time: 5, mode: 'distance', answer: 75, x: 75, generatorType: 'SPEED_RANDOM' },
+    difficulty: 'Medium', reward: 160, kpId: 'kp-1.12-01', sectionId: 'number',
+    tutorialSteps: [],
+    secret: { concept: { zh: '距离 = 速度 × 时间，单位要统一！', en: 'Distance = Speed × Time. Keep units consistent!' }, formula: '$D = S \\times T$', tips: [{ zh: '赵云提示：一骑当千，速度就是力量！', en: 'Zhao Yun Tip: One rider worth a thousand — speed is power!' }] },
+  },
+  {
+    id: 873, grade: 8, unitId: 7, order: 3,
+    unitTitle: { zh: 'Unit 7: 图表篇 · 天下形势图', en: 'Unit 7: Charts · Map of the Realm' },
+    topic: 'Algebra', type: 'STD_FORM',
+    title: { zh: '天下兵力', en: 'Realm Forces' },
+    skillName: { zh: '标准式术', en: 'Standard Form' },
+    skillSummary: { zh: '$a \\times 10^n$（$1 \\leq a < 10$）', en: '$a \\times 10^n$ ($1 \\leq a < 10$)' },
+    story: { zh: '诸葛亮在隆中对中分析天下总兵力，数字太大需要简化。', en: 'In the Longzhong Plan, Zhuge Liang analyses total realm forces — numbers too large.' },
+    description: { zh: '写成标准式', en: 'Write in standard form' },
+    data: { number: 500000, a: 5, n: 5, generatorType: 'STD_FORM_RANDOM' },
+    difficulty: 'Medium', reward: 180, kpId: 'kp-1.8-01', sectionId: 'number',
+    tutorialSteps: [],
+    secret: { concept: { zh: '标准式让大数字变得简洁易比较。$1 \\leq a < 10$，$n$ 是整数。', en: 'Standard form makes big numbers concise and comparable. $1 \\leq a < 10$, $n$ is integer.' }, formula: '$a \\times 10^n$', tips: [{ zh: '诸葛亮提示：大数字用标准式，一目了然！', en: 'Zhuge Liang Tip: Standard form makes big numbers clear at a glance!' }] },
+  },
+  {
+    id: 874, grade: 8, unitId: 7, order: 4,
+    unitTitle: { zh: 'Unit 7: 图表篇 · 天下形势图', en: 'Unit 7: Charts · Map of the Realm' },
+    topic: 'Algebra', type: 'STD_FORM',
+    title: { zh: '粮草总量', en: 'Total Supplies' },
+    skillName: { zh: '大数标准化', en: 'Large Number Standardisation' },
+    skillSummary: { zh: '把大数字写成 $a \\times 10^n$', en: 'Write large numbers as $a \\times 10^n$' },
+    story: { zh: '三分天下需要多少粮草？诸葛亮把庞大数字转为标准式便于计算。', en: 'How much grain to divide the realm? Zhuge Liang converts huge numbers to standard form.' },
+    description: { zh: '写成标准式', en: 'Write in standard form' },
+    data: { number: 3600000, a: 3.6, n: 6, generatorType: 'STD_FORM_RANDOM' },
+    difficulty: 'Hard', reward: 200, kpId: 'kp-1.8-01', sectionId: 'number',
+    tutorialSteps: [],
+    secret: { concept: { zh: '小数点移到第一个非零数字后面，移了几位就是 $n$。', en: 'Move decimal after first non-zero digit. Count of places moved = $n$.' }, formula: '$a \\times 10^n$', tips: [{ zh: '诸葛亮提示：隆中对成竹在胸——三分天下！', en: 'Zhuge Liang Tip: The Longzhong Plan is set — divide the realm in three!' }] },
+    storyConsequence: { correct: { zh: '隆中对完成！三分天下的蓝图绘就！', en: 'Longzhong Plan complete! The blueprint for dividing the realm is drawn!' }, wrong: { zh: '数字太大算糊涂了…', en: 'Numbers too large — calculations went wrong...' } },
+  },
+
+  // --- Unit 8: 度量篇 · 荆州治理 (209 AD) — 线性图 + 综合 ---
+  {
+    id: 881, grade: 8, unitId: 8, order: 1,
+    unitTitle: { zh: 'Unit 8: 度量篇 · 荆州治理', en: 'Unit 8: Measure · Governing Jingzhou' },
+    topic: 'Functions', type: 'LINEAR',
+    title: { zh: '税收路线', en: 'Tax Revenue Route' },
+    skillName: { zh: '线性图解读', en: 'Linear Graph Reading' },
+    skillSummary: { zh: '从图上两点求 y=mx+c', en: 'Find y=mx+c from two points on a graph' },
+    story: { zh: '刘备治荆州，税收增长趋势经过 $({x1},{y1})$ 和 $({x2},{y2})$。', en: 'Liu Bei governs Jingzhou. Tax growth passes through $({x1},{y1})$ and $({x2},{y2})$.' },
+    description: { zh: '求税收增长方程 $y = mx + c$', en: 'Find the tax growth equation $y = mx + c$' },
+    data: { points: [[1, 100], [3, 200]], x1: 1, y1: 100, x2: 3, y2: 200, generatorType: 'LINEAR_RANDOM' },
+    difficulty: 'Medium', reward: 180, kpId: 'kp-2.5-01', sectionId: 'functions',
+    tutorialSteps: [],
+    secret: { concept: { zh: '线性增长 = 每期增加固定量。斜率就是增长速度。', en: 'Linear growth = fixed increase per period. Slope = rate of growth.' }, formula: '$y = mx + c$', tips: [{ zh: '刘备提示：以德服人，荆州大治！', en: 'Liu Bei Tip: Lead with virtue — Jingzhou prospers!' }] },
+  },
+  {
+    id: 882, grade: 8, unitId: 8, order: 2,
+    unitTitle: { zh: 'Unit 8: 度量篇 · 荆州治理', en: 'Unit 8: Measure · Governing Jingzhou' },
+    topic: 'Functions', type: 'LINEAR',
+    title: { zh: '人口增长', en: 'Population Growth' },
+    skillName: { zh: '趋势预测术', en: 'Trend Prediction' },
+    skillSummary: { zh: '用线性方程预测未来值', en: 'Use linear equation to predict future values' },
+    story: { zh: '荆州人口每年稳定增长，今年数据点经过 $({x1},{y1})$ 和 $({x2},{y2})$。', en: 'Jingzhou population grows steadily, passing through $({x1},{y1})$ and $({x2},{y2})$.' },
+    description: { zh: '求人口增长方程', en: 'Find the population growth equation' },
+    data: { points: [[0, 500], [5, 750]], x1: 0, y1: 500, x2: 5, y2: 750, generatorType: 'LINEAR_RANDOM' },
+    difficulty: 'Hard', reward: 200, kpId: 'kp-2.5-01', sectionId: 'functions',
+    tutorialSteps: [],
+    secret: { concept: { zh: '截距 $c$ 是初始人口，斜率 $m$ 是每年增长量。', en: 'Intercept $c$ = initial population, slope $m$ = yearly growth.' }, formula: '$y = mx + c$', tips: [{ zh: '诸葛亮提示：荆州治理好了，就是北伐的根基！', en: 'Zhuge Liang Tip: A well-governed Jingzhou is the base for the northern expedition!' }] },
+    storyConsequence: { correct: { zh: '荆州大治，刘备三分天下的根基已稳！Y8 课程完结！', en: 'Jingzhou thrives — Liu Bei\'s foundation is solid! Y8 curriculum complete!' }, wrong: { zh: '预测失误，治理方案需要调整…', en: 'Prediction wrong — governance plan needs adjustment...' } },
   },
 
   // --- Year 9: The Battle of Guandu (Strategy) ---

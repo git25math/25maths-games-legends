@@ -173,4 +173,20 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'x', label: 'x 坐标', placeholder: 'x = ?' }, { id: 'y', label: 'y 坐标', placeholder: 'y = ?' }],
     en: [{ id: 'x', label: 'x coordinate', placeholder: 'x = ?' }, { id: 'y', label: 'y coordinate', placeholder: 'y = ?' }],
   },
+  EXPAND: {
+    zh: [{ id: 'ans', label: '展开结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Expanded form', placeholder: '= ?' }],
+  },
+  FACTORISE: {
+    zh: [{ id: 'ans', label: '公因子', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Common factor', placeholder: '= ?' }],
+  },
+  INEQUALITY: {
+    zh: [{ id: 'ans', label: '临界值', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Critical value', placeholder: '= ?' }],
+  },
+  STD_FORM: {
+    zh: [{ id: 'a', label: '系数 a', placeholder: 'a = ?' }, { id: 'n', label: '指数 n', placeholder: 'n = ?' }],
+    en: [{ id: 'a', label: 'Coefficient a', placeholder: 'a = ?' }, { id: 'n', label: 'Exponent n', placeholder: 'n = ?' }],
+  },
 };

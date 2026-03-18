@@ -128,11 +128,17 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: ok, expected: { x: String(data.x), y: String(data.y) } };
   }
   if (type === 'ANGLES') {
+    if (data.answer !== undefined) {
+      return { correct: parse(inputs.x || '') === data.answer, expected: { x: String(data.answer) } };
+    }
     const total = data.total || 180;
     const val = total - data.angle;
     return { correct: parse(inputs.x || '') === val, expected: { x: String(val) } };
   }
   if (type === 'VOLUME') {
+    if (data.answer !== undefined) {
+      return { correct: Math.abs(parse(inputs.v || '') - data.answer) < 0.01, expected: { v: round(data.answer) } };
+    }
     const { radius, height, pi, mode } = data;
     let val = pi * radius * radius * height;
     if (mode === 'cone') val = (1 / 3) * pi * radius * radius * height;
@@ -183,6 +189,10 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: ok, expected: { x: `${round(x1)} or ${round(x2)}` } };
   }
   if (type === 'CIRCLE') {
+    if (data.answer !== undefined) {
+      const field = data.mode === 'area' ? 'area' : 'c';
+      return { correct: Math.abs(parse(inputs[field] || '') - data.answer) < 0.01, expected: { [field]: round(data.answer) } };
+    }
     const { r, pi, mode } = data;
     if (mode === 'area') {
       const val = pi * r * r;
@@ -299,6 +309,20 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   if (type === 'COORDINATES') {
     const ok = parse(inputs.x || '') === data.targetX && parse(inputs.y || '') === data.targetY;
     return { correct: ok, expected: { x: String(data.targetX), y: String(data.targetY) } };
+  }
+  if (type === 'EXPAND') {
+    return { correct: Math.abs(parse(inputs.ans || '') - data.answer) < 0.01, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'FACTORISE') {
+    return { correct: Math.abs(parse(inputs.ans || '') - data.answer) < 0.01, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'INEQUALITY') {
+    return { correct: Math.abs(parse(inputs.ans || '') - data.answer) < 0.01, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'STD_FORM') {
+    const okA = Math.abs(parse(inputs.a || '') - data.a) < 0.01;
+    const okN = parse(inputs.n || '') === data.n;
+    return { correct: okA && okN, expected: { a: round(data.a), n: String(data.n) } };
   }
   return { correct: false, expected: {} };
 }

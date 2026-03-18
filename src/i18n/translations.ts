@@ -75,7 +75,11 @@ export const translations = {
       BODMAS: "运算顺序",
       SIMPLIFY: "化简表达式",
       COORDINATES: "坐标读写",
-      MIXED_IMPROPER: "带分数与假分数"
+      MIXED_IMPROPER: "带分数与假分数",
+      EXPAND: "展开括号",
+      FACTORISE: "因式分解",
+      INEQUALITY: "不等式",
+      STD_FORM: "标准式"
     },
     difficulty: {
       Easy: "简单",
@@ -233,7 +237,11 @@ export const translations = {
       BODMAS: "Order of Operations",
       SIMPLIFY: "Simplify Expressions",
       COORDINATES: "Coordinates",
-      MIXED_IMPROPER: "Mixed & Improper Fractions"
+      MIXED_IMPROPER: "Mixed & Improper Fractions",
+      EXPAND: "Expanding Brackets",
+      FACTORISE: "Factorising",
+      INEQUALITY: "Inequalities",
+      STD_FORM: "Standard Form"
     },
     difficulty: {
       Easy: "Easy",
@@ -389,7 +397,11 @@ export const translations = {
       BODMAS: "運算順序",
       SIMPLIFY: "化簡表達式",
       COORDINATES: "座標讀寫",
-      MIXED_IMPROPER: "帶分數與假分數"
+      MIXED_IMPROPER: "帶分數與假分數",
+      EXPAND: "展開括號",
+      FACTORISE: "因式分解",
+      INEQUALITY: "不等式",
+      STD_FORM: "標準式"
     },
     difficulty: {
       Easy: "簡單",

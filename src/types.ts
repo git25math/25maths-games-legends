@@ -55,7 +55,11 @@ export type QuestionType =
   | 'BODMAS'
   | 'SIMPLIFY'
   | 'COORDINATES'
-  | 'MIXED_IMPROPER';
+  | 'MIXED_IMPROPER'
+  | 'EXPAND'
+  | 'FACTORISE'
+  | 'INEQUALITY'
+  | 'STD_FORM';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 
