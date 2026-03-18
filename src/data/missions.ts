@@ -449,16 +449,31 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '吕布："虎牢关城墙一侧角度为 $120^\\circ$，要布置弩床，须知其补角。"', en: 'Lu Bu: "The wall angle at Hulao Pass is $120^\\circ$. To place the ballista, we need the supplementary angle."' },
+        text: { zh: '吕布：虎牢关城墙一侧角度 ${angle}^\\circ$，要在另一侧布置弩床，得先算出那个角度', en: 'Lu Bu: "The wall angle at Hulao Pass is ${angle}^\\circ$. To place the ballista on the other side, we need that angle"' },
+        hint: { zh: '城墙这一侧 ${angle}^\\circ$，另一侧的角度未知\n两个角合起来刚好是一条直线', en: 'This side is ${angle}^\\circ$, the other side is unknown\nTogether they form a straight line' },
         highlightField: 'x'
       },
       {
-        text: { zh: '吕布："补角之和为 $180^\\circ$，所以 $x = 180 - 120$"', en: 'Lu Bu: "Supplementary angles sum to $180^\\circ$, so $x = 180 - 120$"' },
-        hint: { zh: '180 减去 120 等于多少？', en: 'What is 180 minus 120?' },
+        text: { zh: '吕布：什么是补角？两个角加起来等于 $180^\\circ$（一条直线）的角，就互为补角', en: 'Lu Bu: "What are supplementary angles? Two angles that add up to $180^\\circ$ (a straight line) are supplementary"' },
+        hint: { zh: '一条直线的角度是 $180^\\circ$\n城墙是直的，两侧角加起来刚好 $180^\\circ$', en: 'A straight line measures $180^\\circ$\nThe wall is straight, so both sides add up to $180^\\circ$' },
         highlightField: 'x'
       },
       {
-        text: { zh: '吕布："$x = 60^\\circ$！弩床角度确定，万箭齐发！"', en: 'Lu Bu: "$x = 60^\\circ$! Ballista angle set, fire at will!"' },
+        text: { zh: '吕布：已知一个角是 ${angle}^\\circ$，另一个角 $x$ 和它加起来等于 $180^\\circ$', en: 'Lu Bu: "One angle is ${angle}^\\circ$, the other angle $x$ adds up with it to $180^\\circ$"' },
+        hint: { zh: '写成方程：${angle} + x = 180$', en: 'As an equation: ${angle} + x = 180$' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '吕布：怎么算 $x$？用 $180$ 减去已知的 ${angle}$', en: 'Lu Bu: "How to find $x$? Subtract the known ${angle}$ from $180$"' },
+        hint: { zh: '为什么用减法？因为我们知道总和是 $180$\n减去已知的部分，剩下的就是未知的', en: 'Why subtract? We know the total is $180$\nSubtract the known part to find the unknown' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '吕布：$x = 180 - {angle} = {ans}$', en: 'Lu Bu: "$x = 180 - {angle} = {ans}$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '吕布：弩床角度 ${ans}^\\circ$！验算：${angle} + {ans} = 180$ ✓ 万箭齐发！', en: 'Lu Bu: "Ballista angle ${ans}^\\circ$! Verify: ${angle} + {ans} = 180$ ✓ Fire at will!"' },
         highlightField: 'x'
       }
     ],
@@ -477,16 +492,25 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '高顺："两座箭塔的射击线成直角，一个角为 $35^\\circ$，须求另一个角。"', en: 'Gao Shun: "Two towers form a right angle. One angle is $35^\\circ$, find the other."' },
+        text: { zh: '高顺：两座箭塔要形成交叉火力。射击线成直角，一个角 ${angle}^\\circ$，另一个角是多少？', en: 'Gao Shun: "Two towers need crossfire. Lines form a right angle, one is ${angle}^\\circ$ — what is the other?"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺："余角之和为 $90^\\circ$，所以 $x = 90 - 35$"', en: 'Gao Shun: "Complementary angles sum to $90^\\circ$, so $x = 90 - 35$"' },
-        hint: { zh: '90 减去 35 等于多少？', en: 'What is 90 minus 35?' },
+        text: { zh: '高顺：什么是余角？两个角加起来等于 $90^\\circ$（一个直角）的角，就互为余角', en: 'Gao Shun: "What are complementary angles? Two angles that add up to $90^\\circ$ (a right angle) are complementary"' },
+        hint: { zh: '直角 = $90^\\circ$，就是我们平时说的"直角"\n两座箭塔的射击线夹角是直角', en: 'A right angle = $90^\\circ$\nThe two tower lines form a right angle' },
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺："$x = 55^\\circ$！交叉火力覆盖完美！陷阵营，出击！"', en: 'Gao Shun: "$x = 55^\\circ$! Crossfire coverage is perfect! Camp Crushers, attack!"' },
+        text: { zh: '高顺：已知一角 ${angle}^\\circ$，写方程：${angle} + x = 90$', en: 'Gao Shun: "One angle is ${angle}^\\circ$, equation: ${angle} + x = 90$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '高顺：$x = 90 - {angle} = {ans}$', en: 'Gao Shun: "$x = 90 - {angle} = {ans}$"' },
+        hint: { zh: '用总角度 $90$ 减去已知的 ${angle}$\n剩下的就是另一个角', en: 'Total $90$ minus known ${angle}$\nThe remainder is the other angle' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '高顺：交叉火力角度 ${ans}^\\circ$！验算：${angle} + {ans} = 90$ ✓ 陷阵营，出击！', en: 'Gao Shun: "Crossfire angle ${ans}^\\circ$! Verify: ${angle} + {ans} = 90$ ✓ Camp Crushers, attack!"' },
         highlightField: 'x'
       }
     ],
@@ -505,16 +529,24 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '诸葛亮："八卦阵中，两个方位角互为补角。已知一角 $45^\\circ$，须求另一角。"', en: 'Zhuge Liang: "In the Eight Trigrams, two bearing angles are supplementary. One is $45^\\circ$, find the other."' },
+        text: { zh: '诸葛亮：八卦阵中两个方位角互为补角。已知一角 ${angle}^\\circ$，另一角是阵法变换的关键', en: 'Zhuge Liang: "In the Eight Trigrams, two bearing angles are supplementary. One is ${angle}^\\circ$, the other is key to the formation"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮："补角之和为 $180^\\circ$。因此 $x = 180 - 45$"', en: 'Zhuge Liang: "Supplementary angles sum to $180^\\circ$. So $x = 180 - 45$"' },
-        hint: { zh: '180 减去 45 等于多少？', en: 'What is 180 minus 45?' },
+        text: { zh: '诸葛亮：补角就是加起来等于 $180^\\circ$ 的两个角', en: 'Zhuge Liang: "Supplementary angles add up to $180^\\circ$"' },
+        hint: { zh: '一条直线是 $180^\\circ$\n阵法中心的两个方位角合成一线', en: 'A straight line is $180^\\circ$\nThe two bearing angles form a straight line through the center' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮："$x = 135^\\circ$！阵法变幻莫测，皆在术数之间。"', en: 'Zhuge Liang: "$x = 135^\\circ$! The formation changes are all in the numbers."' },
+        text: { zh: '诸葛亮：方程 ${angle} + x = 180$，用 $180$ 减去 ${angle}$', en: 'Zhuge Liang: "Equation: ${angle} + x = 180$, subtract ${angle}$ from $180$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮：$x = 180 - {angle} = {ans}$', en: 'Zhuge Liang: "$x = 180 - {angle} = {ans}$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮：${ans}^\\circ$！验算：${angle} + {ans} = 180$ ✓ 阵法变幻莫测，皆在术数之间', en: 'Zhuge Liang: "${ans}^\\circ$! Verify: ${angle} + {ans} = 180$ ✓ The formation changes are all in the numbers"' },
         highlightField: 'x'
       }
     ],

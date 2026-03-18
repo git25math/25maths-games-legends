@@ -262,61 +262,10 @@ export function generateAnglesMission(template: Mission): Mission {
     en: `Calculate ${kind.en} angle: $${total} - ${angle} = x$.`,
   };
 
-  const narrator = pickRandom(['关羽', '赵云', '张飞']);
-  const tutorialSteps = [
-    {
-      text: {
-        zh: `${narrator}：什么是${kind.zh}？`,
-        en: `${narrator}: "What are ${kind.en} angles?"`,
-      },
-      hint: total === 90 ? {
-        zh: '两个角加起来刚好等于 $90°$（一个直角）\n这两个角就互为余角',
-        en: 'Two angles that add up to exactly $90°$ (a right angle)\nare called complementary angles',
-      } : {
-        zh: '两个角加起来刚好等于 $180°$（一条直线）\n这两个角就互为补角',
-        en: 'Two angles that add up to exactly $180°$ (a straight line)\nare called supplementary angles',
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `${narrator}：已知其中一个角是 $${angle}°$，求另一个角 $x$`,
-        en: `${narrator}: "One angle is $${angle}°$, find the other angle $x$"`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `${narrator}：因为两个角加起来等于 $${total}°$，所以 $${angle} + x = ${total}$`,
-        en: `${narrator}: "Since both angles sum to $${total}°$: $${angle} + x = ${total}$"`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `${narrator}：用 $${total}$ 减去 $${angle}$：$x = ${total} - ${angle}$`,
-        en: `${narrator}: "Subtract: $x = ${total} - ${angle}$"`,
-      },
-      hint: {
-        zh: `$${total} - ${angle} = ${ans}$`,
-        en: `$${total} - ${angle} = ${ans}$`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `${narrator}：所以 $x = ${ans}°$`,
-        en: `${narrator}: "Therefore $x = ${ans}°$"`,
-      },
-      highlightField: 'x',
-    },
-  ];
-
   return {
     ...template,
     description,
-    data: { ...template.data, angle, total, generatorType: 'ANGLES_RANDOM' },
-    tutorialSteps,
+    data: { ...template.data, angle, total, ans, generatorType: 'ANGLES_RANDOM' },
   };
 }
 
