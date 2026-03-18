@@ -357,6 +357,18 @@ export const PracticeScreen = ({
                 highlights={[{ type: 'prime' }]}
                 columns={10}
               />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'SQUARE_CUBE' ? (
+              <NumberGrid
+                range={[1, 100]}
+                highlights={[{ type: currentMission.data?.mode === 'cube' ? 'cube' : 'square' }]}
+                columns={10}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'SQUARE_ROOT' ? (
+              <NumberGrid
+                range={[1, 100]}
+                highlights={currentMission.data?.op === 'cbrt' ? [{ type: 'cube' }] : [{ type: 'square' }]}
+                columns={10}
+              />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'SIMPLE_EQ' && currentMission.data?.left ? (
               <BalanceScale
                 left={String(currentMission.data.left)}

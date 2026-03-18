@@ -129,4 +129,12 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'ans', label: '结果', placeholder: '分数 = ?' }],
     en: [{ id: 'ans', label: 'Result', placeholder: 'Fraction = ?' }],
   },
+  SQUARE_CUBE: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
+  },
+  SQUARE_ROOT: {
+    zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
+    en: [{ id: 'ans', label: 'Result', placeholder: '= ?' }],
+  },
 };

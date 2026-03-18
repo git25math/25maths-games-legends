@@ -245,6 +245,12 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const isPrime = data.isPrime ? 1 : 0;
     return { correct: parse(inputs.ans || '') === isPrime, expected: { ans: String(isPrime) } };
   }
+  if (type === 'SQUARE_CUBE') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
+  if (type === 'SQUARE_ROOT') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
+  }
   return { correct: false, expected: {} };
 }
 

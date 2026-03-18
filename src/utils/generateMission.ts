@@ -43,7 +43,9 @@ export type GeneratorType =
   | 'FRAC_ADD_RANDOM'
   | 'FRAC_MUL_RANDOM'
   | 'FACTOR_TREE_RANDOM'
-  | 'PRIME_RANDOM';
+  | 'PRIME_RANDOM'
+  | 'SQUARE_CUBE_RANDOM'
+  | 'SQUARE_ROOT_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -83,6 +85,8 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   INTEGER_ADD_RANDOM: generateIntegerAddMission,
   FRAC_ADD_RANDOM: generateFracAddMission,
   FRAC_MUL_RANDOM: generateFracMulMission,
+  SQUARE_CUBE_RANDOM: generateSquareCubeMission,
+  SQUARE_ROOT_RANDOM: generateSquareRootMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -3372,6 +3376,262 @@ export function generateFracMulMission(template: Mission): Mission {
     ...template,
     description,
     data: { n1, d1, n2, d2, op: isDivide ? 'div' : 'mul', ansNum, ansDen, generatorType: 'FRAC_MUL_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   SQUARE_CUBE generator: n² or n³ depending on data.mode
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSquareCubeMission(template: Mission): Mission {
+  const tier = getTier();
+  const mode: 'square' | 'cube' = template.data?.mode ?? 'square';
+
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '刘备';
+
+  let n: number;
+  let answer: number;
+
+  if (mode === 'square') {
+    const pools: Record<DifficultyTier, number[]> = {
+      1: [2, 3, 4, 5, 6, 7, 8, 9, 10],
+      2: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+      3: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    };
+    n = pickRandom(pools[tier]);
+    answer = n * n;
+  } else {
+    const pools: Record<DifficultyTier, number[]> = {
+      1: [2, 3, 4, 5],
+      2: [2, 3, 4, 5, 6, 7, 8],
+      3: [2, 3, 4, 5, 6, 7, 8, 9, 10],
+    };
+    n = pickRandom(pools[tier]);
+    answer = n * n * n;
+  }
+
+  const description: BilingualText = mode === 'square'
+    ? { zh: `计算 $${n}^2 = ?$`, en: `Calculate $${n}^2 = ?$` }
+    : { zh: `计算 $${n}^3 = ?$`, en: `Calculate $${n}^3 = ?$` };
+
+  const tutorialSteps = mode === 'square' ? [
+    {
+      text: {
+        zh: `${narrator}：什么是"平方"？一个数乘以自己`,
+        en: `${narrator}: "What is 'squaring'? A number times itself"`,
+      },
+      hint: {
+        zh: '为什么叫"平方"？因为正方形的面积 = 边长 × 边长\n\n比如边长 3 的正方形，面积 = 3 × 3 = 9\n所以 $3^2 = 9$',
+        en: 'Why "square"? Because a square\'s area = side × side\n\nA square with side 3: area = 3 × 3 = 9\nSo $3^2 = 9$',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：$${n}^2 = ${n} \\times ${n}$`,
+        en: `${narrator}: "$${n}^2 = ${n} \\times ${n}$"`,
+      },
+      hint: {
+        zh: `把 ${n} 个士兵排成 ${n} 行 ${n} 列的方阵\n总人数 = $${n} \\times ${n} = ${answer}$`,
+        en: `Arrange ${n} soldiers in a ${n} × ${n} square formation\nTotal = $${n} \\times ${n} = ${answer}$`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——$${answer}$ 是完全平方数吗？$\\sqrt{${answer}} = ${n}$ ✓`,
+        en: `${narrator}: "Check — is $${answer}$ a perfect square? $\\sqrt{${answer}} = ${n}$ ✓"`,
+      },
+      hint: {
+        zh: `$${n} \\times ${n} = ${answer}$，反过来 $\\sqrt{${answer}} = ${n}$\n平方和平方根是互逆运算`,
+        en: `$${n} \\times ${n} = ${answer}$, and $\\sqrt{${answer}} = ${n}$\nSquaring and square root are inverse operations`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：记住前 10 个平方数`,
+        en: `${narrator}: "Remember the first 10 perfect squares"`,
+      },
+      hint: {
+        zh: '$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$\n\n$1^2=1,\\ 2^2=4,\\ 3^2=9,\\ 4^2=16,\\ 5^2=25$\n$6^2=36,\\ 7^2=49,\\ 8^2=64,\\ 9^2=81,\\ 10^2=100$',
+        en: '$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$\n\n$1^2=1,\\ 2^2=4,\\ 3^2=9,\\ 4^2=16,\\ 5^2=25$\n$6^2=36,\\ 7^2=49,\\ 8^2=64,\\ 9^2=81,\\ 10^2=100$',
+      },
+      highlightField: 'ans',
+    },
+  ] : [
+    {
+      text: {
+        zh: `${narrator}：什么是"立方"？一个数乘三次`,
+        en: `${narrator}: "What is 'cubing'? A number times itself three times"`,
+      },
+      hint: {
+        zh: '为什么叫"立方"？因为正方体的体积 = 边长 × 边长 × 边长\n\n比如边长 3 的箱子，体积 = 3 × 3 × 3 = 27\n所以 $3^3 = 27$',
+        en: 'Why "cube"? Because a cube\'s volume = side × side × side\n\nA cube with side 3: volume = 3 × 3 × 3 = 27\nSo $3^3 = 27$',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：$${n}^3 = ${n} \\times ${n} \\times ${n}$`,
+        en: `${narrator}: "$${n}^3 = ${n} \\times ${n} \\times ${n}$"`,
+      },
+      hint: {
+        zh: `先算 $${n} \\times ${n} = ${n*n}$\n再乘 ${n}：$${n*n} \\times ${n} = ${answer}$\n\n就像码粮箱：${n} 层，每层 ${n} 行 ${n} 列`,
+        en: `First: $${n} \\times ${n} = ${n*n}$\nThen × ${n}: $${n*n} \\times ${n} = ${answer}$\n\nLike stacking crates: ${n} layers of ${n} × ${n}`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——$\\sqrt[3]{${answer}} = ${n}$ ✓`,
+        en: `${narrator}: "Check — $\\sqrt[3]{${answer}} = ${n}$ ✓"`,
+      },
+      hint: {
+        zh: `$${n} \\times ${n} \\times ${n} = ${answer}$\n反过来 $\\sqrt[3]{${answer}} = ${n}$\n立方和立方根是互逆运算`,
+        en: `$${n} \\times ${n} \\times ${n} = ${answer}$\nAnd $\\sqrt[3]{${answer}} = ${n}$\nCubing and cube root are inverse operations`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：记住前 5 个立方数`,
+        en: `${narrator}: "Remember the first 5 perfect cubes"`,
+      },
+      hint: {
+        zh: '$1, 8, 27, 64, 125$\n\n$1^3=1,\\ 2^3=8,\\ 3^3=27,\\ 4^3=64,\\ 5^3=125$',
+        en: '$1, 8, 27, 64, 125$\n\n$1^3=1,\\ 2^3=8,\\ 3^3=27,\\ 4^3=64,\\ 5^3=125$',
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n, answer, mode, generatorType: 'SQUARE_CUBE_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   SQUARE_ROOT generator: √n or ∛n depending on data.mode
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSquareRootMission(template: Mission): Mission {
+  const tier = getTier();
+  const mode: 'sqrt' | 'cbrt' | 'mixed' = template.data?.mode ?? 'sqrt';
+
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '关羽';
+
+  // Decide actual operation for this question
+  let op: 'sqrt' | 'cbrt';
+  if (mode === 'mixed') {
+    op = pickRandom(['sqrt', 'cbrt']);
+  } else {
+    op = mode;
+  }
+
+  let n: number;
+  let answer: number;
+
+  if (op === 'sqrt') {
+    const pools: Record<DifficultyTier, number[]> = {
+      1: [4, 9, 16, 25, 36, 49, 64, 81, 100],
+      2: [4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169],
+      3: [4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 324, 400],
+    };
+    n = pickRandom(pools[tier]);
+    answer = Math.round(Math.sqrt(n));
+  } else {
+    const pools: Record<DifficultyTier, number[]> = {
+      1: [8, 27, 64, 125],
+      2: [8, 27, 64, 125, 216],
+      3: [8, 27, 64, 125, 216, 343, 512, 729, 1000],
+    };
+    n = pickRandom(pools[tier]);
+    answer = Math.round(Math.cbrt(n));
+  }
+
+  const description: BilingualText = op === 'sqrt'
+    ? { zh: `计算 $\\sqrt{${n}} = ?$`, en: `Calculate $\\sqrt{${n}} = ?$` }
+    : { zh: `计算 $\\sqrt[3]{${n}} = ?$`, en: `Calculate $\\sqrt[3]{${n}} = ?$` };
+
+  const tutorialSteps = op === 'sqrt' ? [
+    {
+      text: {
+        zh: `${narrator}：平方根是平方的反操作`,
+        en: `${narrator}: "Square root is the reverse of squaring"`,
+      },
+      hint: {
+        zh: `如果 $${answer}^2 = ${answer} \\times ${answer} = ${n}$\n那么 $\\sqrt{${n}} = ${answer}$\n\n"谁的平方等于 ${n}？"——答案是 ${answer}`,
+        en: `If $${answer}^2 = ${answer} \\times ${answer} = ${n}$\nThen $\\sqrt{${n}} = ${answer}$\n\n"Whose square equals ${n}?" — answer is ${answer}`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：侦察到敌军方阵 $${n}$ 人，每行几人？`,
+        en: `${narrator}: "Enemy square formation has $${n}$ soldiers — how many per row?"`,
+      },
+      hint: {
+        zh: `方阵 = 正方形排列 → 总人数 = 行数 × 行数\n$${n} = ${answer} \\times ${answer}$\n所以每行 ${answer} 人`,
+        en: `Square formation → total = rows × rows\n$${n} = ${answer} \\times ${answer}$\nSo ${answer} per row`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：记住常见完全平方数`,
+        en: `${narrator}: "Remember common perfect squares"`,
+      },
+      hint: {
+        zh: '$\\sqrt{4}=2,\\ \\sqrt{9}=3,\\ \\sqrt{16}=4,\\ \\sqrt{25}=5$\n$\\sqrt{36}=6,\\ \\sqrt{49}=7,\\ \\sqrt{64}=8,\\ \\sqrt{81}=9,\\ \\sqrt{100}=10$',
+        en: '$\\sqrt{4}=2,\\ \\sqrt{9}=3,\\ \\sqrt{16}=4,\\ \\sqrt{25}=5$\n$\\sqrt{36}=6,\\ \\sqrt{49}=7,\\ \\sqrt{64}=8,\\ \\sqrt{81}=9,\\ \\sqrt{100}=10$',
+      },
+      highlightField: 'ans',
+    },
+  ] : [
+    {
+      text: {
+        zh: `${narrator}：立方根是立方的反操作`,
+        en: `${narrator}: "Cube root is the reverse of cubing"`,
+      },
+      hint: {
+        zh: `如果 $${answer}^3 = ${answer} \\times ${answer} \\times ${answer} = ${n}$\n那么 $\\sqrt[3]{${n}} = ${answer}$\n\n"谁的立方等于 ${n}？"——答案是 ${answer}`,
+        en: `If $${answer}^3 = ${answer} \\times ${answer} \\times ${answer} = ${n}$\nThen $\\sqrt[3]{${n}} = ${answer}$\n\n"Whose cube equals ${n}?" — answer is ${answer}`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：粮仓体积 $${n}$ 箱，边长几箱？`,
+        en: `${narrator}: "Warehouse volume is $${n}$ crates — what's the side length?"`,
+      },
+      hint: {
+        zh: `正方体粮仓 → 体积 = 边长 × 边长 × 边长\n$${n} = ${answer} \\times ${answer} \\times ${answer}$\n所以边长 ${answer}`,
+        en: `Cube warehouse → volume = side × side × side\n$${n} = ${answer} \\times ${answer} \\times ${answer}$\nSo side = ${answer}`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：记住常见完全立方数`,
+        en: `${narrator}: "Remember common perfect cubes"`,
+      },
+      hint: {
+        zh: '$\\sqrt[3]{8}=2,\\ \\sqrt[3]{27}=3,\\ \\sqrt[3]{64}=4,\\ \\sqrt[3]{125}=5$\n$\\sqrt[3]{216}=6,\\ \\sqrt[3]{343}=7,\\ \\sqrt[3]{512}=8,\\ \\sqrt[3]{729}=9,\\ \\sqrt[3]{1000}=10$',
+        en: '$\\sqrt[3]{8}=2,\\ \\sqrt[3]{27}=3,\\ \\sqrt[3]{64}=4,\\ \\sqrt[3]{125}=5$\n$\\sqrt[3]{216}=6,\\ \\sqrt[3]{343}=7,\\ \\sqrt[3]{512}=8,\\ \\sqrt[3]{729}=9,\\ \\sqrt[3]{1000}=10$',
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n, answer, op, mode, generatorType: 'SQUARE_ROOT_RANDOM' },
     tutorialSteps,
   };
 }

@@ -64,7 +64,9 @@ export const translations = {
       PRIME: "质数判断",
       INTEGER_ADD: "正负数运算",
       FRAC_ADD: "分数加减",
-      FRAC_MUL: "分数乘除"
+      FRAC_MUL: "分数乘除",
+      SQUARE_CUBE: "平方与立方",
+      SQUARE_ROOT: "平方根与立方根"
     },
     difficulty: {
       Easy: "简单",
@@ -211,7 +213,9 @@ export const translations = {
       PRIME: "Prime Numbers",
       INTEGER_ADD: "Integer Operations",
       FRAC_ADD: "Fraction Add/Sub",
-      FRAC_MUL: "Fraction Mul/Div"
+      FRAC_MUL: "Fraction Mul/Div",
+      SQUARE_CUBE: "Squares & Cubes",
+      SQUARE_ROOT: "Square & Cube Roots"
     },
     difficulty: {
       Easy: "Easy",

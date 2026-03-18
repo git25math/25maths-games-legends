@@ -44,7 +44,9 @@ export type QuestionType =
   | 'PRIME'
   | 'INTEGER_ADD'
   | 'FRAC_ADD'
-  | 'FRAC_MUL';
+  | 'FRAC_MUL'
+  | 'SQUARE_CUBE'
+  | 'SQUARE_ROOT';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 

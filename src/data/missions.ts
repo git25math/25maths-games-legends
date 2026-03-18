@@ -280,6 +280,79 @@ export const MISSIONS: Mission[] = [
     ],
     secret: { concept: { zh: '分数除法：除以一个分数 = 乘以它的倒数。', en: 'Fraction division: dividing by a fraction = multiplying by its reciprocal.' }, formula: '$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c} = \\frac{ad}{bc}$', tips: [{ zh: '关羽提示：翻转乾坤，化除为乘！', en: 'Guan Yu Tip: Flip and multiply — turn division into multiplication!' }] }
   },
+  // --- Year 7 Unit 0C: 排兵布阵·幂与根篇 (Powers & Roots) ---
+  {
+    id: 713, grade: 7, unitId: 0, order: 11,
+    unitTitle: { zh: "Unit 0C: 排兵布阵·幂与根篇", en: "Unit 0C: Battle Formation — Powers & Roots" },
+    topic: 'Algebra', type: 'SQUARE_CUBE',
+    title: { zh: '方阵操练', en: 'Square Formation Drill' },
+    skillName: { zh: '平方计算术', en: 'Squaring Numbers' },
+    skillSummary: { zh: '一个数的平方 = 这个数 × 自己', en: 'A number squared = the number × itself' },
+    story: { zh: '刘备：兄弟们，今天操练方阵！士兵排成 n 行 n 列的正方形——这就是"平方"的由来。', en: 'Liu Bei: "Brothers, today we drill square formations! Soldiers in n rows and n columns — that\'s where \'squaring\' comes from."' },
+    description: { zh: '计算 $n^2$。', en: 'Calculate $n^2$.' },
+    data: { n: 7, answer: 49, mode: 'square', generatorType: 'SQUARE_CUBE_RANDOM' }, difficulty: 'Easy', reward: 40,
+    kpId: 'kp-1.3-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '刘备：什么是"平方"？一个数乘以自己', en: 'Liu Bei: "What is squaring? A number times itself"' }, hint: { zh: '正方形的面积 = 边长 × 边长\n比如边长 5 的方阵：$5^2 = 5 \\times 5 = 25$ 人', en: 'A square\'s area = side × side\nE.g. formation with side 5: $5^2 = 5 \\times 5 = 25$ soldiers' }, highlightField: 'ans' },
+      { text: { zh: '刘备：$7^2 = 7 \\times 7 = 49$，7 行 7 列共 49 人', en: 'Liu Bei: "$7^2 = 7 \\times 7 = 49$, 7 rows × 7 columns = 49 soldiers"' }, highlightField: 'ans' },
+      { text: { zh: '刘备：记住前 10 个平方数：$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$', en: 'Liu Bei: "Remember the first 10 squares: $1, 4, 9, 16, 25, 36, 49, 64, 81, 100$"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '平方就是一个数乘以自己，写作 $n^2$。来源于正方形面积公式。', en: 'Squaring means multiplying a number by itself, written $n^2$. Named after the area of a square.' }, formula: '$n^2 = n \\times n$', tips: [{ zh: '刘备提示：方阵排兵，行列相同，总数就是边长的平方！', en: 'Liu Bei Tip: In a square formation, rows equal columns — total is the side length squared!' }] }
+  },
+  {
+    id: 714, grade: 7, unitId: 0, order: 12,
+    unitTitle: { zh: "Unit 0C: 排兵布阵·幂与根篇", en: "Unit 0C: Battle Formation — Powers & Roots" },
+    topic: 'Algebra', type: 'SQUARE_CUBE',
+    title: { zh: '粮箱码垛', en: 'Stacking Supply Crates' },
+    skillName: { zh: '立方计算术', en: 'Cubing Numbers' },
+    skillSummary: { zh: '一个数的立方 = 这个数 × 自己 × 自己', en: 'A number cubed = the number × itself × itself' },
+    story: { zh: '张飞：粮箱码成正方体！n 层，每层 n 行 n 列——这就是"立方"！', en: 'Zhang Fei: "Stack crates into a cube! n layers, each n rows × n columns — that\'s cubing!"' },
+    description: { zh: '计算 $n^3$。', en: 'Calculate $n^3$.' },
+    data: { n: 3, answer: 27, mode: 'cube', generatorType: 'SQUARE_CUBE_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-1.3-02', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '张飞：什么是"立方"？一个数乘三次', en: 'Zhang Fei: "What is cubing? A number times itself three times"' }, hint: { zh: '正方体的体积 = 边长 × 边长 × 边长\n比如边长 3 的粮箱：$3^3 = 3 \\times 3 \\times 3 = 27$ 箱', en: 'A cube\'s volume = side × side × side\nE.g. crate stack with side 3: $3^3 = 3 \\times 3 \\times 3 = 27$ crates' }, highlightField: 'ans' },
+      { text: { zh: '张飞：先算 $3 \\times 3 = 9$，再乘 3：$9 \\times 3 = 27$', en: 'Zhang Fei: "First $3 \\times 3 = 9$, then × 3: $9 \\times 3 = 27$"' }, highlightField: 'ans' },
+      { text: { zh: '张飞：前 5 个立方数：$1, 8, 27, 64, 125$', en: 'Zhang Fei: "First 5 cubes: $1, 8, 27, 64, 125$"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '立方就是一个数乘三次，写作 $n^3$。来源于正方体体积公式。', en: 'Cubing means multiplying a number by itself three times, written $n^3$. Named after the volume of a cube.' }, formula: '$n^3 = n \\times n \\times n$', tips: [{ zh: '张飞提示：码粮箱，三个方向都一样长，总数就是边长的立方！', en: 'Zhang Fei Tip: Stacking crates — same length in all three directions, total is the side cubed!' }] }
+  },
+  {
+    id: 715, grade: 7, unitId: 0, order: 13,
+    unitTitle: { zh: "Unit 0C: 排兵布阵·幂与根篇", en: "Unit 0C: Battle Formation — Powers & Roots" },
+    topic: 'Algebra', type: 'SQUARE_ROOT',
+    title: { zh: '侦察敌阵', en: 'Scouting Enemy Formation' },
+    skillName: { zh: '平方根速算', en: 'Square Root' },
+    skillSummary: { zh: '平方根是平方的反操作：√n 就是"谁的平方等于 n"', en: 'Square root reverses squaring: √n means "whose square equals n"' },
+    story: { zh: '关羽：侦察兵报告敌军方阵人数。要知道每行几人，就要求"平方根"！', en: 'Guan Yu: "Scouts report the enemy square formation size. To find soldiers per row, we need the square root!"' },
+    description: { zh: '计算 $\\sqrt{n}$。', en: 'Calculate $\\sqrt{n}$.' },
+    data: { n: 49, answer: 7, mode: 'sqrt', generatorType: 'SQUARE_ROOT_RANDOM' }, difficulty: 'Easy', reward: 45,
+    kpId: 'kp-1.3-03', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '关羽：平方根是平方的反操作', en: 'Guan Yu: "Square root is the reverse of squaring"' }, hint: { zh: '如果 $7^2 = 49$，那么 $\\sqrt{49} = 7$\n"谁乘以自己等于 49？"——答案是 7', en: 'If $7^2 = 49$, then $\\sqrt{49} = 7$\n"What times itself = 49?" — answer is 7' }, highlightField: 'ans' },
+      { text: { zh: '关羽：看到 49 人方阵 → 每行 $\\sqrt{49} = 7$ 人', en: 'Guan Yu: "49-soldier square formation → $\\sqrt{49} = 7$ per row"' }, highlightField: 'ans' },
+      { text: { zh: '关羽：常见平方根速查表', en: 'Guan Yu: "Common square roots reference"' }, hint: { zh: '$\\sqrt{4}=2,\\ \\sqrt{9}=3,\\ \\sqrt{16}=4,\\ \\sqrt{25}=5$\n$\\sqrt{36}=6,\\ \\sqrt{49}=7,\\ \\sqrt{64}=8,\\ \\sqrt{81}=9,\\ \\sqrt{100}=10$', en: '$\\sqrt{4}=2,\\ \\sqrt{9}=3,\\ \\sqrt{16}=4,\\ \\sqrt{25}=5$\n$\\sqrt{36}=6,\\ \\sqrt{49}=7,\\ \\sqrt{64}=8,\\ \\sqrt{81}=9,\\ \\sqrt{100}=10$' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '平方根 $\\sqrt{n}$ 就是"谁的平方等于 n"。它是平方运算的逆运算。', en: 'Square root $\\sqrt{n}$ means "whose square equals n". It\'s the inverse of squaring.' }, formula: '$\\sqrt{n^2} = n$', tips: [{ zh: '关羽提示：知道方阵总人数，开方就能算出每行几人！', en: 'Guan Yu Tip: Know the total in a square formation — take the square root to find soldiers per row!' }] }
+  },
+  {
+    id: 716, grade: 7, unitId: 0, order: 14,
+    unitTitle: { zh: "Unit 0C: 排兵布阵·幂与根篇", en: "Unit 0C: Battle Formation — Powers & Roots" },
+    topic: 'Algebra', type: 'SQUARE_ROOT',
+    title: { zh: '综合考核', en: 'Combined Assessment' },
+    skillName: { zh: '幂与根综合', en: 'Powers & Roots Mastery' },
+    skillSummary: { zh: '混合练习平方根和立方根', en: 'Mixed practice of square roots and cube roots' },
+    story: { zh: '诸葛亮：最终考核！随机出题，可能是方阵求边长（√），也可能是粮仓求边长（∛）。', en: 'Zhuge Liang: "Final assessment! Random questions — find the side of a square formation (√) or a warehouse (∛)."' },
+    description: { zh: '计算平方根或立方根。', en: 'Calculate the square or cube root.' },
+    data: { n: 64, answer: 8, mode: 'mixed', op: 'sqrt', generatorType: 'SQUARE_ROOT_RANDOM' }, difficulty: 'Medium', reward: 55,
+    kpId: 'kp-1.3-04', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：平方根——"谁的平方等于这个数？"', en: 'Zhuge Liang: "Square root — whose square equals this number?"' }, hint: { zh: '$\\sqrt{49} = 7$，因为 $7 \\times 7 = 49$', en: '$\\sqrt{49} = 7$, because $7 \\times 7 = 49$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：立方根——"谁的立方等于这个数？"', en: 'Zhuge Liang: "Cube root — whose cube equals this number?"' }, hint: { zh: '$\\sqrt[3]{125} = 5$，因为 $5 \\times 5 \\times 5 = 125$', en: '$\\sqrt[3]{125} = 5$, because $5 \\times 5 \\times 5 = 125$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：看清符号！$\\sqrt{\\ }$ 是平方根，$\\sqrt[3]{\\ }$ 是立方根', en: 'Zhuge Liang: "Read the symbol! $\\sqrt{\\ }$ is square root, $\\sqrt[3]{\\ }$ is cube root"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '平方根和立方根分别是平方和立方的逆运算。看清根号上的小数字！', en: 'Square root and cube root are the inverses of squaring and cubing. Watch the index on the radical!' }, formula: '$\\sqrt{n^2} = n,\\quad \\sqrt[3]{n^3} = n$', tips: [{ zh: '诸葛亮提示：方阵用平方根，粮仓用立方根——看清题目再下笔！', en: 'Zhuge Liang Tip: Formations use square root, warehouses use cube root — read carefully before answering!' }] }
+  },
   // --- Year 7: The Peach Garden Oath (Foundations) ---
   {
     id: 711, grade: 7, unitId: 1, order: 1,
