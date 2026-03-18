@@ -4243,18 +4243,28 @@ export function generateStatsRangeMission(template: Mission): Mission {
     en: `Find the range of $${sorted.join(', ')}$.`,
   };
 
+  const max = sorted[sorted.length - 1];
+  const min = sorted[0];
+
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：极差(Range) = 最大值 - 最小值`, en: `${narrator}: "Range = Maximum - Minimum"` },
-      hint: { zh: '极差衡量数据的"分散程度"——差越大越分散', en: 'Range measures how spread out the data is' },
+      text: { zh: `${narrator}：各营战力差距有多大？用"极差"来衡量`, en: `${narrator}: "How spread out are battalion strengths? Use the 'range' to measure"` },
+      hint: { zh: `极差就是最强和最弱之间的差距\n\n差距大 → 水平参差不齐，需要整训\n差距小 → 水平齐整，可以出征\n\n极差 = 最大值 − 最小值`, en: `Range = the gap between strongest and weakest\n\nLarge range → uneven levels, need training\nSmall range → consistent, ready for battle\n\nRange = Maximum − Minimum` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：最大值 = $${sorted[sorted.length - 1]}$，最小值 = $${sorted[0]}$`, en: `${narrator}: "Maximum = $${sorted[sorted.length - 1]}$, Minimum = $${sorted[0]}$"` },
+      text: { zh: `${narrator}：先找最大值和最小值`, en: `${narrator}: "First find the maximum and minimum"` },
+      hint: { zh: `数据（已排序）：$${sorted.join(', ')}$\n\n最小值 = $${min}$（最左边）\n最大值 = $${max}$（最右边）\n\n排好序就能一眼看出！`, en: `Data (sorted): $${sorted.join(', ')}$\n\nMinimum = $${min}$ (leftmost)\nMaximum = $${max}$ (rightmost)\n\nSorting makes it obvious!` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：Range = $${sorted[sorted.length - 1]} - ${sorted[0]} = ${answer}$`, en: `${narrator}: "Range = $${sorted[sorted.length - 1]} - ${sorted[0]} = ${answer}$"` },
+      text: { zh: `${narrator}：极差 = 最大 − 最小`, en: `${narrator}: "Range = Max − Min"` },
+      hint: { zh: `$${max} - ${min} = ${answer}$`, en: `$${max} - ${min} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——极差合理吗？`, en: `${narrator}: "Verify — is the range reasonable?"` },
+      hint: { zh: `极差 $${answer}$\n• 所有数据都在 $${min}$ 到 $${max}$ 之间？$${sorted.join(', ')}$ ✓\n• $${max} - ${min} = ${answer}$ ✓\n• 没有任何数据超出这个范围 ✓`, en: `Range $${answer}$\n• All data between $${min}$ and $${max}$? $${sorted.join(', ')}$ ✓\n• $${max} - ${min} = ${answer}$ ✓\n• No data outside this range ✓` },
       highlightField: 'ans',
     },
   ];
@@ -4780,18 +4790,28 @@ export function generateStatsModeMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：什么是"众数"？——出现次数最多的数`, en: `${narrator}: "What is the mode? — The value that appears most often"` },
-      hint: { zh: `众数就是数据里的"人气王"\n出现频率最高的那个数\n\n和平均数、中位数不同：\n• 平均数看"总体水平"\n• 中位数看"中间位置"\n• 众数看"最常见"`, en: `The mode is the "most popular" value\nThe one that appears most frequently\n\nDifferent from mean and median:\n• Mean = overall level\n• Median = middle position\n• Mode = most common` },
+      text: { zh: `${narrator}：缴获一批兵器，哪种最多？——这就是"众数"`, en: `${narrator}: "Captured weapons — which type is most common? That's the 'mode'"` },
+      hint: { zh: `众数 = 出现次数最多的值\n就是数据里的"人气王"\n\n为什么有用？\n知道最常见的兵器 → 知道敌军偏好什么战术\n知道最常见的分数 → 知道大部分学生在什么水平`, en: `Mode = most frequent value — the "most popular"\n\nWhy useful?\nMost common weapon → enemy's preferred tactics\nMost common score → where most students are` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：怎么找？——数每个值出现了几次`, en: `${narrator}: "How to find it? — Count how many times each value appears"` },
-      hint: { zh: `数据：$${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$ 出现了 $${e.count}$ 次`).join('\n')}`, en: `Data: $${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$ appears $${e.count}$ times`).join('\n')}` },
+      text: { zh: `${narrator}：怎么找？——给每个值"画正字"计数`, en: `${narrator}: "How? — Tally each value"` },
+      hint: { zh: `数据：$${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$：${'|'.repeat(e.count)}$ = $${e.count}$ 次`).join('\n')}`, en: `Data: $${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$: ${'|'.repeat(e.count)}$ = $${e.count}$ times`).join('\n')}` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：出现最多的就是众数`, en: `${narrator}: "The one appearing most is the mode"` },
+      text: { zh: `${narrator}：谁的票数最多？`, en: `${narrator}: "Who got the most votes?"` },
       hint: { zh: `$${modeValue}$ 出现了 $${modeCount}$ 次——最多！\n\n众数 = $${modeValue}$`, en: `$${modeValue}$ appears $${modeCount}$ times — the most!\n\nMode = $${modeValue}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——确认没有其他值出现得更多`, en: `${narrator}: "Verify — confirm no other value appears more often"` },
+      hint: { zh: `${freqEntries.map(e => `$${e.val}$：${e.count} 次${e.val === modeValue ? ' ← 最多！' : ''}`).join('\n')}\n\n没有并列 → 众数唯一 = $${modeValue}$ ✓`, en: `${freqEntries.map(e => `$${e.val}$: ${e.count} times${e.val === modeValue ? ' ← most!' : ''}`).join('\n')}\n\nNo ties → unique mode = $${modeValue}$ ✓` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：注意——众数可能有多个，也可能没有`, en: `${narrator}: "Note — there can be multiple modes, or none"` },
+      hint: { zh: `• 如果两个值并列最多 → 两个众数\n• 如果所有值都出现一样多 → 没有众数\n\n这道题：$${modeValue}$ 独占鳌头，众数唯一`, en: `• Two values tied for most → two modes\n• All values appear equally → no mode\n\nThis problem: $${modeValue}$ is clearly dominant, unique mode` },
       highlightField: 'ans',
     },
   ];

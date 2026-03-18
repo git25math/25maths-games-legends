@@ -256,7 +256,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '关羽："$\\frac{1}{3} = \\frac{4}{12}$，$\\frac{1}{4} = \\frac{3}{12}$"', en: 'Guan Yu: "$\\frac{1}{3} = \\frac{4}{12}$, $\\frac{1}{4} = \\frac{3}{12}$"' }, hint: { zh: '分子分母同乘以相同的数\n$\\frac{1}{3} \\times \\frac{4}{4} = \\frac{4}{12}$', en: 'Multiply top and bottom by the same number\n$\\frac{1}{3} \\times \\frac{4}{4} = \\frac{4}{12}$' }, highlightField: 'ans' },
       { text: { zh: '关羽："$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"', en: 'Guan Yu: "$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '异分母分数相加：先通分（找 LCD），再加分子，最后约分。', en: 'Adding fractions with different denominators: find LCD, add numerators, then simplify.' }, formula: '$\\text{异分母分数相加：先通分（找 LCD），再加分子，最后约分}$', tips: [{ zh: '关羽提示：合兵一处，粮草先算。', en: 'Guan Yu Tip: Before merging troops, count the grain.' }] }
+    secret: { concept: { zh: '异分母分数相加：先通分（找 LCD），再加分子，最后约分。', en: 'Adding fractions with different denominators: find LCD, add numerators, then simplify.' }, formula: '$\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd}$', tips: [{ zh: '关羽提示：合兵一处，粮草先算。', en: 'Guan Yu Tip: Before merging troops, count the grain.' }] }
   },
   {
     id: 708, grade: 7, unitId: 0, order: 8,
@@ -275,7 +275,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮："$\\frac{3}{4} = \\frac{9}{12}$，$\\frac{1}{6} = \\frac{2}{12}$"', en: 'Zhuge Liang: "$\\frac{3}{4} = \\frac{9}{12}$, $\\frac{1}{6} = \\frac{2}{12}$"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮："$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"', en: 'Zhuge Liang: "$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '异分母分数相减：通分后减分子，最后约分。', en: 'Subtracting fractions: find LCD, subtract numerators, then simplify.' }, formula: '$\\text{异分母分数相减：先通分（找 LCD），再减分子，最后约分}$', tips: [{ zh: '诸葛亮提示：粮草不可不算，算清方能持久。', en: 'Zhuge Liang Tip: Always track your supplies — accurate counts sustain campaigns.' }] }
+    secret: { concept: { zh: '异分母分数相减：通分后减分子，最后约分。', en: 'Subtracting fractions: find LCD, subtract numerators, then simplify.' }, formula: '$\\frac{a}{b} - \\frac{c}{d} = \\frac{ad - bc}{bd}$', tips: [{ zh: '诸葛亮提示：粮草不可不算，算清方能持久。', en: 'Zhuge Liang Tip: Always track your supplies — accurate counts sustain campaigns.' }] }
   },
   {
     id: 709, grade: 7, unitId: 0, order: 9,
