@@ -32,6 +32,7 @@
 |------|------|--------|
 | `docs/DEVELOPMENT-PLAN.md` | 主开发计划 + 版本历程 (v0.1→v5.0) | **必读** |
 | `docs/Y8-DEVELOPMENT-PLAN.md` | Y8 接手计划（完整） | Y8 开发时必读 |
+| `docs/BUG-POSTMORTEM.md` | Bug 根因分析 + 9 条防范规则 | **开发前必读** |
 | `Y7-tutorial-content-review.md` | Y7 教程内容规格（旧，仅参考） | 低 |
 | `README.md` | 项目简介 | 低 |
 
@@ -92,13 +93,17 @@ types.ts → translations.ts(×3语) → inputConfig.ts → checkCorrectness.ts
 
 ## 审计时特别注意
 
-1. **重复 ID**: `grep -o 'id: [0-9]*' src/data/missions.ts | sort | uniq -d` 必须为空
+> 详细根因分析见 `docs/BUG-POSTMORTEM.md`（9 条防范规则 + 旧生成器回查结果）
+
+1. **重复 ID (规则H)**: `grep -o 'id: [0-9]*' src/data/missions.ts | sort | uniq -d` 必须为空
 2. **生成器 data ↔ checker 对齐**: generator 输出的字段名必须与 checker 读取的一致
 3. **共享生成器副作用**: 修改如 LINEAR_RANDOM 会影响所有年级，建议创建年级变体
-4. **FractionPie step 映射**: step 从 0 开始，不是 1
-5. **SVG 中不能用 LaTeX**: `<text>` 标签内 `\frac{}{}` 不会渲染，用 SVG 手绘
+4. **FractionPie step 从 0 开始 (规则C)**: step=0 就要有内容
+5. **SVG 内不用 LaTeX (规则F)**: `<text>` 标签内用 SVG 手绘分数线
 6. **translations 三处都要加**: zh + zh_TW + en
-7. **`data.op` 必须被生成器尊重**: 如 FRAC_ADD_RANDOM 的 template.data.op
+7. **生成器必须尊重 template.data (规则A)**: op/mode/func 等控制字段不能随机覆盖
+8. **formula 用短公式 (规则G)**: 不要在 `\text{}` 里放长中文句子
+9. **新文件必须 git add (规则I)**: commit 前 `git status` 检查 `??` 未跟踪文件
 
 ## 用户偏好
 
