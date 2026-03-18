@@ -209,9 +209,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 进军与线性方程", en: "Unit 1: Marching & Linear Equations" },
     topic: 'Functions', type: 'LINEAR',
     title: { zh: '急行军', en: 'Forced March' },
-    story: { zh: '黄巾军作乱，曹操率部急行军。已知出发点为 $(0, 2)$，1小时后到达 $(1, 5)$。', en: "Yellow Turbans are rebelling. Cao Cao leads a forced march. Start at $(0, 2)$, reach $(1, 5)$ in 1 hour." },
+    skillName: { zh: '行军路线术', en: 'March Route' },
+    skillSummary: { zh: '斜率 m = (y₂-y₁)/(x₂-x₁)，截距 b = y₁ - mx₁', en: 'Slope m = (y₂-y₁)/(x₂-x₁), intercept b = y₁ - mx₁' },
+    story: { zh: '黄巾军作乱，曹操率部急行军。已知出发点为 $({x1}, {y1})$，1小时后到达 $({x2}, {y2})$。', en: "Yellow Turbans are rebelling. Cao Cao leads a forced march. Start at $({x1}, {y1})$, reach $({x2}, {y2})$ in 1 hour." },
     description: { zh: '求行军路线的函数表达式 $y = mx + b$。', en: 'Find the function $y = mx + b$ for the march route.' },
-    data: { points: [[0, 2], [1, 5]] }, difficulty: 'Medium', reward: 150,
+    data: { points: [[0, 2], [1, 5]], x1: 0, y1: 2, x2: 1, y2: 5, generatorType: 'LINEAR_RANDOM' }, difficulty: 'Medium', reward: 150,
     kpId: 'kp-3.5-01', sectionId: 'functions',
     tutorialSteps: [
       {
@@ -235,6 +237,8 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 进军与线性方程", en: "Unit 1: Marching & Linear Equations" },
     topic: 'Functions', type: 'FUNC_VAL',
     title: { zh: '追击哨兵', en: 'Intercepting Scouts' },
+    skillName: { zh: '追击计算术', en: 'Pursuit Calculation' },
+    skillSummary: { zh: '两点确定一条直线', en: 'Two points determine a line' },
     story: { zh: '发现敌军哨兵！哨兵位置符合 $y = x + 4$，我军需在 $x=2$ 处拦截。', en: "Enemy scouts spotted! Their position follows $y = x + 4$. Intercept at $x=2$." },
     description: { zh: '计算拦截点的 $y$ 坐标。', en: 'Calculate the $y$ coordinate of the intercept point.' },
     data: { m: 1, b: 4, x: 2 }, difficulty: 'Medium', reward: 160,
@@ -261,9 +265,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 进军与线性方程", en: "Unit 1: Marching & Linear Equations" },
     topic: 'Functions', type: 'LINEAR',
     title: { zh: '合围之势', en: 'Encirclement' },
-    story: { zh: '两路大军合围。已知路线经过 $(2, 10)$ 和 $(4, 18)$。', en: 'Two armies encircle. The route passes through $(2, 10)$ and $(4, 18)$.' },
+    skillName: { zh: '合围路线术', en: 'Encirclement Route' },
+    skillSummary: { zh: '直线方程 y = mx + b', en: 'Line equation y = mx + b' },
+    story: { zh: '两路大军合围。已知路线经过 $({x1}, {y1})$ 和 $({x2}, {y2})$。', en: 'Two armies encircle. The route passes through $({x1}, {y1})$ and $({x2}, {y2})$.' },
     description: { zh: '求斜率 $m$。', en: 'Find the slope $m$.' },
-    data: { points: [[2, 10], [4, 18]] }, difficulty: 'Medium', reward: 170,
+    data: { points: [[2, 10], [4, 18]], x1: 2, y1: 10, x2: 4, y2: 18, generatorType: 'LINEAR_RANDOM' }, difficulty: 'Medium', reward: 170,
     kpId: 'kp-3.3-01', sectionId: 'functions',
     tutorialSteps: [
       {
@@ -425,9 +431,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 4: 军籍与数据", en: "Unit 4: Census & Data" },
     topic: 'Statistics', type: 'STATISTICS',
     title: { zh: '士兵平均年龄', en: 'Average Soldier Age' },
+    skillName: { zh: '军情统计术', en: 'Military Statistics' },
+    skillSummary: { zh: '平均值 = 总和 ÷ 个数', en: 'Mean = sum ÷ count' },
     story: { zh: '统计一队精锐士兵的年龄：20, 22, 24, 26, 28。', en: "Stats for elite soldiers' ages: 20, 22, 24, 26, 28." },
     description: { zh: '计算平均年龄（Mean）。', en: 'Calculate the Mean age.' },
-    data: { values: [20, 22, 24, 26, 28], mode: 'mean' }, difficulty: 'Medium', reward: 200,
+    data: { values: [20, 22, 24, 26, 28], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Medium', reward: 200,
     kpId: 'kp-9.3-01', sectionId: 'statistics',
     tutorialSteps: [
       {
@@ -649,9 +657,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 3: 阵法与相似", en: "Unit 3: Formations & Similarity" },
     topic: 'Geometry', type: 'SIMILARITY',
     title: { zh: '旗帜缩放', en: 'Flag Scaling' },
+    skillName: { zh: '旗帜缩放术', en: 'Flag Scaling' },
+    skillSummary: { zh: '相似比求未知边', en: 'Use similarity ratio for unknown sides' },
     story: { zh: '制作一面大旗。已知小旗长 2 尺，宽 3 尺。大旗与小旗相似，长为 6 尺。', en: 'Making a large flag. Small flag is 2x3. Large flag is similar, length 6.' },
     description: { zh: '求大旗的宽 $x$。', en: 'Find the width $x$ of the large flag.' },
-    data: { a: 6, b: 2, c: 3 }, difficulty: 'Medium', reward: 200,
+    data: { a: 6, b: 2, c: 3, generatorType: 'SIMILARITY_RANDOM' }, difficulty: 'Medium', reward: 200,
     kpId: 'kp-4.4-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -675,9 +685,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 3: 阵法与相似", en: "Unit 3: Formations & Similarity" },
     topic: 'Geometry', type: 'SIMILARITY',
     title: { zh: '地图测绘', en: 'Map Surveying' },
+    skillName: { zh: '地图测绘术', en: 'Map Survey' },
+    skillSummary: { zh: '对应边成比例', en: 'Corresponding sides are proportional' },
     story: { zh: '在地图上测量距离。地图比例尺为 1:1000。地图上距离为 5 厘米。', en: 'Measuring distance on a map. Scale is 1:1000. Map distance is 5cm.' },
     description: { zh: '求实际距离 $x$（单位：厘米）。', en: 'Find actual distance $x$ (in cm).' },
-    data: { a: 1000, b: 1, c: 5 }, difficulty: 'Medium', reward: 220,
+    data: { a: 1000, b: 1, c: 5, generatorType: 'SIMILARITY_RANDOM' }, difficulty: 'Medium', reward: 220,
     kpId: 'kp-4.4-01', sectionId: 'geometry',
     tutorialSteps: [
       {
@@ -701,9 +713,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 4: 军备与比率", en: "Unit 4: Armaments & Ratio" },
     topic: 'Algebra', type: 'RATIO',
     title: { zh: '兵粮配给', en: 'Rationing' },
+    skillName: { zh: '兵粮配比术', en: 'Supply Ratio' },
+    skillSummary: { zh: '比例 a:b 求未知项', en: 'Find unknown in ratio a:b' },
     story: { zh: '分配粮草。士兵与粮草的比例需保持在 2:5。现有 1000 名士兵。', en: 'Allocating grain. Ratio of soldiers to grain must be 2:5. There are 1000 soldiers.' },
     description: { zh: '求所需粮草 $y$（即 $1000:y = 2:5$）。', en: 'Find grain $y$ (i.e., $1000:y = 2:5$).' },
-    data: { a: 2, b: 5 }, difficulty: 'Medium', reward: 240,
+    data: { a: 2, b: 5, generatorType: 'RATIO_RANDOM' }, difficulty: 'Medium', reward: 240,
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
@@ -727,9 +741,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 4: 军备与比率", en: "Unit 4: Armaments & Ratio" },
     topic: 'Algebra', type: 'RATIO',
     title: { zh: '混合阵法', en: 'Mixed Formation' },
+    skillName: { zh: '兵种混编术', en: 'Troop Mix' },
+    skillSummary: { zh: '交叉相乘法', en: 'Cross multiplication' },
     story: { zh: '混合兵种。步兵与骑兵比例为 3:1。现有步兵 900 人。', en: 'Mixing troops. Infantry to cavalry ratio is 3:1. There are 900 infantry.' },
     description: { zh: '求骑兵数量 $y$。', en: 'Find cavalry count $y$.' },
-    data: { a: 3, b: 1 }, difficulty: 'Medium', reward: 260,
+    data: { a: 3, b: 1, generatorType: 'RATIO_RANDOM' }, difficulty: 'Medium', reward: 260,
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
@@ -833,9 +849,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 2: 连环计与联立方程", en: "Unit 2: Chain Strategy & Simultaneous Equations" },
     topic: 'Algebra', type: 'SIMULTANEOUS',
     title: { zh: '兵力合围', en: 'Troop Encirclement' },
+    skillName: { zh: '合围联立术', en: 'Simultaneous Siege' },
+    skillSummary: { zh: '消元法解联立方程', en: 'Elimination method for simultaneous equations' },
     story: { zh: '孙刘联军合围曹操。$x + y = 10000$，$2x - y = 5000$。', en: 'Sun-Liu coalition encircles Cao. $x + y = 10000$, $2x - y = 5000$.' },
     description: { zh: '求孙军 $x$ 和刘军 $y$ 的兵力。', en: 'Find Sun army $x$ and Liu army $y$ strength.' },
-    data: { x: 5000, y: 5000 }, difficulty: 'Easy', reward: 320,
+    data: { x: 5000, y: 5000, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Easy', reward: 320,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -859,9 +877,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 2: 连环计与联立方程", en: "Unit 2: Chain Strategy & Simultaneous Equations" },
     topic: 'Algebra', type: 'SIMULTANEOUS',
     title: { zh: '粮草互换', en: 'Resource Exchange' },
+    skillName: { zh: '粮草互换术', en: 'Supply Exchange' },
+    skillSummary: { zh: '代入法解联立方程', en: 'Substitution method' },
     story: { zh: '孙刘两军交换物资。3车粮加2车草共12金，2车粮加3车草共13金。', en: 'Sun and Liu exchange resources. 3 grain + 2 grass = 12 gold, 2 grain + 3 grass = 13 gold.' },
     description: { zh: '求一车粮 $x$ 和一车草 $y$ 的价格。', en: 'Find price of 1 grain $x$ and 1 grass $y$.' },
-    data: { eq1: [3, 2, 12], eq2: [2, 3, 13] }, difficulty: 'Medium', reward: 550,
+    data: { eq1: [3, 2, 12], eq2: [2, 3, 13], generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Medium', reward: 550,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
@@ -885,9 +905,11 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 2: 连环计与联立方程", en: "Unit 2: Chain Strategy & Simultaneous Equations" },
     topic: 'Algebra', type: 'SIMULTANEOUS',
     title: { zh: '战船调度', en: 'Ship Deployment' },
+    skillName: { zh: '战船调度术', en: 'Fleet Coordination' },
+    skillSummary: { zh: '两个方程两个未知数', en: 'Two equations, two unknowns' },
     story: { zh: '调度战船。大船 $x$ 艘，小船 $y$ 艘。$x + y = 20$，$10x + 5y = 150$。', en: 'Deploying ships. Large $x$, small $y$. $x + y = 20$, $10x + 5y = 150$.' },
     description: { zh: '求大船和小船的数量。', en: 'Find the number of large and small ships.' },
-    data: { x: 10, y: 10 }, difficulty: 'Hard', reward: 400,
+    data: { x: 10, y: 10, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Hard', reward: 400,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
