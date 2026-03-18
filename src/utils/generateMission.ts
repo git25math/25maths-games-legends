@@ -105,96 +105,6 @@ export function generateSimpleEqMission(template: Mission): Mission {
   const x = pickRandom(xPools[tier]);
   const result = a * x;
 
-  const tutorialSteps = [
-    {
-      text: {
-        zh: `军师：我们要解方程 $${a}x = ${result}$，也就是找到 $x$ 等于多少`,
-        en: `Strategist: "We need to solve $${a}x = ${result}$, meaning find what $x$ equals"`,
-      },
-      hint: {
-        zh: '$x$ 是一个未知数，就像一个装了东西的盒子\n我们的任务就是打开盒子，看看里面是什么数',
-        en: '$x$ is an unknown — like a box with a number inside\nOur job is to open the box and find that number',
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `军师：$${a}x$ 是什么意思？就是 $${a}$ 个 $x$ 加在一起`,
-        en: `Strategist: "What does $${a}x$ mean? It means $${a}$ copies of $x$ added together"`,
-      },
-      hint: {
-        zh: `比如 $${a} \\times 5$ 就是 ${a} 个 5 加在一起\n$${a}x$ 就是 ${a} 个 $x$ 加在一起`,
-        en: `For example, $${a} \\times 5$ means ${a} fives added together\n$${a}x$ means ${a} copies of $x$ added together`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `军师：现在 $x$ 被乘了一个 $${a}$，我们要把这个 $${a}$ 去掉，让 $x$ 单独留下来`,
-        en: `Strategist: "Right now $x$ is multiplied by $${a}$. We need to remove that $${a}$ to get $x$ alone"`,
-      },
-      hint: {
-        zh: '为什么？因为只有 $x$ 单独在一边的时候，我们才能直接看出 $x$ 等于多少',
-        en: 'Why? Because only when $x$ is alone on one side can we directly see what $x$ equals',
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `军师：怎么去掉"乘以 $${a}$"？用它的反操作——除以 $${a}$`,
-        en: `Strategist: "How to remove 'times $${a}$'? Use the opposite operation — divide by $${a}$"`,
-      },
-      hint: {
-        zh: `乘法和除法是一对反操作\n$${a} \\times$ 什么 $\\div ${a}$ = 什么\n乘了再除，就被抵消了`,
-        en: `Multiplication and division are inverse operations\n$${a} \\times$ something $\\div ${a}$ = something\nMultiply then divide cancels out`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `军师：但是！只除左边不行，右边也必须除以 $${a}$`,
-        en: `Strategist: "But! We can't just divide the left side — the right side must also be divided by $${a}$"`,
-      },
-      hint: {
-        zh: '为什么？等式就像天平，两边要做完全相同的事情\n否则天平就不平衡了，等式就不成立了',
-        en: 'Why? An equation is like a balance scale — both sides must be treated equally\nOtherwise the scale tips, and the equation breaks',
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `军师：左边：$${a}x \\div ${a}$\n$${a}$ 被抵消了，只剩下 $x$`,
-        en: `Strategist: "Left side: $${a}x \\div ${a}$\nThe $${a}$ cancels out, leaving just $x$"`,
-      },
-      hint: {
-        zh: `$\\frac{${a}x}{${a}} = x$\n就像 ${a} 个苹果平分给 ${a} 个人，每人 1 个`,
-        en: `$\\frac{${a}x}{${a}} = x$\nLike sharing ${a} apples among ${a} people — 1 each`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `军师：右边：$${result} \\div ${a} = ?$\n算一下：$${result} \\div ${a} = ${x}$`,
-        en: `Strategist: "Right side: $${result} \\div ${a} = ?$\nCalculate: $${result} \\div ${a} = ${x}$"`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `军师：现在等式变成了 $x = ${x}$`,
-        en: `Strategist: "Now the equation becomes $x = ${x}$"`,
-      },
-      highlightField: 'x',
-    },
-    {
-      text: {
-        zh: `军师：验算一下：$${a} \\times ${x} = ${result}$ ✓\n答案正确！$x = ${x}$`,
-        en: `Strategist: "Let's verify: $${a} \\times ${x} = ${result}$ ✓\nCorrect! $x = ${x}$"`,
-      },
-      highlightField: 'x',
-    },
-  ];
-
   const tutorialEquationSteps = [
     { tex: `${a}x = ${result}`, annotation: { zh: '原方程', en: 'Original equation' } },
     { tex: `\\frac{${a}x}{${a}} = \\frac{${result}}{${a}}`, annotation: { zh: `两边÷${a}`, en: `÷${a} both sides` } },
@@ -207,7 +117,6 @@ export function generateSimpleEqMission(template: Mission): Mission {
     // story: preserved (template with {a}, {result} — interpolated at render)
     // description: preserved (template — interpolated at render)
     data: { ...template.data, x, a, result, left: `${a}x`, right: `${result}`, generatorType: 'SIMPLE_EQ_RANDOM', tutorialEquationSteps },
-    tutorialSteps,
   };
 }
 
@@ -224,35 +133,6 @@ export function generateAddEqMission(template: Mission): Mission {
   const x = pickRandom(xPools[tier]);
   const result = x + a;
 
-  const tutorialSteps = [
-    {
-      text: { zh: `军师：方程 $x + ${a} = ${result}$，我们要找到 $x$ 是多少`, en: `Strategist: "Equation $x + ${a} = ${result}$, we need to find $x$"` },
-      hint: { zh: '$x$ 是一个未知数，代表我们要求的值', en: '$x$ is an unknown — it represents the value we need to find' },
-      highlightField: 'x',
-    },
-    {
-      text: { zh: `军师：$x$ 旁边有个 $+ ${a}$，我们要把它去掉，让 $x$ 单独留下`, en: `Strategist: "There's a $+ ${a}$ next to $x$. We need to remove it to isolate $x$"` },
-      highlightField: 'x',
-    },
-    {
-      text: { zh: `军师：怎么去掉 $+ ${a}$？两边同时减去 $${a}$`, en: `Strategist: "How to remove $+ ${a}$? Subtract $${a}$ from both sides"` },
-      hint: { zh: `加了 ${a}，就减去 ${a} 来抵消\n这就是"逆运算"`, en: `Added ${a}, so subtract ${a} to undo it\nThis is the "inverse operation"` },
-      highlightField: 'x',
-    },
-    {
-      text: { zh: `军师：左边 $x + ${a} - ${a} = x$（$+ ${a}$ 和 $- ${a}$ 抵消了）`, en: `Strategist: "Left side: $x + ${a} - ${a} = x$ ($+ ${a}$ and $- ${a}$ cancel out)"` },
-      highlightField: 'x',
-    },
-    {
-      text: { zh: `军师：右边 $${result} - ${a} = ${x}$`, en: `Strategist: "Right side: $${result} - ${a} = ${x}$"` },
-      highlightField: 'x',
-    },
-    {
-      text: { zh: `军师：所以 $x = ${x}$`, en: `Strategist: "Therefore $x = ${x}$"` },
-      highlightField: 'x',
-    },
-  ];
-
   const tutorialEquationSteps = [
     { tex: `x + ${a} = ${result}`, annotation: { zh: '原方程', en: 'Original equation' } },
     { tex: `x + ${a} - ${a} = ${result} - ${a}`, annotation: { zh: `两边-${a}`, en: `-${a} both sides` } },
@@ -262,7 +142,6 @@ export function generateAddEqMission(template: Mission): Mission {
   return {
     ...template,
     data: { ...template.data, x, a, result, left: `x+${a}`, right: `${result}`, generatorType: 'SIMPLE_EQ_ADD_RANDOM', tutorialEquationSteps },
-    tutorialSteps,
   };
 }
 

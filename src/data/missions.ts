@@ -256,16 +256,44 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-2.1-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '诸葛亮："三位将军结义，需平分美酒。方程 $x+5=12$ 中，$x$ 是每人的酒量。"', en: 'Zhuge Liang: "Three brothers share wine. In $x+5=12$, $x$ is each person\'s share."' },
+        text: { zh: '诸葛亮：三位将军要平分美酒。总酒量减去已分的 ${a}$ 坛，剩下的就是每人的量 $x$', en: 'Zhuge Liang: "Three brothers share wine. Total minus the ${a}$ jars already set aside — the rest is each person\'s share $x$"' },
+        hint: { zh: '方程 $x + {a} = {result}$ 的意思是：\n每人的酒 $x$ 加上已留出的 {a} 坛 = 总共 {result} 坛', en: 'The equation $x + {a} = {result}$ means:\nEach share $x$ plus {a} jars set aside = {result} total' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮："等式两边同时减去 5：$x = 12 - 5$"', en: 'Zhuge Liang: "Subtract 5 from both sides: $x = 12 - 5$"' },
-        hint: { zh: '12 减去 5 等于多少？', en: 'What is 12 minus 5?' },
+        text: { zh: '诸葛亮：我们要算出 $x$ 是多少——每人能分到几坛酒？', en: 'Zhuge Liang: "We need to find $x$ — how many jars does each person get?"' },
+        hint: { zh: '$x$ 就是我们要找的答案\n它现在藏在方程里，我们要把它"解"出来', en: '$x$ is the answer we\'re looking for\nIt\'s hidden in the equation — we need to "solve" for it' },
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮："所以 $x = 7$！每人分得 7 斛美酒。结义成功！"', en: 'Zhuge Liang: "So $x = 7$! Each gets 7 units of wine. The oath is sealed!"' },
+        text: { zh: '诸葛亮：$x$ 旁边有个 $+ {a}$，我们要把它去掉，让 $x$ 单独留下', en: 'Zhuge Liang: "There\'s a $+ {a}$ next to $x$. We need to remove it so $x$ is alone"' },
+        hint: { zh: '为什么？只有 $x$ 单独在一边时\n我们才能直接看出每人分几坛', en: 'Why? Only when $x$ is alone on one side\ncan we directly see each person\'s share' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮：怎么去掉"加 {a}"？用反操作——减去 {a}', en: 'Zhuge Liang: "How to remove \'plus {a}\'? Use the opposite — subtract {a}"' },
+        hint: { zh: '加法的反操作是减法\n加了 {a} 再减 {a}，就被抵消了', en: 'The opposite of addition is subtraction\nAdd {a} then subtract {a} — they cancel out' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮：但是！等式就像天平，两边必须做同样的事', en: 'Zhuge Liang: "But! An equation is like a balance scale — both sides must be treated equally"' },
+        hint: { zh: '只减左边不行，右边也要减 {a}\n否则等式就不平衡了', en: 'Can\'t just subtract from the left — must also subtract {a} from the right\nOtherwise the equation breaks' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮：左边 $x + {a} - {a} = x$，加减抵消了！', en: 'Zhuge Liang: "Left side: $x + {a} - {a} = x$ — addition and subtraction cancel!"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮：右边 ${result} - {a} = {x}$', en: 'Zhuge Liang: "Right side: ${result} - {a} = {x}$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮：所以 $x = {x}$！每人分 {x} 坛美酒！', en: 'Zhuge Liang: "So $x = {x}$! Each brother gets {x} jars of wine!"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮：验算一下：${x} + {a} = {result}$ ✓ 酒量算对了，结义大吉！', en: 'Zhuge Liang: "Verify: ${x} + {a} = {result}$ ✓ The wine math checks out — the oath is sealed!"' },
         highlightField: 'x'
       }
     ],
@@ -284,16 +312,39 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '关羽："兄长，三把剑共需 15 金。方程 $3x=15$ 中，$x$ 代表每把剑的价格。"', en: 'Guan Yu: "Brother, three swords cost 15 gold. In $3x=15$, $x$ is the price per sword."' },
+        text: { zh: '关羽：兄长，我们要买兵器。{a} 把长剑总价 {result} 金，每把多少钱？', en: 'Guan Yu: "Brother, we need weapons. {a} swords cost {result} gold total — how much per sword?"' },
+        hint: { zh: '方程 ${a}x = {result}$ 的意思是：\n{a} 把剑 × 每把 $x$ 金 = 总共 {result} 金', en: 'The equation ${a}x = {result}$ means:\n{a} swords × $x$ gold each = {result} gold total' },
         highlightField: 'x'
       },
       {
-        text: { zh: '关羽："等式两边同时除以 3：$x = 15 \\div 3$"', en: 'Guan Yu: "Divide both sides by 3: $x = 15 \\div 3$"' },
-        hint: { zh: '15 除以 3 等于多少？', en: 'What is 15 divided by 3?' },
+        text: { zh: '关羽：$x$ 就是每把剑的价格，现在被 {a} 乘着', en: 'Guan Yu: "$x$ is the price per sword — currently multiplied by {a}"' },
+        hint: { zh: '${a}x$ 就是 {a} 个 $x$ 加在一起\n我们要把 $x$ 单独找出来', en: '${a}x$ means {a} copies of $x$ added together\nWe need to isolate $x$' },
         highlightField: 'x'
       },
       {
-        text: { zh: '关羽："所以 $x = 5$！每把剑 5 金，公道价！"', en: 'Guan Yu: "So $x = 5$! 5 gold per sword, a fair price!"' },
+        text: { zh: '关羽：怎么去掉"乘以 {a}"？用反操作——除以 {a}', en: 'Guan Yu: "How to remove \'times {a}\'? Use the opposite — divide by {a}"' },
+        hint: { zh: '为什么？乘法的反操作是除法\n{a} 把剑的总价除以 {a}，就是一把剑的价格', en: 'Why? Division is the opposite of multiplication\nTotal for {a} swords ÷ {a} = price of one sword' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '关羽：等式两边都要除以 {a}（天平两边做同样的事）', en: 'Guan Yu: "Divide both sides by {a} (treat both sides equally)"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '关羽：左边 ${a}x \\div {a} = x$，{a} 被抵消了！', en: 'Guan Yu: "Left side: ${a}x \\div {a} = x$ — the {a} cancels out!"' },
+        hint: { zh: '就像 {a} 把剑的钱平分给 {a} 把，得到一把的价格', en: 'Like splitting the cost of {a} swords among {a} — you get one sword\'s price' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '关羽：右边 ${result} \\div {a} = {x}$', en: 'Guan Yu: "Right side: ${result} \\div {a} = {x}$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '关羽：所以 $x = {x}$！每把剑 {x} 金！', en: 'Guan Yu: "So $x = {x}$! Each sword costs {x} gold!"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '关羽：验算：${a} \\times {x} = {result}$ ✓ 价格没算错，买剑去！', en: 'Guan Yu: "Verify: ${a} \\times {x} = {result}$ ✓ Price is correct — let\'s buy swords!"' },
         highlightField: 'x'
       }
     ],
@@ -312,16 +363,33 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '曹操："粮草乃军中命脉。$2x = 24$ 中，$x$ 是每份军粮数量。"', en: 'Cao Cao: "Supplies are the army\'s lifeline. In $2x = 24$, $x$ is each portion of grain."' },
+        text: { zh: '曹操：粮草乃军中命脉。{a} 个营地共需 {result} 斛粮，每营多少？', en: 'Cao Cao: "Supplies are the army\'s lifeline. {a} camps need {result} units of grain — how much per camp?"' },
+        hint: { zh: '方程 ${a}x = {result}$\n{a} 个营地 × 每营 $x$ 斛 = 总共 {result} 斛', en: 'Equation: ${a}x = {result}$\n{a} camps × $x$ per camp = {result} total' },
         highlightField: 'x'
       },
       {
-        text: { zh: '曹操："两边同时除以 2：$x = 24 \\div 2$"', en: 'Cao Cao: "Divide both sides by 2: $x = 24 \\div 2$"' },
-        hint: { zh: '24 除以 2 等于多少？', en: 'What is 24 divided by 2?' },
+        text: { zh: '曹操：$x$ 是每营的粮草量，被 {a} 乘着，要把它解出来', en: 'Cao Cao: "$x$ is each camp\'s share, multiplied by {a} — we need to solve for it"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '曹操："$x = 12$！每份军粮 12 斛，分配完毕。"', en: 'Cao Cao: "$x = 12$! 12 units of grain per share, distribution complete."' },
+        text: { zh: '曹操：总量除以营数，就是每营的量。两边同时除以 {a}', en: 'Cao Cao: "Total divided by number of camps = per-camp amount. Divide both sides by {a}"' },
+        hint: { zh: '为什么两边都要除？\n等式像天平，两边做同样的事才能保持平衡', en: 'Why divide both sides?\nAn equation is like scales — both sides need the same operation to stay balanced' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '曹操：左边 ${a}x \\div {a} = x$', en: 'Cao Cao: "Left: ${a}x \\div {a} = x$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '曹操：右边 ${result} \\div {a} = {x}$', en: 'Cao Cao: "Right: ${result} \\div {a} = {x}$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '曹操：$x = {x}$！每营 {x} 斛粮草，分配完毕！', en: 'Cao Cao: "$x = {x}$! {x} units per camp — distribution complete!"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '曹操：验算：${a} \\times {x} = {result}$ ✓ 军粮无误，开拔！', en: 'Cao Cao: "Verify: ${a} \\times {x} = {result}$ ✓ Supplies confirmed — march!"' },
         highlightField: 'x'
       }
     ],
@@ -340,16 +408,25 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '张飞："五个村庄，征调 100 人！$5x = 100$，$x$ 就是每村出的人数。"', en: 'Zhang Fei: "Five villages, drafting 100 people! In $5x = 100$, $x$ is the number per village."' },
+        text: { zh: '张飞：五个村庄征调民夫！{a} 村共出 {result} 人，每村几人？', en: 'Zhang Fei: "Drafting from villages! {a} villages sent {result} people total — how many per village?"' },
+        hint: { zh: '${a}x = {result}$\n{a} 个村 × 每村 $x$ 人 = {result} 人', en: '${a}x = {result}$\n{a} villages × $x$ per village = {result} people' },
         highlightField: 'x'
       },
       {
-        text: { zh: '张飞："两边都除以 5：$x = 100 \\div 5$"', en: 'Zhang Fei: "Divide both sides by 5: $x = 100 \\div 5$"' },
-        hint: { zh: '100 除以 5 等于多少？', en: 'What is 100 divided by 5?' },
+        text: { zh: '张飞：每村出的人就是 $x$，总人数除以村数就行了', en: 'Zhang Fei: "Each village\'s share is $x$ — just divide total by number of villages"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '张飞："$x = 20$！每村出 20 人，公平合理！"', en: 'Zhang Fei: "$x = 20$! 20 people per village, fair and square!"' },
+        text: { zh: '张飞：两边除以 {a}：$\\frac{{a}x}{{a}} = \\frac{{result}}{{a}}$', en: 'Zhang Fei: "Divide both sides by {a}: $\\frac{{a}x}{{a}} = \\frac{{result}}{{a}}$"' },
+        hint: { zh: '左边 {a} 抵消了，剩 $x$\n右边 {result} ÷ {a} 算一下', en: 'Left: {a} cancels, leaving $x$\nRight: calculate {result} ÷ {a}' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '张飞：$x = {x}$！每村出 {x} 人，公平合理！', en: 'Zhang Fei: "$x = {x}$! {x} people per village — fair and square!"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '张飞：验算：${a} \\times {x} = {result}$ ✓ 没算错！', en: 'Zhang Fei: "Verify: ${a} \\times {x} = {result}$ ✓ Math checks out!"' },
         highlightField: 'x'
       }
     ],

@@ -63,6 +63,13 @@ export const PracticeScreen = ({
   const storyText = interpolate(currentMission.story[lang], p);
   const descText = interpolate(currentMission.description[lang], p);
 
+  // Interpolate tutorialSteps with mission data (same as story/description)
+  const interpolatedTutorialSteps = currentMission.tutorialSteps?.map(step => ({
+    ...step,
+    text: { zh: interpolate(step.text.zh, p), en: interpolate(step.text.en, p) },
+    ...(step.hint ? { hint: { zh: interpolate(step.hint.zh, p), en: interpolate(step.hint.en, p) } } : {}),
+  }));
+
   const regenerateQuestion = useCallback(() => {
     setCurrentMission(generateMission(mission, adaptiveTier));
     setInputs({});
@@ -318,7 +325,7 @@ export const PracticeScreen = ({
                 {/* GREEN PHASE: Worked example — no input, just watch the solution */}
                 {currentMission.tutorialSteps && (
                   <AnimatedTutorial
-                    tutorialSteps={currentMission.tutorialSteps}
+                    tutorialSteps={interpolatedTutorialSteps!}
                     equationSteps={currentMission.data?.tutorialEquationSteps}
                     characterId={character.id}
                     currentStep={tutorialStep}
@@ -383,7 +390,7 @@ export const PracticeScreen = ({
                     userInputs={wrongAnswerData.userInputs}
                     expected={wrongAnswerData.expected}
                     formula={currentMission.secret.formula}
-                    tutorialSteps={currentMission.tutorialSteps}
+                    tutorialSteps={interpolatedTutorialSteps}
                     lang={lang}
                     onContinue={handleWrongAnswerContinue}
                     continueLabel={t.gotItNextQuestion}

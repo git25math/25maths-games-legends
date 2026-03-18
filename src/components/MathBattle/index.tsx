@@ -91,6 +91,13 @@ export const MathBattle = ({
   const storyText = interpolate(currentQuestion.story[lang], p);
   const descText = interpolate(currentQuestion.description[lang], p);
 
+  // Interpolate tutorialSteps with mission data (same as story/description)
+  const interpolatedTutorialSteps = currentQuestion.tutorialSteps?.map(step => ({
+    ...step,
+    text: { zh: interpolate(step.text.zh, p), en: interpolate(step.text.en, p) },
+    ...(step.hint ? { hint: { zh: interpolate(step.hint.zh, p), en: interpolate(step.hint.en, p) } } : {}),
+  }));
+
   // Streak multiplier: >=5 -> x2, >=3 -> x1.5, else x1
   const getStreakMultiplier = (s: number) => s >= 5 ? 2 : s >= 3 ? 1.5 : 1;
 
@@ -443,9 +450,9 @@ export const MathBattle = ({
           {/* Right: Inputs */}
           <div className="space-y-6">
             {/* Tutorial overlay for Green mode (single-question only) */}
-            {isTutorial && mission.tutorialSteps && (
+            {isTutorial && interpolatedTutorialSteps && (
               <AnimatedTutorial
-                tutorialSteps={mission.tutorialSteps}
+                tutorialSteps={interpolatedTutorialSteps}
                 equationSteps={mission.data?.tutorialEquationSteps}
                 characterId={character.id}
                 currentStep={tutorialStep}
@@ -470,7 +477,7 @@ export const MathBattle = ({
                 userInputs={wrongAnswerData.userInputs}
                 expected={wrongAnswerData.expected}
                 formula={currentQuestion.secret.formula}
-                tutorialSteps={currentQuestion.tutorialSteps}
+                tutorialSteps={interpolatedTutorialSteps}
                 lang={lang}
                 onContinue={handleWrongAnswerContinue}
                 storyText={mission.storyConsequence?.wrong[lang]}
