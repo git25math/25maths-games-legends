@@ -36,7 +36,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: '$\\text{HCF：公有的取小乘}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
+    secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: '$\\text{HCF = 短除法左边全乘}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
   },
   {
     id: 702, grade: 7, unitId: 0, order: 2,
@@ -72,7 +72,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: '$\\text{LCM：全部的取大乘}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
+    secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: '$\\text{LCM = 左边×底部全乘}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
   },
   {
     id: 703, grade: 7, unitId: 0, order: 3,

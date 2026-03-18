@@ -1895,6 +1895,24 @@ function formatFactorization(n: number): string {
   return parts.join(' \\times ');
 }
 
+/** Short division: finds common prime factors step by step */
+function shortDivision(a: number, b: number): { steps: { prime: number; quotientA: number; quotientB: number }[]; bottomA: number; bottomB: number } {
+  const steps: { prime: number; quotientA: number; quotientB: number }[] = [];
+  let curA = a, curB = b;
+  let d = 2;
+  while (d <= Math.min(curA, curB)) {
+    if (curA % d === 0 && curB % d === 0) {
+      curA /= d;
+      curB /= d;
+      steps.push({ prime: d, quotientA: curA, quotientB: curB });
+      // don't increment d — same prime might divide again
+    } else {
+      d++;
+    }
+  }
+  return { steps, bottomA: curA, bottomB: curB };
+}
+
 export function generateHcfMission(template: Mission): Mission {
   const tier = getTier();
   // Generate two numbers that have a non-trivial HCF
@@ -1930,16 +1948,164 @@ export function generateHcfMission(template: Mission): Mission {
   const factorsB = factorsOf(b);
   const commonFactors = factorsA.filter(f => factorsB.includes(f));
 
+  // Phase 2: Short division
+  const sd = shortDivision(a, b);
+  const leftCol = sd.steps.map(s => s.prime);
+  const hcfFromSD = leftCol.reduce((p, c) => p * c, 1);
+  const lcmFromSD = hcfFromSD * sd.bottomA * sd.bottomB;
+
+  // Build ASCII diagram step by step
+  const buildDiagram = (upToStep: number): string => {
+    const lines: string[] = [];
+    let prevA = a, prevB = b;
+    for (let i = 0; i < upToStep && i < sd.steps.length; i++) {
+      lines.push(`${sd.steps[i].prime} | ${prevA}   ${prevB}`);
+      lines.push('  |----------');
+      prevA = sd.steps[i].quotientA;
+      prevB = sd.steps[i].quotientB;
+    }
+    lines.push(`     ${prevA}    ${prevB}`);
+    return lines.join('\n');
+  };
+
+  // Build "try primes" explanation for a given step
+  const tryPrimesHint = (stepIdx: number): { zh: string; en: string } => {
+    const prevA = stepIdx === 0 ? a : sd.steps[stepIdx - 1].quotientA;
+    const prevB = stepIdx === 0 ? b : sd.steps[stepIdx - 1].quotientB;
+    const step = sd.steps[stepIdx];
+    const zhLines: string[] = [];
+    const enLines: string[] = [];
+    // Show trying primes from 2 up to the one that works
+    for (let p = 2; p <= step.prime; p++) {
+      const divA = prevA % p === 0;
+      const divB = prevB % p === 0;
+      if (divA && divB) {
+        zhLines.push(`${p} 能同时整除 ${prevA} 和 ${prevB}? ${prevA}/${p}=${prevA/p} ✓  ${prevB}/${p}=${prevB/p} ✓ -- 可以!`);
+        enLines.push(`Does ${p} divide both ${prevA} and ${prevB}? ${prevA}/${p}=${prevA/p} ✓  ${prevB}/${p}=${prevB/p} ✓ -- Yes!`);
+      } else {
+        const reason = !divA ? `${prevA}/${p} 除不尽` : `${prevB}/${p} 除不尽`;
+        const enReason = !divA ? `${prevA}/${p} not exact` : `${prevB}/${p} not exact`;
+        zhLines.push(`${p} 能同时整除 ${prevA} 和 ${prevB}? ${reason} ✗`);
+        enLines.push(`Does ${p} divide both ${prevA} and ${prevB}? ${enReason} ✗`);
+      }
+    }
+    zhLines.push('');
+    enLines.push('');
+    zhLines.push(buildDiagram(stepIdx + 1));
+    enLines.push(buildDiagram(stepIdx + 1));
+    return { zh: zhLines.join('\n'), en: enLines.join('\n') };
+  };
+
+  // Dynamic short division steps (Phase 2)
+  const sdTutorialSteps: { text: { zh: string; en: string }; hint?: { zh: string; en: string }; highlightField: string }[] = [];
+
+  // Step: intro
+  sdTutorialSteps.push({
+    text: {
+      zh: `${narrator}：方法一太慢。短除法一张图，同时算出 HCF 和 LCM`,
+      en: `${narrator}: "Method 1 is slow. Short division — one diagram gives both HCF and LCM"`,
+    },
+    hint: {
+      zh: '把两个数并排写，找能同时整除两个数的质数，写在左边',
+      en: 'Write both numbers side by side, find a prime that divides both, write it on the left',
+    },
+    highlightField: 'ans',
+  });
+
+  // Step: first division
+  sdTutorialSteps.push({
+    text: {
+      zh: `${narrator}：找能同时整除 $${a}$ 和 $${b}$ 的最小质数`,
+      en: `${narrator}: "Find the smallest prime that divides both $${a}$ and $${b}$"`,
+    },
+    hint: tryPrimesHint(0),
+    highlightField: 'ans',
+  });
+
+  if (sd.steps.length === 1) {
+    // Only one step — bottom already has no common factor
+    sdTutorialSteps.push({
+      text: {
+        zh: `${narrator}：底部的 ${sd.bottomA} 和 ${sd.bottomB} 没有公因数了，停止`,
+        en: `${narrator}: "${sd.bottomA} and ${sd.bottomB} at the bottom share no common factor — stop"`,
+      },
+      hint: { zh: buildDiagram(sd.steps.length), en: buildDiagram(sd.steps.length) },
+      highlightField: 'ans',
+    });
+  } else if (sd.steps.length === 2) {
+    // Two steps
+    sdTutorialSteps.push({
+      text: {
+        zh: `${narrator}：继续找 ${sd.steps[0].quotientA} 和 ${sd.steps[0].quotientB} 的公因数`,
+        en: `${narrator}: "Continue — find common factor of ${sd.steps[0].quotientA} and ${sd.steps[0].quotientB}"`,
+      },
+      hint: tryPrimesHint(1),
+      highlightField: 'ans',
+    });
+    sdTutorialSteps.push({
+      text: {
+        zh: `${narrator}：底部的 ${sd.bottomA} 和 ${sd.bottomB} 没有公因数了，停止`,
+        en: `${narrator}: "${sd.bottomA} and ${sd.bottomB} at the bottom share no common factor — stop"`,
+      },
+      hint: { zh: buildDiagram(sd.steps.length), en: buildDiagram(sd.steps.length) },
+      highlightField: 'ans',
+    });
+  } else {
+    // Three or more steps — show first two individually, then "continue" with final
+    sdTutorialSteps.push({
+      text: {
+        zh: `${narrator}：继续找 ${sd.steps[0].quotientA} 和 ${sd.steps[0].quotientB} 的公因数`,
+        en: `${narrator}: "Continue — find common factor of ${sd.steps[0].quotientA} and ${sd.steps[0].quotientB}"`,
+      },
+      hint: tryPrimesHint(1),
+      highlightField: 'ans',
+    });
+    sdTutorialSteps.push({
+      text: {
+        zh: `${narrator}：继续除，直到底部两个数没有公因数`,
+        en: `${narrator}: "Keep dividing until the bottom numbers share no common factor"`,
+      },
+      hint: { zh: buildDiagram(sd.steps.length), en: buildDiagram(sd.steps.length) },
+      highlightField: 'ans',
+    });
+  }
+
+  // Step: read HCF
+  sdTutorialSteps.push({
+    text: {
+      zh: `${narrator}：读结果 -- HCF = 左边那列全部乘起来`,
+      en: `${narrator}: "Read the result — HCF = multiply everything in the left column"`,
+    },
+    hint: {
+      zh: `左边是 ${leftCol.join(' x ')} = ${hcfFromSD}\n左边的数是两个数"共同能被整除"的部分，乘起来就是最大公因数`,
+      en: `Left column: ${leftCol.join(' x ')} = ${hcfFromSD}\nThe left column contains the shared divisible parts — their product is the HCF`,
+    },
+    highlightField: 'ans',
+  });
+
+  // Step: read LCM bonus
+  sdTutorialSteps.push({
+    text: {
+      zh: `${narrator}：顺便 -- LCM = 左边 x 底部全部乘起来`,
+      en: `${narrator}: "Bonus — LCM = left column x bottom row, all multiplied"`,
+    },
+    hint: {
+      zh: `${leftCol.join(' x ')} x ${sd.bottomA} x ${sd.bottomB} = ${lcmFromSD}\n左边是公共部分，底部是各自剩下的部分，合起来就是 LCM`,
+      en: `${leftCol.join(' x ')} x ${sd.bottomA} x ${sd.bottomB} = ${lcmFromSD}\nLeft = shared part, bottom = remaining parts, combined = LCM`,
+    },
+    highlightField: 'ans',
+  });
+
   const tutorialSteps = [
-    // Phase 1: listing factors
+    // Phase 1: listing factors (Steps 1-6)
     {
       text: {
         zh: `${narrator}：${a} 人和 ${b} 人要分成一样大的小队。每队最多几人？先用最简单的方法——挨个试`,
         en: `${narrator}: "${a} and ${b} people split into equal squads. Max per squad? Let's try the simplest method — test one by one"`,
       },
       hint: {
-        zh: '什么叫"能分"？就是除得尽、没有余数\n比如 12÷3=4，刚好分完 ✓\n12÷5=2.4，有人剩下 ✗',
-        en: 'What does "can be split" mean? Divides evenly, no remainder\nE.g. 12÷3=4, splits perfectly ✓\n12÷5=2.4, someone left over ✗',
+        zh: '什么叫"能分"? 就是除得尽、没有余数\n比如 12/3=4，刚好分完 ✓\n12/5=2.4，有人剩下 ✗',
+        en: 'What does "can be split" mean? Divides evenly, no remainder\nE.g. 12/3=4, splits perfectly ✓\n12/5=2.4, someone left over ✗',
       },
       highlightField: 'ans',
     },
@@ -1949,14 +2115,14 @@ export function generateHcfMission(template: Mission): Mission {
         en: `${narrator}: "Find all numbers that divide ${a} evenly (start from 1)"`,
       },
       hint: {
-        zh: `${factorsA.map(f => `${a}÷${f}=${a/f} ✓`).join('\n')}\n\n${a} 的因数是：${factorsA.join(', ')}`,
-        en: `${factorsA.map(f => `${a}÷${f}=${a/f} ✓`).join('\n')}\n\nFactors of ${a}: ${factorsA.join(', ')}`,
+        zh: `${factorsA.map(f => `${a}/${f}=${a/f} ✓`).join('\n')}\n\n${a} 的因数是: ${factorsA.join(', ')}`,
+        en: `${factorsA.map(f => `${a}/${f}=${a/f} ✓`).join('\n')}\n\nFactors of ${a}: ${factorsA.join(', ')}`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}："因数"就是能把一个数除得尽的数。${a} 的因数是：${factorsA.join(', ')}`,
+        zh: `${narrator}："因数"就是能把一个数除得尽的数。${a} 的因数是: ${factorsA.join(', ')}`,
         en: `${narrator}: "A factor is a number that divides another evenly. Factors of ${a}: ${factorsA.join(', ')}"`,
       },
       highlightField: 'ans',
@@ -1967,8 +2133,8 @@ export function generateHcfMission(template: Mission): Mission {
         en: `${narrator}: "Now find all factors of ${b}"`,
       },
       hint: {
-        zh: `${factorsB.map(f => `${b}÷${f}=${b/f} ✓`).join('\n')}\n\n${b} 的因数是：${factorsB.join(', ')}`,
-        en: `${factorsB.map(f => `${b}÷${f}=${b/f} ✓`).join('\n')}\n\nFactors of ${b}: ${factorsB.join(', ')}`,
+        zh: `${factorsB.map(f => `${b}/${f}=${b/f} ✓`).join('\n')}\n\n${b} 的因数是: ${factorsB.join(', ')}`,
+        en: `${factorsB.map(f => `${b}/${f}=${b/f} ✓`).join('\n')}\n\nFactors of ${b}: ${factorsB.join(', ')}`,
       },
       highlightField: 'ans',
     },
@@ -1978,88 +2144,40 @@ export function generateHcfMission(template: Mission): Mission {
         en: `${narrator}: "Find factors that appear in BOTH lists — these are 'common factors'"`,
       },
       hint: {
-        zh: `${a} 的因数：${factorsA.join(', ')}\n${b} 的因数：${factorsB.join(', ')}\n\n两边都有的：${commonFactors.join(', ')}`,
+        zh: `${a} 的因数: ${factorsA.join(', ')}\n${b} 的因数: ${factorsB.join(', ')}\n\n两边都有的: ${commonFactors.join(', ')}`,
         en: `Factors of ${a}: ${factorsA.join(', ')}\nFactors of ${b}: ${factorsB.join(', ')}\n\nIn both: ${commonFactors.join(', ')}`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：公因数里最大的是 $${h}$——这就是"最大公因数"(HCF)！`,
+        zh: `${narrator}：公因数里最大的是 $${h}$ -- 这就是"最大公因数"(HCF)!`,
         en: `${narrator}: "The largest common factor is $${h}$ — this is the HCF!"`,
       },
       hint: {
-        zh: `公因数：${commonFactors.join(', ')}\n最大的是 ${h}\n\n验算：${a}÷${h}=${a/h} ✓  ${b}÷${h}=${b/h} ✓\n每队 ${h} 人，整编完成！`,
-        en: `Common factors: ${commonFactors.join(', ')}\nLargest is ${h}\n\nVerify: ${a}÷${h}=${a/h} ✓  ${b}÷${h}=${b/h} ✓\n${h} per squad, done!`,
+        zh: `公因数: ${commonFactors.join(', ')}\n最大的是 ${h}\n\n验算: ${a}/${h}=${a/h} ✓  ${b}/${h}=${b/h} ✓\n每队 ${h} 人，整编完成!`,
+        en: `Common factors: ${commonFactors.join(', ')}\nLargest is ${h}\n\nVerify: ${a}/${h}=${a/h} ✓  ${b}/${h}=${b/h} ✓\n${h} per squad, done!`,
       },
       highlightField: 'ans',
     },
-    // Phase 2: prime factorization
+    // Phase 2: Short division (dynamic steps)
+    ...sdTutorialSteps,
+    // Phase 3: Prime factorization (3 steps)
     {
       text: {
-        zh: `${narrator}：上面的方法很准！但数字大了要试很多次。有个更快的方法——"质因数分解"`,
-        en: `${narrator}: "The method above works! But for bigger numbers, there's a faster way — prime factorization"`,
+        zh: `${narrator}：第三种方法 -- 质因数分解（和短除法本质相同，画法不同）`,
+        en: `${narrator}: "Method 3 — prime factorization (same idea as short division, different notation)"`,
       },
       hint: {
-        zh: '先认识"质数"——只能被 1 和它自己整除的数\n比如 2, 3, 5, 7, 11 都是质数\n4 不是（4=2×2），6 不是（6=2×3）',
-        en: 'First, "prime numbers" — only divisible by 1 and themselves\nE.g. 2, 3, 5, 7, 11 are primes\n4 is not (4=2×2), 6 is not (6=2×3)',
+        zh: `$${a} = ${factA}$\n$${b} = ${factB}$`,
+        en: `$${a} = ${factA}$\n$${b} = ${factB}$`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：把 ${a} 拆成质数的乘积——从最小的质数 2 开始试，能除就除，不能就换下一个`,
-        en: `${narrator}: "Break ${a} into prime factors — start with 2, divide if possible, otherwise try next prime"`,
-      },
-      hint: (() => {
-        let n = a;
-        const steps: string[] = [];
-        const enSteps: string[] = [];
-        let d = 2;
-        while (d * d <= n) {
-          while (n % d === 0) {
-            steps.push(`${n}÷${d}=${n/d} ✓`);
-            enSteps.push(`${n}÷${d}=${n/d} ✓`);
-            n /= d;
-          }
-          d++;
-        }
-        if (n > 1) { steps.push(`${n} 是质数，停！`); enSteps.push(`${n} is prime, stop!`); }
-        steps.push(`\n所以 ${a} = ${factA}`);
-        enSteps.push(`\nSo ${a} = ${factA}`);
-        return { zh: steps.join('\n'), en: enSteps.join('\n') };
-      })(),
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：同样拆 ${b}`,
-        en: `${narrator}: "Now break down ${b}"`,
-      },
-      hint: (() => {
-        let n = b;
-        const steps: string[] = [];
-        const enSteps: string[] = [];
-        let d = 2;
-        while (d * d <= n) {
-          while (n % d === 0) {
-            steps.push(`${n}÷${d}=${n/d} ✓`);
-            enSteps.push(`${n}÷${d}=${n/d} ✓`);
-            n /= d;
-          }
-          d++;
-        }
-        if (n > 1) { steps.push(`${n} 是质数，停！`); enSteps.push(`${n} is prime, stop!`); }
-        steps.push(`\n所以 ${b} = ${factB}`);
-        enSteps.push(`\nSo ${b} = ${factB}`);
-        return { zh: steps.join('\n'), en: enSteps.join('\n') };
-      })(),
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：对比两个分解，找共同有的质数，每个取个数少的`,
-        en: `${narrator}: "Compare both breakdowns — for each common prime, take the smaller count"`,
+        zh: `${narrator}：对比，共有质数取少的 = HCF`,
+        en: `${narrator}: "Compare — for each common prime, take the smaller count = HCF"`,
       },
       hint: (() => {
         const fA = primeFactors(a);
@@ -2070,24 +2188,34 @@ export function generateHcfMission(template: Mission): Mission {
           const expB = fB.get(p);
           if (expB !== undefined) {
             const minExp = Math.min(expA, expB);
-            lines.push(`${p}：${a} 有 ${expA} 个，${b} 有 ${expB} 个 → 取少的 = ${minExp} 个`);
-            enLines.push(`${p}: ${a} has ${expA}, ${b} has ${expB} → take smaller = ${minExp}`);
+            lines.push(`${p}: ${a} 有 ${expA} 个，${b} 有 ${expB} 个 -> 取少的 = ${minExp} 个`);
+            enLines.push(`${p}: ${a} has ${expA}, ${b} has ${expB} -> take smaller = ${minExp}`);
           }
         }
-        lines.push(`\n为什么取少的？"共同都有"就是两边都够的量\n${a} 只有少的那么多，再多就超出了`);
-        enLines.push(`\nWhy take smaller? "Common" means both must have enough\n${a} only has the smaller amount, more would exceed it`);
         return { zh: lines.join('\n'), en: enLines.join('\n') };
       })(),
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：HCF = $${formatFactorization(h)} = ${h}$（和挨个试的结果一样！）`,
-        en: `${narrator}: "HCF = $${formatFactorization(h)} = ${h}$ (same as the testing method!)"`,
+        zh: `${narrator}：HCF = $${formatFactorization(h)} = ${h}$（三种方法，同一个答案!）`,
+        en: `${narrator}: "HCF = $${formatFactorization(h)} = ${h}$ (three methods, same answer!)"`,
       },
       hint: {
-        zh: `验算：${a}÷${h}=${a/h} ✓  ${b}÷${h}=${b/h} ✓`,
-        en: `Verify: ${a}÷${h}=${a/h} ✓  ${b}÷${h}=${b/h} ✓`,
+        zh: `验算: ${a}/${h}=${a/h} ✓  ${b}/${h}=${b/h} ✓`,
+        en: `Verify: ${a}/${h}=${a/h} ✓  ${b}/${h}=${b/h} ✓`,
+      },
+      highlightField: 'ans',
+    },
+    // Summary step
+    {
+      text: {
+        zh: `${narrator}：三种方法各有用处`,
+        en: `${narrator}: "Each method has its use"`,
+      },
+      hint: {
+        zh: '挨个试: 最简单，适合初学\n短除法: 最快，同时求 HCF 和 LCM，推荐做题用\n质因数分解: 适合理解原理',
+        en: 'Test one by one: simplest, good for beginners\nShort division: fastest, gives both HCF and LCM, recommended for exams\nPrime factorization: best for understanding the theory',
       },
       highlightField: 'ans',
     },
@@ -2136,8 +2264,149 @@ export function generateLcmMission(template: Mission): Mission {
   for (let i = 1; i * b <= lcm; i++) multiplesB.push(i * b);
   const commonMultiples = multiplesA.filter(m => multiplesB.includes(m));
 
+  // Phase 2: Short division
+  const sdL = shortDivision(a, b);
+  const leftColL = sdL.steps.map(s => s.prime);
+  const hcfFromSDL = leftColL.reduce((p, c) => p * c, 1);
+  const lcmFromSDL = hcfFromSDL * sdL.bottomA * sdL.bottomB;
+
+  const buildDiagramL = (upToStep: number): string => {
+    const lines: string[] = [];
+    let prevA = a, prevB = b;
+    for (let i = 0; i < upToStep && i < sdL.steps.length; i++) {
+      lines.push(`${sdL.steps[i].prime} | ${prevA}   ${prevB}`);
+      lines.push('  |----------');
+      prevA = sdL.steps[i].quotientA;
+      prevB = sdL.steps[i].quotientB;
+    }
+    lines.push(`     ${prevA}    ${prevB}`);
+    return lines.join('\n');
+  };
+
+  const tryPrimesHintL = (stepIdx: number): { zh: string; en: string } => {
+    const prevA = stepIdx === 0 ? a : sdL.steps[stepIdx - 1].quotientA;
+    const prevB = stepIdx === 0 ? b : sdL.steps[stepIdx - 1].quotientB;
+    const step = sdL.steps[stepIdx];
+    const zhLines: string[] = [];
+    const enLines: string[] = [];
+    for (let p = 2; p <= step.prime; p++) {
+      const divA = prevA % p === 0;
+      const divB = prevB % p === 0;
+      if (divA && divB) {
+        zhLines.push(`${p} 能同时整除 ${prevA} 和 ${prevB}? ${prevA}/${p}=${prevA/p} ✓  ${prevB}/${p}=${prevB/p} ✓ -- 可以!`);
+        enLines.push(`Does ${p} divide both ${prevA} and ${prevB}? ${prevA}/${p}=${prevA/p} ✓  ${prevB}/${p}=${prevB/p} ✓ -- Yes!`);
+      } else {
+        const reason = !divA ? `${prevA}/${p} 除不尽` : `${prevB}/${p} 除不尽`;
+        const enReason = !divA ? `${prevA}/${p} not exact` : `${prevB}/${p} not exact`;
+        zhLines.push(`${p} 能同时整除 ${prevA} 和 ${prevB}? ${reason} ✗`);
+        enLines.push(`Does ${p} divide both ${prevA} and ${prevB}? ${enReason} ✗`);
+      }
+    }
+    zhLines.push('');
+    enLines.push('');
+    zhLines.push(buildDiagramL(stepIdx + 1));
+    enLines.push(buildDiagramL(stepIdx + 1));
+    return { zh: zhLines.join('\n'), en: enLines.join('\n') };
+  };
+
+  const sdLcmSteps: { text: { zh: string; en: string }; hint?: { zh: string; en: string }; highlightField: string }[] = [];
+
+  // Intro
+  sdLcmSteps.push({
+    text: {
+      zh: `${narrator}：和 HCF 的短除法画法完全一样 -- 只是读结果不同`,
+      en: `${narrator}: "Same short division diagram as HCF — just read the result differently"`,
+    },
+    hint: {
+      zh: '把两个数并排写，找能同时整除两个数的质数，写在左边',
+      en: 'Write both numbers side by side, find a prime that divides both, write it on the left',
+    },
+    highlightField: 'ans',
+  });
+
+  // First division
+  sdLcmSteps.push({
+    text: {
+      zh: `${narrator}：找能同时整除 $${a}$ 和 $${b}$ 的最小质数`,
+      en: `${narrator}: "Find the smallest prime that divides both $${a}$ and $${b}$"`,
+    },
+    hint: tryPrimesHintL(0),
+    highlightField: 'ans',
+  });
+
+  if (sdL.steps.length === 1) {
+    sdLcmSteps.push({
+      text: {
+        zh: `${narrator}：底部的 ${sdL.bottomA} 和 ${sdL.bottomB} 没有公因数了，停止`,
+        en: `${narrator}: "${sdL.bottomA} and ${sdL.bottomB} at the bottom share no common factor — stop"`,
+      },
+      hint: { zh: buildDiagramL(sdL.steps.length), en: buildDiagramL(sdL.steps.length) },
+      highlightField: 'ans',
+    });
+  } else if (sdL.steps.length === 2) {
+    sdLcmSteps.push({
+      text: {
+        zh: `${narrator}：继续找 ${sdL.steps[0].quotientA} 和 ${sdL.steps[0].quotientB} 的公因数`,
+        en: `${narrator}: "Continue — find common factor of ${sdL.steps[0].quotientA} and ${sdL.steps[0].quotientB}"`,
+      },
+      hint: tryPrimesHintL(1),
+      highlightField: 'ans',
+    });
+    sdLcmSteps.push({
+      text: {
+        zh: `${narrator}：底部的 ${sdL.bottomA} 和 ${sdL.bottomB} 没有公因数了，停止`,
+        en: `${narrator}: "${sdL.bottomA} and ${sdL.bottomB} at the bottom share no common factor — stop"`,
+      },
+      hint: { zh: buildDiagramL(sdL.steps.length), en: buildDiagramL(sdL.steps.length) },
+      highlightField: 'ans',
+    });
+  } else {
+    sdLcmSteps.push({
+      text: {
+        zh: `${narrator}：继续找 ${sdL.steps[0].quotientA} 和 ${sdL.steps[0].quotientB} 的公因数`,
+        en: `${narrator}: "Continue — find common factor of ${sdL.steps[0].quotientA} and ${sdL.steps[0].quotientB}"`,
+      },
+      hint: tryPrimesHintL(1),
+      highlightField: 'ans',
+    });
+    sdLcmSteps.push({
+      text: {
+        zh: `${narrator}：继续除，直到底部两个数没有公因数`,
+        en: `${narrator}: "Keep dividing until the bottom numbers share no common factor"`,
+      },
+      hint: { zh: buildDiagramL(sdL.steps.length), en: buildDiagramL(sdL.steps.length) },
+      highlightField: 'ans',
+    });
+  }
+
+  // Read LCM result
+  sdLcmSteps.push({
+    text: {
+      zh: `${narrator}：LCM = 左边 x 底部全部乘起来`,
+      en: `${narrator}: "LCM = left column x bottom row, all multiplied"`,
+    },
+    hint: {
+      zh: `${leftColL.join(' x ')} x ${sdL.bottomA} x ${sdL.bottomB} = ${lcmFromSDL}\n左边是公共部分，底部是各自剩下的部分，合起来就是 LCM`,
+      en: `${leftColL.join(' x ')} x ${sdL.bottomA} x ${sdL.bottomB} = ${lcmFromSDL}\nLeft = shared part, bottom = remaining parts, combined = LCM`,
+    },
+    highlightField: 'ans',
+  });
+
+  // Why explanation
+  sdLcmSteps.push({
+    text: {
+      zh: `${narrator}：为什么? $${a}$ 和 $${b}$ 的质因数，合并但不重复算左边的`,
+      en: `${narrator}: "Why? Merge the prime factors of $${a}$ and $${b}$, but don't double-count the left column"`,
+    },
+    hint: {
+      zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n左边(${leftColL.join(' x ')})已经是两个数共有的部分\n底部(${sdL.bottomA}, ${sdL.bottomB})是各自独有的部分\n全乘 = 不重不漏包含所有质因数`,
+      en: `$${a} = ${factA}$\n$${b} = ${factB}$\nLeft (${leftColL.join(' x ')}) = shared factors\nBottom (${sdL.bottomA}, ${sdL.bottomB}) = unique remainders\nMultiply all = cover every prime factor without double-counting`,
+    },
+    highlightField: 'ans',
+  });
+
   const tutorialSteps = [
-    // Phase 1: listing multiples
+    // Phase 1: listing multiples (Steps 1-5)
     {
       text: {
         zh: `${narrator}：先用最笨的方法——把两个数的倍数都列出来，看哪个最先撞上`,
@@ -2177,14 +2446,14 @@ export function generateLcmMission(template: Mission): Mission {
         en: `${narrator}: "Find the ones in BOTH lists — the first match is the LCM"`,
       },
       hint: {
-        zh: `$${a}$ 的倍数：${multiplesA.join(', ')}\n$${b}$ 的倍数：${multiplesB.join(', ')}\n\n两边都有的：${commonMultiples.join(', ')}\n最小的是 ${lcm}`,
+        zh: `$${a}$ 的倍数: ${multiplesA.join(', ')}\n$${b}$ 的倍数: ${multiplesB.join(', ')}\n\n两边都有的: ${commonMultiples.join(', ')}\n最小的是 ${lcm}`,
         en: `Multiples of $${a}$: ${multiplesA.join(', ')}\nMultiples of $${b}$: ${multiplesB.join(', ')}\n\nIn both: ${commonMultiples.join(', ')}\nSmallest is ${lcm}`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：LCM($${a}$, $${b}$) = $${lcm}$! 验算：$${lcm}$\\div$${a}$=${lcm/a} \\checkmark  $${lcm}$\\div$${b}$=${lcm/b} \\checkmark`,
+        zh: `${narrator}：LCM($${a}$, $${b}$) = $${lcm}$! 验算: $${lcm} \\div ${a} = ${lcm/a}$ \\checkmark  $${lcm} \\div ${b} = ${lcm/b}$ \\checkmark`,
         en: `${narrator}: "LCM($${a}$, $${b}$) = $${lcm}$! Check: $${lcm} \\div ${a} = ${lcm/a}$ \\checkmark  $${lcm} \\div ${b} = ${lcm/b}$ \\checkmark"`,
       },
       hint: {
@@ -2193,72 +2462,24 @@ export function generateLcmMission(template: Mission): Mission {
       },
       highlightField: 'ans',
     },
-    // Phase 2: prime factorization
+    // Phase 2: Short division (dynamic steps)
+    ...sdLcmSteps,
+    // Phase 3: Prime factorization (3 steps)
     {
       text: {
-        zh: `${narrator}：上面的方法准! 但数字大了要列很长。有更快的方法——质因数分解`,
-        en: `${narrator}: "The method above works! But for bigger numbers, there's a faster way — prime factorization"`,
+        zh: `${narrator}：第三种方法 -- 质因数分解（和短除法本质相同，画法不同）`,
+        en: `${narrator}: "Method 3 — prime factorization (same idea as short division, different notation)"`,
       },
       hint: {
-        zh: '先认识"质数"——只能被 1 和它自己整除的数\n比如 2, 3, 5, 7, 11 都是质数\n4 不是（4=2x2），6 不是（6=2x3）',
-        en: 'First, "prime numbers" — only divisible by 1 and themselves\nE.g. 2, 3, 5, 7, 11 are primes\n4 is not (4=2x2), 6 is not (6=2x3)',
+        zh: `$${a} = ${factA}$\n$${b} = ${factB}$`,
+        en: `$${a} = ${factA}$\n$${b} = ${factB}$`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：拆 $${a}$——从最小的质数 2 开始，能除就除`,
-        en: `${narrator}: "Break down $${a}$ — start with smallest prime 2, divide if possible"`,
-      },
-      hint: (() => {
-        let n = a;
-        const steps: string[] = [];
-        const enSteps: string[] = [];
-        let d = 2;
-        while (d * d <= n) {
-          while (n % d === 0) {
-            steps.push(`${n}\\div${d}=${n/d} \\checkmark`);
-            enSteps.push(`${n}\\div${d}=${n/d} \\checkmark`);
-            n /= d;
-          }
-          d++;
-        }
-        if (n > 1) { steps.push(`${n} 是质数，停!`); enSteps.push(`${n} is prime, stop!`); }
-        steps.push(`\n所以 ${a} = ${factA}`);
-        enSteps.push(`\nSo ${a} = ${factA}`);
-        return { zh: steps.join('\n'), en: enSteps.join('\n') };
-      })(),
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：拆 $${b}$`,
-        en: `${narrator}: "Break down $${b}$"`,
-      },
-      hint: (() => {
-        let n = b;
-        const steps: string[] = [];
-        const enSteps: string[] = [];
-        let d = 2;
-        while (d * d <= n) {
-          while (n % d === 0) {
-            steps.push(`${n}\\div${d}=${n/d} \\checkmark`);
-            enSteps.push(`${n}\\div${d}=${n/d} \\checkmark`);
-            n /= d;
-          }
-          d++;
-        }
-        if (n > 1) { steps.push(`${n} 是质数，停!`); enSteps.push(`${n} is prime, stop!`); }
-        steps.push(`\n所以 ${b} = ${factB}`);
-        enSteps.push(`\nSo ${b} = ${factB}`);
-        return { zh: steps.join('\n'), en: enSteps.join('\n') };
-      })(),
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：注意——和 HCF 正好相反! HCF 取少的，LCM 取多的`,
-        en: `${narrator}: "Note — this is the OPPOSITE of HCF! HCF takes the smaller count, LCM takes the larger"`,
+        zh: `${narrator}：注意 -- 和 HCF 正好相反! HCF 取少的，LCM 取多的`,
+        en: `${narrator}: "Note — opposite of HCF! HCF takes smaller count, LCM takes larger"`,
       },
       hint: (() => {
         const fA = primeFactors(a);
@@ -2272,20 +2493,30 @@ export function generateLcmMission(template: Mission): Mission {
           lines.push(`${p}: $${a}$ 有 ${expA} 个，$${b}$ 有 ${expB} 个 -> 取多的 = ${Math.max(expA, expB)} 个`);
           enLines.push(`${p}: $${a}$ has ${expA}, $${b}$ has ${expB} -> take larger = ${Math.max(expA, expB)}`);
         }
-        lines.push(`\n为什么取多的？LCM 必须能被两个数都整除。如果 $${a}$ 里有 N 个某质数，LCM 至少要有 N 个才能被 $${a}$ 整除`);
-        enLines.push(`\nWhy take larger? LCM must be divisible by both. If $${a}$ has N of a prime, LCM needs at least N to be divisible by $${a}$`);
         return { zh: lines.join('\n'), en: enLines.join('\n') };
       })(),
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：LCM = $${formatFactorization(lcm)} = ${lcm}$（和列倍数的结果一样!）`,
-        en: `${narrator}: "LCM = $${formatFactorization(lcm)} = ${lcm}$ (same result as listing multiples!)"`,
+        zh: `${narrator}：LCM = $${formatFactorization(lcm)} = ${lcm}$（三种方法，同一个答案!）`,
+        en: `${narrator}: "LCM = $${formatFactorization(lcm)} = ${lcm}$ (three methods, same answer!)"`,
       },
       hint: {
-        zh: `验算：$${lcm} \\div ${a} = ${lcm/a}$ \\checkmark  $${lcm} \\div ${b} = ${lcm/b}$ \\checkmark`,
+        zh: `验算: $${lcm} \\div ${a} = ${lcm/a}$ \\checkmark  $${lcm} \\div ${b} = ${lcm/b}$ \\checkmark`,
         en: `Verify: $${lcm} \\div ${a} = ${lcm/a}$ \\checkmark  $${lcm} \\div ${b} = ${lcm/b}$ \\checkmark`,
+      },
+      highlightField: 'ans',
+    },
+    // Summary step
+    {
+      text: {
+        zh: `${narrator}：三种方法各有用处`,
+        en: `${narrator}: "Each method has its use"`,
+      },
+      hint: {
+        zh: '列倍数: 最简单，适合初学\n短除法: 最快，同时求 HCF 和 LCM，推荐做题用\n质因数分解: 适合理解原理',
+        en: 'List multiples: simplest, good for beginners\nShort division: fastest, gives both HCF and LCM, recommended for exams\nPrime factorization: best for understanding the theory',
       },
       highlightField: 'ans',
     },
