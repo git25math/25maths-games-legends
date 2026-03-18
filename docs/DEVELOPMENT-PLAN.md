@@ -2,7 +2,7 @@
 
 > **项目地址**：https://play.25maths.com
 > **仓库**：git25math/25maths-games-legends
-> **版本**：v4.0.0 | 最后更新：2026-03-18
+> **版本**：v5.0.0 | 最后更新：2026-03-19
 
 ## Context
 
@@ -16,7 +16,7 @@
 - ✅ Firebase→Supabase 迁移，ExamHub 账号共享
 - ✅ 模块化代码架构（25 个源文件，215 行 App.tsx）
 - ✅ Green/Amber/Red 三级难度系统
-- ✅ 49 个手写关卡 + tutorialSteps
+- ✅ 56 个 Y7 关卡（完整课纲覆盖）+ 49 个 Y8-Y11 手写关卡
 - ✅ 294 KP 元结构 + 三国故事主题 + 哈罗课程映射
 - ✅ 部署到 play.25maths.com
 - ✅ 三国故事线按史实编年重构（72 topic 全覆盖审查）
@@ -614,7 +614,7 @@ Step 5: 最终结果 — y = mx + b
 | 生成器验证 | 每个生成器的 data 与 checkCorrectness 对齐 |
 | tutorial 验证 | 所有 highlightField 匹配 inputConfig.ts 中的 field.id |
 | 移动端 | iPhone SE (375px) 可正常操作 |
-| 双语 | 所有文案中英文完整（无硬编码中文） |
+| 三语 | 简体中文 + 繁体中文 + 英文完整（自动简→繁转换） |
 | 部署 | push main → play.25maths.com 自动更新 |
 
 ---
@@ -652,6 +652,18 @@ Step 5: 最终结果 — y = mx + b
 | 2026-03-18 | v3.3.0 | 短除法：shortDivision()算法 + ShortDivision SVG组件 + HCF/LCM三种方法教学 |
 | 2026-03-18 | v3.4.0 | 2新题型(PRIME+FACTOR_TREE) + Mission 699质数 + Mission 700因数树 |
 | 2026-03-18 | **v4.0.0** | **19/19 SVG视觉体系**: AnimatedNumberLine + FractionPie + NumberGrid/BalanceScale/AngleArc集成 |
-| — | v4.1.0 | Y8 内容升级（故事融合 + 极限起点版教学法） |
-| — | v5.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |
-| — | v6.0.0 | Phase 5: 章节地图 + 视频三位一体 + 离线支持 |
+| 2026-03-18 | v4.1.0 | Y7 幂与根(Unit 0C): +2题型(SQUARE_CUBE/SQUARE_ROOT) +4关卡(713-716) +2生成器 |
+| 2026-03-18 | v4.2.0 | Y7 全面扩展: +16关卡 +9生成器 +5新单元(序列/估算/周长面积/统计/代入) |
+| 2026-03-18 | v4.3.0 | 教程质量重写: 8个生成器2-3步→5-6步(WHY+验算+微操作+叙事贯穿) |
+| 2026-03-18 | v4.4.0 | 叙事质量升级: 5个最弱关卡重写(711/712/723/724/735)+storyConsequence |
+| 2026-03-18 | v4.5.0 | UI修复: LatexText自动换行+FractionPie加减号+移动端溢出保护 |
+| 2026-03-18 | v4.6.0 | 知识链闭环: +6桥梁关卡(因数/整数乘除/F↔D↔P/BODMAS/化简/众数) |
+| 2026-03-18 | v4.7.0 | 交叉链接: +5关卡(两步方程/递减数列/反推周长/代入+面积/坐标系) |
+| 2026-03-18 | v4.8.0 | 金标准落地: 5个生成器升级至≥5步(FactorsList/BODMAS/TwoStepEq/RatioY7) |
+| 2026-03-18 | v4.9.0 | FractionPie完全重写: 5阶段动画(原始→通分→合并)+假分数多圆+SVG带分数 |
+| 2026-03-18 | v4.10.0 | 带分数↔假分数: +2关卡(692整箱拆零/690散装装箱)+MIXED_IMPROPER生成器 |
+| 2026-03-19 | **v5.0.0** | **三语支持**: 简体+繁体+英文, lt()自动转换+300字映射表+138条UI翻译+15组件更新 |
+| — | v5.1.0 | Y7 剩余优化: StatsMedian重写已完成, 比例/坐标已加, 剩余≤4步生成器待升级 |
+| — | **v6.0.0** | **Y8 完整课纲**: 参照Y7标准(金标准教程+知识链+交叉链接+SVG可视化) |
+| — | v7.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |
+| — | v8.0.0 | Phase 5: 章节地图 + 视频三位一体 + 离线支持 |
