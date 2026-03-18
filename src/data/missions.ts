@@ -72,7 +72,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: '$\\text{LCM}: \\text{每个质因数取大的那个，乘起来}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
+    secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: '$\\text{LCM：所有质因数取大的，乘起来}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
   },
   {
     id: 703, grade: 7, unitId: 0, order: 3,
@@ -108,7 +108,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: '$\\text{HCF：共有质因数取小的，乘起来}$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
+    secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: '$\\text{HCF} = \\text{最大均分数}$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
   },
   // --- Year 7 Unit 0A: 行军算账·正负数篇 ---
   {
@@ -211,7 +211,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '粮草翻倍', en: 'Grain Multiplication' },
     skillName: { zh: '分数乘法术', en: 'Fraction Multiplication' },
     skillSummary: { zh: '分子乘分子，分母乘分母，最后约分', en: 'Multiply tops, multiply bottoms, then simplify' },
-    story: { zh: '军粮需要按比例缩放。学会分数乘法才能精确调配。', en: 'Grain needs to be scaled proportionally. Master fraction multiplication for accurate allocation.' },
+    story: { zh: '军粮需要按比例分配，学会分数乘法才能精确计算。', en: 'Grain must be distributed proportionally — fraction multiplication is the key skill.' },
     description: { zh: '计算分数乘法。', en: 'Calculate the fraction multiplication.' },
     data: { n1: 2, d1: 3, n2: 3, d2: 5, op: 'mul', ansNum: 2, ansDen: 5, generatorType: 'FRAC_MUL_RANDOM' }, difficulty: 'Easy', reward: 55,
     kpId: 'kp-1.4-02', sectionId: 'number',
@@ -466,7 +466,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺：一眼分清——$180°$ 是补角（"补"笔画多，数字大），$90°$ 是余角（"余"笔画少，数字小）', en: 'Gao Shun: "Quick tip: Supplementary=$180°$ (bigger word, bigger number), Complementary=$90°$ (shorter word, smaller number)"' },
+        text: { zh: '高顺：一眼分清——$180°$ 是补角（"补"笔画多，数字大），$90°$ 是余角（"余"笔画少，数字小）', en: 'Gao Shun: "Quick tip: Supplementary = Straight line = $180°$. Complementary = Corner (right angle) = $90°$"' },
         highlightField: 'x'
       }
     ],
