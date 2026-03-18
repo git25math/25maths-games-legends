@@ -510,11 +510,18 @@ export function generateLinearMission(template: Mission): Mission {
     en: `Find the equation $y = mx + c$ through A(${x1}, ${y1}) and B(${x2}, ${y2}).`,
   };
 
+  // Build substitution string for c calculation: y1 = m*x1 + c → c = y1 - m*x1
+  const mTimesX1 = m * x1;
+  const cExpr = mTimesX1 >= 0
+    ? `${y1} - ${mTimesX1}`
+    : `${y1} - (${mTimesX1})`;
+
   const tutorialSteps = [
+    // Step 1: 斜率的定义
     {
       text: {
-        zh: `${narrator}：「斜率的含义：$\\text{gradient}(m) = \\frac{y\\text{的变化值}}{x\\text{的变化值}}$」`,
-        en: `${narrator}: "What is gradient? $\\text{gradient}(m) = \\frac{\\text{change in } y}{\\text{change in } x}$"`,
+        zh: `${narrator}：「斜率(gradient)就是直线的陡峭程度：$m = \\frac{y\\text{的变化量}}{x\\text{的变化量}}$」`,
+        en: `${narrator}: "Gradient measures the steepness of a line: $m = \\frac{\\text{change in } y}{\\text{change in } x}$"`,
       },
       hint: {
         zh: '斜率就是"y 变了多少"除以"x 变了多少"',
@@ -522,13 +529,15 @@ export function generateLinearMission(template: Mission): Mission {
       },
       highlightField: 'm',
     },
+    // Step 2: 用数学公式来表示
     {
       text: {
-        zh: `${narrator}：「用坐标表示：$m = \\frac{y_2 - y_1}{x_2 - x_1}$」`,
-        en: `${narrator}: "In coordinates: $m = \\frac{y_2 - y_1}{x_2 - x_1}$"`,
+        zh: `${narrator}：「用坐标点的公式表示：$m = \\frac{y_2 - y_1}{x_2 - x_1}$」`,
+        en: `${narrator}: "Using coordinate formula: $m = \\frac{y_2 - y_1}{x_2 - x_1}$"`,
       },
       highlightField: 'm',
     },
+    // Step 3: 代入具体数值，算出 m
     {
       text: {
         zh: `${narrator}：「代入 A(${x1}, ${y1}) 和 B(${x2}, ${y2})：$m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$」`,
@@ -536,17 +545,43 @@ export function generateLinearMission(template: Mission): Mission {
       },
       highlightField: 'm',
     },
+    // Step 4: 把 m 代回直线方程
     {
       text: {
-        zh: `${narrator}：「求截距：$c = y_1 - m \\times x_1 = ${y1} - ${m} \\times (${x1}) = ${c}$」`,
-        en: `${narrator}: "Find intercept: $c = y_1 - m \\times x_1 = ${y1} - ${m} \\times (${x1}) = ${c}$"`,
+        zh: `${narrator}：「把 $m = ${m}$ 代回直线方程：$y = ${m}x + c$」`,
+        en: `${narrator}: "Substitute $m = ${m}$ back into the equation: $y = ${m}x + c$"`,
+      },
+      hint: {
+        zh: '现在只剩 c 未知，用任意一个已知点就能求出 c',
+        en: 'Now only c is unknown — use any known point to find c',
       },
       highlightField: 'c',
     },
+    // Step 5: 用第一个点代入求 c
     {
       text: {
-        zh: `${narrator}：「直线方程：$y = ${m}x ${c >= 0 ? '+' : ''} ${c}$」`,
-        en: `${narrator}: "Line equation: $y = ${m}x ${c >= 0 ? '+' : ''} ${c}$"`,
+        zh: `${narrator}：「用点 A(${x1}, ${y1}) 来求 $c$。这里 $x = ${x1}$，$y = ${y1}$，代入 $y = ${m}x + c$：$${y1} = ${m} \\times (${x1}) + c$」`,
+        en: `${narrator}: "Use point A(${x1}, ${y1}) to find $c$. Here $x = ${x1}$, $y = ${y1}$, substitute into $y = ${m}x + c$: $${y1} = ${m} \\times (${x1}) + c$"`,
+      },
+      hint: {
+        zh: `也可以用点 B(${x2}, ${y2}) 来算，结果一样`,
+        en: `You could also use point B(${x2}, ${y2}) — the result is the same`,
+      },
+      highlightField: 'c',
+    },
+    // Step 6: 算出 c
+    {
+      text: {
+        zh: `${narrator}：「解得：$c = ${cExpr} = ${c}$」`,
+        en: `${narrator}: "Solving: $c = ${cExpr} = ${c}$"`,
+      },
+      highlightField: 'c',
+    },
+    // Step 7: 最终方程
+    {
+      text: {
+        zh: `${narrator}：「所以直线方程为：$y = ${m}x ${c >= 0 ? '+' : ''} ${c}$」`,
+        en: `${narrator}: "Therefore the equation of the line is: $y = ${m}x ${c >= 0 ? '+' : ''} ${c}$"`,
       },
       highlightField: 'c',
     },
