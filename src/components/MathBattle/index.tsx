@@ -9,7 +9,7 @@ import { LatexText, MathView } from '../MathView';
 import { InputFields } from './InputFields';
 import { VisualData } from './VisualData';
 import { AnimatedTutorial } from './AnimatedTutorial';
-import { useAudio } from '../../hooks/useAudio';
+import { useAudio } from '../../audio';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { Confetti } from '../Confetti';
 import { AchievementCard } from '../AchievementCard';
@@ -81,7 +81,12 @@ export const MathBattle = ({
   const advanceTimerRef = useRef<number | null>(null);
   const floatingKeyRef = useRef(0);
 
-  const { playBGM, stopBGM, playSuccess, playFail, playClick, muted, toggleMute } = useAudio();
+  const {
+    playBGM, stopBGM, playClick, muted, toggleMute,
+    playCorrect, playWrong, playVictory, playDefeat,
+    playStreak, playStreakBreak, playHpLoss,
+    playShieldBlock, playBattleEnter,
+  } = useAudio();
 
   const t = translations[lang];
   const isTutorial = mode === 'tutorial' && !!mission.tutorialSteps;
@@ -101,8 +106,9 @@ export const MathBattle = ({
   // Streak multiplier: >=5 -> x2, >=3 -> x1.5, else x1
   const getStreakMultiplier = (s: number) => s >= 5 ? 2 : s >= 3 ? 1.5 : 1;
 
-  // Start/stop BGM on mount/unmount + cleanup timers
+  // Battle enter stinger → BGM start on mount
   useEffect(() => {
+    playBattleEnter();
     playBGM();
     return () => {
       stopBGM();
@@ -140,11 +146,12 @@ export const MathBattle = ({
     playClick();
     const result = checkAnswer(currentQuestion, inputs);
     if (result.correct) {
-      playSuccess();
-
       if (isMultiQuestion) {
         // Multi-question: combo scoring
         const newStreak = streak + 1;
+        // Play streak sound (which supersedes correct) or plain correct
+        if (newStreak >= 2) playStreak(newStreak);
+        else playCorrect();
         const streakMult = getStreakMultiplier(newStreak);
         const diffMult = DIFFICULTY_MULTIPLIER[difficultyMode];
         const doubleMult = (skillCard === 'double' && currentQIdx >= 2) ? 2 : 1;
@@ -169,6 +176,7 @@ export const MathBattle = ({
           setFinalDuration(duration);
           setFinalScore(newTotal);
           advanceTimerRef.current = window.setTimeout(() => {
+            playVictory();
             setShowResult('success');
             setShowConfetti(true);
             stopBGM();
@@ -183,7 +191,8 @@ export const MathBattle = ({
           }, 600);
         }
       } else {
-        // Single-question: original behavior
+        // Single-question: victory replaces correct (avoid overlap)
+        playVictory();  // no playCorrect — victory subsumes it
         const duration = (Date.now() - startTime) / 1000;
         const speedBonus = Math.max(0, 100 - Math.floor(duration));
         const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
@@ -196,7 +205,7 @@ export const MathBattle = ({
         achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
       }
     } else {
-      playFail();
+      playWrong();
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       setShakeKey(k => k + 1);
       shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), 500);
@@ -211,10 +220,12 @@ export const MathBattle = ({
 
     if (isMultiQuestion) {
       // Reset streak on wrong
+      if (streak >= 2) playStreakBreak();
       setStreak(0);
 
       // Shield absorbs wrong answer damage
       if (shieldCharges > 0) {
+        playShieldBlock();
         setShieldCharges(prev => prev - 1);
         // Shield absorbed — still alive, advance
         if (currentQIdx + 1 >= questionQueue.length) {
@@ -233,20 +244,19 @@ export const MathBattle = ({
         return;
       }
 
-      setHp(prev => {
-        const next = prev - 1;
-        if (next <= 0) {
-          // HP depleted — fail
-          setShowResult('fail');
-          stopBGM();
-          return next;
-        }
-        return next;
-      });
+      playHpLoss();
+      const nextHp = hp - 1;
+      setHp(nextHp);
+      if (nextHp <= 0) {
+        // Show fail overlay immediately to block interaction;
+        // defeat sound plays after hpLoss fades (400ms)
+        setShowResult('fail');
+        stopBGM();
+        advanceTimerRef.current = window.setTimeout(() => playDefeat(), 400);
+      }
 
-      // If HP > 1 (still alive after deduction), advance to next question
-      // Need to check hp > 1 because setHp is async; if hp is currently 1, next will be 0
-      if (hp > 1) {
+      // Still alive — advance to next question
+      if (nextHp > 0) {
         if (currentQIdx + 1 >= questionQueue.length) {
           // Was last question, show success (they survived)
           const duration = Math.round((Date.now() - startTime) / 1000);
@@ -264,14 +274,13 @@ export const MathBattle = ({
       }
     } else {
       // Single-question: original behavior
-      setHp(prev => {
-        const next = prev - 1;
-        if (next <= 0) {
-          setShowResult('fail');
-          stopBGM();
-        }
-        return next;
-      });
+      const nextSingleHp = hp - 1;
+      setHp(nextSingleHp);
+      if (nextSingleHp <= 0) {
+        setShowResult('fail');
+        stopBGM();
+        advanceTimerRef.current = window.setTimeout(() => playDefeat(), 400);
+      }
     }
   };
 

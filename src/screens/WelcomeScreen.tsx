@@ -5,6 +5,7 @@ import type { Language, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { CharacterCard } from '../components/CharacterCard';
 import { CHARACTERS } from '../data/characters';
+import { useAudio } from '../audio';
 
 export const WelcomeScreen = ({
   lang,
@@ -28,6 +29,7 @@ export const WelcomeScreen = ({
   onGuest: () => void;
 }) => {
   const t = translations[lang];
+  const { playTap } = useAudio();
   const [showAuthForm, setShowAuthForm] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState('');
@@ -83,7 +85,7 @@ export const WelcomeScreen = ({
         <div className="flex flex-col items-center gap-6">
           <button
             disabled={!selectedCharId || !isLoggedIn}
-            onClick={onStart}
+            onClick={() => { playTap(); onStart(); }}
             className={`px-16 py-6 rounded-3xl text-3xl font-black transition-all shadow-2xl ${
               selectedCharId && isLoggedIn ? 'bg-yellow-400 hover:bg-yellow-300 text-slate-900 scale-105' : 'bg-slate-800 text-slate-600 cursor-not-allowed'
             }`}

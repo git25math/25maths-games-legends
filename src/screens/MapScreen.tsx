@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
@@ -5,6 +6,7 @@ import { translations } from '../i18n/translations';
 import { MathView, LatexText } from '../components/MathView';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { interpolate } from '../utils/interpolate';
+import { useAudio } from '../audio';
 
 const CHAPTER_IMAGES = [
   './map/ch1-peach-garden.png',
@@ -40,6 +42,13 @@ export const MapScreen = ({
   onCreateRoom: (type: 'team' | 'pk', missionId: number) => void;
 }) => {
   const t = translations[lang];
+  const { playTap, playBGMMap, stopBGM } = useAudio();
+
+  useEffect(() => {
+    playBGMMap();
+    return () => stopBGM();
+  }, []);
+
   const gradeMissions = missions.filter(m => m.grade === profile.grade);
   const completedCount = Object.keys(profile.completed_missions).filter(id =>
     Object.values(profile.completed_missions[id] || {}).some(Boolean)
@@ -158,7 +167,7 @@ export const MapScreen = ({
                         <div className="flex gap-2">
                           <button
                             disabled={!!isLocked}
-                            onClick={() => onPracticeStart(mission)}
+                            onClick={() => { playTap(); onPracticeStart(mission); }}
                             className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-xs md:text-sm min-h-12 ${
                               isLocked ? 'bg-slate-100 text-slate-400' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-200'
                             }`}
@@ -168,7 +177,7 @@ export const MapScreen = ({
                           </button>
                           <button
                             disabled={!!isLocked}
-                            onClick={() => onMissionStart(mission)}
+                            onClick={() => { playTap(); onMissionStart(mission); }}
                             className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-xs md:text-sm min-h-12 ${
                               isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200'
                             }`}

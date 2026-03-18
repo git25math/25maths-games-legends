@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import type { Language } from '../types';
 import { translations } from '../i18n/translations';
+import { useAudio } from '../audio';
 
 export type SkillCard = {
   id: 'shield' | 'double' | 'reveal';
@@ -44,9 +45,18 @@ export const SkillCardSelector = ({
 }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const t = translations[lang];
+  const { playCardPick, playShieldOn, playDoubleOn, playReveal } = useAudio();
+
+  const skillSounds: Record<string, () => void> = {
+    shield: playShieldOn,
+    double: playDoubleOn,
+    reveal: playReveal,
+  };
 
   const handleSelect = (id: string) => {
     if (selectedId) return; // prevent double click
+    playCardPick();
+    skillSounds[id]?.();
     setSelectedId(id);
     setTimeout(() => onSelect(id), 300);
   };
