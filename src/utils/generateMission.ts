@@ -536,8 +536,8 @@ export function generateLinearMission(template: Mission): Mission {
         en: `${narrator}: "Using coordinate formula: $m = \\frac{y_2 - y_1}{x_2 - x_1}$"`,
       },
       hint: {
-        zh: `简单来说，$x_1$ 和 $y_1$ 就是第一个点 A 的横坐标和纵坐标，所以 $x_1 = ${x1}$，$y_1 = ${y1}$；同理 $x_2 = ${x2}$，$y_2 = ${y2}$ 来自第二个点 B`,
-        en: `Simply put, $x_1$ and $y_1$ are just the x and y of the first point A, so $x_1 = ${x1}$, $y_1 = ${y1}$; likewise $x_2 = ${x2}$, $y_2 = ${y2}$ come from point B`,
+        zh: `$x_1$ 和 $y_1$ 就是第一个点 A 的横坐标和纵坐标\n所以 $x_1 = ${x1}$，$y_1 = ${y1}$\n同理 $x_2 = ${x2}$，$y_2 = ${y2}$ 来自第二个点 B`,
+        en: `$x_1$ and $y_1$ are the x and y of the first point A\nSo $x_1 = ${x1}$, $y_1 = ${y1}$\nLikewise $x_2 = ${x2}$, $y_2 = ${y2}$ come from point B`,
       },
       highlightField: 'm',
     },

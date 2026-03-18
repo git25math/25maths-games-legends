@@ -13,14 +13,23 @@ export const MathView = ({ tex, inline = true, className = "" }: { tex: string |
 };
 
 export const LatexText = ({ text, className = "" }: { text: string; className?: string }) => {
-  const parts = text.split(/(\$.*?\$)/g);
+  // Split by newlines first, then by LaTeX delimiters within each line
+  const lines = text.split('\n');
   return (
     <span className={className}>
-      {parts.map((part, i) => {
-        if (part.startsWith('$') && part.endsWith('$')) {
-          return <MathView key={i} tex={part.slice(1, -1)} />;
-        }
-        return part;
+      {lines.map((line, li) => {
+        const parts = line.split(/(\$.*?\$)/g);
+        return (
+          <span key={li}>
+            {li > 0 && <br />}
+            {parts.map((part, pi) => {
+              if (part.startsWith('$') && part.endsWith('$')) {
+                return <MathView key={pi} tex={part.slice(1, -1)} />;
+              }
+              return part;
+            })}
+          </span>
+        );
       })}
     </span>
   );
