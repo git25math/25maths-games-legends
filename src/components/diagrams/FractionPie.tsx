@@ -196,18 +196,18 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
           const wholeCount = Math.floor(resultN / lcd);
           const remainder = resultN % lcd;
           const pieCount = wholeCount + (remainder > 0 ? 1 : 0);
-          // Scale down radius if multiple pies
           const rr = pieCount > 2 ? R - 8 : pieCount > 1 ? R - 4 : R + 2;
           const totalPieWidth = pieCount * (rr * 2 + 8);
           const startX = cxCenter - totalPieWidth / 2 + rr + 4;
 
-          // Simplified fraction for label
           const g = gcdLocal(Math.abs(resultN), lcd);
           const simpN = resultN / g;
           const simpD = lcd / g;
-          const label = simpD === 1 ? `${simpN}` : wholeCount > 0 && remainder > 0
-            ? `${wholeCount} \\frac{${remainder / g}}{${lcd / g}}`
-            : `\\frac{${simpN}}{${simpD}}`;
+          const simpRemN = remainder > 0 ? remainder / g : 0;
+          const simpRemD = lcd / g;
+
+          // SVG label position
+          const labelY = HEIGHT - 4;
 
           return (
             <motion.g key="row3" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
@@ -226,9 +226,41 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
                   </g>
                 );
               })}
-              <text x={cxCenter} y={HEIGHT - 2} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.result}>
-                = {resultN}/{lcd}{simpD !== lcd ? ` = ${label}` : ''}
-              </text>
+              {/* Label: mixed number using SVG text layout */}
+              {simpD === 1 ? (
+                <text x={cxCenter} y={labelY} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.result}>
+                  = {simpN}
+                </text>
+              ) : wholeCount > 0 && remainder > 0 ? (
+                /* Mixed number: whole + fraction drawn with SVG */
+                <g>
+                  <text x={cxCenter - 24} y={labelY} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.result}>
+                    = {wholeCount}
+                  </text>
+                  {/* Fraction: numerator over denominator with line */}
+                  <text x={cxCenter + 4} y={labelY - 8} textAnchor="middle" fontSize={10} fontWeight="bold" fill={COLORS.result}>
+                    {simpRemN}
+                  </text>
+                  <line x1={cxCenter - 6} y1={labelY - 5} x2={cxCenter + 14} y2={labelY - 5} stroke={COLORS.result} strokeWidth={1.5} />
+                  <text x={cxCenter + 4} y={labelY + 4} textAnchor="middle" fontSize={10} fontWeight="bold" fill={COLORS.result}>
+                    {simpRemD}
+                  </text>
+                </g>
+              ) : (
+                /* Proper fraction: numerator/denominator */
+                <g>
+                  <text x={cxCenter - 10} y={labelY} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.result}>
+                    =
+                  </text>
+                  <text x={cxCenter + 8} y={labelY - 8} textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.result}>
+                    {simpN}
+                  </text>
+                  <line x1={cxCenter - 2} y1={labelY - 5} x2={cxCenter + 18} y2={labelY - 5} stroke={COLORS.result} strokeWidth={1.5} />
+                  <text x={cxCenter + 8} y={labelY + 4} textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.result}>
+                    {simpD}
+                  </text>
+                </g>
+              )}
             </motion.g>
           );
         })()}
