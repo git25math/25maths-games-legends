@@ -2129,73 +2129,136 @@ export function generateLcmMission(template: Mission): Mission {
   const factA = formatFactorization(a);
   const factB = formatFactorization(b);
 
+  // Helper: list multiples up to lcm
+  const multiplesA: number[] = [];
+  for (let i = 1; i * a <= lcm; i++) multiplesA.push(i * a);
+  const multiplesB: number[] = [];
+  for (let i = 1; i * b <= lcm; i++) multiplesB.push(i * b);
+  const commonMultiples = multiplesA.filter(m => multiplesB.includes(m));
+
   const tutorialSteps = [
+    // Phase 1: listing multiples
     {
       text: {
-        zh: `${narrator}：甲将军 $${a}$ 天一次，乙将军 $${b}$ 天一次，什么时候能同一天碰上？找最小公倍数`,
-        en: `${narrator}: "General A patrols every $${a}$ days, General B every $${b}$ days. When do they meet? Find the LCM"`,
+        zh: `${narrator}：先用最笨的方法——把两个数的倍数都列出来，看哪个最先撞上`,
+        en: `${narrator}: "Let's start with the simplest method — list out multiples of both numbers and see which one matches first"`,
       },
       hint: {
-        zh: '比如 12 能被 3 整除，也能被 4 整除\n所以 12 是 3 和 4 的公倍数',
-        en: 'For example, 12 is divisible by 3 and by 4\nSo 12 is a common multiple of 3 and 4',
+        zh: '倍数就是用这个数乘以 1, 2, 3, 4...得到的数',
+        en: 'Multiples are what you get by multiplying the number by 1, 2, 3, 4...',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：先把两个数分别拆成质数的乘积`,
-        en: `${narrator}: "First break each number into a product of primes"`,
+        zh: `${narrator}：列出 $${a}$ 的倍数`,
+        en: `${narrator}: "List the multiples of $${a}$"`,
       },
       hint: {
-        zh: '质数是只能被 1 和自己整除的数，比如 $2, 3, 5, 7, 11$\n怎么拆？从 $2$ 开始试——能整除就除，不能就换下一个质数',
-        en: 'Primes can only be divided by 1 and themselves, e.g. $2, 3, 5, 7, 11$\nHow to factorize? Start with $2$ — if it divides evenly, divide. If not, try the next prime',
+        zh: `${multiplesA.join(', ')}`,
+        en: `${multiplesA.join(', ')}`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：拆第一个数 $${a}$：$${a} = ${factA}$`,
-        en: `${narrator}: "Break down $${a}$: $${a} = ${factA}$"`,
+        zh: `${narrator}：列出 $${b}$ 的倍数`,
+        en: `${narrator}: "List the multiples of $${b}$"`,
       },
       hint: {
-        zh: `不断除以最小的质数\n${a} 一直除到不能再除`,
-        en: `Keep dividing by the smallest prime\nDivide ${a} until you can't anymore`,
+        zh: `${multiplesB.join(', ')}`,
+        en: `${multiplesB.join(', ')}`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：拆第二个数 $${b}$：$${b} = ${factB}$`,
-        en: `${narrator}: "Break down $${b}$: $${b} = ${factB}$"`,
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：把两边所有出现过的质因数都列出来`,
-        en: `${narrator}: "List ALL prime factors that appear in either number"`,
+        zh: `${narrator}：找两边都有的——第一个就是最小公倍数`,
+        en: `${narrator}: "Find the ones in BOTH lists — the first match is the LCM"`,
       },
       hint: {
-        zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n列出所有出现过的质因数（不管在哪边出现的）`,
-        en: `$${a} = ${factA}$\n$${b} = ${factB}$\nList all primes that appear (in either number)`,
+        zh: `$${a}$ 的倍数：${multiplesA.join(', ')}\n$${b}$ 的倍数：${multiplesB.join(', ')}\n\n两边都有的：${commonMultiples.join(', ')}\n最小的是 ${lcm}`,
+        en: `Multiples of $${a}$: ${multiplesA.join(', ')}\nMultiples of $${b}$: ${multiplesB.join(', ')}\n\nIn both: ${commonMultiples.join(', ')}\nSmallest is ${lcm}`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：注意——这里和 HCF 正好相反！HCF 取小的，LCM 取大的`,
-        en: `${narrator}: "Note — this is the OPPOSITE of HCF! HCF takes the smaller, LCM takes the larger"`,
+        zh: `${narrator}：LCM($${a}$, $${b}$) = $${lcm}$! 验算：$${lcm}$\\div$${a}$=${lcm/a} \\checkmark  $${lcm}$\\div$${b}$=${lcm/b} \\checkmark`,
+        en: `${narrator}: "LCM($${a}$, $${b}$) = $${lcm}$! Check: $${lcm} \\div ${a} = ${lcm/a}$ \\checkmark  $${lcm} \\div ${b} = ${lcm/b}$ \\checkmark"`,
       },
       hint: {
-        zh: `HCF 是找两边"共有"的，所以取小的；LCM 是要能被两个数同时整除，所以取大的。比如 $${a}$ 里有 ${(() => { const fA = primeFactors(a); const first = [...fA.entries()][0]; return first ? `${first[1]} 个 ${first[0]}` : ''; })()}，$${b}$ 里有 ${(() => { const fB = primeFactors(b); const first = [...fB.entries()][0]; return first ? `${first[1]} 个 ${first[0]}` : ''; })()}——LCM 必须能被 $${a}$ 整除，所以必须取大的`,
-        en: `HCF finds what's "common" → take smaller; LCM must be divisible by both → take larger. E.g. $${a}$ has ${(() => { const fA = primeFactors(a); const first = [...fA.entries()][0]; return first ? `${first[1]} of prime ${first[0]}` : ''; })()}, $${b}$ has ${(() => { const fB = primeFactors(b); const first = [...fB.entries()][0]; return first ? `${first[1]} of prime ${first[0]}` : ''; })()} — LCM must be divisible by $${a}$, so take the larger`,
+        zh: '"同时能被两个数整除的最小数"叫最小公倍数(LCM)',
+        en: 'The smallest number divisible by both numbers is called the Least Common Multiple (LCM)',
+      },
+      highlightField: 'ans',
+    },
+    // Phase 2: prime factorization
+    {
+      text: {
+        zh: `${narrator}：上面的方法准! 但数字大了要列很长。有更快的方法——质因数分解`,
+        en: `${narrator}: "The method above works! But for bigger numbers, there's a faster way — prime factorization"`,
+      },
+      hint: {
+        zh: '先认识"质数"——只能被 1 和它自己整除的数\n比如 2, 3, 5, 7, 11 都是质数\n4 不是（4=2x2），6 不是（6=2x3）',
+        en: 'First, "prime numbers" — only divisible by 1 and themselves\nE.g. 2, 3, 5, 7, 11 are primes\n4 is not (4=2x2), 6 is not (6=2x3)',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：每个质因数，取出现次数多的那个`,
-        en: `${narrator}: "For each prime factor, take the one with the LARGER power"`,
+        zh: `${narrator}：拆 $${a}$——从最小的质数 2 开始，能除就除`,
+        en: `${narrator}: "Break down $${a}$ — start with smallest prime 2, divide if possible"`,
+      },
+      hint: (() => {
+        let n = a;
+        const steps: string[] = [];
+        const enSteps: string[] = [];
+        let d = 2;
+        while (d * d <= n) {
+          while (n % d === 0) {
+            steps.push(`${n}\\div${d}=${n/d} \\checkmark`);
+            enSteps.push(`${n}\\div${d}=${n/d} \\checkmark`);
+            n /= d;
+          }
+          d++;
+        }
+        if (n > 1) { steps.push(`${n} 是质数，停!`); enSteps.push(`${n} is prime, stop!`); }
+        steps.push(`\n所以 ${a} = ${factA}`);
+        enSteps.push(`\nSo ${a} = ${factA}`);
+        return { zh: steps.join('\n'), en: enSteps.join('\n') };
+      })(),
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：拆 $${b}$`,
+        en: `${narrator}: "Break down $${b}$"`,
+      },
+      hint: (() => {
+        let n = b;
+        const steps: string[] = [];
+        const enSteps: string[] = [];
+        let d = 2;
+        while (d * d <= n) {
+          while (n % d === 0) {
+            steps.push(`${n}\\div${d}=${n/d} \\checkmark`);
+            enSteps.push(`${n}\\div${d}=${n/d} \\checkmark`);
+            n /= d;
+          }
+          d++;
+        }
+        if (n > 1) { steps.push(`${n} 是质数，停!`); enSteps.push(`${n} is prime, stop!`); }
+        steps.push(`\n所以 ${b} = ${factB}`);
+        enSteps.push(`\nSo ${b} = ${factB}`);
+        return { zh: steps.join('\n'), en: enSteps.join('\n') };
+      })(),
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：注意——和 HCF 正好相反! HCF 取少的，LCM 取多的`,
+        en: `${narrator}: "Note — this is the OPPOSITE of HCF! HCF takes the smaller count, LCM takes the larger"`,
       },
       hint: (() => {
         const fA = primeFactors(a);
@@ -2206,24 +2269,23 @@ export function generateLcmMission(template: Mission): Mission {
         for (const p of [...allPrimes].sort((x, y) => x - y)) {
           const expA = fA.get(p) || 0;
           const expB = fB.get(p) || 0;
-          lines.push(`${p}: ${a} 里有 $${p}^{${expA}}$，${b} 里有 $${p}^{${expB}}$，取大的 → $${p}^{${Math.max(expA, expB)}}$`);
-          enLines.push(`${p}: $${p}^{${expA}}$ in ${a}, $${p}^{${expB}}$ in ${b} → take $${p}^{${Math.max(expA, expB)}}$`);
+          lines.push(`${p}: $${a}$ 有 ${expA} 个，$${b}$ 有 ${expB} 个 -> 取多的 = ${Math.max(expA, expB)} 个`);
+          enLines.push(`${p}: $${a}$ has ${expA}, $${b}$ has ${expB} -> take larger = ${Math.max(expA, expB)}`);
         }
+        lines.push(`\n为什么取多的？LCM 必须能被两个数都整除。如果 $${a}$ 里有 N 个某质数，LCM 至少要有 N 个才能被 $${a}$ 整除`);
+        enLines.push(`\nWhy take larger? LCM must be divisible by both. If $${a}$ has N of a prime, LCM needs at least N to be divisible by $${a}$`);
         return { zh: lines.join('\n'), en: enLines.join('\n') };
       })(),
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：把取出来的乘在一起：$${formatFactorization(lcm)} = ${lcm}$`,
-        en: `${narrator}: "Multiply them together: $${formatFactorization(lcm)} = ${lcm}$"`,
+        zh: `${narrator}：LCM = $${formatFactorization(lcm)} = ${lcm}$（和列倍数的结果一样!）`,
+        en: `${narrator}: "LCM = $${formatFactorization(lcm)} = ${lcm}$ (same result as listing multiples!)"`,
       },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：$\\text{LCM}(${a}, ${b}) = ${lcm}$！验算：$${lcm} \\div ${a} = ${lcm/a}$ ✓  $${lcm} \\div ${b} = ${lcm/b}$ ✓ 第 ${lcm} 天，两位将军同时巡营！`,
-        en: `${narrator}: "$\\text{LCM}(${a}, ${b}) = ${lcm}$! Check: $${lcm} \\div ${a} = ${lcm/a}$ ✓  $${lcm} \\div ${b} = ${lcm/b}$ ✓ On day ${lcm}, both generals patrol together!"`,
+      hint: {
+        zh: `验算：$${lcm} \\div ${a} = ${lcm/a}$ \\checkmark  $${lcm} \\div ${b} = ${lcm/b}$ \\checkmark`,
+        en: `Verify: $${lcm} \\div ${a} = ${lcm/a}$ \\checkmark  $${lcm} \\div ${b} = ${lcm/b}$ \\checkmark`,
       },
       highlightField: 'ans',
     },
@@ -2657,66 +2719,78 @@ export function generateFracMulMission(template: Mission): Mission {
   const tutorialSteps = isDivide ? [
     {
       text: {
-        zh: `${narrator}：分数除法怎么算？先想一个简单的例子`,
-        en: `${narrator}: "How to divide fractions? Let's start with a simple example"`,
+        zh: `${narrator}：先用整数建立直觉`,
+        en: `${narrator}: "Let's build intuition with whole numbers first"`,
       },
       hint: {
-        zh: `$6 \\div 2 = 3$，也可以写成 $6 \\times \\frac{1}{2} = 3$\n"除以 2"和"乘以 $\\frac{1}{2}$"是一回事！\n同理，除以任何分数，都可以变成乘以它的倒数`,
-        en: `$6 \\div 2 = 3$, which is the same as $6 \\times \\frac{1}{2} = 3$\n"Divide by 2" and "multiply by $\\frac{1}{2}$" are the same thing!\nSimilarly, dividing by any fraction = multiplying by its reciprocal`,
+        zh: `有 6 个苹果，每人分 2 个：$6 \\div 2 = 3$ 人\n有 6 个苹果，每人分 $\\frac{1}{2}$ 个：$6 \\div \\frac{1}{2} = 12$ 人\n注意：$6 \\div \\frac{1}{2} = 6 \\times 2 = 12$\n除以 $\\frac{1}{2}$，等于乘以 2`,
+        en: `6 apples, 2 per person: $6 \\div 2 = 3$ people\n6 apples, $\\frac{1}{2}$ per person: $6 \\div \\frac{1}{2} = 12$ people\nNotice: $6 \\div \\frac{1}{2} = 6 \\times 2 = 12$\nDividing by $\\frac{1}{2}$ is the same as multiplying by 2`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：$\\frac{${n2}}{${d2}}$ 的倒数是 $\\frac{${d2}}{${n2}}$（分子分母交换）`,
-        en: `${narrator}: "The reciprocal of $\\frac{${n2}}{${d2}}$ is $\\frac{${d2}}{${n2}}$ (swap top and bottom)"`,
+        zh: `${narrator}：为什么"除以分数 = 乘以倒数"？`,
+        en: `${narrator}: "Why does dividing by a fraction = multiplying by its reciprocal?"`,
+      },
+      hint: {
+        zh: `$\\frac{${n2}}{${d2}}$ 的倒数是 $\\frac{${d2}}{${n2}}$（分子分母互换）\n除以 $\\frac{${n2}}{${d2}}$ = 乘以 $\\frac{${d2}}{${n2}}$`,
+        en: `The reciprocal of $\\frac{${n2}}{${d2}}$ is $\\frac{${d2}}{${n2}}$ (swap numerator and denominator)\nDividing by $\\frac{${n2}}{${d2}}$ = multiplying by $\\frac{${d2}}{${n2}}$`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：所以 $\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$`,
-        en: `${narrator}: "So $\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$"`,
+        zh: `${narrator}：回到题目——把除法变成乘法\n$\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$`,
+        en: `${narrator}: "Back to our problem — turn division into multiplication"\n$\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：分子乘分子，分母乘分母：$\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${rawNum}}{${rawDen}}$`,
-        en: `${narrator}: "Multiply tops, multiply bottoms: $\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${rawNum}}{${rawDen}}$"`,
+        zh: `${narrator}：分子乘分子，分母乘分母\n$\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${rawNum}}{${rawDen}}$`,
+        en: `${narrator}: "Multiply tops, multiply bottoms"\n$\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${rawNum}}{${rawDen}}$`,
       },
       highlightField: 'ans',
     },
     ...(needsSimplify ? [{
       text: {
-        zh: `${narrator}：约分，分子分母都除以 $${simplifyG}$：$\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$`,
-        en: `${narrator}: "Simplify, divide both by $${simplifyG}$: $\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$"`,
+        zh: `${narrator}：化简——${rawNum} 和 ${rawDen} 的最大公因数是 ${simplifyG}`,
+        en: `${narrator}: "Simplify — the HCF of ${rawNum} and ${rawDen} is ${simplifyG}"`,
+      },
+      hint: {
+        zh: `分子分母都除以 ${simplifyG}：$\\frac{${rawNum}\\div${simplifyG}}{${rawDen}\\div${simplifyG}} = ${ansDisplay}$`,
+        en: `Divide both by ${simplifyG}: $\\frac{${rawNum}\\div${simplifyG}}{${rawDen}\\div${simplifyG}} = ${ansDisplay}$`,
       },
       highlightField: 'ans',
     }] : []),
     {
       text: {
-        zh: `${narrator}：所以答案是 $${ansDisplay}$`,
-        en: `${narrator}: "So the answer is $${ansDisplay}$"`,
+        zh: `${narrator}：答案是 $${ansDisplay}$`,
+        en: `${narrator}: "The answer is $${ansDisplay}$"`,
+      },
+      hint: {
+        zh: `验算：${(ansNum/ansDen).toFixed(3)}`,
+        en: `Check: ${(ansNum/ansDen).toFixed(3)}`,
       },
       highlightField: 'ans',
     },
   ] : [
     {
       text: {
-        zh: `${narrator}：分数乘法就是"取一部分的一部分"`,
-        en: `${narrator}: "Fraction multiplication means 'taking a part of a part'"`,
+        zh: `${narrator}：分数乘法就是"取一部分的一部分"——结果通常比原来的数更小`,
+        en: `${narrator}: "Fraction multiplication means 'a part of a part' — the result is usually smaller than the original"`,
       },
       hint: {
-        zh: '比如一袋粮食的 $\\frac{1}{3}$，再取那 $\\frac{1}{3}$ 里的 $\\frac{1}{2}$——就是整袋粮食的 $\\frac{1}{6}$。分数越乘越小',
-        en: 'E.g. take $\\frac{1}{3}$ of a bag of grain, then take $\\frac{1}{2}$ of that $\\frac{1}{3}$ — that is $\\frac{1}{6}$ of the whole bag. Multiplying fractions makes them smaller',
+        zh: `想象有 ${d1*d2} 袋粮食\n先取 $\\frac{${n1}}{${d1}}$：${d1*d2} x $\\frac{${n1}}{${d1}}$ = ${n1*d2} 袋\n再取其中的 $\\frac{${n2}}{${d2}}$：${n1*d2} x $\\frac{${n2}}{${d2}}$ = ${n1*n2} 袋\n${n1*n2} 袋占原来 ${d1*d2} 袋的 $\\frac{${n1*n2}}{${d1*d2}}$`,
+        en: `Imagine ${d1*d2} bags of grain\nTake $\\frac{${n1}}{${d1}}$: ${d1*d2} x $\\frac{${n1}}{${d1}}$ = ${n1*d2} bags\nThen take $\\frac{${n2}}{${d2}}$ of those: ${n1*d2} x $\\frac{${n2}}{${d2}}$ = ${n1*n2} bags\n${n1*n2} bags out of ${d1*d2} = $\\frac{${n1*n2}}{${d1*d2}}$`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：规则很简单：分子乘分子，分母乘分母`,
-        en: `${narrator}: "The rule is simple: multiply tops, multiply bottoms"`,
+        zh: `${narrator}：分数乘法的规则——分子乘分子，分母乘分母`,
+        en: `${narrator}: "The rule for fraction multiplication — multiply tops, multiply bottoms"`,
       },
       hint: {
         zh: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$',
@@ -2726,22 +2800,30 @@ export function generateFracMulMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：代入：$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$`,
-        en: `${narrator}: "Substitute: $\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$"`,
+        zh: `${narrator}：代入计算：$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$`,
+        en: `${narrator}: "Substitute and calculate: $\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$"`,
       },
       highlightField: 'ans',
     },
     ...(needsSimplify ? [{
       text: {
-        zh: `${narrator}：约分，$${rawNum}$ 和 $${rawDen}$ 的公因数是 $${simplifyG}$，都除以它：$${ansDisplay}$`,
-        en: `${narrator}: "Simplify: $${rawNum}$ and $${rawDen}$ share factor $${simplifyG}$, divide both: $${ansDisplay}$"`,
+        zh: `${narrator}：化简——${rawNum} 和 ${rawDen} 的最大公因数是 ${simplifyG}`,
+        en: `${narrator}: "Simplify — the HCF of ${rawNum} and ${rawDen} is ${simplifyG}"`,
+      },
+      hint: {
+        zh: `分子分母都除以 ${simplifyG}：$\\frac{${rawNum}\\div${simplifyG}}{${rawDen}\\div${simplifyG}} = ${ansDisplay}$`,
+        en: `Divide both by ${simplifyG}: $\\frac{${rawNum}\\div${simplifyG}}{${rawDen}\\div${simplifyG}} = ${ansDisplay}$`,
       },
       highlightField: 'ans',
     }] : []),
     {
       text: {
-        zh: `${narrator}：所以答案是 $${ansDisplay}$`,
-        en: `${narrator}: "So the answer is $${ansDisplay}$"`,
+        zh: `${narrator}：答案是 $${ansDisplay}$`,
+        en: `${narrator}: "The answer is $${ansDisplay}$"`,
+      },
+      hint: {
+        zh: `验算：${(ansNum/ansDen).toFixed(3)}`,
+        en: `Check: ${(ansNum/ansDen).toFixed(3)}`,
       },
       highlightField: 'ans',
     },
