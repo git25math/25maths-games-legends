@@ -36,7 +36,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: '$\\text{HCF} = \\text{两个数共有质因数（每个取次幂小的）的乘积}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
+    secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: '$\\text{HCF：共有质因数取小的，乘起来}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
   },
   {
     id: 702, grade: 7, unitId: 0, order: 2,
@@ -108,7 +108,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: '$\\text{HCF}(a, b) = \\text{公共质因数（取小次幂）的乘积}$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
+    secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: '$\\text{HCF：共有质因数取小的，乘起来}$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
   },
   // --- Year 7 Unit 0A: 行军算账·正负数篇 ---
   {
@@ -250,7 +250,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '桃园结义', en: 'Oath in the Garden' },
     skillName: { zh: '等式平衡术', en: 'Equation Balance' },
     skillSummary: { zh: '等式两边同时加减同一个数，等号保持不变', en: 'Add or subtract the same number from both sides, the equation stays balanced' },
-    story: { zh: '刘关张三人结义，需平分美酒。已知总酒量为 $x+{a}={result}$。', en: 'Three brothers share wine. Total amount: $x+{a}={result}$.' },
+    story: { zh: '桃园结义，刘备备了 {result} 坛酒。祭天用了 {a} 坛，剩下的三兄弟平分。每人分几坛？', en: 'At the Peach Garden oath, Liu Bei prepared {result} jars of wine. {a} were used for the ceremony. The rest split among three brothers — how many each?' },
     description: { zh: '解方程 $x+{a}={result}$，求 $x$。', en: 'Solve $x+{a}={result}$ for $x$.' },
     data: { x: 7, a: 5, result: 12, generatorType: 'SIMPLE_EQ_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-2.1-01', sectionId: 'algebra',
