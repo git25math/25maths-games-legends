@@ -36,7 +36,9 @@ export type GeneratorType =
   | 'INTEGRATION_RANDOM'
   | 'VOLUME_RANDOM'
   | 'FUNC_VAL_RANDOM'
-  | 'STATISTICS_MEDIAN_RANDOM';
+  | 'STATISTICS_MEDIAN_RANDOM'
+  | 'HCF_RANDOM'
+  | 'LCM_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -69,6 +71,8 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   VOLUME_RANDOM: generateVolumeMission,
   FUNC_VAL_RANDOM: generateFuncValMission,
   STATISTICS_MEDIAN_RANDOM: generateStatsMedianMission,
+  HCF_RANDOM: generateHcfMission,
+  LCM_RANDOM: generateLcmMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -1134,6 +1138,199 @@ export function generateStatsMedianMission(template: Mission): Mission {
     ...template,
     description,
     data: { values: sorted, mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   HCF generator: find highest common factor of two numbers
+   ══════════════════════════════════════════════════════════ */
+
+function gcdCalc(a: number, b: number): number {
+  while (b) { [a, b] = [b, a % b]; }
+  return a;
+}
+
+function primeFactors(n: number): Map<number, number> {
+  const factors = new Map<number, number>();
+  let d = 2;
+  while (d * d <= n) {
+    while (n % d === 0) {
+      factors.set(d, (factors.get(d) || 0) + 1);
+      n /= d;
+    }
+    d++;
+  }
+  if (n > 1) factors.set(n, (factors.get(n) || 0) + 1);
+  return factors;
+}
+
+function formatFactorization(n: number): string {
+  const factors = primeFactors(n);
+  const parts: string[] = [];
+  for (const [base, exp] of [...factors.entries()].sort((a, b) => a[0] - b[0])) {
+    parts.push(exp === 1 ? `${base}` : `${base}^{${exp}}`);
+  }
+  return parts.join(' \\times ');
+}
+
+export function generateHcfMission(template: Mission): Mission {
+  const tier = getTier();
+  // Generate two numbers that have a non-trivial HCF
+  const hcfPools = { 1: [2, 3, 4, 5, 6], 2: [4, 6, 8, 10, 12], 3: [6, 8, 12, 15, 18, 24] };
+  const multPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7], 3: [3, 5, 7, 8, 9, 11] };
+
+  const h = pickRandom(hcfPools[tier]);
+  let m1 = pickRandom(multPools[tier]);
+  let m2 = pickRandom(multPools[tier]);
+  // Ensure m1 and m2 are coprime so HCF is exactly h
+  while (gcdCalc(m1, m2) !== 1) {
+    m2 = pickRandom(multPools[tier]);
+  }
+  const a = h * m1;
+  const b = h * m2;
+
+  const narrator = pickRandom(['刘备', '关羽', '张飞']);
+  const description: BilingualText = {
+    zh: `求 $${a}$ 和 $${b}$ 的最大公因数 (HCF)。`,
+    en: `Find the Highest Common Factor (HCF) of $${a}$ and $${b}$.`,
+  };
+
+  const factA = formatFactorization(a);
+  const factB = formatFactorization(b);
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：最大公因数(HCF)就是两个数共有的最大因数`,
+        en: `${narrator}: "The Highest Common Factor (HCF) is the largest number that divides both numbers exactly"`,
+      },
+      hint: {
+        zh: '方法：先做质因数分解，再找公共部分',
+        en: 'Method: prime factorize both numbers, then find common factors',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：对 $${a}$ 做质因数分解：$${a} = ${factA}$`,
+        en: `${narrator}: "Prime factorize $${a}$: $${a} = ${factA}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：对 $${b}$ 做质因数分解：$${b} = ${factB}$`,
+        en: `${narrator}: "Prime factorize $${b}$: $${b} = ${factB}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：取公共质因数的最低次幂相乘`,
+        en: `${narrator}: "Multiply the common prime factors, each to its lowest power"`,
+      },
+      hint: {
+        zh: `公共因数相乘得到 HCF\n$\\text{HCF} = ${formatFactorization(h)}$`,
+        en: `Multiply common factors to get HCF\n$\\text{HCF} = ${formatFactorization(h)}$`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：所以 $\\text{HCF}(${a}, ${b}) = ${h}$`,
+        en: `${narrator}: "Therefore $\\text{HCF}(${a}, ${b}) = ${h}$"`,
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { numbers: [a, b], generatorType: 'HCF_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   LCM generator: find least common multiple of two numbers
+   ══════════════════════════════════════════════════════════ */
+
+export function generateLcmMission(template: Mission): Mission {
+  const tier = getTier();
+  const hcfPools = { 1: [2, 3, 4], 2: [2, 3, 4, 5, 6], 3: [4, 6, 8, 10, 12] };
+  const multPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 7], 3: [3, 5, 7, 8, 11] };
+
+  const h = pickRandom(hcfPools[tier]);
+  let m1 = pickRandom(multPools[tier]);
+  let m2 = pickRandom(multPools[tier]);
+  while (gcdCalc(m1, m2) !== 1) {
+    m2 = pickRandom(multPools[tier]);
+  }
+  const a = h * m1;
+  const b = h * m2;
+  const lcm = (a * b) / gcdCalc(a, b);
+
+  const narrator = pickRandom(['刘备', '关羽', '张飞']);
+  const description: BilingualText = {
+    zh: `求 $${a}$ 和 $${b}$ 的最小公倍数 (LCM)。`,
+    en: `Find the Least Common Multiple (LCM) of $${a}$ and $${b}$.`,
+  };
+
+  const factA = formatFactorization(a);
+  const factB = formatFactorization(b);
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：最小公倍数(LCM)就是两个数共有的最小倍数`,
+        en: `${narrator}: "The Least Common Multiple (LCM) is the smallest number that both numbers divide into exactly"`,
+      },
+      hint: {
+        zh: '方法：先做质因数分解，再取每个质因数的最高次幂',
+        en: 'Method: prime factorize both, then take each prime to its highest power',
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：对 $${a}$ 做质因数分解：$${a} = ${factA}$`,
+        en: `${narrator}: "Prime factorize $${a}$: $${a} = ${factA}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：对 $${b}$ 做质因数分解：$${b} = ${factB}$`,
+        en: `${narrator}: "Prime factorize $${b}$: $${b} = ${factB}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：取所有质因数的最高次幂相乘`,
+        en: `${narrator}: "Multiply all prime factors, each to its highest power"`,
+      },
+      hint: {
+        zh: `所有质因数取最高次幂相乘得到 LCM\n$\\text{LCM} = ${formatFactorization(lcm)}$`,
+        en: `Take highest powers and multiply for LCM\n$\\text{LCM} = ${formatFactorization(lcm)}$`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：所以 $\\text{LCM}(${a}, ${b}) = ${lcm}$`,
+        en: `${narrator}: "Therefore $\\text{LCM}(${a}, ${b}) = ${lcm}$"`,
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { numbers: [a, b], generatorType: 'LCM_RANDOM' },
     tutorialSteps,
   };
 }

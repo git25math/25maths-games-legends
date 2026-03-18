@@ -57,7 +57,9 @@ export const translations = {
       SIMILARITY: "阵法相似",
       SIMPLE_EQ: "基础方程",
       FUNC_VAL: "函数求值",
-      DERIVATIVE: "导数计算"
+      DERIVATIVE: "导数计算",
+      HCF: "最大公因数",
+      LCM: "最小公倍数"
     },
     difficulty: {
       Easy: "简单",
@@ -197,7 +199,9 @@ export const translations = {
       SIMILARITY: "Formation Similarity",
       SIMPLE_EQ: "Simple Equation",
       FUNC_VAL: "Function Value",
-      DERIVATIVE: "Derivative"
+      DERIVATIVE: "Derivative",
+      HCF: "Highest Common Factor",
+      LCM: "Least Common Multiple"
     },
     difficulty: {
       Easy: "Easy",

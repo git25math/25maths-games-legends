@@ -205,6 +205,24 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const val = (data.a / data.b) * data.c;
     return { correct: Math.abs(parse(inputs.x || '') - val) < 0.01, expected: { x: round(val) } };
   }
+  if (type === 'HCF') {
+    // Compute HCF from data.numbers array
+    const nums = data.numbers as number[];
+    let result = nums[0];
+    for (let i = 1; i < nums.length; i++) {
+      result = gcd(result, nums[i]);
+    }
+    return { correct: parse(inputs.ans || '') === result, expected: { ans: String(result) } };
+  }
+  if (type === 'LCM') {
+    // Compute LCM from data.numbers array
+    const nums = data.numbers as number[];
+    let result = nums[0];
+    for (let i = 1; i < nums.length; i++) {
+      result = (result * nums[i]) / gcd(result, nums[i]);
+    }
+    return { correct: parse(inputs.ans || '') === result, expected: { ans: String(result) } };
+  }
   return { correct: false, expected: {} };
 }
 

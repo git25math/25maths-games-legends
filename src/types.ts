@@ -37,7 +37,9 @@ export type QuestionType =
   | 'ARITHMETIC'
   | 'STATISTICS'
   | 'RATIO'
-  | 'SIMILARITY';
+  | 'SIMILARITY'
+  | 'HCF'
+  | 'LCM';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 

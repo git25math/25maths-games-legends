@@ -101,4 +101,12 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'ans', label: '结果', placeholder: '结果 = ?' }],
     en: [{ id: 'ans', label: 'Result', placeholder: 'Result = ?' }],
   },
+  HCF: {
+    zh: [{ id: 'ans', label: 'HCF', placeholder: 'HCF = ?' }],
+    en: [{ id: 'ans', label: 'HCF', placeholder: 'HCF = ?' }],
+  },
+  LCM: {
+    zh: [{ id: 'ans', label: 'LCM', placeholder: 'LCM = ?' }],
+    en: [{ id: 'ans', label: 'LCM', placeholder: 'LCM = ?' }],
+  },
 };

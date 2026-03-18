@@ -1,6 +1,115 @@
 import type { Mission } from '../types';
 
 export const MISSIONS: Mission[] = [
+  // --- Year 7 Unit 0: 桃园点兵·数论篇 (Number Foundations) ---
+  {
+    id: 701, grade: 7, unitId: 0, order: 1,
+    unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
+    topic: 'Algebra', type: 'HCF',
+    title: { zh: '整编队伍', en: 'Organizing Troops' },
+    skillName: { zh: '公因数术', en: 'Common Factor' },
+    skillSummary: { zh: 'HCF：质因数分解后取公共质因数的最低次幂', en: 'HCF: prime factorize, then take common primes to lowest power' },
+    story: { zh: '桃园结义后，刘关张三兄弟开始整编队伍。现有两营士兵，要分成人数相同的小队操练。', en: 'After the oath, the three brothers organize their troops. Two camps must be split into equal-sized squads.' },
+    description: { zh: '求最大公因数 (HCF)。', en: 'Find the Highest Common Factor (HCF).' },
+    data: { numbers: [24, 36], generatorType: 'HCF_RANDOM' }, difficulty: 'Easy', reward: 50,
+    kpId: 'kp-1.1-08', sectionId: 'number',
+    tutorialSteps: [
+      {
+        text: { zh: '刘备："两营分别有 24 和 36 名士兵，要分成人数相同的小队，每队最多几人？"', en: 'Liu Bei: "Two camps have 24 and 36 soldiers. Split into equal squads — what is the largest squad size?"' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '刘备："先对 24 做质因数分解：$24 = 2^3 \\times 3$"', en: 'Liu Bei: "Prime factorize 24: $24 = 2^3 \\times 3$"' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '刘备："再对 36 做质因数分解：$36 = 2^2 \\times 3^2$"', en: 'Liu Bei: "Prime factorize 36: $36 = 2^2 \\times 3^2$"' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '刘备："取公共质因数的最低次幂：$2^2 \\times 3 = 12$"', en: 'Liu Bei: "Take common primes to lowest power: $2^2 \\times 3 = 12$"' },
+        hint: { zh: '公共质因数是 2 和 3\n2 的最低次幂是 $2^2$（取 24 的）\n3 的最低次幂是 $3^1$（取 24 的）', en: 'Common primes are 2 and 3\nLowest power of 2 is $2^2$ (from 24)\nLowest power of 3 is $3^1$ (from 24)' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '刘备："所以 HCF(24, 36) = 12！每队 12 人，整编完毕！"', en: 'Liu Bei: "So HCF(24, 36) = 12! 12 soldiers per squad, troops organized!"' },
+        highlightField: 'ans'
+      }
+    ],
+    secret: { concept: { zh: 'HCF 是两个数共有的最大因数。', en: 'HCF is the largest factor common to both numbers.' }, formula: '$\\text{HCF}: \\text{取公共质因数的最低次幂}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
+  },
+  {
+    id: 702, grade: 7, unitId: 0, order: 2,
+    unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
+    topic: 'Algebra', type: 'LCM',
+    title: { zh: '巡营排班', en: 'Patrol Schedule' },
+    skillName: { zh: '公倍数术', en: 'Common Multiple' },
+    skillSummary: { zh: 'LCM：质因数分解后取所有质因数的最高次幂', en: 'LCM: prime factorize, then take all primes to highest power' },
+    story: { zh: '三位将军分别每隔一段时间巡营。需要安排所有人同时巡营的日子。', en: 'Three generals patrol at different intervals. Find when they all patrol together.' },
+    description: { zh: '求最小公倍数 (LCM)。', en: 'Find the Least Common Multiple (LCM).' },
+    data: { numbers: [6, 8], generatorType: 'LCM_RANDOM' }, difficulty: 'Easy', reward: 55,
+    kpId: 'kp-1.1-09', sectionId: 'number',
+    tutorialSteps: [
+      {
+        text: { zh: '关羽："我每 6 天巡营一次，张飞每 8 天一次。几天后我们同时巡营？"', en: 'Guan Yu: "I patrol every 6 days, Zhang Fei every 8 days. When do we both patrol together?"' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '关羽："先对 6 做质因数分解：$6 = 2 \\times 3$"', en: 'Guan Yu: "Prime factorize 6: $6 = 2 \\times 3$"' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '关羽："再对 8 做质因数分解：$8 = 2^3$"', en: 'Guan Yu: "Prime factorize 8: $8 = 2^3$"' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '关羽："取所有质因数的最高次幂：$2^3 \\times 3 = 24$"', en: 'Guan Yu: "Take all primes to highest power: $2^3 \\times 3 = 24$"' },
+        hint: { zh: '出现过的质因数是 2 和 3\n2 的最高次幂是 $2^3$（取 8 的）\n3 的最高次幂是 $3^1$（取 6 的）', en: 'Primes that appear are 2 and 3\nHighest power of 2 is $2^3$ (from 8)\nHighest power of 3 is $3^1$ (from 6)' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '关羽："所以 LCM(6, 8) = 24！每 24 天我们同时巡营！"', en: 'Guan Yu: "So LCM(6, 8) = 24! We both patrol together every 24 days!"' },
+        highlightField: 'ans'
+      }
+    ],
+    secret: { concept: { zh: 'LCM 是两个数共有的最小倍数。', en: 'LCM is the smallest number divisible by both.' }, formula: '$\\text{LCM}: \\text{取所有质因数的最高次幂}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
+  },
+  {
+    id: 703, grade: 7, unitId: 0, order: 3,
+    unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
+    topic: 'Algebra', type: 'HCF',
+    title: { zh: '平分军粮', en: 'Dividing Grain Equally' },
+    skillName: { zh: '因数分解术', en: 'Factorization' },
+    skillSummary: { zh: '用 HCF 解决实际均分问题', en: 'Use HCF to solve real equal-sharing problems' },
+    story: { zh: '桃园起义前，需要把军粮和兵器分给各村。要保证每村分到的数量完全相同。', en: 'Before the uprising, grain and weapons must be distributed equally to villages.' },
+    description: { zh: '求最大公因数 (HCF)。', en: 'Find the Highest Common Factor (HCF).' },
+    data: { numbers: [48, 60], generatorType: 'HCF_RANDOM' }, difficulty: 'Medium', reward: 65,
+    kpId: 'kp-1.1-08', sectionId: 'number',
+    tutorialSteps: [
+      {
+        text: { zh: '张飞："俺们有 48 袋粮和 60 把刀，要平分给各村，每村最多能分几份？"', en: 'Zhang Fei: "We have 48 bags of grain and 60 swords. Each village gets equal shares — what is the max per village?"' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '张飞："$48 = 2^4 \\times 3$"', en: 'Zhang Fei: "$48 = 2^4 \\times 3$"' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '张飞："$60 = 2^2 \\times 3 \\times 5$"', en: 'Zhang Fei: "$60 = 2^2 \\times 3 \\times 5$"' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '张飞："公共质因数：2 和 3。取最低次幂：$2^2 \\times 3 = 12$"', en: 'Zhang Fei: "Common primes: 2 and 3. Lowest powers: $2^2 \\times 3 = 12$"' },
+        hint: { zh: '5 只出现在 60 里，不是公共因数\n所以不算进 HCF', en: '5 only appears in 60, not a common factor\nSo it is not included in HCF' },
+        highlightField: 'ans'
+      },
+      {
+        text: { zh: '张飞："HCF(48, 60) = 12！分给 12 个村，每村 4 袋粮 5 把刀！"', en: 'Zhang Fei: "HCF(48, 60) = 12! Split among 12 villages, each gets 4 bags of grain and 5 swords!"' },
+        highlightField: 'ans'
+      }
+    ],
+    secret: { concept: { zh: 'HCF 用于解决平均分配问题。', en: 'HCF solves equal distribution problems.' }, formula: '$\\text{HCF}(48, 60) = 2^2 \\times 3 = 12$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
+  },
   // --- Year 7: The Peach Garden Oath (Foundations) ---
   {
     id: 711, grade: 7, unitId: 1, order: 1,
