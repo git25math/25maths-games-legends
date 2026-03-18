@@ -20,6 +20,9 @@ import { ShortDivision } from '../components/diagrams/ShortDivision';
 import { FactorTree } from '../components/diagrams/FactorTree';
 import { AnimatedNumberLine } from '../components/diagrams/AnimatedNumberLine';
 import { FractionPie } from '../components/diagrams/FractionPie';
+import { NumberGrid } from '../components/diagrams/NumberGrid';
+import { BalanceScale } from '../components/diagrams/BalanceScale';
+import { AngleArc } from '../components/diagrams/AngleArc';
 import { useAudio } from '../hooks/useAudio';
 
 type PracticePhase = 'green' | 'amber' | 'red';
@@ -347,6 +350,27 @@ export const PracticeScreen = ({
                 numerator2={currentMission.data.n2 as number}
                 denominator2={currentMission.data.d2 as number}
                 step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep)}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'PRIME' && currentMission.data?.n ? (
+              <NumberGrid
+                range={[2, 30]}
+                highlights={[{ type: 'prime' }]}
+                columns={10}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'SIMPLE_EQ' && currentMission.data?.left ? (
+              <BalanceScale
+                left={String(currentMission.data.left)}
+                right={String(currentMission.data.right)}
+                operation={currentMission.data.a ? `÷${currentMission.data.a}` : undefined}
+                step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep - 2)}
+                resultLeft="x"
+                resultRight={String(currentMission.data.x)}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'ANGLES' && currentMission.data?.angle ? (
+              <AngleArc
+                angle={currentMission.data.angle as number}
+                label={`${currentMission.data.angle}°`}
+                showProtractor
               />
             ) : currentPhase !== 'red' ? (
               <VisualData mission={currentMission} lang={lang} />

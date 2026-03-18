@@ -9,6 +9,9 @@ type Props = {
   operation?: string; // e.g. "÷3" — shows what operation balances the scale
   balanced?: boolean;
   interactive?: boolean;
+  step?: number;  // 0=show equation, 1=show operation hint, 2=show result
+  resultLeft?: string;  // e.g. "x" after operation
+  resultRight?: string; // e.g. "5" after operation
 };
 
 const COLORS = {
@@ -18,7 +21,7 @@ const COLORS = {
   gold: '#b8860b',
 };
 
-export function BalanceScale({ left, right, operation, balanced = true }: Props) {
+export function BalanceScale({ left, right, operation, balanced = true, step, resultLeft, resultRight }: Props) {
   const width = 360;
   const height = 200;
   const centerX = width / 2;
@@ -60,8 +63,18 @@ export function BalanceScale({ left, right, operation, balanced = true }: Props)
       {/* Equals sign */}
       <text x={centerX} y={beamY + 55} textAnchor="middle" fontSize={20} fontWeight="bold" fill={COLORS.wood}>=</text>
 
+      {/* Result state after operation */}
+      {step !== undefined && step >= 2 && resultLeft && resultRight && (
+        <g opacity={0.6}>
+          <text x={90} y={beamY + 65} textAnchor="middle" fontSize={11} fill={COLORS.gold}>↓</text>
+          <text x={90} y={beamY + 80} textAnchor="middle" fontSize={14} fontWeight="bold" fill={COLORS.gold}>{resultLeft}</text>
+          <text x={width - 90} y={beamY + 65} textAnchor="middle" fontSize={11} fill={COLORS.gold}>↓</text>
+          <text x={width - 90} y={beamY + 80} textAnchor="middle" fontSize={14} fontWeight="bold" fill={COLORS.gold}>{resultRight}</text>
+        </g>
+      )}
+
       {/* Operation hint */}
-      {operation && (
+      {operation && (step === undefined || step >= 1) && (
         <g>
           <rect x={centerX - 25} y={height - 30} width={50} height={22} rx={4} fill={COLORS.gold} fillOpacity={0.2} stroke={COLORS.gold} strokeWidth={1} />
           <text x={centerX} y={height - 14} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.gold}>{operation}</text>
