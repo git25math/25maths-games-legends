@@ -482,7 +482,7 @@ export function generateLinearMission(template: Mission): Mission {
   return {
     ...template,
     description,
-    data: { points: [[x1, y1], [x2, y2]], generatorType: 'LINEAR_RANDOM' },
+    data: { points: [[x1, y1], [x2, y2]], x1, y1, x2, y2, generatorType: 'LINEAR_RANDOM' },
     tutorialSteps,
   };
 }
@@ -654,8 +654,9 @@ export function generateTrigonometryMission(template: Mission): Mission {
     ];
     // Use known-angle combos for clean results
     const knownAngles: { opp: number; adj: number; angle: number }[] = [
-      { opp: 1, adj: 1, angle: 45 }, { opp: 5, adj: 5, angle: 45 }, { opp: 10, adj: 10, angle: 45 },
-      { opp: 30, adj: 30, angle: 45 }, { opp: 100, adj: 100, angle: 45 },
+      { opp: 1, adj: 1, angle: 45 }, { opp: 3, adj: 3, angle: 45 }, { opp: 5, adj: 5, angle: 45 },
+      { opp: 8, adj: 8, angle: 45 }, { opp: 10, adj: 10, angle: 45 }, { opp: 15, adj: 15, angle: 45 },
+      { opp: 20, adj: 20, angle: 45 }, { opp: 50, adj: 50, angle: 45 }, { opp: 100, adj: 100, angle: 45 },
     ];
     const chosen = pickRandom(knownAngles);
 

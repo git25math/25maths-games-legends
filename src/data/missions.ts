@@ -379,8 +379,8 @@ export const MISSIONS: Mission[] = [
     title: { zh: '征收粮税', en: 'Collecting Grain Tax' },
     skillName: { zh: '百分比征税术', en: 'Percentage Tax' },
     skillSummary: { zh: '加税 = 原价 × (1 + 百分比)', en: 'Tax = original × (1 + rate)' },
-    story: { zh: '曹操在兖州推行屯田。已知农户产粮 {initial} 斛，需缴纳 {pct}% 作为粮税。', en: 'Cao Cao implements tuntian. A farmer yields {initial}, tax is {pct}%.' },
-    description: { zh: '计算应缴粮税：${initial} \\times {pct}\\%$。', en: 'Calculate tax: ${initial} \\times {pct}\\%$.' },
+    story: { zh: '曹操在兖州推行屯田。已知农户产粮 {initial} 斛，加征 {pct}% 后，总产出为多少？', en: 'Cao Cao implements tuntian. A farmer yields {initial}, after adding {pct}% tax, what is the total?' },
+    description: { zh: '计算总额：${initial} \\times (1 + {pct}\\%)$。', en: 'Calculate total: ${initial} \\times (1 + {pct}\\%)$.' },
     data: { initial: 1000, pct: 40, rate: 0.4, years: 1, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Easy', reward: 150,
     kpId: 'kp-1.13-01', sectionId: 'number',
     tutorialSteps: [
@@ -519,10 +519,10 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 1: 粮草与指数定律", en: "Unit 1: Supplies & Indices" },
     topic: 'Algebra', type: 'INDICES',
     title: { zh: '粮仓扩建', en: 'Granary Expansion' },
-    skillName: { zh: '指数乘方术', en: 'Power of Power' },
-    skillSummary: { zh: '幂的乘方，指数相乘', en: 'Power of a power: multiply exponents' },
-    story: { zh: '粮仓容量需提升。已知原容量为 $({base}^{e1})^{e2}$，求最终容量 ${base}^x$ 中的 $x$。', en: "Granary capacity must increase. Original is $({base}^{e1})^{e2}$, find $x$ in ${base}^x$." },
-    description: { zh: '利用幂的乘方性质：$(a^m)^n = a^{mn}$。', en: 'Use power of a power property: $(a^m)^n = a^{mn}$.' },
+    skillName: { zh: '指数相加术', en: 'Index Addition' },
+    skillSummary: { zh: '同底数幂相乘，指数相加', en: 'Multiply same-base powers: add exponents' },
+    story: { zh: '粮仓扩建。第一批 ${base}^{e1}$ 单位，扩建 ${base}^{e2}$ 倍。', en: 'Granary expansion. Batch 1: ${base}^{e1}$ units, expanded ${base}^{e2}$ times.' },
+    description: { zh: '利用同底数幂相乘性质：$a^m \\times a^n = a^{m+n}$。', en: 'Use same-base multiplication: $a^m \\times a^n = a^{m+n}$.' },
     data: { base: 2, e1: 3, e2: 2, generatorType: 'INDICES_RANDOM' }, difficulty: 'Medium', reward: 140,
     kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
@@ -540,7 +540,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '幂的乘方，底数不变，指数相乘。', en: 'Power of a power: base stays, exponents multiply.' }, formula: '$(a^m)^n = a^{m \\times n}$', tips: [{ zh: '程昱提示：空间利用要最大化。', en: 'Cheng Yu Tip: Maximize space utilization.' }] }
+    secret: { concept: { zh: '同底数幂相乘，底数不变，指数相加。', en: 'Multiply same-base powers: base stays, add exponents.' }, formula: '$a^m \\times a^n = a^{m+n}$', tips: [{ zh: '程昱提示：空间利用要最大化。', en: 'Cheng Yu Tip: Maximize space utilization.' }] }
   },
   {
     id: 913, grade: 9, unitId: 1, order: 3,
@@ -665,7 +665,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '旗帜缩放', en: 'Flag Scaling' },
     skillName: { zh: '旗帜缩放术', en: 'Flag Scaling' },
     skillSummary: { zh: '相似比求未知边', en: 'Use similarity ratio for unknown sides' },
-    story: { zh: '制作一面大旗。已知小旗长 2 尺，宽 3 尺。大旗与小旗相似，长为 6 尺。', en: 'Making a large flag. Small flag is 2x3. Large flag is similar, length 6.' },
+    story: { zh: '制作一面大旗。按相似比例缩放。', en: 'Making a large flag. Scale by similarity ratio.' },
     description: { zh: '求大旗的宽 $x$。', en: 'Find the width $x$ of the large flag.' },
     data: { a: 6, b: 2, c: 3, generatorType: 'SIMILARITY_RANDOM' }, difficulty: 'Medium', reward: 200,
     kpId: 'kp-4.4-01', sectionId: 'geometry',
@@ -693,7 +693,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '地图测绘', en: 'Map Surveying' },
     skillName: { zh: '地图测绘术', en: 'Map Survey' },
     skillSummary: { zh: '对应边成比例', en: 'Corresponding sides are proportional' },
-    story: { zh: '在地图上测量距离。地图比例尺为 1:1000。地图上距离为 5 厘米。', en: 'Measuring distance on a map. Scale is 1:1000. Map distance is 5cm.' },
+    story: { zh: '在地图上测量距离。按比例换算。', en: 'Measuring distance on a map. Convert by scale ratio.' },
     description: { zh: '求实际距离 $x$（单位：厘米）。', en: 'Find actual distance $x$ (in cm).' },
     data: { a: 1000, b: 1, c: 5, generatorType: 'SIMILARITY_RANDOM' }, difficulty: 'Medium', reward: 220,
     kpId: 'kp-4.4-01', sectionId: 'geometry',
@@ -721,7 +721,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '兵粮配给', en: 'Rationing' },
     skillName: { zh: '兵粮配比术', en: 'Supply Ratio' },
     skillSummary: { zh: '比例 a:b 求未知项', en: 'Find unknown in ratio a:b' },
-    story: { zh: '分配粮草。士兵与粮草的比例需保持在 2:5。现有 1000 名士兵。', en: 'Allocating grain. Ratio of soldiers to grain must be 2:5. There are 1000 soldiers.' },
+    story: { zh: '分配粮草。按固定比例配给。', en: 'Allocating grain. Distribute by fixed ratio.' },
     description: { zh: '求所需粮草 $y$（即 $1000:y = 2:5$）。', en: 'Find grain $y$ (i.e., $1000:y = 2:5$).' },
     data: { a: 2, b: 5, generatorType: 'RATIO_RANDOM' }, difficulty: 'Medium', reward: 240,
     kpId: 'kp-1.12-01', sectionId: 'number',
@@ -749,7 +749,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '混合阵法', en: 'Mixed Formation' },
     skillName: { zh: '兵种混编术', en: 'Troop Mix' },
     skillSummary: { zh: '交叉相乘法', en: 'Cross multiplication' },
-    story: { zh: '混合兵种。步兵与骑兵比例为 3:1。现有步兵 900 人。', en: 'Mixing troops. Infantry to cavalry ratio is 3:1. There are 900 infantry.' },
+    story: { zh: '混合兵种。按固定比例编组。', en: 'Mixing troops. Organize by fixed ratio.' },
     description: { zh: '求骑兵数量 $y$。', en: 'Find cavalry count $y$.' },
     data: { a: 3, b: 1, generatorType: 'RATIO_RANDOM' }, difficulty: 'Medium', reward: 260,
     kpId: 'kp-1.12-01', sectionId: 'number',
@@ -863,7 +863,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '兵力合围', en: 'Troop Encirclement' },
     skillName: { zh: '合围联立术', en: 'Simultaneous Siege' },
     skillSummary: { zh: '消元法解联立方程', en: 'Elimination method for simultaneous equations' },
-    story: { zh: '孙刘联军合围曹操。$x + y = 10000$，$2x - y = 5000$。', en: 'Sun-Liu coalition encircles Cao. $x + y = 10000$, $2x - y = 5000$.' },
+    story: { zh: '孙刘联军合围曹操。两路兵力需满足两个条件。', en: 'Sun-Liu coalition encircles Cao. Two forces must satisfy two conditions.' },
     description: { zh: '求孙军 $x$ 和刘军 $y$ 的兵力。', en: 'Find Sun army $x$ and Liu army $y$ strength.' },
     data: { x: 5000, y: 5000, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Easy', reward: 320,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
@@ -891,7 +891,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '粮草互换', en: 'Resource Exchange' },
     skillName: { zh: '粮草互换术', en: 'Supply Exchange' },
     skillSummary: { zh: '代入法解联立方程', en: 'Substitution method' },
-    story: { zh: '孙刘两军交换物资。3车粮加2车草共12金，2车粮加3车草共13金。', en: 'Sun and Liu exchange resources. 3 grain + 2 grass = 12 gold, 2 grain + 3 grass = 13 gold.' },
+    story: { zh: '孙刘两军交换物资。两种交易需满足两个等式。', en: 'Sun and Liu exchange resources. Two trades must satisfy two equations.' },
     description: { zh: '求一车粮 $x$ 和一车草 $y$ 的价格。', en: 'Find price of 1 grain $x$ and 1 grass $y$.' },
     data: { eq1: [3, 2, 12], eq2: [2, 3, 13], generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Medium', reward: 550,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
@@ -919,7 +919,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '战船调度', en: 'Ship Deployment' },
     skillName: { zh: '战船调度术', en: 'Fleet Coordination' },
     skillSummary: { zh: '两个方程两个未知数', en: 'Two equations, two unknowns' },
-    story: { zh: '调度战船。大船 $x$ 艘，小船 $y$ 艘。$x + y = 20$，$10x + 5y = 150$。', en: 'Deploying ships. Large $x$, small $y$. $x + y = 20$, $10x + 5y = 150$.' },
+    story: { zh: '调度战船。大小两种船需满足两个条件。', en: 'Deploying ships. Two types of ships must satisfy two conditions.' },
     description: { zh: '求大船和小船的数量。', en: 'Find the number of large and small ships.' },
     data: { x: 10, y: 10, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Hard', reward: 400,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
@@ -1005,28 +1005,28 @@ export const MISSIONS: Mission[] = [
     unitTitle: { zh: "Unit 3: 天命占卜与概率", en: "Unit 3: Divination & Probability" },
     topic: 'Algebra', type: 'PROBABILITY',
     title: { zh: '华容道伏兵', en: 'Huarong Pass Ambush' },
-    skillName: { zh: '补事件推演术', en: 'Complement Events' },
-    skillSummary: { zh: '至少一次 = 1 - 全不发生', en: 'At least once = 1 - P(none)' },
-    story: { zh: '曹操败走华容道，连续遇到三个路口，每个路口有 1/3 概率遇到伏兵。共 {total} 种可能中有 {target} 种至少遇一次。', en: 'Cao Cao retreats via Huarong Pass, passing 3 checkpoints. Out of {total} outcomes, {target} involve at least one ambush.' },
-    description: { zh: '求至少遇到一次伏兵的概率。$P = 1 - (2/3)^3$', en: 'Find P(at least one ambush). $P = 1 - (2/3)^3$' },
+    skillName: { zh: '简单概率术', en: 'Simple Probability' },
+    skillSummary: { zh: 'P = 目标数 / 总数', en: 'P = target / total' },
+    story: { zh: '曹操败走华容道。{total} 条路中有 {target} 条设有伏兵。随机选一条，遇到伏兵的概率是多少？', en: 'Cao Cao retreats via Huarong Pass. {target} out of {total} paths have ambushes. Pick one at random, what is the probability of an ambush?' },
+    description: { zh: '求遇到伏兵的概率 $P = {target}/{total}$。', en: 'Find the probability of ambush: $P = {target}/{total}$.' },
     data: { total: 27, target: 19, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Hard', reward: 450,
     kpId: 'kp-8.1-02', sectionId: 'statistics',
     tutorialSteps: [
       {
-        text: { zh: '关羽："曹操连过三关，每关 $1/3$ 概率遇伏。至少遇一次的反面是——一次都不遇。"', en: 'Guan Yu: "Cao Cao passes 3 checkpoints, each $1/3$ chance of ambush. The complement of at least once is none at all."' },
+        text: { zh: '关羽："华容道共 27 条路，其中 19 条有伏兵。"', en: 'Guan Yu: "Huarong Pass has 27 paths, 19 of which have ambushes."' },
         highlightField: 'p'
       },
       {
-        text: { zh: '关羽："一次不遇的概率是 $2/3$，三次都不遇就是 $(2/3)^3 = 8/27$。"', en: 'Guan Yu: "P(no ambush once) = $2/3$. P(none in 3) = $(2/3)^3 = 8/27$."' },
-        hint: { zh: '至少一次 = 1 - 一次都没有', en: 'At least once = 1 - none' },
+        text: { zh: '关羽："概率 $P = \\frac{\\text{伏兵路数}}{\\text{总路数}} = \\frac{19}{27}$"', en: 'Guan Yu: "Probability $P = \\frac{\\text{ambush paths}}{\\text{total paths}} = \\frac{19}{27}$"' },
+        hint: { zh: '用分数或小数作答', en: 'Answer as a fraction or decimal' },
         highlightField: 'p'
       },
       {
-        text: { zh: '关羽："所以至少遇一次 $= 1 - 8/27 = 19/27 ≈ 0.70$。义释曹操，天意如此！"', en: 'Guan Yu: "P(at least once) $= 1 - 8/27 = 19/27 ≈ 0.70$. Releasing Cao Cao was fate!"' },
+        text: { zh: '关羽："$P ≈ 0.70$。义释曹操，天意如此！"', en: 'Guan Yu: "$P ≈ 0.70$. Releasing Cao Cao was fate!"' },
         highlightField: 'p'
       }
     ],
-    secret: { concept: { zh: '补集概率：$P(\\text{至少一次}) = 1 - P(\\text{一次都没有})$。', en: 'Complement probability: $P(\\text{at least once}) = 1 - P(\\text{none})$.' }, formula: '$P = 1 - (2/3)^3 = 19/27$', tips: [{ zh: '关羽提示：义薄云天，放他一马。', en: 'Guan Yu Tip: Loyalty as high as the sky, let him pass.' }] }
+    secret: { concept: { zh: '简单概率：$P = \\frac{\\text{目标数}}{\\text{总数}}$。', en: 'Simple probability: $P = \\frac{\\text{target}}{\\text{total}}$.' }, formula: '$P = 19/27$', tips: [{ zh: '关羽提示：义薄云天，放他一马。', en: 'Guan Yu Tip: Loyalty as high as the sky, let him pass.' }] }
   },
   {
     id: 1041, grade: 10, unitId: 4, order: 1,
