@@ -46,13 +46,15 @@
 | Y8 单元 | 三国历史阶段 | 年代 | 叙事角色 | 数学主题 |
 |---------|------------|------|---------|---------|
 | Unit 1: 进军篇 | 讨伐董卓·虎牢关 | 190 AD | 吕布、关羽、张飞 | 线性方程(行军路线) |
-| Unit 2: 攻城篇 | 官渡之战前奏 | 199 AD | 曹操、袁绍 | 面积/体积(营地/粮仓) |
-| Unit 3: 治理篇 | 官渡胜后治理 | 200 AD | 曹操、荀彧 | 百分比/利息(赋税) |
-| Unit 4: 情报篇 | 官渡谍报 | 200 AD | 曹操情报系统 | 统计/概率(数据分析) |
-| Unit 5: 代数篇 | 隆中对前奏 | 205 AD | 诸葛亮初登场 | 展开/因式分解/不等式 |
-| Unit 6: 几何篇 | 虎牢关攻防 | 190 AD | 三英战吕布 | 平行线角/勾股定理 |
-| Unit 7: 度量篇 | 荆州治理 | 209 AD | 刘备治荆州 | 速度时间/标准式/比例 |
-| Unit 8: 图表篇 | 天下形势 | 207 AD | 诸葛亮隆中对 | 坐标图/方程图像 |
+| Unit 2: 攻城篇 | 虎牢关攻防 | 190 AD | 三英战吕布 | 平行线角/勾股定理 |
+| Unit 3: 营地篇 | 官渡之战前奏 | 199 AD | 曹操、袁绍 | 面积/体积(营地/粮仓) |
+| Unit 4: 治理篇 | 官渡胜后治理 | 200 AD | 曹操、荀彧 | 百分比/利息(赋税) |
+| Unit 5: 情报篇 | 官渡谍报 | 200 AD | 曹操情报系统 | 统计/概率(数据分析) |
+| Unit 6: 代数篇 | 隆中对前奏 | 205 AD | 诸葛亮初登场 | 展开/因式分解/不等式 |
+| Unit 7: 图表篇 | 天下形势图 | 207 AD | 诸葛亮隆中对 | 坐标图/方程图像 |
+| Unit 8: 度量篇 | 荆州治理 | 209 AD | 刘备治荆州 | 速度时间/标准式/比例 |
+
+> **注意**: 时间线严格按编年排列（190→199→200→205→207→209）。数学难度也递进。
 
 ---
 
@@ -223,7 +225,189 @@ FractionPie 内部映射:
 
 ---
 
-## 九、接手注意事项
+## 九、核心架构速览
+
+### 9.1 生成器分发机制
+
+```typescript
+// src/utils/generateMission.ts
+export function generateMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  const genType = template.data?.generatorType as GeneratorType;
+  if (!genType || !GENERATOR_MAP[genType]) return template;
+  _currentTier = tier;               // 1=easy, 2=medium, 3=hard
+  return GENERATOR_MAP[genType](template);  // 生成器覆盖 data + tutorialSteps + description
+}
+```
+
+**关键点**: 生成器返回 `{ ...template, data, tutorialSteps, description }`。template 的 story/title/secret 保留不动。
+
+### 9.2 模板变量插值
+
+Mission 的 story/description 可以用 `{变量名}` 占位：
+```
+story: "刘备备了 {result} 坛酒。祭天用了 {a} 坛"
+data: { a: 5, result: 12 }
+→ 渲染时: "刘备备了 12 坛酒。祭天用了 5 坛"
+```
+
+PracticeScreen 中: `interpolate(mission.story[lang], mission.data)` 完成替换。
+
+### 9.3 `data.answer` 快捷校验模式
+
+多个 checker 支持 `data.answer` 优先级快捷方式，避免写复杂公式：
+```typescript
+if (type === 'PERCENTAGE') {
+  if (data.answer !== undefined) {          // ← 快捷模式
+    return { correct: Math.abs(parse(inputs.ans) - data.answer) < 0.01, ... };
+  }
+  // ... 原有复杂公式
+}
+```
+
+已支持此模式的类型: PERCENTAGE, ESTIMATION, AREA, RATIO。新 Y8 类型建议也用此模式。
+
+### 9.4 `order` 字段与解锁逻辑
+
+```
+MapScreen.tsx 中:
+  const isLocked = mission.order > 1 && prevMission && !(prevComp && completed)
+```
+
+- `order` 控制同一 unitId 内的排列和解锁顺序
+- `order` 可以是小数（如 8.3, 8.6）用于在已有关卡之间插入
+- 第一个关卡 `order ≤ 1` 默认解锁
+
+### 9.5 `secret` 字段结构
+
+```typescript
+secret: {
+  concept: { zh: "核心概念...", en: "..." },    // Green 阶段底部显示
+  formula: "$a^2 + b^2 = c^2$",                 // Green/Amber 阶段公式卡片
+  tips: [{ zh: "角色提示...", en: "..." }]       // ScrollOfWisdom 锦囊妙计
+}
+```
+
+显示位置: PracticeScreen Green 阶段左侧面板底部 + Amber 阶段顶部提示卡。
+
+### 9.6 `storyConsequence` 触发机制
+
+```typescript
+storyConsequence?: {
+  correct: { zh: "答对后的叙事", en: "..." },
+  wrong: { zh: "答错后的叙事", en: "..." }
+}
+```
+
+在 MathBattle/index.tsx 中，答对/答错后如果 mission 有此字段，会在结果面板显示叙事文本。
+
+### 9.7 已有 SVG 图表组件库（可复用于 Y8）
+
+| 组件 | 文件 | 适用类型 | Y8 可复用场景 |
+|------|------|---------|-------------|
+| AnimatedCoordinatePlane | diagrams/AnimatedCoordinatePlane.tsx | LINEAR | Y8 线性方程图 ✓ |
+| AnimatedQuadraticPlane | diagrams/AnimatedQuadraticPlane.tsx | QUADRATIC | Y8 二次图 |
+| ShortDivision | diagrams/ShortDivision.tsx | HCF, LCM | — |
+| FactorTree | diagrams/FactorTree.tsx | FACTOR_TREE | — |
+| AnimatedNumberLine | diagrams/AnimatedNumberLine.tsx | INTEGER_ADD | — |
+| FractionPie | diagrams/FractionPie.tsx | FRAC_ADD, FRAC_MUL | Y8 代数分数 |
+| NumberGrid | diagrams/NumberGrid.tsx | PRIME, SQUARE_CUBE, SQUARE_ROOT | — |
+| BalanceScale | diagrams/BalanceScale.tsx | SIMPLE_EQ | Y8 不等式可改造 |
+| AngleArc | diagrams/AngleArc.tsx | ANGLES | Y8 平行线角 ✓ |
+| Triangle | diagrams/Triangle.tsx | (未集成) | Y8 勾股定理 ✓ |
+| EquationSteps | diagrams/EquationSteps.tsx | SIMPLE_EQ (公式动画) | Y8 展开/因式分解 ✓ |
+
+PracticeScreen 中的条件链（约 288-380 行）根据 `currentMission.type` 选择 SVG 组件。
+
+---
+
+## 十、Y9-Y11 遗留关卡
+
+除了 Y7(690-773) 和 Y8(811-842)，还有 Y9-Y11 的旧关卡：
+
+```
+Y10: 1011-1053 (15 关卡，多种高阶题型)
+Y11: 1111-1131 (5 关卡)
+Y12: 1211-1221 (3 关卡)
+```
+
+**注意**: 这些关卡的教程质量极低（大部分 1-3 步），不要参照。开发 Y8 时可忽略，但不要删除或修改它们的 ID。
+
+---
+
+## 十一、已有 Y8 生成器的升级策略
+
+现有 Y8 关卡使用的生成器（如 LINEAR_RANDOM, VOLUME_RANDOM 等）是**全年级共享**的。修改它们会影响 Y7 和 Y9+ 的关卡。
+
+**推荐策略**:
+- 如果现有生成器教程步数 ≥5 且质量达标 → 保留复用（如 PERCENTAGE_RANDOM 已有 6 步）
+- 如果现有生成器教程步数 <5 → 创建 Y8 变体（如 `LINEAR_Y8_RANDOM`），不动原函数
+- 如果是新题型 → 直接创建新生成器（如 `EXPAND_RANDOM`）
+
+| 生成器 | 当前步数 | 策略 |
+|--------|---------|------|
+| LINEAR_RANDOM | 7 | ✅ 复用，教程已充足 |
+| FUNC_VAL_RANDOM | 5 | ⚠️ 勉强可用，建议加验算 |
+| AREA_RECT_RANDOM | 5 | ✅ 复用 |
+| AREA_TRAP_RANDOM | 4 | ⚠️ 创建 Y8 变体或升级 |
+| VOLUME_RANDOM | 3 | ❌ 需创建 Y8 变体 |
+| PERCENTAGE_RANDOM | 6 | ✅ 复用 |
+| STATISTICS_MEAN_RANDOM | 5 | ✅ 复用 |
+| STATISTICS_MEDIAN_RANDOM | 5 | ✅ 复用 |
+
+---
+
+## 十二、金标准代码示例
+
+一个完整的「好关卡」= mission 模板 + 生成器，参考 Y7 mission 698 + generateFactorsListMission：
+
+**Mission 模板** (missions.ts):
+```typescript
+{
+  id: 698, grade: 7, unitId: 0, order: -2,
+  unitTitle: { zh: "Unit 0: 桃园点兵·数论篇", en: "Unit 0: Peach Garden — Number Theory" },
+  topic: 'Algebra', type: 'FACTORS_LIST',
+  title: { zh: '点兵编队', en: 'Troop Formation Count' },
+  skillName: { zh: '因数列举术', en: 'Listing Factors' },
+  skillSummary: { zh: '因数就是能整除一个数的数', en: 'Factors divide evenly' },
+  story: { zh: '刘备刚招募了一批新兵...把所有可能的分法都找出来！', en: '...' },
+  description: { zh: '这个数有几个因数？', en: 'How many factors?' },
+  data: { n: 24, factors: [1,2,3,4,6,8,12,24], answer: 8,
+          generatorType: 'FACTORS_LIST_RANDOM' },  // ← 关键: 指定生成器
+  difficulty: 'Easy', reward: 35,
+  kpId: 'kp-1.1-02', sectionId: 'number',
+  tutorialSteps: [ ... ],  // 模板教程（生成器会覆盖）
+  secret: { concept: {...}, formula: '...', tips: [{...}] }
+}
+```
+
+**生成器** (generateMission.ts):
+```typescript
+export function generateFactorsListMission(template: Mission): Mission {
+  const tier = getTier();           // 1/2/3 难度
+  const n = pickRandom(pools[tier]); // 随机数字
+  // ... 计算所有因数 ...
+
+  const tutorialSteps = [
+    // Step 1: WHY / 动机（用叙事引入）
+    { text: { zh: "...新兵要编队...", en: "..." }, hint: { zh: "...", en: "..." } },
+    // Step 2: 概念铺垫（什么是因数/整除）
+    // Step 3-4: 微操作计算
+    // Step 5: 答案
+    // Step 6: 验算
+  ];
+
+  return {
+    ...template,                    // 保留 story/title/secret
+    description,                    // 覆盖描述（含新数字）
+    data: { n, factors, answer, generatorType: 'FACTORS_LIST_RANDOM' },
+    tutorialSteps,                  // 覆盖教程（含新数字的演算）
+  };
+}
+```
+
+---
+
+## 十三、接手注意事项
 
 1. **先 `npm run build` 确认零错误**
 2. **Y7 是标杆**: 打开 play.25maths.com → Y7 → 任意关卡 → 练习模式 → 看教程流程
