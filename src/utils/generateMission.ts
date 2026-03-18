@@ -1516,7 +1516,7 @@ export function generateIntegrationMission(template: Mission): Mission {
           en: `${narrator}: "What is the antiderivative? $\\int x\\,dx = \\frac{x^{2}}{2}$"`,
         },
         hint: {
-          zh: '求原函数就是"导数的逆运算"',
+          zh: '求原函数就是"导数的反操作"',
           en: 'Finding the antiderivative is the "reverse of differentiation"',
         },
         highlightField: 'area',
@@ -1575,7 +1575,7 @@ export function generateIntegrationMission(template: Mission): Mission {
           en: `${narrator}: "What is the antiderivative? $\\int 3x^{2}\\,dx = x^{3}$"`,
         },
         hint: {
-          zh: '求原函数就是"导数的逆运算"',
+          zh: '求原函数就是"导数的反操作"',
           en: 'Finding the antiderivative is the "reverse of differentiation"',
         },
         highlightField: 'area',
@@ -1634,7 +1634,7 @@ export function generateIntegrationMission(template: Mission): Mission {
         en: `${narrator}: "What is the antiderivative? $\\int 2x\\,dx = x^{2}$"`,
       },
       hint: {
-        zh: '求原函数就是"导数的逆运算"',
+        zh: '求原函数就是"导数的反操作"',
         en: 'Finding the antiderivative is the "reverse of differentiation"',
       },
       highlightField: 'area',
@@ -1938,8 +1938,8 @@ export function generateHcfMission(template: Mission): Mission {
         en: `${narrator}: "To find the largest equal group for $${a}$ and $${b}$, break each into a product of primes — this is 'prime factorization'"`,
       },
       hint: {
-        zh: '就像把机器拆成零件，拆开才能看到哪些零件相同',
-        en: 'Like taking a machine apart to see which parts are the same',
+        zh: '为什么要拆？就像拆开两台机器，才能看出哪些零件相同\n怎么拆？从最小的质数 $2$ 开始试——$2$ 能整除吗？能就除，不能就试 $3$，再不行试 $5$……一个个往上试',
+        en: 'Why decompose? Like taking apart two machines to find common parts\nHow? Start with the smallest prime $2$ — does it divide evenly? If yes, divide. If not, try $3$, then $5$... test one by one',
       },
       highlightField: 'ans',
     },
@@ -2108,8 +2108,8 @@ export function generateLcmMission(template: Mission): Mission {
         en: `${narrator}: "First break each number into a product of primes"`,
       },
       hint: {
-        zh: '质数是只能被 1 和自己整除的数\n比如 2, 3, 5, 7, 11 都是质数',
-        en: 'Prime numbers can only be divided by 1 and themselves\nE.g. 2, 3, 5, 7, 11 are primes',
+        zh: '质数是只能被 1 和自己整除的数，比如 $2, 3, 5, 7, 11$\n怎么拆？从 $2$ 开始试——能整除就除，不能就换下一个质数',
+        en: 'Primes can only be divided by 1 and themselves, e.g. $2, 3, 5, 7, 11$\nHow to factorize? Start with $2$ — if it divides evenly, divide. If not, try the next prime',
       },
       highlightField: 'ans',
     },
@@ -2264,8 +2264,8 @@ export function generateIntegerAddMission(template: Mission): Mission {
           en: `${narrator}: "Adding a negative is just subtracting. Why? Imagine having money (positive) and spending some (negative) — your total drops"`,
         },
         hint: {
-          zh: `$${b}$ 的绝对值是 $${Math.abs(b)}$\n所以"加 $${b}$"就是"减 $${Math.abs(b)}$"`,
-          en: `The absolute value of $${b}$ is $${Math.abs(b)}$\nSo "add $${b}$" means "subtract $${Math.abs(b)}$"`,
+          zh: `$${b}$ 去掉负号就是 $${Math.abs(b)}$，所以"加 $${b}$"就是"减 $${Math.abs(b)}$"`,
+          en: `$${b}$ without its sign is $${Math.abs(b)}$, so "add $${b}$" means "subtract $${Math.abs(b)}$"`,
         },
         highlightField: 'ans',
       },
@@ -2458,8 +2458,8 @@ export function generateFracAddMission(template: Mission): Mission {
         en: `${narrator}: "The LCM of $${dispD1}$ and $${dispD2}$ is $${recalcLcd}$"`,
       },
       hint: {
-        zh: `$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$ ✓\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$ ✓\n所以 $${recalcLcd}$ 就是公分母`,
-        en: `$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$ ✓\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$ ✓\nSo $${recalcLcd}$ is the common denominator`,
+        zh: `怎么找？把 $${dispD1}$ 的倍数列出来：$${dispD1}, ${dispD1*2}, ${dispD1*3}...$，看哪个也能被 $${dispD2}$ 整除\n$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$ ✓\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$ ✓`,
+        en: `How to find it? List multiples of $${dispD1}$: $${dispD1}, ${dispD1*2}, ${dispD1*3}...$, check which is also divisible by $${dispD2}$\n$${dispD1} \\times ${recalcLcd/dispD1} = ${recalcLcd}$ ✓\n$${dispD2} \\times ${recalcLcd/dispD2} = ${recalcLcd}$ ✓`,
       },
       highlightField: 'ans',
     },
@@ -2571,12 +2571,12 @@ export function generateFracMulMission(template: Mission): Mission {
   const tutorialSteps = isDivide ? [
     {
       text: {
-        zh: `${narrator}：分数除法就是"翻过来再乘"——为什么？除以一半就是乘以 2，同理！`,
-        en: `${narrator}: "Fraction division means 'flip and multiply' — why? Dividing by a half is the same as multiplying by 2, same idea!"`,
+        zh: `${narrator}：分数除法怎么算？先想一个简单的例子`,
+        en: `${narrator}: "How to divide fractions? Let's start with a simple example"`,
       },
       hint: {
-        zh: `有 $\\frac{1}{2}$ 袋粮，每户分 $\\frac{1}{4}$ 袋，能分几户？答案是 $2$ 户——因为 $\\frac{1}{2} \\div \\frac{1}{4} = \\frac{1}{2} \\times 4 = 2$。除以一个数，就是乘以它的倒数`,
-        en: `You have $\\frac{1}{2}$ bag of grain, each household gets $\\frac{1}{4}$ bag. How many households? Answer: $2$ — because $\\frac{1}{2} \\div \\frac{1}{4} = \\frac{1}{2} \\times 4 = 2$. Dividing by a number means multiplying by its reciprocal`,
+        zh: `$6 \\div 2 = 3$，也可以写成 $6 \\times \\frac{1}{2} = 3$\n"除以 2"和"乘以 $\\frac{1}{2}$"是一回事！\n同理，除以任何分数，都可以变成乘以它的倒数`,
+        en: `$6 \\div 2 = 3$, which is the same as $6 \\times \\frac{1}{2} = 3$\n"Divide by 2" and "multiply by $\\frac{1}{2}$" are the same thing!\nSimilarly, dividing by any fraction = multiplying by its reciprocal`,
       },
       highlightField: 'ans',
     },
