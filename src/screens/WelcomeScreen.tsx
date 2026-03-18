@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, User, Info, LogIn, LogOut } from 'lucide-react';
+import { User, Info, LogIn, LogOut } from 'lucide-react';
 import type { Language, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { CharacterCard } from '../components/CharacterCard';
@@ -55,10 +55,8 @@ export const WelcomeScreen = ({
       exit={{ opacity: 0, scale: 1.1 }}
       className="flex flex-col items-center justify-center min-h-[80vh] text-center"
     >
-      <motion.div animate={{ rotate: [0, 5, -5, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="mb-6">
-        <div className="bg-indigo-600 p-6 rounded-[2.5rem] shadow-2xl shadow-indigo-500/50">
-          <Sparkles size={80} className="text-white" />
-        </div>
+      <motion.div animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 3 }} className="mb-6">
+        <div className="text-6xl md:text-8xl">⚔️</div>
       </motion.div>
       <h1 className="text-5xl md:text-7xl font-black text-white mb-2 tracking-tighter">
         {t.title}
