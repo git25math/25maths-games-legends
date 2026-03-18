@@ -99,9 +99,11 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
   const needsConversion = hasTwoPies && (denominator1 !== lcd || d2 !== lcd);
 
   // Layout: 3 rows max (original → converted → result)
-  const showRow1 = step >= 1;
-  const showRow2 = step >= 3 && needsConversion;
-  const showRow3 = step >= 4 && hasTwoPies;
+  // step mapping: 0=first pie, 1=both pies, 2+=converted, 3+=result
+  const showRow1 = step >= 0;
+  const showSecondPie = step >= 1;
+  const showRow2 = step >= 2 && needsConversion;
+  const showRow3 = step >= 3 && hasTwoPies;
   const rowCount = showRow3 ? 3 : showRow2 ? 2 : 1;
 
   const WIDTH = hasTwoPies ? 300 : 160;
@@ -134,7 +136,7 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
               {numerator1}/{denominator1}
             </text>
 
-            {step >= 2 && hasTwoPies && (
+            {showSecondPie && hasTwoPies && (
               <>
                 <motion.text x={cxCenter} y={row1CY + 4} textAnchor="middle" fontSize={18} fontWeight="bold" fill={COLORS.gold}
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>

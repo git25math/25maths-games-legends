@@ -3107,7 +3107,8 @@ export function generateFracAddMission(template: Mission): Mission {
   const n1 = pickRandom(Array.from({ length: d1 - 1 }, (_, i) => i + 1));
   const n2 = pickRandom(Array.from({ length: d2 - 1 }, (_, i) => i + 1));
 
-  const isSubtract = pickRandom([true, false]);
+  // Respect template's op if set (e.g., mission 707 is always '+', mission 708 is always '-')
+  const isSubtract = template.data?.op === '-' ? true : template.data?.op === '+' ? false : pickRandom([true, false]);
   const lcd = (d1 * d2) / gcdCalc(d1, d2);
   const adjN1 = n1 * (lcd / d1);
   const adjN2 = n2 * (lcd / d2);
