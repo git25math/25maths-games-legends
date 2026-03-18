@@ -47,7 +47,8 @@ export function ShortDivision({ a, b, steps, bottomA, bottomB, revealSteps, show
   const LEFT_PAD = 50;
   const TOP_PAD = 20;
   const totalRows = Math.min(reveal, steps.length) + 1; // +1 for bottom row
-  const height = TOP_PAD + totalRows * ROW_H + 30;
+  const labelLines = (showHCF ? 1 : 0) + (showLCM ? 1 : 0);
+  const height = TOP_PAD + totalRows * ROW_H + 10 + labelLines * 22;
   const width = LEFT_PAD + COL_W * 2 + 40;
 
   const elements: JSX.Element[] = [];
@@ -97,23 +98,25 @@ export function ShortDivision({ a, b, steps, bottomA, bottomB, revealSteps, show
     );
   }
 
-  // HCF label
+  // Result labels — each on its own line below the diagram
+  const labelStartY = TOP_PAD + totalRows * ROW_H + 8;
+
   if (showHCF && reveal >= steps.length) {
     const leftProduct = steps.map(s => s.prime).join(' × ');
     const hcf = steps.reduce((p, s) => p * s.prime, 1);
     elements.push(
-      <text key="hcf" x={LEFT_PAD - 25} y={height - 8} textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.gold}>
+      <text key="hcf" x={width / 2} y={labelStartY} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.gold}>
         HCF = {leftProduct} = {hcf}
       </text>,
     );
   }
 
-  // LCM label
   if (showLCM && reveal >= steps.length) {
     const allParts = [...steps.map(s => s.prime), prevA, prevB];
     const lcm = allParts.reduce((p, n) => p * n, 1);
+    const lcmY = labelStartY + (showHCF ? 20 : 0);
     elements.push(
-      <text key="lcm" x={width / 2 + 20} y={height - 8} textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.red}>
+      <text key="lcm" x={width / 2} y={lcmY} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.red}>
         LCM = {allParts.join(' × ')} = {lcm}
       </text>,
     );
