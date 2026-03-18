@@ -108,7 +108,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 用于解决平均分配问题。', en: 'HCF solves equal distribution problems.' }, formula: '$\\text{HCF}(48, 60) = 2^2 \\times 3 = 12$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
+    secret: { concept: { zh: 'HCF 用于解决平均分配问题。', en: 'HCF solves equal distribution problems.' }, formula: '$\\text{HCF}(a, b) = \\text{公共质因数（取小次幂）的乘积}$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
   },
   // --- Year 7 Unit 0A: 行军算账·正负数篇 ---
   {
@@ -261,13 +261,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '诸葛亮：我们要算出 $x$ 是多少——每人能分到几坛酒？', en: 'Zhuge Liang: "We need to find $x$ — how many jars does each person get?"' },
-        hint: { zh: '$x$ 就是我们要找的答案\n它现在藏在方程里，我们要把它"解"出来', en: '$x$ is the answer we\'re looking for\nIt\'s hidden in the equation — we need to "solve" for it' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '诸葛亮：$x$ 旁边有个 $+ {a}$，我们要把它去掉，让 $x$ 单独留下', en: 'Zhuge Liang: "There\'s a $+ {a}$ next to $x$. We need to remove it so $x$ is alone"' },
-        hint: { zh: '为什么？只有 $x$ 单独在一边时\n我们才能直接看出每人分几坛', en: 'Why? Only when $x$ is alone on one side\ncan we directly see each person\'s share' },
+        text: { zh: '诸葛亮：要找到 $x$，就要让它单独在等号一边。现在 $x$ 旁边多了个 $+ {a}$，要把它"移走"', en: 'Zhuge Liang: "To find $x$, we need it alone on one side. Right now there\'s a $+ {a}$ next to $x$ — we need to remove it"' },
+        hint: { zh: '为什么？只有 $x$ 单独在一边时，我们才能直接看出每人分几坛', en: 'Why? Only when $x$ is alone on one side can we directly see each person\'s share' },
         highlightField: 'x'
       },
       {
@@ -327,7 +322,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '关羽：等式两边都要除以 {a}（天平两边做同样的事）', en: 'Guan Yu: "Divide both sides by {a} (treat both sides equally)"' },
+        text: { zh: '关羽：等式两边都要除以 {a}', en: 'Guan Yu: "Divide both sides by {a}"' },
+        hint: { zh: '为什么两边都要除？等式就像天平——只对一边操作，天平就倾斜了，等式就不成立了', en: 'Why divide both sides? An equation is like a balance scale — operating on only one side tips it over, and the equation breaks' },
         highlightField: 'x'
       },
       {
@@ -408,7 +404,7 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '张飞：五个村庄征调民夫！{a} 村共出 {result} 人，每村几人？', en: 'Zhang Fei: "Drafting from villages! {a} villages sent {result} people total — how many per village?"' },
+        text: { zh: '张飞：{a} 个村庄征调民夫！共出 {result} 人，每村几人？', en: 'Zhang Fei: "Drafting from villages! {a} villages sent {result} people total — how many per village?"' },
         hint: { zh: '${a}x = {result}$\n{a} 个村 × 每村 $x$ 人 = {result} 人', en: '${a}x = {result}$\n{a} villages × $x$ per village = {result} people' },
         highlightField: 'x'
       },
@@ -449,12 +445,11 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '吕布：虎牢关城墙一侧角度 ${angle}^\\circ$，要在另一侧布置弩床，得先算出那个角度', en: 'Lu Bu: "The wall angle at Hulao Pass is ${angle}^\\circ$. To place the ballista on the other side, we need that angle"' },
-        hint: { zh: '城墙这一侧 ${angle}^\\circ$，另一侧的角度未知\n两个角合起来刚好是一条直线', en: 'This side is ${angle}^\\circ$, the other side is unknown\nTogether they form a straight line' },
+        text: { zh: '吕布：虎牢关城墙一侧角度 ${angle}^\\circ$，要在另一侧布置弩床', en: 'Lu Bu: "The wall angle at Hulao Pass is ${angle}^\\circ$. We need to place a ballista on the other side"' },
         highlightField: 'x'
       },
       {
-        text: { zh: '吕布：什么是补角？两个角加起来等于 $180^\\circ$（一条直线）的角，就互为补角', en: 'Lu Bu: "What are supplementary angles? Two angles that add up to $180^\\circ$ (a straight line) are supplementary"' },
+        text: { zh: '吕布：城墙是一条直线，直线的角度是 $180^\\circ$。两侧的角加起来就是 $180^\\circ$，这叫做"补角"', en: 'Lu Bu: "The wall is a straight line — $180^\\circ$. The angles on both sides add up to $180^\\circ$ — these are called supplementary angles"' },
         hint: { zh: '一条直线的角度是 $180^\\circ$\n城墙是直的，两侧角加起来刚好 $180^\\circ$', en: 'A straight line measures $180^\\circ$\nThe wall is straight, so both sides add up to $180^\\circ$' },
         highlightField: 'x'
       },
@@ -501,12 +496,16 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '高顺：已知一角 ${angle}^\\circ$，写方程：${angle} + x = 90$', en: 'Gao Shun: "One angle is ${angle}^\\circ$, equation: ${angle} + x = 90$"' },
+        text: { zh: '高顺：已知一角 ${angle}^\\circ$，它和 $x$ 加起来等于 $90^\\circ$，所以 ${angle} + x = 90$', en: 'Gao Shun: "One angle is ${angle}^\\circ$, it and $x$ add up to $90^\\circ$, so ${angle} + x = 90$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '高顺：怎么算 $x$？用总角度 $90$ 减去已知的 ${angle}$', en: 'Gao Shun: "How to find $x$? Subtract the known ${angle}$ from the total $90$"' },
+        hint: { zh: '因为两者加起来必须等于 $90$，知道一个就能算另一个', en: 'Because the two must add up to $90$ — knowing one lets you find the other' },
         highlightField: 'x'
       },
       {
         text: { zh: '高顺：$x = 90 - {angle} = {ans}$', en: 'Gao Shun: "$x = 90 - {angle} = {ans}$"' },
-        hint: { zh: '用总角度 $90$ 减去已知的 ${angle}$\n剩下的就是另一个角', en: 'Total $90$ minus known ${angle}$\nThe remainder is the other angle' },
         highlightField: 'x'
       },
       {
@@ -529,7 +528,7 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '诸葛亮：八卦阵中两个方位角互为补角。已知一角 ${angle}^\\circ$，另一角是阵法变换的关键', en: 'Zhuge Liang: "In the Eight Trigrams, two bearing angles are supplementary. One is ${angle}^\\circ$, the other is key to the formation"' },
+        text: { zh: '诸葛亮：八卦阵的阵眼向两个方向发出指令，两个方向正好成一条直线。已知一个方向的角度是 ${angle}^\\circ$', en: 'Zhuge Liang: "The formation\'s center sends commands in two directions, forming a straight line. One direction\'s angle is ${angle}^\\circ$"' },
         highlightField: 'x'
       },
       {
@@ -550,7 +549,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '补角之和为 $180^\\circ$。', en: 'Supplementary angles sum to $180^\\circ$.' }, formula: '$x = 180 - 45$', tips: [{ zh: '诸葛亮提示：阵法变幻，皆在术数。', en: 'Zhuge Tip: The changes in the formation are all in the numbers.' }] }
+    secret: { concept: { zh: '补角原理在阵法布局中的应用：两个方位角之和 = $180^\\circ$', en: 'Supplementary angle principle in formation layout: sum of two bearing angles = $180^\\circ$' }, formula: '$x = 180^\\circ - y$', tips: [{ zh: '诸葛亮提示：阵法变幻，皆在术数。', en: 'Zhuge Tip: The changes in the formation are all in the numbers.' }] }
   },
 
   // --- Year 8: The Yellow Turban Rebellion (Expansion) ---

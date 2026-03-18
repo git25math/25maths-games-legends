@@ -1934,23 +1934,23 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：怎么算呢？把每个数拆成最小的"零件"——质因数`,
-        en: `${narrator}: "How to figure it out? Break each number into its smallest 'parts' — prime factors"`,
+        zh: `${narrator}：先认识"质数"——只能被 1 和自己整除的数`,
+        en: `${narrator}: "First, let's learn about 'primes' — numbers only divisible by 1 and themselves"`,
       },
       hint: {
-        zh: '为什么要分解？因为分解后可以清楚地看到两个数的"组成零件"\n就像拆机器一样，拆开才能看到哪些零件是相同的',
-        en: 'Why decompose? After breaking down, we can clearly see the "building blocks" of both numbers\nLike taking apart a machine to find which parts are the same',
+        zh: '质数举例：$2, 3, 5, 7, 11, 13$...\n$4$ 不是质数，因为 $4 = 2 \\times 2$\n$6$ 不是质数，因为 $6 = 2 \\times 3$',
+        en: 'Examples of primes: $2, 3, 5, 7, 11, 13$...\n$4$ is NOT prime because $4 = 2 \\times 2$\n$6$ is NOT prime because $6 = 2 \\times 3$',
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：什么是质数？只能被 1 和它自己整除的数`,
-        en: `${narrator}: "What is a prime number? A number that can only be divided by 1 and itself"`,
+        zh: `${narrator}：现在把数拆成质数的乘积，这叫"质因数分解"`,
+        en: `${narrator}: "Now break the numbers into products of primes — this is called 'prime factorization'"`,
       },
       hint: {
-        zh: '质数举例：$2, 3, 5, 7, 11, 13$...\n$4$ 不是质数，因为 $4 = 2 \\times 2$\n$6$ 不是质数，因为 $6 = 2 \\times 3$',
-        en: 'Examples of primes: $2, 3, 5, 7, 11, 13$...\n$4$ is NOT prime because $4 = 2 \\times 2$\n$6$ is NOT prime because $6 = 2 \\times 3$',
+        zh: '就像拆机器，拆开才能看到哪些零件相同',
+        en: 'Like taking apart a machine to find which parts are the same',
       },
       highlightField: 'ans',
     },
@@ -2016,8 +2016,8 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：现在把两个分解放在一起，找"相同的零件"`,
-        en: `${narrator}: "Now compare both breakdowns — find the 'common parts'"`,
+        zh: `${narrator}：两个数都有的"零件"——就像两营都有的兵种，找出来！`,
+        en: `${narrator}: "Parts that both numbers share — like troop types both camps have — find them!"`,
       },
       hint: {
         zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n哪些质数两边都出现了？`,
@@ -2043,8 +2043,8 @@ export function generateHcfMission(template: Mission): Mission {
             enLines.push(`Prime $${p}$: appears $${expA}$ times in $${a}$, $${expB}$ times in $${b}$\n→ take smaller = $${p}^{${minExp}}$`);
           }
         }
-        lines.push(`\n为什么取少的？因为 HCF 是"共有"的\n只有两边都有的才算数，取少的保证两边都够`);
-        enLines.push(`\nWhy take the smaller? Because HCF means "common"\nOnly what both numbers share counts — taking the smaller ensures both have enough`);
+        lines.push(`\n为什么取少的？就像 A 营有 3 连骑兵，B 营只有 2 连——两营"共同"最多凑 2 连。多的那边凑不出来，所以取少的`);
+        enLines.push(`\nWhy take the smaller? Like Camp A has 3 cavalry units, Camp B only has 2 — both camps can only muster 2 together. The extra from one side can't be matched, so take the smaller`);
         return { zh: lines.join('\n'), en: enLines.join('\n') };
       })(),
       highlightField: 'ans',
@@ -2150,6 +2150,17 @@ export function generateLcmMission(template: Mission): Mission {
       hint: {
         zh: `$${a} = ${factA}$\n$${b} = ${factB}$\n列出所有出现过的质因数（不管在哪边出现的）`,
         en: `$${a} = ${factA}$\n$${b} = ${factB}$\nList all primes that appear (in either number)`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：注意！HCF 取少的，LCM 取多的——为什么？`,
+        en: `${narrator}: "Note! HCF takes the smaller power, LCM takes the larger — why?"`,
+      },
+      hint: {
+        zh: 'HCF 是"共有"的，两边都要够 → 取少的\nLCM 是"都能被整除"的，要包含两边所有 → 取多的',
+        en: 'HCF is "common" — both must have enough → take smaller\nLCM must be "divisible by both" — include everything → take larger',
       },
       highlightField: 'ans',
     },
@@ -2483,19 +2494,12 @@ export function generateFracAddMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：现在分母一样了！可以直接${isSubtract ? '减' : '加'}分子了`,
-        en: `${narrator}: "Now the denominators are the same! We can ${isSubtract ? 'subtract' : 'add'} the numerators directly"`,
+        zh: `${narrator}：现在分母一样了！直接${isSubtract ? '减' : '加'}分子：$${recalcAdjN1} ${op} ${recalcAdjN2} = ${rawAns}$，结果是 $\\frac{${rawAns}}{${recalcLcd}}$`,
+        en: `${narrator}: "Now the denominators match! ${isSubtract ? 'Subtract' : 'Add'} numerators: $${recalcAdjN1} ${op} ${recalcAdjN2} = ${rawAns}$, result is $\\frac{${rawAns}}{${recalcLcd}}$"`,
       },
       hint: {
-        zh: `分母相同时，只需要${isSubtract ? '减' : '加'}分子，分母不变\n$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}}$`,
-        en: `When denominators match, just ${isSubtract ? 'subtract' : 'add'} numerators, keep denominator\n$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}}$`,
-      },
-      highlightField: 'ans',
-    },
-    {
-      text: {
-        zh: `${narrator}：$${recalcAdjN1} ${op} ${recalcAdjN2} = ${rawAns}$\n所以结果是 $\\frac{${rawAns}}{${recalcLcd}}$`,
-        en: `${narrator}: "$${recalcAdjN1} ${op} ${recalcAdjN2} = ${rawAns}$\nSo the result is $\\frac{${rawAns}}{${recalcLcd}}$"`,
+        zh: `分母相同时，只需要${isSubtract ? '减' : '加'}分子，分母不变`,
+        en: `When denominators match, just ${isSubtract ? 'subtract' : 'add'} numerators, keep denominator`,
       },
       highlightField: 'ans',
     },
