@@ -127,7 +127,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮："加一个负数 = 减去它的绝对值。$50 + (-30) = 50 - 30$"', en: 'Zhuge Liang: "Adding a negative = subtracting its absolute value. $50 + (-30) = 50 - 30$"' }, hint: { zh: '正数表示增加，负数表示减少\n加负数就是减去', en: 'Positive = gain, negative = loss\nAdding negative = subtracting' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮："$50 - 30 = 20$！还剩 20 袋粮草。"', en: 'Zhuge Liang: "$50 - 30 = 20$! 20 bags remaining."' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '加一个负数等于减去它的绝对值；负负得负，两个亏损叠加。', en: 'Adding a negative equals subtracting its absolute value; two negatives compound the loss.' }, formula: '$a + (-b) = a - b$', tips: [{ zh: '诸葛亮提示：知彼知己，粮草先行。', en: 'Zhuge Liang Tip: Know your supplies before you march.' }] }
+    secret: { concept: { zh: '加一个负数就是减去它；结果的正负取决于谁的数字更大。', en: 'Adding a negative = subtracting it; the sign depends on which number is larger.' }, formula: '$a + (-b) = a - b$', tips: [{ zh: '诸葛亮提示：知彼知己，粮草先行。', en: 'Zhuge Liang Tip: Know your supplies before you march.' }] }
   },
   {
     id: 705, grade: 7, unitId: 0, order: 5,
@@ -250,7 +250,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '桃园结义', en: 'Oath in the Garden' },
     skillName: { zh: '等式平衡术', en: 'Equation Balance' },
     skillSummary: { zh: '等式两边同时加减同一个数，等号保持不变', en: 'Add or subtract the same number from both sides, the equation stays balanced' },
-    story: { zh: '桃园结义，刘备备了 {result} 坛酒。祭天用了 {a} 坛，剩下的三兄弟平分。每人分几坛？', en: 'At the Peach Garden oath, Liu Bei prepared {result} jars of wine. {a} were used for the ceremony. The rest split among three brothers — how many each?' },
+    story: { zh: '桃园结义，刘备备了 {result} 坛酒。祭天用了 {a} 坛，还剩几坛？', en: 'At the Peach Garden oath, Liu Bei prepared {result} jars of wine. {a} were used for the ceremony — how many remain?' },
     description: { zh: '解方程 $x+{a}={result}$，求 $x$。', en: 'Solve $x+{a}={result}$ for $x$.' },
     data: { x: 7, a: 5, result: 12, generatorType: 'SIMPLE_EQ_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-2.1-01', sectionId: 'algebra',
@@ -313,7 +313,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '等式两边同时乘除同一个非零数，等式依然成立。', en: 'Multiplying or dividing both sides by the same non-zero number keeps the equation balanced.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '张飞提示：俺老张买东西从不讲价，但一定要算清楚！', en: 'Zhang Fei Tip: I never haggle, but I always count correctly!' }] }
+    secret: { concept: { zh: '等式两边同时乘除同一个非零数，等式依然成立。', en: 'Multiplying or dividing both sides by the same non-zero number keeps the equation balanced.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '关羽提示：买东西一定要算清楚！', en: 'Guan Yu Tip: Always count correctly when shopping!' }] }
   },
   {
     id: 721, grade: 7, unitId: 2, order: 1,
@@ -350,7 +350,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '比例关系建模：总量 = 份数 x 每份，再用除法求每份。', en: 'Proportional modeling: total = parts x each, use division to find each part.' }, formula: '$ax = b \\Rightarrow x = b/a$（比例建模：总量 = 份数 × 每份）', tips: [{ zh: '关羽提示：公平分配，方能稳定军心。', en: 'Guan Yu Tip: Fair distribution keeps the army stable.' }] }
+    secret: { concept: { zh: '比例关系建模：总量 = 份数 x 每份，再用除法求每份。', en: 'Proportional modeling: total = parts x each, use division to find each part.' }, formula: '$ax = b \\Rightarrow x = b/a$（比例建模：总量 = 份数 × 每份）', tips: [{ zh: '曹操提示：公平分配，方能稳定军心。', en: 'Cao Cao Tip: Fair distribution keeps the army stable.' }] }
   },
   {
     id: 722, grade: 7, unitId: 2, order: 2,
@@ -383,7 +383,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '除法是乘法的逆运算：知道总量和份数，就能求每份。', en: 'Division is the inverse of multiplication: knowing total and parts, find each part.' }, formula: '$x = \\frac{b}{a}$', tips: [{ zh: '张昭提示：内政管理，贵在精准。', en: 'Zhang Zhao Tip: Internal management relies on precision.' }] }
+    secret: { concept: { zh: '除法是乘法的逆运算：知道总量和份数，就能求每份。', en: 'Division is the inverse of multiplication: knowing total and parts, find each part.' }, formula: '$x = \\frac{b}{a}$', tips: [{ zh: '张飞提示：算清楚，才公平！', en: 'Zhang Fei Tip: Count right, keep it fair!' }] }
   },
   {
     id: 731, grade: 7, unitId: 3, order: 1,
@@ -485,7 +485,7 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.6-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '诸葛亮：两道令旗合成一条直线——和 731 的城墙完全一样：两角加起来 $= 180°$', en: 'Zhuge Liang: "Two flags form a straight line — same as 731: angles sum to $180°$"' },
+        text: { zh: '诸葛亮：两道令旗合成一条直线——和之前虎牢关那题完全一样：直线两侧角加起来 $= 180°$', en: 'Zhuge Liang: "Two flags form a straight line — same as the Hulao Pass problem: angles on a line sum to $180°$"' },
         highlightField: 'x'
       },
       {

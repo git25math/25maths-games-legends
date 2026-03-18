@@ -2583,8 +2583,8 @@ export function generateFracAddMission(template: Mission): Mission {
         en: `${narrator}: "Don't rush. Imagine — your pie is cut into ${dispD1} pieces, my pie into ${dispD2} pieces"`,
       },
       hint: {
-        zh: `你的 1 份和我的 1 份大小不一样！\n切成 ${dispD1} 份，每份比较大\n切成 ${dispD2} 份，每份比较小\n不统一成一样大的份，就没法直接${isSubtract ? '减' : '加'}`,
-        en: `Your 1 piece and my 1 piece are different sizes!\n${dispD1} pieces = each piece is bigger\n${dispD2} pieces = each piece is smaller\nCan't ${isSubtract ? 'subtract' : 'add'} until pieces are the same size`,
+        zh: `你的 1 份和我的 1 份大小不一样！\n切成 ${dispD1} 份和切成 ${dispD2} 份，每份大小不同\n不统一成一样大的份，就没法直接${isSubtract ? '减' : '加'}`,
+        en: `Your 1 piece and my 1 piece are different sizes!\n${dispD1} pieces vs ${dispD2} pieces — each piece is a different size\nCan't ${isSubtract ? 'subtract' : 'add'} until pieces are the same size`,
       },
       highlightField: 'ans',
     },
