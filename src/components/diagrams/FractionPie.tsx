@@ -105,9 +105,10 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
   const rowCount = showRow3 ? 3 : showRow2 ? 2 : 1;
 
   const WIDTH = hasTwoPies ? 300 : 160;
-  const ROW_H = 110;
-  const HEIGHT = rowCount * ROW_H + (showRow2 ? 20 : 0) + (showRow3 ? 20 : 0);
-  const R = 38;
+  const ROW_H = 95;
+  const ARROW_H = 22;
+  const HEIGHT = rowCount * ROW_H + (showRow2 ? ARROW_H : 0) + (showRow3 ? ARROW_H : 0);
+  const R = 32;
 
   const cx1 = hasTwoPies ? 80 : WIDTH / 2;
   const cx2 = 220;
@@ -115,28 +116,33 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
 
   const operatorSymbol = op === '-' ? '−' : '+';
 
+  // Y positions for each row
+  const row1CY = R + 8;
+  const arrowY1 = ROW_H + 4;
+  const row2CY = ROW_H + ARROW_H + R + 8;
+  const arrowY2 = (showRow2 ? 2 : 1) * ROW_H + (showRow2 ? ARROW_H : 0) + 4;
+  const row3CY = HEIGHT - R - 18;
+
   return (
-    <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full max-w-sm mx-auto" style={{ maxHeight: 360 }}>
+    <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full max-w-sm mx-auto">
       <AnimatePresence>
         {/* ─── Row 1: Original fractions ─── */}
         {showRow1 && (
           <motion.g key="row1" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            {/* First pie */}
-            {drawPie(cx1, 50, R, numerator1, denominator1, COLORS.fill1, 0, 'orig1')}
-            <text x={cx1} y={50 + R + 16} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.fill1}>
+            {drawPie(cx1, row1CY, R, numerator1, denominator1, COLORS.fill1, 0, 'orig1')}
+            <text x={cx1} y={row1CY + R + 14} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.fill1}>
               {numerator1}/{denominator1}
             </text>
 
-            {/* Operator + second pie */}
             {step >= 2 && hasTwoPies && (
               <>
-                <motion.text x={cxCenter} y={55} textAnchor="middle" fontSize={20} fontWeight="bold" fill={COLORS.gold}
+                <motion.text x={cxCenter} y={row1CY + 4} textAnchor="middle" fontSize={18} fontWeight="bold" fill={COLORS.gold}
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
                   {operatorSymbol}
                 </motion.text>
                 <motion.g initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', delay: 0.3 }}>
-                  {drawPie(cx2, 50, R, n2, d2, COLORS.fill2, 0.3, 'orig2')}
-                  <text x={cx2} y={50 + R + 16} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.fill2}>
+                  {drawPie(cx2, row1CY, R, n2, d2, COLORS.fill2, 0.3, 'orig2')}
+                  <text x={cx2} y={row1CY + R + 14} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.fill2}>
                     {n2}/{d2}
                   </text>
                 </motion.g>
@@ -148,7 +154,7 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
         {/* ─── Arrow: 通分 ─── */}
         {showRow2 && (
           <motion.g key="arrow1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
-            <text x={cxCenter} y={ROW_H + 6} textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.gold}>
+            <text x={cxCenter} y={arrowY1} textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.gold}>
               ↓ 通分 (LCD = {lcd}) ↓
             </text>
           </motion.g>
@@ -156,29 +162,28 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
 
         {/* ─── Row 2: Converted fractions (same LCD) ─── */}
         {showRow2 && (
-          <motion.g key="row2" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            {drawPie(cx1, ROW_H + 60, R, convN1, lcd, COLORS.fill1, 0.4, 'conv1')}
-            <text x={cx1} y={ROW_H + 60 + R + 16} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.fill1}>
+          <motion.g key="row2" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+            {drawPie(cx1, row2CY, R, convN1, lcd, COLORS.fill1, 0.4, 'conv1')}
+            <text x={cx1} y={row2CY + R + 14} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.fill1}>
               {convN1}/{lcd}
             </text>
-            <motion.text x={cxCenter} y={ROW_H + 65} textAnchor="middle" fontSize={20} fontWeight="bold" fill={COLORS.gold}
+            <motion.text x={cxCenter} y={row2CY + 4} textAnchor="middle" fontSize={18} fontWeight="bold" fill={COLORS.gold}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
               {operatorSymbol}
             </motion.text>
             <motion.g initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', delay: 0.5 }}>
-              {drawPie(cx2, ROW_H + 60, R, convN2, lcd, COLORS.fill2, 0.5, 'conv2')}
-              <text x={cx2} y={ROW_H + 60 + R + 16} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.fill2}>
+              {drawPie(cx2, row2CY, R, convN2, lcd, COLORS.fill2, 0.5, 'conv2')}
+              <text x={cx2} y={row2CY + R + 14} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.fill2}>
                 {convN2}/{lcd}
               </text>
             </motion.g>
           </motion.g>
         )}
 
-        {/* ─── Arrow: 合并 ─── */}
+        {/* ─── Arrow: 合并/相减 ─── */}
         {showRow3 && (
           <motion.g key="arrow2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-            <text x={cxCenter} y={(showRow2 ? 2 : 1) * ROW_H + (showRow2 ? 26 : 6)}
-              textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.result}>
+            <text x={cxCenter} y={arrowY2} textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.result}>
               ↓ {op === '-' ? '相减' : '合并'} ↓
             </text>
           </motion.g>
@@ -188,8 +193,8 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
         {showRow3 && resultN >= 0 && (
           <motion.g key="row3" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', bounce: 0.4, delay: 0.7 }}>
-            {drawPie(cxCenter, HEIGHT - R - 22, R + 4, resultN, lcd, COLORS.result, 0.7, 'result')}
-            <text x={cxCenter} y={HEIGHT - 2} textAnchor="middle" fontSize={14} fontWeight="bold" fill={COLORS.result}>
+            {drawPie(cxCenter, row3CY, R + 2, resultN, lcd, COLORS.result, 0.7, 'result')}
+            <text x={cxCenter} y={HEIGHT - 2} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.result}>
               = {resultN}/{lcd}{resultN === lcd ? ' = 1' : ''}
             </text>
           </motion.g>
