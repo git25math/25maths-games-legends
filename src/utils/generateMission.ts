@@ -171,7 +171,7 @@ export function generateIndicesMission(template: Mission): Mission {
     e2 = randInt(eRanges[tier][0], eRanges[tier][1]);
   }
   const ans = op === 'div' ? e1 - e2 : e1 + e2;
-  const sym = op === 'div' ? '/' : '\\times';
+  const sym = op === 'div' ? '\\div' : '\\times';
 
   const description: BilingualText = {
     zh: `计算 $${base}^{${e1}} ${sym} ${base}^{${e2}} = ${base}^x$，求 $x$。`,
