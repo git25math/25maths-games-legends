@@ -191,16 +191,47 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
           </motion.g>
         )}
 
-        {/* ─── Row 3: Result pie ─── */}
-        {showRow3 && resultN >= 0 && (
-          <motion.g key="row3" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', bounce: 0.4, delay: 0.7 }}>
-            {drawPie(cxCenter, row3CY, R + 2, resultN, lcd, COLORS.result, 0.7, 'result')}
-            <text x={cxCenter} y={HEIGHT - 2} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.result}>
-              = {resultN}/{lcd}{resultN === lcd ? ' = 1' : ''}
-            </text>
-          </motion.g>
-        )}
+        {/* ─── Row 3: Result pie(s) — handles improper fractions ─── */}
+        {showRow3 && resultN >= 0 && (() => {
+          const wholeCount = Math.floor(resultN / lcd);
+          const remainder = resultN % lcd;
+          const pieCount = wholeCount + (remainder > 0 ? 1 : 0);
+          // Scale down radius if multiple pies
+          const rr = pieCount > 2 ? R - 8 : pieCount > 1 ? R - 4 : R + 2;
+          const totalPieWidth = pieCount * (rr * 2 + 8);
+          const startX = cxCenter - totalPieWidth / 2 + rr + 4;
+
+          // Simplified fraction for label
+          const g = gcdLocal(Math.abs(resultN), lcd);
+          const simpN = resultN / g;
+          const simpD = lcd / g;
+          const label = simpD === 1 ? `${simpN}` : wholeCount > 0 && remainder > 0
+            ? `${wholeCount} \\frac{${remainder / g}}{${lcd / g}}`
+            : `\\frac{${simpN}}{${simpD}}`;
+
+          return (
+            <motion.g key="row3" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', bounce: 0.4, delay: 0.7 }}>
+              {Array.from({ length: pieCount }, (_, idx) => {
+                const isFull = idx < wholeCount;
+                const fillN = isFull ? lcd : remainder;
+                const px = startX + idx * (rr * 2 + 8);
+                return (
+                  <g key={`res-${idx}`}>
+                    {drawPie(px, row3CY, rr, fillN, lcd, COLORS.result, 0.7 + idx * 0.1, `result-${idx}`)}
+                    {isFull && (
+                      <text x={px} y={row3CY} textAnchor="middle" dominantBaseline="central"
+                        fontSize={10} fontWeight="bold" fill="white" opacity={0.8}>满</text>
+                    )}
+                  </g>
+                );
+              })}
+              <text x={cxCenter} y={HEIGHT - 2} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.result}>
+                = {resultN}/{lcd}{simpD !== lcd ? ` = ${label}` : ''}
+              </text>
+            </motion.g>
+          );
+        })()}
       </AnimatePresence>
     </svg>
   );
