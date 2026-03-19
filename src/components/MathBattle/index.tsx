@@ -334,7 +334,7 @@ export const MathBattle = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto p-4 bg-slate-900/95 backdrop-blur-md">
     <div className="min-h-full flex items-center justify-center py-4">
-      <Confetti active={showConfetti} />
+      <Confetti trigger={confettiTrigger} />
       <CalculatorWidget
         lang={lang}
         onUseResult={(val) => setInputs(prev => {
