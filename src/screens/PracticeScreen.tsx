@@ -25,7 +25,7 @@ import { NumberGrid } from '../components/diagrams/NumberGrid';
 import { BalanceScale } from '../components/diagrams/BalanceScale';
 import { AngleArc } from '../components/diagrams/AngleArc';
 import { useAudio } from '../audio';
-import { buttonBase } from '../utils/animationPresets';
+import { buttonBase, DURATION } from '../utils/animationPresets';
 
 type PracticePhase = 'green' | 'amber' | 'red';
 
@@ -109,11 +109,11 @@ export const PracticeScreen = ({
       setTimeout(() => {
         setShowCorrectFlash(false);
         regenerateQuestion();
-      }, 800);
+      }, DURATION.entrance * 1000);
     } else {
       playFail();
       setShakeKey(k => k + 1);
-      setTimeout(() => setShakeKey(0), 500);
+      setTimeout(() => setShakeKey(0), DURATION.slow * 1000);
       // Adaptive: track consecutive wrong, level down after 2
       const newWrong = consecutiveWrong + 1;
       setConsecutiveWrong(newWrong);
@@ -214,7 +214,7 @@ export const PracticeScreen = ({
         initial={shakeKey > 0 ? false : { scale: 0.9, opacity: 0 }}
         animate={shaking ? { x: [0, -6, 6, -4, 4, -2, 2, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
         transition={shaking ? { duration: 0.4, ease: 'easeOut' } : undefined}
-        className={`bg-parchment w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[6px] md:border-[12px] border-ink relative ${shaking ? 'border-red-600' : ''}`}
+        className={`bg-parchment w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[3px] md:border-[6px] border-ink relative ${shaking ? 'border-red-600' : ''}`}
       >
         {/* Header */}
         <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
@@ -242,10 +242,12 @@ export const PracticeScreen = ({
                   };
                   return (
                     <div key={phase} className="flex items-center gap-1">
-                      <div
-                        className={`w-3 h-3 rounded-full border border-black transition-all ${
+                      <motion.div
+                        animate={isCurrent ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+                        transition={isCurrent ? { repeat: Infinity, duration: 1.5, ease: 'easeInOut' } : undefined}
+                        className={`w-3 h-3 rounded-full border border-black ${
                           isCurrent || isCompleted ? colors[phase] : dimColors[phase]
-                        } ${isCurrent ? 'ring-2 ring-white/50 animate-pulse' : ''}`}
+                        } ${isCurrent ? 'ring-2 ring-white/50' : ''}`}
                       />
                       <span className={`text-[9px] font-bold uppercase ${isCurrent ? 'text-white' : 'text-white/40'}`}>
                         {t.practicePhase[phase]}

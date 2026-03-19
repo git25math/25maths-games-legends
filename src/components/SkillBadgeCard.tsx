@@ -154,7 +154,12 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
         </div>
 
         {/* Continue button */}
-        <div className="flex justify-center pb-5 px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.3 }}
+          className="flex justify-center pb-5 px-6"
+        >
           <button
             onClick={onClose}
             className="w-full rounded-lg px-8 py-2.5 text-base font-bold tracking-wider transition-transform active:scale-95"
@@ -166,7 +171,7 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
           >
             {t.continue}
           </button>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );

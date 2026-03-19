@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import type { Mission, Language, DifficultyMode } from '../../types';
 import { LatexText } from '../MathView';
 import { INPUT_FIELDS } from './inputConfig';
@@ -35,7 +36,12 @@ export const InputFields = ({
       {currentFields.map(field => {
         const isHighlighted = isTutorial && mission.tutorialSteps?.[tutorialStep]?.highlightField === field.id;
         return (
-          <div key={field.id} className={`relative transition-all duration-500 ${isHighlighted ? 'scale-105' : isTutorial ? 'opacity-40 grayscale' : ''}`}>
+          <motion.div
+            key={field.id}
+            animate={isHighlighted ? { scale: 1.05, opacity: 1, filter: 'grayscale(0)' } : isTutorial ? { scale: 1, opacity: 0.4, filter: 'grayscale(1)' } : { scale: 1, opacity: 1, filter: 'grayscale(0)' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            className="relative"
+          >
             <label className="absolute -top-2 left-4 px-2 bg-parchment text-[10px] font-black text-ink-light uppercase tracking-widest z-10">
               <LatexText text={field.label} />
             </label>
@@ -54,7 +60,7 @@ export const InputFields = ({
             <div className="mt-1 text-[9px] text-ink-light/40 px-2">
               {lang === 'zh' ? '支持分数(3/4)、根号(√5)、负数(-3)' : 'Supports fractions(3/4), roots(√5), negatives(-3)'}
             </div>
-          </div>
+          </motion.div>
         );
       })}
     </div>

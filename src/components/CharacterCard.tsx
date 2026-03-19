@@ -7,12 +7,15 @@ import { CharacterAvatar } from './CharacterAvatar';
 
 export const CharacterCard = ({ character, isSelected, onSelect, lang }: { character: Character; isSelected: boolean; onSelect: () => void; lang: Language; key?: string }) => (
   <motion.div
-    whileHover={{ scale: 1.05 }}
+    whileHover={isSelected ? undefined : { scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
     onClick={onSelect}
+    animate={isSelected ? { borderColor: ["#b8860b", "#daa520", "#b8860b"] } : {}}
+    transition={isSelected ? { repeat: Infinity, duration: 2 } : undefined}
     className={`cursor-pointer p-4 rounded-2xl border-4 transition-all ${
-      isSelected ? 'border-yellow-400 shadow-xl scale-105 bg-white/10' : 'border-transparent bg-white/5'
+      isSelected ? 'shadow-xl scale-105 bg-white/10' : 'border-transparent bg-white/5'
     }`}
+    style={isSelected ? { borderColor: '#b8860b' } : undefined}
   >
     <div className="mx-auto mb-4 flex justify-center">
       <CharacterAvatar characterId={character.id} size={96} />

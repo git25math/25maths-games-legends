@@ -1,9 +1,11 @@
+import { motion } from 'motion/react';
 import { Sparkles } from 'lucide-react';
 import type { Mission, Language } from '../../types';
 import { MathView } from '../MathView';
 import { interpolate } from '../../utils/interpolate';
 import { translations } from '../../i18n/translations';
 import { lt } from '../../i18n/resolveText';
+
 import {
   NumberLine,
   VennDiagram,
@@ -18,6 +20,12 @@ import {
   Triangle,
   CompassRose,
 } from '../diagrams';
+
+const diagramEntrance = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.35, ease: 'easeOut' as const },
+};
 
 const VIS_LABELS = {
   zh: { simpleEq: '基础代数方程', compound: '复利增长模型', estimation: '无理数估算', length: '长', width: '宽', start: '起点', end: '落点' },
@@ -35,13 +43,13 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
 
   if (mission.type === 'VENN' && mission.data.sets) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+      <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <VennDiagram
           sets={mission.data.sets}
           intersection={mission.data.intersection}
           universalLabel={mission.data.universalLabel}
         />
-      </div>
+      </motion.div>
     );
   }
 
@@ -49,52 +57,52 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     // Parallel transversal
     if (mission.data.parallel) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+        <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <ParallelTransversal
             angle={mission.data.angle}
             highlight={mission.data.highlight}
             showLabels
           />
-        </div>
+        </motion.div>
       );
     }
     // Intersecting lines / vertically opposite
     if (mission.data.intersecting) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+        <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <IntersectingLines
             angle={mission.data.angle}
             showVerticallyOpposite={mission.data.showVerticallyOpposite}
           />
-        </div>
+        </motion.div>
       );
     }
     // Bearing / compass
     if (mission.data.bearing != null) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+        <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <CompassRose bearing={mission.data.bearing} showNorth />
-        </div>
+        </motion.div>
       );
     }
     // Generic angle
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+      <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <AngleArc angle={mission.data.angle} label={mission.data.label} showProtractor={mission.data.showProtractor} />
-      </div>
+      </motion.div>
     );
   }
 
   if (mission.type === 'TRIGONOMETRY' && mission.data.triangle) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+      <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <Triangle
           sides={mission.data.triangle.sides}
           angles={mission.data.triangle.angles}
           rightAngle={mission.data.triangle.rightAngle}
           labels={mission.data.triangle.labels}
         />
-      </div>
+      </motion.div>
     );
   }
 
@@ -106,9 +114,9 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     // Enhanced: show balance scale if equation data available
     if (mission.data.left && mission.data.right) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+        <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <BalanceScale left={mission.data.left} right={mission.data.right} operation={mission.data.operation} />
-        </div>
+        </motion.div>
       );
     }
     return (
@@ -145,7 +153,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     if (mission.data.points && mission.data.showGraph) {
       const [[x1, y1], [x2, y2]] = mission.data.points;
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+        <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <CoordinatePlane
             xRange={mission.data.xRange || [-5, 10]}
             yRange={mission.data.yRange || [-5, 10]}
@@ -158,7 +166,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
               color: '#1a3a5c',
             }]}
           />
-        </div>
+        </motion.div>
       );
     }
     const [[x1, y1], [x2, y2]] = mission.data.points;
@@ -192,7 +200,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     if (mission.data.a != null && mission.data.showGraph) {
       const { a, b, c } = mission.data;
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+        <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <CoordinatePlane
             xRange={mission.data.xRange || [-5, 5]}
             yRange={mission.data.yRange || [-5, 10]}
@@ -201,7 +209,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
               color: '#8b0000',
             }]}
           />
-        </div>
+        </motion.div>
       );
     }
     const [p1, p2] = [mission.data.p1, mission.data.p2];
@@ -231,7 +239,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     if (mission.data.showDiagram === true) {
       const { a, b } = mission.data;
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+        <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <Triangle
             sides={[
               { label: String(a) },
@@ -241,7 +249,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
             rightAngle={0}
             labels={['A', 'B', 'C']}
           />
-        </div>
+        </motion.div>
       );
     }
     const { a, b } = mission.data;
@@ -258,9 +266,9 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     // Enhanced: show equation steps if available
     if (mission.data.steps) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+        <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <EquationSteps steps={mission.data.steps} currentStep={mission.data.currentStep} />
-        </div>
+        </motion.div>
       );
     }
     const [a1, b1, c1] = mission.data.eq1;
@@ -279,36 +287,36 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
   // Number line visualization
   if (mission.data?.numberLine) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+      <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <NumberLine
           min={mission.data.numberLine.min}
           max={mission.data.numberLine.max}
           marks={mission.data.numberLine.marks}
           highlights={mission.data.numberLine.highlights}
         />
-      </div>
+      </motion.div>
     );
   }
 
   // Factor tree visualization
   if (mission.data?.factorTree) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+      <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <FactorTree root={mission.data.factorTree} />
-      </div>
+      </motion.div>
     );
   }
 
   // Number grid visualization
   if (mission.data?.numberGrid) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
+      <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <NumberGrid
           range={mission.data.numberGrid.range}
           highlights={mission.data.numberGrid.highlights}
           columns={mission.data.numberGrid.columns}
         />
-      </div>
+      </motion.div>
     );
   }
 

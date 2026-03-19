@@ -137,7 +137,7 @@ export const MapScreen = ({
           src={lang === 'zh' ? './map/world-map-zh.png' : './map/world-map-en.png'}
           alt="Three Kingdoms Map"
           loading="lazy"
-          className="w-full rounded-3xl opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
+          className="w-full rounded-3xl opacity-10 md:opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
         />
         <div className="relative z-10 space-y-16 p-4 md:p-8">
         {gradeMissions.length === 0 ? (
@@ -181,9 +181,18 @@ export const MapScreen = ({
                   const cardVariants = isLocked ? { initial: { opacity: 0.5, y: 0 }, animate: { opacity: 0.5, y: 0 } } : staggerItem;
 
                   return (
-                    <motion.div key={mission.id} variants={cardVariants} className="relative group">
+                    <motion.div
+                      key={mission.id}
+                      variants={cardVariants}
+                      className="relative group"
+                      {...(!isLocked ? {
+                        whileHover: { y: -4, boxShadow: "0 12px 40px rgba(99,102,241,0.15)" },
+                        whileTap: { y: -2, scale: 0.98 },
+                        transition: { type: "spring", stiffness: 300, damping: 20 },
+                      } : {})}
+                    >
                       <motion.div
-                        animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})} 
+                        animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})}
                         transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : (isLastCleared ? { duration: 2.5, ease: "easeInOut" } : {})}
                         className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
                       >

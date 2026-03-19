@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Volume2, VolumeX, Flame, Heart } from 'lucide-react';
+import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Volume2, VolumeX, Flame, Heart, Zap, Eye } from 'lucide-react';
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
 import { lt } from '../../i18n/resolveText';
 import { checkAnswer } from '../../utils/checkCorrectness';
 import { interpolate } from '../../utils/interpolate';
-import { tapScale, hoverGlow, buttonBase, VICTORY_TIMING } from '../../utils/animationPresets';
+import { tapScale, hoverGlow, buttonBase, VICTORY_TIMING, BATTLE_TIMING } from '../../utils/animationPresets';
 import { LatexText, MathView } from '../MathView';
 import { InputFields } from './InputFields';
 import { VisualData } from './VisualData';
@@ -137,38 +137,38 @@ export const MathBattle = ({
   const triggerVictorySequence = () => {
     setShowResult('success');
     
-    // Play audio right away
+    // Phase A: Dim screen transition & Shockwave/Confetti
+    setVictoryPhase(0); // Ensure dimming is visible first
     window.setTimeout(() => stopBGM(), VICTORY_TIMING.dimScreen - 50);
     window.setTimeout(() => {
       playVictory();
       setConfettiTheme('default');
       setConfettiTrigger(prev => prev + 1);
+      setVictoryPhase(1); // Shockwave starts after dimming and audio setup
     }, VICTORY_TIMING.dimScreen);
 
-    // Phase A: Shockwave + 1st Confetti
-    achievementTimerRef.current = window.setTimeout(() => {
-      setVictoryPhase(1);
-    }, VICTORY_TIMING.shockwave);
-
     // Phase B: Badge drop
-    advanceTimerRef.current = window.setTimeout(() => setVictoryPhase(2), VICTORY_TIMING.badgeDrop);
+    achievementTimerRef.current = window.setTimeout(() => {
+      setVictoryPhase(2);
+    }, VICTORY_TIMING.badgeDrop);
 
     // Phase C: Stats show
-    shakeTimerRef.current = window.setTimeout(() => setVictoryPhase(3), VICTORY_TIMING.statsReveal);
+    advanceTimerRef.current = window.setTimeout(() => setVictoryPhase(3), VICTORY_TIMING.statsReveal);
 
     // Phase D: Skill Badge or skip to E
-    window.setTimeout(() => {
+    shakeTimerRef.current = window.setTimeout(() => {
       if (mission.skillName) {
         setVictoryPhase(4);
         setConfettiTheme('goldWhite');
         setConfettiTrigger(prev => prev + 1);
-        window.setTimeout(() => setVictoryPhase(5), VICTORY_TIMING.returnButton - VICTORY_TIMING.skillBadge); // relative to skillBadge
+        // Return button appears after badge animation
+        window.setTimeout(() => setVictoryPhase(5), VICTORY_TIMING.returnButton - VICTORY_TIMING.skillBadge); // Relative timing
       } else if (isFirstClear) {
         setConfettiTheme('goldWhite');
         setConfettiTrigger(prev => prev + 1);
-        setVictoryPhase(5);
+        setVictoryPhase(5); // Skip SkillBadge phase, go straight to return button
       } else {
-        setVictoryPhase(5);
+        setVictoryPhase(5); // No skill, no first clear, just show return button
       }
     }, VICTORY_TIMING.skillBadge);
   };
@@ -222,14 +222,14 @@ export const MathBattle = ({
           setFinalScore(newTotal);
           advanceTimerRef.current = window.setTimeout(() => {
             triggerVictorySequence();
-          }, 600);
+          }, BATTLE_TIMING.advance);
         } else {
-          // Advance after 600ms
+          // Advance after brief delay
           advanceTimerRef.current = window.setTimeout(() => {
             setInputs({});
             setWrongAnswerData(null);
             setCurrentQIdx(prev => prev + 1);
-          }, 600);
+          }, BATTLE_TIMING.advance);
         }
       } else {
         // Single-question: victory replaces correct (avoid overlap)
@@ -245,7 +245,7 @@ export const MathBattle = ({
       playWrong();
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       setShakeKey(k => k + 1);
-      shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), 500);
+      shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), BATTLE_TIMING.shake);
       // Show wrong answer panel with solution before deducting HP
       setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
     }
@@ -271,7 +271,7 @@ export const MathBattle = ({
           setFinalScore(totalScore);
           advanceTimerRef.current = window.setTimeout(() => {
             triggerVictorySequence();
-          }, 300);
+          }, BATTLE_TIMING.shieldVictory);
         } else {
           setCurrentQIdx(prev => prev + 1);
         }
@@ -283,10 +283,10 @@ export const MathBattle = ({
       setHp(nextHp);
       if (nextHp <= 0) {
         // Show fail overlay immediately to block interaction;
-        // defeat sound plays after hpLoss fades (400ms)
+        // defeat sound plays after hpLoss fades
         setShowResult('fail');
         stopBGM();
-        advanceTimerRef.current = window.setTimeout(() => playDefeat(), 400);
+        advanceTimerRef.current = window.setTimeout(() => playDefeat(), BATTLE_TIMING.defeatSound);
       }
 
       // Still alive — advance to next question
@@ -299,7 +299,7 @@ export const MathBattle = ({
           advanceTimerRef.current = window.setTimeout(() => {
             stopBGM();
             triggerVictorySequence();
-          }, 300);
+          }, BATTLE_TIMING.shieldVictory);
         } else {
           setCurrentQIdx(prev => prev + 1);
         }
@@ -311,7 +311,7 @@ export const MathBattle = ({
       if (nextSingleHp <= 0) {
         setShowResult('fail');
         stopBGM();
-        advanceTimerRef.current = window.setTimeout(() => playDefeat(), 400);
+        advanceTimerRef.current = window.setTimeout(() => playDefeat(), BATTLE_TIMING.defeatSound);
       }
     }
   };
@@ -355,7 +355,7 @@ export const MathBattle = ({
         initial={shakeKey > 0 ? false : { scale: 0.9, opacity: 0 }}
         animate={shaking ? { x: [0, -6, 6, -4, 4, -2, 2, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
         transition={shaking ? { duration: 0.4, ease: 'easeOut' } : undefined}
-        className={`bg-parchment w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[6px] md:border-[12px] border-ink relative ${shaking ? 'border-red-600' : ''}`}
+        className={`bg-parchment w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[3px] md:border-[6px] border-ink relative ${shaking ? 'border-red-600' : ''}`}
       >
         {/* Header */}
         <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
@@ -379,8 +379,8 @@ export const MathBattle = ({
 
                 {/* Shield charges indicator */}
                 {skillCard === 'shield' && shieldCharges > 0 && (
-                  <span className="ml-3 px-2 py-0.5 rounded bg-blue-600/60 text-[10px] font-black">
-                    {'\u{1F6E1}\u{FE0F}'} {'\u00D7'}{shieldCharges}
+                  <span className="ml-3 px-2 py-0.5 rounded bg-blue-600/60 text-[10px] font-black flex items-center gap-1">
+                    <Shield size={12} /> {'\u00D7'}{shieldCharges}
                   </span>
                 )}
 
@@ -391,8 +391,9 @@ export const MathBattle = ({
 
                 {/* Active skill card badge */}
                 {skillCard && (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-black bg-indigo-600/50">
-                    {SKILL_CARDS.find(c => c.id === skillCard)?.icon}
+                  <span className="px-2 py-0.5 rounded text-[10px] font-black bg-indigo-600/50 flex items-center gap-1">
+                    {skillCard === 'shield' ? <Shield size={10} /> : skillCard === 'double' ? <Zap size={10} /> : <Eye size={10} />}
+                    {lt(SKILL_CARDS.find(c => c.id === skillCard)!.name, lang)}
                   </span>
                 )}
               </div>
@@ -403,7 +404,7 @@ export const MathBattle = ({
                   <span className="text-[10px] font-bold text-[#f4e4bc]/70">
                     {(t.questionProgress as string).replace('{n}', String(currentQIdx + 1)).replace('{total}', String(questionQueue.length))}
                   </span>
-                  <div className="flex gap-1">
+                  <div className="hidden sm:flex gap-1">
                     {questionQueue.map((_, i) => (
                       <div
                         key={i}
@@ -414,6 +415,12 @@ export const MathBattle = ({
                         }`}
                       />
                     ))}
+                  </div>
+                  <div className="flex sm:hidden flex-1 h-1.5 bg-parchment/20 rounded-full overflow-hidden max-w-[80px]">
+                    <div
+                      className="h-full bg-emerald-400 rounded-full transition-all"
+                      style={{ width: `${((currentQIdx + 1) / questionQueue.length) * 100}%` }}
+                    />
                   </div>
                 </div>
               )}
@@ -433,7 +440,7 @@ export const MathBattle = ({
         </div>
 
         {/* Battle Content */}
-        <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+        <div className="p-2 md:p-4 lg:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {/* Left: Tactical Map */}
           <div className="bg-parchment-dark rounded-lg p-6 border-2 border-ink/20 shadow-inner">
             <div className="flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
@@ -575,7 +582,7 @@ export const MathBattle = ({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -20 }}
               className={`absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 text-center z-20 overflow-hidden ${
                 showResult === 'success' ? 'bg-transparent' : 'bg-ink/90'
               }`}

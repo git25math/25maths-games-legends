@@ -30,27 +30,17 @@ export const DialogueBubble = memo(function DialogueBubble({
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
         transition={{ delay: 0.2, duration: 0.2 }}
-        className="absolute top-4 -left-2.5 w-0 h-0 origin-right"
-        style={{
-          borderTop: '6px solid transparent',
-          borderBottom: '6px solid transparent',
-          borderRight: '10px solid #3d2b1f',
-        }}
+        className="absolute top-4 -left-2.5 w-0 h-0 origin-right border-y-[6px] border-y-transparent border-r-[10px] border-r-ink"
       />
       <motion.div
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
         transition={{ delay: 0.2, duration: 0.2 }}
-        className="absolute top-4 -left-1.5 w-0 h-0 origin-right"
-        style={{
-          borderTop: '5px solid transparent',
-          borderBottom: '5px solid transparent',
-          borderRight: '9px solid rgba(255,255,255,0.9)',
-        }}
+        className="absolute top-4 -left-1.5 w-0 h-0 origin-right border-y-[5px] border-y-transparent border-r-[9px] border-r-white/90"
       />
 
       {/* Speaker name */}
-      <div className="text-xs font-bold mb-1" style={{ color: '#8b0000' }}>
+      <div className="text-xs font-bold mb-1 text-[#8b0000]">
         {speaker}
       </div>
 

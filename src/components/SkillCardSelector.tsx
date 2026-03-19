@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Shield as ShieldIcon, Zap, Eye } from 'lucide-react';
 import type { Language } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import { useAudio } from '../audio';
+import { DURATION } from '../utils/animationPresets';
 
 export type SkillCard = {
   id: 'shield' | 'double' | 'reveal';
-  icon: string;
+  icon: ReactNode;
   name: { zh: string; en: string };
   description: { zh: string; en: string };
   color: string;
@@ -16,21 +18,21 @@ export type SkillCard = {
 export const SKILL_CARDS: SkillCard[] = [
   {
     id: 'shield',
-    icon: '\u{1F6E1}\u{FE0F}',
+    icon: <ShieldIcon size={48} className="drop-shadow-lg" />,
     name: { zh: '\u62A4\u76FE', en: 'Shield' },
     description: { zh: '2 \u6B21\u7B54\u9519\u514D\u6263\u8840', en: "2 wrong answers don't cost HP" },
     color: 'from-blue-600 to-blue-800',
   },
   {
     id: 'double',
-    icon: '\u26A1',
+    icon: <Zap size={48} className="drop-shadow-lg" />,
     name: { zh: '\u53CC\u500D', en: 'Double' },
     description: { zh: '\u7B2C 3 \u9898\u8D77\u5F97\u5206\u7FFB\u500D', en: 'Double score from question 3 onwards' },
     color: 'from-amber-500 to-amber-700',
   },
   {
     id: 'reveal',
-    icon: '\u{1F52E}',
+    icon: <Eye size={48} className="drop-shadow-lg" />,
     name: { zh: '\u900F\u89C6', en: 'Reveal' },
     description: { zh: '\u7B2C 1 \u9898\u663E\u793A\u516C\u5F0F\u63D0\u793A', en: 'Show formula hint on question 1' },
     color: 'from-purple-600 to-purple-800',
@@ -59,7 +61,7 @@ export const SkillCardSelector = ({
     playCardPick();
     skillSounds[id]?.();
     setSelectedId(id);
-    setTimeout(() => onSelect(id), 300);
+    setTimeout(() => onSelect(id), DURATION.normal * 1000);
   };
 
   return (
@@ -124,7 +126,7 @@ export const SkillCardSelector = ({
             >
               {/* Card background gradient */}
               <div className={`bg-gradient-to-b ${card.color} p-6 pb-4 flex flex-col items-center`}>
-                <span className="text-5xl md:text-6xl mb-3 drop-shadow-lg">{card.icon}</span>
+                <span className="text-white mb-3">{card.icon}</span>
                 <h3 className="text-xl md:text-2xl font-black text-white tracking-wider drop-shadow">
                   {lt(card.name, lang)}
                 </h3>

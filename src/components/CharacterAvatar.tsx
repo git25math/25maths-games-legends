@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { motion } from 'motion/react';
 
 const AVATAR_IMAGES: Record<string, string> = {
   caocao: './avatars/caocao.png',
@@ -33,7 +34,10 @@ export const CharacterAvatar = memo(function CharacterAvatar({
   }
 
   return (
-    <img
+    <motion.img
+      initial={{ scale: 0.7, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
       src={src}
       alt={characterId}
       width={size}

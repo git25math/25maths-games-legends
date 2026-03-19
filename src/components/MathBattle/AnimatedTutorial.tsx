@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { DialogueBubble } from '../DialogueBubble';
@@ -60,6 +61,10 @@ export function AnimatedTutorial({
   currentStep,
   lang,
 }: Props) {
+  const prevStepRef = useRef(currentStep);
+  const direction = currentStep >= prevStepRef.current ? 1 : -1;
+  prevStepRef.current = currentStep;
+
   const step = tutorialSteps[currentStep];
   if (!step) return null;
 
@@ -68,12 +73,13 @@ export function AnimatedTutorial({
   const hint = step.hint ? lt(step.hint, lang) : undefined;
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" custom={direction}>
       <motion.div
         key={currentStep}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
+        custom={direction}
+        initial={{ opacity: 0, x: direction * 30 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: direction * -30 }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
         className="bg-indigo-600/10 border-2 border-indigo-500/30 p-4 rounded-xl"
       >

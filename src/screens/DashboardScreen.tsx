@@ -469,8 +469,12 @@ export function DashboardScreen({ lang, onClose }: Props) {
               const pct = totalMissions > 0 ? Math.round((overall / totalMissions) * 100) : 0;
               const rank = i + 1;
               return (
-                <tr
+                <motion.tr
                   key={s.user_id}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.25, delay: Math.min(i * 0.03, 0.3) }}
                   className={`border-b border-slate-100 hover:bg-indigo-50/50 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}
                 >
                   {/* Rank */}
@@ -559,7 +563,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                       </td>
                     );
                   })}
-                </tr>
+                </motion.tr>
               );
             })}
           </tbody>

@@ -54,6 +54,11 @@ const DIFFICULTY_COLORS = {
   red: { bg: '#ef4444', text: '#fff' },
 };
 
+const statItem = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0 },
+};
+
 export const AchievementCard = memo(function AchievementCard({
   characterId,
   missionTitle,
@@ -112,9 +117,15 @@ export const AchievementCard = memo(function AchievementCard({
         </p>
 
         {/* === Stats Grid (2x2) === */}
-        <div className="grid grid-cols-2 gap-3 px-6 pb-4">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } } }}
+          className="grid grid-cols-2 gap-3 px-6 pb-4"
+        >
           {/* Score / Merit */}
-          <div
+          <motion.div
+            variants={statItem}
             className="flex flex-col items-center rounded-lg py-3"
             style={{ background: 'rgba(184,134,11,0.1)', border: '1px solid rgba(184,134,11,0.25)' }}
           >
@@ -124,10 +135,11 @@ export const AchievementCard = memo(function AchievementCard({
             <span className="mt-1 text-2xl font-black" style={{ color: '#b8860b' }}>
               <AnimatedCounter value={score} />
             </span>
-          </div>
+          </motion.div>
 
           {/* Time */}
-          <div
+          <motion.div
+            variants={statItem}
             className="flex flex-col items-center rounded-lg py-3"
             style={{ background: 'rgba(184,134,11,0.1)', border: '1px solid rgba(184,134,11,0.25)' }}
           >
@@ -136,10 +148,11 @@ export const AchievementCard = memo(function AchievementCard({
             </span>
             <span className="mt-1 text-2xl font-black text-ink">              {duration}s
             </span>
-          </div>
+          </motion.div>
 
           {/* HP */}
-          <div
+          <motion.div
+            variants={statItem}
             className="flex flex-col items-center rounded-lg py-3"
             style={{ background: 'rgba(184,134,11,0.1)', border: '1px solid rgba(184,134,11,0.25)' }}
           >
@@ -159,10 +172,11 @@ export const AchievementCard = memo(function AchievementCard({
                 />
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Difficulty */}
-          <div
+          <motion.div
+            variants={statItem}
             className="flex flex-col items-center rounded-lg py-3"
             style={{ background: 'rgba(184,134,11,0.1)', border: '1px solid rgba(184,134,11,0.25)' }}
           >
@@ -178,8 +192,8 @@ export const AchievementCard = memo(function AchievementCard({
             >
               {t.difficultyNames[difficulty]}
             </span>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* === Brand Footer === */}
         <div className="flex flex-col items-center pb-3 pt-1">

@@ -39,13 +39,15 @@ export const GradeSelectScreen = ({
             key={g}
             {...buttonBase}
             onClick={() => setSelectedGrade(g)}
-            className={`p-8 border-2 rounded-3xl text-white transition-all group ${
+            animate={selectedGrade === g ? { scale: 1.05, borderColor: '#818cf8' } : { scale: 1, borderColor: 'rgba(255,255,255,0.1)' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            className={`p-8 border-2 rounded-3xl text-white group ${
               selectedGrade === g
-                ? 'bg-indigo-600 border-indigo-400 scale-105'
-                : 'bg-white/5 border-white/10 hover:bg-indigo-600/50 hover:border-indigo-400/50'
+                ? 'bg-indigo-600'
+                : 'bg-white/5 hover:bg-indigo-600/50'
             }`}
           >
-            <span className="block text-4xl font-black mb-2 group-hover:scale-110 transition-transform">{g}</span>
+            <span className="block text-4xl font-black mb-2">{g}</span>
             <span className="text-xs font-bold uppercase tracking-widest opacity-60">{t.year}</span>
           </motion.button>
         ))}

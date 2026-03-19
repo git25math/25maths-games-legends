@@ -56,3 +56,14 @@ export const VICTORY_TIMING = {
   returnButton: 4000,
 } as const;
 
+export const BATTLE_TIMING = {
+  /** Delay before advancing to next question after correct answer */
+  advance: 600,
+  /** Delay before victory after shield absorb / survive last question */
+  shieldVictory: 300,
+  /** Delay before defeat sound plays (after hpLoss fades) */
+  defeatSound: 400,
+  /** Shake animation duration */
+  shake: 500,
+} as const;
+
