@@ -31,6 +31,7 @@ export const MapScreen = ({
   onGradeChange,
   onCharChange,
   onCreateRoom,
+  onDashboard,
 }: {
   lang: Language;
   profile: UserProfile;
@@ -41,6 +42,7 @@ export const MapScreen = ({
   onGradeChange: () => void;
   onCharChange: () => void;
   onCreateRoom: (type: 'team' | 'pk', missionId: number) => void;
+  onDashboard?: () => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
@@ -89,6 +91,14 @@ export const MapScreen = ({
               >
                 {lang === 'zh' ? '换主公' : 'Switch'}
               </button>
+              {onDashboard && (
+                <button
+                  onClick={onDashboard}
+                  className="px-2 py-0.5 bg-emerald-600/20 border border-emerald-500/30 rounded text-xs text-emerald-300 hover:bg-emerald-600/40 transition-colors"
+                >
+                  {lang === 'en' ? 'Dashboard' : '看板'}
+                </button>
+              )}
             </div>
           </div>
         </div>

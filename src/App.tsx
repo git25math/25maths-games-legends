@@ -277,6 +277,7 @@ export default function App() {
                 onGradeChange={() => updateProfile({ grade: null })}
                 onCharChange={() => { setSelectedCharId(null); setGameState('welcome'); }}
                 onCreateRoom={createRoom}
+                onDashboard={() => setGameState('dashboard')}
               />
             )}
 
@@ -325,7 +326,7 @@ export default function App() {
           {gameState === 'dashboard' && (
             <DashboardScreen
               lang={lang}
-              onClose={() => setGameState('welcome')}
+              onClose={() => setGameState(isLoggedIn ? 'map' : 'welcome')}
             />
           )}
         </div>
