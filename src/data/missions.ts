@@ -1316,6 +1316,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Hard', reward: 200, kpId: 'kp-6.1-01', sectionId: 'geometry',
     tutorialSteps: [],
     secret: { concept: { zh: '勾股定理适用于所有直角三角形，不只是 3-4-5。', en: "Pythagoras' theorem works for ALL right triangles, not just 3-4-5." }, formula: '$c = \\sqrt{a^2 + b^2}$', tips: [{ zh: '吕布提示：本将军的吊桥，岂是等闲之辈能过！', en: "Lu Bu Tip: My drawbridge is not for the faint-hearted!" }] },
+    storyConsequence: { correct: { zh: '吊桥放下，联军攻入虎牢关！三英战吕布大获全胜！', en: 'Drawbridge lowered — coalition storms Hulao Pass! Three heroes triumph over Lu Bu!' }, wrong: { zh: '吊桥长度不对，无法跨越护城河…', en: 'Wrong bridge length — cannot cross the moat...' } },
   },
 
   // --- Unit 3: 营地篇 · 官渡之战前奏 (199 AD) — 面积/圆/体积 ---
@@ -1371,7 +1372,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '给圆形马厩围一圈栅栏，半径 {r} 丈。需要多长的木材？', en: 'Fencing a circular stable with radius {r}. How much wood needed?' },
     description: { zh: '计算圆形围栏长度', en: 'Calculate the circular fence length' },
     data: { r: 7, pi: 3.14, mode: 'circumference', generatorType: 'CIRCLE_Y8_RANDOM' },
-    difficulty: 'Medium', reward: 160, kpId: 'kp-5.3-01', sectionId: 'geometry',
+    difficulty: 'Medium', reward: 175, kpId: 'kp-5.3-01', sectionId: 'geometry',
     tutorialSteps: [],
     secret: { concept: { zh: '周长 = 绕一圈的总长度。直径 × $\\pi$ 就是周长。', en: 'Circumference = distance around once. Diameter × $\\pi$ = circumference.' }, formula: '$C = 2\\pi r = \\pi d$', tips: [{ zh: '荀彧提示：围栏不够长，马就跑了！', en: 'Xun Yu Tip: Not enough fence and the horses escape!' }] },
   },
@@ -1493,6 +1494,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Hard', reward: 200, kpId: 'kp-8.1-01', sectionId: 'statistics',
     tutorialSteps: [],
     secret: { concept: { zh: '独立事件：一件事的结果不影响另一件。两个独立事件同时发生 = 各自概率相乘。', en: 'Independent events: one outcome doesn\'t affect the other. Both happening = multiply probabilities.' }, formula: '$P(A \\text{ and } B) = P(A) \\times P(B)$', tips: [{ zh: '曹操提示：多线情报，成功率靠概率！', en: 'Cao Cao Tip: Multiple intel lines — success relies on probability!' }] },
+    storyConsequence: { correct: { zh: '双线情报汇合，官渡之战曹操以少胜多！', en: 'Both intelligence lines converge — Cao Cao wins Guandu despite being outnumbered!' }, wrong: { zh: '情报概率估算失误，行动暴露…', en: 'Probability miscalculated — operation compromised...' } },
   },
 
   // --- Unit 6: 代数篇 · 隆中对前奏 (205 AD) — 展开/因式分解/不等式 ---
@@ -1562,7 +1564,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '刘备能动用的兵力有上限。诸葛亮用不等式计算安全范围。', en: 'Liu Bei\'s troops have a cap. Zhuge Liang uses inequalities to find the safe range.' },
     description: { zh: '解不等式，求临界值', en: 'Solve the inequality, find the critical value' },
     data: { a: 3, b: 2, c: 14, op: '<', answer: 4, generatorType: 'INEQUALITY_RANDOM' },
-    difficulty: 'Medium', reward: 180, kpId: 'kp-2.6-01', sectionId: 'algebra',
+    difficulty: 'Hard', reward: 210, kpId: 'kp-2.6-01', sectionId: 'algebra',
     tutorialSteps: [],
     secret: { concept: { zh: '不等式给出范围而非单一答案。$x < 4$ 意思是 $x$ 可以是 3, 2, 1...', en: 'Inequalities give a range, not one answer. $x < 4$ means $x$ can be 3, 2, 1...' }, formula: '$ax + b < c \\Rightarrow x < \\frac{c-b}{a}$', tips: [{ zh: '诸葛亮提示：不等号像城门——有最大限度！', en: 'Zhuge Liang Tip: Inequality is like a gate — there\'s a maximum!' }] },
   },

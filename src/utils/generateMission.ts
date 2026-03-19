@@ -5259,12 +5259,12 @@ export function generateExpandMission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：合并——写出展开结果`, en: `${narrator}: "Combine — write the expanded form"` },
-      hint: { zh: `$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\n$x$ 的系数是 $${ab}$`, en: `$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\nThe coefficient of $x$ is $${ab}$` },
+      hint: { zh: `诸葛亮点头：总共需要 ${ab}x + ${ac} 件装备\n\n$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\n$x$ 的系数是 $${ab}$`, en: `Zhuge Liang nods: ${ab}x + ${ac} pieces of equipment in total\n\n$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\nThe coefficient of $x$ is $${ab}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：验算——代入 $x=1$ 检查`, en: `${narrator}: "Verify — substitute $x=1$"` },
-      hint: { zh: `左边：$${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\n右边：$${ab} \\times 1 + ${ac} = ${ab + ac}$\n\n$${a * (b + c)} = ${ab + ac}$ ✓ 两边相等！`, en: `Left: $${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\nRight: $${ab} \\times 1 + ${ac} = ${ab + ac}$\n\n$${a * (b + c)} = ${ab + ac}$ ✓ Both sides equal!` },
+      hint: { zh: `诸葛亮再验一遍——军需不能出错！\n\n左边：$${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\n右边：$${ab} \\times 1 + ${ac} = ${ab + ac}$\n\n$${a * (b + c)} = ${ab + ac}$ ✓ 两边相等！`, en: `Zhuge Liang double-checks — supplies must be exact!\n\nLeft: $${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\nRight: $${ab} \\times 1 + ${ac} = ${ab + ac}$\n\n$${a * (b + c)} = ${ab + ac}$ ✓ Both sides equal!` },
       highlightField: 'ans',
     },
   ];
@@ -5317,22 +5317,22 @@ export function generateFactoriseMission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：第二步——每项除以 HCF`, en: `${narrator}: "Step 2 — divide each term by HCF"` },
-      hint: { zh: `$${a}x \\div ${factor} = ${p}x$\n$${b} \\div ${factor} = ${q}$`, en: `$${a}x \\div ${factor} = ${p}x$\n$${b} \\div ${factor} = ${q}$` },
+      hint: { zh: `就像清点物资——每种除以公因子\n\n$${a}x \\div ${factor} = ${p}x$\n$${b} \\div ${factor} = ${q}$`, en: `Like sorting supplies — divide each by the common factor\n\n$${a}x \\div ${factor} = ${p}x$\n$${b} \\div ${factor} = ${q}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：第三步——组合成因式形式`, en: `${narrator}: "Step 3 — write in factored form"` },
-      hint: { zh: `$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nHCF 放外面，商放括号里`, en: `$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nHCF goes outside, quotients go inside brackets` },
+      hint: { zh: `归纳完毕——军令变简洁了\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nHCF 放外面，商放括号里`, en: `Summary complete — the military order is now concise\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nHCF goes outside, quotients go inside brackets` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：答案——最大公因数 = ${factor}`, en: `${narrator}: "Answer — HCF = ${factor}"` },
-      hint: { zh: `$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\n最大公因数（提出来的公因子）= $${factor}$`, en: `$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nThe common factor (factored out) = $${factor}$` },
+      hint: { zh: `诸葛亮：公因子就是每项的"共同点"\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\n最大公因数（提出来的公因子）= $${factor}$`, en: `Zhuge Liang: the common factor is what every term shares\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nThe common factor (factored out) = $${factor}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：验算——展开回去检查`, en: `${narrator}: "Verify — expand back to check"` },
-      hint: { zh: `$${factor}(${p}x + ${q})$\n= $${factor} \\times ${p}x + ${factor} \\times ${q}$\n= $${a}x + ${b}$ ✓`, en: `$${factor}(${p}x + ${q})$\n= $${factor} \\times ${p}x + ${factor} \\times ${q}$\n= $${a}x + ${b}$ ✓` },
+      hint: { zh: `展开回去——军需清点必须复核！\n\n$${factor}(${p}x + ${q})$\n= $${factor} \\times ${p}x + ${factor} \\times ${q}$\n= $${a}x + ${b}$ ✓`, en: `Expand it back — supply counts must be double-checked!\n\n$${factor}(${p}x + ${q})$\n= $${factor} \\times ${p}x + ${factor} \\times ${q}$\n= $${a}x + ${b}$ ✓` },
       highlightField: 'ans',
     },
   ];
@@ -5379,28 +5379,28 @@ export function generateInequalityMission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：第一步——两边减 ${b}`, en: `${narrator}: "Step 1 — subtract ${b} from both sides"` },
-      hint: { zh: `$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$`, en: `$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$` },
+      hint: { zh: `先把城门的固定障碍搬走——\n\n$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$`, en: `First, clear the fixed obstacles from the gate——\n\n$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：第二步——两边除以 ${a}`, en: `${narrator}: "Step 2 — divide both sides by ${a}"` },
-      hint: { zh: `$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n（${a} 是正数，不等号方向不变）`, en: `$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n(${a} is positive, so direction stays the same)` },
+      hint: { zh: `缩小范围——看到底能让多少人通过\n\n$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n（${a} 是正数，不等号方向不变）`, en: `Narrow it down — how many can pass through?\n\n$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n(${a} is positive, so direction stays the same)` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：答案——临界值 = ${answerVal}`, en: `${narrator}: "Answer — critical value = ${answerVal}"` },
-      hint: { zh: `$x ${op} ${answerVal}$\n\n临界值就是不等号旁边的那个数`, en: `$x ${op} ${answerVal}$\n\nThe critical value is the number next to the inequality sign` },
+      hint: { zh: `诸葛亮：城门最多容许 ${answerVal} 人同时通过\n\n$x ${op} ${answerVal}$\n\n临界值就是不等号旁边的那个数`, en: `Zhuge Liang: the gate allows at most ${answerVal} through at once\n\n$x ${op} ${answerVal}$\n\nThe critical value is the number next to the inequality sign` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：验算——代入检查`, en: `${narrator}: "Verify — substitute to check"` },
       hint: {
         zh: op === '<'
-          ? `试 $x = ${answerVal - 1}$：$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} < ${c}$ ✓ 成立！\n\n试 $x = ${answerVal + 1}$：$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} < ${c}$ ✗ 不成立！`
-          : `试 $x = ${answerVal + 1}$：$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} > ${c}$ ✓ 成立！\n\n试 $x = ${answerVal - 1}$：$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} > ${c}$ ✗ 不成立！`,
+          ? `验证——分别试一个通过的和一个不通过的\n\n试 $x = ${answerVal - 1}$：$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} < ${c}$ ✓ 成立！\n\n试 $x = ${answerVal + 1}$：$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} < ${c}$ ✗ 不成立！`
+          : `验证——分别试一个通过的和一个不通过的\n\n试 $x = ${answerVal + 1}$：$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} > ${c}$ ✓ 成立！\n\n试 $x = ${answerVal - 1}$：$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} > ${c}$ ✗ 不成立！`,
         en: op === '<'
-          ? `Try $x = ${answerVal - 1}$: $${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} < ${c}$ ✓ True!\n\nTry $x = ${answerVal + 1}$: $${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} < ${c}$ ✗ False!`
-          : `Try $x = ${answerVal + 1}$: $${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} > ${c}$ ✓ True!\n\nTry $x = ${answerVal - 1}$: $${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} > ${c}$ ✗ False!`,
+          ? `Verify — test one that passes and one that doesn't\n\nTry $x = ${answerVal - 1}$: $${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} < ${c}$ ✓ True!\n\nTry $x = ${answerVal + 1}$: $${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} < ${c}$ ✗ False!`
+          : `Verify — test one that passes and one that doesn't\n\nTry $x = ${answerVal + 1}$: $${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} > ${c}$ ✓ True!\n\nTry $x = ${answerVal - 1}$: $${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} > ${c}$ ✗ False!`,
       },
       highlightField: 'ans',
     },
@@ -5445,22 +5445,22 @@ export function generateStdFormMission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：第一步——找 $a$（把小数点移到第一个数字后面）`, en: `${narrator}: "Step 1 — find $a$ (move decimal after first digit)"` },
-      hint: { zh: `$${numberStr}$\n把小数点移到第一个非零数字后面\n→ $a = ${a}$`, en: `$${numberStr}$\nMove the decimal point after the first non-zero digit\n→ $a = ${a}$` },
+      hint: { zh: `就像报军情——先说最重要的数字\n\n$${numberStr}$\n把小数点移到第一个非零数字后面\n→ $a = ${a}$`, en: `Like reporting military intel — lead with the key figure\n\n$${numberStr}$\nMove the decimal point after the first non-zero digit\n→ $a = ${a}$` },
       highlightField: 'a',
     },
     {
       text: { zh: `${narrator}：第二步——数小数点移了几位 → 就是 $n$`, en: `${narrator}: "Step 2 — count how many places the decimal moved → that's $n$"` },
-      hint: { zh: `从 $${numberStr}$ 到 $${a}$\n小数点向左移了 $${n}$ 位\n所以 $n = ${n}$`, en: `From $${numberStr}$ to $${a}$\nDecimal moved $${n}$ places to the left\nSo $n = ${n}$` },
+      hint: { zh: `数位数——传令兵跑了几步\n\n从 $${numberStr}$ 到 $${a}$\n小数点向左移了 $${n}$ 位\n所以 $n = ${n}$`, en: `Count the places — how many steps did the messenger run?\n\nFrom $${numberStr}$ to $${a}$\nDecimal moved $${n}$ places to the left\nSo $n = ${n}$` },
       highlightField: 'n',
     },
     {
       text: { zh: `${narrator}：答案`, en: `${narrator}: "Answer"` },
-      hint: { zh: `$${numberStr} = ${a} \\times 10^{${n}}$\n\n$a = ${a}$，$n = ${n}$`, en: `$${numberStr} = ${a} \\times 10^{${n}}$\n\n$a = ${a}$, $n = ${n}$` },
+      hint: { zh: `军报格式：${a} × 万级单位\n\n$${numberStr} = ${a} \\times 10^{${n}}$\n\n$a = ${a}$，$n = ${n}$`, en: `Military report format: ${a} × power-of-ten unit\n\n$${numberStr} = ${a} \\times 10^{${n}}$\n\n$a = ${a}$, $n = ${n}$` },
       highlightField: 'a',
     },
     {
       text: { zh: `${narrator}：验算——还原回去`, en: `${narrator}: "Verify — convert back"` },
-      hint: { zh: `$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓`, en: `$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓` },
+      hint: { zh: `还原验证——传令兵回报原数\n\n$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓`, en: `Convert back to verify — the messenger reports the original number\n\n$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓` },
       highlightField: 'a',
     },
   ];
@@ -5522,29 +5522,29 @@ export function generateSpeedMission(template: Mission): Mission {
     {
       text: { zh: `${narrator}：找出已知量`, en: `${narrator}: "Identify what we know"` },
       hint: mode === 'speed'
-        ? { zh: `已知：距离 = $${distance}$ 里，时间 = $${time}$ 小时\n求：速度 = ?`, en: `Known: distance = $${distance}$ li, time = $${time}$ hours\nFind: speed = ?` }
+        ? { zh: `赵云追击——先整理已知军情\n\n已知：距离 = $${distance}$ 里，时间 = $${time}$ 小时\n求：速度 = ?`, en: `Zhao Yun gives chase — first sort out the known intel\n\nKnown: distance = $${distance}$ li, time = $${time}$ hours\nFind: speed = ?` }
         : mode === 'distance'
-        ? { zh: `已知：速度 = $${speed}$ 里/时，时间 = $${time}$ 小时\n求：距离 = ?`, en: `Known: speed = $${speed}$ li/hr, time = $${time}$ hours\nFind: distance = ?` }
-        : { zh: `已知：距离 = $${distance}$ 里，速度 = $${speed}$ 里/时\n求：时间 = ?`, en: `Known: distance = $${distance}$ li, speed = $${speed}$ li/hr\nFind: time = ?` },
+        ? { zh: `行军侦察——先整理已知军情\n\n已知：速度 = $${speed}$ 里/时，时间 = $${time}$ 小时\n求：距离 = ?`, en: `March reconnaissance — first sort out the known intel\n\nKnown: speed = $${speed}$ li/hr, time = $${time}$ hours\nFind: distance = ?` }
+        : { zh: `诸葛亮算时间——先整理已知军情\n\n已知：距离 = $${distance}$ 里，速度 = $${speed}$ 里/时\n求：时间 = ?`, en: `Zhuge Liang calculates time — first sort out the known intel\n\nKnown: distance = $${distance}$ li, speed = $${speed}$ li/hr\nFind: time = ?` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：选公式并代入`, en: `${narrator}: "Choose the formula and substitute"` },
       hint: mode === 'speed'
-        ? { zh: `速度 = 距离 ÷ 时间\n$= ${distance} \\div ${time}$\n$= ${speed}$`, en: `Speed = Distance ÷ Time\n$= ${distance} \\div ${time}$\n$= ${speed}$` }
+        ? { zh: `代入——赵云计算追击速度\n\n速度 = 距离 ÷ 时间\n$= ${distance} \\div ${time}$\n$= ${speed}$`, en: `Substitute — Zhao Yun calculates pursuit speed\n\nSpeed = Distance ÷ Time\n$= ${distance} \\div ${time}$\n$= ${speed}$` }
         : mode === 'distance'
-        ? { zh: `距离 = 速度 × 时间\n$= ${speed} \\times ${time}$\n$= ${distance}$`, en: `Distance = Speed × Time\n$= ${speed} \\times ${time}$\n$= ${distance}$` }
-        : { zh: `时间 = 距离 ÷ 速度\n$= ${distance} \\div ${speed}$\n$= ${time}$`, en: `Time = Distance ÷ Speed\n$= ${distance} \\div ${speed}$\n$= ${time}$` },
+        ? { zh: `代入——诸葛亮计算行军距离\n\n距离 = 速度 × 时间\n$= ${speed} \\times ${time}$\n$= ${distance}$`, en: `Substitute — Zhuge Liang calculates march distance\n\nDistance = Speed × Time\n$= ${speed} \\times ${time}$\n$= ${distance}$` }
+        : { zh: `代入——诸葛亮计算行军时间\n\n时间 = 距离 ÷ 速度\n$= ${distance} \\div ${speed}$\n$= ${time}$`, en: `Substitute — Zhuge Liang calculates march time\n\nTime = Distance ÷ Speed\n$= ${distance} \\div ${speed}$\n$= ${time}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：答案 = ${answer}`, en: `${narrator}: "Answer = ${answer}"` },
-      hint: { zh: `答案是 $${answer}$`, en: `The answer is $${answer}$` },
+      hint: { zh: `军令已出——行军计划确定：答案是 $${answer}$`, en: `Orders issued — march plan confirmed: the answer is $${answer}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：验算——用三个量互相检查`, en: `${narrator}: "Verify — cross-check with all three"` },
-      hint: { zh: `速度 × 时间 = 距离\n$${speed} \\times ${time} = ${distance}$ ✓`, en: `Speed × Time = Distance\n$${speed} \\times ${time} = ${distance}$ ✓` },
+      hint: { zh: `交叉检验——三军核实！\n\n速度 × 时间 = 距离\n$${speed} \\times ${time} = ${distance}$ ✓`, en: `Cross-check — all three armies verify!\n\nSpeed × Time = Distance\n$${speed} \\times ${time} = ${distance}$ ✓` },
       highlightField: 'ans',
     },
   ];
@@ -5598,22 +5598,22 @@ export function generateCircleY8Mission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：代入数值`, en: `${narrator}: "Substitute the values"` },
-      hint: { zh: `$C = 2 \\times ${pi} \\times ${r}$`, en: `$C = 2 \\times ${pi} \\times ${r}$` },
+      hint: { zh: `围营地需要多少绳子？代入数值\n\n$C = 2 \\times ${pi} \\times ${r}$`, en: `How much rope to fence the camp? Substitute the values\n\n$C = 2 \\times ${pi} \\times ${r}$` },
       highlightField: 'c',
     },
     {
       text: { zh: `${narrator}：计算`, en: `${narrator}: "Calculate"` },
-      hint: { zh: `$2 \\times ${r} = ${2 * r}$\n$${2 * r} \\times ${pi} = ${circumference}$\n\n$C = ${circumference}$`, en: `$2 \\times ${r} = ${2 * r}$\n$${2 * r} \\times ${pi} = ${circumference}$\n\n$C = ${circumference}$` },
+      hint: { zh: `绳子量出来了——围营地一圈的长度\n\n$2 \\times ${r} = ${2 * r}$\n$${2 * r} \\times ${pi} = ${circumference}$\n\n$C = ${circumference}$`, en: `The rope is measured — one full loop around the camp\n\n$2 \\times ${r} = ${2 * r}$\n$${2 * r} \\times ${pi} = ${circumference}$\n\n$C = ${circumference}$` },
       highlightField: 'c',
     },
     {
       text: { zh: `${narrator}：答案 = ${circumference}`, en: `${narrator}: "Answer = ${circumference}"` },
-      hint: { zh: `围住半径 $${r}$ 的圆营地需要 $${circumference}$ 的绳子`, en: `A fence around a camp with radius $${r}$ needs $${circumference}$ units of rope` },
+      hint: { zh: `围营地需要这么多绳子——围住半径 $${r}$ 的圆营地需要 $${circumference}$ 的绳子`, en: `This much rope for the camp fence — a camp with radius $${r}$ needs $${circumference}$ units of rope` },
       highlightField: 'c',
     },
     {
       text: { zh: `${narrator}：验算——用直径法`, en: `${narrator}: "Verify — using diameter method"` },
-      hint: { zh: `直径 $d = 2 \\times ${r} = ${2 * r}$\n$C = \\pi \\times d = ${pi} \\times ${2 * r} = ${circumference}$ ✓`, en: `Diameter $d = 2 \\times ${r} = ${2 * r}$\n$C = \\pi \\times d = ${pi} \\times ${2 * r} = ${circumference}$ ✓` },
+      hint: { zh: `换个方法量一遍——绳子不能多也不能少！\n\n直径 $d = 2 \\times ${r} = ${2 * r}$\n$C = \\pi \\times d = ${pi} \\times ${2 * r} = ${circumference}$ ✓`, en: `Measure again a different way — not a metre more, not a metre less!\n\nDiameter $d = 2 \\times ${r} = ${2 * r}$\n$C = \\pi \\times d = ${pi} \\times ${2 * r} = ${circumference}$ ✓` },
       highlightField: 'c',
     },
   ] : [
@@ -5629,22 +5629,22 @@ export function generateCircleY8Mission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：第一步——算 $r^2$`, en: `${narrator}: "Step 1 — calculate $r^2$"` },
-      hint: { zh: `$r^2 = ${r} \\times ${r} = ${r * r}$`, en: `$r^2 = ${r} \\times ${r} = ${r * r}$` },
+      hint: { zh: `营地地基先量方——半径自乘\n\n$r^2 = ${r} \\times ${r} = ${r * r}$`, en: `Measure the camp ground — square the radius first\n\n$r^2 = ${r} \\times ${r} = ${r * r}$` },
       highlightField: 'area',
     },
     {
       text: { zh: `${narrator}：第二步——乘以 $\\pi$`, en: `${narrator}: "Step 2 — multiply by $\\pi$"` },
-      hint: { zh: `$A = ${pi} \\times ${r * r} = ${area}$`, en: `$A = ${pi} \\times ${r * r} = ${area}$` },
+      hint: { zh: `乘上 $\\pi$——算出营地能扎多少帐篷的空间\n\n$A = ${pi} \\times ${r * r} = ${area}$`, en: `Multiply by $\\pi$ — find how much tent space the camp has\n\n$A = ${pi} \\times ${r * r} = ${area}$` },
       highlightField: 'area',
     },
     {
       text: { zh: `${narrator}：答案 = ${area}`, en: `${narrator}: "Answer = ${area}"` },
-      hint: { zh: `圆营地面积 $= ${area}$ 平方单位`, en: `Circular camp area $= ${area}$ square units` },
+      hint: { zh: `营地能扎这么多帐篷——圆营地面积 $= ${area}$ 平方单位`, en: `This much space for tents — circular camp area $= ${area}$ square units` },
       highlightField: 'area',
     },
     {
       text: { zh: `${narrator}：验算——估算检查`, en: `${narrator}: "Verify — estimation check"` },
-      hint: { zh: `圆面积 ≈ $3 \\times r^2 = 3 \\times ${r * r} = ${3 * r * r}$\n实际答案 $${area}$ 略大于 $${3 * r * r}$（因为 $\\pi > 3$）✓ 合理！`, en: `Circle area ≈ $3 \\times r^2 = 3 \\times ${r * r} = ${3 * r * r}$\nActual $${area}$ is slightly more than $${3 * r * r}$ (since $\\pi > 3$) ✓ Makes sense!` },
+      hint: { zh: `估算复核——扎营面积不能算错！\n\n圆面积 ≈ $3 \\times r^2 = 3 \\times ${r * r} = ${3 * r * r}$\n实际答案 $${area}$ 略大于 $${3 * r * r}$（因为 $\\pi > 3$）✓ 合理！`, en: `Estimation check — can't get the camp size wrong!\n\nCircle area ≈ $3 \\times r^2 = 3 \\times ${r * r} = ${3 * r * r}$\nActual $${area}$ is slightly more than $${3 * r * r}$ (since $\\pi > 3$) ✓ Makes sense!` },
       highlightField: 'area',
     },
   ];
@@ -5692,22 +5692,22 @@ export function generateVolumeY8Mission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：第一步——算底面积 $\\pi r^2$`, en: `${narrator}: "Step 1 — base area $\\pi r^2$"` },
-      hint: { zh: `$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$`, en: `$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$` },
+      hint: { zh: `底面积就是仓底能铺多少粮\n\n$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$`, en: `The base area is how much grain fits on the floor\n\n$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$` },
       highlightField: 'v',
     },
     {
       text: { zh: `${narrator}：第二步——底面积 × 高`, en: `${narrator}: "Step 2 — base area × height"` },
-      hint: { zh: `$V = ${baseArea} \\times ${height} = ${volume}$`, en: `$V = ${baseArea} \\times ${height} = ${volume}$` },
+      hint: { zh: `堆满后的总量——底面积乘以高\n\n$V = ${baseArea} \\times ${height} = ${volume}$`, en: `Total grain when filled — base area times height\n\n$V = ${baseArea} \\times ${height} = ${volume}$` },
       highlightField: 'v',
     },
     {
       text: { zh: `${narrator}：答案 = ${volume}`, en: `${narrator}: "Answer = ${volume}"` },
-      hint: { zh: `粮仓体积 $V = ${volume}$ 立方单位`, en: `Granary volume $V = ${volume}$ cubic units` },
+      hint: { zh: `这座粮仓能装这么多粮食——粮仓体积 $V = ${volume}$ 立方单位`, en: `This granary holds this much grain — volume $V = ${volume}$ cubic units` },
       highlightField: 'v',
     },
     {
       text: { zh: `${narrator}：验算——估算检查`, en: `${narrator}: "Verify — estimation check"` },
-      hint: { zh: `估算：$V \\approx 3 \\times ${radius}^2 \\times ${height} = 3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\n实际 $${volume}$ 略大（$\\pi > 3$）✓ 合理！`, en: `Estimate: $V \\approx 3 \\times ${radius}^2 \\times ${height} = 3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\nActual $${volume}$ is slightly more ($\\pi > 3$) ✓ Makes sense!` },
+      hint: { zh: `粮草是大事——估算复核一遍\n\n估算：$V \\approx 3 \\times ${radius}^2 \\times ${height} = 3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\n实际 $${volume}$ 略大（$\\pi > 3$）✓ 合理！`, en: `Grain supplies are critical — double-check with estimation\n\nEstimate: $V \\approx 3 \\times ${radius}^2 \\times ${height} = 3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\nActual $${volume}$ is slightly more ($\\pi > 3$) ✓ Makes sense!` },
       highlightField: 'v',
     },
   ];
@@ -5768,22 +5768,22 @@ export function generatePercentageInterestMission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：计算利息`, en: `${narrator}: "Calculate the interest"` },
-      hint: { zh: `利息 $= ${principal} \\times ${rateDecimal} \\times ${years} = ${interest * years}$`, en: `Interest $= ${principal} \\times ${rateDecimal} \\times ${years} = ${interest * years}$` },
+      hint: { zh: `国库收税——算出利息总额\n\n利息 $= ${principal} \\times ${rateDecimal} \\times ${years} = ${interest * years}$`, en: `Treasury collects tax — calculate total interest\n\nInterest $= ${principal} \\times ${rateDecimal} \\times ${years} = ${interest * years}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：加上本金`, en: `${narrator}: "Add the principal"` },
-      hint: { zh: `总额 $= ${principal} + ${interest * years} = ${totalSimple}$`, en: `Total $= ${principal} + ${interest * years} = ${totalSimple}$` },
+      hint: { zh: `本金加利息——国库总入账\n\n总额 $= ${principal} + ${interest * years} = ${totalSimple}$`, en: `Principal plus interest — total into the treasury\n\nTotal $= ${principal} + ${interest * years} = ${totalSimple}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：答案 = ${totalSimple}`, en: `${narrator}: "Answer = ${totalSimple}"` },
-      hint: { zh: `$${years}$ 年后需还 $${totalSimple}$ 两`, en: `After $${years}$ years, repay $${totalSimple}$ liang` },
+      hint: { zh: `国库账本记录——$${years}$ 年后需还 $${totalSimple}$ 两`, en: `Treasury ledger records — after $${years}$ years, repay $${totalSimple}$ liang` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：验算`, en: `${narrator}: "Verify"` },
-      hint: { zh: `每年利息 $${interest}$，共 $${years}$ 年\n利息合计 $= ${interest} \\times ${years} = ${interest * years}$\n本金 + 利息 $= ${principal} + ${interest * years} = ${totalSimple}$ ✓`, en: `Yearly interest $${interest}$, for $${years}$ years\nTotal interest $= ${interest} \\times ${years} = ${interest * years}$\nPrincipal + interest $= ${principal} + ${interest * years} = ${totalSimple}$ ✓` },
+      hint: { zh: `账房先生复核——国库不能算错！\n\n每年利息 $${interest}$，共 $${years}$ 年\n利息合计 $= ${interest} \\times ${years} = ${interest * years}$\n本金 + 利息 $= ${principal} + ${interest * years} = ${totalSimple}$ ✓`, en: `The treasurer double-checks — the treasury must be accurate!\n\nYearly interest $${interest}$, for $${years}$ years\nTotal interest $= ${interest} \\times ${years} = ${interest * years}$\nPrincipal + interest $= ${principal} + ${interest * years} = ${totalSimple}$ ✓` },
       highlightField: 'ans',
     },
   ] : [
@@ -5800,7 +5800,7 @@ export function generatePercentageInterestMission(template: Mission): Mission {
     {
       text: { zh: `${narrator}：逐年计算`, en: `${narrator}: "Calculate year by year"` },
       hint: (() => {
-        let zh = '', en = '';
+        let zh = '利滚利——国库的雪球越滚越大\n\n', en = 'Snowball effect — the treasury grows year on year\n\n';
         let amt = principal;
         for (let y = 1; y <= years; y++) {
           const prev = amt;
@@ -5814,18 +5814,18 @@ export function generatePercentageInterestMission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：用公式一步算`, en: `${narrator}: "Or use the formula in one step"` },
-      hint: { zh: `$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$`, en: `$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$` },
+      hint: { zh: `一步到位——国库总账公式\n\n$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$`, en: `One step — the treasury's master formula\n\n$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：答案 = ${answer}`, en: `${narrator}: "Answer = ${answer}"` },
-      hint: { zh: `$${years}$ 年复利后总额 $= ${answer}$ 两\n\n比单利多：$${answer} - ${totalSimple} = ${parseFloat((answer - totalSimple).toFixed(2))}$`, en: `After $${years}$ years of compound interest, total $= ${answer}$ liang\n\nMore than simple interest by: $${answer} - ${totalSimple} = ${parseFloat((answer - totalSimple).toFixed(2))}$` },
+      hint: { zh: `国库结算——利滚利果然比单利多\n\n$${years}$ 年复利后总额 $= ${answer}$ 两\n\n比单利多：$${answer} - ${totalSimple} = ${parseFloat((answer - totalSimple).toFixed(2))}$`, en: `Treasury settlement — compounding indeed beats simple interest\n\n$${years}$ years of compound interest, total $= ${answer}$ liang\n\nMore than simple interest by: $${answer} - ${totalSimple} = ${parseFloat((answer - totalSimple).toFixed(2))}$` },
       highlightField: 'ans',
     },
     {
       text: { zh: `${narrator}：验算——逐年追踪`, en: `${narrator}: "Verify — track year by year"` },
       hint: (() => {
-        let zh = `从 $${principal}$ 开始：\n`, en = `Starting from $${principal}$:\n`;
+        let zh = `账房先生逐年核账——国库不容有失！\n\n从 $${principal}$ 开始：\n`, en = `The treasurer audits year by year — the treasury must be exact!\n\nStarting from $${principal}$:\n`;
         let amt = principal;
         for (let y = 1; y <= years; y++) {
           amt = parseFloat((amt * (1 + rateDecimal)).toFixed(2));
@@ -5843,7 +5843,7 @@ export function generatePercentageInterestMission(template: Mission): Mission {
   return {
     ...template,
     description,
-    data: { principal, rate, rateDecimal, years, mode, answer, generatorType: 'PERCENTAGE_INTEREST_RANDOM' },
+    data: { principal, initial: principal, rate: rateDecimal, rateDecimal, years, mode, answer, generatorType: 'PERCENTAGE_INTEREST_RANDOM' },
     tutorialSteps,
   };
 }
@@ -5903,26 +5903,26 @@ export function generateParallelAnglesMission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：这道题是哪种？`, en: `${narrator}: "Which type is this?"` },
-      hint: { zh: `已知角 $= ${givenAngle}°$\n这一对是${typeZh}\n\n${reasonZh}`, en: `Given angle $= ${givenAngle}°$\nThis pair is ${typeEn}\n\n${reasonEn}` },
+      hint: { zh: `这对角在攻城梯的哪个位置？\n\n已知角 $= ${givenAngle}°$\n这一对是${typeZh}\n\n${reasonZh}`, en: `Where is this angle pair on the siege ladder?\n\nGiven angle $= ${givenAngle}°$\nThis pair is ${typeEn}\n\n${reasonEn}` },
       highlightField: 'x',
     },
     {
       text: { zh: `${narrator}：计算`, en: `${narrator}: "Calculate"` },
       hint: angleType === 'co-interior'
-        ? { zh: `同旁内角互补：\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$`, en: `Co-interior angles are supplementary:\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$` }
-        : { zh: `${typeZh}相等：\n$x = ${givenAngle}°$`, en: `${typeEn} are equal:\n$x = ${givenAngle}°$` },
+        ? { zh: `架梯计算——算出安全角度\n\n同旁内角互补：\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$`, en: `Ladder calculation — find the safe angle\n\nCo-interior angles are supplementary:\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$` }
+        : { zh: `架梯计算——算出安全角度\n\n${typeZh}相等：\n$x = ${givenAngle}°$`, en: `Ladder calculation — find the safe angle\n\n${typeEn} are equal:\n$x = ${givenAngle}°$` },
       highlightField: 'x',
     },
     {
       text: { zh: `${narrator}：答案 = ${answer}°`, en: `${narrator}: "Answer = ${answer}°"` },
-      hint: { zh: `$x = ${answer}°$`, en: `$x = ${answer}°$` },
+      hint: { zh: `角度确认——可以安全爬了！$x = ${answer}°$`, en: `Angle confirmed — safe to climb! $x = ${answer}°$` },
       highlightField: 'x',
     },
     {
       text: { zh: `${narrator}：验算`, en: `${narrator}: "Verify"` },
       hint: angleType === 'co-interior'
-        ? { zh: `同旁内角之和 $= ${givenAngle}° + ${answer}° = 180°$ ✓`, en: `Co-interior sum $= ${givenAngle}° + ${answer}° = 180°$ ✓` }
-        : { zh: `${typeZh}应该相等：已知 $= ${givenAngle}°$，$x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓`, en: `${typeEn} should be equal: given $= ${givenAngle}°$, $x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓` },
+        ? { zh: `攻城前最后检查——角度正确才能上！\n\n同旁内角之和 $= ${givenAngle}° + ${answer}° = 180°$ ✓`, en: `Final check before the assault — angles must be right!\n\nCo-interior sum $= ${givenAngle}° + ${answer}° = 180°$ ✓` }
+        : { zh: `攻城前最后检查——角度正确才能上！\n\n${typeZh}应该相等：已知 $= ${givenAngle}°$，$x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓`, en: `Final check before the assault — angles must be right!\n\n${typeEn} should be equal: given $= ${givenAngle}°$, $x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓` },
       highlightField: 'x',
     },
   ];
@@ -5930,7 +5930,7 @@ export function generateParallelAnglesMission(template: Mission): Mission {
   return {
     ...template,
     description,
-    data: { givenAngle, angleType, answer, total: angleType === 'co-interior' ? 180 : undefined, angle: angleType === 'co-interior' ? givenAngle : (180 - answer), generatorType: 'PARALLEL_ANGLES_RANDOM' },
+    data: { givenAngle, angleType, answer, parallel: true, total: angleType === 'co-interior' ? 180 : undefined, angle: angleType === 'co-interior' ? givenAngle : (180 - answer), generatorType: 'PARALLEL_ANGLES_RANDOM' },
     tutorialSteps,
   };
 }
