@@ -262,7 +262,7 @@ export default function App() {
             {gameState === 'map' && profile && !profile.grade && (
               <GradeSelectScreen
                 lang={lang}
-                onSelect={(g) => updateProfile({ grade: g })}
+                onSelect={(g, cls) => updateProfile({ grade: g, ...(cls ? { class_name: cls } : {}) })}
               />
             )}
 
