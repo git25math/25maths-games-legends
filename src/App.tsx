@@ -105,12 +105,19 @@ export default function App() {
     saveAppState(gameState, selectedCharId, isGuest, activeMission?.id);
   }, [gameState, selectedCharId, isGuest, activeMission?.id]);
 
-  // If Supabase auth restored a session, jump to map (but not if already on dashboard)
+  // If Supabase auth restored a session, jump to map
   useEffect(() => {
     if (user && gameState === 'welcome') {
       setGameState('map');
     }
   }, [user]);
+
+  // If not logged in and stuck on a screen that requires auth, redirect to welcome
+  useEffect(() => {
+    if (!authLoading && !user && !isGuest && gameState !== 'welcome' && gameState !== 'dashboard') {
+      setGameState('welcome');
+    }
+  }, [authLoading, user, isGuest, gameState]);
 
   const selectedChar = CHARACTERS.find(c => c.id === (selectedCharId || profile?.selected_char_id));
 
