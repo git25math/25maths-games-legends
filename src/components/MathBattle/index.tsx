@@ -346,20 +346,6 @@ export const MathBattle = ({
         })}
       />
 
-      {showAchievement && (
-        <AchievementCard
-          characterId={character.id}
-          missionTitle={mission.title}
-          score={isMultiQuestion ? totalScore : finalScore}
-          duration={finalDuration}
-          hp={hp}
-          difficulty={difficultyMode}
-          lang={lang}
-          onClose={handleAchievementClose}
-          {...(isMultiQuestion ? { correctCount, totalQuestions: questionQueue.length, peakStreak } : {})}
-        />
-      )}
-
       <motion.div
         key={`battle-${shakeKey}`}
         initial={shakeKey > 0 ? false : { scale: 0.9, opacity: 0 }}
@@ -581,7 +567,7 @@ export const MathBattle = ({
 
         {/* Result Overlay */}
         <AnimatePresence>
-          {showResult !== 'none' && !showAchievement && (
+          {showResult !== 'none' && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
