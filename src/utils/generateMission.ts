@@ -390,12 +390,12 @@ export function generateAreaRectMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是面积?\n面积是一个形状里面的空间大小，用平方单位来量。`,
-        en: `${narrator}: "What is area?\nArea is the space inside a shape, measured in square units."`,
+        zh: `${narrator}：为什么需要算面积？——扎营得知道地盘有多大`,
+        en: `${narrator}: "Why calculate area? — Setting camp means knowing how much ground we have"`,
       },
       hint: {
-        zh: '想象用小方块铺满这个形状，数一数有多少个',
-        en: 'Imagine filling the shape with small squares and counting them',
+        zh: `搭帐篷、练兵、存粮，每件事都需要空间\n空间大小怎么衡量？→ 面积\n\n面积就是一个形状里面的空间大小\n用"平方单位"来量（想象铺满小方块）`,
+        en: `Pitching tents, training soldiers, storing grain — everything needs space\nHow to measure space? → Area\n\nArea = the space inside a shape\nMeasured in "square units" (imagine filling with small squares)`,
       },
       highlightField: 'area',
     },
@@ -428,6 +428,17 @@ export function generateAreaRectMission(template: Mission): Mission {
       text: {
         zh: `${narrator}：答案：面积 = $${area}$ 平方单位`,
         en: `${narrator}: "Answer: Area = $${area}$ square units"`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——面积合理吗？`,
+        en: `${narrator}: "Verify — does the area make sense?"`,
+      },
+      hint: {
+        zh: `$${length} \\times ${width} = ${area}$ ✓\n\n快速检查：\n• 面积一定比长和宽都大（${area} > ${length} 且 ${area} > ${width}）✓\n• 单位是"平方单位"，不是普通单位 ✓`,
+        en: `$${length} \\times ${width} = ${area}$ ✓\n\nQuick check:\n• Area must be larger than both length and width (${area} > ${length} and ${area} > ${width}) ✓\n• Units are "square units", not plain units ✓`,
       },
       highlightField: 'area',
     },
@@ -1047,12 +1058,12 @@ export function generateStatsMeanMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是平均数(mean)?\n把所有数加起来，再除以数的个数。`,
-        en: `${narrator}: "What is the mean (average)?\nAdd up all the numbers, then divide by how many there are."`,
+        zh: `${narrator}：为什么需要"平均数"？——一个数总结全队水平`,
+        en: `${narrator}: "Why do we need the 'mean'? — One number that summarizes the whole team"`,
       },
       hint: {
-        zh: '平均数就是把总量平均分给每一个',
-        en: 'The mean is the total shared equally among all values',
+        zh: `士兵战力各不相同：$${values.join(', ')}$\n\n主公问："整体水平怎么样？"\n总不能把 ${count} 个数字全念一遍\n\n平均数就是——把总量平均分给每一个人\n用一个数字代表整体水平`,
+        en: `Soldiers have different strengths: $${values.join(', ')}$\n\nThe lord asks: "What's the overall level?"\nCan't list all ${count} numbers\n\nThe mean = share the total equally among everyone\nOne number representing the whole group`,
       },
       highlightField: 'ans',
     },
@@ -1081,6 +1092,17 @@ export function generateStatsMeanMission(template: Mission): Mission {
       text: {
         zh: `${narrator}：答案：平均数 = $${meanRounded}$`,
         en: `${narrator}: "Answer: Mean = $${meanRounded}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——平均数合理吗？`,
+        en: `${narrator}: "Verify — does the mean make sense?"`,
+      },
+      hint: {
+        zh: `平均数 $${meanRounded}$ 应该在最小值和最大值之间\n\n最小值 = $${Math.min(...values)}$\n最大值 = $${Math.max(...values)}$\n$${Math.min(...values)} \\leq ${meanRounded} \\leq ${Math.max(...values)}$ ✓\n\n反算：$${meanRounded} \\times ${count} = ${meanRounded * count}$${meanRounded * count === sum ? ' = ' + sum + ' ✓' : ' ≈ ' + sum + ' ✓'}`,
+        en: `Mean $${meanRounded}$ should be between the minimum and maximum\n\nMin = $${Math.min(...values)}$\nMax = $${Math.max(...values)}$\n$${Math.min(...values)} \\leq ${meanRounded} \\leq ${Math.max(...values)}$ ✓\n\nReverse check: $${meanRounded} \\times ${count} = ${meanRounded * count}$${meanRounded * count === sum ? ' = ' + sum + ' ✓' : ' ≈ ' + sum + ' ✓'}`,
       },
       highlightField: 'ans',
     },
@@ -1940,6 +1962,11 @@ export function generateStatsMedianMission(template: Mission): Mission {
     {
       text: { zh: `${narrator}：验算——中位数合理吗？`, en: `${narrator}: "Verify — does the median make sense?"` },
       hint: { zh: `中位数 = $${median}$\n\n检查：\n• 比它小的有 ${mid} 个：$${sorted.slice(0, mid).join(', ')}$ ✓\n• 比它大的有 ${mid} 个：$${sorted.slice(mid + 1).join(', ')}$ ✓\n• 两边数量相等！中位数就是"正中间"的意思`, en: `Median = $${median}$\n\nCheck:\n• Values smaller: ${mid} values: $${sorted.slice(0, mid).join(', ')}$ ✓\n• Values larger: ${mid} values: $${sorted.slice(mid + 1).join(', ')}$ ✓\n• Equal count on both sides! Median means "exactly in the middle"` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：注意——如果数据个数是偶数怎么办？`, en: `${narrator}: "Note — what if there's an even number of values?"` },
+      hint: { zh: `奇数个数据：中间那个就是中位数\n（这道题 $${count}$ 个数据 → 第 $${mid + 1}$ 个）\n\n偶数个数据：取中间两个的平均值\n例如 4 个数据 $1, 3, 5, 7$\n中间两个是 $3$ 和 $5$\n中位数 = $(3 + 5) \\div 2 = 4$`, en: `Odd count: the middle value IS the median\n(This problem: $${count}$ values → ${mid + 1}th)\n\nEven count: average the two middle values\nExample: 4 values $1, 3, 5, 7$\nMiddle two: $3$ and $5$\nMedian = $(3 + 5) \\div 2 = 4$` },
       highlightField: 'ans',
     },
   ];
@@ -3872,6 +3899,11 @@ export function generatePerimeterRectMission(template: Mission): Mission {
       highlightField: 'ans',
     },
     {
+      text: { zh: `${narrator}：答案——周长 = $${answer}$`, en: `${narrator}: "Answer — Perimeter = $${answer}$"` },
+      hint: { zh: `营地的围栅需要 $${answer}$ 单位长\n\n公式：$P = 2(${length} + ${width}) = 2 \\times ${length + width} = ${answer}$`, en: `The camp fence needs $${answer}$ units of fencing\n\nFormula: $P = 2(${length} + ${width}) = 2 \\times ${length + width} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
       text: { zh: `${narrator}：验算——用笨办法检查`, en: `${narrator}: "Verify — check with the simple method"` },
       hint: { zh: `$${length} + ${width} + ${length} + ${width} = ${answer}$ ✓\n$2 \\times (${length} + ${width}) = ${answer}$ ✓\n\n两种方法答案一样——围栅需要 $${answer}$ 单位长！`, en: `$${length} + ${width} + ${length} + ${width} = ${answer}$ ✓\n$2 \\times (${length} + ${width}) = ${answer}$ ✓\n\nBoth methods match — we need $${answer}$ units of fencing!` },
       highlightField: 'ans',
@@ -3925,6 +3957,11 @@ export function generatePercentageOfMission(template: Mission): Mission {
     {
       text: { zh: `${narrator}：小捷径——先算 $10\\%$，再凑其他`, en: `${narrator}: "Shortcut — find $10\\%$ first, then build from there"` },
       hint: { zh: `$10\\%$ 就是除以 10：$${n} \\div 10 = ${tenPct}$\n$50\\%$ 就是除以 2：$${n} \\div 2 = ${n/2}$\n$25\\%$ 就是除以 4：$${n} \\div 4 = ${n/4}$\n$1\\%$ 就是除以 100：$${n} \\div 100 = ${n/100}$\n\n任何百分比都能用 $10\\%$ 和 $1\\%$ 凑出来！`, en: `$10\\%$ = divide by 10: $${n} \\div 10 = ${tenPct}$\n$50\\%$ = divide by 2: $${n} \\div 2 = ${n/2}$\n$25\\%$ = divide by 4: $${n} \\div 4 = ${n/4}$\n$1\\%$ = divide by 100: $${n} \\div 100 = ${n/100}$\n\nAny percentage can be built from $10\\%$ and $1\\%$!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：答案——$${pct}\\%$ of $${n}$ = $${answer}$`, en: `${narrator}: "Answer — $${pct}\\%$ of $${n}$ = $${answer}$"` },
+      hint: { zh: `$${n} \\times \\frac{${pct}}{100} = ${answer}$\n\n前锋营获得 $${answer}$ 石军粮`, en: `$${n} \\times \\frac{${pct}}{100} = ${answer}$\n\nThe vanguard gets $${answer}$ units of grain` },
       highlightField: 'ans',
     },
     {
@@ -3989,6 +4026,11 @@ export function generateEstimationRoundMission(template: Mission): Mission {
       highlightField: 'ans',
     },
     {
+      text: { zh: `${narrator}：四舍五入的核心——"5"是分界线`, en: `${narrator}: "The key to rounding — '5' is the dividing line"` },
+      hint: { zh: `四舍五入的规则只有一条：\n\n看关键位右边那个数字\n• $0, 1, 2, 3, 4$ → 舍（往小的走）\n• $5, 6, 7, 8, 9$ → 入（往大的走）\n\n为什么 5 归"入"？因为 5 正好在中间，约定归大`, en: `The rounding rule is simple:\n\nLook at the digit right after the rounding position\n• $0, 1, 2, 3, 4$ → round DOWN\n• $5, 6, 7, 8, 9$ → round UP\n\nWhy does 5 round up? It's exactly in the middle, by convention we round up` },
+      highlightField: 'ans',
+    },
+    {
       text: { zh: `${narrator}：$${n}$ 夹在哪两个"整数"之间？`, en: `${narrator}: "$${n}$ sits between which two round numbers?"` },
       hint: { zh: `$${n}$ 在 $${roundDown}$ 和 $${roundUp}$ 之间\n\n想象一条数轴：\n$${roundDown}$ ←——— $${n}$ ———→ $${roundUp}$\n\n$${n}$ 离哪个更近？`, en: `$${n}$ is between $${roundDown}$ and $${roundUp}$\n\nImagine a number line:\n$${roundDown}$ ←——— $${n}$ ———→ $${roundUp}$\n\nWhich is $${n}$ closer to?` },
       highlightField: 'ans',
@@ -4040,7 +4082,12 @@ export function generateAnglesTriangleMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：三角旗阵已知两个角，要算第三个角才能裁旗`, en: `${narrator}: "Two angles of the triangular banner are known — find the third to cut the fabric"` },
+      text: { zh: `${narrator}：为什么要算三角形的角？——裁旗、搭营都得知道每个角`, en: `${narrator}: "Why find triangle angles? — Cutting banners and pitching tents requires knowing every angle"` },
+      hint: { zh: `三角旗只知道两个角，第三个角不知道\n没有第三个角，裁缝就没法裁布！\n\n好消息：三角形有一个神奇的规律\n只要知道两个角，第三个角一定能算出来`, en: `A triangular banner has two known angles, but the third is missing\nWithout it, the tailor can't cut the fabric!\n\nGood news: triangles have a magical rule\nIf you know two angles, the third can always be calculated` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：什么是"角"？两条线交叉的张开程度`, en: `${narrator}: "What is an 'angle'? How far two lines spread apart"` },
       hint: { zh: `什么是"角"？两条线相交形成的张开程度\n角度越大，两条线张得越开\n\n我们用"度"（°）来衡量：\n• 直角 = $90°$（像书角）\n• 半圈 = $180°$（一条直线）\n• 整圈 = $360°$`, en: `What is an "angle"? How far apart two lines spread when they meet\nBigger angle = wider spread\n\nWe measure in "degrees" (°):\n• Right angle = $90°$ (like a book corner)\n• Half turn = $180°$ (a straight line)\n• Full turn = $360°$` },
       highlightField: 'x',
     },
@@ -4122,6 +4169,11 @@ export function generateAnglesPointMission(template: Mission): Mission {
     {
       text: { zh: `${narrator}：未知角 = 总度数 - 已知角`, en: `${narrator}: "Unknown angle = total − known angles"` },
       hint: { zh: `$x = 360° - ${sum}°$\n$x = ${answer}°$`, en: `$x = 360° - ${sum}°$\n$x = ${answer}°$` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：答案——$x = ${answer}°$`, en: `${narrator}: "Answer — $x = ${answer}°$"` },
+      hint: { zh: `围绕一点的所有角：${angles.map(a => `$${a}°$`).join(' + ')} + $${answer}°$\n总计 $360°$ ✓`, en: `All angles around the point: ${angles.map(a => `$${a}°$`).join(' + ')} + $${answer}°$\nTotal $360°$ ✓` },
       highlightField: 'x',
     },
     {
@@ -4269,18 +4321,28 @@ export function generateStatsRangeMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：各营战力差距有多大？用"极差"来衡量`, en: `${narrator}: "How spread out are battalion strengths? Use the 'range' to measure"` },
-      hint: { zh: `极差就是最强和最弱之间的差距\n\n差距大 → 水平参差不齐，需要整训\n差距小 → 水平齐整，可以出征\n\n极差 = 最大值 − 最小值`, en: `Range = the gap between strongest and weakest\n\nLarge range → uneven levels, need training\nSmall range → consistent, ready for battle\n\nRange = Maximum − Minimum` },
+      text: { zh: `${narrator}：为什么需要"极差"？——一个数字看出差距`, en: `${narrator}: "Why do we need 'range'? — One number shows the spread"` },
+      hint: { zh: `将军选兵，不光看平均战力\n还要看最强和最弱差多少\n\n差距大 → 水平参差不齐，需要整训\n差距小 → 水平齐整，可以出征\n\n极差就是用一个数字衡量这个差距`, en: `A general doesn't just look at average strength\nHe needs to know the gap between best and worst\n\nLarge gap → uneven, needs training\nSmall gap → consistent, ready for battle\n\nRange measures this gap with a single number` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：先找最大值和最小值`, en: `${narrator}: "First find the maximum and minimum"` },
+      text: { zh: `${narrator}：极差的公式——极差 = 最大值 − 最小值`, en: `${narrator}: "Range formula — Range = Maximum − Minimum"` },
+      hint: { zh: `就这么简单！\n\n极差 = 最大值 − 最小值\n\n注意：只需要最大和最小两个数\n中间的数据不影响极差`, en: `That's it!\n\nRange = Maximum − Minimum\n\nNote: only need the largest and smallest\nMiddle values don't affect the range` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：第一步——排序后找最大最小`, en: `${narrator}: "Step 1 — Sort to find max and min"` },
       hint: { zh: `数据（已排序）：$${sorted.join(', ')}$\n\n最小值 = $${min}$（最左边）\n最大值 = $${max}$（最右边）\n\n排好序就能一眼看出！`, en: `Data (sorted): $${sorted.join(', ')}$\n\nMinimum = $${min}$ (leftmost)\nMaximum = $${max}$ (rightmost)\n\nSorting makes it obvious!` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：极差 = 最大 − 最小`, en: `${narrator}: "Range = Max − Min"` },
-      hint: { zh: `$${max} - ${min} = ${answer}$`, en: `$${max} - ${min} = ${answer}$` },
+      text: { zh: `${narrator}：第二步——相减`, en: `${narrator}: "Step 2 — Subtract"` },
+      hint: { zh: `极差 = $${max} - ${min} = ${answer}$`, en: `Range = $${max} - ${min} = ${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：答案：极差 = $${answer}$`, en: `${narrator}: "Answer: Range = $${answer}$"` },
+      hint: { zh: `数据 $${sorted.join(', ')}$ 的极差是 $${answer}$\n\n这意味着最强和最弱之间相差 $${answer}$`, en: `Range of $${sorted.join(', ')}$ is $${answer}$\n\nThis means the gap between highest and lowest is $${answer}$` },
       highlightField: 'ans',
     },
     {
@@ -4335,7 +4397,12 @@ export function generateAreaTriangleMission(template: Mission): Mission {
     },
     {
       text: { zh: `${narrator}：第二步——除以 2`, en: `${narrator}: "Step 2 — divide by 2"` },
-      hint: { zh: `$${rectArea} \\div 2 = ${answer}$\n\n三角形面积 = $${answer}$ 平方单位`, en: `$${rectArea} \\div 2 = ${answer}$\n\nTriangle area = $${answer}$ square units` },
+      hint: { zh: `$${rectArea} \\div 2 = ${answer}$`, en: `$${rectArea} \\div 2 = ${answer}$` },
+      highlightField: 'area',
+    },
+    {
+      text: { zh: `${narrator}：答案——三角形面积 = $${answer}$`, en: `${narrator}: "Answer — Triangle area = $${answer}$"` },
+      hint: { zh: `公式：$A = \\frac{1}{2} \\times base \\times height$\n$= \\frac{1}{2} \\times ${base} \\times ${height} = ${answer}$ 平方单位\n\n三角军旗的面积是 $${answer}$ 平方单位`, en: `Formula: $A = \\frac{1}{2} \\times base \\times height$\n$= \\frac{1}{2} \\times ${base} \\times ${height} = ${answer}$ square units\n\nThe triangular banner area is $${answer}$ square units` },
       highlightField: 'area',
     },
     {
@@ -4474,7 +4541,12 @@ export function generateIntegerMulMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：正负数乘除——先看符号，再算数字`, en: `${narrator}: "Multiplying/dividing with negatives — check signs first, then compute"` },
+      text: { zh: `${narrator}：为什么需要学负数乘除？——进攻退守，方向很重要`, en: `${narrator}: "Why learn multiplying negatives? — Advance or retreat, direction matters"` },
+      hint: { zh: `正数 = 前进/得到/增加\n负数 = 后退/失去/减少\n\n"3 队骑兵各前进 2 里" = $3 \\times 2 = 6$ 里（正 = 前进）\n"3 队骑兵各后退 2 里" = $3 \\times (-2) = -6$ 里（负 = 后退）\n\n乘除里正负号代表方向！`, en: `Positive = advance/gain/increase\nNegative = retreat/lose/decrease\n\n"3 units advance 2 miles each" = $3 \\times 2 = 6$ miles (positive = forward)\n"3 units retreat 2 miles each" = $3 \\times (-2) = -6$ miles (negative = backward)\n\nSigns in multiplication represent direction!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：正负数乘除的核心规则`, en: `${narrator}: "Core rule for multiplying/dividing with signs"` },
       hint: { zh: `口诀：\n• 正 × 正 = 正（同号得正）\n• 负 × 负 = 正（同号得正）\n• 正 × 负 = 负（异号得负）\n• 负 × 正 = 负（异号得负）\n\n乘法和除法规则相同！`, en: `Rule:\n• (+) × (+) = (+) (same signs → positive)\n• (−) × (−) = (+) (same signs → positive)\n• (+) × (−) = (−) (different signs → negative)\n• (−) × (+) = (−) (different signs → negative)\n\nSame rule for division!` },
       highlightField: 'ans',
     },
@@ -4562,7 +4634,12 @@ export function generateFdpConvertMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：分数、小数、百分比——三种写法，说的是同一个数`, en: `${narrator}: "Fractions, decimals, percentages — three ways to write the same number"` },
+      text: { zh: `${narrator}：为什么要学转换？——战场上同一种情报，不同人用不同写法`, en: `${narrator}: "Why learn conversions? — Same intel, different formats for different people"` },
+      hint: { zh: `将军说"半数兵力"\n军师说"0.5倍兵力"\n谋士说"50%兵力"\n\n说的是同一件事！\n你必须能在三种写法之间自由切换`, en: `The general says "half the troops"\nThe adviser says "0.5 of the troops"\nThe strategist says "50% of the troops"\n\nAll the same thing!\nYou must switch freely between all three forms` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：分数、小数、百分比——三种写法，同一个数`, en: `${narrator}: "Fractions, decimals, percentages — three forms, one value"` },
       hint: { zh: `$\\frac{1}{2} = 0.5 = 50\\%$\n\n就像同一个人有大名、小名、绰号\n换个写法，但数值不变`, en: `$\\frac{1}{2} = 0.5 = 50\\%$\n\nLike the same person with a formal name, nickname, and title\nDifferent form, same value` },
       highlightField: 'ans',
     },
@@ -4574,6 +4651,20 @@ export function generateFdpConvertMission(template: Mission): Mission {
     {
       text: { zh: `${narrator}：这道题的答案`, en: `${narrator}: "The answer to this question"` },
       hint: { zh: `$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.dec} = ${chosen.pct}\\%$\n\n答案 = $${answer}$`, en: `$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.dec} = ${chosen.pct}\\%$\n\nAnswer = $${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——反向转换回去`, en: `${narrator}: "Verify — convert back the other way"` },
+      hint: { zh: dir === 'frac_to_pct'
+        ? `答案 $${chosen.pct}\\%$\n反向：$${chosen.pct} \\div 100 = ${chosen.dec}$\n$${chosen.dec} = \\frac{${chosen.num}}{${chosen.den}}$ ✓`
+        : dir === 'pct_to_dec'
+        ? `答案 $${chosen.dec}$\n反向：$${chosen.dec} \\times 100 = ${chosen.pct}\\%$ ✓`
+        : `答案 $${chosen.pct}\\%$\n反向：$${chosen.pct} \\div 100 = ${chosen.dec}$ ✓`,
+        en: dir === 'frac_to_pct'
+        ? `Answer $${chosen.pct}\\%$\nReverse: $${chosen.pct} \\div 100 = ${chosen.dec}$\n$${chosen.dec} = \\frac{${chosen.num}}{${chosen.den}}$ ✓`
+        : dir === 'pct_to_dec'
+        ? `Answer $${chosen.dec}$\nReverse: $${chosen.dec} \\times 100 = ${chosen.pct}\\%$ ✓`
+        : `Answer $${chosen.pct}\\%$\nReverse: $${chosen.pct} \\div 100 = ${chosen.dec}$ ✓` },
       highlightField: 'ans',
     },
     {
@@ -4740,12 +4831,17 @@ export function generateSimplifyMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：什么是"化简"？——把能合并的合并`, en: `${narrator}: "What is 'simplifying'? — Combine what can be combined"` },
-      hint: { zh: `$3x + 2x$ 就像"3 箱苹果 + 2 箱苹果"\n苹果一样，箱子可以合并！\n$3x + 2x = 5x$（5 箱苹果）\n\n但 $3x + 2y$ 不能合并——苹果和橘子不能混！`, en: `$3x + 2x$ is like "3 boxes of apples + 2 boxes of apples"\nSame fruit, boxes can be combined!\n$3x + 2x = 5x$ (5 boxes of apples)\n\nBut $3x + 2y$ can't combine — apples and oranges don't mix!` },
+      text: { zh: `${narrator}：为什么要化简？——把复杂的式子变简洁`, en: `${narrator}: "Why simplify? — Turn complex expressions into clean ones"` },
+      hint: { zh: `行军布阵时，"3队骑兵加2队骑兵"说起来太啰嗦\n直接说"5队骑兵"更清楚\n\n化简就是把数学式子也这样"合并同类"`, en: `In battle planning, "3 cavalry units plus 2 cavalry units" is wordy\nJust say "5 cavalry units" — much clearer\n\nSimplifying does the same for math expressions` },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：规则——只有"同类项"才能合并`, en: `${narrator}: "Rule — only 'like terms' can be combined"` },
+      text: { zh: `${narrator}：什么是"同类项"？——字母部分完全相同`, en: `${narrator}: "What are 'like terms'? — Same letter part"` },
+      hint: { zh: `$3x + 2x$ 就像"3 箱苹果 + 2 箱苹果"\n苹果一样，箱子可以合并！\n$3x + 2x = 5x$（5 箱苹果）\n\n但 $3x + 2y$ 不能合并——苹果和橘子不能混！`, en: `$3x + 2x$ is like "3 boxes of apples + 2 boxes of apples"\nSame fruit, boxes can be combined!\n$3x + 2x = 5x$ (5 boxes)\n\nBut $3x + 2y$ can't combine — apples and oranges don't mix!` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：判断——$${expr}$ 中哪些是同类项？`, en: `${narrator}: "Identify — which terms in $${expr}$ are like terms?"` },
       hint: { zh: `同类项 = 字母部分完全相同\n\n✓ $${a}x$ 和 $${b}x$ 是同类项（都是 $x$）\n✗ $3x$ 和 $3y$ 不是同类项（一个 $x$ 一个 $y$）\n✗ $3x$ 和 $3x^2$ 不是同类项（一个 $x$ 一个 $x^2$）${c !== null ? `\n✗ $${a}x$ 和 $${c}$（常数）不是同类项` : ''}`, en: `Like terms = exact same letter part\n\n✓ $${a}x$ and $${b}x$ are like terms (both $x$)\n✗ $3x$ and $3y$ are NOT (different letters)\n✗ $3x$ and $3x^2$ are NOT ($x$ vs $x^2$)${c !== null ? `\n✗ $${a}x$ and $${c}$ (constant) are NOT like terms` : ''}` },
       highlightField: 'ans',
     },
@@ -4755,8 +4851,13 @@ export function generateSimplifyMission(template: Mission): Mission {
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：结果`, en: `${narrator}: "Result"` },
-      hint: { zh: `$${expr} = ${simplified}$\n\n$x$ 的系数 = $${answer}$\n\n验算：$${answer} \\times x${c !== null ? ` + ${c}` : ''}$ 和原来一样 ✓`, en: `$${expr} = ${simplified}$\n\nCoefficient of $x$ = $${answer}$\n\nCheck: $${answer} \\times x${c !== null ? ` + ${c}` : ''}$ same as original ✓` },
+      text: { zh: `${narrator}：答案——$x$ 的系数是 $${answer}$`, en: `${narrator}: "Answer — coefficient of $x$ is $${answer}$"` },
+      hint: { zh: `$${expr} = ${simplified}$\n\n$x$ 的系数 = $${answer}$`, en: `$${expr} = ${simplified}$\n\nCoefficient of $x$ = $${answer}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：验算——代入 $x = 1$ 检验`, en: `${narrator}: "Verify — substitute $x = 1$ to check"` },
+      hint: { zh: `原式：$${a}(1) + ${b}(1)${c !== null ? ` + ${c}` : ''} = ${a + b}${c !== null ? ` + ${c} = ${a + b + c}` : ''}$\n化简后：$${answer}(1)${c !== null ? ` + ${c} = ${answer + c}` : ` = ${answer}`}$\n\n${a + b + (c || 0)} = ${answer + (c || 0)} ✓ 一致！`, en: `Original: $${a}(1) + ${b}(1)${c !== null ? ` + ${c}` : ''} = ${a + b}${c !== null ? ` + ${c} = ${a + b + c}` : ''}$\nSimplified: $${answer}(1)${c !== null ? ` + ${c} = ${answer + c}` : ` = ${answer}`}$\n\n${a + b + (c || 0)} = ${answer + (c || 0)} ✓ Match!` },
       highlightField: 'ans',
     },
   ];
@@ -4823,6 +4924,11 @@ export function generateStatsModeMission(template: Mission): Mission {
     {
       text: { zh: `${narrator}：谁的票数最多？`, en: `${narrator}: "Who got the most votes?"` },
       hint: { zh: `$${modeValue}$ 出现了 $${modeCount}$ 次——最多！\n\n众数 = $${modeValue}$`, en: `$${modeValue}$ appears $${modeCount}$ times — the most!\n\nMode = $${modeValue}$` },
+      highlightField: 'ans',
+    },
+    {
+      text: { zh: `${narrator}：答案——众数 = $${modeValue}$`, en: `${narrator}: "Answer — Mode = $${modeValue}$"` },
+      hint: { zh: `数据 $${sorted.join(', ')}$\n\n$${modeValue}$ 出现了 $${modeCount}$ 次，比其他任何值都多\n\n众数 = $${modeValue}$`, en: `Data: $${sorted.join(', ')}$\n\n$${modeValue}$ appears $${modeCount}$ times, more than any other value\n\nMode = $${modeValue}$` },
       highlightField: 'ans',
     },
     {
@@ -4953,7 +5059,12 @@ export function generateCoordinatesMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：什么是坐标？——用两个数字标记地图上的位置`, en: `${narrator}: "What are coordinates? — Two numbers that mark a position on a map"` },
+      text: { zh: `${narrator}：为什么需要坐标？——让每个位置都有"地址"`, en: `${narrator}: "Why do we need coordinates? — Give every position an 'address'"` },
+      hint: { zh: `"敌军在东边"——太模糊了！\n"敌军在东 5 里、北 3 里"——精确！\n\n坐标就是用数字精确描述位置的方法\n战场上每个点都有唯一的"数字地址"`, en: `"The enemy is to the east" — too vague!\n"The enemy is 5 miles east, 3 miles north" — precise!\n\nCoordinates use numbers to pinpoint locations\nEvery point on the battlefield has a unique "numerical address"` },
+      highlightField: 'x',
+    },
+    {
+      text: { zh: `${narrator}：坐标系的结构——两条轴 + 原点`, en: `${narrator}: "Coordinate system — two axes + origin"` },
       hint: { zh: `想象一张方格地图：\n• 横着看（→）= $x$ 轴\n• 竖着看（↑）= $y$ 轴\n• 两条轴交叉的点 = 原点 $(0, 0)$\n\n每个位置用 $(x, y)$ 表示：\n先走横的（$x$），再走竖的（$y$）\n\n口诀：先横后竖，先 $x$ 后 $y$`, en: `Imagine a grid map:\n• Horizontal (→) = $x$-axis\n• Vertical (↑) = $y$-axis\n• Where they cross = origin $(0, 0)$\n\nEvery position is written $(x, y)$:\nGo horizontal first ($x$), then vertical ($y$)\n\nRule: across first, then up — $x$ before $y$` },
       highlightField: 'x',
     },
