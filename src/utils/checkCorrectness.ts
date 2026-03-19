@@ -131,8 +131,9 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     if (data.answer !== undefined) {
       return { correct: parse(inputs.x || '') === data.answer, expected: { x: String(data.answer) } };
     }
+    // Fallback: complementary/supplementary angle (Y7 style)
     const total = data.total || 180;
-    const val = total - data.angle;
+    const val = total - (data.givenAngle ?? data.angle);
     return { correct: parse(inputs.x || '') === val, expected: { x: String(val) } };
   }
   if (type === 'VOLUME') {

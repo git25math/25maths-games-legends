@@ -5930,7 +5930,7 @@ export function generateParallelAnglesMission(template: Mission): Mission {
   return {
     ...template,
     description,
-    data: { givenAngle, angleType, answer, parallel: true, total: angleType === 'co-interior' ? 180 : undefined, angle: angleType === 'co-interior' ? givenAngle : (180 - answer), generatorType: 'PARALLEL_ANGLES_RANDOM' },
+    data: { givenAngle, angleType, answer, parallel: true, highlight: angleType === 'co-interior' ? 'cointerior' : angleType, total: angleType === 'co-interior' ? 180 : undefined, angle: givenAngle, generatorType: 'PARALLEL_ANGLES_RANDOM' },
     tutorialSteps,
   };
 }
