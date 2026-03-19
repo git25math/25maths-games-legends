@@ -6335,53 +6335,72 @@ export function generateSimultaneousY8Mission(template: Mission): Mission {
     en: `Solve by substitution: ${eq1En}, ${eq2En}`,
   };
 
+  // Build sign display helpers
+  const bSign = b >= 0 ? '+ ' + b : '- ' + Math.abs(b);
+  const constSign = constant >= 0 ? '+ ' + constant : '- ' + Math.abs(constant);
+  const aDisplay = a === 1 ? '' : a === -1 ? '-' : String(a);
+
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：为什么需要联立方程？\n两支军队需要同时到达会合点——每支军队有自己的行军路线（方程）。\n只有同时满足两个条件，才能找到会合点。`,
-        en: `${narrator}: "Why do we need simultaneous equations?\nTwo armies must arrive at the rendezvous at the same time — each has its own march route (equation).\nOnly by satisfying both conditions can we find the meeting point."`,
+        zh: `${narrator}：为什么需要联立方程？\n想象两支军队要在某个地点会合。第一支走的是一条路（方程1），第二支走另一条路（方程2）。\n只有找到**两条路的交叉点**，才知道在哪里碰头。\n联立方程就是找这个交叉点的方法！`,
+        en: `${narrator}: "Why do we need simultaneous equations?\nImagine two armies meeting at a point. The first takes one road (Equation 1), the second another (Equation 2).\nOnly by finding where the two roads CROSS can we know the meeting point.\nSimultaneous equations are the method for finding that crossing!"`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：方程组\n方程1：${eq1Zh}（已解出 $y$）\n方程2：${eq2Zh}`,
-        en: `${narrator}: "The system\nEquation 1: ${eq1En} ($y$ is already isolated)\nEquation 2: ${eq2En}"`,
+        zh: `${narrator}：我们有两个方程：\n方程1：${eq1Zh}\n方程2：${eq2Zh}\n\n注意方程1已经告诉我们 $y$ 等于什么了——这是代入法的关键起点！`,
+        en: `${narrator}: "We have two equations:\nEquation 1: ${eq1En}\nEquation 2: ${eq2En}\n\nNotice Equation 1 already tells us what $y$ equals — this is the key starting point for substitution!"`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：代入\n把方程1的 $y$ 代入方程2：\n$${c}x + ${d}(${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}) = ${e}$`,
-        en: `${narrator}: "Substitute\nReplace $y$ in Equation 2 with Equation 1:\n$${c}x + ${d}(${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}) = ${e}$"`,
+        zh: `${narrator}：什么是"代入"？\n很简单：方程1说 $y = ${aDisplay}x ${bSign}$\n我们把这个整体"塞"进方程2里，**替换掉方程2里的 $y$**。\n就像在句子里用具体描述替换一个代号。\n别紧张，跟着我一步步来！`,
+        en: `${narrator}: "What is 'substitution'?\nSimple: Equation 1 says $y = ${aDisplay}x ${bSign}$\nWe take this whole expression and 'plug it in' to Equation 2, REPLACING the $y$ there.\nIt's like replacing a codename with its actual description in a sentence.\nDon't worry — follow me step by step!"`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：化简\n$${combinedCoeff}x ${constant >= 0 ? '+ ' + constant : '- ' + Math.abs(constant)} = ${e}$\n$${combinedCoeff}x = ${e - constant}$\n$x = ${x}$`,
-        en: `${narrator}: "Simplify\n$${combinedCoeff}x ${constant >= 0 ? '+ ' + constant : '- ' + Math.abs(constant)} = ${e}$\n$${combinedCoeff}x = ${e - constant}$\n$x = ${x}$"`,
+        zh: `${narrator}：执行代入\n方程2原来是 $${c}x + ${d}y = ${e}$\n用 $(${aDisplay}x ${bSign})$ 替换 $y$：\n$$${c}x + ${d}(${aDisplay}x ${bSign}) = ${e}$$\n现在方程里只剩 $x$ 一个未知数了！`,
+        en: `${narrator}: "Do the substitution\nEquation 2 was $${c}x + ${d}y = ${e}$\nReplace $y$ with $(${aDisplay}x ${bSign})$:\n$$${c}x + ${d}(${aDisplay}x ${bSign}) = ${e}$$\nNow there's only ONE unknown — $x$!"`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：代回求 $y$\n$y = ${a} \\times ${x} ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} = ${y}$`,
-        en: `${narrator}: "Substitute back to find $y$\n$y = ${a} \\times ${x} ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} = ${y}$"`,
+        zh: `${narrator}：展开括号\n$${d} \\times ${aDisplay}x = ${d * a}x$\n$${d} \\times (${bSign.replace('+ ', '').replace('- ', '-')}) = ${constant >= 0 ? constant : constant}$\n\n展开后得到：$${c}x + ${d * a}x ${constSign} = ${e}$\n合并 $x$ 的项：$${combinedCoeff}x ${constSign} = ${e}$`,
+        en: `${narrator}: "Expand the brackets\n$${d} \\times ${aDisplay}x = ${d * a}x$\n$${d} \\times (${bSign.replace('+ ', '').replace('- ', '-')}) = ${constant}$\n\nAfter expanding: $${c}x + ${d * a}x ${constSign} = ${e}$\nCombine the $x$ terms: $${combinedCoeff}x ${constSign} = ${e}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：解出 $x$\n$${combinedCoeff}x ${constSign} = ${e}$\n移项：$${combinedCoeff}x = ${e} ${constant >= 0 ? '- ' + constant : '+ ' + Math.abs(constant)} = ${e - constant}$\n除以系数：$x = \\frac{${e - constant}}{${combinedCoeff}} = ${x}$\n\n$x$ 找到了！你做得太好了！`,
+        en: `${narrator}: "Solve for $x$\n$${combinedCoeff}x ${constSign} = ${e}$\nRearrange: $${combinedCoeff}x = ${e} ${constant >= 0 ? '- ' + constant : '+ ' + Math.abs(constant)} = ${e - constant}$\nDivide: $x = \\frac{${e - constant}}{${combinedCoeff}} = ${x}$\n\n$x$ found! You're doing brilliantly!"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：代回求 $y$\n把 $x = ${x}$ 代回方程1：\n$y = ${aDisplay} \\times ${x} ${bSign}$\n$y = ${a * x} ${bSign}$\n$y = ${y}$`,
+        en: `${narrator}: "Substitute back to find $y$\nPut $x = ${x}$ back into Equation 1:\n$y = ${aDisplay} \\times ${x} ${bSign}$\n$y = ${a * x} ${bSign}$\n$y = ${y}$"`,
       },
       highlightField: 'y',
     },
     {
       text: {
-        zh: `${narrator}：答案\n$x = ${x}$，$y = ${y}$`,
-        en: `${narrator}: "Answer\n$x = ${x}$, $y = ${y}$"`,
+        zh: `${narrator}：答案\n$$x = ${x}, \\quad y = ${y}$$\n这就是两条路的交叉点——两军的会合点！`,
+        en: `${narrator}: "Answer\n$$x = ${x}, \\quad y = ${y}$$\nThis is where the two roads cross — the armies' meeting point!"`,
       },
       highlightField: 'y',
     },
     {
       text: {
-        zh: `${narrator}：验算\n代入方程2：$${c} \\times ${x} + ${d} \\times ${y} = ${c * x} + ${d * y} = ${e}$ ✓`,
-        en: `${narrator}: "Verify\nSubstitute into Eq2: $${c} \\times ${x} + ${d} \\times ${y} = ${c * x} + ${d * y} = ${e}$ ✓"`,
+        zh: `${narrator}：验算——把答案代回方程2检查：\n$${c} \\times (${x}) + ${d} \\times (${y})$\n$= ${c * x} + ${d * y}$\n$= ${e}$ ✓ 和方程2右边一致！\n\n恭喜你！代入法的每一步你都跟上了，非常出色！`,
+        en: `${narrator}: "Verify — plug the answer back into Equation 2:\n$${c} \\times (${x}) + ${d} \\times (${y})$\n$= ${c * x} + ${d * y}$\n$= ${e}$ ✓ Matches Equation 2!\n\nCongratulations! You followed every step of substitution perfectly — outstanding!"`,
       },
       highlightField: 'y',
     },
@@ -6453,46 +6472,70 @@ export function generateRatioY8Mission(template: Mission): Mission {
     ? `$\\frac{y_1}{x_1} = \\frac{${y1}}{${x1}} = ${k}$, $\\frac{y_2}{x_2} = \\frac{${y2}}{${x2}} = ${k}$ ✓ Ratios are equal!`
     : `$y_1 \\times x_1 = ${y1} \\times ${x1} = ${k}$, $y_2 \\times x_2 = ${y2} \\times ${x2} = ${k}$ ✓ Products are equal!`;
 
+  const directAnalogy = {
+    zh: `想象一个水龙头：开大一倍，水流也大一倍。\n水流和开度成**正比**——一个变大，另一个也按同样倍数变大。\n它们的比值 $\\frac{y}{x}$ 永远不变，这个不变的比值就叫 $k$。`,
+    en: `Imagine a tap: open it twice as much, water flows twice as fast.\nWater flow is DIRECTLY proportional to how far you open it — one grows, the other grows by the same factor.\nTheir ratio $\\frac{y}{x}$ never changes — this unchanging ratio is called $k$.`,
+  };
+  const inverseAnalogy = {
+    zh: `想象分蛋糕：人越多，每人分到的越少。\n每人的份量和人数成**反比**——一个变大，另一个就变小。\n它们的乘积 $x \\times y$ 永远不变（因为蛋糕总量没变），这个不变的乘积就叫 $k$。`,
+    en: `Imagine sharing a cake: more people means less each person gets.\nEach person's share is INVERSELY proportional to the number of people — one grows, the other shrinks.\nTheir product $x \\times y$ never changes (the cake stays the same size) — this unchanging product is called $k$.`,
+  };
+  const analogy = mode === 'direct' ? directAnalogy : inverseAnalogy;
+
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：为什么需要比例关系？\n治理天下，税收和人口成正比——人越多税越多。\n而粮草分配和军队数成反比——军队越多，每人分到越少。\n理解正反比例，才能精准治国。`,
-        en: `${narrator}: "Why do we need proportion?\nGoverning a realm: tax is directly proportional to population — more people, more tax.\nBut rations per soldier are inversely proportional — more soldiers, less each gets.\nUnderstanding proportion is key to good governance."`,
+        zh: `${narrator}：为什么需要比例？\n治理天下处处是比例关系：\n税收和人口成正比（人越多税越多），粮草和军队数成反比（兵越多每人分到越少）。\n掌握比例，就能用已知推算未知——这是治国的核心能力！`,
+        en: `${narrator}: "Why do we need proportion?\nGoverning a realm is all about proportion:\nTax is proportional to population (more people, more tax). Rations are inversely proportional to army size (more soldiers, less each gets).\nMaster proportion, and you can predict the unknown from the known — a ruler's core skill!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：${conceptZh}\n公式：${formulaZh}`,
-        en: `${narrator}: "${conceptEn}\nFormula: ${formulaEn}"`,
+        zh: `${narrator}：${analogy.zh}`,
+        en: `${narrator}: "${analogy.en}"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：求常数 $k$\n已知 $x = ${x1}$，$y = ${y1}$\n${findKZh}`,
-        en: `${narrator}: "Find the constant $k$\nGiven $x = ${x1}$, $y = ${y1}$\n${findKEn}"`,
+        zh: `${narrator}：从题目提取已知信息：\n已知一组数据：当 $x = ${x1}$ 时，$y = ${y1}$\n目标：求当 $x = ${x2}$ 时，$y = ?$\n\n信息都找齐了，接下来就是三步计算！`,
+        en: `${narrator}: "Extract the given information:\nKnown pair: when $x = ${x1}$, $y = ${y1}$\nGoal: find $y$ when $x = ${x2}$\n\nAll information gathered — just three calculation steps to go!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：计算\n当 $x = ${x2}$ 时：\n${calcZh}`,
-        en: `${narrator}: "Calculate\nWhen $x = ${x2}$:\n${calcEn}"`,
+        zh: `${narrator}：第一步——求常数 $k$\n$k$ 就是那个"永远不变的数"。用已知数据算出它：\n${findKZh}\n\n$k = ${k}$，记住这个数！`,
+        en: `${narrator}: "Step 1 — find the constant $k$\n$k$ is the 'number that never changes'. Calculate it from the known data:\n${findKEn}\n\n$k = ${k}$, remember this number!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：答案\n$y = ${y2}$`,
-        en: `${narrator}: "Answer\n$y = ${y2}$"`,
+        zh: `${narrator}：第二步——用 $k$ 和新的 $x$ 求 $y$\n$k$ 不变，$x$ 变了，$y$ 自然跟着变。\n当 $x = ${x2}$ 时：\n${calcZh}`,
+        en: `${narrator}: "Step 2 — use $k$ and the new $x$ to find $y$\n$k$ stays the same, $x$ changes, so $y$ changes accordingly.\nWhen $x = ${x2}$:\n${calcEn}"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：验算\n${verifyZh}`,
-        en: `${narrator}: "Verify\n${verifyEn}"`,
+        zh: `${narrator}：答案\n$y = ${y2}$\n\n做得非常好！你已经完成了比例计算！`,
+        en: `${narrator}: "Answer\n$y = ${y2}$\n\nVery well done — you've completed the proportion calculation!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n${verifyZh}\n$k$ 果然没变！说明我们算对了。`,
+        en: `${narrator}: "Verify\n${verifyEn}\n$k$ really didn't change! That confirms our answer is correct."`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：总结规律\n${mode === 'direct' ? '正比例：$x$ 变大 → $y$ 也变大（同向变化）' : '反比例：$x$ 变大 → $y$ 反而变小（反向变化）'}\n公式：${formulaZh}\n\n掌握了这个规律，以后碰到类似题目就不怕了！了不起！`,
+        en: `${narrator}: "Summary\n${mode === 'direct' ? 'Direct proportion: $x$ increases → $y$ increases too (same direction)' : 'Inverse proportion: $x$ increases → $y$ decreases (opposite direction)'}\nFormula: ${formulaEn}\n\nWith this pattern mastered, you'll never fear proportion problems again! Impressive!"`,
       },
       highlightField: 'ans',
     },
