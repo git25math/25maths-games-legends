@@ -70,7 +70,7 @@ function loadPersistedState(): PersistedState {
 function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
     // Battle can't be restored (complex internal state) → save as map
-    const safeState = (gameState === 'battle' || gameState === 'dashboard') ? 'map' : gameState;
+    const safeState = gameState === 'battle' ? 'map' : gameState;
     const safeMission = safeState === 'practice' ? missionId : null;
     localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
@@ -105,7 +105,7 @@ export default function App() {
     saveAppState(gameState, selectedCharId, isGuest, activeMission?.id);
   }, [gameState, selectedCharId, isGuest, activeMission?.id]);
 
-  // If Supabase auth restored a session, jump to map
+  // If Supabase auth restored a session, jump to map (but not if already on dashboard)
   useEffect(() => {
     if (user && gameState === 'welcome') {
       setGameState('map');
