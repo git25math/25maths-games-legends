@@ -396,55 +396,43 @@ export function generateAreaRectMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：为什么需要算面积？——扎营得知道地盘有多大`,
-        en: `${narrator}: "Why calculate area? — Setting camp means knowing how much ground we have"`,
-      },
-      hint: {
-        zh: `搭帐篷、练兵、存粮，每件事都需要空间\n空间大小怎么衡量？→ 面积\n\n面积就是一个形状里面的空间大小\n用"平方单位"来量（想象铺满小方块）`,
-        en: `Pitching tents, training soldiers, storing grain — everything needs space\nHow to measure space? → Area\n\nArea = the space inside a shape\nMeasured in "square units" (imagine filling with small squares)`,
+        zh: `${narrator}：为什么要算面积？\n扎营之前总得知道这块地有多大吧？帐篷能搭几个？练兵场够不够用？\n面积就是告诉你——这块地到底有多少"空间"。\n\n你可以想象：在地上铺满 $1 \\times 1$ 的小方块，数一数一共铺了多少块。`,
+        en: `${narrator}: "Why calculate area?\nBefore setting up camp, you need to know how big the ground is, right? How many tents fit? Is the drill yard big enough?\nArea tells you — exactly how much 'space' this plot has.\n\nImagine covering the ground with $1 \\times 1$ tiles and counting them all."`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：长方形的面积公式：$\\text{Area} = \\text{length} \\times \\text{width}$`,
-        en: `${narrator}: "Rectangle area formula: $\\text{Area} = \\text{length} \\times \\text{width}$"`,
-      },
-      hint: {
-        zh: '数一数里面能放多少个单位正方形',
-        en: 'Count how many unit squares fit inside',
+        zh: `${narrator}：长方形面积的算法超简单\n不用真的一块块数小方块——直接用：\n$$\\text{面积} = \\text{长} \\times \\text{宽}$$\n\n为什么？因为长告诉你一排能放几块，宽告诉你有几排。一乘就得到总数！`,
+        en: `${narrator}: "The rectangle area formula is super simple\nNo need to actually count tiles — just use:\n$$\\text{Area} = \\text{length} \\times \\text{width}$$\n\nWhy? Length tells you how many fit in one row, width tells you how many rows. Multiply and you get the total!"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：代入数值：$\\text{Area} = ${length} \\times ${width}$`,
-        en: `${narrator}: "Substitute: $\\text{Area} = ${length} \\times ${width}$"`,
+        zh: `${narrator}：从题目找出长和宽\n长 = $${length}$，宽 = $${width}$\n\n代进去：面积 $= ${length} \\times ${width}$`,
+        en: `${narrator}: "Find the length and width from the problem\nLength = $${length}$, width = $${width}$\n\nPlug in: Area $= ${length} \\times ${width}$"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：计算：$${length} \\times ${width} = ${area}$`,
-        en: `${narrator}: "Calculate: $${length} \\times ${width} = ${area}$"`,
+        zh: `${narrator}：算一下\n$${length} \\times ${width} = ${area}$\n\n就是这么简单——一步乘法就搞定了！`,
+        en: `${narrator}: "Calculate\n$${length} \\times ${width} = ${area}$\n\nThat simple — one multiplication and you're done!"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：答案：面积 = $${area}$ 平方单位`,
-        en: `${narrator}: "Answer: Area = $${area}$ square units"`,
+        zh: `${narrator}：答案\n面积 = $${area}$ 平方单位\n\n这块地能铺 ${area} 个小方块那么大！`,
+        en: `${narrator}: "Answer\nArea = $${area}$ square units\n\nThis plot is as big as ${area} little tiles!"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：验算——面积合理吗？`,
-        en: `${narrator}: "Verify — does the area make sense?"`,
-      },
-      hint: {
-        zh: `$${length} \\times ${width} = ${area}$ ✓\n\n快速检查：\n• 面积一定比长和宽都大（${area} > ${length} 且 ${area} > ${width}）✓\n• 单位是"平方单位"，不是普通单位 ✓`,
-        en: `$${length} \\times ${width} = ${area}$ ✓\n\nQuick check:\n• Area must be larger than both length and width (${area} > ${length} and ${area} > ${width}) ✓\n• Units are "square units", not plain units ✓`,
+        zh: `${narrator}：验算\n面积 $${area}$ 肯定比长 $${length}$ 和宽 $${width}$ 都大？✓ 对的\n反算：$${area} \\div ${length} = ${width}$ ✓ 刚好等于宽\n\n营地面积确认无误，可以开始搭帐篷了！`,
+        en: `${narrator}: "Verify\nArea $${area}$ is definitely bigger than both length $${length}$ and width $${width}$? ✓ Yes\nReverse: $${area} \\div ${length} = ${width}$ ✓ Exactly the width\n\nCamp area confirmed — start pitching tents!"`,
       },
       highlightField: 'area',
     },
@@ -749,19 +737,19 @@ export function generatePythagorasMission(template: Mission): Mission {
 
   const ans = findC ? triC : triA;
   const tutorialSteps = findC ? [
-    { text: { zh: `${narrator}：什么是勾股定理?\n在直角三角形中，$a^{2} + b^{2} = c^{2}$\n其中 $c$ 是最长的边，叫做斜边(hypotenuse)。`, en: `${narrator}: "What is the Pythagorean theorem?\nIn a right triangle, $a^{2} + b^{2} = c^{2}$\nwhere $c$ is the longest side, called the hypotenuse."` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：找出已知量：\n$a = ${triA}$，$b = ${triB}$\n我们需要求 $c$（斜边）。`, en: `${narrator}: "Identify the known values:\n$a = ${triA}$, $b = ${triB}$\nWe need to find $c$ (the hypotenuse)."` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：代入公式：\n$c^{2} = ${triA}^{2} + ${triB}^{2}$`, en: `${narrator}: "Substitute into the formula:\n$c^{2} = ${triA}^{2} + ${triB}^{2}$"` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：计算平方：\n$c^{2} = ${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$`, en: `${narrator}: "Calculate the squares:\n$c^{2} = ${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$"` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：开平方根：\n$c = \\sqrt{${triA * triA + triB * triB}} = ${triC}$`, en: `${narrator}: "Take the square root:\n$c = \\sqrt{${triA * triA + triB * triB}} = ${triC}$"` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：答案：$c = ${triC}$!`, en: `${narrator}: "Answer: $c = ${triC}$!"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：为什么需要勾股定理？\n攻城要架云梯——城墙高 $${triA}$，梯子底部离城墙 $${triB}$。\n梯子要多长才够得到？不能太短（够不到），也不能带太长的（搬不动）。\n勾股定理就是专门算这种"直角三角形"问题的！`, en: `${narrator}: "Why do we need the Pythagorean theorem?\nTo siege a wall, you need a ladder — wall height $${triA}$, ladder base $${triB}$ from wall.\nHow long must the ladder be? Not too short (can't reach), not too long (can't carry).\nThe Pythagorean theorem is made for this kind of right-angle problem!"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：勾股定理说的是什么？\n在有一个直角的三角形里，两条短边的平方加起来 = 最长边的平方。\n写成公式：$a^{2} + b^{2} = c^{2}$\n\n$a$、$b$ 是两条短边（直角旁边的），$c$ 是最长边（对面的斜边）。`, en: `${narrator}: "What does the theorem say?\nIn a triangle with a right angle, the two short sides squared add up to the longest side squared.\nAs a formula: $a^{2} + b^{2} = c^{2}$\n\n$a$, $b$ are the two short sides (next to the right angle), $c$ is the longest (the hypotenuse)."` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：从题目里找数字\n$a = ${triA}$（城墙高度），$b = ${triB}$（离墙距离）\n要求的是 $c$（云梯长度）\n\n信息齐了，开始算！`, en: `${narrator}: "Find the numbers from the problem\n$a = ${triA}$ (wall height), $b = ${triB}$ (distance from wall)\nWe need $c$ (ladder length)\n\nAll info ready — let's calculate!"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：先算平方\n$${triA}^{2} = ${triA} \\times ${triA} = ${triA * triA}$\n$${triB}^{2} = ${triB} \\times ${triB} = ${triB * triB}$\n\n加起来：$${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$\n\n所以 $c^{2} = ${triA * triA + triB * triB}$`, en: `${narrator}: "First, calculate the squares\n$${triA}^{2} = ${triA} \\times ${triA} = ${triA * triA}$\n$${triB}^{2} = ${triB} \\times ${triB} = ${triB * triB}$\n\nAdd them: $${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$\n\nSo $c^{2} = ${triA * triA + triB * triB}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：开平方根——"反向操作"\n$c^{2} = ${triA * triA + triB * triB}$，什么数乘以自己等于 ${triA * triA + triB * triB}？\n$c = \\sqrt{${triA * triA + triB * triB}} = ${triC}$\n\n云梯长度 = $${triC}$！`, en: `${narrator}: "Take the square root — the 'reverse operation'\n$c^{2} = ${triA * triA + triB * triB}$, what number times itself equals ${triA * triA + triB * triB}?\n$c = \\sqrt{${triA * triA + triB * triB}} = ${triC}$\n\nLadder length = $${triC}$!"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：答案 $c = ${triC}$\n\n验算：$${triA}^{2} + ${triB}^{2} = ${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$\n$${triC}^{2} = ${triC * triC}$ ✓ 完全吻合！\n\n云梯准备好了，攻城吧！`, en: `${narrator}: "Answer: $c = ${triC}$\n\nVerify: $${triA}^{2} + ${triB}^{2} = ${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$\n$${triC}^{2} = ${triC * triC}$ ✓ Perfect match!\n\nLadder ready — charge the walls!"` }, highlightField: 'c' },
   ] : [
-    { text: { zh: `${narrator}：什么是勾股定理?\n在直角三角形中，$a^{2} + b^{2} = c^{2}$\n其中 $c$ 是最长的边，叫做斜边(hypotenuse)。`, en: `${narrator}: "What is the Pythagorean theorem?\nIn a right triangle, $a^{2} + b^{2} = c^{2}$\nwhere $c$ is the longest side, called the hypotenuse."` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：找出已知量：\n斜边 $c = ${triC}$，一条直角边 $a = ${triB}$\n我们需要求另一条直角边 $b$。`, en: `${narrator}: "Identify the known values:\nHypotenuse $c = ${triC}$, one leg $a = ${triB}$\nWe need to find the other leg $b$."` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：变形公式：\n$b^{2} = c^{2} - a^{2}$`, en: `${narrator}: "Rearrange the formula:\n$b^{2} = c^{2} - a^{2}$"` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：计算：\n$b^{2} = ${triC}^{2} - ${triB}^{2} = ${triC * triC} - ${triB * triB} = ${triC * triC - triB * triB}$`, en: `${narrator}: "Calculate:\n$b^{2} = ${triC}^{2} - ${triB}^{2} = ${triC * triC} - ${triB * triB} = ${triC * triC - triB * triB}$"` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：开平方根：\n$b = \\sqrt{${triC * triC - triB * triB}} = ${triA}$`, en: `${narrator}: "Take the square root:\n$b = \\sqrt{${triC * triC - triB * triB}} = ${triA}$"` }, highlightField: 'c' },
-    { text: { zh: `${narrator}：答案：$b = ${triA}$!`, en: `${narrator}: "Answer: $b = ${triA}$!"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：为什么需要勾股定理？\n挖地道攻城！地面距离知道是 $${triB}$，斜着的隧道长 $${triC}$。\n但地道要挖多深？这就需要勾股定理来算。`, en: `${narrator}: "Why do we need the Pythagorean theorem?\nDigging a tunnel to breach the wall! Ground distance is $${triB}$, tunnel length $${triC}$.\nBut how deep must we dig? The Pythagorean theorem will tell us."` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：勾股定理：$a^{2} + b^{2} = c^{2}$\n$c$ 是最长边（隧道），$a$ 和 $b$ 是两条短边。\n这次我们知道 $c$ 和一条短边，要求另一条。\n\n变一下形：$b^{2} = c^{2} - a^{2}$（把已知的移过去）`, en: `${narrator}: "Pythagorean theorem: $a^{2} + b^{2} = c^{2}$\n$c$ is the longest side (tunnel), $a$ and $b$ are the two shorter sides.\nThis time we know $c$ and one short side — find the other.\n\nRearrange: $b^{2} = c^{2} - a^{2}$ (move the known side across)"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：从题目找数字\n隧道长 $c = ${triC}$，地面距离 $a = ${triB}$\n求深度 $b = ?$\n\n代进去算！`, en: `${narrator}: "Find the numbers\nTunnel length $c = ${triC}$, ground distance $a = ${triB}$\nFind depth $b = ?$\n\nLet's substitute and calculate!"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：先算平方，再做减法\n$c^{2} = ${triC} \\times ${triC} = ${triC * triC}$\n$a^{2} = ${triB} \\times ${triB} = ${triB * triB}$\n$b^{2} = ${triC * triC} - ${triB * triB} = ${triC * triC - triB * triB}$`, en: `${narrator}: "Square first, then subtract\n$c^{2} = ${triC} \\times ${triC} = ${triC * triC}$\n$a^{2} = ${triB} \\times ${triB} = ${triB * triB}$\n$b^{2} = ${triC * triC} - ${triB * triB} = ${triC * triC - triB * triB}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：开平方根\n$b = \\sqrt{${triC * triC - triB * triB}} = ${triA}$\n\n地道深度 = $${triA}$！`, en: `${narrator}: "Take the square root\n$b = \\sqrt{${triC * triC - triB * triB}} = ${triA}$\n\nTunnel depth = $${triA}$!"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}：答案 $b = ${triA}$\n\n验算：$${triA}^{2} + ${triB}^{2} = ${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$\n$${triC}^{2} = ${triC * triC}$ ✓ 完美！\n\n地道挖通了，出其不意！`, en: `${narrator}: "Answer: $b = ${triA}$\n\nVerify: $${triA}^{2} + ${triB}^{2} = ${triA * triA} + ${triB * triB} = ${triA * triA + triB * triB}$\n$${triC}^{2} = ${triC * triC}$ ✓ Perfect!\n\nTunnel complete — surprise attack!"` }, highlightField: 'c' },
   ];
 
   return { ...template, description, data, tutorialSteps };
@@ -790,60 +778,50 @@ export function generatePercentageMission(template: Mission): Mission {
 
   const decimal = pct / 100;
   const multiplier = isDiscount ? 1 - decimal : 1 + decimal;
+  const changeAmount = initial * decimal;
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是百分比?\n"百分"就是"每一百份中"。\n$${pct}\\% = \\frac{${pct}}{100} = ${decimal}$`,
-        en: `${narrator}: "What is a percentage?\n'Per cent' means 'out of 100'.\n$${pct}\\% = \\frac{${pct}}{100} = ${decimal}$"`,
+        zh: `${narrator}：百分比是什么意思？\n很简单——"百分之${pct}"就是"每 100 份里取 ${pct} 份"。\n生活中到处都是：商店打折、考试得分、税率……\n${isDiscount ? '今天我们算的是打折——原价便宜了多少。' : '今天我们算的是涨价——原来的基础上多了多少。'}`,
+        en: `${narrator}: "What does percentage mean?\nSimple — '${pct} percent' means 'take ${pct} out of every 100'.\nIt's everywhere in life: shop discounts, exam scores, tax rates...\n${isDiscount ? 'Today we\'re calculating a discount — how much cheaper.' : 'Today we\'re calculating an increase — how much more.'}"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：题目信息：\n起始值 = $${initial}$\n百分比 = $${pct}\\%$${isDiscount ? '(减少)' : '(增加)'}`,
-        en: `${narrator}: "Given information:\nStarting value = $${initial}$\nPercentage = $${pct}\\%$${isDiscount ? ' (decrease)' : ' (increase)'}"`,
+        zh: `${narrator}：从题目里找信息\n原来的值 = $${initial}$\n${isDiscount ? '减少' : '增加'} $${pct}\\%$\n\n接下来分三步走，慢慢来！`,
+        en: `${narrator}: "Find the information from the problem\nOriginal value = $${initial}$\n${isDiscount ? 'Decrease' : 'Increase'} by $${pct}\\%$\n\nThree steps ahead — nice and easy!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：把百分比转成小数：$${pct}\\% = ${decimal}$`,
-        en: `${narrator}: "Convert percentage to decimal: $${pct}\\% = ${decimal}$"`,
-      },
-      hint: {
-        zh: '除以100就行：把小数点往左移两位',
-        en: 'Just divide by 100: move the decimal point two places left',
+        zh: `${narrator}：第一步——把百分比变成小数\n怎么变？除以 100 就行（小数点往左挪两位）\n$${pct}\\% = ${pct} \\div 100 = ${decimal}$\n\n这个 $${decimal}$ 就是"变化的比例"。`,
+        en: `${narrator}: "Step 1 — turn the percentage into a decimal\nHow? Just divide by 100 (move decimal point two places left)\n$${pct}\\% = ${pct} \\div 100 = ${decimal}$\n\nThis $${decimal}$ is the 'rate of change'."`,
       },
       highlightField: 'ans',
     },
     {
       text: isDiscount ? {
-        zh: `${narrator}：减少用这个公式：\n新值 = 原值 $\\times$ $(1 - ${decimal})$ = 原值 $\\times$ $${multiplier}$`,
-        en: `${narrator}: "For decrease, use this formula:\nNew = Original $\\times$ $(1 - ${decimal})$ = Original $\\times$ $${multiplier}$"`,
+        zh: `${narrator}：第二步——算变化了多少\n减少 $${decimal}$ 意味着保留了 $1 - ${decimal} = ${multiplier}$\n\n换个说法：原来有 100%，去掉 ${pct}%，还剩 ${pct === 50 ? '一半' : (100 - pct) + '%'}。\n所以新值 = 原值 $\\times ${multiplier}$`,
+        en: `${narrator}: "Step 2 — calculate the change\nDecrease by $${decimal}$ means keeping $1 - ${decimal} = ${multiplier}$\n\nAnother way: had 100%, remove ${pct}%, left with ${100 - pct}%.\nSo new value = original $\\times ${multiplier}$"`,
       } : {
-        zh: `${narrator}：增加用这个公式：\n新值 = 原值 $\\times$ $(1 + ${decimal})$ = 原值 $\\times$ $${multiplier}$`,
-        en: `${narrator}: "For increase, use this formula:\nNew = Original $\\times$ $(1 + ${decimal})$ = Original $\\times$ $${multiplier}$"`,
-      },
-      hint: isDiscount ? {
-        zh: '减少就是用1减去小数，得到保留的比例',
-        en: 'Decrease means subtract the decimal from 1 to get the remaining fraction',
-      } : {
-        zh: '增加就是用1加上小数，得到总的比例',
-        en: 'Increase means add the decimal to 1 to get the total fraction',
+        zh: `${narrator}：第二步——算变化了多少\n增加 $${decimal}$ 意味着变成了 $1 + ${decimal} = ${multiplier}$\n\n换个说法：原来 100%，加上 ${pct}%，一共 ${100 + pct}%。\n所以新值 = 原值 $\\times ${multiplier}$`,
+        en: `${narrator}: "Step 2 — calculate the change\nIncrease by $${decimal}$ means becoming $1 + ${decimal} = ${multiplier}$\n\nAnother way: had 100%, add ${pct}%, total ${100 + pct}%.\nSo new value = original $\\times ${multiplier}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：计算：$${initial} \\times ${multiplier} = ${result}$`,
-        en: `${narrator}: "Calculate: $${initial} \\times ${multiplier} = ${result}$"`,
+        zh: `${narrator}：第三步——算出最终结果\n$${initial} \\times ${multiplier} = ${result}$`,
+        en: `${narrator}: "Step 3 — calculate the final result\n$${initial} \\times ${multiplier} = ${result}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：答案：$${result}$`,
-        en: `${narrator}: "Answer: $${result}$"`,
+        zh: `${narrator}：答案 = $${result}$\n\n验算：变化量 $= ${initial} \\times ${decimal} = ${changeAmount}$\n${isDiscount ? `$${initial} - ${changeAmount} = ${result}$` : `$${initial} + ${changeAmount} = ${result}$`} ✓\n\n百分比就是这么简单！做得好！`,
+        en: `${narrator}: "Answer = $${result}$\n\nVerify: change = $${initial} \\times ${decimal} = ${changeAmount}$\n${isDiscount ? `$${initial} - ${changeAmount} = ${result}$` : `$${initial} + ${changeAmount} = ${result}$`} ✓\n\nPercentages are that simple! Great job!"`,
       },
       highlightField: 'ans',
     },
@@ -1140,54 +1118,48 @@ export function generateStatsMeanMission(template: Mission): Mission {
   };
 
   const meanRounded = Math.round(mean * 100) / 100;
+  const minVal = Math.min(...values);
+  const maxVal = Math.max(...values);
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：为什么需要"平均数"？——一个数总结全队水平`,
-        en: `${narrator}: "Why do we need the 'mean'? — One number that summarizes the whole team"`,
-      },
-      hint: {
-        zh: `士兵战力各不相同：$${values.join(', ')}$\n\n主公问："整体水平怎么样？"\n总不能把 ${count} 个数字全念一遍\n\n平均数就是——把总量平均分给每一个人\n用一个数字代表整体水平`,
-        en: `Soldiers have different strengths: $${values.join(', ')}$\n\nThe lord asks: "What's the overall level?"\nCan't list all ${count} numbers\n\nThe mean = share the total equally among everyone\nOne number representing the whole group`,
+        zh: `${narrator}：平均数是什么意思？\n想象 ${count} 个士兵站成一排，战力各不相同。\n主公问："咱们的兵整体水平怎么样？"\n你总不能把每个人的数字都报一遍吧？\n\n平均数就是：假如把所有人的战力"匀一匀"，每人能分到多少。\n一个数就能代表整体！`,
+        en: `${narrator}: "What does the mean tell us?\nImagine ${count} soldiers in a line, each with different strength.\nThe lord asks: 'How strong is our army overall?'\nYou can't read out every single number!\n\nThe mean is: if we shared everyone's strength equally, how much would each get?\nOne number represents the whole group!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：列出所有数：$${values.join(', ')}$\n一共有 $${count}$ 个数。`,
-        en: `${narrator}: "List all numbers: $${values.join(', ')}$\nThere are $${count}$ numbers in total."`,
+        zh: `${narrator}：数一数有多少个数\n$${values.join(', ')}$\n\n数一下……一共 $${count}$ 个数。这就是我们要除以的数。`,
+        en: `${narrator}: "Count how many numbers there are\n$${values.join(', ')}$\n\nCount them... $${count}$ numbers in total. This is what we'll divide by."`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：把它们加起来：\n$${values.join(' + ')} = ${sum}$`,
-        en: `${narrator}: "Add them up:\n$${values.join(' + ')} = ${sum}$"`,
+        zh: `${narrator}：先把它们全部加起来\n$${values.join(' + ')} = ${sum}$\n\n这是所有人的战力总和——先"堆"成一大堆。`,
+        en: `${narrator}: "First, add them all up\n$${values.join(' + ')} = ${sum}$\n\nThis is everyone's strength combined — pile it all together first."`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：除以个数：$\\frac{${sum}}{${count}}$`,
-        en: `${narrator}: "Divide by the count: $\\frac{${sum}}{${count}}$"`,
+        zh: `${narrator}：然后平均分——除以人数\n$\\frac{${sum}}{${count}} = ${meanRounded}$\n\n就像分饭：总量 ${sum}，${count} 个人分，每人 ${meanRounded}。`,
+        en: `${narrator}: "Then share equally — divide by the count\n$\\frac{${sum}}{${count}} = ${meanRounded}$\n\nLike sharing food: total ${sum}, ${count} people, each gets ${meanRounded}."`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：答案：平均数 = $${meanRounded}$`,
-        en: `${narrator}: "Answer: Mean = $${meanRounded}$"`,
+        zh: `${narrator}：答案\n平均数 = $${meanRounded}$\n\n做得好！两步就搞定：先加后除。`,
+        en: `${narrator}: "Answer\nMean = $${meanRounded}$\n\nGreat job! Just two steps: add first, then divide."`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：验算——平均数合理吗？`,
-        en: `${narrator}: "Verify — does the mean make sense?"`,
-      },
-      hint: {
-        zh: `平均数 $${meanRounded}$ 应该在最小值和最大值之间\n\n最小值 = $${Math.min(...values)}$\n最大值 = $${Math.max(...values)}$\n$${Math.min(...values)} \\leq ${meanRounded} \\leq ${Math.max(...values)}$ ✓\n\n反算：$${meanRounded} \\times ${count} = ${meanRounded * count}$${meanRounded * count === sum ? ' = ' + sum + ' ✓' : ' ≈ ' + sum + ' ✓'}`,
-        en: `Mean $${meanRounded}$ should be between the minimum and maximum\n\nMin = $${Math.min(...values)}$\nMax = $${Math.max(...values)}$\n$${Math.min(...values)} \\leq ${meanRounded} \\leq ${Math.max(...values)}$ ✓\n\nReverse check: $${meanRounded} \\times ${count} = ${meanRounded * count}$${meanRounded * count === sum ? ' = ' + sum + ' ✓' : ' ≈ ' + sum + ' ✓'}`,
+        zh: `${narrator}：验算——用常识检查\n平均数应该在最小和最大之间，对不对？\n最小 = $${minVal}$，最大 = $${maxVal}$\n$${minVal} \\leq ${meanRounded} \\leq ${maxVal}$ ✓ 没问题！\n\n反算：$${meanRounded} \\times ${count} = ${meanRounded * count}$${meanRounded * count === sum ? ' = ' + sum + ' ✓ 完美！' : ' ≈ ' + sum + ' ✓ 合理！'}`,
+        en: `${narrator}: "Verify — use common sense\nThe mean should be between the smallest and largest, right?\nMin = $${minVal}$, Max = $${maxVal}$\n$${minVal} \\leq ${meanRounded} \\leq ${maxVal}$ ✓ All good!\n\nReverse check: $${meanRounded} \\times ${count} = ${meanRounded * count}$${meanRounded * count === sum ? ' = ' + sum + ' ✓ Perfect!' : ' ≈ ' + sum + ' ✓ Makes sense!'}"`,
       },
       highlightField: 'ans',
     },
@@ -1894,43 +1866,47 @@ export function generateFuncValMission(template: Mission): Mission {
       zh: `求 $y = ${m}x ${b >= 0 ? '+' : ''}${b}$ 在 $x=${x}$ 处的值。`,
       en: `Find $y = ${m}x ${b >= 0 ? '+' : ''}${b}$ at $x=${x}$.`,
     };
+    const bSign = b >= 0 ? '+ ' + b : '- ' + Math.abs(b);
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：我们要计算函数在某一点的值`,
-          en: `${narrator}: "We need to calculate the value of a function at a specific point"`,
-        },
-        hint: {
-          zh: '函数就是一个"计算规则"——给它一个 x，它会算出一个 y',
-          en: 'A function is a "calculation rule" — give it an x, it produces a y',
+          zh: `${narrator}：函数是什么？\n你可以把函数想象成一台机器——你往里面丢一个数($x$)，它就吐出另一个数($y$)。\n每次丢同一个数进去，出来的结果一定一样。\n今天这台机器的规则是：$y = ${m}x ${bSign}$`,
+          en: `${narrator}: "What is a function?\nThink of it as a machine — you feed in a number ($x$), and it spits out another ($y$).\nSame input always gives the same output.\nToday's machine rule is: $y = ${m}x ${bSign}$"`,
         },
         highlightField: 'y',
       },
       {
         text: {
-          zh: `${narrator}：函数是 $y = ${m}x ${b >= 0 ? '+' : ''}${b}$，要求 $x = ${x}$ 时 $y$ 是多少`,
-          en: `${narrator}: "The function is $y = ${m}x ${b >= 0 ? '+' : ''}${b}$, find $y$ when $x = ${x}$"`,
+          zh: `${narrator}：题目问什么？\n当 $x = ${x}$ 时，$y$ 等于多少？\n就是说——把 $${x}$ 丢进机器里，看出来什么。`,
+          en: `${narrator}: "What does the problem ask?\nWhen $x = ${x}$, what is $y$?\nIn other words — feed $${x}$ into the machine and see what comes out."`,
         },
         highlightField: 'y',
       },
       {
         text: {
-          zh: `${narrator}：把 $x = ${x}$ 代入公式，就是把公式里的 $x$ 换成 ${x}\n$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b}$`,
-          en: `${narrator}: "Substitute $x = ${x}$ into the formula — replace $x$ with ${x}\n$y = ${m} \\times ${x} ${b >= 0 ? '+' : ''}${b}$"`,
+          zh: `${narrator}：代入——把 $x$ 换成 $${x}$\n$y = ${m} \\times ${x} ${bSign}$\n\n就是把公式里所有的 $x$ 都换成 $${x}$，其他不动。`,
+          en: `${narrator}: "Substitute — replace $x$ with $${x}$\n$y = ${m} \\times ${x} ${bSign}$\n\nJust swap every $x$ in the formula with $${x}$, keep everything else."`,
         },
         highlightField: 'y',
       },
       {
         text: {
-          zh: `${narrator}：先算乘法 $${m} \\times ${x} = ${m * x}$，再加上 ${b}\n$y = ${m * x} ${b >= 0 ? '+' : ''}${b} = ${y}$`,
-          en: `${narrator}: "First multiply $${m} \\times ${x} = ${m * x}$, then add ${b}\n$y = ${m * x} ${b >= 0 ? '+' : ''}${b} = ${y}$"`,
+          zh: `${narrator}：按顺序计算\n先算乘法：$${m} \\times ${x} = ${m * x}$\n再${b >= 0 ? '加' : '减'}：$${m * x} ${bSign} = ${y}$`,
+          en: `${narrator}: "Calculate in order\nMultiply first: $${m} \\times ${x} = ${m * x}$\nThen ${b >= 0 ? 'add' : 'subtract'}: $${m * x} ${bSign} = ${y}$"`,
         },
         highlightField: 'y',
       },
       {
         text: {
-          zh: `${narrator}：所以 $y = ${y}$!`,
-          en: `${narrator}: "So $y = ${y}$!"`,
+          zh: `${narrator}：答案\n$y = ${y}$\n\n机器吐出来了！当 $x = ${x}$ 时，$y = ${y}$。`,
+          en: `${narrator}: "Answer\n$y = ${y}$\n\nThe machine has spoken! When $x = ${x}$, $y = ${y}$."`,
+        },
+        highlightField: 'y',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算\n把答案代回去：$${m} \\times ${x} ${bSign} = ${m * x} ${bSign} = ${y}$ ✓\n\n恭喜！你已经学会了"代入求值"——以后碰到任何函数都用这个方法！`,
+          en: `${narrator}: "Verify\nPlug the answer back: $${m} \\times ${x} ${bSign} = ${m * x} ${bSign} = ${y}$ ✓\n\nCongratulations! You've learned 'substitution' — use this method for any function!"`,
         },
         highlightField: 'y',
       },

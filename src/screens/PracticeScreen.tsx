@@ -289,7 +289,11 @@ export const PracticeScreen = ({
             className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8"
           >
             {/* Left: Question area */}
-          <div className="bg-parchment-dark rounded-lg p-3 md:p-6 border-2 border-ink/20 shadow-inner">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-[#e8d5a7] rounded-lg p-3 md:p-6 border-2 border-[#3d2b1f]/20 shadow-inner"
+            >
             <div className="flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
               <MapIcon size={18} />
               <span>{t.practicePhase[currentPhase]}</span>
@@ -417,11 +421,15 @@ export const PracticeScreen = ({
                 <MathView tex={currentMission.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-emerald-900" />
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* Right: Inputs and controls */}
-          <div className="space-y-6">
-            {currentPhase === 'green' ? (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="space-y-6"
+          >            {currentPhase === 'green' ? (
               <>
                 {/* GREEN PHASE: Worked example — no input, just watch the solution */}
                 {currentMission.tutorialSteps && (
@@ -518,7 +526,12 @@ export const PracticeScreen = ({
             )}
 
             {/* Phase navigation */}
-            <div className="flex gap-3">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+              className="flex gap-3"
+            >
               {phaseIndex > 0 && (
                 <motion.button
                   {...buttonBase}
@@ -541,7 +554,7 @@ export const PracticeScreen = ({
                 {currentPhase === 'green' ? t.startPractice : currentPhase === 'amber' ? t.removeHints : t.enterChallenge}
                 <ChevronRight size={16} />
               </motion.button>
-            </div>
+            </motion.div>
 
             {/* Back to map */}
             <motion.button
@@ -552,7 +565,7 @@ export const PracticeScreen = ({
               <ChevronLeft size={14} />
               {t.backToMap}
             </motion.button>
-          </div>
+          </motion.div>
           </motion.div>
         </AnimatePresence>
       </motion.div>
