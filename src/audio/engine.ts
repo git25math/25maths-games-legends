@@ -7,7 +7,7 @@ export type SoundCategory = 'sfx' | 'music';
 const MIX = {
   master: 1.0,
   sfx: 0.7,
-  music: 0.3,
+  music: 0.18,
   reverbSend: 0.18,
   crossfadeSec: 0.8,
   duckAmount: 0.25,
