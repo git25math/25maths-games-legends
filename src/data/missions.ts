@@ -1687,7 +1687,7 @@ export const MISSIONS: Mission[] = [
     data: { eq1: [2, 3], eq2: [1, 1, 5], x: 2, y: 7, generatorType: 'SIMULTANEOUS_Y8_RANDOM' },
     difficulty: 'Medium', reward: 180, kpId: 'kp-2.2-01', sectionId: 'algebra',
     tutorialSteps: [],
-    secret: { concept: { zh: '代入法：把一个方程"塞进"另一个，化为一元方程。', en: 'Substitution: "plug" one equation into the other to get a single-variable equation.' }, formula: '$y = ax + b$ 代入 $cx + dy = e$', tips: [{ zh: '曹操提示：兵分两路，合而为一——代入法的精髓！', en: 'Cao Cao Tip: Divide forces, then unite — the essence of substitution!' }] },
+    secret: { concept: { zh: '代入法：把一个方程"塞进"另一个，化为一元方程。', en: 'Substitution: "plug" one equation into the other to get a single-variable equation.' }, formula: '$y = ax + b \\to cx + dy = e$', tips: [{ zh: '曹操提示：兵分两路，合而为一——代入法的精髓！', en: 'Cao Cao Tip: Divide forces, then unite — the essence of substitution!' }] },
   },
   {
     id: 886, grade: 8, unitId: 5, order: 6,
@@ -1701,7 +1701,7 @@ export const MISSIONS: Mission[] = [
     data: { eq1: [-1, 5], eq2: [2, 1, 7], x: 1, y: 4, generatorType: 'SIMULTANEOUS_Y8_RANDOM' },
     difficulty: 'Hard', reward: 200, kpId: 'kp-2.2-01', sectionId: 'algebra',
     tutorialSteps: [],
-    secret: { concept: { zh: '代入法同样适用于负系数——注意符号！', en: 'Substitution works with negative coefficients too — watch the signs!' }, formula: '$y = ax + b$ 代入 $cx + dy = e$', tips: [{ zh: '诸葛亮提示：情报交叉验证，真相自然浮现！', en: 'Zhuge Liang Tip: Cross-check intelligence — the truth will emerge!' }] },
+    secret: { concept: { zh: '代入法同样适用于负系数——注意符号！', en: 'Substitution works with negative coefficients too — watch the signs!' }, formula: '$y = ax + b \\to cx + dy = e$', tips: [{ zh: '诸葛亮提示：情报交叉验证，真相自然浮现！', en: 'Zhuge Liang Tip: Cross-check intelligence — the truth will emerge!' }] },
     storyConsequence: { correct: { zh: '情报交叉验证成功，官渡大计又进一步！', en: 'Intelligence cross-check successful — the Guandu plan advances!' }, wrong: { zh: '情报对不上，需要重新分析…', en: 'Intelligence doesn\'t match — reanalysis needed...' } },
   },
 
@@ -1718,7 +1718,7 @@ export const MISSIONS: Mission[] = [
     data: { px: 3, py: 4, mode: 'reflect_y', ansX: -3, ansY: 4, generatorType: 'SYMMETRY_RANDOM' },
     difficulty: 'Medium', reward: 180, kpId: 'kp-4.5-01', sectionId: 'geometry',
     tutorialSteps: [],
-    secret: { concept: { zh: '线对称：图形沿对称轴翻折后完全重合。坐标轴反射有简单规则。', en: 'Line symmetry: a shape folds exactly onto itself along the line of symmetry. Axis reflections have simple rules.' }, formula: '$(x,y) \\to (-x,y)$ 或 $(x,-y)$', tips: [{ zh: '诸葛亮提示：左右对称，阵法无懈可击！', en: 'Zhuge Liang Tip: Symmetrical formations are unbreakable!' }] },
+    secret: { concept: { zh: '线对称：图形沿对称轴翻折后完全重合。坐标轴反射有简单规则。', en: 'Line symmetry: a shape folds exactly onto itself along the line of symmetry. Axis reflections have simple rules.' }, formula: '$(x,y) \\to (-x,y)$ / $(x,-y)$', tips: [{ zh: '诸葛亮提示：左右对称，阵法无懈可击！', en: 'Zhuge Liang Tip: Symmetrical formations are unbreakable!' }] },
   },
   {
     id: 888, grade: 8, unitId: 6, order: 8,
