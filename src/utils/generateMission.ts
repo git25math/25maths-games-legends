@@ -5512,12 +5512,12 @@ export function generateSpeedMission(template: Mission): Mission {
     {
       text: { zh: `${narrator}：速度、距离、时间的关系`, en: `${narrator}: "The relationship between speed, distance, and time"` },
       hint: { zh: `行军打仗，三个量密切相关：\n• 速度 = 距离 ÷ 时间\n• 距离 = 速度 × 时间\n• 时间 = 距离 ÷ 速度\n\n记住三角形：$D = S \\times T$`, en: `In marching, three quantities are linked:\n• Speed = Distance ÷ Time\n• Distance = Speed × Time\n• Time = Distance ÷ Speed\n\nRemember the triangle: $D = S \\times T$` },
-      highlightField: 'ans',
+      highlightField: 'x',
     },
     {
       text: { zh: `${narrator}：用生活例子理解`, en: `${narrator}: "Understand with a real example"` },
       hint: { zh: `如果你走路速度是每小时 5 里\n走了 2 小时\n那你走了 $5 \\times 2 = 10$ 里\n\n知道任意两个，就能算第三个！`, en: `If you walk at 5 li per hour\nfor 2 hours\nyou've walked $5 \\times 2 = 10$ li\n\nKnow any two, find the third!` },
-      highlightField: 'ans',
+      highlightField: 'x',
     },
     {
       text: { zh: `${narrator}：找出已知量`, en: `${narrator}: "Identify what we know"` },
@@ -5526,7 +5526,7 @@ export function generateSpeedMission(template: Mission): Mission {
         : mode === 'distance'
         ? { zh: `行军侦察——先整理已知军情\n\n已知：速度 = $${speed}$ 里/时，时间 = $${time}$ 小时\n求：距离 = ?`, en: `March reconnaissance — first sort out the known intel\n\nKnown: speed = $${speed}$ li/hr, time = $${time}$ hours\nFind: distance = ?` }
         : { zh: `诸葛亮算时间——先整理已知军情\n\n已知：距离 = $${distance}$ 里，速度 = $${speed}$ 里/时\n求：时间 = ?`, en: `Zhuge Liang calculates time — first sort out the known intel\n\nKnown: distance = $${distance}$ li, speed = $${speed}$ li/hr\nFind: time = ?` },
-      highlightField: 'ans',
+      highlightField: 'x',
     },
     {
       text: { zh: `${narrator}：选公式并代入`, en: `${narrator}: "Choose the formula and substitute"` },
@@ -5535,17 +5535,17 @@ export function generateSpeedMission(template: Mission): Mission {
         : mode === 'distance'
         ? { zh: `代入——诸葛亮计算行军距离\n\n距离 = 速度 × 时间\n$= ${speed} \\times ${time}$\n$= ${distance}$`, en: `Substitute — Zhuge Liang calculates march distance\n\nDistance = Speed × Time\n$= ${speed} \\times ${time}$\n$= ${distance}$` }
         : { zh: `代入——诸葛亮计算行军时间\n\n时间 = 距离 ÷ 速度\n$= ${distance} \\div ${speed}$\n$= ${time}$`, en: `Substitute — Zhuge Liang calculates march time\n\nTime = Distance ÷ Speed\n$= ${distance} \\div ${speed}$\n$= ${time}$` },
-      highlightField: 'ans',
+      highlightField: 'x',
     },
     {
       text: { zh: `${narrator}：答案 = ${answer}`, en: `${narrator}: "Answer = ${answer}"` },
       hint: { zh: `军令已出——行军计划确定：答案是 $${answer}$`, en: `Orders issued — march plan confirmed: the answer is $${answer}$` },
-      highlightField: 'ans',
+      highlightField: 'x',
     },
     {
       text: { zh: `${narrator}：验算——用三个量互相检查`, en: `${narrator}: "Verify — cross-check with all three"` },
       hint: { zh: `交叉检验——三军核实！\n\n速度 × 时间 = 距离\n$${speed} \\times ${time} = ${distance}$ ✓`, en: `Cross-check — all three armies verify!\n\nSpeed × Time = Distance\n$${speed} \\times ${time} = ${distance}$ ✓` },
-      highlightField: 'ans',
+      highlightField: 'x',
     },
   ];
 
