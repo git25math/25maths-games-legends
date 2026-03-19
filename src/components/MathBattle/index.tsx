@@ -15,6 +15,8 @@ import { useAudio } from '../../audio';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { Confetti } from '../Confetti';
 import { AchievementCard } from '../AchievementCard';
+import { AnimatedCounter } from '../AnimatedCounter';
+import { SkillBadgeCard } from '../SkillBadgeCard';
 import { WrongAnswerPanel } from './WrongAnswerPanel';
 import { generateMission } from '../../utils/generateMission';
 import { SKILL_CARDS } from '../SkillCardSelector';
@@ -32,7 +34,9 @@ export const MathBattle = ({
   difficultyMode,
   isMultiplayer = false,
   roomData = null,
-  skillCard = null
+  skillCard = null,
+  isFirstClear = false,
+  completedDifficulties = {},
 }: {
   mission: Mission;
   character: Character;
@@ -43,6 +47,8 @@ export const MathBattle = ({
   isMultiplayer?: boolean;
   roomData?: Room | null;
   skillCard?: string | null;
+  isFirstClear?: boolean;
+  completedDifficulties?: Record<string, boolean>;
 }) => {
   const isMultiQuestion = !!mission.data?.generatorType;
 
@@ -71,8 +77,9 @@ export const MathBattle = ({
   const [wrongAnswerData, setWrongAnswerData] = useState<{ userInputs: Record<string, string>; expected: Record<string, string> } | null>(null);
   const [hp, setHp] = useState(4);
   const [startTime] = useState(Date.now());
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [showAchievement, setShowAchievement] = useState(false);
+  const [victoryPhase, setVictoryPhase] = useState<0|1|2|3|4|5>(0);
+  const [confettiTrigger, setConfettiTrigger] = useState(0);
+  const [confettiTheme, setConfettiTheme] = useState<'default' | 'goldWhite'>('default');
   const [finalScore, setFinalScore] = useState(0);
   const [finalDuration, setFinalDuration] = useState(0);
   const [shieldCharges, setShieldCharges] = useState(skillCard === 'shield' ? 2 : 0);
@@ -127,6 +134,35 @@ export const MathBattle = ({
     }
   }, [showResult]);
 
+  const triggerVictorySequence = () => {
+    setShowResult('success');
+    setVictoryPhase(1); // Shockwave + 1st Confetti
+    setConfettiTheme('default');
+    setConfettiTrigger(prev => prev + 1);
+
+    // Phase B: Badge drop (500ms)
+    achievementTimerRef.current = window.setTimeout(() => setVictoryPhase(2), 500);
+
+    // Phase C: Stats show (1500ms)
+    advanceTimerRef.current = window.setTimeout(() => setVictoryPhase(3), 1500);
+
+    // Phase D: Skill Badge or skip to E (2500ms)
+    shakeTimerRef.current = window.setTimeout(() => {
+      if (mission.skillName) {
+        setVictoryPhase(4);
+        setConfettiTheme('goldWhite');
+        setConfettiTrigger(prev => prev + 1);
+        window.setTimeout(() => setVictoryPhase(5), 2000); // return button
+      } else if (isFirstClear) {
+        setConfettiTheme('goldWhite');
+        setConfettiTrigger(prev => prev + 1);
+        setVictoryPhase(5);
+      } else {
+        setVictoryPhase(5);
+      }
+    }, 2500);
+  };
+
   const advanceToNextQuestion = () => {
     setInputs({});
     setWrongAnswerData(null);
@@ -135,10 +171,8 @@ export const MathBattle = ({
       const duration = Math.round((Date.now() - startTime) / 1000);
       setFinalDuration(duration);
       setFinalScore(totalScore);
-      setShowResult('success');
-      setShowConfetti(true);
       stopBGM();
-      achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+      triggerVictorySequence();
     } else {
       setCurrentQIdx(prev => prev + 1);
     }
@@ -179,10 +213,8 @@ export const MathBattle = ({
           setFinalScore(newTotal);
           advanceTimerRef.current = window.setTimeout(() => {
             playVictory();
-            setShowResult('success');
-            setShowConfetti(true);
             stopBGM();
-            achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+            triggerVictorySequence();
           }, 600);
         } else {
           // Advance after 600ms
@@ -201,10 +233,8 @@ export const MathBattle = ({
         const score = Math.round((mission.reward + speedBonus) * multiplier);
         setFinalScore(score);
         setFinalDuration(Math.round(duration));
-        setShowResult('success');
-        setShowConfetti(true);
         stopBGM();
-        achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+        triggerVictorySequence();
       }
     } else {
       playWrong();
@@ -235,10 +265,8 @@ export const MathBattle = ({
           setFinalDuration(duration);
           setFinalScore(totalScore);
           advanceTimerRef.current = window.setTimeout(() => {
-            setShowResult('success');
-            setShowConfetti(true);
             stopBGM();
-            achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+            triggerVictorySequence();
           }, 300);
         } else {
           setCurrentQIdx(prev => prev + 1);
@@ -265,10 +293,8 @@ export const MathBattle = ({
           setFinalDuration(duration);
           setFinalScore(totalScore);
           advanceTimerRef.current = window.setTimeout(() => {
-            setShowResult('success');
-            setShowConfetti(true);
             stopBGM();
-            achievementTimerRef.current = window.setTimeout(() => setShowAchievement(true), 2000);
+            triggerVictorySequence();
           }, 300);
         } else {
           setCurrentQIdx(prev => prev + 1);
@@ -339,7 +365,7 @@ export const MathBattle = ({
         initial={shakeKey > 0 ? false : { scale: 0.9, opacity: 0 }}
         animate={shaking ? { x: [0, -6, 6, -4, 4, -2, 2, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
         transition={shaking ? { duration: 0.4, ease: 'easeOut' } : undefined}
-        className={`bg-[#f4e4bc] w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[6px] md:border-[12px] border-[#3d2b1f] relative ${shaking ? 'border-red-600' : ''}`}
+        className={`bg-parchment w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[6px] md:border-[12px] border-ink relative ${shaking ? 'border-red-600' : ''}`}
       >
         {/* Header */}
         <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
@@ -394,7 +420,7 @@ export const MathBattle = ({
                         className={`w-2 h-2 rounded-full ${
                           i < currentQIdx ? 'bg-emerald-400' :
                           i === currentQIdx ? 'bg-yellow-400' :
-                          'bg-[#f4e4bc]/30'
+                          'bg-parchment/30'
                         }`}
                       />
                     ))}
@@ -419,17 +445,17 @@ export const MathBattle = ({
         {/* Battle Content */}
         <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {/* Left: Tactical Map */}
-          <div className="bg-[#e8d5a7] rounded-lg p-6 border-2 border-[#3d2b1f]/20 shadow-inner">
-            <div className="flex items-center gap-2 mb-4 text-[#3d2b1f] font-bold border-b border-[#3d2b1f]/10 pb-2">
+          <div className="bg-parchment-dark rounded-lg p-6 border-2 border-ink/20 shadow-inner">
+            <div className="flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
               <MapIcon size={18} />
               <span>{t.calculating}</span>
             </div>
 
-            <div className="bg-white/40 p-3 rounded-lg mb-4 italic text-xs text-[#5c4033] border-l-4 border-[#8b0000]">
+            <div className="bg-white/40 p-3 rounded-lg mb-4 italic text-xs text-ink-light border-l-4 border-[#8b0000]">
               <LatexText text={storyText} />
             </div>
 
-            <div className="text-[#5c4033] text-sm font-bold mb-6 leading-relaxed">
+            <div className="text-ink-light text-sm font-bold mb-6 leading-relaxed">
               <LatexText text={descText} />
             </div>
             <VisualData mission={currentQuestion} lang={lang} />
@@ -450,8 +476,8 @@ export const MathBattle = ({
               </div>
             )}
 
-            <div className="mt-8 pt-4 border-t border-[#3d2b1f]/10">
-              <div className="flex items-center gap-2 text-[#5c4033] text-xs font-bold">
+            <div className="mt-8 pt-4 border-t border-ink/10">
+              <div className="flex items-center gap-2 text-ink-light text-xs font-bold">
                 <Shield size={14} />
                 <span>{t.defense}：{character.stats.wisdom}</span>
               </div>
@@ -560,20 +586,131 @@ export const MathBattle = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className={`absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 text-center z-20 ${
-                showResult === 'success' ? 'bg-[#f4e4bc]/90' : 'bg-[#3d2b1f]/90'
+              className={`absolute inset-0 flex flex-col items-center justify-center p-4 md:p-8 text-center z-20 overflow-hidden ${
+                showResult === 'success' ? 'bg-transparent' : 'bg-ink/90'
               }`}
             >
-              {showResult === 'success' ? (
-                <motion.div initial={{ scale: 0.5 }} animate={{ scale: 1 }} className="bg-white p-6 md:p-12 rounded-full border-8 border-yellow-500 shadow-2xl">
-                  <Trophy size={80} className="text-yellow-500 mb-4 mx-auto" />
-                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-2">{t.successTitle}</h3>
-                  <p className="text-slate-600 font-bold">{t.successDesc}</p>
-                  {mission.storyConsequence && (
-                    <p className="text-emerald-600 font-bold mt-3 italic text-sm">{lt(mission.storyConsequence.correct, lang)}</p>
-                  )}
-                </motion.div>
-              ) : (
+              {showResult === 'success' ? (() => {
+                const willBePerfect = Object.values({ ...completedDifficulties, [difficultyMode]: true }).filter(Boolean).length === 3;
+                
+                return (
+                  <>
+                    {/* Phase A: Background & Shockwave */}
+                    <div className="absolute inset-0 bg-parchment/90 transition-opacity duration-500" />
+                    {victoryPhase >= 1 && (
+                      <>
+                        <motion.div
+                          initial={{ scale: 0, opacity: 1 }}
+                          animate={{ scale: 3, opacity: 0 }}
+                          transition={{ duration: 0.5, ease: "easeOut" }}
+                          className="absolute inset-0 m-auto w-[300px] h-[300px] rounded-full border-[20px] border-yellow-400 pointer-events-none"
+                        />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.2)_0%,transparent_70%)] pointer-events-none" />
+                      </>
+                    )}
+
+                    {/* Phase B: Badge Drop */}
+                    {victoryPhase >= 2 && (
+                      <div className="relative z-10 flex flex-col items-center">
+                        <motion.div
+                          initial={{ y: -200, scale: 1.5, rotateZ: -15 }}
+                          animate={{ y: 0, scale: 1, rotateZ: 0 }}
+                          transition={{ type: "spring", bounce: 0.4 }}
+                          className="relative"
+                        >
+                          {/* First Clear / Perfect Clear Halo */}
+                          {(isFirstClear || willBePerfect) && (
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                              className={`absolute -inset-8 rounded-full border-4 border-dashed opacity-50 ${willBePerfect ? 'border-purple-400' : 'border-yellow-400'}`}
+                            />
+                          )}
+                          <div className={`w-32 h-32 rounded-full border-8 shadow-2xl flex items-center justify-center overflow-hidden ${willBePerfect ? 'border-purple-500 bg-gradient-to-br from-yellow-400 to-purple-600' : 'border-yellow-500 bg-gradient-to-br from-ink to-ink-light'}`}>
+                            <CharacterAvatar characterId={character.id} size={96} />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.8 }}
+                          className="mt-6"
+                        >
+                          <h3 className="text-4xl md:text-6xl font-black text-ink mb-2 drop-shadow-md">
+                            {willBePerfect ? (lang === 'zh' ? '完美通关！' : lang === 'zh_TW' ? '完美通關！' : 'Perfect Clear!') : t.successTitle}
+                          </h3>
+                          {(isFirstClear || willBePerfect) && (
+                            <motion.p
+                              animate={{ opacity: [0.5, 1, 0.5] }}
+                              transition={{ duration: 1.5, repeat: Infinity }}
+                              className={`font-black text-xl tracking-widest ${willBePerfect ? 'text-purple-600' : 'text-yellow-600'}`}
+                            >
+                              {willBePerfect ? (lang === 'zh' ? '三星达成！' : lang === 'zh_TW' ? '三星達成！' : '3 Stars Achieved!') : (lang === 'zh' ? '首次通关！' : lang === 'zh_TW' ? '首次通關！' : 'First Clear!')}
+                            </motion.p>
+                          )}
+                        </motion.div>
+                      </div>
+                    )}
+
+                    {/* Phase C: Stats Bubbles */}
+                    {victoryPhase >= 3 && (
+                      <div className="flex gap-4 mt-8 z-10">
+                        {[
+                          { icon: <Trophy size={20} className="text-yellow-600" />, label: t.score, value: finalScore, color: 'bg-yellow-100 border-yellow-300' },
+                          { icon: <span className="text-xl">⏱️</span>, label: t.time, value: `${finalDuration}s`, color: 'bg-blue-100 border-blue-300' },
+                          { icon: <Heart size={20} className="text-red-500 fill-red-500" />, label: lang === 'zh' ? '剩余体力' : lang === 'zh_TW' ? '剩餘體力' : 'HP Left', value: hp, color: 'bg-red-100 border-red-300' },
+                        ].map((stat, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", delay: i * 0.2 }}
+                            className={`flex flex-col items-center p-3 md:p-4 rounded-2xl border-2 shadow-lg w-24 md:w-32 ${stat.color}`}
+                          >
+                            <div className="mb-1">{stat.icon}</div>
+                            <div className="text-[10px] font-bold text-ink/60 uppercase">{stat.label}</div>
+                            <div className="text-xl font-black text-ink mt-1">
+                              {typeof stat.value === 'number' && i === 0 ? (
+                                <AnimatedCounter value={stat.value} />
+                              ) : (
+                                stat.value
+                              )}
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Phase D: Skill Badge */}
+                    {victoryPhase >= 4 && mission.skillName && (
+                      <div className="absolute inset-0 z-20">
+                        <SkillBadgeCard
+                          characterId={character.id}
+                          skillName={mission.skillName}
+                          skillSummary={mission.skillSummary || ''}
+                          formula={mission.secret.formula}
+                          missionTitle={mission.title}
+                          lang={lang}
+                          onClose={() => {}} // Disabled as it closes automatically or is unclickable here
+                        />
+                      </div>
+                    )}
+
+                    {/* Phase E: Return Button */}
+                    {victoryPhase >= 5 && (
+                      <motion.button
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        onClick={() => onComplete(true, isMultiQuestion ? totalScore : finalScore, finalDuration, hp)}
+                        className="absolute bottom-8 px-12 py-5 bg-indigo-600 text-white font-black text-xl rounded-2xl shadow-xl hover:bg-indigo-500 transition-colors z-30"
+                      >
+                        {t.backToMap}
+                      </motion.button>
+                    )}
+                  </>
+                );
+              })() : (
                 <motion.div initial={{ y: 50 }} animate={{ y: 0 }}>
                   <XCircle size={80} className="text-red-500 mb-6 mx-auto" />
                   <h3 className="text-3xl md:text-5xl font-black text-white mb-4">{t.failTitle}</h3>

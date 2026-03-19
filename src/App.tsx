@@ -94,6 +94,7 @@ export default function App() {
   const [showSkillCards, setShowSkillCards] = useState(false);
   const [selectedDifficulty] = useState<DifficultyMode>('red');
   const [isGuest, setIsGuest] = useState(persisted.isGuest);
+  const [lastClearedMissionId, setLastClearedMissionId] = useState<number | null>(null);
 
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
   const { profile, updateProfile, recordBattleComplete } = useProfile(user, isGuest);
@@ -166,6 +167,7 @@ export default function App() {
         activeMission.topic,
         activeMission.kpId,
       );
+      setLastClearedMissionId(activeMission.id);
     }
     setGameState('map');
     setActiveMission(null);
@@ -298,6 +300,8 @@ export default function App() {
                   onCharChange={() => { setSelectedCharId(null); setGameState('welcome'); }}
                   onCreateRoom={createRoom}
                   onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
+                  lastClearedMissionId={lastClearedMissionId}
+                  clearLastClearedMission={() => setLastClearedMissionId(null)}
                 />
               )}
 
@@ -323,6 +327,8 @@ export default function App() {
                   isMultiplayer={!!activeRoom}
                   roomData={activeRoom}
                   skillCard={selectedSkillCard}
+                  isFirstClear={activeMission ? !profile?.completed_missions[String(activeMission.id)] : true}
+                  completedDifficulties={activeMission && profile ? profile.completed_missions[String(activeMission.id)] : {}}
                 />
               )}
 
@@ -338,6 +344,9 @@ export default function App() {
                   onCancel={() => {
                     setGameState('map');
                     setActiveMission(null);
+                  }}
+                  onEnterBattle={() => {
+                    handleMissionStart(activeMission);
                   }}
                 />
               )}

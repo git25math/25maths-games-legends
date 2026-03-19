@@ -1,6 +1,7 @@
 import { useState, memo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Calculator as CalcIcon, X, ArrowRight } from 'lucide-react';
+import { buttonBase } from '../utils/animationPresets';
 
 type Props = {
   onUseResult?: (value: string) => void;
@@ -78,12 +79,13 @@ export const CalculatorWidget = memo(function CalculatorWidget({ onUseResult, la
   return (
     <>
       {/* Floating button */}
-      <button
+      <motion.button
+        {...buttonBase}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-16 right-4 z-40 w-12 h-12 bg-[#3d2b1f] text-[#f4e4bc] rounded-full shadow-lg hover:bg-[#5c4033] transition-all flex items-center justify-center border-2 border-[#f4e4bc]/20"
+        className="fixed bottom-16 right-4 z-40 w-12 h-12 bg-ink text-parchment rounded-full shadow-lg hover:bg-ink-light transition-colors flex items-center justify-center border-2 border-parchment/20"
       >
         <CalcIcon size={20} />
-      </button>
+      </motion.button>
 
       {/* Calculator popup */}
       <AnimatePresence>
@@ -99,9 +101,9 @@ export const CalculatorWidget = memo(function CalculatorWidget({ onUseResult, la
               <span className="text-[#b8860b] text-xs font-bold">
                 {lang === 'zh' ? '计算器' : 'Calculator'}
               </span>
-              <button onClick={() => setIsOpen(false)} className="text-white/40 hover:text-white">
+              <motion.button {...buttonBase} onClick={() => setIsOpen(false)} className="text-white/40 hover:text-white">
                 <X size={14} />
-              </button>
+              </motion.button>
             </div>
 
             {/* Display */}
@@ -117,10 +119,11 @@ export const CalculatorWidget = memo(function CalculatorWidget({ onUseResult, la
                 const isOp = ['÷', '×', '-', '+', '='].includes(btn);
                 const isFunc = ['C', 'DEL', '√', 'π'].includes(btn);
                 return (
-                  <button
+                  <motion.button
+                    {...buttonBase}
                     key={btn}
                     onClick={() => handleButton(btn)}
-                    className={`py-2.5 rounded-lg text-sm font-bold transition-all active:scale-95 ${
+                    className={`py-2.5 rounded-lg text-sm font-bold transition-colors ${
                       btn === '='
                         ? 'bg-[#b8860b] text-[#1a1a2e]'
                         : isOp
@@ -131,7 +134,7 @@ export const CalculatorWidget = memo(function CalculatorWidget({ onUseResult, la
                     }`}
                   >
                     {btn}
-                  </button>
+                  </motion.button>
                 );
               })}
             </div>
@@ -139,13 +142,14 @@ export const CalculatorWidget = memo(function CalculatorWidget({ onUseResult, la
             {/* Use result button */}
             {prevResult && onUseResult && (
               <div className="px-2 pb-2">
-                <button
+                <motion.button
+                  {...buttonBase}
                   onClick={handleUseResult}
-                  className="w-full py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 hover:bg-emerald-500 transition-all"
+                  className="w-full py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 hover:bg-emerald-500 transition-colors"
                 >
                   <ArrowRight size={12} />
                   {lang === 'zh' ? `使用结果 ${prevResult}` : `Use result ${prevResult}`}
-                </button>
+                </motion.button>
               </div>
             )}
           </motion.div>

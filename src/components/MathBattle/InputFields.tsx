@@ -36,7 +36,7 @@ export const InputFields = ({
         const isHighlighted = isTutorial && mission.tutorialSteps?.[tutorialStep]?.highlightField === field.id;
         return (
           <div key={field.id} className={`relative transition-all duration-500 ${isHighlighted ? 'scale-105' : isTutorial ? 'opacity-40 grayscale' : ''}`}>
-            <label className="absolute -top-2 left-4 px-2 bg-[#f4e4bc] text-[10px] font-black text-[#5c4033] uppercase tracking-widest z-10">
+            <label className="absolute -top-2 left-4 px-2 bg-parchment text-[10px] font-black text-ink-light uppercase tracking-widest z-10">
               <LatexText text={field.label} />
             </label>
             <input
@@ -47,11 +47,11 @@ export const InputFields = ({
               value={inputs[field.id] || ''}
               onChange={(e) => setInputs({ ...inputs, [field.id]: e.target.value })}
               placeholder={field.placeholder}
-              className={`w-full px-6 py-5 bg-white/50 border-2 rounded-lg text-2xl font-black text-[#3d2b1f] focus:bg-white outline-none transition-all shadow-md ${
-                isHighlighted ? 'border-indigo-500 ring-4 ring-indigo-500/20' : 'border-[#3d2b1f]'
+              className={`w-full px-6 py-5 bg-white/50 border-2 rounded-lg text-2xl font-black text-ink focus:bg-white outline-none transition-all shadow-md ${
+                isHighlighted ? 'border-indigo-500 ring-4 ring-indigo-500/20' : 'border-ink'
               }`}
             />
-            <div className="mt-1 text-[9px] text-[#5c4033]/40 px-2">
+            <div className="mt-1 text-[9px] text-ink-light/40 px-2">
               {lang === 'zh' ? '支持分数(3/4)、根号(√5)、负数(-3)' : 'Supports fractions(3/4), roots(√5), negatives(-3)'}
             </div>
           </div>

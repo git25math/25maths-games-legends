@@ -37,12 +37,14 @@ export const PracticeScreen = ({
   lang,
   onComplete,
   onCancel,
+  onEnterBattle,
 }: {
   mission: Mission;
   character: Character;
   lang: Language;
   onComplete: () => void;
   onCancel: () => void;
+  onEnterBattle?: () => void;
 }) => {
   const t = translations[lang];
 
@@ -135,6 +137,8 @@ export const PracticeScreen = ({
       if (mission.skillName && mission.skillSummary) {
         playBadgeUnlock();
         setShowBadge(true);
+      } else if (onEnterBattle) {
+        onEnterBattle();
       } else {
         onComplete();
       }
@@ -163,7 +167,7 @@ export const PracticeScreen = ({
         formula={mission.secret.formula}
         missionTitle={mission.title}
         lang={lang}
-        onClose={onComplete}
+        onClose={onEnterBattle || onComplete}
       />
     );
   }
@@ -210,7 +214,7 @@ export const PracticeScreen = ({
         initial={shakeKey > 0 ? false : { scale: 0.9, opacity: 0 }}
         animate={shaking ? { x: [0, -6, 6, -4, 4, -2, 2, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
         transition={shaking ? { duration: 0.4, ease: 'easeOut' } : undefined}
-        className={`bg-[#f4e4bc] w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[6px] md:border-[12px] border-[#3d2b1f] relative ${shaking ? 'border-red-600' : ''}`}
+        className={`bg-parchment w-full max-w-3xl rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border-[6px] md:border-[12px] border-ink relative ${shaking ? 'border-red-600' : ''}`}
       >
         {/* Header */}
         <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
@@ -285,19 +289,19 @@ export const PracticeScreen = ({
             className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8"
           >
             {/* Left: Question area */}
-          <div className="bg-[#e8d5a7] rounded-lg p-3 md:p-6 border-2 border-[#3d2b1f]/20 shadow-inner">
-            <div className="flex items-center gap-2 mb-4 text-[#3d2b1f] font-bold border-b border-[#3d2b1f]/10 pb-2">
+          <div className="bg-parchment-dark rounded-lg p-3 md:p-6 border-2 border-ink/20 shadow-inner">
+            <div className="flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
               <MapIcon size={18} />
               <span>{t.practicePhase[currentPhase]}</span>
             </div>
 
             {/* Story text */}
-            <div className="bg-white/40 p-3 rounded-lg mb-4 italic text-xs text-[#5c4033] border-l-4 border-[#8b0000]">
+            <div className="bg-white/40 p-3 rounded-lg mb-4 italic text-xs text-ink-light border-l-4 border-[#8b0000]">
               <LatexText text={storyText} />
             </div>
 
             {/* Description text */}
-            <div className="text-[#5c4033] text-sm font-bold mb-6 leading-relaxed">
+            <div className="text-ink-light text-sm font-bold mb-6 leading-relaxed">
               <LatexText text={descText} />
             </div>
 
@@ -516,17 +520,19 @@ export const PracticeScreen = ({
             {/* Phase navigation */}
             <div className="flex gap-3">
               {phaseIndex > 0 && (
-                <button
+                <motion.button
+                  {...buttonBase}
                   onClick={handlePhaseBack}
-                  className="flex-1 py-3 bg-white/50 border-2 border-[#3d2b1f]/20 text-[#3d2b1f] font-bold rounded-lg hover:bg-white/70 transition-all flex items-center justify-center gap-2 text-sm min-h-12"
+                  className="flex-1 py-3 bg-white/50 border-2 border-ink/20 text-ink font-bold rounded-lg hover:bg-white/70 transition-colors flex items-center justify-center gap-2 text-sm min-h-12"
                 >
                   <ChevronLeft size={16} />
                   {t.goBack}
-                </button>
+                </motion.button>
               )}
-              <button
+              <motion.button
+                {...buttonBase}
                 onClick={handlePhaseForward}
-                className={`flex-1 py-3 font-bold rounded-lg transition-all flex items-center justify-center gap-2 text-sm border-2 min-h-12 ${
+                className={`flex-1 py-3 font-bold rounded-lg transition-colors flex items-center justify-center gap-2 text-sm border-2 min-h-12 ${
                   currentPhase === 'red'
                     ? 'bg-rose-600 text-white border-rose-700 hover:bg-rose-500'
                     : 'bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-500'
@@ -534,17 +540,18 @@ export const PracticeScreen = ({
               >
                 {currentPhase === 'green' ? t.startPractice : currentPhase === 'amber' ? t.removeHints : t.enterChallenge}
                 <ChevronRight size={16} />
-              </button>
+              </motion.button>
             </div>
 
             {/* Back to map */}
-            <button
+            <motion.button
+              {...buttonBase}
               onClick={onCancel}
-              className="w-full py-2 text-[#3d2b1f]/50 hover:text-[#3d2b1f] text-xs font-bold transition-colors flex items-center justify-center gap-1"
+              className="w-full py-2 text-ink/50 hover:text-ink text-xs font-bold transition-colors flex items-center justify-center gap-1"
             >
               <ChevronLeft size={14} />
               {t.backToMap}
-            </button>
+            </motion.button>
           </div>
           </motion.div>
         </AnimatePresence>

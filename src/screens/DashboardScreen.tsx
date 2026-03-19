@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag } from 'lucide-react';
 import type { Language, Mission, CompletedMissions } from '../types';
 import { supabase } from '../supabase';
+import { SkeletonRow } from '../components/SkeletonRow';
+import { INPUT_FOCUS_CLASS } from '../utils/animationPresets';
 import { MISSIONS } from '../data/missions';
 import { lt } from '../i18n/resolveText';
 
@@ -299,7 +301,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
           <select
             value={grade}
             onChange={e => setGrade(Number(e.target.value))}
-            className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-900 shadow-sm"
+            className={`bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-900 shadow-sm transition-shadow ${INPUT_FOCUS_CLASS}`}
           >
             <option value={7}>Y7</option>
             <option value={8}>Y8</option>
@@ -375,7 +377,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
               <select
                 value={batchTag}
                 onChange={e => setBatchTag(e.target.value)}
-                className="bg-white border border-indigo-200 rounded-lg px-3 py-1.5 text-sm text-indigo-900 font-bold"
+                className={`bg-white border border-indigo-200 rounded-lg px-3 py-1.5 text-sm text-indigo-900 font-bold transition-shadow ${INPUT_FOCUS_CLASS}`}
                 autoFocus
               >
                 <option value="">选择...</option>
@@ -454,7 +456,11 @@ export function DashboardScreen({ lang, onClose }: Props) {
             {students.length === 0 && (
               <tr>
                 <td colSpan={5 + units.length} className="text-center py-8 text-slate-400 text-sm">
-                  {loading ? '加载中...' : t.noStudents}
+                  {loading ? (
+                    <div className="flex flex-col gap-2 p-4">
+                      {Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} columns={5 + units.length} />)}
+                    </div>
+                  ) : t.noStudents}
                 </td>
               </tr>
             )}
@@ -501,7 +507,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                               const v = e.target.value;
                               if (v) addStudentTag(s.user_id, v);
                             }}
-                            className="text-[9px] bg-white border border-indigo-300 rounded px-1 py-0.5 font-bold text-indigo-900"
+                            className={`text-[9px] bg-white border border-indigo-300 rounded px-1 py-0.5 font-bold text-indigo-900 transition-shadow ${INPUT_FOCUS_CLASS}`}
                             autoFocus
                           >
                             <option value="">选择班级...</option>

@@ -35,7 +35,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
 
   if (mission.type === 'VENN' && mission.data.sets) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <VennDiagram
           sets={mission.data.sets}
           intersection={mission.data.intersection}
@@ -49,7 +49,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     // Parallel transversal
     if (mission.data.parallel) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <ParallelTransversal
             angle={mission.data.angle}
             highlight={mission.data.highlight}
@@ -61,7 +61,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     // Intersecting lines / vertically opposite
     if (mission.data.intersecting) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <IntersectingLines
             angle={mission.data.angle}
             showVerticallyOpposite={mission.data.showVerticallyOpposite}
@@ -72,14 +72,14 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     // Bearing / compass
     if (mission.data.bearing != null) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <CompassRose bearing={mission.data.bearing} showNorth />
         </div>
       );
     }
     // Generic angle
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <AngleArc angle={mission.data.angle} label={mission.data.label} showProtractor={mission.data.showProtractor} />
       </div>
     );
@@ -87,7 +87,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
 
   if (mission.type === 'TRIGONOMETRY' && mission.data.triangle) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <Triangle
           sides={mission.data.triangle.sides}
           angles={mission.data.triangle.angles}
@@ -106,37 +106,37 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     // Enhanced: show balance scale if equation data available
     if (mission.data.left && mission.data.right) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <BalanceScale left={mission.data.left} right={mission.data.right} operation={mission.data.operation} />
         </div>
       );
     }
     return (
-      <div className="bg-white/30 p-6 rounded-lg border border-[#3d2b1f]/10 text-center">
-        <div className="text-4xl font-black text-[#3d2b1f] mb-2">
+      <div className="bg-white/30 p-6 rounded-lg border border-ink/10 text-center">
+        <div className="text-4xl font-black text-ink mb-2">
           <MathView tex={interpolate(lt(mission.description, lang), mission.data ?? {}).match(/\$(.*?)\$/)?.[1] || ''} />
         </div>
-        <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">{vl.simpleEq}</p>
+        <p className="text-ink-light text-[10px] font-bold uppercase tracking-widest">{vl.simpleEq}</p>
       </div>
     );
   }
   if (mission.type === 'PERCENTAGE') {
     return (
-      <div className="bg-white/30 p-6 rounded-lg border border-[#3d2b1f]/10 text-center">
-        <div className="text-3xl font-black text-[#3d2b1f] mb-2">
+      <div className="bg-white/30 p-6 rounded-lg border border-ink/10 text-center">
+        <div className="text-3xl font-black text-ink mb-2">
           <MathView tex={`${mission.data.initial} \\times (1 + ${mission.data.rate})^{${mission.data.years}}`} />
         </div>
-        <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">{vl.compound}</p>
+        <p className="text-ink-light text-[10px] font-bold uppercase tracking-widest">{vl.compound}</p>
       </div>
     );
   }
   if (mission.type === 'ESTIMATION') {
     return (
-      <div className="bg-white/30 p-6 rounded-lg border border-[#3d2b1f]/10 text-center">
-        <div className="text-5xl font-black text-[#3d2b1f] mb-2">
+      <div className="bg-white/30 p-6 rounded-lg border border-ink/10 text-center">
+        <div className="text-5xl font-black text-ink mb-2">
           <MathView tex={`\\sqrt{${mission.data.value}} \\approx ?`} />
         </div>
-        <p className="text-[#5c4033] text-[10px] font-bold uppercase tracking-widest">{vl.estimation}</p>
+        <p className="text-ink-light text-[10px] font-bold uppercase tracking-widest">{vl.estimation}</p>
       </div>
     );
   }
@@ -145,7 +145,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     if (mission.data.points && mission.data.showGraph) {
       const [[x1, y1], [x2, y2]] = mission.data.points;
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <CoordinatePlane
             xRange={mission.data.xRange || [-5, 10]}
             yRange={mission.data.yRange || [-5, 10]}
@@ -164,13 +164,13 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     const [[x1, y1], [x2, y2]] = mission.data.points;
     return (
       <div className="space-y-4">
-        <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-[#3d2b1f]/10">
-          <span className="text-xs font-black text-[#5c4033]">{t.pointA}</span>
-          <MathView tex={`(${x1}, ${y1})`} className="text-lg font-black text-[#3d2b1f]" />
+        <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-ink/10">
+          <span className="text-xs font-black text-ink-light">{t.pointA}</span>
+          <MathView tex={`(${x1}, ${y1})`} className="text-lg font-black text-ink" />
         </div>
-        <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-[#3d2b1f]/10">
-          <span className="text-xs font-black text-[#5c4033]">{t.pointB}</span>
-          <MathView tex={`(${x2}, ${y2})`} className="text-lg font-black text-[#3d2b1f]" />
+        <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-ink/10">
+          <span className="text-xs font-black text-ink-light">{t.pointB}</span>
+          <MathView tex={`(${x2}, ${y2})`} className="text-lg font-black text-ink" />
         </div>
       </div>
     );
@@ -178,10 +178,10 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
   if (mission.type === 'AREA' && mission.data.length) {
     const { length, width } = mission.data;
     return (
-      <div className="bg-white/30 p-6 rounded-lg border border-[#3d2b1f]/10 flex flex-col items-center">
-        <div className="w-32 h-20 border-4 border-[#3d2b1f] bg-indigo-500/20 flex items-center justify-center relative">
-          <span className="absolute -top-6 text-xs font-bold text-[#5c4033]">{vl.length}: {length}</span>
-          <span className="absolute -left-10 text-xs font-bold text-[#5c4033]">{vl.width}: {width}</span>
+      <div className="bg-white/30 p-6 rounded-lg border border-ink/10 flex flex-col items-center">
+        <div className="w-32 h-20 border-4 border-ink bg-indigo-500/20 flex items-center justify-center relative">
+          <span className="absolute -top-6 text-xs font-bold text-ink-light">{vl.length}: {length}</span>
+          <span className="absolute -left-10 text-xs font-bold text-ink-light">{vl.width}: {width}</span>
           <Sparkles className="text-indigo-500/30" size={32} />
         </div>
       </div>
@@ -192,7 +192,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     if (mission.data.a != null && mission.data.showGraph) {
       const { a, b, c } = mission.data;
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <CoordinatePlane
             xRange={mission.data.xRange || [-5, 5]}
             yRange={mission.data.yRange || [-5, 10]}
@@ -207,13 +207,13 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     const [p1, p2] = [mission.data.p1, mission.data.p2];
     return (
       <div className="space-y-4">
-        <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-[#3d2b1f]/10">
-          <span className="text-xs font-black text-[#5c4033]">{vl.start}</span>
-          <MathView tex={`(${p1[0]}, ${p1[1]})`} className="text-lg font-black text-[#3d2b1f]" />
+        <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-ink/10">
+          <span className="text-xs font-black text-ink-light">{vl.start}</span>
+          <MathView tex={`(${p1[0]}, ${p1[1]})`} className="text-lg font-black text-ink" />
         </div>
-        <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-[#3d2b1f]/10">
-          <span className="text-xs font-black text-[#5c4033]">{vl.end}</span>
-          <MathView tex={`(${p2[0]}, ${p2[1]})`} className="text-lg font-black text-[#3d2b1f]" />
+        <div className="flex items-center justify-between bg-white/30 p-3 rounded-lg border border-ink/10">
+          <span className="text-xs font-black text-ink-light">{vl.end}</span>
+          <MathView tex={`(${p2[0]}, ${p2[1]})`} className="text-lg font-black text-ink" />
         </div>
       </div>
     );
@@ -221,8 +221,8 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
   if (mission.type === 'INDICES') {
     const { base, e1, e2 } = mission.data;
     return (
-      <div className="bg-white/30 p-6 rounded-lg border border-[#3d2b1f]/10 text-center">
-        <MathView tex={`${base}^{${e1}} \\times ${base}^{${e2}} = ${base}^x`} className="text-2xl font-black text-[#3d2b1f]" />
+      <div className="bg-white/30 p-6 rounded-lg border border-ink/10 text-center">
+        <MathView tex={`${base}^{${e1}} \\times ${base}^{${e2}} = ${base}^x`} className="text-2xl font-black text-ink" />
       </div>
     );
   }
@@ -231,7 +231,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     if (mission.data.showDiagram === true) {
       const { a, b } = mission.data;
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <Triangle
             sides={[
               { label: String(a) },
@@ -246,10 +246,10 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     }
     const { a, b } = mission.data;
     return (
-      <div className="bg-white/30 p-6 rounded-lg border border-[#3d2b1f]/10 flex flex-col items-center">
-        <div className="w-32 h-24 border-b-4 border-l-4 border-[#3d2b1f] relative">
-          <span className="absolute -left-6 top-1/2 text-xs font-bold text-[#5c4033]">{b}</span>
-          <span className="absolute bottom-[-24px] left-1/2 text-xs font-bold text-[#5c4033]">{a}</span>
+      <div className="bg-white/30 p-6 rounded-lg border border-ink/10 flex flex-col items-center">
+        <div className="w-32 h-24 border-b-4 border-l-4 border-ink relative">
+          <span className="absolute -left-6 top-1/2 text-xs font-bold text-ink-light">{b}</span>
+          <span className="absolute bottom-[-24px] left-1/2 text-xs font-bold text-ink-light">{a}</span>
         </div>
       </div>
     );
@@ -258,7 +258,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     // Enhanced: show equation steps if available
     if (mission.data.steps) {
       return (
-        <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+        <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <EquationSteps steps={mission.data.steps} currentStep={mission.data.currentStep} />
         </div>
       );
@@ -266,8 +266,8 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
     const [a1, b1, c1] = mission.data.eq1;
     const [a2, b2, c2] = mission.data.eq2;
     return (
-      <div className="bg-white/30 p-6 rounded-lg border border-[#3d2b1f]/10">
-        <MathView tex={`\\begin{cases} ${a1}x + ${b1}y = ${c1} \\\\ ${a2}x + ${b2}y = ${c2} \\end{cases}`} className="text-xl font-black text-[#3d2b1f]" />
+      <div className="bg-white/30 p-6 rounded-lg border border-ink/10">
+        <MathView tex={`\\begin{cases} ${a1}x + ${b1}y = ${c1} \\\\ ${a2}x + ${b2}y = ${c2} \\end{cases}`} className="text-xl font-black text-ink" />
       </div>
     );
   }
@@ -279,7 +279,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
   // Number line visualization
   if (mission.data?.numberLine) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <NumberLine
           min={mission.data.numberLine.min}
           max={mission.data.numberLine.max}
@@ -293,7 +293,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
   // Factor tree visualization
   if (mission.data?.factorTree) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <FactorTree root={mission.data.factorTree} />
       </div>
     );
@@ -302,7 +302,7 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
   // Number grid visualization
   if (mission.data?.numberGrid) {
     return (
-      <div className="bg-white/30 p-4 rounded-lg border border-[#3d2b1f]/10">
+      <div className="bg-white/30 p-4 rounded-lg border border-ink/10">
         <NumberGrid
           range={mission.data.numberGrid.range}
           highlights={mission.data.numberGrid.highlights}

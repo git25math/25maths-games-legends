@@ -1,11 +1,17 @@
 import { memo, useEffect, useMemo, useState } from "react";
 
-const COLORS = ["#FFD700", "#8b0000", "#2d6a2e", "#b8860b", "#4f46e5", "#ef4444", "#f59e0b", "#fff"];
+const THEMES = {
+  default: ["#FFD700", "#8b0000", "#2d6a2e", "#b8860b", "#4f46e5", "#ef4444", "#f59e0b", "#fff"],
+  goldWhite: ["#FFD700", "#FFF8DC", "#FFFFFF", "#DAA520", "#B8860B", "#F0E68C"],
+};
+
 const PARTICLE_COUNT = 60;
 const DURATION_MS = 3000;
 
 interface ConfettiProps {
-  active: boolean;
+  active?: boolean;
+  trigger?: number;
+  theme?: 'default' | 'goldWhite';
 }
 
 interface Particle {
@@ -21,12 +27,18 @@ interface Particle {
   id: number;
 }
 
-export const Confetti = memo(function Confetti({ active }: ConfettiProps) {
+export const Confetti = memo(function Confetti({ active, trigger = 0, theme = 'default' }: ConfettiProps) {
   const [visible, setVisible] = useState(false);
 
-  // Regenerate random values each time active flips to true
+  // Use both active and trigger to determine if it should fire
+  const isTriggered = active || trigger > 0;
+  
+  // Regenerate random values each time active flips to true or trigger changes
   const particles = useMemo<Particle[]>(() => {
-    if (!active) return [];
+    if (!isTriggered) return [];
+    
+    const colors = THEMES[theme] || THEMES.default;
+    
     return Array.from({ length: PARTICLE_COUNT }, (_, i) => {
       const angle = Math.random() * Math.PI * 2;
       const distance = 120 + Math.random() * 280;
@@ -34,7 +46,7 @@ export const Confetti = memo(function Confetti({ active }: ConfettiProps) {
       const sy = (Math.random() - 0.5) * 60;
       return {
         id: i,
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        color: colors[Math.floor(Math.random() * colors.length)],
         delay: Math.random() * 500,
         width: Math.random() > 0.5 ? 10 : 7,
         height: Math.random() > 0.5 ? 10 : 14,
@@ -45,17 +57,26 @@ export const Confetti = memo(function Confetti({ active }: ConfettiProps) {
         endY: sy + Math.sin(angle) * distance + 100, // gravity pull
       };
     });
-  }, [active]);
+  }, [active, trigger, theme]);
 
   useEffect(() => {
-    if (!active) {
+    if (!isTriggered) {
       setVisible(false);
       return;
     }
-    setVisible(true);
+    
+    // We need to briefly toggle visibility off then on to restart CSS animations
+    setVisible(false);
+    const frame = requestAnimationFrame(() => {
+      setVisible(true);
+    });
+    
     const timer = setTimeout(() => setVisible(false), DURATION_MS);
-    return () => clearTimeout(timer);
-  }, [active]);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(timer);
+    };
+  }, [active, trigger]);
 
   if (!visible) return null;
 

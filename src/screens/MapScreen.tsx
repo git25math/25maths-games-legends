@@ -9,6 +9,7 @@ import { CharacterAvatar } from '../components/CharacterAvatar';
 import { interpolate } from '../utils/interpolate';
 import { useAudio } from '../audio';
 import { tapScale, hoverGlow, springIn, staggerContainer, staggerItem } from '../utils/animationPresets';
+import { EmptyState } from '../components/EmptyState';
 
 const CHAPTER_IMAGES = [
   './map/ch1-peach-garden.png',
@@ -33,6 +34,8 @@ export const MapScreen = ({
   onCharChange,
   onCreateRoom,
   onDashboard,
+  lastClearedMissionId,
+  clearLastClearedMission,
 }: {
   lang: Language;
   profile: UserProfile;
@@ -44,6 +47,8 @@ export const MapScreen = ({
   onCharChange: () => void;
   onCreateRoom: (type: 'team' | 'pk', missionId: number) => void;
   onDashboard?: () => void;
+  lastClearedMissionId?: number | null;
+  clearLastClearedMission?: () => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
@@ -52,6 +57,15 @@ export const MapScreen = ({
     playBGMMap();
     return () => stopBGM();
   }, []);
+
+  useEffect(() => {
+    if (lastClearedMissionId && clearLastClearedMission) {
+      const timer = setTimeout(() => {
+        clearLastClearedMission();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [lastClearedMissionId, clearLastClearedMission]);
 
   const gradeMissions = missions.filter(m => m.grade === profile.grade);
   const completedCount = Object.keys(profile.completed_missions).filter(id =>
@@ -126,8 +140,15 @@ export const MapScreen = ({
           className="w-full rounded-3xl opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
         />
         <div className="relative z-10 space-y-16 p-4 md:p-8">
-        {Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang)))).map((unitTitle, unitIndex) => (
-          <div key={unitTitle} className="space-y-6">
+        {gradeMissions.length === 0 ? (
+          <EmptyState 
+            icon={<MapIcon size={48} />} 
+            title={lang === 'zh' ? '暂无关卡' : lang === 'zh_TW' ? '暫無關卡' : 'No Missions Available'} 
+            description={lang === 'en' ? 'Missions for this grade are coming soon.' : '该年级的关卡正在建设中。'} 
+          />
+        ) : (
+          Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang)))).map((unitTitle, unitIndex) => (
+            <div key={unitTitle} className="space-y-6">
             <motion.div initial={{ x: -20, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} className="flex items-center gap-4">
               <div className="h-px flex-1 bg-white/10" />
               <div className="flex items-center gap-3">
@@ -154,16 +175,41 @@ export const MapScreen = ({
                   const prevComp = prevMission ? profile.completed_missions[String(prevMission.id)] : null;
                   const isLocked = mission.order > 1 && prevMission && !(prevComp && Object.values(prevComp).some(Boolean));
                   const isPlayable = !isLocked && !isCompleted;
+                  const isPerfect = comp?.green && comp?.amber && comp?.red;
+                  const isLastCleared = lastClearedMissionId === mission.id;
                   
                   const cardVariants = isLocked ? { initial: { opacity: 0.5, y: 0 }, animate: { opacity: 0.5, y: 0 } } : staggerItem;
 
                   return (
                     <motion.div key={mission.id} variants={cardVariants} className="relative group">
                       <motion.div
-                        animate={isPlayable ? { scale: [1, 1.02, 1] } : {}} 
-                        transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : {}}
-                        className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl transition-shadow ${isLocked ? 'opacity-50 grayscale' : 'hover:shadow-indigo-500/20'}`}
+                        animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})} 
+                        transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : (isLastCleared ? { duration: 2.5, ease: "easeInOut" } : {})}
+                        className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
                       >
+                        {isLastCleared && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 0, scale: 0.5 }}
+                            animate={{ opacity: [0, 1, 1, 0], y: -80, scale: 1.5 }}
+                            transition={{ duration: 2, ease: "easeOut" }}
+                            className="absolute -top-4 left-1/2 -translate-x-1/2 text-2xl font-black text-yellow-400 z-50 pointer-events-none drop-shadow-md"
+                          >
+                            + Score
+                          </motion.div>
+                        )}
+                        {isPerfect && (
+                          <motion.div
+                            initial={{ scale: 0, rotate: -180 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{ type: "spring", bounce: 0.5, damping: 12 }}
+                            className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-yellow-300 to-amber-500 flex items-center justify-center shadow-lg border-2 border-white z-10 group/badge"
+                          >
+                            <Crown size={20} className="text-white" />
+                            <div className="absolute -top-8 bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover/badge:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                              {lang === 'zh' ? '完美通关！' : lang === 'zh_TW' ? '完美通關！' : 'Perfect Clear!'}
+                            </div>
+                          </motion.div>
+                        )}
                         <div className="flex justify-between items-start mb-6">
                           <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                             mission.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' :
@@ -216,7 +262,7 @@ export const MapScreen = ({
                 })}
             </motion.div>
           </div>
-        ))}
+        )))}
         </div>
       </div>
     </motion.div>

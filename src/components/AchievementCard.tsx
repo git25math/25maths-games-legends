@@ -89,8 +89,7 @@ export const AchievementCard = memo(function AchievementCard({
             style={{ background: 'linear-gradient(to right, transparent, #b8860b, transparent)' }}
           />
           <h1
-            className="font-black text-2xl tracking-wider"
-            style={{ color: '#3d2b1f' }}
+            className="font-black text-2xl tracking-wider text-ink"
           >
             {t.header}
           </h1>
@@ -107,8 +106,7 @@ export const AchievementCard = memo(function AchievementCard({
 
         {/* === Mission Title === */}
         <p
-          className="text-center font-bold text-lg px-6 pb-3"
-          style={{ color: '#3d2b1f' }}
+          className="text-center font-bold text-lg px-6 pb-3 text-ink"
         >
           {lt(missionTitle, lang)}
         </p>
@@ -136,8 +134,7 @@ export const AchievementCard = memo(function AchievementCard({
             <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#6b5a3e' }}>
               {t.time}
             </span>
-            <span className="mt-1 text-2xl font-black" style={{ color: '#3d2b1f' }}>
-              {duration}s
+            <span className="mt-1 text-2xl font-black text-ink">              {duration}s
             </span>
           </div>
 

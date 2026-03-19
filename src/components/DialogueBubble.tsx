@@ -23,8 +23,7 @@ export const DialogueBubble = memo(function DialogueBubble({
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-      className="relative bg-white/90 rounded-2xl px-4 py-3 border-2 shadow-lg max-w-sm"
-      style={{ borderColor: '#3d2b1f' }}
+      className="relative bg-white/90 rounded-2xl px-4 py-3 border-2 shadow-lg max-w-sm border-ink"
     >
       {/* Bubble tail pointing left */}
       <motion.div
@@ -56,7 +55,7 @@ export const DialogueBubble = memo(function DialogueBubble({
       </div>
 
       {/* Text with LaTeX rendering */}
-      <div className="text-sm leading-relaxed" style={{ color: '#3d2b1f' }}>
+      <div className="text-sm leading-relaxed text-ink">
         {tokens.map((token, index) => {
           if (token.startsWith('$') && token.endsWith('$')) {
             const delay = charCount * 0.03;
