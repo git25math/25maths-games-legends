@@ -49,15 +49,28 @@ function Dot({ done, color }: { done: boolean; color: string }) {
   return <Circle size={14} className="text-gray-400/40" />;
 }
 
+// Predefined class groups
+const CLASS_GROUPS: Record<string, string[]> = {
+  homeroom: ['7A', '7B', '7C', '8A', '8B', '8C', '9A', '9B', '9C', '10A', '10B', '10C', '11A', '11B', '11C'],
+  programme: ['NZH MATHS EA'],
+};
+const ALL_CLASSES = [...CLASS_GROUPS.homeroom, ...CLASS_GROUPS.programme];
+
+// Tag color mapping
+function getTagColor(tag: string): string {
+  if (tag.includes('EA')) return 'bg-purple-100 text-purple-700 border-purple-200';
+  if (tag.startsWith('7')) return 'bg-sky-50 text-sky-700 border-sky-200';
+  if (tag.startsWith('8')) return 'bg-teal-50 text-teal-700 border-teal-200';
+  if (tag.startsWith('9')) return 'bg-amber-50 text-amber-700 border-amber-200';
+  if (tag.startsWith('10')) return 'bg-rose-50 text-rose-700 border-rose-200';
+  if (tag.startsWith('11')) return 'bg-violet-50 text-violet-700 border-violet-200';
+  return 'bg-indigo-50 text-indigo-700 border-indigo-200';
+}
+
 // Tag badge component
 function TagBadge({ tag, onRemove }: { tag: string; onRemove?: () => void }) {
-  const colors: Record<string, string> = {
-    EA: 'bg-purple-100 text-purple-700 border-purple-200',
-    OLYMPIAD: 'bg-amber-100 text-amber-700 border-amber-200',
-  };
-  const cls = colors[tag] || 'bg-indigo-50 text-indigo-700 border-indigo-200';
   return (
-    <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold border ${cls}`}>
+    <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold border ${getTagColor(tag)}`}>
       {tag}
       {onRemove && (
         <button onClick={onRemove} className="hover:text-rose-500 transition-colors ml-0.5">
@@ -291,6 +304,8 @@ export function DashboardScreen({ lang, onClose }: Props) {
             <option value={7}>Y7</option>
             <option value={8}>Y8</option>
             <option value={9}>Y9</option>
+            <option value={10}>Y10</option>
+            <option value={11}>Y11</option>
           </select>
           <button
             onClick={fetchStudents}
@@ -357,15 +372,17 @@ export function DashboardScreen({ lang, onClose }: Props) {
               <span className="text-sm font-bold text-indigo-900">
                 {t.assignAll.replace('{g}', String(grade))}
               </span>
-              <input
-                type="text"
+              <select
                 value={batchTag}
-                onChange={e => setBatchTag(e.target.value.toUpperCase())}
-                placeholder="EA"
-                className="bg-white border border-indigo-200 rounded-lg px-3 py-1.5 text-sm w-24 text-indigo-900 font-bold"
+                onChange={e => setBatchTag(e.target.value)}
+                className="bg-white border border-indigo-200 rounded-lg px-3 py-1.5 text-sm text-indigo-900 font-bold"
                 autoFocus
-                onKeyDown={e => e.key === 'Enter' && batchAddTag()}
-              />
+              >
+                <option value="">选择...</option>
+                {ALL_CLASSES.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
               <button onClick={batchAddTag} className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors">
                 {t.confirm}
               </button>
@@ -478,19 +495,20 @@ export function DashboardScreen({ lang, onClose }: Props) {
                       ))}
                       {addingTagFor === s.user_id ? (
                         <span className="inline-flex items-center gap-0.5">
-                          <input
-                            type="text"
+                          <select
                             value={newTagValue}
-                            onChange={e => setNewTagValue(e.target.value.toUpperCase())}
-                            className="w-14 px-1 py-0.5 text-[9px] bg-white border border-indigo-300 rounded font-bold"
-                            autoFocus
-                            placeholder="EA"
-                            onKeyDown={e => {
-                              if (e.key === 'Enter') addStudentTag(s.user_id, newTagValue);
-                              if (e.key === 'Escape') { setAddingTagFor(null); setNewTagValue(''); }
+                            onChange={e => {
+                              const v = e.target.value;
+                              if (v) addStudentTag(s.user_id, v);
                             }}
-                          />
-                          <button onClick={() => addStudentTag(s.user_id, newTagValue)} className="text-emerald-600"><Plus size={10} /></button>
+                            className="text-[9px] bg-white border border-indigo-300 rounded px-1 py-0.5 font-bold text-indigo-900"
+                            autoFocus
+                          >
+                            <option value="">选择班级...</option>
+                            {ALL_CLASSES.filter(c => !(s.class_tags || []).includes(c)).map(c => (
+                              <option key={c} value={c}>{c}</option>
+                            ))}
+                          </select>
                           <button onClick={() => { setAddingTagFor(null); setNewTagValue(''); }} className="text-rose-400"><X size={10} /></button>
                         </span>
                       ) : (
