@@ -473,47 +473,43 @@ export function generateAreaTrapMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是梯形?\n梯形有一对平行的边(上底和下底)，另外两条边不平行。`,
-        en: `${narrator}: "What is a trapezoid?\nA shape with one pair of parallel sides (top and bottom). The other two sides are not parallel."`,
+        zh: `${narrator}：为什么要学梯形面积？\n城墙上有很多不规则的区域——不是正方形，不是长方形，而是一边长一边短的奇怪形状。\n那就是梯形！上面窄（上底），下面宽（下底），像个"倒着的梯子"。\n\n学会算梯形面积，就能搞定很多现实中不规则的地块！`,
+        en: `${narrator}: "Why learn trapezoid area?\nCity walls have many irregular sections — not square, not rectangular, but with one side longer than the other.\nThat's a trapezoid! Narrow on top, wide at the bottom, like an upside-down step.\n\nLearn trapezoid area, and you can handle all sorts of irregular plots in real life!"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：梯形面积公式：$\\text{Area} = \\frac{(a + b) \\times h}{2}$`,
-        en: `${narrator}: "Trapezoid area formula: $\\text{Area} = \\frac{(a + b) \\times h}{2}$"`,
-      },
-      hint: {
-        zh: '把两条平行边加起来，乘以高，再除以2',
-        en: 'Add the two parallel sides, multiply by height, then halve',
+        zh: `${narrator}：梯形面积的公式——为什么除以 2？\n$$\\text{面积} = \\frac{(\\text{上底} + \\text{下底}) \\times \\text{高}}{2}$$\n\n把两个一模一样的梯形"拼"在一起，刚好变成一个平行四边形！\n平行四边形面积 = (上底+下底) × 高，梯形只占一半，所以除以 2。\n这个小窍门记住了，梯形面积就不会错！`,
+        en: `${narrator}: "The trapezoid formula — why divide by 2?\n$$\\text{Area} = \\frac{(\\text{top} + \\text{bottom}) \\times \\text{height}}{2}$$\n\nFlip and join two identical trapezoids — they form a parallelogram!\nParallelogram area = (top + bottom) × height, trapezoid is half, so divide by 2.\nRemember this trick and you'll never get it wrong!"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：找出已知量：\n上底 $a = ${a}$，下底 $b = ${b}$，高 $h = ${h}$`,
-        en: `${narrator}: "Identify the values:\nTop $a = ${a}$, Bottom $b = ${b}$, Height $h = ${h}$"`,
+        zh: `${narrator}：从题目中找出三个数\n上底 $a = ${a}$，下底 $b = ${b}$，高 $h = ${h}$\n\n三个数都找到了——就像找齐三味药材，接下来就是"炼丹"了！`,
+        en: `${narrator}: "Find the three numbers from the problem\nTop $a = ${a}$, bottom $b = ${b}$, height $h = ${h}$\n\nAll three found — like gathering three ingredients, now it's time to 'brew the potion'!"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：先把两条平行边加起来：$${a} + ${b} = ${sumAB}$`,
-        en: `${narrator}: "First add the two parallel sides: $${a} + ${b} = ${sumAB}$"`,
+        zh: `${narrator}：第一步——上底加下底\n$${a} + ${b} = ${sumAB}$\n\n把两条平行边加起来——就像量两条城墙合起来有多长。这是为下一步做准备！`,
+        en: `${narrator}: "Step 1 — add top + bottom\n$${a} + ${b} = ${sumAB}$\n\nAdd the two parallel sides — like measuring two walls combined. This prepares for the next step!"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：乘以高，再除以2：$\\frac{${sumAB} \\times ${h}}{2} = \\frac{${sumAB * h}}{2} = ${areaVal}$`,
-        en: `${narrator}: "Multiply by height, then divide by 2: $\\frac{${sumAB} \\times ${h}}{2} = \\frac{${sumAB * h}}{2} = ${areaVal}$"`,
+        zh: `${narrator}：第二步——乘以高，再除以 2\n$\\frac{${sumAB} \\times ${h}}{2} = \\frac{${sumAB * h}}{2} = ${areaVal}$\n\n乘高得出平行四边形的面积，除以 2 就是梯形的面积。两步搞定！`,
+        en: `${narrator}: "Step 2 — multiply by height, then halve\n$\\frac{${sumAB} \\times ${h}}{2} = \\frac{${sumAB * h}}{2} = ${areaVal}$\n\nMultiply by height for the parallelogram area, halve it for the trapezoid. Two steps done!"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：答案：面积 = $${areaVal}$`,
-        en: `${narrator}: "Answer: Area = $${areaVal}$"`,
+        zh: `${narrator}：答案\n面积 = $${areaVal}$\n\n验算：面积应该比 $${a} \\times ${h} = ${a * h}$（小长方形）大，\n比 $${b} \\times ${h} = ${b * h}$（大长方形）小。\n$${a * h} < ${areaVal} < ${b * h}$ ✓ 夹在中间，完美合理！做得漂亮！`,
+        en: `${narrator}: "Answer\nArea = $${areaVal}$\n\nVerify: area should be bigger than $${a} \\times ${h} = ${a * h}$ (small rectangle),\nand smaller than $${b} \\times ${h} = ${b * h}$ (big rectangle).\n$${a * h} < ${areaVal} < ${b * h}$ ✓ Sandwiched perfectly! Brilliantly done!"`,
       },
       highlightField: 'area',
     },
@@ -2001,33 +1997,45 @@ export function generateStatsMedianMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：什么是"中位数"？——排好队，站在正中间的那个人`, en: `${narrator}: "What is the median? — Line everyone up, and pick the person standing in the exact middle"` },
-      hint: { zh: `想象 ${count} 个士兵按身高从矮到高站成一排\n中位数就是站在正中间的那个人的身高\n\n为什么不用平均数？\n因为平均数会被极端值"带偏"——如果队伍里混了一个巨人，平均身高会被拉高\n但中位数不受影响——巨人再高，中间那个人还是那个人`, en: `Imagine ${count} soldiers lined up by height, shortest to tallest\nThe median is the height of the person standing in the exact middle\n\nWhy not use the mean (average)?\nBecause the mean gets "pulled" by extreme values — if a giant joins, the average shoots up\nBut the median doesn't change — the middle person is still the same` },
+      text: {
+        zh: `${narrator}：为什么要学中位数？\n想象 ${count} 个士兵按身高从矮到高站成一排。\n站在**正中间**的那个人的身高，就是中位数。\n\n为什么不直接用平均数？因为平均数容易被"极端值"带偏——\n队伍里混进一个两米的巨人，平均身高一下子被拉高了。\n但中位数稳如泰山——巨人再高，中间那个人还是那个人！`,
+        en: `${narrator}: "Why learn the median?\nImagine ${count} soldiers lined up by height, shortest to tallest.\nThe height of the person standing in the EXACT MIDDLE is the median.\n\nWhy not use the mean? Because the mean gets pulled by extreme values —\na 2-metre giant sneaks in, the average shoots up.\nBut the median stays rock-solid — the middle person is still the same!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第一步——把数据从小到大排列`, en: `${narrator}: "Step 1 — arrange the data from smallest to largest"` },
-      hint: { zh: `原始数据：$${values.join(', ')}$\n\n排序后：$${sorted.join(', ')}$\n\n（如果已经排好了，这步可以跳过）`, en: `Original data: $${values.join(', ')}$\n\nSorted: $${sorted.join(', ')}$\n\n(If already sorted, skip this step)` },
+      text: {
+        zh: `${narrator}：第一步——从小到大"站队"\n原始数据：$${values.join(', ')}$\n\n让它们排好队：$${sorted.join(', ')}$\n\n排好了！就像让士兵从矮到高站整齐。\n这一步是**最关键的**——不排队就找不到真正的中间！`,
+        en: `${narrator}: "Step 1 — line them up smallest to largest\nOriginal data: $${values.join(', ')}$\n\nGet them in order: $${sorted.join(', ')}$\n\nAll lined up! Like soldiers sorted by height.\nThis step is **crucial** — without sorting, you can't find the true middle!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——数一数有几个数，找到正中间的位置`, en: `${narrator}: "Step 2 — count how many values, find the exact middle position"` },
-      hint: { zh: `一共 $${count}$ 个数\n中间位置 = 第 $${mid + 1}$ 个\n\n怎么算？$(${count} + 1) \\div 2 = ${(count + 1) / 2}$\n所以中间是第 $${mid + 1}$ 个\n\n口诀：总数加 1 除以 2 = 中间位置`, en: `Total: $${count}$ values\nMiddle position = ${mid + 1}th\n\nHow? $(${count} + 1) \\div 2 = ${(count + 1) / 2}$\nSo middle is the ${mid + 1}th value\n\nRule: (total + 1) ÷ 2 = middle position` },
+      text: {
+        zh: `${narrator}：第二步——找正中间的位置\n一共 ${count} 个数，中间是第几个？\n$(${count} + 1) \\div 2 = ${(count + 1) / 2}$\n\n所以中间是第 $${mid + 1}$ 个。口诀很简单：**总数加 1，除以 2**！`,
+        en: `${narrator}: "Step 2 — find the middle position\nThere are ${count} numbers — which position is the middle?\n$(${count} + 1) \\div 2 = ${(count + 1) / 2}$\n\nSo the middle is position $${mid + 1}$. Easy formula: **total + 1, divide by 2**!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第三步——从排好的数据中取第 $${mid + 1}$ 个`, en: `${narrator}: "Step 3 — pick the ${mid + 1}th value from the sorted list"` },
-      hint: { zh: `排序后：$${sorted.join(', ')}$\n\n数到第 $${mid + 1}$ 个：\n${sorted.map((v, i) => `第 ${i+1} 个 = $${v}$${i === mid ? ' ← 就是这个！' : ''}`).join('\n')}\n\n中位数 = $${median}$`, en: `Sorted: $${sorted.join(', ')}$\n\nCount to position ${mid + 1}:\n${sorted.map((v, i) => `${i+1}th = $${v}$${i === mid ? ' ← this one!' : ''}`).join('\n')}\n\nMedian = $${median}$` },
+      text: {
+        zh: `${narrator}：第三步——数到那个位置\n$${sorted.join(', ')}$\n\n从左边开始数：${sorted.slice(0, mid).map((v, i) => `第${i+1}个是${v}`).join('，')}……\n第 ${mid + 1} 个是 $${median}$！← 就是它——队伍的正中心！`,
+        en: `${narrator}: "Step 3 — count to that position\n$${sorted.join(', ')}$\n\nCount from the left: ${sorted.slice(0, mid).map((v, i) => `${i+1}st is ${v}`).join(', ')}...\nPosition ${mid + 1} is $${median}$! ← That's it — the exact centre of the line!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——中位数合理吗？`, en: `${narrator}: "Verify — does the median make sense?"` },
-      hint: { zh: `中位数 = $${median}$\n\n检查：\n• 比它小的有 ${mid} 个：$${sorted.slice(0, mid).join(', ')}$ ✓\n• 比它大的有 ${mid} 个：$${sorted.slice(mid + 1).join(', ')}$ ✓\n• 两边数量相等！中位数就是"正中间"的意思`, en: `Median = $${median}$\n\nCheck:\n• Values smaller: ${mid} values: $${sorted.slice(0, mid).join(', ')}$ ✓\n• Values larger: ${mid} values: $${sorted.slice(mid + 1).join(', ')}$ ✓\n• Equal count on both sides! Median means "exactly in the middle"` },
+      text: {
+        zh: `${narrator}：答案\n中位数 = $${median}$\n\n排队 → 找位置 → 数过去，三步搞定！你做得太棒了！`,
+        en: `${narrator}: "Answer\nMedian = $${median}$\n\nSort → find position → count there. Three steps and done! You're amazing!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：注意——如果数据个数是偶数怎么办？`, en: `${narrator}: "Note — what if there's an even number of values?"` },
-      hint: { zh: `奇数个数据：中间那个就是中位数\n（这道题 $${count}$ 个数据 → 第 $${mid + 1}$ 个）\n\n偶数个数据：取中间两个的平均值\n例如 4 个数据 $1, 3, 5, 7$\n中间两个是 $3$ 和 $5$\n中位数 = $(3 + 5) \\div 2 = 4$`, en: `Odd count: the middle value IS the median\n(This problem: $${count}$ values → ${mid + 1}th)\n\nEven count: average the two middle values\nExample: 4 values $1, 3, 5, 7$\nMiddle two: $3$ and $5$\nMedian = $(3 + 5) \\div 2 = 4$` },
+      text: {
+        zh: `${narrator}：验算——两边数一数\n比 $${median}$ 小的有 ${mid} 个：$${sorted.slice(0, mid).join(', ')}$\n比 $${median}$ 大的有 ${mid} 个：$${sorted.slice(mid + 1).join(', ')}$\n两边一样多 ✓ 它确实站在正中间！\n\n小贴士：如果数据个数是**偶数**，要取中间两个的平均值哦——以后会学到！`,
+        en: `${narrator}: "Verify — count both sides\nSmaller than $${median}$: ${mid} values — $${sorted.slice(0, mid).join(', ')}$\nLarger than $${median}$: ${mid} values — $${sorted.slice(mid + 1).join(', ')}$\nEqual on both sides ✓ It really is in the exact middle!\n\nTip: if there's an EVEN number of values, average the two middle ones — you'll learn that later!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -5641,33 +5649,45 @@ export function generateStdFormMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：为什么需要标准式？`, en: `${narrator}: "Why do we need standard form?"` },
-      hint: { zh: `大数字太长，写起来容易出错\n比如曹操的百万大军：$1,000,000$\n用标准式写：$1 \\times 10^6$\n\n简洁、准确、一眼就能比大小！`, en: `Big numbers are too long and error-prone\nLike Cao Cao's million-strong army: $1,000,000$\nIn standard form: $1 \\times 10^6$\n\nNeat, precise, and easy to compare!` },
+      text: {
+        zh: `${narrator}：为什么需要标准式？\n你试试写一下曹操的百万大军——$1,000,000$。好长对不对？容易数错零！\n标准式就是把大数字"缩写"成一个简洁的形式：$1 \\times 10^6$。\n\n简洁、不会写错、一眼就能比大小。科学家、工程师天天用它！`,
+        en: `${narrator}: "Why do we need standard form?\nTry writing Cao Cao's million-strong army — $1,000,000$. So long! Easy to miscount zeros!\nStandard form 'compresses' big numbers into a neat form: $1 \\times 10^6$.\n\nNeat, error-free, easy to compare. Scientists and engineers use it every day!"`,
+      },
       highlightField: 'a',
     },
     {
-      text: { zh: `${narrator}：标准式的规则`, en: `${narrator}: "The rules of standard form"` },
-      hint: { zh: `$a \\times 10^n$ 其中：\n• $a$ 必须在 $1$ 和 $10$ 之间（$1 \\leq a < 10$）\n• $n$ 是整数（小数点移动的次数）\n\n所以 $25$ 不是标准式（$a=25>10$）\n$2.5 \\times 10^1$ 才是 ✓`, en: `$a \\times 10^n$ where:\n• $a$ must be between $1$ and $10$ ($1 \\leq a < 10$)\n• $n$ is an integer (number of places the decimal moves)\n\nSo $25$ is NOT standard form ($a=25>10$)\n$2.5 \\times 10^1$ is ✓` },
+      text: {
+        zh: `${narrator}：标准式的两个规则\n$a \\times 10^n$——就这个格式，记住两条：\n• $a$ 必须在 $1$ 到 $10$ 之间（$3.6$ 可以，$36$ 不行，$0.5$ 也不行）\n• $n$ 就是小数点挪了几位\n\n就像报军情：先说最关键的数字（$a$），再说规模是"万"还是"百万"（$10^n$）。`,
+        en: `${narrator}: "Two rules of standard form\n$a \\times 10^n$ — just this format, remember two things:\n• $a$ must be between $1$ and $10$ ($3.6$ is fine, $36$ is not, $0.5$ isn't either)\n• $n$ is how many places the decimal moved\n\nLike a military report: state the key figure ($a$) first, then the scale — 'ten-thousands' or 'millions' ($10^n$)."`,
+      },
       highlightField: 'a',
     },
     {
-      text: { zh: `${narrator}：第一步——找 $a$（把小数点移到第一个数字后面）`, en: `${narrator}: "Step 1 — find $a$ (move decimal after first digit)"` },
-      hint: { zh: `就像报军情——先说最重要的数字\n\n$${numberStr}$\n把小数点移到第一个非零数字后面\n→ $a = ${a}$`, en: `Like reporting military intel — lead with the key figure\n\n$${numberStr}$\nMove the decimal point after the first non-zero digit\n→ $a = ${a}$` },
+      text: {
+        zh: `${narrator}：第一步——找 $a$\n看这个数：$${numberStr}$\n把小数点挪到第一个非零数字后面，让它变成 $1$ 到 $10$ 之间的数。\n\n$a = ${a}$ ✓ 在 $1$ 到 $10$ 之间——完美！就像挑出军情中最关键的数字。`,
+        en: `${narrator}: "Step 1 — find $a$\nLook at this number: $${numberStr}$\nMove the decimal after the first non-zero digit to get a number between $1$ and $10$.\n\n$a = ${a}$ ✓ Between $1$ and $10$ — perfect! Like picking out the key figure in a report."`,
+      },
       highlightField: 'a',
     },
     {
-      text: { zh: `${narrator}：第二步——数小数点移了几位 → 就是 $n$`, en: `${narrator}: "Step 2 — count how many places the decimal moved → that's $n$"` },
-      hint: { zh: `数位数——传令兵跑了几步\n\n从 $${numberStr}$ 到 $${a}$\n小数点向左移了 $${n}$ 位\n所以 $n = ${n}$`, en: `Count the places — how many steps did the messenger run?\n\nFrom $${numberStr}$ to $${a}$\nDecimal moved $${n}$ places to the left\nSo $n = ${n}$` },
+      text: {
+        zh: `${narrator}：第二步——数小数点挪了几位\n从 $${numberStr}$ 变成 $${a}$，小数点往左跳了几步？\n数一数……$${n}$ 步！所以 $n = ${n}$。\n\n$n$ 越大，说明原来的数越大——$10^{${n}}$ 就是 $${Math.pow(10, n).toLocaleString('en-US')}$！`,
+        en: `${narrator}: "Step 2 — count decimal places moved\nFrom $${numberStr}$ to $${a}$, how many jumps left did the decimal make?\nCount... $${n}$ jumps! So $n = ${n}$.\n\nThe bigger $n$ is, the bigger the original number — $10^{${n}}$ is $${Math.pow(10, n).toLocaleString('en-US')}$!"`,
+      },
       highlightField: 'n',
     },
     {
-      text: { zh: `${narrator}：答案`, en: `${narrator}: "Answer"` },
-      hint: { zh: `军报格式：${a} × 万级单位\n\n$${numberStr} = ${a} \\times 10^{${n}}$\n\n$a = ${a}$，$n = ${n}$`, en: `Military report format: ${a} × power-of-ten unit\n\n$${numberStr} = ${a} \\times 10^{${n}}$\n\n$a = ${a}$, $n = ${n}$` },
+      text: {
+        zh: `${narrator}：答案\n$$${numberStr} = ${a} \\times 10^{${n}}$$\n\n$a = ${a}$，$n = ${n}$——大数字瞬间变简洁！\n以后遇到再大的数字都不怕了。`,
+        en: `${narrator}: "Answer\n$$${numberStr} = ${a} \\times 10^{${n}}$$\n\n$a = ${a}$, $n = ${n}$ — the big number is now compact!\nNo matter how large the number, you can handle it now."`,
+      },
       highlightField: 'a',
     },
     {
-      text: { zh: `${narrator}：验算——还原回去`, en: `${narrator}: "Verify — convert back"` },
-      hint: { zh: `还原验证——传令兵回报原数\n\n$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓`, en: `Convert back to verify — the messenger reports the original number\n\n$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓` },
+      text: {
+        zh: `${narrator}：验算——还原回去\n$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓\n\n和原来的数一模一样！标准式掌握了，做得漂亮！`,
+        en: `${narrator}: "Verify — convert back\n$${a} \\times 10^{${n}} = ${a} \\times ${Math.pow(10, n).toLocaleString('en-US')} = ${numberStr}$ ✓\n\nExactly the same as the original! Standard form mastered — brilliantly done!"`,
+      },
       highlightField: 'a',
     },
   ];
@@ -5717,41 +5737,57 @@ export function generateSpeedMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：速度、距离、时间的关系`, en: `${narrator}: "The relationship between speed, distance, and time"` },
-      hint: { zh: `行军打仗，三个量密切相关：\n• 速度 = 距离 ÷ 时间\n• 距离 = 速度 × 时间\n• 时间 = 距离 ÷ 速度\n\n记住三角形：$D = S \\times T$`, en: `In marching, three quantities are linked:\n• Speed = Distance ÷ Time\n• Distance = Speed × Time\n• Time = Distance ÷ Speed\n\nRemember the triangle: $D = S \\times T$` },
+      text: {
+        zh: `${narrator}：为什么要学速度公式？\n打仗最怕什么？迟到！如果不会算速度，部队就不知道几时出发才能准时到达。\n\n现实中也一样——坐火车、跑步、开车，都在和速度、距离、时间打交道。\n学会了这三个量的关系，你就能规划任何行程！`,
+        en: `${narrator}: "Why learn the speed formula?\nWhat's the worst thing in war? Being late! Without knowing speed, the army can't figure out when to march to arrive on time.\n\nSame in real life — trains, running, driving — all about speed, distance, and time.\nLearn how these three relate, and you can plan any journey!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：用生活例子理解`, en: `${narrator}: "Understand with a real example"` },
-      hint: { zh: `如果你走路速度是每小时 5 里\n走了 2 小时\n那你走了 $5 \\times 2 = 10$ 里\n\n知道任意两个，就能算第三个！`, en: `If you walk at 5 li per hour\nfor 2 hours\nyou've walked $5 \\times 2 = 10$ li\n\nKnow any two, find the third!` },
+      text: {
+        zh: `${narrator}：速度、距离、时间——三角公式\n记住一个公式就够了：\n$$\\text{距离} = \\text{速度} \\times \\text{时间}$$\n\n知道任意两个，就能算第三个：\n• 速度 $= \\frac{\\text{距离}}{\\text{时间}}$\n• 时间 $= \\frac{\\text{距离}}{\\text{速度}}$\n\n就像一个三角形：遮住哪个，剩下两个告诉你答案！`,
+        en: `${narrator}: "Speed, distance, time — the triangle formula\nJust remember one equation:\n$$\\text{Distance} = \\text{Speed} \\times \\text{Time}$$\n\nKnow any two, find the third:\n• Speed $= \\frac{\\text{Distance}}{\\text{Time}}$\n• Time $= \\frac{\\text{Distance}}{\\text{Speed}}$\n\nLike a triangle — cover one, and the other two give you the answer!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：找出已知量`, en: `${narrator}: "Identify what we know"` },
-      hint: mode === 'speed'
-        ? { zh: `赵云追击——先整理已知军情\n\n已知：距离 = $${distance}$ 里，时间 = $${time}$ 小时\n求：速度 = ?`, en: `Zhao Yun gives chase — first sort out the known intel\n\nKnown: distance = $${distance}$ li, time = $${time}$ hours\nFind: speed = ?` }
-        : mode === 'distance'
-        ? { zh: `行军侦察——先整理已知军情\n\n已知：速度 = $${speed}$ 里/时，时间 = $${time}$ 小时\n求：距离 = ?`, en: `March reconnaissance — first sort out the known intel\n\nKnown: speed = $${speed}$ li/hr, time = $${time}$ hours\nFind: distance = ?` }
-        : { zh: `诸葛亮算时间——先整理已知军情\n\n已知：距离 = $${distance}$ 里，速度 = $${speed}$ 里/时\n求：时间 = ?`, en: `Zhuge Liang calculates time — first sort out the known intel\n\nKnown: distance = $${distance}$ li, speed = $${speed}$ li/hr\nFind: time = ?` },
+      text: mode === 'speed' ? {
+        zh: `${narrator}：题目问速度——找出已知量\n已知：距离 = $${distance}$ 里，时间 = $${time}$ 小时\n求：速度 = ？\n\n速度就是"每小时走了多远"——把总路程平均分给每个小时。\n所以用**除法**：距离 ÷ 时间。`,
+        en: `${narrator}: "The question asks for speed — find the knowns\nKnown: distance = $${distance}$ li, time = $${time}$ hrs\nFind: speed = ?\n\nSpeed is 'how far per hour' — share the total distance equally across each hour.\nSo we use **division**: distance ÷ time."`,
+      } : mode === 'distance' ? {
+        zh: `${narrator}：题目问距离——找出已知量\n已知：速度 = $${speed}$ 里/时，时间 = $${time}$ 小时\n求：距离 = ？\n\n每小时走 $${speed}$ 里，走了 $${time}$ 个小时——总共走了多远？\n用**乘法**：速度 × 时间。`,
+        en: `${narrator}: "The question asks for distance — find the knowns\nKnown: speed = $${speed}$ li/hr, time = $${time}$ hrs\nFind: distance = ?\n\n$${speed}$ li every hour, for $${time}$ hours — how far in total?\nUse **multiplication**: speed × time."`,
+      } : {
+        zh: `${narrator}：题目问时间——找出已知量\n已知：距离 = $${distance}$ 里，速度 = $${speed}$ 里/时\n求：时间 = ？\n\n总共要走 $${distance}$ 里，每小时能走 $${speed}$ 里——要走几个小时？\n用**除法**：距离 ÷ 速度。`,
+        en: `${narrator}: "The question asks for time — find the knowns\nKnown: distance = $${distance}$ li, speed = $${speed}$ li/hr\nFind: time = ?\n\n$${distance}$ li to travel, going $${speed}$ li each hour — how many hours?\nUse **division**: distance ÷ speed."`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：选公式并代入`, en: `${narrator}: "Choose the formula and substitute"` },
-      hint: mode === 'speed'
-        ? { zh: `代入——赵云计算追击速度\n\n速度 = 距离 ÷ 时间\n$= ${distance} \\div ${time}$\n$= ${speed}$`, en: `Substitute — Zhao Yun calculates pursuit speed\n\nSpeed = Distance ÷ Time\n$= ${distance} \\div ${time}$\n$= ${speed}$` }
-        : mode === 'distance'
-        ? { zh: `代入——诸葛亮计算行军距离\n\n距离 = 速度 × 时间\n$= ${speed} \\times ${time}$\n$= ${distance}$`, en: `Substitute — Zhuge Liang calculates march distance\n\nDistance = Speed × Time\n$= ${speed} \\times ${time}$\n$= ${distance}$` }
-        : { zh: `代入——诸葛亮计算行军时间\n\n时间 = 距离 ÷ 速度\n$= ${distance} \\div ${speed}$\n$= ${time}$`, en: `Substitute — Zhuge Liang calculates march time\n\nTime = Distance ÷ Speed\n$= ${distance} \\div ${speed}$\n$= ${time}$` },
+      text: mode === 'speed' ? {
+        zh: `${narrator}：代入计算\n速度 $= \\frac{\\text{距离}}{\\text{时间}} = \\frac{${distance}}{${time}} = ${speed}$ 里/时\n\n意思是这支部队每小时行军 $${speed}$ 里——${speed >= 20 ? '这可是急行军的速度！' : '稳步前进！'}`,
+        en: `${narrator}: "Substitute and calculate\nSpeed $= \\frac{\\text{Distance}}{\\text{Time}} = \\frac{${distance}}{${time}} = ${speed}$ li/hr\n\nThat means the army marches $${speed}$ li every hour — ${speed >= 20 ? 'that\'s a rapid march!' : 'steady advance!'}"`,
+      } : mode === 'distance' ? {
+        zh: `${narrator}：代入计算\n距离 $= \\text{速度} \\times \\text{时间} = ${speed} \\times ${time} = ${distance}$ 里\n\n${time} 个小时后，部队已经走了 $${distance}$ 里！${distance >= 100 ? '好远！' : '路程不算远。'}`,
+        en: `${narrator}: "Substitute and calculate\nDistance $= \\text{Speed} \\times \\text{Time} = ${speed} \\times ${time} = ${distance}$ li\n\nAfter ${time} hours, the army has covered $${distance}$ li! ${distance >= 100 ? 'Quite far!' : 'Not too far.'}"`,
+      } : {
+        zh: `${narrator}：代入计算\n时间 $= \\frac{\\text{距离}}{\\text{速度}} = \\frac{${distance}}{${speed}} = ${time}$ 小时\n\n需要 $${time}$ 小时才能到达！${time >= 6 ? '行军辛苦，要做好准备。' : '很快就能到！'}`,
+        en: `${narrator}: "Substitute and calculate\nTime $= \\frac{\\text{Distance}}{\\text{Speed}} = \\frac{${distance}}{${speed}} = ${time}$ hours\n\nIt takes $${time}$ hours to arrive! ${time >= 6 ? 'A long march — better prepare well.' : 'You\'ll be there in no time!'}"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：答案 = ${answer}`, en: `${narrator}: "Answer = ${answer}"` },
-      hint: { zh: `军令已出——行军计划确定：答案是 $${answer}$`, en: `Orders issued — march plan confirmed: the answer is $${answer}$` },
+      text: {
+        zh: `${narrator}：答案\n${mode === 'speed' ? `速度 = $${answer}$ 里/时` : mode === 'distance' ? `距离 = $${answer}$ 里` : `时间 = $${answer}$ 小时`}\n\n行军计划有了数据支撑，出发吧！`,
+        en: `${narrator}: "Answer\n${mode === 'speed' ? `Speed = $${answer}$ li/hr` : mode === 'distance' ? `Distance = $${answer}$ li` : `Time = $${answer}$ hours`}\n\nThe march plan has data backing — let's move out!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：验算——用三个量互相检查`, en: `${narrator}: "Verify — cross-check with all three"` },
-      hint: { zh: `交叉检验——三军核实！\n\n速度 × 时间 = 距离\n$${speed} \\times ${time} = ${distance}$ ✓`, en: `Cross-check — all three armies verify!\n\nSpeed × Time = Distance\n$${speed} \\times ${time} = ${distance}$ ✓` },
+      text: {
+        zh: `${narrator}：验算——三个量互相验证\n速度 $\\times$ 时间 $=$ 距离？\n$${speed} \\times ${time} = ${distance}$ ✓\n\n三个量完美吻合！行军计划万无一失，做得漂亮！`,
+        en: `${narrator}: "Verify — cross-check all three\nSpeed $\\times$ Time $=$ Distance?\n$${speed} \\times ${time} = ${distance}$ ✓\n\nAll three match perfectly! March plan confirmed — brilliantly done!"`,
+      },
       highlightField: 'x',
     },
   ];
@@ -5794,64 +5830,88 @@ export function generateCircleY8Mission(template: Mission): Mission {
 
   const tutorialSteps = mode === 'circumference' ? [
     {
-      text: { zh: `${narrator}：什么是圆的周长？`, en: `${narrator}: "What is the circumference of a circle?"` },
-      hint: { zh: `圆的周长就是圆的一圈有多长\n——如果用绳子绕营地围一圈，需要多长的绳子？\n\n古人发现：周长和直径的比值总是约 $3.14$\n这个比值就叫做 $\\pi$（读 pai）`, en: `Circumference = the distance around a circle\n— How much rope to go around the camp once?\n\nAncients discovered: circumference ÷ diameter ≈ $3.14$\nThis ratio is called $\\pi$ (pi)` },
-      highlightField: mode === 'circumference' ? 'c' : 'area',
-    },
-    {
-      text: { zh: `${narrator}：周长公式`, en: `${narrator}: "Circumference formula"` },
-      hint: { zh: `$C = 2\\pi r$\n\n$C$ = 周长\n$\\pi \\approx 3.14$\n$r$ = 半径 = $${r}$\n\n直径 $d = 2r$，所以也可以写成 $C = \\pi d$`, en: `$C = 2\\pi r$\n\n$C$ = circumference\n$\\pi \\approx 3.14$\n$r$ = radius = $${r}$\n\nDiameter $d = 2r$, so also $C = \\pi d$` },
+      text: {
+        zh: `${narrator}：为什么要算周长？\n想象你要在圆形营地周围建一圈篱笆——需要多长的木材？\n这就是周长的用处！走一圈的距离就是周长。\n\n有个神奇的事：不管圆多大多小，周长除以直径永远约等于 $3.14$。\n这个神奇的比值就叫 $\\pi$（读"派"）——古人花了上千年才精确计算出来！`,
+        en: `${narrator}: "Why calculate circumference?\nImagine building a fence around a circular camp — how much wood do you need?\nThat's what circumference is for! The distance around is the circumference.\n\nHere's something magical: no matter how big or small the circle, circumference ÷ diameter always ≈ $3.14$.\nThis magical ratio is called $\\pi$ ('pi') — it took ancient scholars thousands of years to calculate precisely!"`,
+      },
       highlightField: 'c',
     },
     {
-      text: { zh: `${narrator}：代入数值`, en: `${narrator}: "Substitute the values"` },
-      hint: { zh: `围营地需要多少绳子？代入数值\n\n$C = 2 \\times ${pi} \\times ${r}$`, en: `How much rope to fence the camp? Substitute the values\n\n$C = 2 \\times ${pi} \\times ${r}$` },
+      text: {
+        zh: `${narrator}：周长公式\n$C = 2 \\times \\pi \\times r$\n\n$r = ${r}$ 是半径（从圆心到边的距离），$\\pi \\approx ${pi}$。\n$2r$ 就是直径——想象穿过圆心的一条直线。\n所以也可以写成 $C = \\pi \\times d$（直径乘以 $\\pi$）。\n\n两种写法，一个意思——选你觉得方便的！`,
+        en: `${narrator}: "Circumference formula\n$C = 2 \\times \\pi \\times r$\n\n$r = ${r}$ is the radius (centre to edge), $\\pi \\approx ${pi}$.\n$2r$ is the diameter — imagine a line straight through the centre.\nSo you can also write $C = \\pi \\times d$ (diameter times $\\pi$).\n\nTwo versions, same thing — pick whichever feels easier!"`,
+      },
       highlightField: 'c',
     },
     {
-      text: { zh: `${narrator}：计算`, en: `${narrator}: "Calculate"` },
-      hint: { zh: `绳子量出来了——围营地一圈的长度\n\n$2 \\times ${r} = ${2 * r}$\n$${2 * r} \\times ${pi} = ${circumference}$\n\n$C = ${circumference}$`, en: `The rope is measured — one full loop around the camp\n\n$2 \\times ${r} = ${2 * r}$\n$${2 * r} \\times ${pi} = ${circumference}$\n\n$C = ${circumference}$` },
+      text: {
+        zh: `${narrator}：第一步——算直径\n$2 \\times r = 2 \\times ${r} = ${2 * r}$\n\n直径就是两个半径拼起来——从这边到那边穿过圆心的长度。`,
+        en: `${narrator}: "Step 1 — calculate the diameter\n$2 \\times r = 2 \\times ${r} = ${2 * r}$\n\nDiameter is two radii joined end to end — the full width through the centre."`,
+      },
       highlightField: 'c',
     },
     {
-      text: { zh: `${narrator}：答案 = ${circumference}`, en: `${narrator}: "Answer = ${circumference}"` },
-      hint: { zh: `围营地需要这么多绳子——围住半径 $${r}$ 的圆营地需要 $${circumference}$ 的绳子`, en: `This much rope for the camp fence — a camp with radius $${r}$ needs $${circumference}$ units of rope` },
+      text: {
+        zh: `${narrator}：第二步——直径乘以 $\\pi$\n$C = ${2 * r} \\times ${pi} = ${circumference}$\n\n直径知道了，乘以 $\\pi$ 就能"绕一圈"了！`,
+        en: `${narrator}: "Step 2 — diameter times $\\pi$\n$C = ${2 * r} \\times ${pi} = ${circumference}$\n\nOnce you know the diameter, multiply by $\\pi$ to 'go all the way around'!"`,
+      },
       highlightField: 'c',
     },
     {
-      text: { zh: `${narrator}：验算——用直径法`, en: `${narrator}: "Verify — using diameter method"` },
-      hint: { zh: `换个方法量一遍——绳子不能多也不能少！\n\n直径 $d = 2 \\times ${r} = ${2 * r}$\n$C = \\pi \\times d = ${pi} \\times ${2 * r} = ${circumference}$ ✓`, en: `Measure again a different way — not a metre more, not a metre less!\n\nDiameter $d = 2 \\times ${r} = ${2 * r}$\n$C = \\pi \\times d = ${pi} \\times ${2 * r} = ${circumference}$ ✓` },
+      text: {
+        zh: `${narrator}：答案\n周长 $C = ${circumference}$\n\n围这个营地一圈需要 $${circumference}$ 长的绳子！篱笆材料备好了！`,
+        en: `${narrator}: "Answer\nCircumference $C = ${circumference}$\n\nYou need $${circumference}$ units of rope to go around the camp! Fence materials ready!"`,
+      },
+      highlightField: 'c',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——换个方法再算一遍\n用 $\\pi \\approx 3$ 快速估算：$3 \\times ${2 * r} = ${3 * 2 * r}$\n实际 $${circumference}$ 比 $${3 * 2 * r}$ 稍大（因为 $\\pi = ${pi} > 3$），合理 ✓\n\n绳子量准了！营地可以动工了，做得好！`,
+        en: `${narrator}: "Verify — calculate a different way\nQuick estimate with $\\pi \\approx 3$: $3 \\times ${2 * r} = ${3 * 2 * r}$\nActual $${circumference}$ is slightly more than $${3 * 2 * r}$ (since $\\pi = ${pi} > 3$), makes sense ✓\n\nRope measured correctly! Construction can begin — well done!"`,
+      },
       highlightField: 'c',
     },
   ] : [
     {
-      text: { zh: `${narrator}：什么是圆的面积？`, en: `${narrator}: "What is the area of a circle?"` },
-      hint: { zh: `面积就是圆内部的空间大小\n——这块圆形营地能容纳多少人扎帐篷？\n\n回忆长方形面积 = 长 × 宽\n圆形？也有公式，但和 $\\pi$ 有关`, en: `Area = the space inside the circle\n— How many tents fit in this circular camp?\n\nRecall rectangle area = length × width\nCircle? Also has a formula, involving $\\pi$` },
+      text: {
+        zh: `${narrator}：为什么要算圆的面积？\n营地是圆形的——你需要知道里面有多大空间，才能决定搭多少个帐篷！\n面积就是圆**里面**占了多大地方。\n\n长方形面积 = 长 × 宽，但圆没有"长"和"宽"。\n别担心，圆的公式其实也只要两步！`,
+        en: `${narrator}: "Why calculate a circle's area?\nThe camp is circular — you need to know how much space is inside to decide how many tents fit!\nArea is how much ground the circle COVERS.\n\nRectangle area = length × width, but a circle has no straight sides.\nDon't worry — the circle formula only takes two steps!"`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：面积公式`, en: `${narrator}: "Area formula"` },
-      hint: { zh: `$A = \\pi r^2$\n\n$A$ = 面积\n$\\pi \\approx 3.14$\n$r$ = 半径 = $${r}$\n$r^2$ = $r \\times r$（半径的平方）`, en: `$A = \\pi r^2$\n\n$A$ = area\n$\\pi \\approx 3.14$\n$r$ = radius = $${r}$\n$r^2$ = $r \\times r$ (radius squared)` },
+      text: {
+        zh: `${narrator}：圆面积公式\n$$A = \\pi \\times r^2$$\n\n$r = ${r}$（半径），$r^2$ 就是 $r \\times r$（半径乘以自己）。\n再乘以 $\\pi \\approx ${pi}$。\n\n为什么是 $r^2$？因为面积是二维的——长度×长度=面积，所以半径要"自己乘自己"！`,
+        en: `${narrator}: "Circle area formula\n$$A = \\pi \\times r^2$$\n\n$r = ${r}$ (radius), $r^2$ means $r \\times r$ (radius times itself).\nThen multiply by $\\pi \\approx ${pi}$.\n\nWhy $r^2$? Because area is 2D — length × length = area, so the radius 'multiplies itself'!"`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：第一步——算 $r^2$`, en: `${narrator}: "Step 1 — calculate $r^2$"` },
-      hint: { zh: `营地地基先量方——半径自乘\n\n$r^2 = ${r} \\times ${r} = ${r * r}$`, en: `Measure the camp ground — square the radius first\n\n$r^2 = ${r} \\times ${r} = ${r * r}$` },
+      text: {
+        zh: `${narrator}：第一步——算 $r^2$\n$r^2 = ${r} \\times ${r} = ${r * r}$\n\n半径乘以自己——就这么简单！你已经完成一半了。`,
+        en: `${narrator}: "Step 1 — calculate $r^2$\n$r^2 = ${r} \\times ${r} = ${r * r}$\n\nRadius times itself — that simple! You're already halfway there."`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：第二步——乘以 $\\pi$`, en: `${narrator}: "Step 2 — multiply by $\\pi$"` },
-      hint: { zh: `乘上 $\\pi$——算出营地能扎多少帐篷的空间\n\n$A = ${pi} \\times ${r * r} = ${area}$`, en: `Multiply by $\\pi$ — find how much tent space the camp has\n\n$A = ${pi} \\times ${r * r} = ${area}$` },
+      text: {
+        zh: `${narrator}：第二步——乘以 $\\pi$\n$A = ${pi} \\times ${r * r} = ${area}$\n\n$\\pi$ 就像一个"圆形调整系数"——它把正方形面积（$r^2$）变成圆形面积。`,
+        en: `${narrator}: "Step 2 — multiply by $\\pi$\n$A = ${pi} \\times ${r * r} = ${area}$\n\n$\\pi$ is like a 'circle adjustment factor' — it converts the square area ($r^2$) into circular area."`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：答案 = ${area}`, en: `${narrator}: "Answer = ${area}"` },
-      hint: { zh: `营地能扎这么多帐篷——圆营地面积 $= ${area}$ 平方单位`, en: `This much space for tents — circular camp area $= ${area}$ square units` },
+      text: {
+        zh: `${narrator}：答案\n面积 $A = ${area}$\n\n这块圆形营地有 $${area}$ 平方单位的空间！帐篷可以安排了。`,
+        en: `${narrator}: "Answer\nArea $A = ${area}$\n\nThis circular camp has $${area}$ square units of space! Time to set up tents."`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：验算——估算检查`, en: `${narrator}: "Verify — estimation check"` },
-      hint: { zh: `估算复核——扎营面积不能算错！\n\n圆面积 ≈ $3 \\times r^2 = 3 \\times ${r * r} = ${3 * r * r}$\n实际答案 $${area}$ 略大于 $${3 * r * r}$（因为 $\\pi > 3$）✓ 合理！`, en: `Estimation check — can't get the camp size wrong!\n\nCircle area ≈ $3 \\times r^2 = 3 \\times ${r * r} = ${3 * r * r}$\nActual $${area}$ is slightly more than $${3 * r * r}$ (since $\\pi > 3$) ✓ Makes sense!` },
+      text: {
+        zh: `${narrator}：验算\n用 $\\pi \\approx 3$ 快速估算：$3 \\times ${r * r} = ${3 * r * r}$\n实际 $${area}$ 比 $${3 * r * r}$ 稍大（因为 $\\pi = ${pi} > 3$），合理 ✓\n\n营地面积确认！做得好！`,
+        en: `${narrator}: "Verify\nQuick estimate with $\\pi \\approx 3$: $3 \\times ${r * r} = ${3 * r * r}$\nActual $${area}$ is slightly more than $${3 * r * r}$ (since $\\pi = ${pi} > 3$), makes sense ✓\n\nCamp area confirmed! Well done!"`,
+      },
       highlightField: 'area',
     },
   ];
@@ -5888,33 +5948,45 @@ export function generateVolumeY8Mission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：粮仓是什么形状？`, en: `${narrator}: "What shape is the granary?"` },
-      hint: { zh: `粮仓是圆柱体——上下两个圆，中间直筒\n\n体积就是这个筒能装多少粮食\n\n回忆长方体体积 = 底面积 × 高\n圆柱体？一样！只是底面变成了圆`, en: `The granary is a cylinder — two circles top and bottom, straight sides\n\nVolume = how much grain it can hold\n\nRecall cuboid volume = base area × height\nCylinder? Same! Just the base is a circle` },
+      text: {
+        zh: `${narrator}：为什么要算粮仓的体积？\n行军打仗最重要的是什么？粮草！粮仓建多大，就决定能存多少粮食。\n\n粮仓长什么样？上下两个圆，中间直直的——这就是圆柱体。\n体积就是这个圆筒**能装多少粮食**。跟长方体思路一样：底面积 × 高！`,
+        en: `${narrator}: "Why calculate the granary's volume?\nWhat's the most important thing in war? Food supplies! The granary's size determines how much grain it stores.\n\nWhat shape is a granary? Two circles top and bottom, straight in the middle — that's a cylinder.\nVolume is how much grain this tube can HOLD. Same as a box: base area × height!"`,
+      },
       highlightField: 'v',
     },
     {
-      text: { zh: `${narrator}：圆柱体积公式`, en: `${narrator}: "Cylinder volume formula"` },
-      hint: { zh: `$V = \\pi r^2 h$\n\n就是：圆形底面积($\\pi r^2$) × 高($h$)\n\n$r = ${radius}$，$h = ${height}$，$\\pi = ${pi}$`, en: `$V = \\pi r^2 h$\n\nThat is: circular base area ($\\pi r^2$) × height ($h$)\n\n$r = ${radius}$, $h = ${height}$, $\\pi = ${pi}$` },
+      text: {
+        zh: `${narrator}：圆柱体积公式\n$$V = \\pi r^2 \\times h$$\n\n翻译成白话：先算圆底面积（$\\pi r^2$），再乘以高（$h$）。\n$r = ${radius}$（半径），$h = ${height}$（高），$\\pi \\approx ${pi}$\n\n跟圆面积公式很像对不对？只是多乘了一个高——从平面"长高"变立体了！`,
+        en: `${narrator}: "Cylinder volume formula\n$$V = \\pi r^2 \\times h$$\n\nIn plain words: first calculate the circular base ($\\pi r^2$), then multiply by height ($h$).\n$r = ${radius}$ (radius), $h = ${height}$ (height), $\\pi \\approx ${pi}$\n\nLooks like the circle area formula, right? Just multiply by height — the flat circle 'grows tall' into 3D!"`,
+      },
       highlightField: 'v',
     },
     {
-      text: { zh: `${narrator}：第一步——算底面积 $\\pi r^2$`, en: `${narrator}: "Step 1 — base area $\\pi r^2$"` },
-      hint: { zh: `底面积就是仓底能铺多少粮\n\n$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$`, en: `The base area is how much grain fits on the floor\n\n$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$` },
+      text: {
+        zh: `${narrator}：第一步——算底面积\n$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$\n\n这就是仓底一层能铺多少粮食——圆形那层地板的面积。`,
+        en: `${narrator}: "Step 1 — calculate the base area\n$r^2 = ${radius} \\times ${radius} = ${radius * radius}$\n$\\pi r^2 = ${pi} \\times ${radius * radius} = ${baseArea}$\n\nThat's how much grain fits in one layer — the area of the circular floor."`,
+      },
       highlightField: 'v',
     },
     {
-      text: { zh: `${narrator}：第二步——底面积 × 高`, en: `${narrator}: "Step 2 — base area × height"` },
-      hint: { zh: `堆满后的总量——底面积乘以高\n\n$V = ${baseArea} \\times ${height} = ${volume}$`, en: `Total grain when filled — base area times height\n\n$V = ${baseArea} \\times ${height} = ${volume}$` },
+      text: {
+        zh: `${narrator}：第二步——底面积乘以高\n$V = ${baseArea} \\times ${height} = ${volume}$\n\n想象一层一层往上叠：底面 $${baseArea}$，叠了 $${height}$ 层，总共 $${volume}$！`,
+        en: `${narrator}: "Step 2 — base area times height\n$V = ${baseArea} \\times ${height} = ${volume}$\n\nImagine stacking layers: each layer is $${baseArea}$, stacked $${height}$ high, total $${volume}$!"`,
+      },
       highlightField: 'v',
     },
     {
-      text: { zh: `${narrator}：答案 = ${volume}`, en: `${narrator}: "Answer = ${volume}"` },
-      hint: { zh: `这座粮仓能装这么多粮食——粮仓体积 $V = ${volume}$ 立方单位`, en: `This granary holds this much grain — volume $V = ${volume}$ cubic units` },
+      text: {
+        zh: `${narrator}：答案\n体积 $V = ${volume}$\n\n这座粮仓能存 $${volume}$ 立方单位的粮食！够大军吃好一阵子了。`,
+        en: `${narrator}: "Answer\nVolume $V = ${volume}$\n\nThis granary stores $${volume}$ cubic units of grain! Enough to feed the army for quite a while."`,
+      },
       highlightField: 'v',
     },
     {
-      text: { zh: `${narrator}：验算——估算检查`, en: `${narrator}: "Verify — estimation check"` },
-      hint: { zh: `粮草是大事——估算复核一遍\n\n估算：$V \\approx 3 \\times ${radius}^2 \\times ${height} = 3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\n实际 $${volume}$ 略大（$\\pi > 3$）✓ 合理！`, en: `Grain supplies are critical — double-check with estimation\n\nEstimate: $V \\approx 3 \\times ${radius}^2 \\times ${height} = 3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\nActual $${volume}$ is slightly more ($\\pi > 3$) ✓ Makes sense!` },
+      text: {
+        zh: `${narrator}：验算\n用 $\\pi \\approx 3$ 快速估算：$3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\n实际 $${volume}$ 比估算 $${3 * radius * radius * height}$ 稍大（因为 $\\pi = ${pi} > 3$），合理 ✓\n\n粮草清点完毕！三军将士有饭吃了，做得漂亮！`,
+        en: `${narrator}: "Verify\nQuick estimate with $\\pi \\approx 3$: $3 \\times ${radius * radius} \\times ${height} = ${3 * radius * radius * height}$\nActual $${volume}$ is slightly more than $${3 * radius * radius * height}$ (since $\\pi = ${pi} > 3$), makes sense ✓\n\nGrain count complete! The army is well-fed — brilliantly done!"`,
+      },
       highlightField: 'v',
     },
   ];
@@ -5964,83 +6036,104 @@ export function generatePercentageInterestMission(template: Mission): Mission {
 
   const tutorialSteps = mode === 'simple' ? [
     {
-      text: { zh: `${narrator}：什么是单利？`, en: `${narrator}: "What is simple interest?"` },
-      hint: { zh: `借钱要付利息——利息就是"借钱的费用"\n\n单利：每年的利息只按本金算\n比如借 $${principal}$ 两，年利率 $${rate}\\%$\n每年利息固定 = $${principal} \\times ${rateDecimal} = ${interest}$`, en: `Borrowing costs interest — the "fee for borrowing"\n\nSimple interest: calculated on original amount only\nE.g., borrow $${principal}$ liang at $${rate}\\%$ per year\nYearly interest = $${principal} \\times ${rateDecimal} = ${interest}$` },
+      text: {
+        zh: `${narrator}：为什么要学利息？\n你把 $${principal}$ 两银子存进国库，过了 $${years}$ 年去取——结果多了一些钱！\n多出来的就是"利息"，是国库为了感谢你存钱而给你的奖励。\n\n单利是最简单的一种：每年的利息都按**最初的本金**来算，固定不变。`,
+        en: `${narrator}: "Why learn about interest?\nYou deposit $${principal}$ liang into the treasury. After $${years}$ years, you withdraw — and there's MORE money!\nThe extra is 'interest' — the treasury's reward for letting them use your money.\n\nSimple interest is the easiest type: each year's interest is based on the ORIGINAL amount, never changing."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：单利公式`, en: `${narrator}: "Simple interest formula"` },
-      hint: { zh: `总额 $= P + P \\times r \\times t$\n$= P(1 + r \\times t)$\n\n$P$ = 本金 = $${principal}$\n$r$ = 年利率 = $${rateDecimal}$\n$t$ = 年数 = $${years}$`, en: `Total $= P + P \\times r \\times t$\n$= P(1 + r \\times t)$\n\n$P$ = principal = $${principal}$\n$r$ = annual rate = $${rateDecimal}$\n$t$ = years = $${years}$` },
+      text: {
+        zh: `${narrator}：单利公式长什么样？\n$$\\text{总额} = P + P \\times r \\times t = P(1 + r \\times t)$$\n\n$P$ = 本金 = $${principal}$（你最初存了多少）\n$r$ = 年利率 = $${rateDecimal}$（就是 $${rate}\\%$ 变成小数）\n$t$ = 年数 = $${years}$（存了几年）\n\n三个数一乘一加，搞定！`,
+        en: `${narrator}: "What does the simple interest formula look like?\n$$\\text{Total} = P + P \\times r \\times t = P(1 + r \\times t)$$\n\n$P$ = principal = $${principal}$ (how much you deposited)\n$r$ = annual rate = $${rateDecimal}$ (that's $${rate}\\%$ as a decimal)\n$t$ = years = $${years}$ (how long it's deposited)\n\nMultiply three numbers, add once — done!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：计算利息`, en: `${narrator}: "Calculate the interest"` },
-      hint: { zh: `国库收税——算出利息总额\n\n利息 $= ${principal} \\times ${rateDecimal} \\times ${years} = ${interest * years}$`, en: `Treasury collects tax — calculate total interest\n\nInterest $= ${principal} \\times ${rateDecimal} \\times ${years} = ${interest * years}$` },
+      text: {
+        zh: `${narrator}：第一步——算每年的利息\n每年利息 $= P \\times r = ${principal} \\times ${rateDecimal} = ${interest}$\n\n意思是每年国库给你 $${interest}$ 两银子作为利息。\n$${years}$ 年总共给你多少？$${interest} \\times ${years} = ${interest * years}$ 两！`,
+        en: `${narrator}: "Step 1 — calculate yearly interest\nYearly interest $= P \\times r = ${principal} \\times ${rateDecimal} = ${interest}$\n\nThat means the treasury pays you $${interest}$ liang each year.\nOver $${years}$ years? $${interest} \\times ${years} = ${interest * years}$ liang total!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：加上本金`, en: `${narrator}: "Add the principal"` },
-      hint: { zh: `本金加利息——国库总入账\n\n总额 $= ${principal} + ${interest * years} = ${totalSimple}$`, en: `Principal plus interest — total into the treasury\n\nTotal $= ${principal} + ${interest * years} = ${totalSimple}$` },
+      text: {
+        zh: `${narrator}：第二步——本金加利息\n你最初存了 $${principal}$ 两，利息一共 $${interest * years}$ 两。\n\n总额 $= ${principal} + ${interest * years} = ${totalSimple}$\n\n就像打仗后清点：原来的兵 + 新招的兵 = 总兵力！`,
+        en: `${narrator}: "Step 2 — principal plus interest\nYou originally deposited $${principal}$ liang, total interest is $${interest * years}$ liang.\n\nTotal $= ${principal} + ${interest * years} = ${totalSimple}$\n\nLike counting troops after battle: original soldiers + new recruits = total force!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：答案 = ${totalSimple}`, en: `${narrator}: "Answer = ${totalSimple}"` },
-      hint: { zh: `国库账本记录——$${years}$ 年后需还 $${totalSimple}$ 两`, en: `Treasury ledger records — after $${years}$ years, repay $${totalSimple}$ liang` },
+      text: {
+        zh: `${narrator}：答案\n$${years}$ 年后总额 = $${totalSimple}$ 两\n\n从 $${principal}$ 变成 $${totalSimple}$，多赚了 $${interest * years}$ 两！做得好！`,
+        en: `${narrator}: "Answer\nAfter $${years}$ years, total = $${totalSimple}$ liang\n\nFrom $${principal}$ to $${totalSimple}$ — earned $${interest * years}$ liang extra! Well done!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算`, en: `${narrator}: "Verify"` },
-      hint: { zh: `账房先生复核——国库不能算错！\n\n每年利息 $${interest}$，共 $${years}$ 年\n利息合计 $= ${interest} \\times ${years} = ${interest * years}$\n本金 + 利息 $= ${principal} + ${interest * years} = ${totalSimple}$ ✓`, en: `The treasurer double-checks — the treasury must be accurate!\n\nYearly interest $${interest}$, for $${years}$ years\nTotal interest $= ${interest} \\times ${years} = ${interest * years}$\nPrincipal + interest $= ${principal} + ${interest * years} = ${totalSimple}$ ✓` },
+      text: {
+        zh: `${narrator}：验算——逐年对账\n每年利息固定 $${interest}$ 两，$${years}$ 年就是 $${interest} \\times ${years} = ${interest * years}$ 两。\n本金 + 利息 $= ${principal} + ${interest * years} = ${totalSimple}$ ✓\n\n账目清晰，万无一失！国库账房先生都佩服你！`,
+        en: `${narrator}: "Verify — check the books year by year\nFixed yearly interest $${interest}$ liang, for $${years}$ years: $${interest} \\times ${years} = ${interest * years}$ liang.\nPrincipal + interest $= ${principal} + ${interest * years} = ${totalSimple}$ ✓\n\nBooks balanced perfectly! Even the treasury accountant is impressed!"`,
+      },
       highlightField: 'ans',
     },
   ] : [
     {
-      text: { zh: `${narrator}：什么是复利？`, en: `${narrator}: "What is compound interest?"` },
-      hint: { zh: `复利和单利的区别：\n单利：只按本金算利息（利息不生利息）\n复利：利息也算利息！（利滚利）\n\n曹操的军需库：去年的利息今年也要算利息`, en: `Compound vs simple interest:\nSimple: interest on original only\nCompound: interest on interest too! (snowball)\n\nCao Cao's treasury: last year's interest also earns interest` },
+      text: {
+        zh: `${narrator}：为什么要学复利？\n你知道"滚雪球"吗？雪球越大，每滚一圈粘的雪就越多，越滚越大越快！\n复利就是钱的"滚雪球"——利息也会产生利息！\n\n跟单利不同：单利每年只按本金算利息，复利每年按"本金+已有利息"算。`,
+        en: `${narrator}: "Why learn compound interest?\nKnow what a snowball does? The bigger it gets, the more snow it picks up each roll — growing faster and faster!\nCompound interest is money's 'snowball' — interest earns interest too!\n\nUnlike simple interest (calculated on the original only), compound interest uses 'principal + accumulated interest' each year."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：复利公式`, en: `${narrator}: "Compound interest formula"` },
-      hint: { zh: `$A = P \\times (1 + r)^t$\n\n$P = ${principal}$，$r = ${rateDecimal}$，$t = ${years}$\n\n$(1 + r)$ 就是"每年变成原来的多少倍"\n$1 + ${rateDecimal} = ${1 + rateDecimal}$`, en: `$A = P \\times (1 + r)^t$\n\n$P = ${principal}$, $r = ${rateDecimal}$, $t = ${years}$\n\n$(1 + r)$ = "multiply factor per year"\n$1 + ${rateDecimal} = ${1 + rateDecimal}$` },
+      text: {
+        zh: `${narrator}：复利公式\n$$A = P \\times (1 + r)^t$$\n\n$P = ${principal}$（本金），$r = ${rateDecimal}$（利率），$t = ${years}$（年数）\n\n$(1 + r) = ${1 + rateDecimal}$ 就是"每过一年，钱变成原来的 $${1 + rateDecimal}$ 倍"。\n指数 $t$ 的意思是连续乘 $${years}$ 次——雪球滚了 $${years}$ 圈！`,
+        en: `${narrator}: "Compound interest formula\n$$A = P \\times (1 + r)^t$$\n\n$P = ${principal}$ (principal), $r = ${rateDecimal}$ (rate), $t = ${years}$ (years)\n\n$(1 + r) = ${1 + rateDecimal}$ means 'each year, money becomes $${1 + rateDecimal}$ times what it was'.\nThe exponent $t$ means multiply $${years}$ times — the snowball rolls $${years}$ times!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：逐年计算`, en: `${narrator}: "Calculate year by year"` },
-      hint: (() => {
-        let zh = '利滚利——国库的雪球越滚越大\n\n', en = 'Snowball effect — the treasury grows year on year\n\n';
+      text: (() => {
+        let zh = `${narrator}：逐年看看雪球怎么滚的\n`, en = `${narrator}: "Watch the snowball grow year by year\n`;
         let amt = principal;
         for (let y = 1; y <= years; y++) {
           const prev = amt;
           amt = parseFloat((amt * (1 + rateDecimal)).toFixed(2));
-          zh += `第 ${y} 年：$${prev} \\times ${1 + rateDecimal} = ${amt}$\n`;
-          en += `Year ${y}: $${prev} \\times ${1 + rateDecimal} = ${amt}$\n`;
+          const yearInterest = parseFloat((prev * rateDecimal).toFixed(2));
+          zh += `第 ${y} 年：$${prev} \\times ${1 + rateDecimal} = ${amt}$（利息 $${yearInterest}$）\n`;
+          en += `Year ${y}: $${prev} \\times ${1 + rateDecimal} = ${amt}$ (interest $${yearInterest}$)\n`;
         }
+        zh += `\n看到了吗？每年的利息在变大——因为本金在变大！这就是复利的威力。`;
+        en += `\nSee? Each year's interest grows — because the base amount grows! That's the power of compounding."`;
         return { zh, en };
       })(),
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：用公式一步算`, en: `${narrator}: "Or use the formula in one step"` },
-      hint: { zh: `一步到位——国库总账公式\n\n$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$`, en: `One step — the treasury's master formula\n\n$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$` },
+      text: {
+        zh: `${narrator}：用公式一步搞定\n$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$\n\n逐年算和公式算，结果一模一样！\n公式更快，逐年算更直观——两种方法你都会了！`,
+        en: `${narrator}: "Or use the formula in one shot\n$A = ${principal} \\times (${1 + rateDecimal})^{${years}} = ${answer}$\n\nYear-by-year and formula give the exact same result!\nFormula is faster, year-by-year is more intuitive — now you know both!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：答案 = ${answer}`, en: `${narrator}: "Answer = ${answer}"` },
-      hint: { zh: `国库结算——利滚利果然比单利多\n\n$${years}$ 年复利后总额 $= ${answer}$ 两\n\n比单利多：$${answer} - ${totalSimple} = ${parseFloat((answer - totalSimple).toFixed(2))}$`, en: `Treasury settlement — compounding indeed beats simple interest\n\n$${years}$ years of compound interest, total $= ${answer}$ liang\n\nMore than simple interest by: $${answer} - ${totalSimple} = ${parseFloat((answer - totalSimple).toFixed(2))}$` },
+      text: {
+        zh: `${narrator}：答案\n$${years}$ 年复利后总额 = $${answer}$ 两\n\n比单利 $${totalSimple}$ 多了 $${parseFloat((answer - totalSimple).toFixed(2))}$ 两！\n时间越长，复利的雪球效应越明显。做得漂亮！`,
+        en: `${narrator}: "Answer\nAfter $${years}$ years of compound interest, total = $${answer}$ liang\n\nThat's $${parseFloat((answer - totalSimple).toFixed(2))}$ more than simple interest ($${totalSimple}$)!\nThe longer the time, the stronger the snowball effect. Brilliant work!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——逐年追踪`, en: `${narrator}: "Verify — track year by year"` },
-      hint: (() => {
-        let zh = `账房先生逐年核账——国库不容有失！\n\n从 $${principal}$ 开始：\n`, en = `The treasurer audits year by year — the treasury must be exact!\n\nStarting from $${principal}$:\n`;
+      text: (() => {
+        let zh = `${narrator}：验算——再走一遍雪球路线\n从 $${principal}$ 开始：\n`, en = `${narrator}: "Verify — trace the snowball path again\nStarting from $${principal}$:\n`;
         let amt = principal;
         for (let y = 1; y <= years; y++) {
           amt = parseFloat((amt * (1 + rateDecimal)).toFixed(2));
           zh += `第 ${y} 年末：$${amt}$\n`;
           en += `End of year ${y}: $${amt}$\n`;
         }
-        zh += `最终 $${amt}$ ✓`;
-        en += `Final $${amt}$ ✓`;
+        zh += `最终 $${amt}$ ✓ 和公式算出来的一模一样！\n\n国库大账查清了，你是最棒的账房先生！`;
+        en += `Final $${amt}$ ✓ Matches the formula exactly!\n\nTreasury audit complete — you're the best accountant in the kingdom!"`;
         return { zh, en };
       })(),
       highlightField: 'ans',
@@ -6099,37 +6192,51 @@ export function generateParallelAnglesMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：攻城时为什么要关心角度？`, en: `${narrator}: "Why care about angles when besieging?"` },
-      hint: { zh: `城墙是平行线，攻城梯是截线\n梯子和城墙形成的角度决定了爬墙的难度\n\n两条平行线被一条直线截断\n会产生 3 种特殊角度关系`, en: `City walls are parallel lines, siege ladders are transversals\nThe angle between ladder and wall determines climbing difficulty\n\nTwo parallel lines cut by a transversal\ncreate 3 special angle relationships` },
+      text: {
+        zh: `${narrator}：平行线和角度有什么关系？\n你看城墙——上下两道城墙是平行的，攻城梯斜斜地搭在上面。\n梯子和城墙形成了好多角度，而且这些角度之间有神奇的规律！\n\n只要城墙是平行的，这些规律**永远成立**。学会了就能快速算出未知角度！`,
+        en: `${narrator}: "What do parallel lines have to do with angles?\nLook at the city walls — the top and bottom walls are parallel, and the siege ladder leans across them.\nThe ladder creates many angles with the walls, and these angles follow magical rules!\n\nAs long as the walls are parallel, these rules ALWAYS hold. Learn them and you can find any unknown angle instantly!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：三种平行线角度关系`, en: `${narrator}: "Three parallel line angle rules"` },
-      hint: { zh: `1. 同位角（F字形）：相等\n2. 内错角（Z字形）：相等\n3. 同旁内角（C字形）：互补（加起来 = 180°）\n\n记住字母形状就不会忘！`, en: `1. Corresponding (F-shape): equal\n2. Alternate (Z-shape): equal\n3. Co-interior (C/U-shape): supplementary (add to 180°)\n\nRemember the letter shapes!` },
+      text: {
+        zh: `${narrator}：三种角度规律——记住字母形状就行！\n1. **同位角**（F 字形）：位置相同 → 角度相等\n2. **内错角**（Z 字形）：交叉对望 → 角度相等\n3. **同旁内角**（C 字形）：同侧挤着 → 加起来 = $180°$\n\n画一条横线穿过两条平行线，转动手中的纸，你就能看到 F、Z、C 的形状！`,
+        en: `${narrator}: "Three angle rules — just remember the letter shapes!\n1. **Corresponding** (F-shape): same position → equal\n2. **Alternate** (Z-shape): cross-looking → equal\n3. **Co-interior** (C/U-shape): same side → add to $180°$\n\nDraw a line through two parallel lines, rotate the paper, and you'll see F, Z, C shapes!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：这道题是哪种？`, en: `${narrator}: "Which type is this?"` },
-      hint: { zh: `这对角在攻城梯的哪个位置？\n\n已知角 $= ${givenAngle}°$\n这一对是${typeZh}\n\n${reasonZh}`, en: `Where is this angle pair on the siege ladder?\n\nGiven angle $= ${givenAngle}°$\nThis pair is ${typeEn}\n\n${reasonEn}` },
+      text: {
+        zh: `${narrator}：看看这道题是哪种？\n已知角 $= ${givenAngle}°$，要求的 $x$ 和它是什么关系？\n\n这一对是**${typeZh}**！\n${reasonZh}。\n\n${angleType === 'co-interior' ? '它们在截线的同一侧——想象两个人背靠背挤在一起，加起来撑满 $180°$。' : angleType === 'alternate' ? '它们在截线的两侧——像 Z 字形的两个拐角，虽然位置不同但角度一样！' : '它们在截线的同一侧、同一个位置——像 F 字形的两个横杠处，角度完全一样！'}`,
+        en: `${narrator}: "Which type is this problem?\nGiven angle $= ${givenAngle}°$, what's the relationship with $x$?\n\nThis pair is **${typeEn}**!\n${reasonEn}.\n\n${angleType === 'co-interior' ? 'They\'re on the same side of the transversal — imagine two people back-to-back, together filling exactly $180°$.' : angleType === 'alternate' ? 'They\'re on opposite sides — like the two turns in a Z, different positions but same angle!' : 'They\'re in matching positions — like the two bars of an F, exactly the same angle!'}"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：计算`, en: `${narrator}: "Calculate"` },
-      hint: angleType === 'co-interior'
-        ? { zh: `架梯计算——算出安全角度\n\n同旁内角互补：\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$`, en: `Ladder calculation — find the safe angle\n\nCo-interior angles are supplementary:\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$` }
-        : { zh: `架梯计算——算出安全角度\n\n${typeZh}相等：\n$x = ${givenAngle}°$`, en: `Ladder calculation — find the safe angle\n\n${typeEn} are equal:\n$x = ${givenAngle}°$` },
+      text: angleType === 'co-interior' ? {
+        zh: `${narrator}：代入计算\n同旁内角加起来 $= 180°$，所以：\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$\n\n就像拼图——两块拼在一起刚好是一条直线（$180°$），知道一块就能算另一块！`,
+        en: `${narrator}: "Plug in and calculate\nCo-interior angles add to $180°$, so:\n$x + ${givenAngle}° = 180°$\n$x = 180° - ${givenAngle}° = ${answer}°$\n\nLike a puzzle — two pieces together make a straight line ($180°$). Know one piece, find the other!"`,
+      } : {
+        zh: `${narrator}：代入计算\n${typeZh}相等，所以直接：\n$x = ${givenAngle}°$\n\n就这么简单！${angleType === 'alternate' ? 'Z 字形两端的角一模一样。' : 'F 字形两横的角一模一样。'}`,
+        en: `${narrator}: "Plug in and calculate\n${typeEn} are equal, so simply:\n$x = ${givenAngle}°$\n\nThat simple! ${angleType === 'alternate' ? 'Both ends of the Z are identical.' : 'Both bars of the F are identical.'}"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：答案 = ${answer}°`, en: `${narrator}: "Answer = ${answer}°"` },
-      hint: { zh: `角度确认——可以安全爬了！$x = ${answer}°$`, en: `Angle confirmed — safe to climb! $x = ${answer}°$` },
+      text: {
+        zh: `${narrator}：答案\n$x = ${answer}°$\n\n${angleType === 'co-interior' ? `两个角：$${givenAngle}°$ 和 $${answer}°$，加起来刚好 $180°$！` : `两个角都是 $${answer}°$，完全相等！`}\n攻城角度计算完毕，可以架梯了！`,
+        en: `${narrator}: "Answer\n$x = ${answer}°$\n\n${angleType === 'co-interior' ? `The two angles: $${givenAngle}°$ and $${answer}°$, adding to exactly $180°$!` : `Both angles are $${answer}°$ — perfectly equal!`}\nSiege angle calculated — time to raise the ladder!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：验算`, en: `${narrator}: "Verify"` },
-      hint: angleType === 'co-interior'
-        ? { zh: `攻城前最后检查——角度正确才能上！\n\n同旁内角之和 $= ${givenAngle}° + ${answer}° = 180°$ ✓`, en: `Final check before the assault — angles must be right!\n\nCo-interior sum $= ${givenAngle}° + ${answer}° = 180°$ ✓` }
-        : { zh: `攻城前最后检查——角度正确才能上！\n\n${typeZh}应该相等：已知 $= ${givenAngle}°$，$x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓`, en: `Final check before the assault — angles must be right!\n\n${typeEn} should be equal: given $= ${givenAngle}°$, $x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓` },
+      text: angleType === 'co-interior' ? {
+        zh: `${narrator}：验算\n同旁内角之和 $= ${givenAngle}° + ${answer}° = ${givenAngle + answer}°$\n$${givenAngle + answer}° = 180°$ ✓\n\n两块拼图完美合拢！角度万无一失！`,
+        en: `${narrator}: "Verify\nCo-interior sum $= ${givenAngle}° + ${answer}° = ${givenAngle + answer}°$\n$${givenAngle + answer}° = 180°$ ✓\n\nPuzzle pieces fit perfectly! Angle confirmed!"`,
+      } : {
+        zh: `${narrator}：验算\n${typeZh}应该相等：\n已知角 $= ${givenAngle}°$，$x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓\n\n左右对称，一模一样！攻城没问题！`,
+        en: `${narrator}: "Verify\n${typeEn} should be equal:\nGiven angle $= ${givenAngle}°$, $x = ${answer}°$\n$${givenAngle}° = ${answer}°$ ✓\n\nSymmetrical match! Siege angle confirmed!"`,
+      },
       highlightField: 'x',
     },
   ];
