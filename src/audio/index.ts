@@ -134,16 +134,9 @@ export function useAudio() {
   const playBattleExitWin = useCallback(() => { if (guard()) engine.play(battleExitWin); }, []);
   const playBattleExitLose = useCallback(() => { if (guard()) engine.play(battleExitLose); }, []);
 
-  // --- BGM ---
-  const playBGMBattle = useCallback(() => {
-    if (!guard()) return;
-    engine.startBGM(bgmBattle);
-  }, []);
-
-  const playBGMMap = useCallback(() => {
-    if (!guard()) return;
-    engine.startBGM(bgmMap);
-  }, []);
+  // --- BGM (disabled — all background music off) ---
+  const playBGMBattle = useCallback(() => { /* BGM disabled */ }, []);
+  const playBGMMap = useCallback(() => { /* BGM disabled */ }, []);
 
   const stopBGM = useCallback(() => {
     engine.stopBGM();
