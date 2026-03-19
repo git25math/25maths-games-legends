@@ -41,14 +41,28 @@ export function AnimatedNumberLine({ start, end, movement, step = 999 }: Props) 
 
   const toX = (val: number) => PAD + ((val - minVal) / range) * (WIDTH - 2 * PAD);
 
-  // Tick marks
+  // Tick marks — adaptive interval to avoid overcrowding
+  const tickStep = range <= 12 ? 1 : range <= 30 ? 5 : 10;
   const ticks: JSX.Element[] = [];
-  for (let v = Math.ceil(minVal); v <= Math.floor(maxVal); v++) {
+  // Always include 0, start, and end as important reference ticks
+  const importantVals = new Set<number>();
+  importantVals.add(0);
+  importantVals.add(start);
+  importantVals.add(end);
+  // Add regular interval ticks
+  const firstTick = Math.ceil(minVal / tickStep) * tickStep;
+  for (let v = firstTick; v <= Math.floor(maxVal); v += tickStep) {
+    importantVals.add(v);
+  }
+  // Sort and render
+  const tickVals = [...importantVals].filter(v => v >= minVal && v <= maxVal).sort((a, b) => a - b);
+  for (const v of tickVals) {
     const x = toX(v);
     const isZero = v === 0;
+    const isEndpoint = v === start || v === end;
     ticks.push(
-      <line key={`t${v}`} x1={x} y1={LINE_Y - 5} x2={x} y2={LINE_Y + 5} stroke={isZero ? COLORS.wood : '#a0937d'} strokeWidth={isZero ? 2 : 1} />,
-      <text key={`l${v}`} x={x} y={LINE_Y + 18} textAnchor="middle" fontSize={isZero ? 11 : 9} fontWeight={isZero ? 'bold' : 'normal'} fill={COLORS.wood}>{v}</text>,
+      <line key={`t${v}`} x1={x} y1={LINE_Y - 5} x2={x} y2={LINE_Y + 5} stroke={isZero || isEndpoint ? COLORS.wood : '#a0937d'} strokeWidth={isZero ? 2 : 1} />,
+      <text key={`l${v}`} x={x} y={LINE_Y + 18} textAnchor="middle" fontSize={isZero ? 11 : 9} fontWeight={isZero || isEndpoint ? 'bold' : 'normal'} fill={COLORS.wood}>{v}</text>,
     );
   }
 
