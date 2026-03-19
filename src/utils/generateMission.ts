@@ -564,50 +564,50 @@ export function generateProbSimpleMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：为什么需要概率？\n战场上充满不确定性——敌军动向、天气变化、伏兵位置。\n概率帮我们量化"可能性"，做出最优决策。`,
-        en: `${narrator}: "Why do we need probability?\nThe battlefield is full of uncertainty — enemy movements, weather, ambush positions.\nProbability helps us quantify 'likelihood' and make the best decisions."`,
+        zh: `${narrator}：为什么需要概率？\n想象一下：袋子里有 $${total}$ 个球，你闭着眼睛摸一个。\n能摸到你想要的那种球吗？概率就是回答"有多大可能"的数学工具。\n战场上也一样——不确定性无处不在，算清概率才能做最聪明的决定。`,
+        en: `${narrator}: "Why do we need probability?\nImagine a bag with $${total}$ balls. You reach in blindfolded.\nWill you grab the one you want? Probability is the maths tool that answers 'how likely is it?'\nOn the battlefield too — uncertainty is everywhere. Calculate probability to make the smartest decision."`,
       },
       highlightField: 'p',
     },
     {
       text: {
-        zh: `${narrator}：概率是什么？\n概率 = 有利结果数 ÷ 总结果数\n$P = \\frac{\\text{有利结果}}{\\text{总结果}}$\n范围：$0 \\leq P \\leq 1$（$0$ = 不可能，$1$ = 一定发生）`,
-        en: `${narrator}: "What is probability?\nProbability = favourable outcomes ÷ total outcomes\n$P = \\frac{\\text{favourable}}{\\text{total}}$\nRange: $0 \\leq P \\leq 1$ ($0$ = impossible, $1$ = certain)"`,
+        zh: `${narrator}：概率的核心思想，只有一句话：\n$$P = \\frac{\\text{我想要的结果数}}{\\text{所有可能的结果数}}$$\n就像摸球：想要的球有几个 ÷ 总共几个球。\n概率的值在 $0$ 到 $1$ 之间：$0$ = 绝不可能，$1$ = 一定发生。`,
+        en: `${narrator}: "The core idea of probability fits in one sentence:\n$$P = \\frac{\\text{outcomes I want}}{\\text{all possible outcomes}}$$\nLike drawing balls: how many I want ÷ total balls.\nProbability ranges from $0$ to $1$: $0$ = impossible, $1$ = certain."`,
       },
       highlightField: 'p',
     },
     {
       text: {
-        zh: `${narrator}：找总数\n总共有多少个可能的结果？\n总结果数 = $${total}$`,
-        en: `${narrator}: "Find the total\nHow many possible outcomes are there?\nTotal outcomes = $${total}$"`,
+        zh: `${narrator}：第一步——从题目里找"总数"\n题目说总共有多少种可能？仔细读一遍……\n找到了！总结果数 = $${total}$\n（这就是分母——放在分数线下面的数）`,
+        en: `${narrator}: "Step 1 — find the 'total' from the problem\nHow many possible outcomes does the problem describe? Read carefully...\nFound it! Total outcomes = $${total}$\n(This goes on the bottom of the fraction — the denominator)"`,
       },
       highlightField: 'p',
     },
     {
       text: {
-        zh: `${narrator}：找有利数\n我们想要的结果有多少个？\n有利结果数 = $${target}$`,
-        en: `${narrator}: "Find the favourable count\nHow many outcomes do we want?\nFavourable outcomes = $${target}$"`,
+        zh: `${narrator}：第二步——从题目里找"想要的数"\n我们想要的那种结果有几个？\n找到了！想要的结果数 = $${target}$\n（这就是分子——放在分数线上面的数）\n你做得很好，信息都找齐了！`,
+        en: `${narrator}: "Step 2 — find the 'wanted count' from the problem\nHow many of the outcomes are the ones we want?\nFound it! Wanted outcomes = $${target}$\n(This goes on top of the fraction — the numerator)\nGreat job — you've found all the information!"`,
       },
       highlightField: 'p',
     },
     {
       text: {
-        zh: `${narrator}：计算概率\n$P = \\frac{${target}}{${total}} = ${pDisplay}$`,
-        en: `${narrator}: "Calculate the probability\n$P = \\frac{${target}}{${total}} = ${pDisplay}$"`,
+        zh: `${narrator}：现在套公式，慢慢来：\n$P = \\frac{\\text{想要的}}{\\text{总数}} = \\frac{${target}}{${total}}$\n\n接下来算这个除法：$${target} \\div ${total} = ${pDisplay}$`,
+        en: `${narrator}: "Now plug into the formula, nice and slow:\n$P = \\frac{\\text{wanted}}{\\text{total}} = \\frac{${target}}{${total}}$\n\nNow do the division: $${target} \\div ${total} = ${pDisplay}$"`,
       },
       highlightField: 'p',
     },
     {
       text: {
-        zh: `${narrator}：答案\n概率 $P = ${pDisplay}$`,
-        en: `${narrator}: "Answer\nProbability $P = ${pDisplay}$"`,
+        zh: `${narrator}：答案出来了！\n概率 $P = ${pDisplay}$\n\n换个说法：每 $${total}$ 次里大约有 $${target}$ 次能成功。\n恭喜你，概率计算完成！`,
+        en: `${narrator}: "We have the answer!\nProbability $P = ${pDisplay}$\n\nIn other words: roughly $${target}$ times out of every $${total}$ tries.\nCongratulations — probability calculated!"`,
       },
       highlightField: 'p',
     },
     {
       text: {
-        zh: `${narrator}：验算\n$0 \\leq ${pDisplay} \\leq 1$? ✓\n有利数 $${target} \\leq$ 总数 $${total}$? ✓\n概率合理！`,
-        en: `${narrator}: "Verify\n$0 \\leq ${pDisplay} \\leq 1$? ✓\nFavourable $${target} \\leq$ total $${total}$? ✓\nProbability is valid!"`,
+        zh: `${narrator}：最后检查一下，确保没算错：\n① $0 \\leq ${pDisplay} \\leq 1$? ✓ 概率在合理范围内\n② 想要的 $${target}$ 不超过总数 $${total}$? ✓ 没有多出来\n全部正确！你现在已经学会了最基础的概率计算，了不起！`,
+        en: `${narrator}: "Let's double-check to make sure:\n① $0 \\leq ${pDisplay} \\leq 1$? ✓ Probability is in valid range\n② Wanted $${target}$ doesn't exceed total $${total}$? ✓ Nothing extra\nAll correct! You've now mastered the most basic probability calculation — well done!"`,
       },
       highlightField: 'p',
     },
@@ -642,12 +642,55 @@ export function generateProbIndMission(template: Mission): Mission {
   const ansDisplay = Math.round(ans * 100) / 100;
   const minP = Math.min(p1, p2);
   const tutorialSteps = [
-    { text: { zh: `${narrator}：为什么需要独立事件概率？\n战场上经常需要多路出击——两支部队同时成功的概率是多少？\n只有算清每条路线的成功率以及组合概率，才能制定最优策略。`, en: `${narrator}: "Why do we need independent event probability?\nIn battle, we often attack on multiple fronts — what's the probability both succeed?\nOnly by calculating each route's success rate and their combined probability can we devise the best strategy."` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：什么是独立事件?\n两个事件互不影响，一个发生不会改变另一个的概率。\n例如：抛两次硬币，第一次不影响第二次。`, en: `${narrator}: "What are independent events?\nTwo events where one happening does not affect the other.\nExample: flipping a coin twice — the first flip does not affect the second."` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：已知条件：\n第一个事件的概率 $P_1 = ${p1}$\n第二个事件的概率 $P_2 = ${p2}$`, en: `${narrator}: "Given:\nFirst event probability $P_1 = ${p1}$\nSecond event probability $P_2 = ${p2}$"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：独立事件的乘法法则：\n两个独立事件同时发生的概率 = 各自概率相乘\n$P(\\text{both}) = P_1 \\times P_2$`, en: `${narrator}: "Rule for independent events:\nMultiply the probabilities\n$P(\\text{both}) = P_1 \\times P_2$"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：计算：\n$P = ${p1} \\times ${p2} = ${ansDisplay}$\n答案是 $${ansDisplay}$!`, en: `${narrator}: "Calculate:\n$P = ${p1} \\times ${p2} = ${ansDisplay}$\nThe answer is $${ansDisplay}$!"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：验算：\n$P_1 \\times P_2 = ${ansDisplay} \\leq \\min(P_1, P_2) = ${minP}$? ✓\n两件事同时发生的概率不可能比其中任何一件更大！`, en: `${narrator}: "Verify:\n$P_1 \\times P_2 = ${ansDisplay} \\leq \\min(P_1, P_2) = ${minP}$? ✓\nThe probability of both events can never exceed either individual probability!"` }, highlightField: 'p' },
+    {
+      text: {
+        zh: `${narrator}：为什么需要算"同时发生"的概率？\n想象你同时派两个探子去打探消息。每个人能不能成功是各自的事。\n但你关心的是：两个人**都**成功的可能性有多大？\n这就是独立事件的组合概率——战场决策的关键。`,
+        en: `${narrator}: "Why do we need to calculate 'both happening' probability?\nImagine sending two spies on separate missions. Each one's success is their own affair.\nBut what you care about is: how likely is it that BOTH succeed?\nThis is combined probability of independent events — the key to battlefield decisions."`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：什么是"独立"？\n独立 = 互不影响。第一个人成不成功，完全不影响第二个人。\n生活例子：抛两次硬币——第一次正面朝上，不会让第二次更容易或更难。\n判断方法很简单：两件事之间有没有因果关系？没有 = 独立。`,
+        en: `${narrator}: "What does 'independent' mean?\nIndependent = no influence. Whether the first person succeeds has zero effect on the second.\nReal-life example: flip a coin twice — heads on the first flip doesn't make the second flip easier or harder.\nSimple test: is there a cause-and-effect link? No link = independent."`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：从题目中提取已知信息：\n第一个事件成功概率 → $P_1 = ${p1}$\n第二个事件成功概率 → $P_2 = ${p2}$\n这两个数就是我们的起点，别担心，接下来只需要一步乘法！`,
+        en: `${narrator}: "Extract the given information from the problem:\nFirst event success probability → $P_1 = ${p1}$\nSecond event success probability → $P_2 = ${p2}$\nThese two numbers are our starting point. Don't worry — we just need one multiplication!"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：为什么是"乘"？\n直觉：如果第一件事成功的可能是一半($0.5$)，第二件也是一半($0.5$)，\n两个都成功就是"一半的一半"= $0.25$（四分之一）。\n"一半的一半"就是乘法！这就是乘法法则的本质：\n$$P(\\text{都成功}) = P_1 \\times P_2$$`,
+        en: `${narrator}: "Why do we MULTIPLY?\nIntuition: if the first event has a half chance ($0.5$), and the second also has a half ($0.5$),\nboth succeeding is 'half of a half' = $0.25$ (a quarter).\n'Half of a half' IS multiplication! That's the essence of the multiplication rule:\n$$P(\\text{both}) = P_1 \\times P_2$$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：代入计算，一步一步来：\n$P = P_1 \\times P_2$\n$P = ${p1} \\times ${p2}$\n$P = ${ansDisplay}$`,
+        en: `${narrator}: "Substitute and calculate, step by step:\n$P = P_1 \\times P_2$\n$P = ${p1} \\times ${p2}$\n$P = ${ansDisplay}$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n两个事件同时发生的概率 = $${ansDisplay}$\n\n做到这里你已经很棒了！`,
+        en: `${narrator}: "Answer\nProbability of both events happening = $${ansDisplay}$\n\nYou've done brilliantly getting this far!"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——用常识检查：\n两件事**同时**发生，应该比任何一件**单独**发生更难，对吗？\n$${ansDisplay} \\leq ${minP}$? ✓ 确实更小！\n$0 \\leq ${ansDisplay} \\leq 1$? ✓ 在合理范围内\n完美！你已经掌握了独立事件的组合概率！`,
+        en: `${narrator}: "Verify — use common sense:\nBOTH events happening should be HARDER than either one alone, right?\n$${ansDisplay} \\leq ${minP}$? ✓ Indeed smaller!\n$0 \\leq ${ansDisplay} \\leq 1$? ✓ Within valid range\nPerfect! You've mastered combined probability of independent events!"`,
+      },
+      highlightField: 'p',
+    },
   ];
 
   return {
@@ -6155,46 +6198,87 @@ export function generateSymmetryMission(template: Mission): Mission {
     en: `Find the image of $(${px}, ${py})$ after ${transformEn}`,
   };
 
+  // Build intuitive explanation based on mode
+  let intuitionZh: string, intuitionEn: string;
+  let xExplainZh: string, xExplainEn: string;
+  let yExplainZh: string, yExplainEn: string;
+  if (mode === 'reflect_x') {
+    intuitionZh = `想象 $x$ 轴是一面横放的镜子。\n你站在点 $(${px}, ${py})$ 上往镜子里看——镜子里的你，左右位置没变，但上下翻转了。`;
+    intuitionEn = `Imagine the $x$-axis is a horizontal mirror.\nYou stand at $(${px}, ${py})$ and look in the mirror — your reflection keeps the same left-right position, but flips up-down.`;
+    xExplainZh = `$x$ 坐标：镜子是横的，所以左右不变。\n$x' = ${px}$（和原来一样）`;
+    xExplainEn = `$x$ coordinate: the mirror is horizontal, so left-right stays.\n$x' = ${px}$ (same as before)`;
+    yExplainZh = `$y$ 坐标：上下翻转 = 正变负，负变正。\n$y$ 原来是 $${py}$，翻转后变成 $${ansY}$\n（"取反"就是加个负号，或者去掉负号）`;
+    yExplainEn = `$y$ coordinate: up-down flips = positive becomes negative, negative becomes positive.\n$y$ was $${py}$, after flipping it becomes $${ansY}$\n("Change sign" means add a minus, or remove one)`;
+  } else if (mode === 'reflect_y') {
+    intuitionZh = `想象 $y$ 轴是一面竖放的镜子。\n你站在点 $(${px}, ${py})$ 上往镜子里看——镜子里的你，上下位置没变，但左右翻转了。`;
+    intuitionEn = `Imagine the $y$-axis is a vertical mirror.\nYou stand at $(${px}, ${py})$ and look in the mirror — your reflection keeps the same up-down position, but flips left-right.`;
+    xExplainZh = `$x$ 坐标：左右翻转 = 正变负，负变正。\n$x$ 原来是 $${px}$，翻转后变成 $${ansX}$`;
+    xExplainEn = `$x$ coordinate: left-right flips = positive becomes negative, negative becomes positive.\n$x$ was $${px}$, after flipping it becomes $${ansX}$`;
+    yExplainZh = `$y$ 坐标：镜子是竖的，所以上下不变。\n$y' = ${py}$（和原来一样）`;
+    yExplainEn = `$y$ coordinate: the mirror is vertical, so up-down stays.\n$y' = ${py}$ (same as before)`;
+  } else {
+    intuitionZh = `想象你把整张纸绕中心点（原点）转半圈($180°$)。\n所有东西都"对面翻"了——左边的到右边，上面的到下面。`;
+    intuitionEn = `Imagine spinning the whole page half a turn ($180°$) around the centre (origin).\nEverything flips to the opposite side — left goes right, top goes bottom.`;
+    xExplainZh = `$x$ 坐标：转了半圈，左右互换。\n$x$ 原来是 $${px}$，翻转后变成 $${ansX}$`;
+    xExplainEn = `$x$ coordinate: half turn swaps left and right.\n$x$ was $${px}$, after turning it becomes $${ansX}$`;
+    yExplainZh = `$y$ 坐标：转了半圈，上下也互换。\n$y$ 原来是 $${py}$，翻转后变成 $${ansY}$`;
+    yExplainEn = `$y$ coordinate: half turn swaps up and down too.\n$y$ was $${py}$, after turning it becomes $${ansY}$`;
+  }
+
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：为什么需要对称？\n行军布阵讲究对称——左翼和右翼互相呼应，才能攻守兼备。\n数学中的对称变换帮助我们描述这种镜像关系。`,
-        en: `${narrator}: "Why do we need symmetry?\nBattle formations rely on symmetry — left and right wings mirror each other for balanced attack and defence.\nMathematical symmetry transformations describe these mirror relationships."`,
+        zh: `${narrator}：为什么需要对称？\n布阵讲究左右呼应——你的左翼有 10 名弓箭手，右翼也要有 10 名。\n如果阵法不对称，敌人只要攻击薄弱的一侧就赢了。\n数学中的对称变换，就是帮我们精确计算"镜像位置"的工具。`,
+        en: `${narrator}: "Why do we need symmetry?\nFormations need balance — 10 archers on the left, 10 on the right.\nIf a formation isn't symmetrical, the enemy just attacks the weak side.\nSymmetry transformations in maths are the tool for calculating exact mirror positions."`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：${transformZh}的规则\n${ruleZh}`,
-        en: `${narrator}: "Rule for ${transformEn}\n${ruleEn}"`,
+        zh: `${narrator}：${intuitionZh}\n\n别急，我们一步一步来！`,
+        en: `${narrator}: "${intuitionEn}\n\nDon't rush — let's take it one step at a time!"`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：原始坐标\n点 $A = (${px}, ${py})$`,
-        en: `${narrator}: "Original point\n$A = (${px}, ${py})$"`,
+        zh: `${narrator}：先看原始坐标\n我们的点在 $A = (${px}, ${py})$\n$x = ${px}$ 表示它在${px > 0 ? '右边' : px < 0 ? '左边' : '正中间'}\n$y = ${py}$ 表示它在${py > 0 ? '上面' : py < 0 ? '下面' : '正中间'}`,
+        en: `${narrator}: "First, look at the original coordinates\nOur point is at $A = (${px}, ${py})$\n$x = ${px}$ means it's on the ${px > 0 ? 'right' : px < 0 ? 'left' : 'centre'}\n$y = ${py}$ means it's ${py > 0 ? 'above' : py < 0 ? 'below' : 'at the centre'}"`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：应用变换规则\n$x' = ${ansX}$`,
-        en: `${narrator}: "Apply the transformation rule\n$x' = ${ansX}$"`,
+        zh: `${narrator}：先算新的 $x$ 坐标\n${xExplainZh}`,
+        en: `${narrator}: "First, calculate the new $x$\n${xExplainEn}"`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：答案\n映像坐标 $A' = (${ansX}, ${ansY})$`,
-        en: `${narrator}: "Answer\nImage coordinates $A' = (${ansX}, ${ansY})$"`,
+        zh: `${narrator}：再算新的 $y$ 坐标\n${yExplainZh}`,
+        en: `${narrator}: "Now calculate the new $y$\n${yExplainEn}"`,
       },
       highlightField: 'y',
     },
     {
       text: {
-        zh: `${narrator}：验算\n${verifyZh}`,
-        en: `${narrator}: "Verify\n${verifyEn}"`,
+        zh: `${narrator}：把两个坐标组合起来\n新坐标 $A' = (${ansX}, ${ansY})$\n\n做得好！你已经完成了变换！`,
+        en: `${narrator}: "Combine both coordinates\nNew coordinates $A' = (${ansX}, ${ansY})$\n\nWell done — you've completed the transformation!"`,
+      },
+      highlightField: 'y',
+    },
+    {
+      text: {
+        zh: `${narrator}：记住规则，以后就更快了：\n${ruleZh}\n这个规则适用于所有的点，不只是这一个。`,
+        en: `${narrator}: "Remember the rule for next time:\n${ruleEn}\nThis rule works for ALL points, not just this one."`,
+      },
+      highlightField: 'y',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n${verifyZh}\n太棒了！对称变换掌握了，以后排兵布阵就靠你了！`,
+        en: `${narrator}: "Verify\n${verifyEn}\nBrilliant! You've mastered symmetry — you'll be designing formations in no time!"`,
       },
       highlightField: 'y',
     },
