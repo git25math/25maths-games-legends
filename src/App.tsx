@@ -20,6 +20,7 @@ import { GradeSelectScreen } from './screens/GradeSelectScreen';
 import { MapScreen } from './screens/MapScreen';
 import { LobbyScreen } from './screens/LobbyScreen';
 import { PracticeScreen } from './screens/PracticeScreen';
+import { DashboardScreen } from './screens/DashboardScreen';
 
 class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; error: any }> {
   state = { hasError: false, error: null };
@@ -254,6 +255,7 @@ export default function App() {
                 onSignup={signUp}
                 onLogout={signOut}
                 onGuest={handleGuest}
+                onDashboard={() => setGameState('dashboard')}
               />
             )}
 
@@ -317,6 +319,13 @@ export default function App() {
                 setGameState('map');
                 setActiveMission(null);
               }}
+            />
+          )}
+
+          {gameState === 'dashboard' && (
+            <DashboardScreen
+              lang={lang}
+              onClose={() => setGameState('welcome')}
             />
           )}
         </div>

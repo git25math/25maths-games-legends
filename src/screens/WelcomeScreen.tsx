@@ -27,6 +27,7 @@ export const WelcomeScreen = ({
   onSignup: (email: string, password: string) => Promise<{ error: any }>;
   onLogout: () => void;
   onGuest: () => void;
+  onDashboard?: () => void;
 }) => {
   const t = translations[lang];
   const { playTap } = useAudio();
@@ -112,6 +113,14 @@ export const WelcomeScreen = ({
               >
                 {t.guestMode}
               </button>
+              {onDashboard && (
+                <button
+                  onClick={onDashboard}
+                  className="px-4 py-2 bg-indigo-700 text-white font-bold rounded-xl text-xs hover:bg-indigo-600 transition-all"
+                >
+                  {lang === 'en' ? 'Dashboard' : '看板'}
+                </button>
+              )}
             </div>
           )}
 
