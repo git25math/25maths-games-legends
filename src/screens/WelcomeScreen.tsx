@@ -17,6 +17,7 @@ export const WelcomeScreen = ({
   onSignup,
   onLogout,
   onGuest,
+  onDashboard,
 }: {
   lang: Language;
   selectedCharId: string | null;

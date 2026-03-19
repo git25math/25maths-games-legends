@@ -33,7 +33,7 @@ function getUnitMap(grade: number): Map<number, { title: string; missions: Missi
   });
   for (const m of gradeMissions) {
     if (!map.has(m.unitId)) {
-      map.set(m.unitId, { title: lt(m.unitTitle, 'zh'), missions: [] });
+      map.set(m.unitId, { title: m.unitTitle ? lt(m.unitTitle, 'zh') : `Unit ${m.unitId}`, missions: [] });
     }
     map.get(m.unitId)!.missions.push(m);
   }
