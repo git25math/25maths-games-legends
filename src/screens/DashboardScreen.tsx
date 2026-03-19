@@ -1,11 +1,11 @@
 /**
  * DashboardScreen — 教师进度看板
  * 实时显示全班学生在每个单元的 Green/Amber/Red 完成进度
- * 支持批量/单个班级分配
+ * 支持多标签（如 7B + EA）：批量/单个添加、删除标签
  */
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Edit3, Check, X, UserPlus } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag } from 'lucide-react';
 import type { Language, Mission, CompletedMissions } from '../types';
 import { supabase } from '../supabase';
 import { MISSIONS } from '../data/missions';
@@ -15,6 +15,7 @@ type StudentRow = {
   user_id: string;
   display_name: string;
   class_name: string | null;
+  class_tags: string[];
   total_score: number;
   completed_missions: CompletedMissions;
   updated_at: string;
@@ -48,44 +49,75 @@ function Dot({ done, color }: { done: boolean; color: string }) {
   return <Circle size={14} className="text-gray-400/40" />;
 }
 
+// Tag badge component
+function TagBadge({ tag, onRemove }: { tag: string; onRemove?: () => void }) {
+  const colors: Record<string, string> = {
+    EA: 'bg-purple-100 text-purple-700 border-purple-200',
+    OLYMPIAD: 'bg-amber-100 text-amber-700 border-amber-200',
+  };
+  const cls = colors[tag] || 'bg-indigo-50 text-indigo-700 border-indigo-200';
+  return (
+    <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold border ${cls}`}>
+      {tag}
+      {onRemove && (
+        <button onClick={onRemove} className="hover:text-rose-500 transition-colors ml-0.5">
+          <X size={8} />
+        </button>
+      )}
+    </span>
+  );
+}
+
 export function DashboardScreen({ lang, onClose }: Props) {
   const [grade, setGrade] = useState(7);
-  const [className, setClassName] = useState('');
+  const [filterTag, setFilterTag] = useState('');
   const [students, setStudents] = useState<StudentRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
   const [error, setError] = useState('');
-  const [editingStudent, setEditingStudent] = useState<string | null>(null);
-  const [editClassValue, setEditClassValue] = useState('');
+  const [addingTagFor, setAddingTagFor] = useState<string | null>(null);
+  const [newTagValue, setNewTagValue] = useState('');
   const [showBatchAssign, setShowBatchAssign] = useState(false);
-  const [batchClass, setBatchClass] = useState('');
+  const [batchTag, setBatchTag] = useState('');
 
   const unitMap = useMemo(() => getUnitMap(grade), [grade]);
   const units = useMemo(() => [...unitMap.entries()], [unitMap]);
+
+  // Collect all unique tags for quick-filter chips
+  const allTags = useMemo(() => {
+    const tags = new Set<string>();
+    for (const s of students) {
+      for (const t of (s.class_tags || [])) tags.add(t);
+    }
+    return [...tags].sort();
+  }, [students]);
 
   // Fetch students
   const fetchStudents = async () => {
     setLoading(true);
     setError('');
     try {
-      // Try RPC first (SECURITY DEFINER, bypasses RLS)
       const { data, error: rpcErr } = await supabase.rpc('get_class_progress', {
         p_grade: grade,
-        p_class: className || null,
+        p_class: filterTag || null,
       });
       if (!rpcErr && data) {
-        setStudents(data as StudentRow[]);
+        setStudents((data as StudentRow[]).map(s => ({
+          ...s,
+          class_tags: s.class_tags || [],
+        })));
       } else {
         console.warn('RPC failed, trying fallback:', rpcErr?.message);
-        // Fallback: direct query (works if RLS allows)
         let query = supabase.from('gl_user_progress').select('*').eq('grade', grade);
-        if (className) query = query.eq('class_name', className);
+        if (filterTag) query = query.contains('class_tags', [filterTag]);
         const { data: fallback, error: fbErr } = await query.order('display_name');
         if (fbErr) {
           setError(lang === 'en' ? 'Failed to load data' : '加载数据失败');
-          console.error('Fallback also failed:', fbErr.message);
         }
-        setStudents((fallback as StudentRow[]) || []);
+        setStudents(((fallback as StudentRow[]) || []).map(s => ({
+          ...s,
+          class_tags: s.class_tags || [],
+        })));
       }
     } catch {
       setError(lang === 'en' ? 'Network error' : '网络错误');
@@ -95,36 +127,57 @@ export function DashboardScreen({ lang, onClose }: Props) {
     setLastRefresh(new Date());
   };
 
-  // Assign class to a single student
-  const assignStudentClass = async (userId: string, newClass: string) => {
+  // Add a tag to a single student
+  const addStudentTag = async (userId: string, tag: string) => {
+    if (!tag.trim()) return;
+    const cleanTag = tag.trim().toUpperCase();
     const { error: err } = await supabase.rpc('assign_student_class', {
       p_user_id: userId,
-      p_class: newClass || null,
+      p_class: cleanTag,
     });
     if (!err) {
       setStudents(prev => prev.map(s =>
-        s.user_id === userId ? { ...s, class_name: newClass || null } : s
+        s.user_id === userId
+          ? { ...s, class_tags: s.class_tags.includes(cleanTag) ? s.class_tags : [...s.class_tags, cleanTag] }
+          : s
       ));
     }
-    setEditingStudent(null);
+    setAddingTagFor(null);
+    setNewTagValue('');
   };
 
-  // Batch assign class to all students in current grade
-  const batchAssignClass = async () => {
-    if (!batchClass.trim()) return;
+  // Remove a tag from a single student
+  const removeStudentTag = async (userId: string, tag: string) => {
+    const { error: err } = await supabase.rpc('remove_student_tag', {
+      p_user_id: userId,
+      p_tag: tag,
+    });
+    if (!err) {
+      setStudents(prev => prev.map(s =>
+        s.user_id === userId
+          ? { ...s, class_tags: s.class_tags.filter(t => t !== tag) }
+          : s
+      ));
+    }
+  };
+
+  // Batch add tag to all students in current grade
+  const batchAddTag = async () => {
+    if (!batchTag.trim()) return;
+    const cleanTag = batchTag.trim().toUpperCase();
     const { data } = await supabase.rpc('assign_class', {
       p_grade: grade,
-      p_class: batchClass.trim().toUpperCase(),
+      p_class: cleanTag,
     });
     setShowBatchAssign(false);
-    setBatchClass('');
+    setBatchTag('');
     if (typeof data === 'number' && data > 0) {
       fetchStudents();
     }
   };
 
-  // Initial fetch + refetch on grade/class change
-  useEffect(() => { fetchStudents(); }, [grade, className]);
+  // Initial fetch + refetch on grade/tag change
+  useEffect(() => { fetchStudents(); }, [grade, filterTag]);
 
   // Realtime subscription
   useEffect(() => {
@@ -137,17 +190,17 @@ export function DashboardScreen({ lang, onClose }: Props) {
       }, (payload) => {
         const updated = payload.new as StudentRow;
         if (!updated || updated.grade !== grade) return;
-        if (className && updated.class_name !== className) return;
+        if (filterTag && !(updated.class_tags || []).includes(filterTag)) return;
 
         setStudents(prev => {
           const idx = prev.findIndex(s => s.user_id === updated.user_id);
+          const row = { ...updated, class_tags: updated.class_tags || [] };
           if (idx >= 0) {
             const next = [...prev];
-            next[idx] = updated;
+            next[idx] = row;
             return next;
           }
-          // New student appeared
-          return [...prev, updated].sort((a, b) =>
+          return [...prev, row].sort((a, b) =>
             (a.display_name || '').localeCompare(b.display_name || '')
           );
         });
@@ -156,7 +209,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, [grade, className]);
+  }, [grade, filterTag]);
 
   // Calculate stats
   const totalMissions = useMemo(() => {
@@ -189,28 +242,28 @@ export function DashboardScreen({ lang, onClose }: Props) {
 
   const LABELS = {
     zh: {
-      title: '班级进度看板', grade: '年级', class: '班级', placeholder: '如 7B',
-      student: '学生', score: '分数', overall: '总进度', refresh: '刷新',
+      title: '班级进度看板', placeholder: '筛选标签',
+      student: '学生', score: '分数', overall: '总进度',
       green: '手把手', amber: '练习', red: '闯关', noStudents: '暂无数据',
-      liveHint: '数据实时更新', lastUpdate: '最后更新',
-      classCol: '班级', batchAssign: '批量分配班级', assignAll: '将全部 Y{g} 学生分配到:',
-      confirm: '确认', cancel: '取消', unassigned: '未分配',
+      liveHint: '实时更新', tags: '标签', addTag: '添加标签',
+      batchAssign: '批量添加标签', assignAll: '为全部 Y{g} 学生添加:',
+      confirm: '确认', cancel: '取消', all: '全部',
     },
     zh_TW: {
-      title: '班級進度看板', grade: '年級', class: '班級', placeholder: '如 7B',
-      student: '學生', score: '分數', overall: '總進度', refresh: '刷新',
+      title: '班級進度看板', placeholder: '篩選標籤',
+      student: '學生', score: '分數', overall: '總進度',
       green: '手把手', amber: '練習', red: '闖關', noStudents: '暫無數據',
-      liveHint: '數據實時更新', lastUpdate: '最後更新',
-      classCol: '班級', batchAssign: '批量分配班級', assignAll: '將全部 Y{g} 學生分配到:',
-      confirm: '確認', cancel: '取消', unassigned: '未分配',
+      liveHint: '實時更新', tags: '標籤', addTag: '添加標籤',
+      batchAssign: '批量添加標籤', assignAll: '為全部 Y{g} 學生添加:',
+      confirm: '確認', cancel: '取消', all: '全部',
     },
     en: {
-      title: 'Class Progress Dashboard', grade: 'Grade', class: 'Class', placeholder: 'e.g. 7B',
-      student: 'Student', score: 'Score', overall: 'Overall', refresh: 'Refresh',
+      title: 'Class Progress Dashboard', placeholder: 'Filter tag',
+      student: 'Student', score: 'Score', overall: 'Overall',
       green: 'Tutorial', amber: 'Practice', red: 'Challenge', noStudents: 'No data yet',
-      liveHint: 'Live updates', lastUpdate: 'Last update',
-      classCol: 'Class', batchAssign: 'Batch Assign Class', assignAll: 'Assign all Y{g} students to:',
-      confirm: 'Confirm', cancel: 'Cancel', unassigned: 'N/A',
+      liveHint: 'Live', tags: 'Tags', addTag: 'Add tag',
+      batchAssign: 'Batch Add Tag', assignAll: 'Add tag to all Y{g} students:',
+      confirm: 'OK', cancel: 'Cancel', all: 'All',
     },
   };
   const t = LABELS[lang] || LABELS.zh;
@@ -224,7 +277,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
       className="min-h-screen"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-5 bg-white/50 backdrop-blur-sm rounded-2xl px-5 py-3 border border-amber-200/40 shadow-sm">
+      <div className="flex items-center justify-between mb-4 bg-white/50 backdrop-blur-sm rounded-2xl px-5 py-3 border border-amber-200/40 shadow-sm">
         <button onClick={onClose} className="flex items-center gap-2 text-amber-800 hover:text-amber-950 transition-colors">
           <ArrowLeft size={18} />
           <span className="text-base font-black">{t.title}</span>
@@ -239,13 +292,6 @@ export function DashboardScreen({ lang, onClose }: Props) {
             <option value={8}>Y8</option>
             <option value={9}>Y9</option>
           </select>
-          <input
-            type="text"
-            value={className}
-            onChange={e => setClassName(e.target.value.toUpperCase())}
-            placeholder={t.placeholder}
-            className="bg-white/80 border border-amber-200 rounded-lg px-3 py-1.5 text-sm w-20 text-amber-900 placeholder:text-amber-400 shadow-sm"
-          />
           <button
             onClick={fetchStudents}
             className="flex items-center gap-1 bg-white/80 border border-amber-200 rounded-lg px-3 py-1.5 text-sm text-amber-800 hover:bg-amber-50 transition-colors shadow-sm"
@@ -262,7 +308,42 @@ export function DashboardScreen({ lang, onClose }: Props) {
         </div>
       )}
 
-      {/* Batch assign modal */}
+      {/* Tag filter chips */}
+      <div className="flex items-center gap-2 mb-4 px-1 flex-wrap">
+        <Tag size={14} className="text-amber-600" />
+        <button
+          onClick={() => setFilterTag('')}
+          className={`px-3 py-1 rounded-full text-xs font-bold border transition-all ${
+            !filterTag
+              ? 'bg-amber-600 text-white border-amber-600'
+              : 'bg-white/60 text-amber-700 border-amber-200 hover:bg-amber-50'
+          }`}
+        >
+          {t.all}
+        </button>
+        {allTags.map(tag => (
+          <button
+            key={tag}
+            onClick={() => setFilterTag(filterTag === tag ? '' : tag)}
+            className={`px-3 py-1 rounded-full text-xs font-bold border transition-all ${
+              filterTag === tag
+                ? 'bg-indigo-600 text-white border-indigo-600'
+                : 'bg-white/60 text-indigo-700 border-indigo-200 hover:bg-indigo-50'
+            }`}
+          >
+            {tag}
+          </button>
+        ))}
+        <button
+          onClick={() => setShowBatchAssign(!showBatchAssign)}
+          className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border border-dashed border-indigo-300 text-indigo-500 hover:bg-indigo-50 transition-all"
+        >
+          <UserPlus size={11} />
+          {t.batchAssign}
+        </button>
+      </div>
+
+      {/* Batch assign panel */}
       <AnimatePresence>
         {showBatchAssign && (
           <motion.div
@@ -271,21 +352,21 @@ export function DashboardScreen({ lang, onClose }: Props) {
             exit={{ opacity: 0, height: 0 }}
             className="mb-4 overflow-hidden"
           >
-            <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-5 py-3 flex items-center gap-3">
+            <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-5 py-3 flex items-center gap-3 flex-wrap">
               <UserPlus size={16} className="text-indigo-600" />
               <span className="text-sm font-bold text-indigo-900">
                 {t.assignAll.replace('{g}', String(grade))}
               </span>
               <input
                 type="text"
-                value={batchClass}
-                onChange={e => setBatchClass(e.target.value.toUpperCase())}
-                placeholder={t.placeholder}
+                value={batchTag}
+                onChange={e => setBatchTag(e.target.value.toUpperCase())}
+                placeholder="EA"
                 className="bg-white border border-indigo-200 rounded-lg px-3 py-1.5 text-sm w-24 text-indigo-900 font-bold"
                 autoFocus
-                onKeyDown={e => e.key === 'Enter' && batchAssignClass()}
+                onKeyDown={e => e.key === 'Enter' && batchAddTag()}
               />
-              <button onClick={batchAssignClass} className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors">
+              <button onClick={batchAddTag} className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors">
                 {t.confirm}
               </button>
               <button onClick={() => setShowBatchAssign(false)} className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-600 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors">
@@ -296,9 +377,9 @@ export function DashboardScreen({ lang, onClose }: Props) {
         )}
       </AnimatePresence>
 
-      {/* Live indicator + Legend row */}
-      <div className="flex items-center justify-between mb-4 px-1">
-        <div className="flex items-center gap-4 text-xs text-amber-700">
+      {/* Live indicator + stats row */}
+      <div className="flex items-center justify-between mb-3 px-1">
+        <div className="flex items-center gap-3 text-xs text-amber-700">
           <span className="flex items-center gap-1.5">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -306,20 +387,12 @@ export function DashboardScreen({ lang, onClose }: Props) {
             </span>
             {t.liveHint}
           </span>
-          <span className="text-amber-400">|</span>
+          <span className="text-amber-300">|</span>
           <span className="flex items-center gap-1"><CheckCircle size={11} className="text-emerald-500" /> {t.green}</span>
           <span className="flex items-center gap-1"><CheckCircle size={11} className="text-amber-400" /> {t.amber}</span>
           <span className="flex items-center gap-1"><CheckCircle size={11} className="text-rose-500" /> {t.red}</span>
         </div>
-        <div className="flex items-center gap-3 text-xs text-amber-600/60">
-          <button
-            onClick={() => setShowBatchAssign(!showBatchAssign)}
-            className="flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold transition-colors"
-          >
-            <UserPlus size={12} />
-            {t.batchAssign}
-          </button>
-          <span className="text-amber-300">|</span>
+        <div className="flex items-center gap-2 text-xs text-amber-600/60">
           <Users size={12} />
           {students.length} {t.student}
           <span className="mx-0.5">·</span>
@@ -338,8 +411,8 @@ export function DashboardScreen({ lang, onClose }: Props) {
               <th className="sticky left-8 bg-amber-50/95 backdrop-blur-sm z-20 px-3 py-2 text-left font-bold text-amber-900 whitespace-nowrap min-w-[140px]">
                 {t.student}
               </th>
-              <th className="px-2 py-2 text-center font-bold text-amber-900 whitespace-nowrap min-w-[56px]">
-                {t.classCol}
+              <th className="px-2 py-2 text-left font-bold text-amber-900 whitespace-nowrap min-w-[100px]">
+                {t.tags}
               </th>
               <th className="px-2 py-2 text-center font-bold text-amber-900 whitespace-nowrap min-w-[60px]">
                 <div className="flex items-center justify-center gap-1"><Trophy size={12} /> {t.score}</div>
@@ -363,7 +436,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
           <tbody>
             {students.length === 0 && (
               <tr>
-                <td colSpan={4 + units.length} className="text-center py-8 text-[#5c4033]/50 text-sm">
+                <td colSpan={5 + units.length} className="text-center py-8 text-[#5c4033]/50 text-sm">
                   {loading ? '加载中...' : t.noStudents}
                 </td>
               </tr>
@@ -393,33 +466,42 @@ export function DashboardScreen({ lang, onClose }: Props) {
                       <span className="text-xs">{s.display_name || 'Anonymous'}</span>
                     </div>
                   </td>
-                  {/* Class */}
-                  <td className="px-2 py-2 text-center">
-                    {editingStudent === s.user_id ? (
-                      <div className="flex items-center gap-1 justify-center">
-                        <input
-                          type="text"
-                          value={editClassValue}
-                          onChange={e => setEditClassValue(e.target.value.toUpperCase())}
-                          className="w-14 px-1.5 py-0.5 text-[10px] bg-white border border-indigo-300 rounded font-bold text-center"
-                          autoFocus
-                          onKeyDown={e => {
-                            if (e.key === 'Enter') assignStudentClass(s.user_id, editClassValue);
-                            if (e.key === 'Escape') setEditingStudent(null);
-                          }}
+                  {/* Tags */}
+                  <td className="px-2 py-2">
+                    <div className="flex items-center gap-1 flex-wrap">
+                      {(s.class_tags || []).map(tag => (
+                        <TagBadge
+                          key={tag}
+                          tag={tag}
+                          onRemove={() => removeStudentTag(s.user_id, tag)}
                         />
-                        <button onClick={() => assignStudentClass(s.user_id, editClassValue)} className="text-emerald-600 hover:text-emerald-800"><Check size={12} /></button>
-                        <button onClick={() => setEditingStudent(null)} className="text-rose-400 hover:text-rose-600"><X size={12} /></button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => { setEditingStudent(s.user_id); setEditClassValue(s.class_name || ''); }}
-                        className="group flex items-center gap-0.5 justify-center text-[10px] font-bold text-amber-600 hover:text-indigo-600 transition-colors"
-                      >
-                        {s.class_name || <span className="text-amber-400/60 italic">{t.unassigned}</span>}
-                        <Edit3 size={9} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </button>
-                    )}
+                      ))}
+                      {addingTagFor === s.user_id ? (
+                        <span className="inline-flex items-center gap-0.5">
+                          <input
+                            type="text"
+                            value={newTagValue}
+                            onChange={e => setNewTagValue(e.target.value.toUpperCase())}
+                            className="w-14 px-1 py-0.5 text-[9px] bg-white border border-indigo-300 rounded font-bold"
+                            autoFocus
+                            placeholder="EA"
+                            onKeyDown={e => {
+                              if (e.key === 'Enter') addStudentTag(s.user_id, newTagValue);
+                              if (e.key === 'Escape') { setAddingTagFor(null); setNewTagValue(''); }
+                            }}
+                          />
+                          <button onClick={() => addStudentTag(s.user_id, newTagValue)} className="text-emerald-600"><Plus size={10} /></button>
+                          <button onClick={() => { setAddingTagFor(null); setNewTagValue(''); }} className="text-rose-400"><X size={10} /></button>
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => { setAddingTagFor(s.user_id); setNewTagValue(''); }}
+                          className="w-4 h-4 rounded-full border border-dashed border-amber-300 flex items-center justify-center text-amber-400 hover:text-indigo-500 hover:border-indigo-400 transition-colors"
+                        >
+                          <Plus size={8} />
+                        </button>
+                      )}
+                    </div>
                   </td>
                   {/* Score */}
                   <td className="px-2 py-2 text-center">

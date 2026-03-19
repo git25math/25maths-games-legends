@@ -120,6 +120,7 @@ export type UserProfile = {
   total_score: number;
   grade: number | null;
   class_name?: string | null;
+  class_tags?: string[];
   selected_char_id: string;
   completed_missions: CompletedMissions;
   stats: { [key in KnowledgePoint]: number };

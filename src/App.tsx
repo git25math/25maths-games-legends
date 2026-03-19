@@ -177,6 +177,7 @@ export default function App() {
   };
 
   const isLoggedIn = !!user || isGuest;
+  const isAdmin = user?.email === 'zhuxingda86@hotmail.com';
 
   // Loading splash while auth initializes
   if (authLoading) {
@@ -262,14 +263,14 @@ export default function App() {
                 onSignup={signUp}
                 onLogout={signOut}
                 onGuest={handleGuest}
-                onDashboard={() => setGameState('dashboard')}
+                onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
               />
             )}
 
             {gameState === 'map' && profile && !profile.grade && (
               <GradeSelectScreen
                 lang={lang}
-                onSelect={(g, cls) => updateProfile({ grade: g, ...(cls ? { class_name: cls } : {}) })}
+                onSelect={(g, cls) => updateProfile({ grade: g, ...(cls ? { class_name: cls, class_tags: [cls] } : {}) })}
               />
             )}
 
@@ -284,7 +285,7 @@ export default function App() {
                 onGradeChange={() => updateProfile({ grade: null })}
                 onCharChange={() => { setSelectedCharId(null); setGameState('welcome'); }}
                 onCreateRoom={createRoom}
-                onDashboard={() => setGameState('dashboard')}
+                onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
               />
             )}
 
