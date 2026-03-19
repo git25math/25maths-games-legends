@@ -4,7 +4,7 @@
  */
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy } from 'lucide-react';
 import type { Language, Mission, CompletedMissions } from '../types';
 import { supabase } from '../supabase';
 import { MISSIONS } from '../data/missions';
@@ -176,85 +176,86 @@ export function DashboardScreen({ lang, onClose }: Props) {
       className="min-h-screen"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <button onClick={onClose} className="flex items-center gap-2 text-[#5c4033] hover:text-[#3d2b1f] transition-colors">
-          <ArrowLeft size={20} />
-          <span className="text-sm font-bold">{t.title}</span>
+      <div className="flex items-center justify-between mb-5 bg-white/50 backdrop-blur-sm rounded-2xl px-5 py-3 border border-amber-200/40 shadow-sm">
+        <button onClick={onClose} className="flex items-center gap-2 text-amber-800 hover:text-amber-950 transition-colors">
+          <ArrowLeft size={18} />
+          <span className="text-base font-black">{t.title}</span>
         </button>
         <div className="flex items-center gap-3">
-          {/* Grade selector */}
           <select
             value={grade}
             onChange={e => setGrade(Number(e.target.value))}
-            className="bg-white/40 border border-[#3d2b1f]/20 rounded-lg px-3 py-1.5 text-sm font-bold text-[#3d2b1f]"
+            className="bg-white/80 border border-amber-200 rounded-lg px-3 py-1.5 text-sm font-bold text-amber-900 shadow-sm"
           >
             <option value={7}>Y7</option>
             <option value={8}>Y8</option>
             <option value={9}>Y9</option>
           </select>
-          {/* Class filter */}
           <input
             type="text"
             value={className}
             onChange={e => setClassName(e.target.value.toUpperCase())}
             placeholder={t.placeholder}
-            className="bg-white/40 border border-[#3d2b1f]/20 rounded-lg px-3 py-1.5 text-sm w-20 text-[#3d2b1f] placeholder:text-[#3d2b1f]/40"
+            className="bg-white/80 border border-amber-200 rounded-lg px-3 py-1.5 text-sm w-20 text-amber-900 placeholder:text-amber-400 shadow-sm"
           />
-          {/* Refresh */}
           <button
             onClick={fetchStudents}
-            className="flex items-center gap-1 bg-white/40 border border-[#3d2b1f]/20 rounded-lg px-3 py-1.5 text-sm text-[#3d2b1f] hover:bg-white/60 transition-colors"
+            className="flex items-center gap-1 bg-white/80 border border-amber-200 rounded-lg px-3 py-1.5 text-sm text-amber-800 hover:bg-amber-50 transition-colors shadow-sm"
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
       </div>
 
-      {/* Live indicator */}
-      <div className="flex items-center justify-between mb-4 text-xs text-[#5c4033]/60">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+      {/* Live indicator + Legend row */}
+      <div className="flex items-center justify-between mb-4 px-1">
+        <div className="flex items-center gap-4 text-xs text-amber-700">
+          <span className="flex items-center gap-1.5">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            {t.liveHint}
           </span>
-          {t.liveHint}
+          <span className="text-amber-400">|</span>
+          <span className="flex items-center gap-1"><CheckCircle size={11} className="text-emerald-500" /> {t.green}</span>
+          <span className="flex items-center gap-1"><CheckCircle size={11} className="text-amber-400" /> {t.amber}</span>
+          <span className="flex items-center gap-1"><CheckCircle size={11} className="text-rose-500" /> {t.red}</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 text-xs text-amber-600/60">
           <Users size={12} />
           {students.length} {t.student}
-          <span className="mx-1">·</span>
-          {t.lastUpdate}: {lastRefresh.toLocaleTimeString()}
+          <span className="mx-0.5">·</span>
+          {lastRefresh.toLocaleTimeString()}
         </div>
-      </div>
-
-      {/* Legend */}
-      <div className="flex items-center gap-4 mb-4 text-xs text-[#5c4033]">
-        <span className="flex items-center gap-1"><CheckCircle size={12} className="text-green-600" /> {t.green}</span>
-        <span className="flex items-center gap-1"><CheckCircle size={12} className="text-amber-500" /> {t.amber}</span>
-        <span className="flex items-center gap-1"><CheckCircle size={12} className="text-red-600" /> {t.red}</span>
-        <span className="flex items-center gap-1"><Circle size={12} className="text-gray-400/40" /> 未完成</span>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-[#3d2b1f]/10 bg-white/30 backdrop-blur-sm">
+      <div className="overflow-x-auto rounded-2xl border border-amber-200/50 bg-white/60 backdrop-blur-sm shadow-lg">
         <table className="w-full text-xs">
           <thead>
-            <tr className="bg-[#3d2b1f]/5 border-b border-[#3d2b1f]/10">
-              <th className="sticky left-0 bg-[#f4e4bc]/90 backdrop-blur-sm z-20 px-3 py-2 text-left font-bold text-[#3d2b1f] whitespace-nowrap min-w-[120px]">
+            <tr className="bg-amber-50/80 border-b border-amber-200/60">
+              <th className="sticky left-0 bg-amber-50/95 backdrop-blur-sm z-20 px-2 py-2 text-center font-bold text-amber-900 whitespace-nowrap w-8">
+                #
+              </th>
+              <th className="sticky left-8 bg-amber-50/95 backdrop-blur-sm z-20 px-3 py-2 text-left font-bold text-amber-900 whitespace-nowrap min-w-[140px]">
                 {t.student}
               </th>
-              <th className="px-2 py-2 text-center font-bold text-[#3d2b1f] whitespace-nowrap min-w-[50px]">
+              <th className="px-2 py-2 text-center font-bold text-amber-900 whitespace-nowrap min-w-[60px]">
+                <div className="flex items-center justify-center gap-1"><Trophy size={12} /> {t.score}</div>
+              </th>
+              <th className="px-2 py-2 text-center font-bold text-amber-900 whitespace-nowrap min-w-[50px]">
                 {t.overall}
               </th>
               {units.map(([uid, u]) => (
                 <th
                   key={uid}
                   colSpan={1}
-                  className="px-2 py-2 text-center font-bold text-[#3d2b1f] whitespace-nowrap border-l border-[#3d2b1f]/5"
+                  className="px-2 py-2 text-center font-bold text-amber-900 whitespace-nowrap border-l border-amber-200/40"
                   title={u.title}
                 >
                   <div className="text-[10px] leading-tight max-w-[80px] mx-auto truncate">{u.title.replace(/Unit \d+:\s*/, '').split('·')[0]}</div>
-                  <div className="text-[8px] text-[#5c4033]/50 mt-0.5">{u.missions.length} 关</div>
+                  <div className="text-[8px] text-amber-600/50 mt-0.5">{u.missions.length} 关</div>
                 </th>
               ))}
             </tr>
@@ -262,54 +263,63 @@ export function DashboardScreen({ lang, onClose }: Props) {
           <tbody>
             {students.length === 0 && (
               <tr>
-                <td colSpan={2 + units.length} className="text-center py-8 text-[#5c4033]/50 text-sm">
+                <td colSpan={3 + units.length} className="text-center py-8 text-[#5c4033]/50 text-sm">
                   {loading ? '加载中...' : t.noStudents}
                 </td>
               </tr>
             )}
-            {students.map((s, i) => {
+            {[...students].sort((a, b) => (b.total_score || 0) - (a.total_score || 0)).map((s, i) => {
               const overall = getStudentOverall(s);
               const pct = totalMissions > 0 ? Math.round((overall / totalMissions) * 100) : 0;
+              const rank = i + 1;
               return (
                 <tr
                   key={s.user_id}
-                  className={`border-b border-[#3d2b1f]/5 hover:bg-white/40 transition-colors ${i % 2 === 0 ? '' : 'bg-white/10'}`}
+                  className={`border-b border-amber-100 hover:bg-amber-50/60 transition-colors ${i % 2 === 0 ? 'bg-white/60' : 'bg-amber-50/30'}`}
                 >
+                  {/* Rank */}
+                  <td className="sticky left-0 bg-inherit z-10 px-2 py-2 text-center whitespace-nowrap">
+                    {rank === 1 ? <span className="text-base">🥇</span> :
+                     rank === 2 ? <span className="text-base">🥈</span> :
+                     rank === 3 ? <span className="text-base">🥉</span> :
+                     <span className="text-xs font-bold text-amber-700/50">{rank}</span>}
+                  </td>
                   {/* Student name */}
-                  <td className="sticky left-0 bg-[#f4e4bc]/80 backdrop-blur-sm z-10 px-3 py-2 font-bold text-[#3d2b1f] whitespace-nowrap">
+                  <td className="sticky left-8 bg-inherit z-10 px-3 py-2 font-bold text-amber-900 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-[#3d2b1f]/10 flex items-center justify-center text-[10px] font-black text-[#3d2b1f]/60">
+                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-[11px] font-black text-white shadow-sm">
                         {(s.display_name || '?')[0].toUpperCase()}
                       </div>
-                      <div>
-                        <div className="text-xs">{s.display_name || 'Anonymous'}</div>
-                        <div className="text-[9px] text-[#5c4033]/40">{s.total_score} pts</div>
-                      </div>
+                      <span className="text-xs">{s.display_name || 'Anonymous'}</span>
                     </div>
+                  </td>
+                  {/* Score */}
+                  <td className="px-2 py-2 text-center">
+                    <span className="text-sm font-black text-amber-700">{s.total_score || 0}</span>
                   </td>
                   {/* Overall progress */}
                   <td className="px-2 py-2 text-center">
                     <div className="flex flex-col items-center gap-0.5">
-                      <div className="w-full max-w-[40px] h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="w-full max-w-[44px] h-2 bg-amber-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-green-500 rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-500"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
-                      <span className="text-[9px] font-bold text-[#3d2b1f]/70">{pct}%</span>
+                      <span className="text-[9px] font-bold text-amber-700/70">{pct}%</span>
                     </div>
                   </td>
                   {/* Per-unit progress */}
                   {units.map(([uid, u]) => {
                     const p = getStudentUnitProgress(s, u.missions);
                     return (
-                      <td key={uid} className="px-2 py-2 border-l border-[#3d2b1f]/5">
+                      <td key={uid} className="px-2 py-2 border-l border-amber-100/60">
                         <div className="flex items-center justify-center gap-0.5">
-                          <Dot done={p.green === p.total} color="text-green-600" />
-                          <Dot done={p.amber === p.total} color="text-amber-500" />
-                          <Dot done={p.red === p.total} color="text-red-600" />
+                          <Dot done={p.green === p.total} color="text-emerald-500" />
+                          <Dot done={p.amber === p.total} color="text-amber-400" />
+                          <Dot done={p.red === p.total} color="text-rose-500" />
                         </div>
-                        <div className="text-[8px] text-center text-[#5c4033]/40 mt-0.5">
+                        <div className="text-[8px] text-center text-amber-600/40 mt-0.5">
                           {p.green}/{p.total}
                         </div>
                       </td>
