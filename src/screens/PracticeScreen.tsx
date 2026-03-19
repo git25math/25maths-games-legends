@@ -25,6 +25,7 @@ import { NumberGrid } from '../components/diagrams/NumberGrid';
 import { BalanceScale } from '../components/diagrams/BalanceScale';
 import { AngleArc } from '../components/diagrams/AngleArc';
 import { useAudio } from '../audio';
+import { buttonBase } from '../utils/animationPresets';
 
 type PracticePhase = 'green' | 'amber' | 'red';
 
@@ -274,8 +275,16 @@ export const PracticeScreen = ({
         </div>
 
         {/* Content */}
-        <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-          {/* Left: Question area */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPhase}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8"
+          >
+            {/* Left: Question area */}
           <div className="bg-[#e8d5a7] rounded-lg p-3 md:p-6 border-2 border-[#3d2b1f]/20 shadow-inner">
             <div className="flex items-center gap-2 mb-4 text-[#3d2b1f] font-bold border-b border-[#3d2b1f]/10 pb-2">
               <MapIcon size={18} />
@@ -424,30 +433,33 @@ export const PracticeScreen = ({
                 {/* Step through tutorial with prev/next, then offer "next example" */}
                 <div className="flex gap-2">
                   {tutorialStep > 0 && (
-                    <button
+                    <motion.button
+                      {...buttonBase}
                       onClick={() => { playClick(); setTutorialStep(prev => prev - 1); }}
-                      className="flex-1 py-4 bg-slate-500 text-white font-black rounded-lg shadow-lg hover:bg-slate-600 transition-all flex items-center justify-center gap-2 min-h-12"
+                      className="flex-1 py-4 bg-slate-500 text-white font-black rounded-lg shadow-lg hover:bg-slate-600 transition-colors flex items-center justify-center gap-2 min-h-12"
                     >
                       <ChevronLeft size={20} />
                       {t.prevStep}
-                    </button>
+                    </motion.button>
                   )}
                   {tutorialStep < (currentMission.tutorialSteps?.length || 1) - 1 ? (
-                    <button
+                    <motion.button
+                      {...buttonBase}
                       onClick={() => { playClick(); setTutorialStep(prev => prev + 1); }}
-                      className="flex-1 py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
+                      className="flex-1 py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 min-h-12"
                     >
                       {t.nextStep}
                       <ChevronRight size={20} />
-                    </button>
+                    </motion.button>
                   ) : (
-                    <button
+                    <motion.button
+                      {...buttonBase}
                       onClick={() => { playClick(); regenerateQuestion(); }}
-                      className="flex-1 py-4 bg-[#3d2b1f] text-[#f4e4bc] font-black rounded-lg shadow-lg hover:bg-[#5c4033] transition-all flex items-center justify-center gap-2 min-h-12"
+                      className="flex-1 py-4 bg-[#3d2b1f] text-[#f4e4bc] font-black rounded-lg shadow-lg hover:bg-[#5c4033] transition-colors flex items-center justify-center gap-2 min-h-12"
                     >
                       {t.seeAnotherExample}
                       <ChevronRight size={20} />
-                    </button>
+                    </motion.button>
                   )}
                 </div>
               </>
@@ -485,18 +497,19 @@ export const PracticeScreen = ({
                   />
                 )}
 
-                <button
+                <motion.button
+                  {...(wrongAnswerData || showCorrectFlash ? {} : buttonBase)}
                   onClick={handleSubmit}
                   disabled={!!wrongAnswerData || showCorrectFlash}
-                  className={`w-full py-5 text-[#f4e4bc] text-xl font-black rounded-lg transition-all flex items-center justify-center gap-3 border-2 min-h-12 ${
+                  className={`w-full py-5 text-[#f4e4bc] text-xl font-black rounded-lg transition-colors flex items-center justify-center gap-3 border-2 min-h-12 ${
                     wrongAnswerData || showCorrectFlash
                       ? 'bg-slate-500 border-slate-600 cursor-not-allowed'
-                      : 'bg-[#8b0000] hover:bg-[#a50000] shadow-[0_4px_0_#5c0000] active:translate-y-1 active:shadow-none border-[#5c0000]'
+                      : 'bg-[#8b0000] shadow-[0_4px_0_#5c0000] border-[#5c0000]'
                   }`}
                 >
                   <Swords size={24} />
                   {t.attack}
-                </button>
+                </motion.button>
               </>
             )}
 
@@ -533,7 +546,8 @@ export const PracticeScreen = ({
               {t.backToMap}
             </button>
           </div>
-        </div>
+          </motion.div>
+        </AnimatePresence>
       </motion.div>
     </div>
     </div>

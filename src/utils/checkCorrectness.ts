@@ -325,6 +325,10 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const okN = parse(inputs.n || '') === data.n;
     return { correct: okA && okN, expected: { a: round(data.a), n: String(data.n) } };
   }
+  if (type === 'SYMMETRY') {
+    const ok = parse(inputs.x || '') === data.ansX && parse(inputs.y || '') === data.ansY;
+    return { correct: ok, expected: { x: String(data.ansX), y: String(data.ansY) } };
+  }
   return { correct: false, expected: {} };
 }
 

@@ -189,4 +189,8 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'a', label: '系数 a', placeholder: 'a = ?' }, { id: 'n', label: '指数 n', placeholder: 'n = ?' }],
     en: [{ id: 'a', label: 'Coefficient a', placeholder: 'a = ?' }, { id: 'n', label: 'Exponent n', placeholder: 'n = ?' }],
   },
+  SYMMETRY: {
+    zh: [{ id: 'x', label: '新 x 坐标', placeholder: 'x = ?' }, { id: 'y', label: '新 y 坐标', placeholder: 'y = ?' }],
+    en: [{ id: 'x', label: 'New x coordinate', placeholder: 'x = ?' }, { id: 'y', label: 'New y coordinate', placeholder: 'y = ?' }],
+  },
 };

@@ -8,6 +8,7 @@ import { MathView, LatexText } from '../components/MathView';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { interpolate } from '../utils/interpolate';
 import { useAudio } from '../audio';
+import { tapScale, hoverGlow, springIn, staggerContainer, staggerItem } from '../utils/animationPresets';
 
 const CHAPTER_IMAGES = [
   './map/ch1-peach-garden.png',
@@ -127,7 +128,7 @@ export const MapScreen = ({
         <div className="relative z-10 space-y-16 p-4 md:p-8">
         {Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang)))).map((unitTitle, unitIndex) => (
           <div key={unitTitle} className="space-y-6">
-            <div className="flex items-center gap-4">
+            <motion.div initial={{ x: -20, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} className="flex items-center gap-4">
               <div className="h-px flex-1 bg-white/10" />
               <div className="flex items-center gap-3">
                 <img
@@ -141,8 +142,8 @@ export const MapScreen = ({
                 </h3>
               </div>
               <div className="h-px flex-1 bg-white/10" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            </motion.div>
+            <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {gradeMissions
                 .filter(m => lt(m.unitTitle, lang) === unitTitle)
                 .sort((a, b) => a.order - b.order)
@@ -152,10 +153,17 @@ export const MapScreen = ({
                   const prevMission = gradeMissions.find(m => m.unitId === mission.unitId && m.order === mission.order - 1);
                   const prevComp = prevMission ? profile.completed_missions[String(prevMission.id)] : null;
                   const isLocked = mission.order > 1 && prevMission && !(prevComp && Object.values(prevComp).some(Boolean));
+                  const isPlayable = !isLocked && !isCompleted;
+                  
+                  const cardVariants = isLocked ? { initial: { opacity: 0.5, y: 0 }, animate: { opacity: 0.5, y: 0 } } : staggerItem;
 
                   return (
-                    <div key={mission.id} className="relative group">
-                      <div className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl transition-all ${isLocked ? 'opacity-50 grayscale' : 'hover:-translate-y-2'}`}>
+                    <motion.div key={mission.id} variants={cardVariants} className="relative group">
+                      <motion.div
+                        animate={isPlayable ? { scale: [1, 1.02, 1] } : {}} 
+                        transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : {}}
+                        className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl transition-shadow ${isLocked ? 'opacity-50 grayscale' : 'hover:shadow-indigo-500/20'}`}
+                      >
                         <div className="flex justify-between items-start mb-6">
                           <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                             mission.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' :
@@ -164,47 +172,49 @@ export const MapScreen = ({
                             {t.difficulty[mission.difficulty]}
                           </div>
                           {isCompleted ? (
-                            <div className="flex gap-1">
+                            <motion.div {...springIn} transition={{ type: "spring", bounce: 0.4 }} className="flex gap-1">
                               {comp?.green && <div className="w-3 h-3 rounded-full bg-emerald-500" />}
                               {comp?.amber && <div className="w-3 h-3 rounded-full bg-amber-500" />}
                               {comp?.red && <div className="w-3 h-3 rounded-full bg-rose-500" />}
                               <CheckCircle2 className="text-emerald-500 ml-1" size={20} />
-                            </div>
+                            </motion.div>
                           ) : isLocked ? <Lock className="text-slate-400" size={28} /> : null}
                         </div>
                         <h4 className="text-lg md:text-2xl font-black text-slate-800 mb-1">{lt(mission.title, lang)}</h4>
                         <p className="text-indigo-600 text-[10px] font-bold mb-3 uppercase">{t.questionTypes[mission.type]}</p>
                         <LatexText text={interpolate(lt(mission.description, lang), mission.data ?? {})} className="text-slate-500 text-sm mb-8 line-clamp-3 block" />
                         <div className="flex gap-2">
-                          <button
+                          <motion.button
+                            {...(isLocked ? {} : { ...tapScale, ...hoverGlow })}
                             disabled={!!isLocked}
                             onClick={() => { playTap(); onPracticeStart(mission); }}
-                            className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-xs md:text-sm min-h-12 ${
-                              isLocked ? 'bg-slate-100 text-slate-400' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-200'
+                            className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 text-xs md:text-sm min-h-12 ${
+                              isLocked ? 'bg-slate-100 text-slate-400' : 'bg-emerald-600 text-white shadow-lg shadow-emerald-200'
                             }`}
                           >
                             <BookOpen size={16} />
                             {isLocked ? t.locked : t.practice}
-                          </button>
-                          <button
+                          </motion.button>
+                          <motion.button
+                            {...(isLocked ? {} : { ...tapScale, ...hoverGlow })}
                             disabled={!!isLocked}
                             onClick={() => { playTap(); onMissionStart(mission); }}
-                            className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 transition-all text-xs md:text-sm min-h-12 ${
-                              isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200'
+                            className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 text-xs md:text-sm min-h-12 ${
+                              isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
                             }`}
                           >
                             <Swords size={16} />
                             {isLocked ? t.locked : t.challenge}
-                          </button>
+                          </motion.button>
                         </div>
                         {isLocked && (
                           <p className="mt-2 text-[10px] text-rose-500 font-bold text-center">{t.lockedByOrder}</p>
                         )}
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
                   );
                 })}
-            </div>
+            </motion.div>
           </div>
         ))}
         </div>

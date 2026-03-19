@@ -1,6 +1,6 @@
 import { useState, useEffect, Component } from 'react';
 import 'katex/dist/katex.min.css';
-import { AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Languages, LogOut, XCircle } from 'lucide-react';
 
 import type { Language, Mission, GameState, DifficultyMode } from './types';
@@ -252,91 +252,104 @@ export default function App() {
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
           <AnimatePresence mode="wait">
-            {gameState === 'welcome' && (
-              <WelcomeScreen
-                lang={lang}
-                selectedCharId={selectedCharId}
-                onCharSelect={handleCharSelect}
-                onStart={() => setGameState('map')}
-                isLoggedIn={isLoggedIn}
-                onLogin={signIn}
-                onSignup={signUp}
-                onLogout={signOut}
-                onGuest={handleGuest}
-                onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
-              />
-            )}
+            <motion.div
+              key={
+                gameState === 'map'
+                  ? (profile && !profile.grade ? 'grade' : 'map')
+                  : gameState
+              }
+              initial={{ opacity: 0, x: 300 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -300 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="w-full"
+            >
+              {gameState === 'welcome' && (
+                <WelcomeScreen
+                  lang={lang}
+                  selectedCharId={selectedCharId}
+                  onCharSelect={handleCharSelect}
+                  onStart={() => setGameState('map')}
+                  isLoggedIn={isLoggedIn}
+                  onLogin={signIn}
+                  onSignup={signUp}
+                  onLogout={signOut}
+                  onGuest={handleGuest}
+                  onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
+                />
+              )}
 
-            {gameState === 'map' && profile && !profile.grade && (
-              <GradeSelectScreen
-                lang={lang}
-                onSelect={(g, cls) => updateProfile({ grade: g, ...(cls ? { class_name: cls, class_tags: [cls] } : {}) })}
-              />
-            )}
+              {gameState === 'map' && profile && !profile.grade && (
+                <GradeSelectScreen
+                  lang={lang}
+                  onSelect={(g, cls) => updateProfile({ grade: g, ...(cls ? { class_name: cls, class_tags: [cls] } : {}) })}
+                />
+              )}
 
-            {gameState === 'map' && profile && profile.grade && (
-              <MapScreen
-                lang={lang}
-                profile={profile}
-                missions={missions}
-                selectedChar={selectedChar}
-                onMissionStart={handleMissionStart}
-                onPracticeStart={handlePracticeStart}
-                onGradeChange={() => updateProfile({ grade: null })}
-                onCharChange={() => { setSelectedCharId(null); setGameState('welcome'); }}
-                onCreateRoom={createRoom}
-                onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
-              />
-            )}
+              {gameState === 'map' && profile && profile.grade && (
+                <MapScreen
+                  lang={lang}
+                  profile={profile}
+                  missions={missions}
+                  selectedChar={selectedChar}
+                  onMissionStart={handleMissionStart}
+                  onPracticeStart={handlePracticeStart}
+                  onGradeChange={() => updateProfile({ grade: null })}
+                  onCharChange={() => { setSelectedCharId(null); setGameState('welcome'); }}
+                  onCreateRoom={createRoom}
+                  onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
+                />
+              )}
 
-            {gameState === 'lobby' && activeRoom && user && (
-              <LobbyScreen
-                lang={lang}
-                room={activeRoom}
-                userId={user.id}
-                onReady={toggleReady}
-                onStart={startGame}
-                onLeave={() => { leaveRoom(); setGameState('map'); }}
-              />
-            )}
+              {gameState === 'lobby' && activeRoom && user && (
+                <LobbyScreen
+                  lang={lang}
+                  room={activeRoom}
+                  userId={user.id}
+                  onReady={toggleReady}
+                  onStart={startGame}
+                  onLeave={() => { leaveRoom(); setGameState('map'); }}
+                />
+              )}
+
+              {gameState === 'battle' && activeMission && selectedChar && (
+                <MathBattle
+                  mission={activeMission}
+                  character={selectedChar}
+                  onComplete={handleBattleComplete}
+                  onCancel={() => setGameState('map')}
+                  lang={lang}
+                  difficultyMode={selectedDifficulty}
+                  isMultiplayer={!!activeRoom}
+                  roomData={activeRoom}
+                  skillCard={selectedSkillCard}
+                />
+              )}
+
+              {gameState === 'practice' && activeMission && selectedChar && (
+                <PracticeScreen
+                  mission={activeMission}
+                  character={selectedChar}
+                  lang={lang}
+                  onComplete={() => {
+                    setGameState('map');
+                    setActiveMission(null);
+                  }}
+                  onCancel={() => {
+                    setGameState('map');
+                    setActiveMission(null);
+                  }}
+                />
+              )}
+
+              {gameState === 'dashboard' && (
+                <DashboardScreen
+                  lang={lang}
+                  onClose={() => setGameState(isLoggedIn ? 'map' : 'welcome')}
+                />
+              )}
+            </motion.div>
           </AnimatePresence>
-
-          {gameState === 'battle' && activeMission && selectedChar && (
-            <MathBattle
-              mission={activeMission}
-              character={selectedChar}
-              onComplete={handleBattleComplete}
-              onCancel={() => setGameState('map')}
-              lang={lang}
-              difficultyMode={selectedDifficulty}
-              isMultiplayer={!!activeRoom}
-              roomData={activeRoom}
-              skillCard={selectedSkillCard}
-            />
-          )}
-
-          {gameState === 'practice' && activeMission && selectedChar && (
-            <PracticeScreen
-              mission={activeMission}
-              character={selectedChar}
-              lang={lang}
-              onComplete={() => {
-                setGameState('map');
-                setActiveMission(null);
-              }}
-              onCancel={() => {
-                setGameState('map');
-                setActiveMission(null);
-              }}
-            />
-          )}
-
-          {gameState === 'dashboard' && (
-            <DashboardScreen
-              lang={lang}
-              onClose={() => setGameState(isLoggedIn ? 'map' : 'welcome')}
-            />
-          )}
         </div>
       </div>
     </ErrorBoundary>

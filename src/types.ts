@@ -59,7 +59,8 @@ export type QuestionType =
   | 'EXPAND'
   | 'FACTORISE'
   | 'INEQUALITY'
-  | 'STD_FORM';
+  | 'STD_FORM'
+  | 'SYMMETRY';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 

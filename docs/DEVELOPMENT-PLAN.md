@@ -2,7 +2,7 @@
 
 > **项目地址**：https://play.25maths.com
 > **仓库**：git25math/25maths-games-legends
-> **版本**：v5.0.0 | 最后更新：2026-03-19
+> **版本**：v6.0.0 | 最后更新：2026-03-20
 > **开发规范**：`docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）
 > **Bug 防范**：`docs/BUG-POSTMORTEM.md`（9 条规则 + 根因分析）
 > **Y8 计划**：`docs/Y8-DEVELOPMENT-PLAN.md`（完整接手方案）
@@ -667,6 +667,6 @@ Step 5: 最终结果 — y = mx + b
 | 2026-03-18 | v4.10.0 | 带分数↔假分数: +2关卡(692整箱拆零/690散装装箱)+MIXED_IMPROPER生成器 |
 | 2026-03-19 | **v5.0.0** | **三语支持**: 简体+繁体+英文, lt()自动转换+300字映射表+138条UI翻译+15组件更新 |
 | 2026-03-20 | **v5.1.0** | **Y7 金标准全面达标**: 15个生成器升级至≥6步(StatsRange/FdpConvert/Simplify各+2步, AreaRect/StatsMean/IntegerMul/Coordinates/AnglesTriangle/AnglesPoint/PerimeterRect/PercentageOf/EstimationRound/AreaTriangle/StatsMedian/StatsMode各+1步), 全部35个Y7动态生成器≥6步 |
-| — | **v6.0.0** | **Y8 完整课纲**: 参照Y7标准(金标准教程+知识链+交叉链接+SVG可视化) |
+| 2026-03-20 | **v6.0.0** | **Y8 Tier 2 扩展**: +8关卡(885-896) +1新题型(SYMMETRY) +3新生成器(SYMMETRY/SIMULTANEOUS_Y8/RATIO_Y8) + 概率生成器金标准升级(ProbSimple 3→7步, ProbInd 5→6步), 全部Y8动态生成器≥6步 |
 | — | v7.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |
 | — | v8.0.0 | Phase 5: 章节地图 + 视频三位一体 + 离线支持 |

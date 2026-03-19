@@ -4,6 +4,7 @@ import type { Language, Room } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import { CHARACTERS } from '../data/characters';
+import { buttonBase } from '../utils/animationPresets';
 
 export const LobbyScreen = ({
   lang,
@@ -57,21 +58,22 @@ export const LobbyScreen = ({
           ))}
         </div>
         <div className="flex gap-4">
-          <button onClick={onLeave} className="flex-1 py-5 bg-slate-100 text-slate-600 font-black rounded-2xl hover:bg-slate-200 transition-all">
+          <motion.button {...buttonBase} onClick={onLeave} className="flex-1 py-5 bg-slate-100 text-slate-600 font-black rounded-2xl hover:bg-slate-200 transition-colors">
             {t.leave}
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            {...buttonBase}
             onClick={onReady}
-            className={`flex-[2] py-5 font-black rounded-2xl transition-all ${
+            className={`flex-[2] py-5 font-black rounded-2xl transition-colors ${
               room.players[userId]?.isReady ? 'bg-emerald-500 text-white' : 'bg-indigo-600 text-white hover:bg-indigo-700'
             }`}
           >
             {t.ready}
-          </button>
+          </motion.button>
           {userId === room.hostId && (
-            <button onClick={onStart} className="flex-1 py-5 bg-yellow-400 text-slate-900 font-black rounded-2xl hover:bg-yellow-300 transition-all">
+            <motion.button {...buttonBase} onClick={onStart} className="flex-1 py-5 bg-yellow-400 text-slate-900 font-black rounded-2xl hover:bg-yellow-300 transition-colors">
               {t.startBattle}
-            </button>
+            </motion.button>
           )}
         </div>
       </div>

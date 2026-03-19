@@ -54,6 +54,7 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
       <motion.div
         initial={{ scale: 0.6, opacity: 0, rotateY: -30 }}
         animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+        exit={{ scale: 0.6, opacity: 0, rotateY: 30 }}
         transition={{ type: 'spring', duration: 0.6, bounce: 0.3 }}
         className="relative w-full max-w-[340px] overflow-hidden rounded-xl"
         style={{

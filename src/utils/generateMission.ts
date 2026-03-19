@@ -73,7 +73,10 @@ export type GeneratorType =
   | 'CIRCLE_Y8_RANDOM'
   | 'VOLUME_Y8_RANDOM'
   | 'PERCENTAGE_INTEREST_RANDOM'
-  | 'PARALLEL_ANGLES_RANDOM';
+  | 'PARALLEL_ANGLES_RANDOM'
+  | 'SYMMETRY_RANDOM'
+  | 'SIMULTANEOUS_Y8_RANDOM'
+  | 'RATIO_Y8_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -143,6 +146,9 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   VOLUME_Y8_RANDOM: generateVolumeY8Mission,
   PERCENTAGE_INTEREST_RANDOM: generatePercentageInterestMission,
   PARALLEL_ANGLES_RANDOM: generateParallelAnglesMission,
+  SYMMETRY_RANDOM: generateSymmetryMission,
+  SIMULTANEOUS_Y8_RANDOM: generateSimultaneousY8Mission,
+  RATIO_Y8_RANDOM: generateRatioY8Mission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -543,7 +549,9 @@ export function generateProbSimpleMission(template: Mission): Mission {
   const totalPools = { 1: [10, 12, 20], 2: [20, 30, 36, 40, 50, 52, 60, 80, 100], 3: [60, 80, 100, 200] };
   const targetPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8, 10, 12, 15], 3: [7, 11, 13, 17, 19] };
   const total = pickRandom(totalPools[tier]);
-  const target = pickRandom(targetPools[tier]);
+  let target = pickRandom(targetPools[tier]);
+  // Ensure target ≤ total
+  if (target > total) target = Math.min(...targetPools[tier].filter(t => t <= total));
   const narrator = '诸葛亮';
 
   const description: BilingualText = {
@@ -552,10 +560,57 @@ export function generateProbSimpleMission(template: Mission): Mission {
   };
 
   const p = target / total;
+  const pDisplay = Math.round(p * 10000) / 10000;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：概率 = 有利结果数 ÷ 总结果数`, en: `${narrator}: "Probability = favorable ÷ total"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：P = ${target} ÷ ${total}`, en: `${narrator}: "P = ${target} ÷ ${total}"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：P = ${Math.round(p * 10000) / 10000}！`, en: `${narrator}: "P = ${Math.round(p * 10000) / 10000}!"` }, highlightField: 'p' },
+    {
+      text: {
+        zh: `${narrator}：为什么需要概率？\n战场上充满不确定性——敌军动向、天气变化、伏兵位置。\n概率帮我们量化"可能性"，做出最优决策。`,
+        en: `${narrator}: "Why do we need probability?\nThe battlefield is full of uncertainty — enemy movements, weather, ambush positions.\nProbability helps us quantify 'likelihood' and make the best decisions."`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：概率是什么？\n概率 = 有利结果数 ÷ 总结果数\n$P = \\frac{\\text{有利结果}}{\\text{总结果}}$\n范围：$0 \\leq P \\leq 1$（$0$ = 不可能，$1$ = 一定发生）`,
+        en: `${narrator}: "What is probability?\nProbability = favourable outcomes ÷ total outcomes\n$P = \\frac{\\text{favourable}}{\\text{total}}$\nRange: $0 \\leq P \\leq 1$ ($0$ = impossible, $1$ = certain)"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：找总数\n总共有多少个可能的结果？\n总结果数 = $${total}$`,
+        en: `${narrator}: "Find the total\nHow many possible outcomes are there?\nTotal outcomes = $${total}$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：找有利数\n我们想要的结果有多少个？\n有利结果数 = $${target}$`,
+        en: `${narrator}: "Find the favourable count\nHow many outcomes do we want?\nFavourable outcomes = $${target}$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算概率\n$P = \\frac{${target}}{${total}} = ${pDisplay}$`,
+        en: `${narrator}: "Calculate the probability\n$P = \\frac{${target}}{${total}} = ${pDisplay}$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n概率 $P = ${pDisplay}$`,
+        en: `${narrator}: "Answer\nProbability $P = ${pDisplay}$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n$0 \\leq ${pDisplay} \\leq 1$? ✓\n有利数 $${target} \\leq$ 总数 $${total}$? ✓\n概率合理！`,
+        en: `${narrator}: "Verify\n$0 \\leq ${pDisplay} \\leq 1$? ✓\nFavourable $${target} \\leq$ total $${total}$? ✓\nProbability is valid!"`,
+      },
+      highlightField: 'p',
+    },
   ];
 
   return {
@@ -584,12 +639,15 @@ export function generateProbIndMission(template: Mission): Mission {
   };
 
   const ans = p1 * p2;
+  const ansDisplay = Math.round(ans * 100) / 100;
+  const minP = Math.min(p1, p2);
   const tutorialSteps = [
-    { text: { zh: `${narrator}：什么是概率?\n概率是一个 0 到 1 之间的数，表示事件发生的可能性。\n$0$ = 不可能，$1$ = 一定发生。`, en: `${narrator}: "What is probability?\nA number from 0 to 1 that tells us how likely something is.\n$0$ = impossible, $1$ = certain."` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：为什么需要独立事件概率？\n战场上经常需要多路出击——两支部队同时成功的概率是多少？\n只有算清每条路线的成功率以及组合概率，才能制定最优策略。`, en: `${narrator}: "Why do we need independent event probability?\nIn battle, we often attack on multiple fronts — what's the probability both succeed?\nOnly by calculating each route's success rate and their combined probability can we devise the best strategy."` }, highlightField: 'p' },
     { text: { zh: `${narrator}：什么是独立事件?\n两个事件互不影响，一个发生不会改变另一个的概率。\n例如：抛两次硬币，第一次不影响第二次。`, en: `${narrator}: "What are independent events?\nTwo events where one happening does not affect the other.\nExample: flipping a coin twice — the first flip does not affect the second."` }, highlightField: 'p' },
     { text: { zh: `${narrator}：已知条件：\n第一个事件的概率 $P_1 = ${p1}$\n第二个事件的概率 $P_2 = ${p2}$`, en: `${narrator}: "Given:\nFirst event probability $P_1 = ${p1}$\nSecond event probability $P_2 = ${p2}$"` }, highlightField: 'p' },
     { text: { zh: `${narrator}：独立事件的乘法法则：\n两个独立事件同时发生的概率 = 各自概率相乘\n$P(\\text{both}) = P_1 \\times P_2$`, en: `${narrator}: "Rule for independent events:\nMultiply the probabilities\n$P(\\text{both}) = P_1 \\times P_2$"` }, highlightField: 'p' },
-    { text: { zh: `${narrator}：计算：\n$P = ${p1} \\times ${p2} = ${Math.round(ans * 100) / 100}$\n答案是 $${Math.round(ans * 100) / 100}$!`, en: `${narrator}: "Calculate:\n$P = ${p1} \\times ${p2} = ${Math.round(ans * 100) / 100}$\nThe answer is $${Math.round(ans * 100) / 100}$!"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：计算：\n$P = ${p1} \\times ${p2} = ${ansDisplay}$\n答案是 $${ansDisplay}$!`, en: `${narrator}: "Calculate:\n$P = ${p1} \\times ${p2} = ${ansDisplay}$\nThe answer is $${ansDisplay}$!"` }, highlightField: 'p' },
+    { text: { zh: `${narrator}：验算：\n$P_1 \\times P_2 = ${ansDisplay} \\leq \\min(P_1, P_2) = ${minP}$? ✓\n两件事同时发生的概率不可能比其中任何一件更大！`, en: `${narrator}: "Verify:\n$P_1 \\times P_2 = ${ansDisplay} \\leq \\min(P_1, P_2) = ${minP}$? ✓\nThe probability of both events can never exceed either individual probability!"` }, highlightField: 'p' },
   ];
 
   return {
@@ -6042,6 +6100,324 @@ export function generateParallelAnglesMission(template: Mission): Mission {
     ...template,
     description,
     data: { givenAngle, angleType, answer, parallel: true, highlight: angleType === 'co-interior' ? 'cointerior' : angleType, total: angleType === 'co-interior' ? 180 : undefined, angle: givenAngle, generatorType: 'PARALLEL_ANGLES_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   SYMMETRY generator: reflection or 180° rotation
+   Modes: 'reflect_x' (reflect over x-axis), 'reflect_y' (reflect over y-axis), 'rotate_180' (rotate 180° about origin)
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSymmetryMission(template: Mission): Mission {
+  const tier = getTier();
+  const coordPools = { 1: [1, 2, 3, 4, 5], 2: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5], 3: [-8, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 8] };
+  const px = pickRandom(coordPools[tier]);
+  const py = pickRandom(coordPools[tier]);
+
+  const modes = tier === 1 ? ['reflect_x', 'reflect_y'] : ['reflect_x', 'reflect_y', 'rotate_180'];
+  const mode = pickRandom(modes);
+
+  let ansX: number, ansY: number;
+  let transformZh: string, transformEn: string;
+  let ruleZh: string, ruleEn: string;
+  let verifyZh: string, verifyEn: string;
+
+  if (mode === 'reflect_x') {
+    ansX = px; ansY = -py;
+    transformZh = '关于 $x$ 轴的对称';
+    transformEn = 'reflection in the $x$-axis';
+    ruleZh = `$x$ 不变，$y$ 取反：$(x, y) \\to (x, -y)$`;
+    ruleEn = `$x$ stays the same, $y$ changes sign: $(x, y) \\to (x, -y)$`;
+    verifyZh = `原点 $(${px}, ${py})$ 和映像 $(${ansX}, ${ansY})$ 到 $x$ 轴距离相等？$|${py}| = |${ansY}|$ ✓`;
+    verifyEn = `Original $(${px}, ${py})$ and image $(${ansX}, ${ansY})$ are equal distance from $x$-axis? $|${py}| = |${ansY}|$ ✓`;
+  } else if (mode === 'reflect_y') {
+    ansX = -px; ansY = py;
+    transformZh = '关于 $y$ 轴的对称';
+    transformEn = 'reflection in the $y$-axis';
+    ruleZh = `$y$ 不变，$x$ 取反：$(x, y) \\to (-x, y)$`;
+    ruleEn = `$y$ stays the same, $x$ changes sign: $(x, y) \\to (-x, y)$`;
+    verifyZh = `原点 $(${px}, ${py})$ 和映像 $(${ansX}, ${ansY})$ 到 $y$ 轴距离相等？$|${px}| = |${ansX}|$ ✓`;
+    verifyEn = `Original $(${px}, ${py})$ and image $(${ansX}, ${ansY})$ are equal distance from $y$-axis? $|${px}| = |${ansX}|$ ✓`;
+  } else {
+    ansX = -px; ansY = -py;
+    transformZh = '绕原点旋转 $180°$';
+    transformEn = 'rotation $180°$ about the origin';
+    ruleZh = `$x$ 和 $y$ 都取反：$(x, y) \\to (-x, -y)$`;
+    ruleEn = `Both $x$ and $y$ change sign: $(x, y) \\to (-x, -y)$`;
+    verifyZh = `中点 $= (\\frac{${px}+(${ansX})}{2}, \\frac{${py}+(${ansY})}{2}) = (0, 0)$ = 旋转中心 ✓`;
+    verifyEn = `Midpoint $= (\\frac{${px}+(${ansX})}{2}, \\frac{${py}+(${ansY})}{2}) = (0, 0)$ = centre of rotation ✓`;
+  }
+
+  const narrator = pickRandom(['诸葛亮', '周瑜']);
+  const description: BilingualText = {
+    zh: `点 $(${px}, ${py})$ 经过${transformZh}后的坐标`,
+    en: `Find the image of $(${px}, ${py})$ after ${transformEn}`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么需要对称？\n行军布阵讲究对称——左翼和右翼互相呼应，才能攻守兼备。\n数学中的对称变换帮助我们描述这种镜像关系。`,
+        en: `${narrator}: "Why do we need symmetry?\nBattle formations rely on symmetry — left and right wings mirror each other for balanced attack and defence.\nMathematical symmetry transformations describe these mirror relationships."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：${transformZh}的规则\n${ruleZh}`,
+        en: `${narrator}: "Rule for ${transformEn}\n${ruleEn}"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：原始坐标\n点 $A = (${px}, ${py})$`,
+        en: `${narrator}: "Original point\n$A = (${px}, ${py})$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：应用变换规则\n$x' = ${ansX}$`,
+        en: `${narrator}: "Apply the transformation rule\n$x' = ${ansX}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n映像坐标 $A' = (${ansX}, ${ansY})$`,
+        en: `${narrator}: "Answer\nImage coordinates $A' = (${ansX}, ${ansY})$"`,
+      },
+      highlightField: 'y',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n${verifyZh}`,
+        en: `${narrator}: "Verify\n${verifyEn}"`,
+      },
+      highlightField: 'y',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { px, py, mode, ansX, ansY, generatorType: 'SYMMETRY_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   SIMULTANEOUS_Y8 generator: substitution method (simpler than Y9 elimination)
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSimultaneousY8Mission(template: Mission): Mission {
+  const tier = getTier();
+  // Generate y = ax + b (first equation, already solved for y)
+  const aPools = { 1: [1, 2], 2: [1, 2, 3, -1], 3: [1, 2, 3, -1, -2, -3] };
+  const bPools = { 1: [1, 2, 3], 2: [-3, -2, -1, 1, 2, 3, 4, 5], 3: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5] };
+  const a = pickRandom(aPools[tier]);
+  const b = pickRandom(bPools[tier]);
+
+  // Second equation: cx + dy = e, with integer solution
+  const cPools = { 1: [1, 2], 2: [1, 2, 3], 3: [1, 2, 3, 4] };
+  const dPools = { 1: [1], 2: [1, 2], 3: [1, 2, 3] };
+  const c = pickRandom(cPools[tier]);
+  const d = pickRandom(dPools[tier]);
+
+  // Pick x from pool, compute y, compute e
+  const xPools = { 1: [1, 2, 3], 2: [-2, -1, 1, 2, 3, 4], 3: [-3, -2, -1, 1, 2, 3, 4, 5] };
+  const x = pickRandom(xPools[tier]);
+  const y = a * x + b;
+  const e = c * x + d * y;
+
+  const narrator = pickRandom(['诸葛亮', '周瑜']);
+
+  // Substitution intermediate: c*x + d*(a*x + b) = e → (c + d*a)*x + d*b = e → (c+da)*x = e - db
+  const combinedCoeff = c + d * a;
+  const constant = d * b;
+
+  // Avoid trivial or zero-coefficient cases
+  if (combinedCoeff === 0) return generateSimultaneousY8Mission(template);
+
+  const eq1Zh = `$y = ${a === 1 ? '' : a === -1 ? '-' : a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}$`;
+  const eq1En = eq1Zh;
+  const eq2Zh = `$${c}x + ${d}y = ${e}$`;
+  const eq2En = eq2Zh;
+
+  const description: BilingualText = {
+    zh: `用代入法解联立方程：${eq1Zh}，${eq2Zh}`,
+    en: `Solve by substitution: ${eq1En}, ${eq2En}`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么需要联立方程？\n两支军队需要同时到达会合点——每支军队有自己的行军路线（方程）。\n只有同时满足两个条件，才能找到会合点。`,
+        en: `${narrator}: "Why do we need simultaneous equations?\nTwo armies must arrive at the rendezvous at the same time — each has its own march route (equation).\nOnly by satisfying both conditions can we find the meeting point."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：方程组\n方程1：${eq1Zh}（已解出 $y$）\n方程2：${eq2Zh}`,
+        en: `${narrator}: "The system\nEquation 1: ${eq1En} ($y$ is already isolated)\nEquation 2: ${eq2En}"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：代入\n把方程1的 $y$ 代入方程2：\n$${c}x + ${d}(${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}) = ${e}$`,
+        en: `${narrator}: "Substitute\nReplace $y$ in Equation 2 with Equation 1:\n$${c}x + ${d}(${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}) = ${e}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：化简\n$${combinedCoeff}x ${constant >= 0 ? '+ ' + constant : '- ' + Math.abs(constant)} = ${e}$\n$${combinedCoeff}x = ${e - constant}$\n$x = ${x}$`,
+        en: `${narrator}: "Simplify\n$${combinedCoeff}x ${constant >= 0 ? '+ ' + constant : '- ' + Math.abs(constant)} = ${e}$\n$${combinedCoeff}x = ${e - constant}$\n$x = ${x}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：代回求 $y$\n$y = ${a} \\times ${x} ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} = ${y}$`,
+        en: `${narrator}: "Substitute back to find $y$\n$y = ${a} \\times ${x} ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} = ${y}$"`,
+      },
+      highlightField: 'y',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n$x = ${x}$，$y = ${y}$`,
+        en: `${narrator}: "Answer\n$x = ${x}$, $y = ${y}$"`,
+      },
+      highlightField: 'y',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n代入方程2：$${c} \\times ${x} + ${d} \\times ${y} = ${c * x} + ${d * y} = ${e}$ ✓`,
+        en: `${narrator}: "Verify\nSubstitute into Eq2: $${c} \\times ${x} + ${d} \\times ${y} = ${c * x} + ${d * y} = ${e}$ ✓"`,
+      },
+      highlightField: 'y',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { subEq1: [a, b], subEq2: [c, d, e], x, y, generatorType: 'SIMULTANEOUS_Y8_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   RATIO_Y8 generator: direct & inverse proportion (y=kx or y=k/x)
+   ══════════════════════════════════════════════════════════ */
+
+export function generateRatioY8Mission(template: Mission): Mission {
+  const tier = getTier();
+  const mode = pickRandom(['direct', 'inverse']) as 'direct' | 'inverse';
+
+  const kPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8, 10], 3: [2, 3, 4, 5, 6, 7, 8, 10, 12, 15] };
+  const k = pickRandom(kPools[tier]);
+
+  // Known pair
+  const x1Pools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8], 3: [2, 3, 4, 5, 6, 8, 10] };
+  const x1 = pickRandom(x1Pools[tier]);
+  const y1 = mode === 'direct' ? k * x1 : k / x1;
+
+  // Target: given x2, find y2
+  const x2Pools = { 1: [2, 3, 5], 2: [2, 3, 4, 5, 6, 8, 10], 3: [2, 3, 4, 5, 6, 8, 10, 12] };
+  let x2 = pickRandom(x2Pools[tier]);
+  while (x2 === x1) x2 = pickRandom(x2Pools[tier]);
+
+  const y2 = mode === 'direct' ? k * x2 : k / x2;
+
+  // Skip non-integer answers
+  if (!Number.isInteger(y1) || !Number.isInteger(y2)) return generateRatioY8Mission(template);
+
+  const narrator = pickRandom(['曹操', '刘备']);
+
+  const description: BilingualText = mode === 'direct'
+    ? { zh: `$y$ 与 $x$ 成正比。当 $x=${x1}$ 时 $y=${y1}$，求 $x=${x2}$ 时的 $y$。`, en: `$y$ is directly proportional to $x$. When $x=${x1}$, $y=${y1}$. Find $y$ when $x=${x2}$.` }
+    : { zh: `$y$ 与 $x$ 成反比。当 $x=${x1}$ 时 $y=${y1}$，求 $x=${x2}$ 时的 $y$。`, en: `$y$ is inversely proportional to $x$. When $x=${x1}$, $y=${y1}$. Find $y$ when $x=${x2}$.` };
+
+  const formulaZh = mode === 'direct' ? '$y = kx$' : '$y = \\frac{k}{x}$';
+  const formulaEn = formulaZh;
+  const conceptZh = mode === 'direct'
+    ? '正比例：$x$ 增大，$y$ 也增大，比值恒定。'
+    : '反比例：$x$ 增大，$y$ 反而减小，乘积恒定。';
+  const conceptEn = mode === 'direct'
+    ? 'Direct proportion: as $x$ increases, $y$ increases — the ratio stays constant.'
+    : 'Inverse proportion: as $x$ increases, $y$ decreases — the product stays constant.';
+
+  const findKZh = mode === 'direct'
+    ? `$k = \\frac{y}{x} = \\frac{${y1}}{${x1}} = ${k}$`
+    : `$k = y \\times x = ${y1} \\times ${x1} = ${k}$`;
+  const findKEn = findKZh;
+
+  const calcZh = mode === 'direct'
+    ? `$y = ${k} \\times ${x2} = ${y2}$`
+    : `$y = \\frac{${k}}{${x2}} = ${y2}$`;
+  const calcEn = calcZh;
+
+  const verifyZh = mode === 'direct'
+    ? `$\\frac{y_1}{x_1} = \\frac{${y1}}{${x1}} = ${k}$，$\\frac{y_2}{x_2} = \\frac{${y2}}{${x2}} = ${k}$ ✓ 比值相等！`
+    : `$y_1 \\times x_1 = ${y1} \\times ${x1} = ${k}$，$y_2 \\times x_2 = ${y2} \\times ${x2} = ${k}$ ✓ 乘积相等！`;
+  const verifyEn = mode === 'direct'
+    ? `$\\frac{y_1}{x_1} = \\frac{${y1}}{${x1}} = ${k}$, $\\frac{y_2}{x_2} = \\frac{${y2}}{${x2}} = ${k}$ ✓ Ratios are equal!`
+    : `$y_1 \\times x_1 = ${y1} \\times ${x1} = ${k}$, $y_2 \\times x_2 = ${y2} \\times ${x2} = ${k}$ ✓ Products are equal!`;
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么需要比例关系？\n治理天下，税收和人口成正比——人越多税越多。\n而粮草分配和军队数成反比——军队越多，每人分到越少。\n理解正反比例，才能精准治国。`,
+        en: `${narrator}: "Why do we need proportion?\nGoverning a realm: tax is directly proportional to population — more people, more tax.\nBut rations per soldier are inversely proportional — more soldiers, less each gets.\nUnderstanding proportion is key to good governance."`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：${conceptZh}\n公式：${formulaZh}`,
+        en: `${narrator}: "${conceptEn}\nFormula: ${formulaEn}"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：求常数 $k$\n已知 $x = ${x1}$，$y = ${y1}$\n${findKZh}`,
+        en: `${narrator}: "Find the constant $k$\nGiven $x = ${x1}$, $y = ${y1}$\n${findKEn}"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算\n当 $x = ${x2}$ 时：\n${calcZh}`,
+        en: `${narrator}: "Calculate\nWhen $x = ${x2}$:\n${calcEn}"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n$y = ${y2}$`,
+        en: `${narrator}: "Answer\n$y = ${y2}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n${verifyZh}`,
+        en: `${narrator}: "Verify\n${verifyEn}"`,
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { ...template.data, mode, k, x1, y1, x2, y2, answer: y2, generatorType: 'RATIO_Y8_RANDOM' },
     tutorialSteps,
   };
 }

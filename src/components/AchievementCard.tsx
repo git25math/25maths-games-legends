@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { motion } from 'motion/react';
 import { CharacterAvatar } from './CharacterAvatar';
 import { lt } from '../i18n/resolveText';
+import { AnimatedCounter } from './AnimatedCounter';
 
 type Props = {
   characterId: string;
@@ -71,6 +72,7 @@ export const AchievementCard = memo(function AchievementCard({
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
         transition={{ type: 'spring', duration: 0.5 }}
         className="relative w-full max-w-[360px] max-h-[640px] overflow-hidden rounded-lg"
         style={{
@@ -122,7 +124,7 @@ export const AchievementCard = memo(function AchievementCard({
               {t.merit}
             </span>
             <span className="mt-1 text-2xl font-black" style={{ color: '#b8860b' }}>
-              {score}
+              <AnimatedCounter value={score} />
             </span>
           </div>
 

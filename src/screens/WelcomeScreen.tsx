@@ -6,6 +6,7 @@ import { translations } from '../i18n/translations';
 import { CharacterCard } from '../components/CharacterCard';
 import { CHARACTERS } from '../data/characters';
 import { useAudio } from '../audio';
+import { tapScale, hoverGlow, INPUT_FOCUS_CLASS } from '../utils/animationPresets';
 
 export const WelcomeScreen = ({
   lang,
@@ -85,15 +86,16 @@ export const WelcomeScreen = ({
         </div>
 
         <div className="flex flex-col items-center gap-6">
-          <button
+          <motion.button
             disabled={!selectedCharId || !isLoggedIn}
             onClick={() => { playTap(); onStart(); }}
             className={`px-16 py-6 rounded-3xl text-3xl font-black transition-all shadow-2xl ${
-              selectedCharId && isLoggedIn ? 'bg-yellow-400 hover:bg-yellow-300 text-slate-900 scale-105' : 'bg-slate-800 text-slate-600 cursor-not-allowed'
+              selectedCharId && isLoggedIn ? 'bg-yellow-400 text-slate-900' : 'bg-slate-800 text-slate-600 cursor-not-allowed'
             }`}
+            {...(selectedCharId && isLoggedIn ? { ...tapScale, ...hoverGlow } : {})}
           >
             {t.startJourney}
-          </button>
+          </motion.button>
           {!isLoggedIn && selectedCharId && (
             <p className="text-amber-400/80 text-sm font-bold">{t.loginRequired}</p>
           )}
@@ -136,14 +138,14 @@ export const WelcomeScreen = ({
                 placeholder={t.emailPlaceholder}
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 outline-none focus:border-indigo-400"
+                className={`w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 ${INPUT_FOCUS_CLASS}`}
               />
               <input
                 type="password"
                 placeholder={t.passwordPlaceholder}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 outline-none focus:border-indigo-400"
+                className={`w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 ${INPUT_FOCUS_CLASS}`}
                 onKeyDown={e => e.key === 'Enter' && handleAuth()}
               />
               {authError && <p className="text-rose-400 text-xs font-bold">{authError}</p>}

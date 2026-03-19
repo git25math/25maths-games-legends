@@ -6,6 +6,7 @@ import { translations } from '../../i18n/translations';
 import { lt } from '../../i18n/resolveText';
 import { checkAnswer } from '../../utils/checkCorrectness';
 import { interpolate } from '../../utils/interpolate';
+import { tapScale, hoverGlow } from '../../utils/animationPresets';
 import { LatexText, MathView } from '../MathView';
 import { InputFields } from './InputFields';
 import { VisualData } from './VisualData';
@@ -522,14 +523,15 @@ export const MathBattle = ({
                 </button>
               </div>
             ) : (
-              <button
+              <motion.button
+                {...(wrongAnswerData ? {} : { ...tapScale, ...hoverGlow })}
                 onClick={handleSubmit}
                 disabled={!!wrongAnswerData}
-                className={`w-full py-4 md:py-6 text-[#f4e4bc] text-lg md:text-2xl font-black rounded-lg transition-all flex items-center justify-center gap-4 border-2 min-h-12 ${wrongAnswerData ? 'bg-slate-500 border-slate-600 cursor-not-allowed' : 'bg-[#8b0000] hover:bg-[#a50000] shadow-[0_4px_0_#5c0000] active:translate-y-1 active:shadow-none border-[#5c0000]'}`}
+                className={`w-full py-4 md:py-6 text-[#f4e4bc] text-lg md:text-2xl font-black rounded-lg transition-shadow flex items-center justify-center gap-4 border-2 min-h-12 ${wrongAnswerData ? 'bg-slate-500 border-slate-600 cursor-not-allowed' : 'bg-[#8b0000] shadow-[0_4px_0_#5c0000] border-[#5c0000]'}`}
               >
                 <Swords size={28} />
                 {t.attack}
-              </button>
+              </motion.button>
             )}
 
           </div>

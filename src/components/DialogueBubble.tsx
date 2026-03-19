@@ -3,9 +3,7 @@ import { motion } from 'motion/react';
 import { LatexText } from './MathView';
 
 /**
- * Dialogue bubble with LaTeX support.
- * No typewriter effect — renders immediately with LatexText
- * so $...$ formulas are always properly rendered by KaTeX.
+ * Dialogue bubble with LaTeX support and typewriter effect.
  */
 export const DialogueBubble = memo(function DialogueBubble({
   text,
@@ -16,6 +14,10 @@ export const DialogueBubble = memo(function DialogueBubble({
   speaker: string;
   onComplete?: () => void;
 }) {
+  // Split by KaTeX blocks to avoid typing out LaTeX code character by character
+  const tokens = text.split(/(\$[^$]+\$)/g);
+  let charCount = 0;
+
   return (
     <motion.div
       initial={{ scale: 0.8, opacity: 0 }}
@@ -25,16 +27,22 @@ export const DialogueBubble = memo(function DialogueBubble({
       style={{ borderColor: '#3d2b1f' }}
     >
       {/* Bubble tail pointing left */}
-      <div
-        className="absolute top-4 -left-2.5 w-0 h-0"
+      <motion.div
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: 1 }}
+        transition={{ delay: 0.2, duration: 0.2 }}
+        className="absolute top-4 -left-2.5 w-0 h-0 origin-right"
         style={{
           borderTop: '6px solid transparent',
           borderBottom: '6px solid transparent',
           borderRight: '10px solid #3d2b1f',
         }}
       />
-      <div
-        className="absolute top-4 -left-1.5 w-0 h-0"
+      <motion.div
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: 1 }}
+        transition={{ delay: 0.2, duration: 0.2 }}
+        className="absolute top-4 -left-1.5 w-0 h-0 origin-right"
         style={{
           borderTop: '5px solid transparent',
           borderBottom: '5px solid transparent',
@@ -49,7 +57,38 @@ export const DialogueBubble = memo(function DialogueBubble({
 
       {/* Text with LaTeX rendering */}
       <div className="text-sm leading-relaxed" style={{ color: '#3d2b1f' }}>
-        <LatexText text={text} />
+        {tokens.map((token, index) => {
+          if (token.startsWith('$') && token.endsWith('$')) {
+            const delay = charCount * 0.03;
+            charCount += 1;
+            return (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay, duration: 0 }}
+                className="inline-block"
+              >
+                <LatexText text={token} />
+              </motion.span>
+            );
+          } else {
+            return token.split('').map((char, i) => {
+              const delay = charCount * 0.03;
+              charCount += 1;
+              return (
+                <motion.span
+                  key={`${index}-${i}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay, duration: 0 }}
+                >
+                  {char}
+                </motion.span>
+              );
+            });
+          }
+        })}
       </div>
     </motion.div>
   );

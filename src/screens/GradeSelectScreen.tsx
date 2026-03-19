@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import type { Language } from '../types';
 import { translations } from '../i18n/translations';
+import { buttonBase, INPUT_FOCUS_CLASS } from '../utils/animationPresets';
 
 export const GradeSelectScreen = ({
   lang,
@@ -34,8 +35,9 @@ export const GradeSelectScreen = ({
       {/* Grade buttons */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
         {[7, 8, 9, 10, 11].map(g => (
-          <button
+          <motion.button
             key={g}
+            {...buttonBase}
             onClick={() => setSelectedGrade(g)}
             className={`p-8 border-2 rounded-3xl text-white transition-all group ${
               selectedGrade === g
@@ -45,7 +47,7 @@ export const GradeSelectScreen = ({
           >
             <span className="block text-4xl font-black mb-2 group-hover:scale-110 transition-transform">{g}</span>
             <span className="text-xs font-bold uppercase tracking-widest opacity-60">{t.year}</span>
-          </button>
+          </motion.button>
         ))}
       </div>
 
@@ -62,23 +64,25 @@ export const GradeSelectScreen = ({
             value={className}
             onChange={e => setClassName(e.target.value.toUpperCase())}
             placeholder={l.placeholder}
-            className="bg-white/10 border-2 border-white/20 rounded-xl px-6 py-3 text-center text-white text-xl font-bold w-48 placeholder:text-white/30 focus:border-indigo-400 focus:outline-none transition-colors"
+            className={`bg-white/10 border-2 border-white/20 rounded-xl px-6 py-3 text-center text-white text-xl font-bold w-48 placeholder:text-white/30 transition-colors ${INPUT_FOCUS_CLASS}`}
             autoFocus
             onKeyDown={e => e.key === 'Enter' && handleConfirm()}
           />
           <div className="flex gap-3">
-            <button
+            <motion.button
+              {...buttonBase}
               onClick={() => onSelect(selectedGrade)}
               className="px-6 py-2 bg-white/10 border border-white/20 text-white/60 font-bold rounded-xl text-sm hover:bg-white/20 transition-all"
             >
               {l.skip}
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              {...buttonBase}
               onClick={handleConfirm}
               className="px-8 py-2 bg-indigo-600 text-white font-bold rounded-xl text-sm hover:bg-indigo-500 transition-all"
             >
               {l.confirm}
-            </button>
+            </motion.button>
           </div>
         </motion.div>
       )}

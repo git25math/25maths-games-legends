@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { DialogueBubble } from '../DialogueBubble';
 import { LatexText } from '../MathView';
@@ -68,47 +68,61 @@ export function AnimatedTutorial({
   const hint = step.hint ? lt(step.hint, lang) : undefined;
 
   return (
-    <motion.div
-      key={currentStep}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="bg-indigo-600/10 border-2 border-indigo-500/30 p-4 rounded-xl"
-    >
-      {/* Top row: avatar + dialogue bubble */}
-      <div className="flex items-start gap-3">
-        <CharacterAvatar characterId={characterId} size={48} speaking />
-        <div className="flex-1 min-w-0">
-          <DialogueBubble text={dialogue} speaker={speaker} />
-          {/* Hint box */}
-          {hint && (
-            <div className="mt-2 px-3 py-1.5 rounded-lg bg-amber-100/80 border border-amber-300 text-xs text-amber-800 leading-relaxed overflow-hidden" style={{ wordBreak: 'break-word' }}>
-              <LatexText text={hint} />
-            </div>
-          )}
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={currentStep}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+        className="bg-indigo-600/10 border-2 border-indigo-500/30 p-4 rounded-xl"
+      >
+        {/* Top row: avatar + dialogue bubble */}
+        <div className="flex items-start gap-3">
+          <CharacterAvatar characterId={characterId} size={48} speaking />
+          <div className="flex-1 min-w-0">
+            <DialogueBubble text={dialogue} speaker={speaker} />
+            {/* Hint box */}
+            {hint && (
+              <motion.div 
+                animate={{ boxShadow: ['0 0 0px rgba(245,158,11,0)', '0 0 15px rgba(245,158,11,0.5)', '0 0 0px rgba(245,158,11,0)'] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+                className="mt-2 px-3 py-1.5 rounded-lg bg-amber-100/80 border border-amber-300 text-xs text-amber-800 leading-relaxed overflow-hidden" 
+                style={{ wordBreak: 'break-word' }}
+              >
+                <LatexText text={hint} />
+              </motion.div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Equation steps synced to tutorial step */}
-      {equationSteps && equationSteps.length > 0 && (
-        <motion.div
-          key={currentStep}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.15, duration: 0.3 }}
-          className="mt-4"
-        >
-          <EquationSteps
-            steps={equationSteps.map(s => ({
-              tex: s.tex,
-              annotation: s.annotation
-                ? (typeof s.annotation === 'string' ? s.annotation : lt(s.annotation, lang))
-                : undefined,
-            }))}
-            currentStep={currentStep}
-          />
-        </motion.div>
-      )}
-    </motion.div>
+        {/* Equation steps synced to tutorial step */}
+        {equationSteps && equationSteps.length > 0 && (
+          <motion.div
+            key={currentStep}
+            initial={{ opacity: 0 }}
+            animate={{ 
+              opacity: 1, 
+              boxShadow: ['0 0 0px rgba(99,102,241,0)', '0 0 20px rgba(99,102,241,0.3)', '0 0 0px rgba(99,102,241,0)'] 
+            }}
+            transition={{ 
+              opacity: { delay: 0.15, duration: 0.3 },
+              boxShadow: { repeat: Infinity, duration: 2, ease: "easeInOut" }
+            }}
+            className="mt-4 rounded-xl"
+          >
+            <EquationSteps
+              steps={equationSteps.map(s => ({
+                tex: s.tex,
+                annotation: s.annotation
+                  ? (typeof s.annotation === 'string' ? s.annotation : lt(s.annotation, lang))
+                  : undefined,
+              }))}
+              currentStep={currentStep}
+            />
+          </motion.div>
+        )}
+      </motion.div>
+    </AnimatePresence>
   );
 }

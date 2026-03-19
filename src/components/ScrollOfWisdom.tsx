@@ -11,6 +11,7 @@ export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; l
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
       className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md"
     >
       <div className="bg-amber-50 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border-8 border-amber-200">

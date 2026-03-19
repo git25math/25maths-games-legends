@@ -79,7 +79,8 @@ export const translations = {
       EXPAND: "展开括号",
       FACTORISE: "因式分解",
       INEQUALITY: "不等式",
-      STD_FORM: "标准式"
+      STD_FORM: "标准式",
+      SYMMETRY: "对称变换"
     },
     difficulty: {
       Easy: "简单",
@@ -241,7 +242,8 @@ export const translations = {
       EXPAND: "Expanding Brackets",
       FACTORISE: "Factorising",
       INEQUALITY: "Inequalities",
-      STD_FORM: "Standard Form"
+      STD_FORM: "Standard Form",
+      SYMMETRY: "Symmetry"
     },
     difficulty: {
       Easy: "Easy",
@@ -401,7 +403,8 @@ export const translations = {
       EXPAND: "展開括號",
       FACTORISE: "因式分解",
       INEQUALITY: "不等式",
-      STD_FORM: "標準式"
+      STD_FORM: "標準式",
+      SYMMETRY: "對稱變換"
     },
     difficulty: {
       Easy: "簡單",
