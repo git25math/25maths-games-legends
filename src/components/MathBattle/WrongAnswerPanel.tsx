@@ -4,6 +4,7 @@ import type { Language } from '../../types';
 import { MathView } from '../MathView';
 import { lt } from '../../i18n/resolveText';
 import { INPUT_FIELDS } from './inputConfig';
+import { staggerContainer, staggerItem } from '../../utils/animationPresets';
 
 const LABELS = {
   zh: {
@@ -75,12 +76,12 @@ export function WrongAnswerPanel({
       </div>
 
       {/* Answer comparison */}
-      <div className="space-y-2">
+      <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-2">
         {relevantFields.map(field => {
           const userVal = userInputs[field.id] || '—';
           const correctVal = expected[field.id] || '?';
           return (
-            <div key={field.id} className="grid grid-cols-2 gap-3">
+            <motion.div variants={staggerItem} key={field.id} className="grid grid-cols-2 gap-3">
               <div className="bg-red-100 rounded-lg p-3 text-center">
                 <div className="text-[10px] font-bold text-red-400 uppercase mb-1">{t.yourAnswer}</div>
                 <div className="text-lg font-black text-red-700">{userVal}</div>
@@ -89,10 +90,10 @@ export function WrongAnswerPanel({
                 <div className="text-[10px] font-bold text-emerald-500 uppercase mb-1">{t.correctAnswer}</div>
                 <div className="text-lg font-black text-emerald-700">{correctVal}</div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* Story consequence */}
       {storyText && (
@@ -119,13 +120,16 @@ export function WrongAnswerPanel({
       )}
 
       {/* Continue button */}
-      <button
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
         onClick={onContinue}
-        className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2"
+        className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         {continueLabel || t.continue}
         <ChevronRight size={18} />
-      </button>
+      </motion.button>
     </motion.div>
   );
 }

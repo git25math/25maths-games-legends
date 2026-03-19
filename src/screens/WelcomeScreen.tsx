@@ -6,7 +6,7 @@ import { translations } from '../i18n/translations';
 import { CharacterCard } from '../components/CharacterCard';
 import { CHARACTERS } from '../data/characters';
 import { useAudio } from '../audio';
-import { tapScale, hoverGlow, INPUT_FOCUS_CLASS } from '../utils/animationPresets';
+import { tapScale, hoverGlow, INPUT_FOCUS_CLASS, staggerContainer, staggerItem } from '../utils/animationPresets';
 
 export const WelcomeScreen = ({
   lang,
@@ -73,17 +73,29 @@ export const WelcomeScreen = ({
           <User className="text-indigo-400" />
           {t.chooseHero}
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
+        <motion.div 
+          variants={{
+            ...staggerContainer,
+            animate: {
+              ...staggerContainer.animate,
+              transition: { staggerChildren: 0.08 }
+            }
+          }}
+          initial="initial" 
+          animate="animate" 
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12"
+        >
           {CHARACTERS.map(char => (
-            <CharacterCard
-              key={char.id}
-              character={char}
-              isSelected={selectedCharId === char.id}
-              onSelect={() => onCharSelect(char.id)}
-              lang={lang}
-            />
+            <motion.div key={char.id} variants={staggerItem}>
+              <CharacterCard
+                character={char}
+                isSelected={selectedCharId === char.id}
+                onSelect={() => onCharSelect(char.id)}
+                lang={lang}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         <div className="flex flex-col items-center gap-6">
           <motion.button

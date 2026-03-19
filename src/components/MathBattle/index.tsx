@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Volume2, VolumeX, Flame } from 'lucide-react';
+import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Volume2, VolumeX, Flame, Heart } from 'lucide-react';
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
 import { lt } from '../../i18n/resolveText';
 import { checkAnswer } from '../../utils/checkCorrectness';
 import { interpolate } from '../../utils/interpolate';
-import { tapScale, hoverGlow } from '../../utils/animationPresets';
+import { tapScale, hoverGlow, buttonBase, VICTORY_TIMING } from '../../utils/animationPresets';
 import { LatexText, MathView } from '../MathView';
 import { InputFields } from './InputFields';
 import { VisualData } from './VisualData';
@@ -136,23 +136,33 @@ export const MathBattle = ({
 
   const triggerVictorySequence = () => {
     setShowResult('success');
-    setVictoryPhase(1); // Shockwave + 1st Confetti
-    setConfettiTheme('default');
-    setConfettiTrigger(prev => prev + 1);
+    
+    // Play audio right away
+    window.setTimeout(() => stopBGM(), VICTORY_TIMING.dimScreen - 50);
+    window.setTimeout(() => {
+      playVictory();
+      setConfettiTheme('default');
+      setConfettiTrigger(prev => prev + 1);
+    }, VICTORY_TIMING.dimScreen);
 
-    // Phase B: Badge drop (500ms)
-    achievementTimerRef.current = window.setTimeout(() => setVictoryPhase(2), 500);
+    // Phase A: Shockwave + 1st Confetti
+    achievementTimerRef.current = window.setTimeout(() => {
+      setVictoryPhase(1);
+    }, VICTORY_TIMING.shockwave);
 
-    // Phase C: Stats show (1500ms)
-    advanceTimerRef.current = window.setTimeout(() => setVictoryPhase(3), 1500);
+    // Phase B: Badge drop
+    advanceTimerRef.current = window.setTimeout(() => setVictoryPhase(2), VICTORY_TIMING.badgeDrop);
 
-    // Phase D: Skill Badge or skip to E (2500ms)
-    shakeTimerRef.current = window.setTimeout(() => {
+    // Phase C: Stats show
+    shakeTimerRef.current = window.setTimeout(() => setVictoryPhase(3), VICTORY_TIMING.statsReveal);
+
+    // Phase D: Skill Badge or skip to E
+    window.setTimeout(() => {
       if (mission.skillName) {
         setVictoryPhase(4);
         setConfettiTheme('goldWhite');
         setConfettiTrigger(prev => prev + 1);
-        window.setTimeout(() => setVictoryPhase(5), 2000); // return button
+        window.setTimeout(() => setVictoryPhase(5), VICTORY_TIMING.returnButton - VICTORY_TIMING.skillBadge); // relative to skillBadge
       } else if (isFirstClear) {
         setConfettiTheme('goldWhite');
         setConfettiTrigger(prev => prev + 1);
@@ -160,7 +170,7 @@ export const MathBattle = ({
       } else {
         setVictoryPhase(5);
       }
-    }, 2500);
+    }, VICTORY_TIMING.skillBadge);
   };
 
   const advanceToNextQuestion = () => {
@@ -171,7 +181,6 @@ export const MathBattle = ({
       const duration = Math.round((Date.now() - startTime) / 1000);
       setFinalDuration(duration);
       setFinalScore(totalScore);
-      stopBGM();
       triggerVictorySequence();
     } else {
       setCurrentQIdx(prev => prev + 1);
@@ -212,8 +221,6 @@ export const MathBattle = ({
           setFinalDuration(duration);
           setFinalScore(newTotal);
           advanceTimerRef.current = window.setTimeout(() => {
-            playVictory();
-            stopBGM();
             triggerVictorySequence();
           }, 600);
         } else {
@@ -226,14 +233,12 @@ export const MathBattle = ({
         }
       } else {
         // Single-question: victory replaces correct (avoid overlap)
-        playVictory();  // no playCorrect — victory subsumes it
         const duration = (Date.now() - startTime) / 1000;
         const speedBonus = Math.max(0, 100 - Math.floor(duration));
         const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
         const score = Math.round((mission.reward + speedBonus) * multiplier);
         setFinalScore(score);
         setFinalDuration(Math.round(duration));
-        stopBGM();
         triggerVictorySequence();
       }
     } else {
@@ -265,7 +270,6 @@ export const MathBattle = ({
           setFinalDuration(duration);
           setFinalScore(totalScore);
           advanceTimerRef.current = window.setTimeout(() => {
-            stopBGM();
             triggerVictorySequence();
           }, 300);
         } else {
@@ -582,7 +586,12 @@ export const MathBattle = ({
                 return (
                   <>
                     {/* Phase A: Background & Shockwave */}
-                    <div className="absolute inset-0 bg-parchment/90 transition-opacity duration-500" />
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 0.9 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 bg-black pointer-events-none"
+                    />
                     {victoryPhase >= 1 && (
                       <>
                         <motion.div
@@ -641,7 +650,12 @@ export const MathBattle = ({
 
                     {/* Phase C: Stats Bubbles */}
                     {victoryPhase >= 3 && (
-                      <div className="flex gap-4 mt-8 z-10">
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                        className="flex gap-4 mt-8 z-10"
+                      >
                         {[
                           { icon: <Trophy size={20} className="text-yellow-600" />, label: t.score, value: finalScore, color: 'bg-yellow-100 border-yellow-300' },
                           { icon: <span className="text-xl">⏱️</span>, label: t.time, value: `${finalDuration}s`, color: 'bg-blue-100 border-blue-300' },
@@ -651,7 +665,7 @@ export const MathBattle = ({
                             key={i}
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            transition={{ type: "spring", delay: i * 0.2 }}
+                            transition={{ type: "spring", delay: 0.4 + i * 0.2 }}
                             className={`flex flex-col items-center p-3 md:p-4 rounded-2xl border-2 shadow-lg w-24 md:w-32 ${stat.color}`}
                           >
                             <div className="mb-1">{stat.icon}</div>
@@ -665,23 +679,29 @@ export const MathBattle = ({
                             </div>
                           </motion.div>
                         ))}
-                      </div>
+                      </motion.div>
                     )}
 
                     {/* Phase D: Skill Badge */}
-                    {victoryPhase >= 4 && mission.skillName && (
-                      <div className="absolute inset-0 z-20">
-                        <SkillBadgeCard
-                          characterId={character.id}
-                          skillName={mission.skillName}
-                          skillSummary={mission.skillSummary || ''}
-                          formula={mission.secret.formula}
-                          missionTitle={mission.title}
-                          lang={lang}
-                          onClose={() => {}} // Disabled as it closes automatically or is unclickable here
-                        />
-                      </div>
-                    )}
+                    <AnimatePresence>
+                      {victoryPhase === 4 && mission.skillName && (
+                        <motion.div
+                          key="skill-badge"
+                          exit={{ scale: 0.5, opacity: 0, y: -50 }}
+                          className="absolute inset-0 z-20"
+                        >
+                          <SkillBadgeCard
+                            characterId={character.id}
+                            skillName={mission.skillName}
+                            skillSummary={mission.skillSummary || ''}
+                            formula={mission.secret.formula}
+                            missionTitle={mission.title}
+                            lang={lang}
+                            onClose={() => {}} // Disabled as it closes automatically or is unclickable here
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
 
                     {/* Phase E: Return Button */}
                     {victoryPhase >= 5 && (

@@ -47,3 +47,12 @@ export const DURATION = {
   entrance: 0.8,
 } as const;
 
+export const VICTORY_TIMING = {
+  dimScreen: 300,
+  shockwave: 600,
+  badgeDrop: 1400,
+  statsReveal: 2200,
+  skillBadge: 3000,
+  returnButton: 4000,
+} as const;
+
