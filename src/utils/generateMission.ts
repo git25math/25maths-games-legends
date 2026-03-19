@@ -885,75 +885,59 @@ export function generateLinearMission(template: Mission): Mission {
     : `${y1} - (${mTimesX1})`;
 
   const tutorialSteps = [
-    // Step 1: 斜率的定义
     {
       text: {
-        zh: `${narrator}：斜率(gradient)就是直线的陡峭程度：$m = \\frac{y\\text{的变化量}}{x\\text{的变化量}}$`,
-        en: `${narrator}: "Gradient measures the steepness of a line: $m = \\frac{\\text{change in } y}{\\text{change in } x}$"`,
-      },
-      hint: {
-        zh: '斜率就是"y 变了多少"除以"x 变了多少"',
-        en: 'Gradient is "how much y changes" divided by "how much x changes"',
+        zh: `${narrator}：为什么要学直线方程？\n你看，行军路线、粮草涨价、人口增长——很多东西的变化都是"匀速"的。\n直线方程 $y = mx + c$ 就是用来描述这种"匀速变化"的万能工具。\n学会了它，就能预测未来的趋势！`,
+        en: `${narrator}: "Why learn the equation of a line?\nThink about it — march routes, rising grain prices, population growth — many things change at a steady rate.\nThe line equation $y = mx + c$ is the universal tool for describing this 'steady change'.\nLearn it, and you can predict future trends!"`,
       },
       highlightField: 'm',
     },
-    // Step 2: 用数学公式来表示
     {
       text: {
-        zh: `${narrator}：用坐标点的公式表示：$m = \\frac{y_2 - y_1}{x_2 - x_1}$`,
-        en: `${narrator}: "Using coordinate formula: $m = \\frac{y_2 - y_1}{x_2 - x_1}$"`,
-      },
-      hint: {
-        zh: `$x_1$ 和 $y_1$ 就是第一个点 A 的横坐标和纵坐标\n所以 $x_1 = ${x1}$，$y_1 = ${y1}$\n同理 $x_2 = ${x2}$，$y_2 = ${y2}$ 来自第二个点 B`,
-        en: `$x_1$ and $y_1$ are the x and y of the first point A\nSo $x_1 = ${x1}$, $y_1 = ${y1}$\nLikewise $x_2 = ${x2}$, $y_2 = ${y2}$ come from point B`,
+        zh: `${narrator}：什么是斜率 $m$？\n你走上坡路——坡越陡，走一步横向距离上升越多，对吧？\n斜率就是衡量"陡不陡"的数：\n$$m = \\frac{\\text{上升了多少}}{\\text{往前走了多少}} = \\frac{y \\text{ 的变化}}{x \\text{ 的变化}}$$\n正数 = 上坡，负数 = 下坡，零 = 平路。`,
+        en: `${narrator}: "What is slope $m$?\nImagine walking uphill — the steeper it is, the more you rise for each step forward, right?\nSlope measures exactly this 'steepness':\n$$m = \\frac{\\text{rise}}{\\text{run}} = \\frac{\\text{change in } y}{\\text{change in } x}$$\nPositive = uphill, negative = downhill, zero = flat."`,
       },
       highlightField: 'm',
     },
-    // Step 3: 代入具体数值，算出 m
     {
       text: {
-        zh: `${narrator}：代入 A(${x1}, ${y1}) 和 B(${x2}, ${y2})：$m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$`,
-        en: `${narrator}: "Substitute A(${x1}, ${y1}) and B(${x2}, ${y2}): $m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$"`,
+        zh: `${narrator}：从题目找出两个点\n题目给了我们两个坐标：\n点 A = $(${x1}, ${y1})$ → $x_1 = ${x1}$，$y_1 = ${y1}$\n点 B = $(${x2}, ${y2})$ → $x_2 = ${x2}$，$y_2 = ${y2}$\n\n有了两个点，斜率就能算出来！`,
+        en: `${narrator}: "Find the two points from the problem\nWe're given two coordinates:\nPoint A = $(${x1}, ${y1})$ → $x_1 = ${x1}$, $y_1 = ${y1}$\nPoint B = $(${x2}, ${y2})$ → $x_2 = ${x2}$, $y_2 = ${y2}$\n\nWith two points, we can calculate the slope!"`,
       },
       highlightField: 'm',
     },
-    // Step 4: 把 m 代回直线方程
     {
       text: {
-        zh: `${narrator}：把 $m = ${m}$ 代回直线方程：$y = ${m}x + c$`,
-        en: `${narrator}: "Substitute $m = ${m}$ back into the equation: $y = ${m}x + c$"`,
+        zh: `${narrator}：算斜率，一步步来\n上升了多少？$y_2 - y_1 = ${y2} - (${y1}) = ${y2 - y1}$\n往前走了多少？$x_2 - x_1 = ${x2} - (${x1}) = ${x2 - x1}$\n\n斜率 $m = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$\n\n${m > 0 ? '正数，说明是上坡趋势！' : m < 0 ? '负数，说明是下坡趋势！' : '零，说明是平路！'}`,
+        en: `${narrator}: "Calculate slope step by step\nRise: $y_2 - y_1 = ${y2} - (${y1}) = ${y2 - y1}$\nRun: $x_2 - x_1 = ${x2} - (${x1}) = ${x2 - x1}$\n\nSlope $m = \\frac{${y2 - y1}}{${x2 - x1}} = ${m}$\n\n${m > 0 ? 'Positive — uphill trend!' : m < 0 ? 'Negative — downhill trend!' : 'Zero — flat!'}"`,
       },
-      hint: {
-        zh: '现在只剩 c 未知，用任意一个已知点就能求出 c',
-        en: 'Now only c is unknown — use any known point to find c',
+      highlightField: 'm',
+    },
+    {
+      text: {
+        zh: `${narrator}：什么是截距 $c$？\n$c$ 就是"起点"——当 $x = 0$ 的时候，$y$ 是多少。\n想象一条路从原点出发，$c$ 就是出发点的高度。\n\n现在 $m$ 已经知道了，只剩 $c$ 要找。用一个已知的点就能算出来！`,
+        en: `${narrator}: "What is intercept $c$?\n$c$ is the 'starting point' — when $x = 0$, what is $y$?\nImagine a road from the origin, $c$ is the starting height.\n\nWe already know $m$, only $c$ is left. We can find it using any known point!"`,
       },
       highlightField: 'c',
     },
-    // Step 5: 用第一个点代入求 c
     {
       text: {
-        zh: `${narrator}：用点 A(${x1}, ${y1}) 来求 $c$。这里 $x = ${x1}$，$y = ${y1}$，代入 $y = ${m}x + c$：$${y1} = ${m} \\times (${x1}) + c$`,
-        en: `${narrator}: "Use point A(${x1}, ${y1}) to find $c$. Here $x = ${x1}$, $y = ${y1}$, substitute into $y = ${m}x + c$: $${y1} = ${m} \\times (${x1}) + c$"`,
-      },
-      hint: {
-        zh: `也可以用点 B(${x2}, ${y2}) 来算，结果一样`,
-        en: `You could also use point B(${x2}, ${y2}) — the result is the same`,
+        zh: `${narrator}：把点 A 代入方程求 $c$\n$y = mx + c$ 里，把 $m = ${m}$，$x = ${x1}$，$y = ${y1}$ 代进去：\n$${y1} = ${m} \\times (${x1}) + c$\n$${y1} = ${mTimesX1} + c$\n$c = ${cExpr} = ${c}$\n\n$c$ 也找到了！你做得太好了！`,
+        en: `${narrator}: "Substitute point A into the equation to find $c$\nIn $y = mx + c$, put $m = ${m}$, $x = ${x1}$, $y = ${y1}$:\n$${y1} = ${m} \\times (${x1}) + c$\n$${y1} = ${mTimesX1} + c$\n$c = ${cExpr} = ${c}$\n\n$c$ found too! You're doing brilliantly!"`,
       },
       highlightField: 'c',
     },
-    // Step 6: 算出 c
     {
       text: {
-        zh: `${narrator}：解得：$c = ${cExpr} = ${c}$`,
-        en: `${narrator}: "Solving: $c = ${cExpr} = ${c}$"`,
+        zh: `${narrator}：答案\n$$y = ${m}x ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)}$$\n这就是这条直线的方程！有了它，给任何 $x$ 都能算出对应的 $y$。`,
+        en: `${narrator}: "Answer\n$$y = ${m}x ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)}$$\nThis is the equation of the line! With it, give any $x$ and you can find the matching $y$."`,
       },
       highlightField: 'c',
     },
-    // Step 7: 最终方程
     {
       text: {
-        zh: `${narrator}：所以直线方程为：$y = ${m}x ${c >= 0 ? '+' : ''} ${c}$`,
-        en: `${narrator}: "Therefore the equation of the line is: $y = ${m}x ${c >= 0 ? '+' : ''} ${c}$"`,
+        zh: `${narrator}：验算——用点 B 检查\n把 B$(${x2}, ${y2})$ 代回方程：\n$y = ${m} \\times (${x2}) ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)} = ${m * x2} ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)} = ${y2}$ ✓\n和点 B 的 $y$ 坐标一致！\n\n恭喜！直线方程学会了，未来的趋势你说了算！`,
+        en: `${narrator}: "Verify — check with point B\nSubstitute B$(${x2}, ${y2})$ back:\n$y = ${m} \\times (${x2}) ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)} = ${m * x2} ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)} = ${y2}$ ✓\nMatches point B's $y$ coordinate!\n\nCongratulations! You've mastered line equations — you're the one predicting the trends now!"`,
       },
       highlightField: 'c',
     },
@@ -5450,33 +5434,45 @@ export function generateExpandMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：为什么要学展开括号？`, en: `${narrator}: "Why learn to expand brackets?"` },
-      hint: { zh: `想象你是军需官，要给 ${a} 支小队分发装备\n每队需要 ${b} 把刀和 ${c} 张弓\n\n"展开"就是把每队的需求乘以队数\n——算出总共需要多少`, en: `Imagine you're a quartermaster supplying ${a} squads\nEach squad needs ${b} swords and ${c} bows\n\n"Expanding" means multiplying each item by the number of squads\n— to find the total needed` },
+      text: {
+        zh: `${narrator}：为什么要学展开括号？\n你想啊，你是军需官，要给 ${a} 支小队发装备。\n每队要 ${b} 把刀和 ${c} 张弓。\n那总共要多少？把每队的需求乘以队伍数——这就是"展开"！`,
+        en: `${narrator}: "Why learn to expand brackets?\nThink about it — you're the quartermaster, supplying ${a} squads.\nEach squad needs ${b} swords and ${c} bows.\nHow many in total? Multiply each squad's needs by the number of squads — that's 'expanding'!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：展开的规则——分配律`, en: `${narrator}: "The rule — distributive law"` },
-      hint: { zh: `外面的数要分别乘里面的每一项\n就像发东西，每人（每项）都要发到\n\n$${a}(${b}x + ${c})$\n= $${a} \\times ${b}x$ ＋ $${a} \\times ${c}$`, en: `The number outside multiplies EACH term inside\nLike handing out supplies — everyone gets some\n\n$${a}(${b}x + ${c})$\n= $${a} \\times ${b}x$ + $${a} \\times ${c}$` },
+      text: {
+        zh: `${narrator}：展开的规则其实特别简单\n就一句话：外面的数要跟里面的**每一项**都乘一遍。\n就像发东西——每种物资都得发到，不能漏掉任何一项！\n\n$${a}(${b}x + ${c})$ = $${a} \\times ${b}x$ ＋ $${a} \\times ${c}$`,
+        en: `${narrator}: "The rule for expanding is really simple\nOne sentence: the outside number multiplies EVERY term inside.\nLike handing out supplies — every type of gear gets distributed, nothing skipped!\n\n$${a}(${b}x + ${c})$ = $${a} \\times ${b}x$ + $${a} \\times ${c}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第一步——外面 × 第一项`, en: `${narrator}: "Step 1 — outside × first term"` },
-      hint: { zh: `$${a} \\times ${b}x = ${ab}x$\n\n${a} 支队 × 每队 ${b} 把刀 = ${ab} 把刀`, en: `$${a} \\times ${b}x = ${ab}x$\n\n${a} squads × ${b} swords each = ${ab} swords` },
+      text: {
+        zh: `${narrator}：先算第一项\n外面的 $${a}$ 乘以里面的第一项 $${b}x$：\n$${a} \\times ${b}x = ${ab}x$\n\n就是说：${a} 支队 × 每队 ${b} 把刀 = ${ab} 把刀！`,
+        en: `${narrator}: "Calculate the first term\nThe outside $${a}$ times the first inside term $${b}x$:\n$${a} \\times ${b}x = ${ab}x$\n\nThat means: ${a} squads × ${b} swords each = ${ab} swords!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——外面 × 第二项`, en: `${narrator}: "Step 2 — outside × second term"` },
-      hint: { zh: `$${a} \\times ${c} = ${ac}$\n\n${a} 支队 × 每队 ${c} 张弓 = ${ac} 张弓`, en: `$${a} \\times ${c} = ${ac}$\n\n${a} squads × ${c} bows each = ${ac} bows` },
+      text: {
+        zh: `${narrator}：再算第二项\n外面的 $${a}$ 乘以里面的第二项 $${c}$：\n$${a} \\times ${c} = ${ac}$\n\n${a} 支队 × 每队 ${c} 张弓 = ${ac} 张弓！\n两项都算完了，你真棒！`,
+        en: `${narrator}: "Now the second term\nThe outside $${a}$ times the second inside term $${c}$:\n$${a} \\times ${c} = ${ac}$\n\n${a} squads × ${c} bows each = ${ac} bows!\nBoth terms done — great job!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：合并——写出展开结果`, en: `${narrator}: "Combine — write the expanded form"` },
-      hint: { zh: `诸葛亮点头：总共需要 ${ab}x + ${ac} 件装备\n\n$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\n$x$ 的系数是 $${ab}$`, en: `Zhuge Liang nods: ${ab}x + ${ac} pieces of equipment in total\n\n$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\nThe coefficient of $x$ is $${ab}$` },
+      text: {
+        zh: `${narrator}：把两项拼起来就是答案\n$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\n题目问 $x$ 的系数是多少？就是 $x$ 前面那个数：$${ab}$\n\n总共 ${ab} 把刀和 ${ac} 张弓，装备齐全！`,
+        en: `${narrator}: "Put both terms together for the answer\n$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\nThe question asks for the coefficient of $x$ — that's the number in front: $${ab}$\n\n${ab} swords and ${ac} bows — fully equipped!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——代入 $x=1$ 检查`, en: `${narrator}: "Verify — substitute $x=1$"` },
-      hint: { zh: `诸葛亮再验一遍——军需不能出错！\n\n左边：$${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\n右边：$${ab} \\times 1 + ${ac} = ${ab + ac}$\n\n$${a * (b + c)} = ${ab + ac}$ ✓ 两边相等！`, en: `Zhuge Liang double-checks — supplies must be exact!\n\nLeft: $${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\nRight: $${ab} \\times 1 + ${ac} = ${ab + ac}$\n\n$${a * (b + c)} = ${ab + ac}$ ✓ Both sides equal!` },
+      text: {
+        zh: `${narrator}：验算——代个数检查一下\n让 $x = 1$，看两边是不是一样：\n左边：$${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\n右边：$${ab} \\times 1 + ${ac} = ${ab + ac}$\n$${a * (b + c)} = ${ab + ac}$ ✓ 一模一样！\n\n军需发放零误差，完美！`,
+        en: `${narrator}: "Verify — plug in a number to check\nLet $x = 1$, see if both sides match:\nLeft: $${a}(${b} \\times 1 + ${c}) = ${a} \\times ${b + c} = ${a * (b + c)}$\nRight: $${ab} \\times 1 + ${ac} = ${ab + ac}$\n$${a * (b + c)} = ${ab + ac}$ ✓ Exact match!\n\nZero errors in supply distribution — perfect!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -5518,33 +5514,45 @@ export function generateFactoriseMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：因式分解是展开的反操作`, en: `${narrator}: "Factorising is the reverse of expanding"` },
-      hint: { zh: `展开：$${factor}(${p}x + ${q}) = ${a}x + ${b}$\n因式分解：$${a}x + ${b} = ?(... + ...)$\n\n就像把散装物资重新打包——找出每项的公因子`, en: `Expanding: $${factor}(${p}x + ${q}) = ${a}x + ${b}$\nFactorising: $${a}x + ${b} = ?(...+...)$\n\nLike re-packing supplies — find what's common to each term` },
+      text: {
+        zh: `${narrator}：因式分解是什么？其实就是"展开"的反操作\n展开是拆包裹：$${factor}(${p}x + ${q}) = ${a}x + ${b}$\n因式分解是重新打包：$${a}x + ${b} = ?(... + ...)$\n\n想象桌上散着 ${a} 把刀和 ${b} 张弓，你要把它们按"每队一份"重新打包。\n第一件事：找出每种东西的"公共份数"——也就是最大公因数！`,
+        en: `${narrator}: "What is factorising? It's just the REVERSE of expanding!\nExpanding is unpacking: $${factor}(${p}x + ${q}) = ${a}x + ${b}$\nFactorising is re-packing: $${a}x + ${b} = ?(...+...)$\n\nImagine ${a} swords and ${b} bows scattered on the table — you need to re-pack them into squad bundles.\nFirst job: find how many squads they can split into equally — the highest common factor!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第一步——找 ${a} 和 ${b} 的最大公因数(HCF)`, en: `${narrator}: "Step 1 — find the HCF of ${a} and ${b}"` },
-      hint: { zh: `$${a}$ 的因数：${getFactorsStrLocal(a)}\n$${b}$ 的因数：${getFactorsStrLocal(b)}\n\n最大公因数 = $${factor}$`, en: `Factors of $${a}$: ${getFactorsStrLocal(a)}\nFactors of $${b}$: ${getFactorsStrLocal(b)}\n\nHCF = $${factor}$` },
+      text: {
+        zh: `${narrator}：找 $${a}$ 和 $${b}$ 的最大公因数\n$${a}$ 能被哪些数整除？${getFactorsStrLocal(a)}\n$${b}$ 能被哪些数整除？${getFactorsStrLocal(b)}\n\n两边都有的最大的数是几？是 $${factor}$！\n这就是它们的最大公因数。`,
+        en: `${narrator}: "Find the HCF of $${a}$ and $${b}$\nWhat divides $${a}$ evenly? ${getFactorsStrLocal(a)}\nWhat divides $${b}$ evenly? ${getFactorsStrLocal(b)}\n\nThe biggest number in BOTH lists? It's $${factor}$!\nThat's their highest common factor."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——每项除以 HCF`, en: `${narrator}: "Step 2 — divide each term by HCF"` },
-      hint: { zh: `就像清点物资——每种除以公因子\n\n$${a}x \\div ${factor} = ${p}x$\n$${b} \\div ${factor} = ${q}$`, en: `Like sorting supplies — divide each by the common factor\n\n$${a}x \\div ${factor} = ${p}x$\n$${b} \\div ${factor} = ${q}$` },
+      text: {
+        zh: `${narrator}：用最大公因数去除每一项\n$${a}x \\div ${factor} = ${p}x$（${a} 把刀分成 ${factor} 份，每份 ${p} 把）\n$${b} \\div ${factor} = ${q}$（${b} 张弓分成 ${factor} 份，每份 ${q} 张）\n\n看，分得刚刚好，没有剩余！`,
+        en: `${narrator}: "Divide each term by the HCF\n$${a}x \\div ${factor} = ${p}x$ (${a} swords into ${factor} packs = ${p} each)\n$${b} \\div ${factor} = ${q}$ (${b} bows into ${factor} packs = ${q} each)\n\nSee — divides perfectly, nothing left over!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第三步——组合成因式形式`, en: `${narrator}: "Step 3 — write in factored form"` },
-      hint: { zh: `归纳完毕——军令变简洁了\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nHCF 放外面，商放括号里`, en: `Summary complete — the military order is now concise\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nHCF goes outside, quotients go inside brackets` },
+      text: {
+        zh: `${narrator}：拼起来就行了\n公因数放外面，除完的结果放括号里：\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\n意思就是：${factor} 个包裹，每个包裹里 ${p} 把刀和 ${q} 张弓。`,
+        en: `${narrator}: "Put it together\nHCF goes outside, the quotients go inside brackets:\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nMeaning: ${factor} packs, each containing ${p} swords and ${q} bows."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：答案——最大公因数 = ${factor}`, en: `${narrator}: "Answer — HCF = ${factor}"` },
-      hint: { zh: `诸葛亮：公因子就是每项的"共同点"\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\n最大公因数（提出来的公因子）= $${factor}$`, en: `Zhuge Liang: the common factor is what every term shares\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nThe common factor (factored out) = $${factor}$` },
+      text: {
+        zh: `${narrator}：答案\n提出来的公因数 = $${factor}$\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n做得好！因式分解就是"打包"，你学会了！`,
+        en: `${narrator}: "Answer\nThe common factor = $${factor}$\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\nWell done — factorising is just 're-packing', and you've got it!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——展开回去检查`, en: `${narrator}: "Verify — expand back to check"` },
-      hint: { zh: `展开回去——军需清点必须复核！\n\n$${factor}(${p}x + ${q})$\n= $${factor} \\times ${p}x + ${factor} \\times ${q}$\n= $${a}x + ${b}$ ✓`, en: `Expand it back — supply counts must be double-checked!\n\n$${factor}(${p}x + ${q})$\n= $${factor} \\times ${p}x + ${factor} \\times ${q}$\n= $${a}x + ${b}$ ✓` },
+      text: {
+        zh: `${narrator}：验算——拆开检查\n把包裹拆开看看对不对：\n$${factor} \\times ${p}x = ${a}x$ ✓\n$${factor} \\times ${q} = ${b}$ ✓\n\n$${factor}(${p}x + ${q}) = ${a}x + ${b}$ ✓ 完全一致！\n军需打包零失误！`,
+        en: `${narrator}: "Verify — unpack and check\nOpen the packs to see if they're right:\n$${factor} \\times ${p}x = ${a}x$ ✓\n$${factor} \\times ${q} = ${b}$ ✓\n\n$${factor}(${p}x + ${q}) = ${a}x + ${b}$ ✓ Perfect match!\nZero packing errors!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -5578,41 +5586,52 @@ export function generateInequalityMission(template: Mission): Mission {
     en: `Solve $${a}x + ${b} ${op} ${c}$. $x ${op}$ ?`,
   };
 
+  const opWordZh = op === '<' ? '小于' : '大于';
+  const opWordEn = op === '<' ? 'less than' : 'greater than';
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：不等式和方程有什么不同？`, en: `${narrator}: "How is an inequality different from an equation?"` },
-      hint: { zh: `方程：$3x + 1 = 7$（等号，只有一个答案）\n不等式：$3x + 1 < 7$（不等号，有一个范围）\n\n不等号就像城门限高——不是刚好那个数\n而是"不能超过"或"必须超过"`, en: `Equation: $3x + 1 = 7$ (equals sign, one answer)\nInequality: $3x + 1 < 7$ (inequality sign, a range)\n\nLike a height limit at a gate — not exactly that number\nbut "must not exceed" or "must exceed"` },
+      text: {
+        zh: `${narrator}：不等式和方程有什么不一样？\n方程用的是"$=$"（等号），答案只有一个数。\n不等式用的是"$${op}$"（${opWordZh}号），答案是一个**范围**。\n\n你可以想象城门有个限高杆——不是说刚好那个高度才能过，\n而是"${op === '<' ? '矮于这个高度的都能过' : '高于这个高度的才能过'}"。`,
+        en: `${narrator}: "How is an inequality different from an equation?\nAn equation uses '$=$' (equals) — there's exactly one answer.\nAn inequality uses '$${op}$' (${opWordEn}) — the answer is a RANGE.\n\nImagine a height barrier at the gate — it's not about being exactly that height,\nit's about '${op === '<' ? 'anything shorter can pass' : 'only taller ones can pass'}'."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：解法和方程一样——两边做相同运算`, en: `${narrator}: "Solve it like an equation — same operation both sides"` },
-      hint: { zh: `$${a}x + ${b} ${op} ${c}$\n\n规则：不等号两边加/减/乘/除同一个正数，方向不变\n（注意：乘除负数时方向要反！但这次不需要）`, en: `$${a}x + ${b} ${op} ${c}$\n\nRule: add/subtract/multiply/divide both sides by the same positive number — direction stays\n(Note: multiplying by negative flips direction, but not needed here)` },
+      text: {
+        zh: `${narrator}：好消息！解法跟方程**一模一样**\n$${a}x + ${b} ${op} ${c}$\n\n两边加减乘除同一个正数，不等号方向不变。\n（只有乘除负数才要翻方向，但这题不需要，放心！）\n跟解方程一样，把 $x$ 单独留在一边就行！`,
+        en: `${narrator}: "Good news! The solving method is EXACTLY the same as equations\n$${a}x + ${b} ${op} ${c}$\n\nAdd, subtract, multiply, or divide both sides by the same positive number — the sign stays.\n(Only multiplying by a negative flips it, but we don't need that here — no worries!)\nJust get $x$ alone on one side!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第一步——两边减 ${b}`, en: `${narrator}: "Step 1 — subtract ${b} from both sides"` },
-      hint: { zh: `先把城门的固定障碍搬走——\n\n$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$`, en: `First, clear the fixed obstacles from the gate——\n\n$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$` },
+      text: {
+        zh: `${narrator}：先把多余的数搬走——两边减 $${b}$\n$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$\n\n看，$+${b}$ 和 $-${b}$ 互相抵消了，$x$ 这边更干净了！`,
+        en: `${narrator}: "First, move the extra number — subtract $${b}$ from both sides\n$${a}x + ${b} - ${b} ${op} ${c} - ${b}$\n$${a}x ${op} ${c - b}$\n\nSee, $+${b}$ and $-${b}$ cancel out — $x$'s side is cleaner now!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——两边除以 ${a}`, en: `${narrator}: "Step 2 — divide both sides by ${a}"` },
-      hint: { zh: `缩小范围——看到底能让多少人通过\n\n$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n（${a} 是正数，不等号方向不变）`, en: `Narrow it down — how many can pass through?\n\n$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n(${a} is positive, so direction stays the same)` },
+      text: {
+        zh: `${narrator}：再除以 $${a}$，把 $x$ 完全解放出来\n$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n（$${a}$ 是正数，不等号方向不变 ✓）\n$x$ 找到了！`,
+        en: `${narrator}: "Now divide by $${a}$ to free $x$ completely\n$\\frac{${a}x}{${a}} ${op} \\frac{${c - b}}{${a}}$\n$x ${op} ${answerVal}$\n\n($${a}$ is positive, so the sign doesn't flip ✓)\n$x$ found!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：答案——临界值 = ${answerVal}`, en: `${narrator}: "Answer — critical value = ${answerVal}"` },
-      hint: { zh: `诸葛亮：城门最多容许 ${answerVal} 人同时通过\n\n$x ${op} ${answerVal}$\n\n临界值就是不等号旁边的那个数`, en: `Zhuge Liang: the gate allows at most ${answerVal} through at once\n\n$x ${op} ${answerVal}$\n\nThe critical value is the number next to the inequality sign` },
+      text: {
+        zh: `${narrator}：答案\n$x ${op} ${answerVal}$\n\n这个 $${answerVal}$ 就是分界线——${op === '<' ? '$x$ 只要比 ' + answerVal + ' 小就满足条件' : '$x$ 只要比 ' + answerVal + ' 大就满足条件'}。\n你做得很好！`,
+        en: `${narrator}: "Answer\n$x ${op} ${answerVal}$\n\nThis $${answerVal}$ is the boundary — ${op === '<' ? '$x$ just needs to be less than ' + answerVal + ' to satisfy the condition' : '$x$ just needs to be greater than ' + answerVal + ' to satisfy the condition'}.\nGreat work!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——代入检查`, en: `${narrator}: "Verify — substitute to check"` },
-      hint: {
+      text: {
         zh: op === '<'
-          ? `验证——分别试一个通过的和一个不通过的\n\n试 $x = ${answerVal - 1}$：$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} < ${c}$ ✓ 成立！\n\n试 $x = ${answerVal + 1}$：$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} < ${c}$ ✗ 不成立！`
-          : `验证——分别试一个通过的和一个不通过的\n\n试 $x = ${answerVal + 1}$：$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} > ${c}$ ✓ 成立！\n\n试 $x = ${answerVal - 1}$：$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} > ${c}$ ✗ 不成立！`,
+          ? `${narrator}：验算——试两个数看看\n试 $x = ${answerVal - 1}$（应该满足）：\n$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$，$${a * (answerVal - 1) + b} < ${c}$ ✓ 对的！\n\n试 $x = ${answerVal + 1}$（应该不满足）：\n$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$，$${a * (answerVal + 1) + b} < ${c}$ ✗ 果然不行！\n\n分界线验证通过，完美！`
+          : `${narrator}：验算——试两个数看看\n试 $x = ${answerVal + 1}$（应该满足）：\n$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$，$${a * (answerVal + 1) + b} > ${c}$ ✓ 对的！\n\n试 $x = ${answerVal - 1}$（应该不满足）：\n$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$，$${a * (answerVal - 1) + b} > ${c}$ ✗ 果然不行！\n\n分界线验证通过，完美！`,
         en: op === '<'
-          ? `Verify — test one that passes and one that doesn't\n\nTry $x = ${answerVal - 1}$: $${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} < ${c}$ ✓ True!\n\nTry $x = ${answerVal + 1}$: $${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} < ${c}$ ✗ False!`
-          : `Verify — test one that passes and one that doesn't\n\nTry $x = ${answerVal + 1}$: $${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$\n$${a * (answerVal + 1) + b} > ${c}$ ✓ True!\n\nTry $x = ${answerVal - 1}$: $${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$\n$${a * (answerVal - 1) + b} > ${c}$ ✗ False!`,
+          ? `${narrator}: "Verify — try two numbers\nTry $x = ${answerVal - 1}$ (should work):\n$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$, $${a * (answerVal - 1) + b} < ${c}$ ✓ Correct!\n\nTry $x = ${answerVal + 1}$ (shouldn't work):\n$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$, $${a * (answerVal + 1) + b} < ${c}$ ✗ Indeed not!\n\nBoundary verified — perfect!"`
+          : `${narrator}: "Verify — try two numbers\nTry $x = ${answerVal + 1}$ (should work):\n$${a} \\times ${answerVal + 1} + ${b} = ${a * (answerVal + 1) + b}$, $${a * (answerVal + 1) + b} > ${c}$ ✓ Correct!\n\nTry $x = ${answerVal - 1}$ (shouldn't work):\n$${a} \\times ${answerVal - 1} + ${b} = ${a * (answerVal - 1) + b}$, $${a * (answerVal - 1) + b} > ${c}$ ✗ Indeed not!\n\nBoundary verified — perfect!"`,
       },
       highlightField: 'ans',
     },
