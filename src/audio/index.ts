@@ -140,12 +140,12 @@ export function useAudio() {
   // --- BGM ---
   const playBGMBattle = useCallback(() => {
     if (!guard()) return;
-    engine.playBGM(bgmBattle);
+    engine.startBGM(bgmBattle);
   }, []);
 
   const playBGMMap = useCallback(() => {
     if (!guard()) return;
-    engine.playBGM(bgmMap);
+    engine.startBGM(bgmMap);
   }, []);
 
   const stopBGM = useCallback(() => {
