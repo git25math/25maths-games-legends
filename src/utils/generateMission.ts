@@ -4522,33 +4522,45 @@ export function generateAreaTriangleMission(template: Mission): Mission {
   const rectArea = base * height;
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：裁制三角军旗——先搞懂"底"和"高"`, en: `${narrator}: "Making a triangular banner — first understand 'base' and 'height'"` },
-      hint: { zh: `底（base）= 三角形最下面的那条边\n就是旗帜摊平后放在桌面上的那条边\n\n高（height）= 从底边到对面顶点的垂直距离\n就是旗帜从底部到尖端的"直上直下"距离\n\n注意：高一定是垂直的！不是斜边！`, en: `Base = the bottom edge of the triangle\nThe side resting on the table when you lay the banner flat\n\nHeight = the perpendicular distance from base to opposite corner\nThe "straight up" distance from bottom to tip\n\nNote: Height is always vertical! Not the slanted side!` },
+      text: {
+        zh: `${narrator}：为什么要学三角形面积？\n裁制三角军旗——先搞懂"底"和"高"。\n\n底（base）= 三角形最下面的边。\n高（height）= 从底边到对面顶点的**垂直**距离——不是斜边！\n\n底 = $${base}$，高 = $${height}$。`,
+        en: `${narrator}: "Why learn triangle area?\nMaking a triangular banner — first understand 'base' and 'height'.\n\nBase = the bottom edge of the triangle.\nHeight = the PERPENDICULAR distance from base to opposite corner — not the slanted side!\n\nBase = $${base}$, Height = $${height}$."`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：为什么三角形面积要除以 2？`, en: `${narrator}: "Why do we divide by 2 for triangle area?"` },
-      hint: { zh: `想象做两面一模一样的三角旗\n把第二面翻转过来，和第一面拼在一起\n\n拼出来的形状是——长方形！\n长方形面积 = $${base} \\times ${height} = ${rectArea}$\n\n一面三角旗 = 长方形的一半\n所以三角形面积 = $${rectArea} \\div 2 = ${answer}$`, en: `Imagine making two identical triangular banners\nFlip one over and join them together\n\nThe combined shape is — a rectangle!\nRectangle area = $${base} \\times ${height} = ${rectArea}$\n\nOne triangle = half the rectangle\nSo triangle area = $${rectArea} \\div 2 = ${answer}$` },
+      text: {
+        zh: `${narrator}：为什么三角形面积要除以 2？\n想象做两面一模一样的三角旗，把第二面翻转拼上——变成一个长方形！\n\n长方形面积 = $${base} \\times ${height} = ${rectArea}$\n三角旗 = 长方形的一半 → 面积 = $${rectArea} \\div 2$！`,
+        en: `${narrator}: "Why divide by 2 for triangle area?\nImagine two identical triangular banners — flip one and join them. You get a rectangle!\n\nRectangle area = $${base} \\times ${height} = ${rectArea}$\nTriangle = half the rectangle → area = $${rectArea} \\div 2$!"`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：第一步——底 × 高`, en: `${narrator}: "Step 1 — base × height"` },
-      hint: { zh: `底 = $${base}$\n高 = $${height}$\n\n$${base} \\times ${height} = ${rectArea}$\n\n（这是完整长方形的面积）`, en: `Base = $${base}$\nHeight = $${height}$\n\n$${base} \\times ${height} = ${rectArea}$\n\n(This is the full rectangle area)` },
+      text: {
+        zh: `${narrator}：第一步——底 × 高\n$${base} \\times ${height} = ${rectArea}$\n\n这是"完整长方形"的面积——三角形只要一半。`,
+        en: `${narrator}: "Step 1 — base × height\n$${base} \\times ${height} = ${rectArea}$\n\nThis is the 'full rectangle' area — the triangle needs just half."`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：第二步——除以 2`, en: `${narrator}: "Step 2 — divide by 2"` },
-      hint: { zh: `$${rectArea} \\div 2 = ${answer}$`, en: `$${rectArea} \\div 2 = ${answer}$` },
+      text: {
+        zh: `${narrator}：第二步——除以 2\n$${rectArea} \\div 2 = ${answer}$\n\n三角形面积就是长方形面积的一半——就这么简单！`,
+        en: `${narrator}: "Step 2 — divide by 2\n$${rectArea} \\div 2 = ${answer}$\n\nTriangle area is half the rectangle — that simple!"`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：答案——三角形面积 = $${answer}$`, en: `${narrator}: "Answer — Triangle area = $${answer}$"` },
-      hint: { zh: `公式：$A = \\frac{1}{2} \\times base \\times height$\n$= \\frac{1}{2} \\times ${base} \\times ${height} = ${answer}$ 平方单位\n\n三角军旗的面积是 $${answer}$ 平方单位`, en: `Formula: $A = \\frac{1}{2} \\times base \\times height$\n$= \\frac{1}{2} \\times ${base} \\times ${height} = ${answer}$ square units\n\nThe triangular banner area is $${answer}$ square units` },
+      text: {
+        zh: `${narrator}：答案\n三角形面积 $= \\frac{1}{2} \\times ${base} \\times ${height} = ${answer}$ 平方单位\n\n三角军旗裁好了！`,
+        en: `${narrator}: "Answer\nTriangle area $= \\frac{1}{2} \\times ${base} \\times ${height} = ${answer}$ square units\n\nBanner cut and ready!"`,
+      },
       highlightField: 'area',
     },
     {
-      text: { zh: `${narrator}：验算——答案合理吗？`, en: `${narrator}: "Verify — does it make sense?"` },
-      hint: { zh: `三角形面积 = $${answer}$\n长方形面积 = $${rectArea}$\n\n$${answer}$ 是 $${rectArea}$ 的一半吗？\n$${answer} \\times 2 = ${rectArea}$ ✓\n\n三角旗面积 = $${answer}$ 平方单位`, en: `Triangle area = $${answer}$\nRectangle area = $${rectArea}$\n\nIs $${answer}$ half of $${rectArea}$?\n$${answer} \\times 2 = ${rectArea}$ ✓\n\nBanner area = $${answer}$ square units` },
+      text: {
+        zh: `${narrator}：验算——三角形是长方形的一半吗？\n三角形 $= ${answer}$，长方形 $= ${rectArea}$\n$${answer} \\times 2 = ${rectArea}$ ✓ 确实是一半！\n\n三角军旗面积 $= ${answer}$ 平方单位，做得漂亮！`,
+        en: `${narrator}: "Verify — is the triangle half the rectangle?\nTriangle $= ${answer}$, Rectangle $= ${rectArea}$\n$${answer} \\times 2 = ${rectArea}$ ✓ Indeed half!\n\nBanner area $= ${answer}$ square units — brilliantly done!"`,
+      },
       highlightField: 'area',
     },
   ];
