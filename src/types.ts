@@ -96,7 +96,7 @@ export type Mission = {
   tutorialSteps?: TutorialStep[];
   secret: {
     concept: BilingualText;
-    formula: string;
+    formula: string | BilingualText;
     tips: BilingualText[];
   };
   storyConsequence?: {

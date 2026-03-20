@@ -1,4 +1,15 @@
 import type { Language, BilingualText } from '../types';
+
+/**
+ * Resolve a formula (string or BilingualText) to a display string.
+ * Strips $ delimiters. For BilingualText, picks the right language and auto-converts zh_TW.
+ */
+export function resolveFormula(formula: string | BilingualText, lang: Language): string {
+  if (typeof formula === 'string') return formula.replace(/\$/g, '');
+  const base = lang === 'en' ? formula.en : formula.zh;
+  const resolved = lang === 'zh_TW' ? toTraditional(base) : base;
+  return resolved.replace(/\$/g, '');
+}
 import { toTraditional } from './zhHantMap';
 import { translations } from './translations';
 

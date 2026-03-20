@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Volume2, VolumeX, Flame, Heart, Zap, Eye } from 'lucide-react';
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
-import { lt } from '../../i18n/resolveText';
+import { lt, resolveFormula } from '../../i18n/resolveText';
 import { checkAnswer, checkPartialCredit } from '../../utils/checkCorrectness';
 import { interpolate } from '../../utils/interpolate';
 import { tapScale, hoverGlow, buttonBase, VICTORY_TIMING, BATTLE_TIMING } from '../../utils/animationPresets';
@@ -97,6 +97,7 @@ export const MathBattle = ({
   const shakeTimerRef = useRef<number | null>(null);
   const advanceTimerRef = useRef<number | null>(null);
   const milestoneTimerRef = useRef<number | null>(null);
+  const victoryReturnTimerRef = useRef<number | null>(null);
   const floatingKeyRef = useRef(0);
 
   const {
@@ -134,6 +135,7 @@ export const MathBattle = ({
       if (shakeTimerRef.current !== null) clearTimeout(shakeTimerRef.current);
       if (advanceTimerRef.current !== null) clearTimeout(advanceTimerRef.current);
       if (milestoneTimerRef.current !== null) clearTimeout(milestoneTimerRef.current);
+      if (victoryReturnTimerRef.current !== null) clearTimeout(victoryReturnTimerRef.current);
     };
   }, []);
 
@@ -172,7 +174,7 @@ export const MathBattle = ({
         setConfettiTheme('goldWhite');
         setConfettiTrigger(prev => prev + 1);
         // Return button appears after badge animation
-        window.setTimeout(() => setVictoryPhase(5), VICTORY_TIMING.returnButton - VICTORY_TIMING.skillBadge); // Relative timing
+        victoryReturnTimerRef.current = window.setTimeout(() => setVictoryPhase(5), VICTORY_TIMING.returnButton - VICTORY_TIMING.skillBadge);
       } else if (isFirstClear) {
         setConfettiTheme('goldWhite');
         setConfettiTrigger(prev => prev + 1);
@@ -381,6 +383,8 @@ export const MathBattle = ({
     setTotalScore(0);
     setFloatingScore(null);
     setShieldCharges(skillCard === 'shield' ? 2 : 0);
+    setConfettiTheme('default');
+    setVictoryPhase(0);
     playBGM();
   };
 
@@ -517,7 +521,7 @@ export const MathBattle = ({
             {skillCard === 'reveal' && currentQIdx === 0 && (
               <div className="mt-4 p-3 bg-purple-100 border-2 border-purple-300 rounded-lg">
                 <div className="text-purple-800 text-xs font-bold mb-1">{'\u{1F52E}'} {t.secretFormula}</div>
-                <MathView tex={currentQuestion.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-purple-900" />
+                <MathView tex={resolveFormula(currentQuestion.secret.formula, lang)} className="text-lg font-black text-purple-900" />
               </div>
             )}
 
@@ -525,7 +529,7 @@ export const MathBattle = ({
             {difficultyMode === 'amber' && (
               <div className="mt-4 p-3 bg-amber-100 border-2 border-amber-300 rounded-lg">
                 <div className="text-amber-800 text-xs font-bold mb-1">{t.secretFormula}</div>
-                <MathView tex={currentQuestion.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-amber-900" />
+                <MathView tex={resolveFormula(currentQuestion.secret.formula, lang)} className="text-lg font-black text-amber-900" />
               </div>
             )}
 
@@ -566,7 +570,7 @@ export const MathBattle = ({
                 questionType={currentQuestion.type}
                 userInputs={wrongAnswerData.userInputs}
                 expected={wrongAnswerData.expected}
-                formula={currentQuestion.secret.formula}
+                formula={resolveFormula(currentQuestion.secret.formula, lang)}
                 tutorialSteps={interpolatedTutorialSteps}
                 lang={lang}
                 onContinue={handleWrongAnswerContinue}
@@ -790,7 +794,7 @@ export const MathBattle = ({
                             characterId={character.id}
                             skillName={mission.skillName}
                             skillSummary={mission.skillSummary || ''}
-                            formula={mission.secret.formula}
+                            formula={resolveFormula(mission.secret.formula, lang)}
                             missionTitle={mission.title}
                             lang={lang}
                             onClose={() => {}} // Disabled as it closes automatically or is unclickable here

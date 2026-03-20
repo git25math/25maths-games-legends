@@ -179,6 +179,11 @@ export const translations = {
     streakBonus: "连胜奖励",
     streakToken: "连胜令牌",
     streakKing: "连胜之王",
+    switchChar: "换主公",
+    dashboard: "看板",
+    noMissions: "暂无关卡",
+    noMissionsDesc: "该年级的关卡正在建设中。",
+    perfectClear: "完美通关！",
   },
   en: {
     title: "25 Math Legends",
@@ -358,6 +363,11 @@ export const translations = {
     streakBonus: "Streak Bonus",
     streakToken: "Streak Token",
     streakKing: "Streak King",
+    switchChar: "Switch",
+    dashboard: "Dashboard",
+    noMissions: "No Missions",
+    noMissionsDesc: "Missions for this grade are coming soon.",
+    perfectClear: "Perfect Clear!",
   },
   zh_TW: {
     title: "25 數學三國",
@@ -537,6 +547,11 @@ export const translations = {
     streakBonus: "連勝獎勵",
     streakToken: "連勝令牌",
     streakKing: "連勝之王",
+    switchChar: "換主公",
+    dashboard: "看板",
+    noMissions: "暫無關卡",
+    noMissionsDesc: "該年級的關卡正在建設中。",
+    perfectClear: "完美通關！",
   }
 } as const;
 

@@ -18,7 +18,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '刘备：因数成对出现——$1 \\times 24 = 24$，$2 \\times 12 = 24$，$3 \\times 8 = 24$，$4 \\times 6 = 24$', en: 'Liu Bei: "Factors come in pairs: $1 \\times 24$, $2 \\times 12$, $3 \\times 8$, $4 \\times 6$"' }, highlightField: 'ans' },
       { text: { zh: '刘备：所以 24 的全部因数是 $1, 2, 3, 4, 6, 8, 12, 24$——共 8 个', en: 'Liu Bei: "All factors of 24: $1, 2, 3, 4, 6, 8, 12, 24$ — total 8"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '因数是能整除一个数的数。因数成对出现，一对乘起来等于原数。', en: 'Factors divide a number evenly. They come in pairs whose product is the original number.' }, formula: '$n = a \\times b \\Rightarrow a, b \\text{ 都是 } n \\text{ 的因数}$', tips: [{ zh: '刘备提示：编队方式越多，战术越灵活！', en: 'Liu Bei Tip: More ways to divide = more tactical flexibility!' }] }
+    secret: { concept: { zh: '因数是能整除一个数的数。因数成对出现，一对乘起来等于原数。', en: 'Factors divide a number evenly. They come in pairs whose product is the original number.' }, formula: { zh: '$n = a \\times b \\Rightarrow a, b \\text{ 都是 } n \\text{ 的因数}$', en: '$n = a \\times b \\Rightarrow a, b \\text{ are factors of } n$' }, tips: [{ zh: '刘备提示：编队方式越多，战术越灵活！', en: 'Liu Bei Tip: More ways to divide = more tactical flexibility!' }] }
   },
   {
     id: 699, grade: 7, unitId: 0, order: -1,
@@ -37,7 +37,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：注意——1 不是质数，2 是唯一的偶数质数', en: 'Zhuge Liang: "Note: 1 is NOT prime. 2 is the only even prime"' }, hint: { zh: '1 不算（只有 1 个因数）\n2 是质数（只能被 1 和 2 整除）\n所有其他偶数都能被 2 整除 → 不是质数', en: '1 doesn\'t count (only 1 factor)\n2 is prime (only 1 and 2)\nAll other even numbers are divisible by 2 → not prime' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：前 10 个质数：$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$', en: 'Zhuge Liang: "First 10 primes: $2, 3, 5, 7, 11, 13, 17, 19, 23, 29$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: '$\\text{质数 = 只被 1 和自己整除}$', tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorize.' }] }
+    secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: { zh: '$\\text{质数 = 只被 1 和自己整除}$', en: '$\\text{Prime = only divisible by 1 and itself}$' }, tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorize.' }] }
   },
   {
     id: 700, grade: 7, unitId: 0, order: 0,
@@ -56,7 +56,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：12÷2=6，记下 2。6÷2=3，记下 2。3 是质数，停！', en: 'Zhuge Liang: "12÷2=6, note 2. 6÷2=3, note 2. 3 is prime, stop!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：$24 = 2 \\times 2 \\times 2 \\times 3 = 2^3 \\times 3$，共 4 个质因数', en: 'Zhuge Liang: "$24 = 2 \\times 2 \\times 2 \\times 3 = 2^3 \\times 3$, 4 prime factors total"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '任何大于 1 的整数都能唯一地分解为质数的乘积。', en: 'Every integer greater than 1 can be uniquely expressed as a product of primes.' }, formula: '$\\text{因数树：从上往下拆到全是质数}$', tips: [{ zh: '诸葛亮提示：知己知彼，先把自己的兵力拆解清楚。', en: 'Zhuge Liang Tip: Know yourself — first break down your own forces clearly.' }] }
+    secret: { concept: { zh: '任何大于 1 的整数都能唯一地分解为质数的乘积。', en: 'Every integer greater than 1 can be uniquely expressed as a product of primes.' }, formula: { zh: '$\\text{因数树：从上往下拆到全是质数}$', en: '$\\text{Factor tree: split top-down until all primes}$' }, tips: [{ zh: '诸葛亮提示：知己知彼，先把自己的兵力拆解清楚。', en: 'Zhuge Liang Tip: Know yourself — first break down your own forces clearly.' }] }
   },
   {
     id: 701, grade: 7, unitId: 0, order: 1,
@@ -92,7 +92,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: '$\\text{HCF = 短除法左边全乘}$', tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
+    secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: { zh: '$\\text{HCF = 短除法左边全乘}$', en: '$\\text{HCF = multiply all left-side divisors}$' }, tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
   },
   {
     id: 702, grade: 7, unitId: 0, order: 2,
@@ -128,7 +128,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: '$\\text{LCM = 左边×底部全乘}$', tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
+    secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: { zh: '$\\text{LCM = 左边×底部全乘}$', en: '$\\text{LCM = multiply left side × bottom}$' }, tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
   },
   {
     id: 703, grade: 7, unitId: 0, order: 3,
@@ -164,7 +164,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: '$\\text{HCF} = \\text{最大均分数}$', tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
+    secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: { zh: '$\\text{HCF} = \\text{最大均分数}$', en: '$\\text{HCF} = \\text{largest equal share}$' }, tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
   },
   // --- Year 7 Unit 0A: 行军算账·正负数篇 ---
   {
@@ -582,7 +582,7 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：代入就是——把字母换成数字', en: 'Zhuge Liang: "Substitution means replacing the letter with a number"' }, hint: { zh: '$3x + 5$，当 $x=4$ 时：\n$3 \\times 4 + 5 = 12 + 5 = 17$', en: '$3x + 5$, when $x=4$:\n$3 \\times 4 + 5 = 12 + 5 = 17$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '代入就是用具体数值替换变量，然后按运算顺序计算。', en: 'Substitution means replacing variables with values, then computing step by step.' }, formula: '$\\text{代入 } x \\text{ 的值，按顺序计算}$', tips: [{ zh: '诸葛亮提示：先乘除，后加减！', en: 'Zhuge Liang Tip: Multiply/divide first, then add/subtract!' }] }
+    secret: { concept: { zh: '代入就是用具体数值替换变量，然后按运算顺序计算。', en: 'Substitution means replacing variables with values, then computing step by step.' }, formula: { zh: '$\\text{代入 } x \\text{ 的值，按顺序计算}$', en: '$\\text{Substitute } x \\text{, then compute in order}$' }, tips: [{ zh: '诸葛亮提示：先乘除，后加减！', en: 'Zhuge Liang Tip: Multiply/divide first, then add/subtract!' }] }
   },
   {
     id: 718, grade: 7, unitId: 1, order: 4,
@@ -653,7 +653,7 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '比例关系建模：总量 = 份数 x 每份，再用除法求每份。', en: 'Proportional modeling: total = parts x each, use division to find each part.' }, formula: '$ax = b \\Rightarrow x = b/a$（比例建模：总量 = 份数 × 每份）', tips: [{ zh: '曹操提示：公平分配，方能稳定军心。', en: 'Cao Cao Tip: Fair distribution keeps the army stable.' }] }
+    secret: { concept: { zh: '比例关系建模：总量 = 份数 x 每份，再用除法求每份。', en: 'Proportional modeling: total = parts x each, use division to find each part.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '曹操提示：公平分配，方能稳定军心。', en: 'Cao Cao Tip: Fair distribution keeps the army stable.' }] }
   },
   {
     id: 722, grade: 7, unitId: 2, order: 2,
@@ -723,7 +723,7 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '曹操：增加 20% 就是乘以 1.2', en: 'Cao Cao: "Increase 20% means multiply by 1.2"' }, hint: { zh: '$200 \\times (1 + 0.2) = 200 \\times 1.2 = 240$', en: '$200 \\times (1 + 0.2) = 200 \\times 1.2 = 240$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '增减百分比的关键是乘法因子：增加用 (1+r)，减少用 (1-r)。', en: 'The key to percentage change is the multiplier: increase (1+r), decrease (1-r).' }, formula: '$\\text{新值} = \\text{原值} \\times (1 \\pm r)$', tips: [{ zh: '曹操提示：粮价涨跌关乎国运，算清楚才能决策！', en: 'Cao Cao Tip: Grain prices affect the nation — calculate clearly to decide wisely!' }] }
+    secret: { concept: { zh: '增减百分比的关键是乘法因子：增加用 (1+r)，减少用 (1-r)。', en: 'The key to percentage change is the multiplier: increase (1+r), decrease (1-r).' }, formula: { zh: '$\\text{新值} = \\text{原值} \\times (1 \\pm r)$', en: '$\\text{New} = \\text{Original} \\times (1 \\pm r)$' }, tips: [{ zh: '曹操提示：粮价涨跌关乎国运，算清楚才能决策！', en: 'Cao Cao Tip: Grain prices affect the nation — calculate clearly to decide wisely!' }] }
   },
   // --- Year 7 Unit 2 续: 比例化简与分配 ---
   {
@@ -760,7 +760,7 @@ export const MISSIONS: Mission[] = [
       correct: { zh: '曹操：分配公正！前锋 48 金，主力 72 金——军心大振！', en: 'Cao Cao: "Fair distribution! Vanguard 48, main 72 — morale soars!"' },
       wrong: { zh: '曹操：分配不均，前锋将士不服...重新算！', en: 'Cao Cao: "Unfair split — vanguard soldiers revolt! Recalculate!"' },
     },
-    secret: { concept: { zh: '按比分配三步：总份数→每份值→各自乘。这连接了除法、乘法和比例三个技能！', en: 'Divide in ratio: total parts → value per part → multiply each. This connects division, multiplication, and ratios!' }, formula: '$\\text{份额} = \\text{总数} \\times \\frac{\\text{自己的份数}}{\\text{总份数}}$', tips: [{ zh: '曹操提示：功劳大的多分——但得算公平！', en: 'Cao Cao Tip: More merit, more reward — but it must be fair!' }] }
+    secret: { concept: { zh: '按比分配三步：总份数→每份值→各自乘。这连接了除法、乘法和比例三个技能！', en: 'Divide in ratio: total parts → value per part → multiply each. This connects division, multiplication, and ratios!' }, formula: { zh: '$\\text{份额} = \\text{总数} \\times \\frac{\\text{自己的份数}}{\\text{总份数}}$', en: '$\\text{Share} = \\text{Total} \\times \\frac{\\text{own parts}}{\\text{total parts}}$' }, tips: [{ zh: '曹操提示：功劳大的多分——但得算公平！', en: 'Cao Cao Tip: More merit, more reward — but it must be fair!' }] }
   },
   {
     id: 731, grade: 7, unitId: 3, order: 1,
@@ -923,7 +923,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：已知的区域已经覆盖了多少度？', en: 'Zhuge Liang: "How many degrees are already covered?"' }, hint: { zh: '$120° + 140° = 260°$\n\n已覆盖 $260°$，总共需要 $360°$', en: '$120° + 140° = 260°$\n\nAlready covered $260°$, need $360°$ total' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：剩下的缺口就是未知角', en: 'Zhuge Liang: "The remaining gap is the unknown angle"' }, hint: { zh: '$x = 360° - 260° = 100°$\n\n这 $100°$ 的方向就是要重点防守的位置！', en: '$x = 360° - 260° = 100°$\n\nThis $100°$ direction is where we need the most defense!' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '围绕一点的所有角加起来等于 360°（一整圈）。少一度都是防御漏洞！', en: 'Angles around a point sum to 360° (a full turn). Even 1° missing is a gap in defense!' }, formula: '$\\text{全部角之和} = 360°$', tips: [{ zh: '诸葛亮提示：三百六十度无死角，方可高枕无忧！', en: 'Zhuge Liang Tip: Full 360° coverage — only then can you sleep soundly!' }] }
+    secret: { concept: { zh: '围绕一点的所有角加起来等于 360°（一整圈）。少一度都是防御漏洞！', en: 'Angles around a point sum to 360° (a full turn). Even 1° missing is a gap in defense!' }, formula: { zh: '$\\text{全部角之和} = 360°$', en: '$\\text{All angles sum} = 360°$' }, tips: [{ zh: '诸葛亮提示：三百六十度无死角，方可高枕无忧！', en: 'Zhuge Liang Tip: Full 360° coverage — only then can you sleep soundly!' }] }
   },
   // --- Year 7 Unit 3A: 战场地图·坐标篇 ---
   {
@@ -978,7 +978,7 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '刘备：每天比前天多招 4 人——这就是"公差"', en: 'Liu Bei: "4 more each day — that\'s the common difference"' }, hint: { zh: '$3, 7, 11, 15, ?$\n$7-3=4$，$11-7=4$，$15-11=4$\n下一个：$15+4=19$', en: '$3, 7, 11, 15, ?$\n$7-3=4$, $11-7=4$, $15-11=4$\nNext: $15+4=19$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '等差数列：每项与前一项的差（公差）恒定。下一项 = 最后一项 + 公差。', en: 'Arithmetic sequence: the difference between consecutive terms is constant. Next = last + common difference.' }, formula: '$\\text{下一项} = \\text{末项} + d$', tips: [{ zh: '刘备提示：找到规律，就能预见未来！', en: 'Liu Bei Tip: Find the pattern, predict the future!' }] }
+    secret: { concept: { zh: '等差数列：每项与前一项的差（公差）恒定。下一项 = 最后一项 + 公差。', en: 'Arithmetic sequence: the difference between consecutive terms is constant. Next = last + common difference.' }, formula: { zh: '$\\text{下一项} = \\text{末项} + d$', en: '$\\text{Next term} = \\text{Last term} + d$' }, tips: [{ zh: '刘备提示：找到规律，就能预见未来！', en: 'Liu Bei Tip: Find the pattern, predict the future!' }] }
   },
   {
     id: 742, grade: 7, unitId: 4, order: 2,
@@ -1029,7 +1029,7 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：四舍五入——看要舍去的那一位', en: 'Zhuge Liang: "Rounding — look at the digit being removed"' }, hint: { zh: '$347$ 四舍五入到十位：\n看个位 $7$（$\\geq 5$），进 1\n$347 \\approx 350$', en: 'Round $347$ to nearest 10:\nLook at ones digit $7$ ($\\geq 5$), round up\n$347 \\approx 350$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '四舍五入：看要去掉的那一位，0-4 不变，5-9 前一位加 1。', en: 'Rounding: look at the digit being removed. 0-4 stays, 5-9 rounds up.' }, formula: '$\\text{看下一位：} < 5 \\text{ 舍，} \\geq 5 \\text{ 入}$', tips: [{ zh: '诸葛亮提示：战场上要的是大局观，不纠结零头！', en: 'Zhuge Liang Tip: On the battlefield, focus on the big picture!' }] }
+    secret: { concept: { zh: '四舍五入：看要去掉的那一位，0-4 不变，5-9 前一位加 1。', en: 'Rounding: look at the digit being removed. 0-4 stays, 5-9 rounds up.' }, formula: { zh: '$\\text{看下一位：} < 5 \\text{ 舍，} \\geq 5 \\text{ 入}$', en: '$\\text{Check next digit: } < 5 \\text{ round down, } \\geq 5 \\text{ round up}$' }, tips: [{ zh: '诸葛亮提示：战场上要的是大局观，不纠结零头！', en: 'Zhuge Liang Tip: On the battlefield, focus on the big picture!' }] }
   },
   {
     id: 752, grade: 7, unitId: 5, order: 2,
@@ -1045,7 +1045,7 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：大数估算——先找到要舍入的位', en: 'Zhuge Liang: "Large numbers — find the place value first"' }, hint: { zh: '$3847$ 四舍五入到百位：\n看十位 $4$（$< 5$），舍\n$3847 \\approx 3800$', en: 'Round $3847$ to nearest 100:\nLook at tens digit $4$ ($< 5$), round down\n$3847 \\approx 3800$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '四舍五入到百位看十位，到千位看百位——总是看"下一位"。', en: 'To round to hundreds look at tens, to round to thousands look at hundreds — always check the next digit.' }, formula: '$\\text{看"下一位"决定舍入}$', tips: [{ zh: '诸葛亮提示：知己知彼，估算也要精准到位！', en: 'Zhuge Liang Tip: Know your enemy — even estimates should be strategic!' }] },
+    secret: { concept: { zh: '四舍五入到百位看十位，到千位看百位——总是看"下一位"。', en: 'To round to hundreds look at tens, to round to thousands look at hundreds — always check the next digit.' }, formula: { zh: '$\\text{看"下一位"决定舍入}$', en: '$\\text{Check the next digit to decide rounding}$' }, tips: [{ zh: '诸葛亮提示：知己知彼，估算也要精准到位！', en: 'Zhuge Liang Tip: Know your enemy — even estimates should be strategic!' }] },
     storyConsequence: { correct: { zh: '大军兵力估算到位，战略部署精准！', en: 'Army strength estimated correctly — strategy deployed precisely!' }, wrong: { zh: '估算偏差太大，战略判断失误…', en: 'Estimate too far off — strategic miscalculation...' } },
   },
   // --- Year 7 Unit 6: 营寨丈量·周长与面积篇 ---
@@ -1150,7 +1150,7 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '张飞：众数就是出现次数最多的数——数据里的"人气王"', en: 'Zhang Fei: "Mode = the value appearing most — the \'most popular\' in the data"' }, hint: { zh: '$3, 5, 5, 5, 7, 8, 12$\n$3$ 出现 1 次\n$5$ 出现 3 次 ← 最多！\n$7$ 出现 1 次\n$8$ 出现 1 次\n$12$ 出现 1 次\n\n众数 = $5$', en: '$3, 5, 5, 5, 7, 8, 12$\n$3$: 1 time\n$5$: 3 times ← most!\n$7$: 1 time\n$8$: 1 time\n$12$: 1 time\n\nMode = $5$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '众数是出现频率最高的值。一组数据可以有多个众数，也可以没有众数。', en: 'Mode is the most frequent value. Data can have multiple modes or no mode.' }, formula: '$\\text{众数 = 频率最高的值}$', tips: [{ zh: '张飞提示：哪种兵器最多，就知道敌军的战术偏好！', en: 'Zhang Fei Tip: The most common weapon reveals the enemy\'s tactics!' }] }
+    secret: { concept: { zh: '众数是出现频率最高的值。一组数据可以有多个众数，也可以没有众数。', en: 'Mode is the most frequent value. Data can have multiple modes or no mode.' }, formula: { zh: '$\\text{众数 = 频率最高的值}$', en: '$\\text{Mode = most frequent value}$' }, tips: [{ zh: '张飞提示：哪种兵器最多，就知道敌军的战术偏好！', en: 'Zhang Fei Tip: The most common weapon reveals the enemy\'s tactics!' }] }
   },
   {
     id: 771, grade: 7, unitId: 7, order: 1,
@@ -1182,7 +1182,7 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：先排序，再找中间', en: 'Zhuge Liang: "Sort first, then find the middle"' }, hint: { zh: '排序后：$3, 7, 8, 12, 15$\n5 个数，中间是第 3 个 = $8$', en: 'Sorted: $3, 7, 8, 12, 15$\n5 values, middle is 3rd = $8$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '中位数是排序后正中间的值。它不受极端值影响。', en: 'Median is the middle value after sorting. It\'s not affected by outliers.' }, formula: '$\\text{排序后取中间值}$', tips: [{ zh: '诸葛亮提示：中位数比平均数更稳定——一个极端值不会带偏它！', en: 'Zhuge Liang Tip: Median is more stable than mean — one outlier won\'t skew it!' }] }
+    secret: { concept: { zh: '中位数是排序后正中间的值。它不受极端值影响。', en: 'Median is the middle value after sorting. It\'s not affected by outliers.' }, formula: { zh: '$\\text{排序后取中间值}$', en: '$\\text{Middle value after sorting}$' }, tips: [{ zh: '诸葛亮提示：中位数比平均数更稳定——一个极端值不会带偏它！', en: 'Zhuge Liang Tip: Median is more stable than mean — one outlier won\'t skew it!' }] }
   },
   {
     id: 773, grade: 7, unitId: 7, order: 3,

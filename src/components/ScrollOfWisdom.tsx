@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { BookOpen, XCircle, Sparkles, Zap } from 'lucide-react';
 import type { Mission, Language } from '../types';
 import { translations } from '../i18n/translations';
-import { lt } from '../i18n/resolveText';
+import { lt, resolveFormula } from '../i18n/resolveText';
 import { MathView, LatexText } from './MathView';
 
 export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; lang: Language; onClose: () => void }) => {
@@ -44,7 +44,7 @@ export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; l
           >
             <h3 className="text-amber-800 font-bold mb-2 uppercase text-xs tracking-widest">{t.secretFormula}</h3>
             <div className="text-center py-2">
-              <MathView tex={mission.secret.formula.replace(/\$/g, '')} inline={false} className="text-2xl font-black text-indigo-600" />
+              <MathView tex={resolveFormula(mission.secret.formula, lang)} inline={false} className="text-2xl font-black text-indigo-600" />
             </div>
           </motion.section>
           <motion.section

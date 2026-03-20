@@ -148,7 +148,7 @@ export const MapScreen = ({
                 onClick={onCharChange}
                 className="px-2 py-0.5 bg-indigo-600/20 border border-indigo-500/30 rounded text-xs text-indigo-300 hover:bg-indigo-600/40 transition-colors"
               >
-                {lang === 'zh' ? '换主公' : 'Switch'}
+                {t.switchChar}
               </button>
               {/* Streak tokens */}
               {streakTokens > 0 && (
@@ -162,7 +162,7 @@ export const MapScreen = ({
                   onClick={onDashboard}
                   className="px-2 py-0.5 bg-emerald-600/20 border border-emerald-500/30 rounded text-xs text-emerald-300 hover:bg-emerald-600/40 transition-colors"
                 >
-                  {lang === 'en' ? 'Dashboard' : '看板'}
+                  {t.dashboard}
                 </button>
               )}
             </div>
@@ -248,8 +248,8 @@ export const MapScreen = ({
         {gradeMissions.length === 0 ? (
           <EmptyState 
             icon={<MapIcon size={48} />} 
-            title={lang === 'zh' ? '暂无关卡' : lang === 'zh_TW' ? '暫無關卡' : 'No Missions Available'} 
-            description={lang === 'en' ? 'Missions for this grade are coming soon.' : '该年级的关卡正在建设中。'} 
+            title={t.noMissions}
+            description={t.noMissionsDesc} 
           />
         ) : (
           Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang)))).map((unitTitle, unitIndex) => (
@@ -320,7 +320,7 @@ export const MapScreen = ({
                           >
                             <Crown size={20} className="text-white" />
                             <div className="absolute -top-8 bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover/badge:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                              {lang === 'zh' ? '完美通关！' : lang === 'zh_TW' ? '完美通關！' : 'Perfect Clear!'}
+                              {t.perfectClear}
                             </div>
                           </motion.div>
                         )}

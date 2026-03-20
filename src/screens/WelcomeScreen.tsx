@@ -133,7 +133,7 @@ export const WelcomeScreen = ({
                   onClick={onDashboard}
                   className="px-4 py-2 bg-indigo-700 text-white font-bold rounded-xl text-xs hover:bg-indigo-600 transition-all"
                 >
-                  {lang === 'en' ? 'Dashboard' : '看板'}
+                  {t.dashboard}
                 </button>
               )}
             </div>
