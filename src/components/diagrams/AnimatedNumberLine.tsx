@@ -24,9 +24,13 @@ type Props = {
   movement: number;
   /** Tutorial step for progressive reveal: 0=line only, 1=start point, 2=arrow+end */
   step?: number;
+  /** Inequality mode: show solution range instead of arrow */
+  inequalityOp?: '<' | '>' | '≤' | '≥';
+  /** Boundary value for inequality (e.g., x < 4 → boundary=4) */
+  inequalityBoundary?: number;
 };
 
-export function AnimatedNumberLine({ start, end, movement, step = 999 }: Props) {
+export function AnimatedNumberLine({ start, end, movement, step = 999, inequalityOp, inequalityBoundary }: Props) {
   // Auto-calculate range to show all relevant points with padding
   const allPoints = [start, end, 0];
   const minVal = Math.min(...allPoints) - 2;
@@ -89,8 +93,8 @@ export function AnimatedNumberLine({ start, end, movement, step = 999 }: Props) 
         </motion.g>
       )}
 
-      {/* Movement arrow */}
-      {step >= 2 && (
+      {/* Movement arrow (normal addition/subtraction mode) */}
+      {!inequalityOp && step >= 2 && (
         <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
           {/* Curved arrow path */}
           <motion.path
@@ -136,6 +140,61 @@ export function AnimatedNumberLine({ start, end, movement, step = 999 }: Props) 
           </motion.g>
         </motion.g>
       )}
+
+      {/* Inequality mode: shaded solution region */}
+      {inequalityOp && inequalityBoundary !== undefined && step >= 1 && (() => {
+        const bx = toX(inequalityBoundary);
+        const isLess = inequalityOp === '<' || inequalityOp === '≤';
+        const isClosed = inequalityOp === '≤' || inequalityOp === '≥';
+        const shadeLeft = isLess ? PAD : bx;
+        const shadeRight = isLess ? bx : WIDTH - PAD;
+        return (
+          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }}>
+            {/* Shaded solution region */}
+            {step >= 2 && (
+              <motion.rect
+                x={shadeLeft} y={LINE_Y - 12}
+                width={shadeRight - shadeLeft} height={24}
+                fill={COLORS.green} fillOpacity={0.15}
+                rx={3}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                style={{ transformOrigin: isLess ? `${bx}px ${LINE_Y}px` : `${bx}px ${LINE_Y}px` }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              />
+            )}
+            {/* Boundary point: open circle (< >) or filled (≤ ≥) */}
+            <motion.circle
+              cx={bx} cy={LINE_Y} r={7}
+              fill={isClosed ? COLORS.gold : 'white'}
+              stroke={COLORS.gold} strokeWidth={2.5}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', bounce: 0.5 }}
+            />
+            {/* Boundary label */}
+            <text x={bx} y={LINE_Y - 14} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.gold}>
+              {inequalityBoundary}
+            </text>
+            {/* Arrow showing solution direction */}
+            {step >= 2 && (
+              <motion.text
+                x={isLess ? shadeLeft + 15 : shadeRight - 15}
+                y={LINE_Y + 30}
+                textAnchor="middle"
+                fontSize={11}
+                fontWeight="bold"
+                fill={COLORS.green}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                x {inequalityOp} {inequalityBoundary}
+              </motion.text>
+            )}
+          </motion.g>
+        );
+      })()}
     </svg>
   );
 }

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { XCircle, BookOpen, ChevronRight, ChevronLeft, Swords, MapIcon, CheckCircle2 } from 'lucide-react';
 import type { Mission, Character, Language, DifficultyMode } from '../types';
 import { translations } from '../i18n/translations';
-import { lt } from '../i18n/resolveText';
+import { lt, resolveFormula } from '../i18n/resolveText';
 import { generateMission, type DifficultyTier } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
 import { interpolate } from '../utils/interpolate';
@@ -167,7 +167,7 @@ export const PracticeScreen = ({
         characterId={character.id}
         skillName={mission.skillName}
         skillSummary={mission.skillSummary}
-        formula={mission.secret.formula}
+        formula={resolveFormula(mission.secret.formula, lang)}
         missionTitle={mission.title}
         lang={lang}
         onClose={onEnterBattle || onComplete}
@@ -435,6 +435,15 @@ export const PracticeScreen = ({
                 showArea={currentMission.data.mode === 'area'}
                 showCircumference={currentMission.data.mode === 'circumference'}
               />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'INEQUALITY' && currentMission.data?.answer !== undefined ? (
+              <AnimatedNumberLine
+                start={0}
+                end={0}
+                movement={0}
+                inequalityOp={currentMission.data.op as '<' | '>' | '≤' | '≥'}
+                inequalityBoundary={currentMission.data.answer as number}
+                step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep)}
+              />
             ) : currentPhase !== 'red' ? (
               <VisualData mission={currentMission} lang={lang} />
             ) : null}
@@ -443,7 +452,7 @@ export const PracticeScreen = ({
             {currentPhase === 'green' && (
               <div className="mt-4 p-3 bg-emerald-100 border-2 border-emerald-300 rounded-lg">
                 <div className="text-emerald-800 text-xs font-bold mb-1">{t.secretFormula}</div>
-                <MathView tex={currentMission.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-emerald-900" />
+                <MathView tex={resolveFormula(currentMission.secret.formula, lang)} className="text-lg font-black text-emerald-900" />
               </div>
             )}
           </motion.div>
@@ -506,7 +515,7 @@ export const PracticeScreen = ({
                 {currentPhase === 'amber' && (
                   <div className="p-3 bg-amber-100 border-2 border-amber-300 rounded-lg mb-2">
                     <div className="text-amber-800 text-xs font-bold mb-1">{t.secretFormula}</div>
-                    <MathView tex={currentMission.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-amber-900" />
+                    <MathView tex={resolveFormula(currentMission.secret.formula, lang)} className="text-lg font-black text-amber-900" />
                   </div>
                 )}
 
@@ -526,7 +535,7 @@ export const PracticeScreen = ({
                     questionType={currentMission.type}
                     userInputs={wrongAnswerData.userInputs}
                     expected={wrongAnswerData.expected}
-                    formula={currentMission.secret.formula}
+                    formula={resolveFormula(currentMission.secret.formula, lang)}
                     tutorialSteps={interpolatedTutorialSteps}
                     lang={lang}
                     onContinue={handleWrongAnswerContinue}
