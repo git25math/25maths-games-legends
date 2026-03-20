@@ -1502,7 +1502,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '奇袭概率', en: 'Raid Probability' },
     skillName: { zh: '概率基础术', en: 'Basic Probability' },
     skillSummary: { zh: '概率 = 目标数 ÷ 总数', en: 'Probability = target ÷ total' },
-    story: { zh: '袁绍有 {total} 个粮仓，其中 {target} 个防守薄弱。随机选一个袭击。', en: 'Yuan Shao has {total} granaries, {target} are poorly guarded. Pick one to raid.' },
+    story: { zh: '你已经学会用平均数和中位数分析情报了。现在更进一步——预测未来！袁绍有 {total} 个粮仓，情报显示 {target} 个防守薄弱。随机选一个袭击，成功的可能性有多大？', en: 'You can analyse intelligence with mean and median now. Time to go further — predict the future! Yuan Shao has {total} granaries, intel says {target} are poorly guarded. Pick one at random — what are the chances of success?' },
     description: { zh: '成功概率 P = ?', en: 'Probability of success P = ?' },
     data: { target: 3, total: 10, generatorType: 'PROBABILITY_SIMPLE_RANDOM' },
     difficulty: 'Medium', reward: 180, kpId: 'kp-8.1-01', sectionId: 'statistics',
