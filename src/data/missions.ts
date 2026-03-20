@@ -440,7 +440,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：立方根——"谁的立方等于这个数？"', en: 'Zhuge Liang: "Cube root — whose cube equals this number?"' }, hint: { zh: '$\\sqrt[3]{125} = 5$，因为 $5 \\times 5 \\times 5 = 125$', en: '$\\sqrt[3]{125} = 5$, because $5 \\times 5 \\times 5 = 125$' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：看清符号！$\\sqrt{\\ }$ 是平方根，$\\sqrt[3]{\\ }$ 是立方根', en: 'Zhuge Liang: "Read the symbol! $\\sqrt{\\ }$ is square root, $\\sqrt[3]{\\ }$ is cube root"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '平方根和立方根分别是平方和立方的逆运算。看清根号上的小数字！', en: 'Square root and cube root are the inverses of squaring and cubing. Watch the index on the radical!' }, formula: '$\\sqrt{n^2} = n,\\quad \\sqrt[3]{n^3} = n$', tips: [{ zh: '诸葛亮提示：方阵用平方根，粮仓用立方根——看清题目再下笔！', en: 'Zhuge Liang Tip: Formations use square root, warehouses use cube root — read carefully before answering!' }] }
+    secret: { concept: { zh: '平方根和立方根分别是平方和立方的逆运算。看清根号上的小数字！', en: 'Square root and cube root are the inverses of squaring and cubing. Watch the index on the radical!' }, formula: '$\\sqrt{n^2} = n,\\quad \\sqrt[3]{n^3} = n$', tips: [{ zh: '诸葛亮提示：方阵用平方根，粮仓用立方根——看清题目再下笔！', en: 'Zhuge Liang Tip: Formations use square root, warehouses use cube root — read carefully before answering!' }] },
+    storyConsequence: { correct: { zh: '方阵和粮仓的尺寸全算对了！诸葛亮：孺子可教！', en: 'Formation and warehouse dimensions all correct! Zhuge Liang: "A worthy student!"' }, wrong: { zh: '算错了尺寸，方阵排不齐…', en: 'Wrong dimensions — the formation is uneven...' } },
   },
   // --- Year 7 Unit 1 前置: 运算顺序 BODMAS ---
   {
@@ -614,7 +615,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：$3x + 2x$——同类项合并：$3 + 2 = 5$，字母照抄 → $5x$', en: 'Zhuge Liang: "$3x + 2x$ — like terms: $3 + 2 = 5$, keep letter → $5x$"' }, hint: { zh: '同类项 = 字母部分相同的项\n$3x$ 和 $2x$ 都是"$x$ 的倍数"→ 可以合并\n$3x + 2y$ 不能合并——步兵和骑兵不能混编！', en: 'Like terms = same letter part\n$3x$ and $2x$ are both "multiples of $x$" → can combine\n$3x + 2y$ can\'t combine — infantry and cavalry don\'t mix!' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '同类项（字母和指数完全相同）可以合并，只需把系数相加减。', en: 'Like terms (same letter and power) can be combined by adding/subtracting coefficients.' }, formula: '$ax + bx = (a+b)x$', tips: [{ zh: '诸葛亮提示：合兵一处，势如破竹！', en: 'Zhuge Liang Tip: United forces are unstoppable!' }] }
+    secret: { concept: { zh: '同类项（字母和指数完全相同）可以合并，只需把系数相加减。', en: 'Like terms (same letter and power) can be combined by adding/subtracting coefficients.' }, formula: '$ax + bx = (a+b)x$', tips: [{ zh: '诸葛亮提示：合兵一处，势如破竹！', en: 'Zhuge Liang Tip: United forces are unstoppable!' }] },
+    storyConsequence: { correct: { zh: '合兵一处，势如破竹！代数入门完成！', en: 'Forces combined — unstoppable! Algebra intro complete!' }, wrong: { zh: '步兵骑兵混编失败，阵型大乱…', en: 'Infantry-cavalry mix-up — formation chaos...' } },
   },
   {
     id: 721, grade: 7, unitId: 2, order: 1,
@@ -1009,7 +1011,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '赵云：公差可以是负数——每天减少就是"加一个负数"', en: 'Zhao Yun: "Common difference can be negative — daily decrease means adding a negative"' }, hint: { zh: '$30, 27, 24, 21, \\ldots$\n$27 - 30 = -3$（公差 $d = -3$）\n\n第 $n$ 项 $= 30 + (n-1) \\times (-3)$\n第 10 项 $= 30 + 9 \\times (-3) = 30 - 27 = 3$', en: '$30, 27, 24, 21, \\ldots$\n$27 - 30 = -3$ (common difference $d = -3$)\n\nTerm $n$ $= 30 + (n-1) \\times (-3)$\nTerm 10 $= 30 + 9 \\times (-3) = 30 - 27 = 3$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '公差为负数时数列递减。公式不变：$a_n = a_1 + (n-1)d$，只是 $d < 0$。', en: 'Negative common difference = decreasing sequence. Same formula, just $d < 0$.' }, formula: '$a_n = a_1 + (n-1)d,\\quad d < 0$', tips: [{ zh: '赵云提示：知道粮草何时耗尽，才能提前安排补给线！', en: 'Zhao Yun Tip: Know when supplies run out to plan the supply line ahead!' }] }
+    secret: { concept: { zh: '公差为负数时数列递减。公式不变：$a_n = a_1 + (n-1)d$，只是 $d < 0$。', en: 'Negative common difference = decreasing sequence. Same formula, just $d < 0$.' }, formula: '$a_n = a_1 + (n-1)d,\\quad d < 0$', tips: [{ zh: '赵云提示：知道粮草何时耗尽，才能提前安排补给线！', en: 'Zhao Yun Tip: Know when supplies run out to plan the supply line ahead!' }] },
+    storyConsequence: { correct: { zh: '粮草消耗精准预测，补给线及时安排！', en: 'Supply depletion predicted accurately — resupply arranged in time!' }, wrong: { zh: '粮草耗尽时间算错，大军断粮…', en: 'Supply exhaustion miscalculated — army runs out of food...' } },
   },
   // --- Year 7 Unit 5: 估算篇 ---
   {
@@ -1042,7 +1045,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：大数估算——先找到要舍入的位', en: 'Zhuge Liang: "Large numbers — find the place value first"' }, hint: { zh: '$3847$ 四舍五入到百位：\n看十位 $4$（$< 5$），舍\n$3847 \\approx 3800$', en: 'Round $3847$ to nearest 100:\nLook at tens digit $4$ ($< 5$), round down\n$3847 \\approx 3800$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '四舍五入到百位看十位，到千位看百位——总是看"下一位"。', en: 'To round to hundreds look at tens, to round to thousands look at hundreds — always check the next digit.' }, formula: '$\\text{看"下一位"决定舍入}$', tips: [{ zh: '诸葛亮提示：知己知彼，估算也要精准到位！', en: 'Zhuge Liang Tip: Know your enemy — even estimates should be strategic!' }] }
+    secret: { concept: { zh: '四舍五入到百位看十位，到千位看百位——总是看"下一位"。', en: 'To round to hundreds look at tens, to round to thousands look at hundreds — always check the next digit.' }, formula: '$\\text{看"下一位"决定舍入}$', tips: [{ zh: '诸葛亮提示：知己知彼，估算也要精准到位！', en: 'Zhuge Liang Tip: Know your enemy — even estimates should be strategic!' }] },
+    storyConsequence: { correct: { zh: '大军兵力估算到位，战略部署精准！', en: 'Army strength estimated correctly — strategy deployed precisely!' }, wrong: { zh: '估算偏差太大，战略判断失误…', en: 'Estimate too far off — strategic miscalculation...' } },
   },
   // --- Year 7 Unit 6: 营寨丈量·周长与面积篇 ---
   {
@@ -1128,7 +1132,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '赵云：分两步走——先代入求长，再算面积', en: 'Zhao Yun: "Two steps: substitute to find length, then calculate area"' }, hint: { zh: '第一步：长 $= 2x + 3 = 2 \\times 4 + 3 = 8 + 3 = 11$\n第二步：面积 $= 11 \\times 5 = 55$\n\n这就是代数 + 几何的结合！', en: 'Step 1: length $= 2x + 3 = 2 \\times 4 + 3 = 8 + 3 = 11$\nStep 2: area $= 11 \\times 5 = 55$\n\nThis is algebra + geometry combined!' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '代数和几何可以结合：用公式表示边长，代入后就能算面积。这是高中数学的基础！', en: 'Algebra + geometry combine: express sides as formulas, substitute to find area. This is the foundation of advanced math!' }, formula: '$A = (2x + 3) \\times w$', tips: [{ zh: '赵云提示：会画蓝图还不够，还要会算面积！', en: 'Zhao Yun Tip: Drawing blueprints isn\'t enough — you must calculate the area!' }] }
+    secret: { concept: { zh: '代数和几何可以结合：用公式表示边长，代入后就能算面积。这是高中数学的基础！', en: 'Algebra + geometry combine: express sides as formulas, substitute to find area. This is the foundation of advanced math!' }, formula: '$A = (2x + 3) \\times w$', tips: [{ zh: '赵云提示：会画蓝图还不够，还要会算面积！', en: 'Zhao Yun Tip: Drawing blueprints isn\'t enough — you must calculate the area!' }] },
+    storyConsequence: { correct: { zh: '营地蓝图完美落地，代数+几何完美结合！', en: 'Camp blueprint executed perfectly — algebra + geometry in harmony!' }, wrong: { zh: '蓝图尺寸算错，营地太小住不下…', en: 'Blueprint dimensions wrong — camp too small for the troops...' } },
   },
   // --- Year 7 Unit 7: 战后统计·数据篇 ---
   {
@@ -1193,7 +1198,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '张飞：极差 = 最大的 - 最小的', en: 'Zhang Fei: "Range = biggest − smallest"' }, hint: { zh: '最大 $20$，最小 $5$\nRange = $20 - 5 = 15$', en: 'Max $20$, Min $5$\nRange = $20 - 5 = 15$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '极差衡量数据的"分散程度"——差越大，数据越分散。', en: 'Range measures how spread out the data is — bigger range means more spread.' }, formula: '$\\text{Range} = \\text{Max} - \\text{Min}$', tips: [{ zh: '张飞提示：差距太大就要整训，差距小说明水平齐整！', en: 'Zhang Fei Tip: Big gap means more training needed!' }] }
+    secret: { concept: { zh: '极差衡量数据的"分散程度"——差越大，数据越分散。', en: 'Range measures how spread out the data is — bigger range means more spread.' }, formula: '$\\text{Range} = \\text{Max} - \\text{Min}$', tips: [{ zh: '张飞提示：差距太大就要整训，差距小说明水平齐整！', en: 'Zhang Fei Tip: Big gap means more training needed!' }] },
+    storyConsequence: { correct: { zh: '战力差距一目了然！张飞：整训计划安排上了！', en: 'Strength gap crystal clear! Zhang Fei: Training plan is set!' }, wrong: { zh: '数据分析有误，整训方向搞错了…', en: 'Data analysis wrong — training focus is off...' } },
   },
 
   // === Year 8: 讨伐董卓 → 官渡之战 → 隆中对 (190-209 AD) ===
@@ -1553,6 +1559,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Hard', reward: 200, kpId: 'kp-2.2-05', sectionId: 'algebra',
     tutorialSteps: [],
     secret: { concept: { zh: '因式分解让表达式更简洁——就像军令要精炼。', en: 'Factorising makes expressions concise — like military orders must be brief.' }, formula: '$ab + ac = a(b+c)$', tips: [{ zh: '刘备提示：军令如山，越简越好！', en: 'Liu Bei Tip: Orders like mountains — the simpler the better!' }] },
+    storyConsequence: { correct: { zh: '军令精简到位，三军令行禁止！', en: 'Orders simplified perfectly — troops execute flawlessly!' }, wrong: { zh: '军令冗长混乱，士兵不知所措…', en: 'Orders too verbose — soldiers are confused...' } },
   },
   {
     id: 865, grade: 8, unitId: 6, order: 5,
@@ -1567,6 +1574,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Hard', reward: 210, kpId: 'kp-2.6-01', sectionId: 'algebra',
     tutorialSteps: [],
     secret: { concept: { zh: '不等式给出范围而非单一答案。$x < 4$ 意思是 $x$ 可以是 3, 2, 1...', en: 'Inequalities give a range, not one answer. $x < 4$ means $x$ can be 3, 2, 1...' }, formula: '$ax + b < c \\Rightarrow x < \\frac{c-b}{a}$', tips: [{ zh: '诸葛亮提示：不等号像城门——有最大限度！', en: 'Zhuge Liang Tip: Inequality is like a gate — there\'s a maximum!' }] },
+    storyConsequence: { correct: { zh: '兵力安排在安全范围内，诸葛亮点头赞许！', en: 'Troops within safe limits — Zhuge Liang nods approvingly!' }, wrong: { zh: '超出兵力上限，后勤跟不上…', en: 'Exceeded troop limit — logistics can\'t keep up...' } },
   },
   {
     id: 866, grade: 8, unitId: 6, order: 6,
