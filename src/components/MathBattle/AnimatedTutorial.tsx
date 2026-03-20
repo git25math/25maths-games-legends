@@ -62,7 +62,7 @@ export function AnimatedTutorial({
   currentStep,
   lang,
 }: Props) {
-  const { speakTactical } = useAudio();
+  const { speakTactical, muted } = useAudio();
   const prevStepRef = useRef(currentStep);
   const direction = currentStep >= prevStepRef.current ? 1 : -1;
 
