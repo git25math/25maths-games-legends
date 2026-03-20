@@ -3596,90 +3596,86 @@ export function generateSquareCubeMission(template: Mission): Mission {
   const tutorialSteps = mode === 'square' ? [
     {
       text: {
-        zh: `${narrator}：什么是"平方"？一个数乘以自己`,
-        en: `${narrator}: "What is 'squaring'? A number times itself"`,
-      },
-      hint: {
-        zh: '为什么叫"平方"？因为正方形的面积 = 边长 × 边长\n\n比如边长 3 的正方形，面积 = 3 × 3 = 9\n所以 $3^2 = 9$',
-        en: 'Why "square"? Because a square\'s area = side × side\n\nA square with side 3: area = 3 × 3 = 9\nSo $3^2 = 9$',
+        zh: `${narrator}：为什么叫"平方"？\n想象一块正方形的营地，边长 $${n}$ 丈。\n正方形面积 = 边长 × 边长 = $${n} \\times ${n}$。\n\n"平方"就是一个数**乘以自己**——因为正方形是"平"的！`,
+        en: `${narrator}: "Why is it called 'squaring'?\nImagine a square camp, side length $${n}$.\nSquare area = side × side = $${n} \\times ${n}$.\n\n'Squaring' means a number TIMES ITSELF — because a square is flat!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：$${n}^2 = ${n} \\times ${n}$`,
-        en: `${narrator}: "$${n}^2 = ${n} \\times ${n}$"`,
-      },
-      hint: {
-        zh: `把 ${n} 个士兵排成 ${n} 行 ${n} 列的方阵\n总人数 = $${n} \\times ${n} = ${answer}$`,
-        en: `Arrange ${n} soldiers in a ${n} × ${n} square formation\nTotal = $${n} \\times ${n} = ${answer}$`,
+        zh: `${narrator}：$${n}^2$ 就是 $${n} \\times ${n}$\n把 ${n} 个士兵排成 $${n}$ 行 $${n}$ 列的方阵——总共多少人？\n\n$${n} \\times ${n} = ${answer}$\n\n方阵排好了！`,
+        en: `${narrator}: "$${n}^2$ means $${n} \\times ${n}$\nArrange soldiers in a $${n}$ × $${n}$ square formation — how many total?\n\n$${n} \\times ${n} = ${answer}$\n\nFormation complete!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：验算——$${answer}$ 是完全平方数吗？$\\sqrt{${answer}} = ${n}$ ✓`,
-        en: `${narrator}: "Check — is $${answer}$ a perfect square? $\\sqrt{${answer}} = ${n}$ ✓"`,
-      },
-      hint: {
-        zh: `$${n} \\times ${n} = ${answer}$，反过来 $\\sqrt{${answer}} = ${n}$\n平方和平方根是互逆运算`,
-        en: `$${n} \\times ${n} = ${answer}$, and $\\sqrt{${answer}} = ${n}$\nSquaring and square root are inverse operations`,
+        zh: `${narrator}：答案\n$${n}^2 = ${answer}$\n\n$${n}$ 的平方就是 $${answer}$——方阵里有 $${answer}$ 个士兵。`,
+        en: `${narrator}: "Answer\n$${n}^2 = ${answer}$\n\n$${n}$ squared is $${answer}$ — the formation has $${answer}$ soldiers."`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：记住前 10 个平方数`,
-        en: `${narrator}: "Remember the first 10 perfect squares"`,
+        zh: `${narrator}：验算——$\\sqrt{${answer}} = ${n}$ ✓\n$${n} \\times ${n} = ${answer}$，反过来 $\\sqrt{${answer}} = ${n}$。\n\n平方和平方根是互逆运算——就像加和减一样！`,
+        en: `${narrator}: "Verify — $\\sqrt{${answer}} = ${n}$ ✓\n$${n} \\times ${n} = ${answer}$, and $\\sqrt{${answer}} = ${n}$.\n\nSquaring and square root are inverse operations — like addition and subtraction!"`,
       },
-      hint: {
-        zh: '$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$\n\n$1^2=1,\\ 2^2=4,\\ 3^2=9,\\ 4^2=16,\\ 5^2=25$\n$6^2=36,\\ 7^2=49,\\ 8^2=64,\\ 9^2=81,\\ 10^2=100$',
-        en: '$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$\n\n$1^2=1,\\ 2^2=4,\\ 3^2=9,\\ 4^2=16,\\ 5^2=25$\n$6^2=36,\\ 7^2=49,\\ 8^2=64,\\ 9^2=81,\\ 10^2=100$',
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：必背——前 10 个平方数\n$1^2=1$，$2^2=4$，$3^2=9$，$4^2=16$，$5^2=25$\n$6^2=36$，$7^2=49$，$8^2=64$，$9^2=81$，$10^2=100$\n\n背下这些，以后一看就知道答案！`,
+        en: `${narrator}: "Must memorize — first 10 perfect squares\n$1^2=1$, $2^2=4$, $3^2=9$, $4^2=16$, $5^2=25$\n$6^2=36$, $7^2=49$, $8^2=64$, $9^2=81$, $10^2=100$\n\nMemorize these and you'll know instantly!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：小窍门——平方数的规律\n$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$\n相邻平方数的差：$3, 5, 7, 9, 11, 13, 15, 17, 19$\n\n差总是连续的奇数！这就是平方的秘密。做得漂亮！`,
+        en: `${narrator}: "Cool pattern — differences between squares\n$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$\nDifferences: $3, 5, 7, 9, 11, 13, 15, 17, 19$\n\nAlways consecutive odd numbers! That's the secret of squares. Brilliantly done!"`,
       },
       highlightField: 'ans',
     },
   ] : [
     {
       text: {
-        zh: `${narrator}：什么是"立方"？一个数乘三次`,
-        en: `${narrator}: "What is 'cubing'? A number times itself three times"`,
-      },
-      hint: {
-        zh: '为什么叫"立方"？因为正方体的体积 = 边长 × 边长 × 边长\n\n比如边长 3 的箱子，体积 = 3 × 3 × 3 = 27\n所以 $3^3 = 27$',
-        en: 'Why "cube"? Because a cube\'s volume = side × side × side\n\nA cube with side 3: volume = 3 × 3 × 3 = 27\nSo $3^3 = 27$',
+        zh: `${narrator}：为什么叫"立方"？\n想象一个正方体的粮箱，边长 $${n}$ 丈。\n正方体体积 = 边长 × 边长 × 边长 = $${n} \\times ${n} \\times ${n}$。\n\n"立方"就是一个数**乘三次**——因为正方体是"立"体的！`,
+        en: `${narrator}: "Why is it called 'cubing'?\nImagine a cube-shaped crate, side $${n}$.\nCube volume = side × side × side = $${n} \\times ${n} \\times ${n}$.\n\n'Cubing' means a number TIMES ITSELF THREE TIMES — because a cube is 3D!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：$${n}^3 = ${n} \\times ${n} \\times ${n}$`,
-        en: `${narrator}: "$${n}^3 = ${n} \\times ${n} \\times ${n}$"`,
-      },
-      hint: {
-        zh: `先算 $${n} \\times ${n} = ${n*n}$\n再乘 ${n}：$${n*n} \\times ${n} = ${answer}$\n\n就像码粮箱：${n} 层，每层 ${n} 行 ${n} 列`,
-        en: `First: $${n} \\times ${n} = ${n*n}$\nThen × ${n}: $${n*n} \\times ${n} = ${answer}$\n\nLike stacking crates: ${n} layers of ${n} × ${n}`,
+        zh: `${narrator}：$${n}^3$ 分两步算\n先算 $${n} \\times ${n} = ${n*n}$（一层有多少）\n再乘 $${n}$：$${n*n} \\times ${n} = ${answer}$（$${n}$ 层叠起来）\n\n就像码粮箱：$${n}$ 层，每层 $${n}$ 行 $${n}$ 列。`,
+        en: `${narrator}: "$${n}^3$ in two steps\nFirst: $${n} \\times ${n} = ${n*n}$ (one layer)\nThen × $${n}$: $${n*n} \\times ${n} = ${answer}$ (stack $${n}$ layers)\n\nLike stacking crates: $${n}$ layers of $${n}$ × $${n}$."`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：验算——$\\sqrt[3]{${answer}} = ${n}$ ✓`,
-        en: `${narrator}: "Check — $\\sqrt[3]{${answer}} = ${n}$ ✓"`,
-      },
-      hint: {
-        zh: `$${n} \\times ${n} \\times ${n} = ${answer}$\n反过来 $\\sqrt[3]{${answer}} = ${n}$\n立方和立方根是互逆运算`,
-        en: `$${n} \\times ${n} \\times ${n} = ${answer}$\nAnd $\\sqrt[3]{${answer}} = ${n}$\nCubing and cube root are inverse operations`,
+        zh: `${narrator}：答案\n$${n}^3 = ${answer}$\n\n$${n}$ 的立方就是 $${answer}$——粮箱能装这么多！`,
+        en: `${narrator}: "Answer\n$${n}^3 = ${answer}$\n\n$${n}$ cubed is $${answer}$ — that's how much the crate holds!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：记住前 5 个立方数`,
-        en: `${narrator}: "Remember the first 5 perfect cubes"`,
+        zh: `${narrator}：验算——$\\sqrt[3]{${answer}} = ${n}$ ✓\n$${n} \\times ${n} \\times ${n} = ${answer}$，反过来 $\\sqrt[3]{${answer}} = ${n}$。\n\n立方和立方根是互逆运算！`,
+        en: `${narrator}: "Verify — $\\sqrt[3]{${answer}} = ${n}$ ✓\n$${n} \\times ${n} \\times ${n} = ${answer}$, and $\\sqrt[3]{${answer}} = ${n}$.\n\nCubing and cube root are inverse operations!"`,
       },
-      hint: {
-        zh: '$1, 8, 27, 64, 125$\n\n$1^3=1,\\ 2^3=8,\\ 3^3=27,\\ 4^3=64,\\ 5^3=125$',
-        en: '$1, 8, 27, 64, 125$\n\n$1^3=1,\\ 2^3=8,\\ 3^3=27,\\ 4^3=64,\\ 5^3=125$',
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：必背——前 5 个立方数\n$1^3=1$，$2^3=8$，$3^3=27$，$4^3=64$，$5^3=125$\n\n立方数增长比平方快得多——$5^3 = 125$，但 $5^2$ 才 $25$！`,
+        en: `${narrator}: "Must memorize — first 5 perfect cubes\n$1^3=1$, $2^3=8$, $3^3=27$, $4^3=64$, $5^3=125$\n\nCubes grow much faster than squares — $5^3 = 125$, but $5^2$ is only $25$!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：平方 vs 立方——对比记忆\n平方（$n^2$）= 面积（二维，$n \\times n$）\n立方（$n^3$）= 体积（三维，$n \\times n \\times n$）\n\n指数 2 = 二维，指数 3 = 三维——指数就是维度！做得漂亮！`,
+        en: `${narrator}: "Square vs Cube — compare and remember\nSquare ($n^2$) = area (2D, $n \\times n$)\nCube ($n^3$) = volume (3D, $n \\times n \\times n$)\n\nExponent 2 = 2D, exponent 3 = 3D — the exponent IS the dimension! Brilliantly done!"`,
       },
       highlightField: 'ans',
     },
