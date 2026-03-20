@@ -1,10 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { DialogueBubble } from '../DialogueBubble';
 import { LatexText } from '../MathView';
 import { EquationSteps } from '../diagrams/EquationSteps';
 import { lt } from '../../i18n/resolveText';
+import { useAudio } from '../../audio';
 
 type TutorialStep = {
   text: { zh: string; en: string };
@@ -61,16 +62,41 @@ export function AnimatedTutorial({
   currentStep,
   lang,
 }: Props) {
+  const { speakTactical } = useAudio();
   const prevStepRef = useRef(currentStep);
   const direction = currentStep >= prevStepRef.current ? 1 : -1;
-  prevStepRef.current = currentStep;
 
   const step = tutorialSteps[currentStep];
-  if (!step) return null;
-
-  const rawText = lt(step.text, lang);
+  const rawText = step ? lt(step.text, lang) : '';
   const { speaker, dialogue } = extractSpeaker(rawText);
-  const hint = step.hint ? lt(step.hint, lang) : undefined;
+  const hint = step?.hint ? lt(step.hint, lang) : undefined;
+
+  // Voice Guidance Trigger
+  useEffect(() => {
+    if (dialogue && !muted) {
+      // Advanced Math-to-Speech Cleaning
+      let speechText = dialogue
+        .replace(/\$/g, '') // Remove TeX markers
+        .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, '$1 over $2') // Fractions
+        .replace(/\^\{?([^}]*)\}?/g, ' to the power of $1') // Powers
+        .replace(/\\sqrt\{?([^}]*)\}?/g, 'square root of $1') // Roots
+        .replace(/\\approx/g, 'approximately equal to') // Approx
+        .replace(/\\pm/g, 'plus or minus') // Plus-minus
+        .replace(/\\times/g, 'times') // Multiplication
+        .replace(/\*/g, ' times ') // Asterisk multiplication
+        .replace(/=/g, ' equals '); // Equals
+
+      // Delay slightly for the radio static SFX to finish
+      const timer = window.setTimeout(() => {
+        speakTactical(speechText, lang as any);
+      }, 50);
+      
+      return () => window.clearTimeout(timer);
+    }
+    prevStepRef.current = currentStep;
+  }, [currentStep, dialogue, lang, speakTactical, muted]);
+
+  if (!step) return null;
 
   return (
     <AnimatePresence mode="wait" custom={direction}>

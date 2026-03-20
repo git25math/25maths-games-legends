@@ -270,7 +270,7 @@ export default function App() {
         <div className="fixed bottom-2 left-2 z-50 flex items-center gap-2 font-mono">
           <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
           <div className="text-white/20 text-[10px] tracking-widest uppercase">
-            System.v6.3.0 // Terminal_Active
+            System.v6.4.0 // Terminal_Active
           </div>
         </div>
 
@@ -307,10 +307,10 @@ export default function App() {
                   ? (profile && !profile.grade ? 'grade' : 'map')
                   : gameState
               }
-              initial={{ opacity: 0, x: 300 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -300 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              variants={pageWarp}
+              initial="initial"
+              animate="animate"
+              exit="exit"
               className="w-full"
             >
               {gameState === 'welcome' && (

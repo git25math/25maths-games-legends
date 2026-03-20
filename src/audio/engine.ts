@@ -253,6 +253,40 @@ class SoundEngine {
     return this.musicIntensity;
   }
 
+  /** Tactical Commander Voice — Web Speech API with Radio Static */
+  speakTactical(text: string, lang: Language): void {
+    if (!this.ctx || this._muted) return;
+    
+    // Stop any current speech
+    window.speechSynthesis.cancel();
+
+    // 1. Play Opening Radio Glitch
+    this.play((ctx, time, dest) => {
+      // Short bandpass burst for radio wake-up
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 1200;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.04, time);
+      g.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+      const src = ctx.createOscillator();
+      src.type = 'sawtooth';
+      src.frequency.value = 50;
+      src.connect(filter).connect(g).connect(dest);
+      src.start(time);
+      src.stop(time + 0.1);
+    }, 'sfx');
+
+    // 2. Synthesize Speech
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang === 'en' ? 'en-US' : lang === 'zh_TW' ? 'zh-TW' : 'zh-CN';
+    utterance.rate = 0.95; // Slightly slower/professional
+    utterance.pitch = 0.85; // Lower pitch for tactical feel
+    utterance.volume = MIX.sfx * 0.8;
+
+    window.speechSynthesis.speak(utterance);
+  }
+
   getContext(): AudioContext {
     return this.ensureCtx();
   }

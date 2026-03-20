@@ -403,10 +403,23 @@ export const MathBattle = ({
 
       <motion.div
         key={`battle-${shakeKey}`}
-        initial={shakeKey > 0 ? false : { scale: 0.95, opacity: 0 }}
-        animate={shaking ? { x: [0, -4, 4, -3, 3, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
+        variants={terminalEntrance}
+        initial="initial"
+        animate="animate"
         className="relative w-full max-w-4xl bg-slate-950/40 border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
       >
+        {/* Physical Impact Overlay */}
+        <AnimatePresence>
+          {shaking && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 0.2, 0] }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-red-600/20 z-[60] pointer-events-none"
+            />
+          )}
+        </AnimatePresence>
+
         {/* Tactical Corner Brackets */}
         <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-indigo-500/40 rounded-tl-2xl pointer-events-none" />
         <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-indigo-500/40 rounded-tr-2xl pointer-events-none" />
@@ -414,10 +427,15 @@ export const MathBattle = ({
         <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-indigo-500/40 rounded-br-2xl pointer-events-none" />
 
         {/* Header: Tactical Uplink Status */}
-        <div className="bg-white/[0.02] p-6 border-b border-white/5 flex flex-wrap justify-between items-center gap-4">
+        <motion.div variants={staggerItem} className="bg-white/[0.02] p-6 border-b border-white/5 flex flex-wrap justify-between items-center gap-4">
           <div className="flex items-center gap-5">
             <div className="relative">
-              <CharacterAvatar characterId={character.id} size={64} className="border-2 border-indigo-500/30 rounded-xl" />
+              <motion.div
+                animate={streak >= 5 ? { scale: [1, 1.1, 1], rotate: [0, 2, -2, 0] } : {}}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              >
+                <CharacterAvatar characterId={character.id} size={64} className="border-2 border-indigo-500/30 rounded-xl" />
+              </motion.div>
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-slate-900 animate-pulse" />
             </div>
             
@@ -473,9 +491,19 @@ export const MathBattle = ({
 
         {/* Battle Content */}
         <div className="p-4 md:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 relative">
-          
+          {/* Physical Impact Overlay */}
+          <AnimatePresence>
+            {shaking && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 0.2, 0] }}
+                className="absolute inset-0 bg-red-600/20 z-[60] pointer-events-none"
+              />
+            )}
+          </AnimatePresence>
+
           {/* Left Side: Tactical Question & Stream */}
-          <div className="space-y-8">
+          <motion.div variants={staggerItem} className="space-y-8">
             {/* Question Display */}
             <div className="relative group">
               <div className="absolute -top-3 left-3 px-2 bg-[#0a0a10] text-[9px] font-mono text-indigo-400 uppercase tracking-widest z-10">
@@ -492,7 +520,7 @@ export const MathBattle = ({
             {/* Parameter Input Fields */}
             <div className="space-y-4">
               {currentQuestion.inputs.map((input, idx) => (
-                <div key={idx} className="relative group">
+                <motion.div key={idx} variants={staggerItem} className="relative group">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
                     <span className="font-mono text-[10px] text-white/20 group-focus-within:text-indigo-400 transition-colors uppercase">Param_{idx + 1}</span>
                     <div className="w-[1px] h-3 bg-white/10" />
@@ -504,10 +532,11 @@ export const MathBattle = ({
                     placeholder={lt(input.label, lang)}
                     className="w-full bg-white/[0.03] border border-white/5 focus:border-indigo-500/50 focus:bg-indigo-500/5 rounded-xl px-4 py-4 pl-24 text-white font-mono placeholder:text-white/10 outline-none transition-all"
                   />
-                </div>
+                </motion.div>
               ))}
 
-              <button
+              <motion.button
+                variants={staggerItem}
                 onClick={handleSubmit}
                 disabled={Object.keys(inputs).length === 0}
                 className={`w-full py-5 rounded-xl font-black text-sm uppercase tracking-[0.4em] transition-all relative overflow-hidden group ${
@@ -522,16 +551,16 @@ export const MathBattle = ({
                 </div>
                 {/* Tactical Glitch Sweep */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none" />
-              </button>
+              </motion.button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Side: Environmental Feedback */}
-          <div className="flex flex-col gap-6">
+          <motion.div variants={staggerItem} className="flex flex-col gap-6">
             {/* Strategic Map / Visualizer Mockup */}
             <div className="flex-1 bg-white/[0.02] border border-white/5 rounded-2xl p-6 relative overflow-hidden flex flex-col items-center justify-center">
               <div className="absolute top-3 left-4 font-mono text-[9px] text-white/20 uppercase tracking-[0.2em]">Environment_Visualizer</div>
-              
+
               {/* Radar Grid Animation Placeholder */}
               <div className="absolute inset-0 opacity-10 pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-indigo-500 rounded-full animate-ping" />
@@ -556,19 +585,19 @@ export const MathBattle = ({
                 <span className="text-white/30 uppercase tracking-widest">Telemetry_Stream</span>
                 <span className="text-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.3)]">● ONLINE</span>
               </div>
-              
+
               {isMultiQuestion && streak >= 2 && (
                 <div className="flex justify-between items-center text-orange-400">
                   <span className="uppercase">Streak_Multiplier:</span>
                   <span className="font-bold text-sm">x{getStreakMultiplier(streak)}</span>
                 </div>
               )}
-              
+
               <div className="flex justify-between">
                 <span className="text-white/40 uppercase">Queue_Progress:</span>
                 <span className="text-white/80 font-bold">{currentQIdx + 1} / {questionQueue.length}</span>
               </div>
-              
+
               <div className="flex justify-between">
                 <span className="text-white/40 uppercase">Time_Elapsed:</span>
                 <span className="text-white/80 font-bold">{Math.floor((Date.now() - startTime) / 1000)}S</span>
@@ -587,122 +616,64 @@ export const MathBattle = ({
                 ))}
               </div>
             </div>
-          </div>
-
+          </motion.div>
         </div>
-          {/* Left: Tactical Map */}
-          <div className="bg-parchment-dark rounded-lg p-6 border-2 border-ink/20 shadow-inner">
-            <div className="flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
-              <MapIcon size={18} />
-              <span>{t.calculating}</span>
+
+        {/* Tactical Map & Mission Story (Bottom Section) */}
+        <div className="px-4 md:px-8 pb-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+          {/* Left: Targeting Area / Map */}
+          <motion.div variants={staggerItem} className="bg-slate-900/40 rounded-2xl p-6 border border-white/5 relative overflow-hidden group">
+            <div className="absolute top-3 left-4 font-mono text-[9px] text-indigo-400/60 uppercase tracking-widest flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+              Satellite_Feed_Active
+            </div>
+            
+            <div className="mt-4 flex items-center gap-2 text-white/70 font-mono text-xs border-b border-white/5 pb-2">
+              <MapIcon size={14} className="text-indigo-400" />
+              <span className="uppercase tracking-widest">{t.calculating}</span>
             </div>
 
-            <div className="bg-white/40 p-3 rounded-lg mb-4 italic text-xs text-ink-light border-l-4 border-[#8b0000]">
-              <LatexText text={storyText} />
-            </div>
-
-            <div className="text-ink-light text-sm font-bold mb-6 leading-relaxed">
-              <LatexText text={descText} />
-            </div>
-            <VisualData mission={currentQuestion} lang={lang} />
-
-            {/* Reveal skill card: show formula hint on Q1 */}
-            {skillCard === 'reveal' && currentQIdx === 0 && (
-              <div className="mt-4 p-3 bg-purple-100 border-2 border-purple-300 rounded-lg">
-                <div className="text-purple-800 text-xs font-bold mb-1">{'\u{1F52E}'} {t.secretFormula}</div>
-                <MathView tex={currentQuestion.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-purple-900" />
-              </div>
-            )}
-
-            {/* Amber mode: show formula hint */}
-            {difficultyMode === 'amber' && (
-              <div className="mt-4 p-3 bg-amber-100 border-2 border-amber-300 rounded-lg">
-                <div className="text-amber-800 text-xs font-bold mb-1">{t.secretFormula}</div>
-                <MathView tex={currentQuestion.secret.formula.replace(/\$/g, '')} className="text-lg font-black text-amber-900" />
-              </div>
-            )}
-
-            <div className="mt-8 pt-4 border-t border-ink/10">
-              <div className="flex items-center gap-2 text-ink-light text-xs font-bold">
-                <Shield size={14} />
-                <span>{t.defense}：{character.stats.wisdom}</span>
+            <div className="mt-4 relative aspect-video bg-[#0a0a15] rounded-xl border border-indigo-500/20 overflow-hidden">
+              <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0%,rgba(79,70,229,0.1)_50%,transparent_100%)] animate-[spin_4s_linear_infinite]" />
+              <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#4f46e5 1px, transparent 1px)', backgroundSize: '15px 15px' }} />
+              
+              <div className="relative h-full flex items-center justify-center">
+                <LatexText 
+                  text={activeMission.secret.formula} 
+                  className="text-indigo-300 font-mono text-xl drop-shadow-[0_0_10px_rgba(79,70,229,0.5)]" 
+                />
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Right: Inputs */}
-          <div className="space-y-6">
-            {/* Tutorial overlay for Green mode (single-question only) */}
-            {isTutorial && interpolatedTutorialSteps && (
-              <AnimatedTutorial
-                tutorialSteps={interpolatedTutorialSteps}
-                equationSteps={mission.data?.tutorialEquationSteps}
-                characterId={character.id}
-                currentStep={tutorialStep}
-                lang={lang}
-              />
-            )}
+          {/* Right: Mission Logs / Story */}
+          <motion.div variants={staggerItem} className="bg-slate-900/40 rounded-2xl p-6 border border-white/5 relative overflow-hidden">
+            <div className="absolute top-3 left-4 font-mono text-[9px] text-indigo-400/60 uppercase tracking-widest flex items-center gap-2">
+              <Swords size={12} />
+              Mission_Log_Entry
+            </div>
 
-            <InputFields
-              mission={currentQuestion}
-              inputs={inputs}
-              setInputs={setInputs}
-              difficultyMode={difficultyMode}
-              tutorialStep={tutorialStep}
-              isTutorial={isTutorial}
-              lang={lang}
-            />
-
-            {/* Wrong answer review panel (with partial credit variant) */}
-            {wrongAnswerData && (
-              <WrongAnswerPanel
-                questionType={currentQuestion.type}
-                userInputs={wrongAnswerData.userInputs}
-                expected={wrongAnswerData.expected}
-                formula={currentQuestion.secret.formula}
-                tutorialSteps={interpolatedTutorialSteps}
-                lang={lang}
-                onContinue={handleWrongAnswerContinue}
-                storyText={!partialCreditInfo && mission.storyConsequence ? lt(mission.storyConsequence.wrong, lang) : undefined}
-                isPartial={!!partialCreditInfo}
-                partialScore={partialCreditInfo?.score}
-              />
-            )}
-
-            {isTutorial ? (
-              <div className="flex gap-2">
-                {tutorialStep > 0 && (
-                  <button
-                    onClick={() => { playClick(); setTutorialStep(prev => prev - 1); }}
-                    className="flex-1 py-4 bg-slate-500 text-white font-black rounded-lg shadow-lg hover:bg-slate-600 transition-all flex items-center justify-center gap-2 min-h-12"
-                  >
-                    <ChevronLeft size={20} />
-                    {t.prevStep}
-                  </button>
-                )}
-                <button
-                  onClick={() => {
-                    playClick();
-                    if (tutorialStep < (mission.tutorialSteps?.length || 0) - 1) {
-                      setTutorialStep(prev => prev + 1);
-                    } else {
-                      setMode('battle');
-                      setInputs({});
-                    }
-                  }}
-                  className="flex-1 py-4 bg-indigo-600 text-white font-black rounded-lg shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-h-12"
-                >
-                  {tutorialStep < (mission.tutorialSteps?.length || 0) - 1 ? t.nextStep : t.tutorialStartBattle}
-                  <ChevronRight size={20} />
-                </button>
+            <div className="mt-6 space-y-4">
+              <div className="bg-indigo-500/5 border-l-2 border-indigo-500 p-3 rounded-r-lg">
+                <p className="text-sm text-indigo-200/90 leading-relaxed font-mono italic">
+                  "{lt(activeMission.description, lang)}"
+                </p>
               </div>
-            ) : (
-              <motion.button
-                {...(wrongAnswerData ? {} : { ...tapScale, ...hoverGlow })}
-                onClick={handleSubmit}
-                disabled={!!wrongAnswerData}
-                className={`w-full py-4 md:py-6 text-[#f4e4bc] text-lg md:text-2xl font-black rounded-lg transition-shadow flex items-center justify-center gap-4 border-2 min-h-12 ${wrongAnswerData ? 'bg-slate-500 border-slate-600 cursor-not-allowed' : 'bg-[#8b0000] shadow-[0_4px_0_#5c0000] border-[#5c0000]'}`}
-              >
+
+              <div className="bg-emerald-500/5 border-l-2 border-emerald-500/50 p-3 rounded-r-lg">
+                <div className="text-[10px] font-mono text-emerald-500/60 uppercase mb-1">Intelligence_Received:</div>
+                <p className="text-xs text-white/60 font-mono leading-relaxed">
+                  {lt(activeMission.secret.tips[0], lang)}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+    </div>
+  );
+};
                 <Swords size={28} />
                 {t.attack}
               </motion.button>

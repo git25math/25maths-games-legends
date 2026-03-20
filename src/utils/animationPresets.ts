@@ -1,4 +1,35 @@
-import type { MotionProps } from "motion/react";
+import type { MotionProps, Variants } from "motion/react";
+
+// --- Tactical Curves ---
+const energyEase = [0.22, 1, 0.36, 1]; // Fast out, slow in
+
+// --- Page Warp: Deep Dive Transition ---
+export const pageWarp: Variants = {
+  initial: { scale: 1.15, opacity: 0, filter: 'blur(20px) brightness(1.5)' },
+  animate: { 
+    scale: 1, 
+    opacity: 1, 
+    filter: 'blur(0px) brightness(1)',
+    transition: { duration: 0.8, ease: energyEase } 
+  },
+  exit: { 
+    scale: 0.9, 
+    opacity: 0, 
+    filter: 'blur(10px) brightness(0)',
+    transition: { duration: 0.4, ease: 'easeIn' } 
+  }
+};
+
+// --- Terminal Assembly: Staggered HUD Entrance ---
+export const terminalEntrance: Variants = {
+  initial: { opacity: 0, scale: 0.98, y: 10 },
+  animate: { 
+    opacity: 1, 
+    scale: 1, 
+    y: 0,
+    transition: { duration: 0.5, ease: energyEase, staggerChildren: 0.08 } 
+  }
+};
 
 export const tapScale: MotionProps = {
   whileTap: { scale: 0.95 },
@@ -6,8 +37,9 @@ export const tapScale: MotionProps = {
 
 export const hoverGlow: MotionProps = {
   whileHover: { 
-    scale: 1.05, 
-    boxShadow: "0 0 15px rgba(234,179,8,0.3)" 
+    scale: 1.02, 
+    boxShadow: "0 0 20px rgba(79, 70, 229, 0.3)",
+    filter: 'brightness(1.1)'
   },
 };
 
@@ -21,15 +53,15 @@ export const staggerContainer = {
   initial: {},
   animate: {
     transition: {
-      staggerChildren: 0.05,
+      staggerChildren: 0.08,
     },
   },
 };
 
 export const staggerItem = {
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.3, ease: "easeOut" } // this will be used for item entrance if not overridden
+  transition: { duration: 0.4, ease: energyEase }
 };
 
 export const buttonBase: MotionProps = {
@@ -57,13 +89,9 @@ export const VICTORY_TIMING = {
 } as const;
 
 export const BATTLE_TIMING = {
-  /** Delay before advancing to next question after correct answer */
   advance: 600,
-  /** Delay before victory after shield absorb / survive last question */
   shieldVictory: 300,
-  /** Delay before defeat sound plays (after hpLoss fades) */
   defeatSound: 400,
-  /** Shake animation duration */
   shake: 500,
 } as const;
 
