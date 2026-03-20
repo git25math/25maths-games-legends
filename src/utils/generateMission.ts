@@ -4995,59 +4995,88 @@ export function generateBodmasMission(template: Mission): Mission {
 
   const tutorialSteps = tier <= 2 ? [
     {
-      text: { zh: `${narrator}：为什么不能从左到右算？——因为运算有"军衔"`, en: `${narrator}: "Why not just calculate left to right? — Because operations have 'ranks'"` },
-      hint: { zh: `日常生活中，我们从左到右读句子\n但数学不一样！运算有优先级：\n\n乘除 > 加减\n就像将军的命令比士兵的命令优先\n\n$2 + 3 \\times 4$：乘法（将军）先执行，加法（士兵）后执行`, en: `In everyday life, we read left to right\nBut math is different! Operations have priority:\n\nMultiply/Divide > Add/Subtract\nLike a general's order overrides a soldier's\n\n$2 + 3 \\times 4$: multiplication (general) first, addition (soldier) second` },
+      text: {
+        zh: `${narrator}：为什么不能从左到右算？\n日常读句子从左到右，但数学不一样！运算有"军衔"：\n\n乘除 > 加减——将军的命令比士兵优先。\n$2 + 3 \\times 4$：乘法（将军）先行，加法（士兵）等候！`,
+        en: `${narrator}: "Why not just left to right?\nWe read sentences left to right, but math is different! Operations have 'ranks':\n\nMultiply/Divide > Add/Subtract — general's orders override soldiers'.\n$2 + 3 \\times 4$: multiplication (general) first, addition (soldier) waits!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：口诀 BODMAS——运算的军衔表`, en: `${narrator}: "BODMAS — the rank table of operations"` },
-      hint: { zh: `B — Brackets 括号（最高！统帅级）\nO — Orders 幂/根号（将军级）\nDM — Division/Multiplication 乘除（校官级）\nAS — Addition/Subtraction 加减（士兵级）\n\n遇到同级（比如既有乘又有除）→ 从左到右`, en: `B — Brackets (highest! Commander)\nO — Orders/Powers (General)\nDM — Division/Multiplication (Officer)\nAS — Addition/Subtraction (Soldier)\n\nSame rank (e.g., both × and ÷) → left to right` },
+      text: {
+        zh: `${narrator}：BODMAS——运算的军衔表\nB — Brackets 括号（统帅级，最高！）\nO — Orders 幂/根号（将军级）\nDM — Division/Multiplication 乘除（校官级）\nAS — Addition/Subtraction 加减（士兵级）\n\n同级的（比如又乘又除）→ 从左到右。`,
+        en: `${narrator}: "BODMAS — the rank table\nB — Brackets (Commander, highest!)\nO — Orders/Powers (General)\nDM — Division/Multiplication (Officer)\nAS — Addition/Subtraction (Soldier)\n\nSame rank (e.g., × and ÷ together) → left to right."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：看这道题——$${expr}$，有哪些运算？`, en: `${narrator}: "Look at $${expr}$ — what operations are there?"` },
-      hint: { zh: `$${expr}$ 包含：\n• 乘法 $${b} \\times ${c}$（校官级）\n• 加法 $+ ${a}$（士兵级）\n\n校官 > 士兵 → 先算乘法！`, en: `$${expr}$ contains:\n• Multiplication $${b} \\times ${c}$ (Officer rank)\n• Addition $+ ${a}$ (Soldier rank)\n\nOfficer > Soldier → multiply first!` },
+      text: {
+        zh: `${narrator}：$${expr}$ 有哪些运算？\n• 乘法 $${b} \\times ${c}$（校官级）\n• 加法 $+ ${a}$（士兵级）\n\n校官 > 士兵 → 先算乘法！`,
+        en: `${narrator}: "$${expr}$ — what operations are there?\n• Multiplication $${b} \\times ${c}$ (Officer)\n• Addition $+ ${a}$ (Soldier)\n\nOfficer > Soldier → multiply first!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第一步——先算乘法（军衔高的先执行）`, en: `${narrator}: "Step 1 — multiply first (higher rank goes first)"` },
-      hint: { zh: `$${b} \\times ${c} = ${b * c}$\n\n现在式子变成：$${a} + ${b * c}$`, en: `$${b} \\times ${c} = ${b * c}$\n\nNow the expression becomes: $${a} + ${b * c}$` },
+      text: {
+        zh: `${narrator}：第一步——先算乘法\n$${b} \\times ${c} = ${b * c}$\n\n式子变成：$${a} + ${b * c}$`,
+        en: `${narrator}: "Step 1 — multiply first\n$${b} \\times ${c} = ${b * c}$\n\nExpression becomes: $${a} + ${b * c}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——再算加法`, en: `${narrator}: "Step 2 — now add"` },
-      hint: { zh: `$${a} + ${b * c} = ${answer}$`, en: `$${a} + ${b * c} = ${answer}$` },
+      text: {
+        zh: `${narrator}：第二步——再算加法\n$${a} + ${b * c} = ${answer}$\n\n答案 = $${answer}$`,
+        en: `${narrator}: "Step 2 — now add\n$${a} + ${b * c} = ${answer}$\n\nAnswer = $${answer}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：对比——如果犯了"从左到右"的错误`, en: `${narrator}: "Compare — what if you made the 'left to right' mistake?"` },
-      hint: { zh: `错误做法（从左到右）：\n$${a} + ${b} = ${a + b}$，然后 $${a + b} \\times ${c} = ${wrongAnswer}$ ✗\n\n正确做法（先乘后加）：\n$${b} \\times ${c} = ${b * c}$，然后 $${a} + ${b * c} = ${answer}$ ✓\n\n$${wrongAnswer} \\neq ${answer}$——顺序不同，答案完全不同！`, en: `Wrong (left to right):\n$${a} + ${b} = ${a + b}$, then $${a + b} \\times ${c} = ${wrongAnswer}$ ✗\n\nCorrect (multiply first):\n$${b} \\times ${c} = ${b * c}$, then $${a} + ${b * c} = ${answer}$ ✓\n\n$${wrongAnswer} \\neq ${answer}$ — different order, totally different answer!` },
+      text: {
+        zh: `${narrator}：验算——对比"从左到右"的错误\n❌ 错误：$${a} + ${b} = ${a + b}$，$${a + b} \\times ${c} = ${wrongAnswer}$\n✓ 正确：$${b} \\times ${c} = ${b * c}$，$${a} + ${b * c} = ${answer}$\n\n$${wrongAnswer} \\neq ${answer}$——顺序不同，答案天差地别！做得漂亮！`,
+        en: `${narrator}: "Verify — compare with the 'left to right' mistake\n❌ Wrong: $${a} + ${b} = ${a + b}$, $${a + b} \\times ${c} = ${wrongAnswer}$\n✓ Correct: $${b} \\times ${c} = ${b * c}$, $${a} + ${b * c} = ${answer}$\n\n$${wrongAnswer} \\neq ${answer}$ — different order, totally different answer! Brilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ] : [
     {
-      text: { zh: `${narrator}：括号——运算界的"统帅令"`, en: `${narrator}: "Brackets — the 'supreme command' of operations"` },
-      hint: { zh: `BODMAS 里 B = Brackets（括号）\n括号的军衔最高——比乘除还高\n\n有括号？先算括号里面的\n没括号？按乘除 > 加减的顺序`, en: `BODMAS: B = Brackets\nBrackets outrank everything — even multiply/divide\n\nBrackets present? Calculate inside first\nNo brackets? Follow multiply/divide > add/subtract` },
+      text: {
+        zh: `${narrator}：括号——运算界的"统帅令"！\nBODMAS 里 B = Brackets，军衔最高——比乘除还高。\n\n有括号？**先算括号里面的**，不管里面是什么运算。\n括号就是临时提拔：让低级运算获得最高优先权！`,
+        en: `${narrator}: "Brackets — the 'supreme command' of operations!\nBODMAS: B = Brackets, highest rank — outranks even multiply/divide.\n\nBrackets present? Calculate INSIDE FIRST, no matter what.\nBrackets = temporary promotion for any operation inside!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：$${expr}$ ——发现括号了！先算它`, en: `${narrator}: "$${expr}$ — spot the brackets! Do them first"` },
-      hint: { zh: `第一步（括号内）：$${a} + ${b} = ${a + b}$\n\n现在式子变成：$${a + b} \\times ${c}$`, en: `Step 1 (inside brackets): $${a} + ${b} = ${a + b}$\n\nNow: $${a + b} \\times ${c}$` },
+      text: {
+        zh: `${narrator}：$${expr}$——发现括号了！先算它\n括号内：$${a} + ${b} = ${a + b}$\n\n式子变成：$${a + b} \\times ${c}$\n\n括号消除了——接下来正常算。`,
+        en: `${narrator}: "$${expr}$ — brackets spotted! Do them first\nInside brackets: $${a} + ${b} = ${a + b}$\n\nExpression becomes: $${a + b} \\times ${c}$\n\nBrackets gone — now calculate normally."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——括号消除后，正常算`, en: `${narrator}: "Step 2 — brackets done, calculate normally"` },
-      hint: { zh: `$${a + b} \\times ${c} = ${answer}$`, en: `$${a + b} \\times ${c} = ${answer}$` },
+      text: {
+        zh: `${narrator}：括号消除后——正常乘\n$${a + b} \\times ${c} = ${answer}$\n\n答案 = $${answer}$`,
+        en: `${narrator}: "Brackets done — now multiply\n$${a + b} \\times ${c} = ${answer}$\n\nAnswer = $${answer}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：对比——有括号 vs 没括号`, en: `${narrator}: "Compare — with brackets vs without"` },
-      hint: { zh: `有括号：$(${a} + ${b}) \\times ${c} = ${a + b} \\times ${c} = ${answer}$\n无括号：$${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$\n\n括号把加法的军衔"临时提升"了——先算加法再算乘法！`, en: `With: $(${a} + ${b}) \\times ${c} = ${a + b} \\times ${c} = ${answer}$\nWithout: $${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$\n\nBrackets "temporarily promote" addition — add before multiply!` },
+      text: {
+        zh: `${narrator}：对比——有括号 vs 没括号\n有：$(${a} + ${b}) \\times ${c} = ${a + b} \\times ${c} = ${answer}$\n无：$${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$——括号改变了一切！`,
+        en: `${narrator}: "Compare — with brackets vs without\nWith: $(${a} + ${b}) \\times ${c} = ${a + b} \\times ${c} = ${answer}$\nWithout: $${a} + ${b} \\times ${c} = ${a} + ${b * c} = ${a + b * c}$\n\n$${answer} \\neq ${a + b * c}$ — brackets change everything!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——答案 $${answer}$ 对吗？`, en: `${narrator}: "Verify — is $${answer}$ correct?"` },
-      hint: { zh: `$(${a} + ${b}) \\times ${c}$\n$= ${a + b} \\times ${c}$\n$= ${answer}$ ✓\n\nBODMAS 口诀：B 括号 → O 幂 → DM 乘除 → AS 加减`, en: `$(${a} + ${b}) \\times ${c}$\n$= ${a + b} \\times ${c}$\n$= ${answer}$ ✓\n\nBODMAS: B Brackets → O Orders → DM Div/Mul → AS Add/Sub` },
+      text: {
+        zh: `${narrator}：答案\n$(${a} + ${b}) \\times ${c} = ${answer}$`,
+        en: `${narrator}: "Answer\n$(${a} + ${b}) \\times ${c} = ${answer}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n$(${a} + ${b}) \\times ${c} = ${a + b} \\times ${c} = ${answer}$ ✓\n\nBODMAS 口诀：B括号 → O幂 → DM乘除 → AS加减\n记住军衔表，运算顺序永不出错！做得漂亮！`,
+        en: `${narrator}: "Verify\n$(${a} + ${b}) \\times ${c} = ${a + b} \\times ${c} = ${answer}$ ✓\n\nBODMAS: B Brackets → O Orders → DM Div/Mul → AS Add/Sub\nRemember the rank table — never get the order wrong! Brilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ];
