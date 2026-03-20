@@ -3183,84 +3183,60 @@ export function generateFracAddMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：先别急着算。想象一下——你有一块饼切成 ${dispD1} 份，我有一块同样大的饼切成 ${dispD2} 份`,
-        en: `${narrator}: "Don't rush. Imagine — your pie is cut into ${dispD1} pieces, my pie into ${dispD2} pieces"`,
-      },
-      hint: {
-        zh: `你的 1 份和我的 1 份大小不一样！\n切成 ${dispD1} 份和切成 ${dispD2} 份，每份大小不同\n不统一成一样大的份，就没法直接${isSubtract ? '减' : '加'}`,
-        en: `Your 1 piece and my 1 piece are different sizes!\n${dispD1} pieces vs ${dispD2} pieces — each piece is a different size\nCan't ${isSubtract ? 'subtract' : 'add'} until pieces are the same size`,
+        zh: `${narrator}：为什么不能直接${isSubtract ? '减' : '加'}？\n你的饼切成 $${dispD1}$ 份，我的切成 $${dispD2}$ 份——每份大小不一样！\n不统一份数，就没法直接${isSubtract ? '减' : '加'}。\n\n就像你的 1 块和我的 1 块大小不同——先切成一样大的才行！`,
+        en: `${narrator}: "Why can't we just ${isSubtract ? 'subtract' : 'add'} directly?\nYour pie has $${dispD1}$ pieces, mine has $${dispD2}$ — each piece is different size!\nCan't ${isSubtract ? 'subtract' : 'add'} until pieces are the same size.\n\nYour 1 piece ≠ my 1 piece — cut both the same first!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：要把两块饼都切成一样多的份——找一个数，既能被 ${dispD1} 整除，也能被 ${dispD2} 整除`,
-        en: `${narrator}: "Cut both pies into the same number of pieces — find a number divisible by both ${dispD1} and ${dispD2}"`,
-      },
-      hint: {
-        zh: `列出 ${dispD1} 的倍数，看哪个也能被 ${dispD2} 整除：\n${multiplesForLCD.zh}\n\n公分母 = ${recalcLcd}`,
-        en: `List multiples of ${dispD1}, check which is also divisible by ${dispD2}:\n${multiplesForLCD.en}\n\nCommon denominator = ${recalcLcd}`,
+        zh: `${narrator}：找公分母——两块饼都切成一样多的份\n列出 $${dispD1}$ 的倍数，看哪个也能被 $${dispD2}$ 整除：\n${multiplesForLCD.zh}\n\n公分母 = $${recalcLcd}$！`,
+        en: `${narrator}: "Find the common denominator — cut both pies the same\nList multiples of $${dispD1}$, check which is divisible by $${dispD2}$:\n${multiplesForLCD.en}\n\nCommon denominator = $${recalcLcd}$!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：把 $\\frac{${dispN1}}{${dispD1}}$ 变成分母是 ${recalcLcd} 的分数`,
-        en: `${narrator}: "Convert $\\frac{${dispN1}}{${dispD1}}$ to denominator ${recalcLcd}"`,
-      },
-      hint: {
-        zh: `分母 ${dispD1}→${recalcLcd}，乘了 ${k1}\n分子也必须乘 ${k1}（不然分数的值就变了）\n${dispN1}×${k1}=${recalcAdjN1}\n\n$\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
-        en: `Denominator ${dispD1}→${recalcLcd}, multiplied by ${k1}\nNumerator must also ×${k1} (otherwise fraction value changes)\n${dispN1}×${k1}=${recalcAdjN1}\n\n$\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
+        zh: `${narrator}：通分第一个——$\\frac{${dispN1}}{${dispD1}}$\n分母 $${dispD1} \\to ${recalcLcd}$，乘了 $${k1}$。\n分子也必须乘 $${k1}$（不然分数值就变了）：$${dispN1} \\times ${k1} = ${recalcAdjN1}$\n\n$\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$`,
+        en: `${narrator}: "Convert first — $\\frac{${dispN1}}{${dispD1}}$\nDenominator $${dispD1} \\to ${recalcLcd}$, multiplied by $${k1}$.\nNumerator must also ×$${k1}$ (or the value changes): $${dispN1} \\times ${k1} = ${recalcAdjN1}$\n\n$\\frac{${dispN1}}{${dispD1}} = \\frac{${recalcAdjN1}}{${recalcLcd}}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：把 $\\frac{${dispN2}}{${dispD2}}$ 也变成分母是 ${recalcLcd} 的分数`,
-        en: `${narrator}: "Convert $\\frac{${dispN2}}{${dispD2}}$ to denominator ${recalcLcd} too"`,
-      },
-      hint: {
-        zh: `分母 ${dispD2}→${recalcLcd}，乘了 ${k2}\n分子也乘 ${k2}：${dispN2}×${k2}=${recalcAdjN2}\n\n$\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$`,
-        en: `Denominator ${dispD2}→${recalcLcd}, multiplied by ${k2}\nNumerator also ×${k2}: ${dispN2}×${k2}=${recalcAdjN2}\n\n$\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$`,
+        zh: `${narrator}：通分第二个——$\\frac{${dispN2}}{${dispD2}}$\n分母 $${dispD2} \\to ${recalcLcd}$，乘了 $${k2}$。分子也乘：$${dispN2} \\times ${k2} = ${recalcAdjN2}$\n\n$\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$`,
+        en: `${narrator}: "Convert second — $\\frac{${dispN2}}{${dispD2}}$\nDenominator $${dispD2} \\to ${recalcLcd}$, ×$${k2}$. Numerator too: $${dispN2} \\times ${k2} = ${recalcAdjN2}$\n\n$\\frac{${dispN2}}{${dispD2}} = \\frac{${recalcAdjN2}}{${recalcLcd}}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：现在都是 ${recalcLcd} 份里的几份了——直接${isSubtract ? '减' : '加'}分子！`,
-        en: `${narrator}: "Now both are out of ${recalcLcd} — just ${isSubtract ? 'subtract' : 'add'} the numerators!"`,
-      },
-      hint: {
-        zh: `$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$\n\n分母不变，只${isSubtract ? '减' : '加'}分子`,
-        en: `$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$\n\nDenominator stays, just ${isSubtract ? 'subtract' : 'add'} numerators`,
+        zh: `${narrator}：分母相同了——直接${isSubtract ? '减' : '加'}分子！\n$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${recalcAdjN1} ${op} ${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$\n\n分母不变，只${isSubtract ? '减' : '加'}分子——就这么简单！`,
+        en: `${narrator}: "Same denominator now — just ${isSubtract ? 'subtract' : 'add'} numerators!\n$\\frac{${recalcAdjN1}}{${recalcLcd}} ${op} \\frac{${recalcAdjN2}}{${recalcLcd}} = \\frac{${rawAns}}{${recalcLcd}}$\n\nDenominator stays, just ${isSubtract ? 'subtract' : 'add'} numerators — that simple!"`,
       },
       highlightField: 'ans',
     },
     ...(needsSimplify ? [
       {
         text: {
-          zh: `${narrator}：$\\frac{${rawAns}}{${recalcLcd}}$ 能化简吗？看分子和分母有没有公因数`,
-          en: `${narrator}: "Can $\\frac{${rawAns}}{${recalcLcd}}$ be simplified? Check if numerator and denominator share a factor"`,
-        },
-        hint: {
-          zh: `${rawAns} 和 ${recalcLcd} 的公因数是 ${gcdCalc(rawAns, recalcLcd)}\n分子分母都除以 ${gcdCalc(rawAns, recalcLcd)}：\n$\\frac{${rawAns}÷${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd}÷${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$`,
-          en: `${rawAns} and ${recalcLcd} share factor ${gcdCalc(rawAns, recalcLcd)}\nDivide both by ${gcdCalc(rawAns, recalcLcd)}:\n$\\frac{${rawAns}÷${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd}÷${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$`,
+          zh: `${narrator}：化简——$${rawAns}$ 和 $${recalcLcd}$ 的公因数是 $${gcdCalc(rawAns, recalcLcd)}$\n都除以 $${gcdCalc(rawAns, recalcLcd)}$：$\\frac{${rawAns} \\div ${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd} \\div ${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$`,
+          en: `${narrator}: "Simplify — $${rawAns}$ and $${recalcLcd}$ share factor $${gcdCalc(rawAns, recalcLcd)}$\nDivide both: $\\frac{${rawAns} \\div ${gcdCalc(rawAns, recalcLcd)}}{${recalcLcd} \\div ${gcdCalc(rawAns, recalcLcd)}} = ${ansDisplay}$"`,
         },
         highlightField: 'ans',
       },
     ] : [
       {
         text: {
-          zh: `${narrator}：$\\frac{${rawAns}}{${recalcLcd}}$ 能化简吗？${rawAns} 和 ${recalcLcd} 没有公因数，已经是最简了`,
-          en: `${narrator}: "Can $\\frac{${rawAns}}{${recalcLcd}}$ be simplified? ${rawAns} and ${recalcLcd} share no factors — already simplest"`,
+          zh: `${narrator}：能化简吗？$${rawAns}$ 和 $${recalcLcd}$ 没有公因数——已经最简了！`,
+          en: `${narrator}: "Can it simplify? $${rawAns}$ and $${recalcLcd}$ share no factors — already simplest!"`,
         },
         highlightField: 'ans',
       },
     ]),
     {
       text: {
-        zh: `${narrator}：答案是 $${ansDisplay}$！\n验算：$${ansNum/ansDen}$ ≈ ${(ansNum/ansDen).toFixed(3)}`,
-        en: `${narrator}: "Answer: $${ansDisplay}$!\nCheck: $${ansNum/ansDen}$ ≈ ${(ansNum/ansDen).toFixed(3)}"`,
+        zh: `${narrator}：答案\n$${ansDisplay}$\n\n验算：$\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$——做得漂亮！`,
+        en: `${narrator}: "Answer\n$${ansDisplay}$\n\nCheck: $\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$ — brilliantly done!"`,
       },
       highlightField: 'ans',
     },
@@ -3328,111 +3304,79 @@ export function generateFracMulMission(template: Mission): Mission {
   const tutorialSteps = isDivide ? [
     {
       text: {
-        zh: `${narrator}：先用整数建立直觉`,
-        en: `${narrator}: "Let's build intuition with whole numbers first"`,
-      },
-      hint: {
-        zh: `有 6 个苹果，每人分 2 个：$6 \\div 2 = 3$ 人\n有 6 个苹果，每人分 $\\frac{1}{2}$ 个：$6 \\div \\frac{1}{2} = 12$ 人\n注意：$6 \\div \\frac{1}{2} = 6 \\times 2 = 12$\n除以 $\\frac{1}{2}$，等于乘以 2`,
-        en: `6 apples, 2 per person: $6 \\div 2 = 3$ people\n6 apples, $\\frac{1}{2}$ per person: $6 \\div \\frac{1}{2} = 12$ people\nNotice: $6 \\div \\frac{1}{2} = 6 \\times 2 = 12$\nDividing by $\\frac{1}{2}$ = multiplying by 2`,
+        zh: `${narrator}：分数除法——先用整数感受\n有 6 个苹果，每人分 2 个：$6 \\div 2 = 3$ 人。\n有 6 个苹果，每人分 $\\frac{1}{2}$ 个：$6 \\div \\frac{1}{2} = 12$ 人！\n\n注意：$6 \\div \\frac{1}{2} = 6 \\times 2 = 12$——除以分数 = 乘以倒数！`,
+        en: `${narrator}: "Fraction division — feel it with whole numbers first\n6 apples, 2 per person: $6 \\div 2 = 3$ people.\n6 apples, $\\frac{1}{2}$ per person: $6 \\div \\frac{1}{2} = 12$ people!\n\nNotice: $6 \\div \\frac{1}{2} = 6 \\times 2 = 12$ — dividing by a fraction = multiplying by its reciprocal!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：为什么"除以分数 = 乘以倒数"？`,
-        en: `${narrator}: "Why does dividing by a fraction = multiplying by its reciprocal?"`,
-      },
-      hint: {
-        zh: `$\\frac{${n2}}{${d2}}$ 的倒数是 $\\frac{${d2}}{${n2}}$（分子分母互换）\n除以 $\\frac{${n2}}{${d2}}$ = 乘以 $\\frac{${d2}}{${n2}}$`,
-        en: `The reciprocal of $\\frac{${n2}}{${d2}}$ is $\\frac{${d2}}{${n2}}$ (swap numerator and denominator)\nDividing by $\\frac{${n2}}{${d2}}$ = multiplying by $\\frac{${d2}}{${n2}}$`,
+        zh: `${narrator}：什么是"倒数"？分子分母互换！\n$\\frac{${n2}}{${d2}}$ 的倒数是 $\\frac{${d2}}{${n2}}$。\n\n除以 $\\frac{${n2}}{${d2}}$ = 乘以 $\\frac{${d2}}{${n2}}$——记住这个就够了！`,
+        en: `${narrator}: "What's a reciprocal? Swap numerator and denominator!\nReciprocal of $\\frac{${n2}}{${d2}}$ is $\\frac{${d2}}{${n2}}$.\n\nDivide by $\\frac{${n2}}{${d2}}$ = multiply by $\\frac{${d2}}{${n2}}$ — remember this and you're set!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：回到题目——把除法变成乘法\n$\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$`,
-        en: `${narrator}: "Back to our problem — turn division into multiplication"\n$\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$`,
+        zh: `${narrator}：把除法变乘法\n$\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$\n\n翻转第二个分数，除号变乘号！`,
+        en: `${narrator}: "Turn division into multiplication\n$\\frac{${n1}}{${d1}} \\div \\frac{${n2}}{${d2}} = \\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}}$\n\nFlip the second fraction, change ÷ to ×!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
         zh: `${narrator}：分子乘分子，分母乘分母\n$\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${rawNum}}{${rawDen}}$`,
-        en: `${narrator}: "Multiply tops, multiply bottoms"\n$\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${rawNum}}{${rawDen}}$`,
+        en: `${narrator}: "Tops × tops, bottoms × bottoms\n$\\frac{${n1} \\times ${d2}}{${d1} \\times ${n2}} = \\frac{${rawNum}}{${rawDen}}$"`,
       },
       highlightField: 'ans',
     },
     ...(needsSimplify ? [{
       text: {
-        zh: `${narrator}：化简——${rawNum} 和 ${rawDen} 的最大公因数是 ${simplifyG}`,
-        en: `${narrator}: "Simplify — the HCF of ${rawNum} and ${rawDen} is ${simplifyG}"`,
-      },
-      hint: {
-        zh: `分子分母都除以 ${simplifyG}：$\\frac{${rawNum}\\div${simplifyG}}{${rawDen}\\div${simplifyG}} = ${ansDisplay}$`,
-        en: `Divide both by ${simplifyG}: $\\frac{${rawNum}\\div${simplifyG}}{${rawDen}\\div${simplifyG}} = ${ansDisplay}$`,
+        zh: `${narrator}：化简——$${rawNum}$ 和 $${rawDen}$ 的公因数是 $${simplifyG}$\n都除以 $${simplifyG}$：$\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$`,
+        en: `${narrator}: "Simplify — HCF of $${rawNum}$ and $${rawDen}$ is $${simplifyG}$\nDivide both: $\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$"`,
       },
       highlightField: 'ans',
     }] : []),
     {
       text: {
-        zh: `${narrator}：答案是 $${ansDisplay}$`,
-        en: `${narrator}: "The answer is $${ansDisplay}$"`,
-      },
-      hint: {
-        zh: `验算：${(ansNum/ansDen).toFixed(3)}`,
-        en: `Check: ${(ansNum/ansDen).toFixed(3)}`,
+        zh: `${narrator}：答案\n$${ansDisplay}$\n\n验算：$\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$——做得漂亮！`,
+        en: `${narrator}: "Answer\n$${ansDisplay}$\n\nCheck: $\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$ — brilliantly done!"`,
       },
       highlightField: 'ans',
     },
   ] : [
     {
       text: {
-        zh: `${narrator}：分数乘法就是"取一部分的一部分"——先用整数感受一下`,
-        en: `${narrator}: "Fraction multiplication means 'a part of a part' — let's feel it with whole numbers first"`,
-      },
-      hint: {
-        zh: `想象有 ${previewTotal} 袋粮食\n先取 $\\frac{${n1}}{${d1}}$：${previewTotal} × $\\frac{${n1}}{${d1}}$ = ${previewFirst} 袋\n再取其中的 $\\frac{${n2}}{${d2}}$：${previewFirst} × $\\frac{${n2}}{${d2}}$ = ${previewSecond} 袋\n${previewSecond} 袋占原来 ${previewTotal} 袋的 $\\frac{${previewSecond}}{${previewTotal}}$`,
-        en: `Imagine ${previewTotal} bags of grain\nTake $\\frac{${n1}}{${d1}}$: ${previewTotal} × $\\frac{${n1}}{${d1}}$ = ${previewFirst} bags\nThen take $\\frac{${n2}}{${d2}}$ of those: ${previewFirst} × $\\frac{${n2}}{${d2}}$ = ${previewSecond} bags\n${previewSecond} bags out of ${previewTotal} = $\\frac{${previewSecond}}{${previewTotal}}$`,
+        zh: `${narrator}：分数乘法——"取一部分的一部分"\n想象 ${previewTotal} 袋粮食，先取 $\\frac{${n1}}{${d1}}$ = ${previewFirst} 袋。\n再从这 ${previewFirst} 袋里取 $\\frac{${n2}}{${d2}}$ = ${previewSecond} 袋。\n\n$${previewSecond}$ 袋占原来 $${previewTotal}$ 袋的 $\\frac{${previewSecond}}{${previewTotal}}$——这就是分数乘法！`,
+        en: `${narrator}: "Fraction multiplication — 'a part of a part'\nImagine ${previewTotal} bags of grain. Take $\\frac{${n1}}{${d1}}$ = ${previewFirst} bags.\nFrom those, take $\\frac{${n2}}{${d2}}$ = ${previewSecond} bags.\n\n$${previewSecond}$ out of $${previewTotal}$ = $\\frac{${previewSecond}}{${previewTotal}}$ — that's fraction multiplication!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：分数乘法的规则——分子乘分子，分母乘分母`,
-        en: `${narrator}: "The rule for fraction multiplication — multiply tops, multiply bottoms"`,
-      },
-      hint: {
-        zh: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$',
-        en: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$',
+        zh: `${narrator}：规则超简单——分子×分子，分母×分母\n$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$\n\n不用通分！分数乘法比加法还简单！`,
+        en: `${narrator}: "Rule is super simple — tops × tops, bottoms × bottoms\n$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$\n\nNo common denominator needed! Fraction multiplication is easier than addition!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：代入计算：$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$`,
-        en: `${narrator}: "Substitute and calculate: $\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$"`,
+        zh: `${narrator}：代入计算\n$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$`,
+        en: `${narrator}: "Substitute and calculate\n$\\frac{${n1} \\times ${n2}}{${d1} \\times ${d2}} = \\frac{${rawNum}}{${rawDen}}$"`,
       },
       highlightField: 'ans',
     },
     ...(needsSimplify ? [{
       text: {
-        zh: `${narrator}：化简——${rawNum} 和 ${rawDen} 的最大公因数是 ${simplifyG}`,
-        en: `${narrator}: "Simplify — the HCF of ${rawNum} and ${rawDen} is ${simplifyG}"`,
-      },
-      hint: {
-        zh: `分子分母都除以 ${simplifyG}：$\\frac{${rawNum}\\div${simplifyG}}{${rawDen}\\div${simplifyG}} = ${ansDisplay}$`,
-        en: `Divide both by ${simplifyG}: $\\frac{${rawNum}\\div${simplifyG}}{${rawDen}\\div${simplifyG}} = ${ansDisplay}$`,
+        zh: `${narrator}：化简——$${rawNum}$ 和 $${rawDen}$ 的公因数是 $${simplifyG}$\n都除以 $${simplifyG}$：$\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$`,
+        en: `${narrator}: "Simplify — HCF of $${rawNum}$ and $${rawDen}$ is $${simplifyG}$\nDivide both: $\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$"`,
       },
       highlightField: 'ans',
     }] : []),
     {
       text: {
-        zh: `${narrator}：答案是 $${ansDisplay}$`,
-        en: `${narrator}: "The answer is $${ansDisplay}$"`,
-      },
-      hint: {
-        zh: `分数乘法的结果通常比原来的数更小——取一部分的一部分，当然更少\n验算：${(ansNum/ansDen).toFixed(3)}`,
-        en: `Fraction multiplication usually gives a smaller result — a part of a part is naturally less\nCheck: ${(ansNum/ansDen).toFixed(3)}`,
+        zh: `${narrator}：答案\n$${ansDisplay}$\n\n分数乘法的结果通常比原来更小——取一部分的一部分，当然更少！\n验算：$\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$——做得漂亮！`,
+        en: `${narrator}: "Answer\n$${ansDisplay}$\n\nFraction multiplication usually gives a smaller result — a part of a part is naturally less!\nCheck: $\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$ — brilliantly done!"`,
       },
       highlightField: 'ans',
     },
