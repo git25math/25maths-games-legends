@@ -97,286 +97,241 @@ export const MapScreen = ({
   const streakTokens = ((profile.completed_missions as Record<string, unknown>)['_streak_tokens'] as number) || 0;
 
   return (
-    <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12">
-      {/* Profile Header */}
-      <div className="flex flex-wrap items-center justify-between gap-6 bg-white/5 backdrop-blur-xl p-4 md:p-8 rounded-[2rem] border border-white/10">
-        <div className="flex items-center gap-4 md:gap-6">
-          {/* Avatar — clickable to change character */}
+    <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12 pb-20">
+      {/* Profile Header — Tactical Dashboard */}
+      <div className="flex flex-wrap items-center justify-between gap-6 bg-slate-950/40 backdrop-blur-xl p-6 md:p-8 rounded-2xl border border-white/5 shadow-2xl relative overflow-hidden">
+        {/* Decorative corner accents */}
+        <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-indigo-500/30" />
+        <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-indigo-500/30" />
+        
+        <div className="flex items-center gap-6 relative z-10">
           <button onClick={onCharChange} className="relative group">
-            <div className="border-4 border-white/20 shadow-2xl rounded-full group-hover:border-indigo-400 transition-colors">
-              <CharacterAvatar characterId={selectedChar?.id || ''} size={72} />
+            <div className="border-2 border-indigo-500/30 p-1 rounded-xl bg-slate-900 shadow-[0_0_20px_rgba(79,70,229,0.15)] group-hover:border-indigo-400 transition-all">
+              <CharacterAvatar characterId={selectedChar?.id || ''} size={80} className="rounded-lg" />
             </div>
-            {/* Level badge on avatar */}
-            <div className="absolute -bottom-2 -right-2 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-full w-8 h-8 flex items-center justify-center text-white font-black text-xs border-2 border-white/30 shadow-lg">
-              {levelInfo.level}
+            <div className="absolute -bottom-2 -right-2 bg-indigo-600 rounded-lg px-2 py-1 flex items-center justify-center text-white font-mono font-bold text-[10px] border border-white/20 shadow-lg">
+              LVL_{levelInfo.level}
             </div>
           </button>
-          <div>
-            <h3 className="text-white font-black text-lg md:text-2xl flex items-center gap-2">
+          
+          <div className="space-y-2">
+            <h3 className="text-white font-black text-xl md:text-3xl flex items-center gap-3 tracking-tight">
               {profile.display_name}
-              <span className="text-xs font-bold px-2 py-0.5 bg-amber-500/20 border border-amber-400/30 rounded-full text-amber-300">
+              <span className="font-mono text-[10px] px-2 py-0.5 bg-indigo-500/10 border border-indigo-400/20 rounded text-indigo-300 uppercase tracking-widest">
                 {rankName}
               </span>
             </h3>
-            {/* XP Progress Bar */}
-            <div className="flex items-center gap-2 mt-1.5">
-              <Star size={12} className="text-yellow-400" />
-              <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden min-w-[120px] max-w-[200px]">
+            
+            {/* XP Progress Bar Tactical */}
+            <div className="space-y-1">
+              <div className="flex justify-between items-center px-1">
+                <span className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Experience_Yield</span>
+                <span className="font-mono text-[9px] text-indigo-400/70">{levelInfo.currentXP} / {levelInfo.xpForNextLevel}</span>
+              </div>
+              <div className="w-full md:w-64 h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/10 p-[1px]">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${levelInfo.progress * 100}%` }}
-                  transition={{ duration: 0.8, ease: 'easeOut' }}
-                  className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full"
+                  className="h-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] rounded-full"
                 />
               </div>
-              <span className="text-[10px] text-yellow-400/70 font-bold">
-                {levelInfo.xpForNextLevel > 0
-                  ? `${levelInfo.currentXP}/${levelInfo.xpForNextLevel}`
-                  : 'MAX'}
-              </span>
             </div>
-            <div className="flex flex-wrap items-center gap-2 mt-1">
-              <p className="text-indigo-400 font-bold text-sm">{selectedChar ? lt(selectedChar.name, lang) : ''}</p>
-              <span className="text-white/20">|</span>
-              <button
-                onClick={onGradeChange}
-                className="px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors"
-              >
-                {t.year} {profile.grade}
+
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <button onClick={onGradeChange} className="font-mono text-[10px] px-2 py-0.5 bg-white/5 border border-white/10 rounded text-white/60 hover:bg-white/10 transition-all uppercase tracking-tighter">
+                YEAR_{profile.grade}
               </button>
-              <button
-                onClick={onCharChange}
-                className="px-2 py-0.5 bg-indigo-600/20 border border-indigo-500/30 rounded text-xs text-indigo-300 hover:bg-indigo-600/40 transition-colors"
-              >
-                {lang === 'zh' ? '换主公' : 'Switch'}
+              <button onClick={onCharChange} className="font-mono text-[10px] px-2 py-0.5 bg-white/5 border border-white/10 rounded text-white/60 hover:bg-white/10 transition-all uppercase tracking-tighter">
+                SWITCH_OPERATOR
               </button>
-              {/* Streak tokens */}
               {streakTokens > 0 && (
-                <span className={`px-2 py-0.5 rounded text-xs font-black flex items-center gap-1 ${streakTokens >= 3 ? 'bg-yellow-500/20 border border-yellow-400/30 text-yellow-300' : 'bg-orange-600/20 border border-orange-500/30 text-orange-300'}`}>
-                  <Flame size={12} /> {streakTokens} {t.streakToken}
-                  {streakTokens >= 3 && <> · <Crown size={10} /> {t.streakKing}</>}
+                <span className="font-mono text-[10px] px-2 py-0.5 bg-orange-500/10 border border-orange-500/30 rounded text-orange-400 uppercase flex items-center gap-1.5">
+                  <Flame size={10} /> {streakTokens} TOKENS
                 </span>
-              )}
-              {onDashboard && (
-                <button
-                  onClick={onDashboard}
-                  className="px-2 py-0.5 bg-emerald-600/20 border border-emerald-500/30 rounded text-xs text-emerald-300 hover:bg-emerald-600/40 transition-colors"
-                >
-                  {lang === 'en' ? 'Dashboard' : '看板'}
-                </button>
               )}
             </div>
           </div>
         </div>
-        <div className="flex gap-8 md:gap-12">
-          <div className="text-center">
-            <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.totalScore}</span>
-            <MathView tex={profile.total_score} className="text-2xl md:text-4xl font-black text-yellow-400" />
+
+        <div className="flex gap-8 md:gap-12 border-l border-white/5 pl-8 hidden lg:flex">
+          <div className="text-right">
+            <span className="block text-white/20 font-mono text-[9px] uppercase mb-1 tracking-[0.2em]">Asset_Score</span>
+            <span className="text-3xl font-black text-white font-mono tracking-tighter">{profile.total_score.toLocaleString()}</span>
           </div>
-          <div className="text-center">
-            <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.level}</span>
-            <span className="text-2xl md:text-4xl font-black text-amber-400">{levelInfo.level}</span>
-          </div>
-          <div className="text-center">
-            <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.completed}</span>
-            <MathView tex={completedCount} className="text-2xl md:text-4xl font-black text-emerald-400" />
+          <div className="text-right">
+            <span className="block text-white/20 font-mono text-[9px] uppercase mb-1 tracking-[0.2em]">Nodes_Cleared</span>
+            <span className="text-3xl font-black text-emerald-500 font-mono tracking-tighter">{completedCount}</span>
           </div>
         </div>
       </div>
 
-      {/* Daily Challenge Banner */}
+      {/* Daily Challenge — Tactical Priority */}
       {dailyMission && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`relative overflow-hidden rounded-2xl border-2 p-4 md:p-6 ${
+          className={`relative overflow-hidden rounded-2xl border p-6 ${
             dailyDone
-              ? 'bg-emerald-900/30 border-emerald-500/30'
-              : 'bg-gradient-to-r from-yellow-900/40 via-amber-900/40 to-yellow-900/40 border-yellow-500/40'
+              ? 'bg-emerald-500/5 border-emerald-500/20'
+              : 'bg-indigo-600/10 border-indigo-500/30'
           }`}
         >
-          {!dailyDone && (
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/5 to-transparent animate-pulse pointer-events-none" />
-          )}
-          <div className="relative flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${dailyDone ? 'bg-emerald-500/20' : 'bg-yellow-500/20'}`}>
-                <Zap size={24} className={dailyDone ? 'text-emerald-400' : 'text-yellow-400'} />
+          <div className="absolute top-2 right-4 font-mono text-[8px] text-white/20 uppercase tracking-[0.3em]">Priority_Target_Daily</div>
+          <div className="relative flex flex-wrap items-center justify-between gap-6">
+            <div className="flex items-center gap-5">
+              <div className={`w-14 h-14 rounded-xl flex items-center justify-center border ${dailyDone ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400 animate-pulse'}`}>
+                <Zap size={28} />
               </div>
-              <div>
-                <h4 className={`font-black text-lg ${dailyDone ? 'text-emerald-300' : 'text-yellow-300'}`}>
+              <div className="space-y-1">
+                <h4 className={`font-black text-xl tracking-tight ${dailyDone ? 'text-emerald-400' : 'text-white'}`}>
                   {t.dailyChallenge}
-                  {!dailyDone && <span className="ml-2 text-xs font-bold px-2 py-0.5 bg-yellow-500/20 rounded-full">{t.dailyReward}</span>}
+                  {!dailyDone && <span className="ml-3 text-[9px] font-mono font-bold px-2 py-0.5 bg-indigo-500 text-white rounded uppercase tracking-widest">{t.dailyReward}</span>}
                 </h4>
-                <p className="text-white/60 text-sm">
+                <div className="font-mono text-xs text-white/40 uppercase tracking-widest">
                   {dailyDone
-                    ? <><CheckCircle2 size={14} className="inline text-emerald-400 mr-1" />{t.dailyCompleted} · {t.dailyCountdown} {formatCountdown(countdown)}</>
-                    : <>{lt(dailyMission.title, lang)} — {t.questionTypes[dailyMission.type]}</>
+                    ? <span className="text-emerald-500/60 flex items-center gap-2"><CheckCircle2 size={12} /> {t.dailyCompleted} // REFRESH_IN {formatCountdown(countdown)}</span>
+                    : <>{lt(dailyMission.title, lang)} // TYPE: {t.questionTypes[dailyMission.type]}</>
                   }
-                </p>
+                </div>
               </div>
             </div>
             {!dailyDone && onDailyChallenge && (
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,1)' }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => { playTap(); onDailyChallenge(dailyMission); }}
-                className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-black rounded-xl shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40 transition-shadow"
+                className="px-8 py-3 bg-white text-black font-black text-xs rounded-xl uppercase tracking-[0.3em] transition-all"
               >
-                <Swords size={16} className="inline mr-2" />
-                {t.missionStart}
+                DEPLOY_NOW
               </motion.button>
-            )}
-            {dailyDone && (
-              <div className="text-emerald-400/60 text-sm font-bold">{t.dailyTomorrow}</div>
             )}
           </div>
         </motion.div>
       )}
 
-      {/* Multiplayer — hidden until Phase 5 */}
-
-      {/* Mission Grid with World Map Background */}
-      <div className="relative rounded-3xl overflow-hidden bg-[#1a1a2e]">
-        <img
-          src={lang === 'zh' ? './map/world-map-zh.png' : './map/world-map-en.png'}
-          alt="Three Kingdoms Map"
-          loading="lazy"
-          className="w-full rounded-3xl opacity-10 md:opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
-        />
-        <div className="relative z-10 space-y-16 p-4 md:p-8">
+      {/* Mission Grid with Tactical Topography Background */}
+      <div className="relative rounded-3xl overflow-hidden bg-[#020205] border border-white/5">
+        {/* Digital Grid/Topo Background */}
+        <div className="absolute inset-0 opacity-[0.07] pointer-events-none" style={{ 
+          backgroundImage: 'radial-gradient(#4f46e5 1px, transparent 1px), linear-gradient(#4f46e5 1px, transparent 1px), linear-gradient(90deg, #4f46e5 1px, transparent 1px)',
+          backgroundSize: '40px 40px, 80px 80px, 80px 80px'
+        }} />
+        
+        <div className="relative z-10 space-y-20 p-6 md:p-12">
         {gradeMissions.length === 0 ? (
           <EmptyState 
-            icon={<MapIcon size={48} />} 
-            title={lang === 'zh' ? '暂无关卡' : lang === 'zh_TW' ? '暫無關卡' : 'No Missions Available'} 
-            description={lang === 'en' ? 'Missions for this grade are coming soon.' : '该年级的关卡正在建设中。'} 
+            icon={<MapIcon size={48} className="text-white/20" />} 
+            title={lang === 'zh' ? '暂无关卡' : 'NO_OPERATIONS_AVAILABLE'} 
+            description={lang === 'en' ? 'Node initialization in progress.' : '该年级的关卡正在建设中。'} 
           />
         ) : (
           Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang)))).map((unitTitle, unitIndex) => (
-            <div key={unitTitle} className="space-y-6">
-            <motion.div initial={{ x: -20, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} className="flex items-center gap-4">
-              <div className="h-px flex-1 bg-white/10" />
-              <div className="flex items-center gap-3">
-                <img
-                  src={CHAPTER_IMAGES[unitIndex % CHAPTER_IMAGES.length]}
-                  alt=""
-                  className="w-16 h-16 rounded-xl object-cover border-2 border-amber-400/30 shadow-lg"
-                />
-                <h3 className="text-2xl font-black text-white uppercase tracking-widest flex items-center gap-3">
-                  <MapIcon className="text-indigo-400" />
-                  {unitTitle}
-                </h3>
-              </div>
-              <div className="h-px flex-1 bg-white/10" />
-            </motion.div>
-            <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {gradeMissions
-                .filter(m => lt(m.unitTitle, lang) === unitTitle)
-                .sort((a, b) => a.order - b.order)
-                .map(mission => {
-                  const comp = profile.completed_missions[String(mission.id)];
-                  const isCompleted = comp && Object.values(comp).some(Boolean);
-                  const prevMission = gradeMissions.find(m => m.unitId === mission.unitId && m.order === mission.order - 1);
-                  const prevComp = prevMission ? profile.completed_missions[String(prevMission.id)] : null;
-                  const isLocked = mission.order > 1 && prevMission && !(prevComp && Object.values(prevComp).some(Boolean));
-                  const isPlayable = !isLocked && !isCompleted;
-                  const isPerfect = comp?.green && comp?.amber && comp?.red;
-                  const isLastCleared = lastClearedMissionId === mission.id;
-                  
-                  const cardVariants = isLocked ? { initial: { opacity: 0.5, y: 0 }, animate: { opacity: 0.5, y: 0 } } : staggerItem;
+            <div key={unitTitle} className="space-y-8">
+              <motion.div initial={{ x: -20, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} className="flex items-center gap-6">
+                <div className="space-y-1">
+                  <div className="font-mono text-[10px] text-indigo-500/60 uppercase tracking-[0.4em]">Sector_0{unitIndex + 1}</div>
+                  <h3 className="text-3xl font-black text-white italic uppercase tracking-tighter flex items-center gap-4">
+                    {unitTitle}
+                    <div className="h-0.5 w-12 bg-indigo-500 shadow-[0_0_10px_rgba(79,70,229,0.5)]" />
+                  </h3>
+                </div>
+                <div className="h-px flex-1 bg-white/5" />
+              </motion.div>
 
-                  return (
-                    <motion.div
-                      key={mission.id}
-                      variants={cardVariants}
-                      className="relative group"
-                      {...(!isLocked ? {
-                        whileHover: { y: -4, boxShadow: "0 12px 40px rgba(99,102,241,0.15)" },
-                        whileTap: { y: -2, scale: 0.98 },
-                        transition: { type: "spring", stiffness: 300, damping: 20 },
-                      } : {})}
-                    >
+              <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {gradeMissions
+                  .filter(m => lt(m.unitTitle, lang) === unitTitle)
+                  .sort((a, b) => a.order - b.order)
+                  .map(mission => {
+                    const comp = profile.completed_missions[String(mission.id)];
+                    const isCompleted = comp && Object.values(comp).some(Boolean);
+                    const prevMission = gradeMissions.find(m => m.unitId === mission.unitId && m.order === mission.order - 1);
+                    const prevComp = prevMission ? profile.completed_missions[String(prevMission.id)] : null;
+                    const isLocked = mission.order > 1 && prevMission && !(prevComp && Object.values(prevComp).some(Boolean));
+                    const isPlayable = !isLocked && !isCompleted;
+                    
+                    return (
                       <motion.div
-                        animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})}
-                        transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : (isLastCleared ? { duration: 2.5, ease: "easeInOut" } : {})}
-                        className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
+                        key={mission.id}
+                        variants={staggerItem}
+                        className="relative group"
                       >
-                        {isLastCleared && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 0, scale: 0.5 }}
-                            animate={{ opacity: [0, 1, 1, 0], y: -80, scale: 1.5 }}
-                            transition={{ duration: 2, ease: "easeOut" }}
-                            className="absolute -top-4 left-1/2 -translate-x-1/2 text-2xl font-black text-yellow-400 z-50 pointer-events-none drop-shadow-md"
-                          >
-                            + Score
-                          </motion.div>
-                        )}
-                        {isPerfect && (
-                          <motion.div
-                            initial={{ scale: 0, rotate: -180 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            transition={{ type: "spring", bounce: 0.5, damping: 12 }}
-                            className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-yellow-300 to-amber-500 flex items-center justify-center shadow-lg border-2 border-white z-10 group/badge"
-                          >
-                            <Crown size={20} className="text-white" />
-                            <div className="absolute -top-8 bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover/badge:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                              {lang === 'zh' ? '完美通关！' : lang === 'zh_TW' ? '完美通關！' : 'Perfect Clear!'}
-                            </div>
-                          </motion.div>
-                        )}
-                        <div className="flex justify-between items-start mb-6">
-                          <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                            mission.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' :
-                            mission.difficulty === 'Medium' ? 'bg-orange-100 text-orange-700' : 'bg-rose-100 text-rose-700'
-                          }`}>
-                            {t.difficulty[mission.difficulty]}
+                        <div className={`relative h-full bg-slate-900/40 backdrop-blur-md rounded-2xl p-6 border transition-all duration-500 ${
+                          isLocked ? 'border-white/5 opacity-40 grayscale' : 
+                          isCompleted ? 'border-emerald-500/20 bg-emerald-500/5' : 
+                          'border-white/10 hover:border-indigo-500/50 group-hover:shadow-[0_0_30px_rgba(79,70,229,0.1)]'
+                        }`}>
+                          {/* Node ID Tag */}
+                          <div className="absolute top-3 right-4 font-mono text-[9px] text-white/20 group-hover:text-indigo-400 transition-colors uppercase tracking-widest">
+                            NODE_ID_{mission.id.toString().padStart(3, '0')}
                           </div>
-                          {isCompleted ? (
-                            <motion.div {...springIn} transition={{ type: "spring", bounce: 0.4 }} className="flex gap-1">
-                              {comp?.green && <div className="w-3 h-3 rounded-full bg-emerald-500" />}
-                              {comp?.amber && <div className="w-3 h-3 rounded-full bg-amber-500" />}
-                              {comp?.red && <div className="w-3 h-3 rounded-full bg-rose-500" />}
-                              <CheckCircle2 className="text-emerald-500 ml-1" size={20} />
-                            </motion.div>
-                          ) : isLocked ? <Lock className="text-slate-400" size={28} /> : null}
+
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-start">
+                              <div className={`px-2 py-0.5 rounded font-mono text-[9px] font-bold uppercase tracking-widest border ${
+                                mission.difficulty === 'Easy' ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/5' :
+                                mission.difficulty === 'Medium' ? 'border-orange-500/30 text-orange-400 bg-orange-500/5' :
+                                'border-red-500/30 text-red-400 bg-red-500/5'
+                              }`}>
+                                {mission.difficulty}
+                              </div>
+                              {isCompleted && (
+                                <div className="flex gap-1 items-center">
+                                  <CheckCircle2 size={14} className="text-emerald-500" />
+                                  <div className="flex gap-0.5">
+                                    {comp?.green && <div className="w-1.5 h-3 bg-emerald-500 rounded-sm" />}
+                                    {comp?.amber && <div className="w-1.5 h-3 bg-orange-500 rounded-sm" />}
+                                    {comp?.red && <div className="w-1.5 h-3 bg-red-500 rounded-sm" />}
+                                  </div>
+                                </div>
+                              )}
+                              {isLocked && <Lock size={16} className="text-white/20" />}
+                            </div>
+
+                            <div className="space-y-1">
+                              <h4 className="text-xl font-black text-white tracking-tight uppercase group-hover:text-indigo-300 transition-colors">{lt(mission.title, lang)}</h4>
+                              <div className="font-mono text-[9px] text-indigo-500/60 uppercase tracking-widest">{t.questionTypes[mission.type]}</div>
+                            </div>
+
+                            <p className="text-white/40 text-xs leading-relaxed line-clamp-2 font-mono h-8">
+                              {lt(mission.description, lang)}
+                            </p>
+
+                            <div className="flex gap-2 pt-2">
+                              {!isLocked ? (
+                                <>
+                                  <motion.button
+                                    whileHover={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
+                                    onClick={() => { playTap(); onPracticeStart(mission); }}
+                                    className="flex-1 py-2.5 border border-white/10 rounded-xl font-mono text-[10px] text-white/60 uppercase tracking-widest flex items-center justify-center gap-2 hover:border-white/30 transition-all"
+                                  >
+                                    <BookOpen size={12} />
+                                    DRY_RUN
+                                  </motion.button>
+                                  <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => { playTap(); onMissionStart(mission); }}
+                                    className="flex-1 py-2.5 bg-indigo-600 text-white rounded-xl font-mono text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(79,70,229,0.3)]"
+                                  >
+                                    <Swords size={12} />
+                                    ENGAGE
+                                  </motion.button>
+                                </>
+                              ) : (
+                                <div className="w-full py-2.5 bg-white/5 rounded-xl text-center font-mono text-[10px] text-white/20 uppercase tracking-[0.3em]">
+                                  LOCKED_DATA
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <h4 className="text-lg md:text-2xl font-black text-slate-800 mb-1">{lt(mission.title, lang)}</h4>
-                        <p className="text-indigo-600 text-[10px] font-bold mb-3 uppercase">{t.questionTypes[mission.type]}</p>
-                        <LatexText text={interpolate(lt(mission.description, lang), mission.data ?? {})} className="text-slate-500 text-sm mb-8 line-clamp-3 block" />
-                        <div className="flex gap-2">
-                          <motion.button
-                            {...(isLocked ? {} : { ...tapScale, ...hoverGlow })}
-                            disabled={!!isLocked}
-                            onClick={() => { playTap(); onPracticeStart(mission); }}
-                            className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 text-xs md:text-sm min-h-12 ${
-                              isLocked ? 'bg-slate-100 text-slate-400' : 'bg-emerald-600 text-white shadow-lg shadow-emerald-200'
-                            }`}
-                          >
-                            <BookOpen size={16} />
-                            {isLocked ? t.locked : t.practice}
-                          </motion.button>
-                          <motion.button
-                            {...(isLocked ? {} : { ...tapScale, ...hoverGlow })}
-                            disabled={!!isLocked}
-                            onClick={() => { playTap(); onMissionStart(mission); }}
-                            className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 text-xs md:text-sm min-h-12 ${
-                              isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
-                            }`}
-                          >
-                            <Swords size={16} />
-                            {isLocked ? t.locked : t.challenge}
-                          </motion.button>
-                        </div>
-                        {isLocked && (
-                          <p className="mt-2 text-[10px] text-rose-500 font-bold text-center">{t.lockedByOrder}</p>
-                        )}
                       </motion.div>
-                    </motion.div>
-                  );
-                })}
-            </motion.div>
-          </div>
-        )))}
+                    );
+                  })}
+              </motion.div>
+            </div>
+          )))}
         </div>
       </div>
     </motion.div>

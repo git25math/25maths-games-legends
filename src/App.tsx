@@ -266,13 +266,37 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v6.2.0</div>
+        {/* Tactical Version indicator */}
+        <div className="fixed bottom-2 left-2 z-50 flex items-center gap-2 font-mono">
+          <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+          <div className="text-white/20 text-[10px] tracking-widest uppercase">
+            System.v6.3.0 // Terminal_Active
+          </div>
+        </div>
+
+        {/* Global Tactical Overlays */}
+        <div className="fixed inset-0 pointer-events-none z-[60] overflow-hidden">
+          {/* Scanlines Effect */}
+          <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
+          
+          {/* Subtle Vignette */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
+          
+          {/* Border HUD Elements */}
+          <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-white/10" />
+          <div className="absolute top-4 right-4 w-8 h-8 border-t border-r border-white/10" />
+          <div className="absolute bottom-4 left-4 w-8 h-8 border-b border-l border-white/10" />
+          <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-white/10" />
+        </div>
 
         {/* Background */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500 rounded-full blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500 rounded-full blur-[120px]" />
+        <div className="fixed inset-0 overflow-hidden pointer-events-none bg-[#050508]">
+          {/* Tactical Grid */}
+          <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle, #4f46e5 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+          
+          {/* Ambient Glows */}
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-900/20 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-900/20 rounded-full blur-[120px]" />
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
