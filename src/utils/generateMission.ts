@@ -5372,28 +5372,45 @@ export function generateRatioY7Mission(template: Mission): Mission {
 
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}：$${total}$ 金要按 $${a}:${b}$ 分——不是平均分，是按功劳分`, en: `${narrator}: "$${total}$ gold shared in ratio $${a}:${b}$ — not equal shares, but by merit"` },
-        hint: { zh: `$${a}:${b}$ 是什么意思？\n想象切蛋糕：一共切 ${parts} 块\n甲拿 ${a} 块，乙拿 ${b} 块\n\n比例不是具体的数量，而是"几份对几份"`, en: `What does $${a}:${b}$ mean?\nImagine cutting a cake into ${parts} pieces\nA gets ${a} pieces, B gets ${b} pieces\n\nRatio is not amounts — it's "how many parts each"` },
+        text: {
+          zh: `${narrator}：为什么要学"按比分配"？\n打仗立功，赏金不能平分——谁功劳大谁拿多。$${a}:${b}$ 就是分配方案。\n\n想象切蛋糕：一共切 $${parts}$ 块，甲拿 $${a}$ 块，乙拿 $${b}$ 块。\n比例不是具体数量，是"几份对几份"！`,
+          en: `${narrator}: "Why learn 'dividing in a ratio'?\nWar rewards can't be split equally — bigger contribution, bigger share. $${a}:${b}$ is the split plan.\n\nImagine cutting a cake: $${parts}$ slices total, A gets $${a}$, B gets $${b}$.\nRatio isn't amounts — it's 'how many parts each'!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：第一步——算总份数`, en: `${narrator}: "Step 1 — find total parts"` },
-        hint: { zh: `$${a}:${b}$ → 总份数 $= ${a} + ${b} = ${parts}$\n\n就像蛋糕一共切成 $${parts}$ 块`, en: `$${a}:${b}$ → total parts $= ${a} + ${b} = ${parts}$\n\nLike cutting the cake into $${parts}$ pieces` },
+        text: {
+          zh: `${narrator}：第一步——算总份数\n$${a}:${b}$ → 总份数 $= ${a} + ${b} = ${parts}$\n\n蛋糕一共切 $${parts}$ 块。这一步很关键——漏了就全错！`,
+          en: `${narrator}: "Step 1 — find total parts\n$${a}:${b}$ → total parts $= ${a} + ${b} = ${parts}$\n\nCake gets cut into $${parts}$ pieces. This step is crucial — miss it and everything goes wrong!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：第二步——算每份值多少`, en: `${narrator}: "Step 2 — find the value of each part"` },
-        hint: { zh: `总共 $${total}$ 金，分成 $${parts}$ 份\n每份 $= ${total} \\div ${parts} = ${eachPart}$ 金`, en: `Total $${total}$ gold, divided into $${parts}$ parts\nEach part $= ${total} \\div ${parts} = ${eachPart}$ gold` },
+        text: {
+          zh: `${narrator}：第二步——算每份值多少\n总共 $${total}$ 金，分成 $${parts}$ 份：\n每份 $= ${total} \\div ${parts} = ${eachPart}$ 金\n\n每一块蛋糕值 $${eachPart}$ 金！`,
+          en: `${narrator}: "Step 2 — find the value of each part\nTotal $${total}$ gold, divided into $${parts}$ parts:\nEach part $= ${total} \\div ${parts} = ${eachPart}$ gold\n\nEach slice of cake is worth $${eachPart}$ gold!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：第三步——各方拿自己的份数 × 每份值`, en: `${narrator}: "Step 3 — each side takes their parts × value per part"` },
-        hint: { zh: `甲（$${a}$ 份）：$${a} \\times ${eachPart} = ${answerA}$ 金\n乙（$${b}$ 份）：$${b} \\times ${eachPart} = ${answerB}$ 金`, en: `A ($${a}$ parts): $${a} \\times ${eachPart} = ${answerA}$ gold\nB ($${b}$ parts): $${b} \\times ${eachPart} = ${answerB}$ gold` },
+        text: {
+          zh: `${narrator}：第三步——各方拿走自己的份\n甲（$${a}$ 份）：$${a} \\times ${eachPart} = ${answerA}$ 金\n乙（$${b}$ 份）：$${b} \\times ${eachPart} = ${answerB}$ 金\n\n较小份 = $${answer}$ 金。`,
+          en: `${narrator}: "Step 3 — each takes their share\nA ($${a}$ parts): $${a} \\times ${eachPart} = ${answerA}$ gold\nB ($${b}$ parts): $${b} \\times ${eachPart} = ${answerB}$ gold\n\nSmaller share = $${answer}$ gold."`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：验算——两份加起来等于总数吗？`, en: `${narrator}: "Verify — do both shares add to the total?"` },
-        hint: { zh: `$${answerA} + ${answerB} = ${total}$ ✓\n\n而且比例对吗？$${answerA} : ${answerB}$\n$= ${answerA / eachPart} : ${answerB / eachPart}$\n$= ${a} : ${b}$ ✓`, en: `$${answerA} + ${answerB} = ${total}$ ✓\n\nRatio correct? $${answerA} : ${answerB}$\n$= ${answerA / eachPart} : ${answerB / eachPart}$\n$= ${a} : ${b}$ ✓` },
+        text: {
+          zh: `${narrator}：答案\n较小份 = $${answer}$ 金\n\n$${total}$ 金按 $${a}:${b}$ 分 → $${answerA}$ 和 $${answerB}$。`,
+          en: `${narrator}: "Answer\nSmaller share = $${answer}$ gold\n\n$${total}$ gold in ratio $${a}:${b}$ → $${answerA}$ and $${answerB}$."`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算——两份加起来等于总数吗？\n$${answerA} + ${answerB} = ${total}$ ✓\n\n比例对吗？$${answerA} : ${answerB} = ${a} : ${b}$ ✓\n\n赏金分配完毕，公平公正！做得漂亮！`,
+          en: `${narrator}: "Verify — do both shares add to the total?\n$${answerA} + ${answerB} = ${total}$ ✓\n\nRatio correct? $${answerA} : ${answerB} = ${a} : ${b}$ ✓\n\nRewards distributed fairly! Brilliantly done!"`,
+        },
         highlightField: 'ans',
       },
     ];
@@ -5422,28 +5439,45 @@ export function generateRatioY7Mission(template: Mission): Mission {
 
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}："步兵与骑兵 $${a}:${b}$"——比例是一种简洁的对比方式`, en: `${narrator}: "Infantry to cavalry $${a}:${b}$" — ratios are a concise way to compare"` },
-        hint: { zh: `$${a}:${b}$ 的意思：\n每 $${a}$ 个步兵配 $${b}$ 个骑兵\n\n比例和分数是亲戚：\n$${a}:${b}$ 就像 $\\frac{${a}}{${b}}$\n化简比就像约分——找最大公因数！`, en: `$${a}:${b}$ means:\nFor every $${a}$ infantry, there are $${b}$ cavalry\n\nRatios and fractions are related:\n$${a}:${b}$ is like $\\frac{${a}}{${b}}$\nSimplifying a ratio = simplifying a fraction — find the HCF!` },
+        text: {
+          zh: `${narrator}：化简比——和约分是一回事！\n"步兵 $${a}$ 人，骑兵 $${b}$ 人"写成比就是 $${a}:${b}$。\n\n比例和分数是亲戚：$${a}:${b}$ 就像 $\\frac{${a}}{${b}}$。\n化简比 = 约分 = 找最大公因数！`,
+          en: `${narrator}: "Simplifying ratios — same as simplifying fractions!\n'$${a}$ infantry, $${b}$ cavalry' as a ratio is $${a}:${b}$.\n\nRatios and fractions are related: $${a}:${b}$ is like $\\frac{${a}}{${b}}$.\nSimplify ratio = simplify fraction = find the HCF!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：为什么要化简？$${a}:${b}$ 和 $${sa}:${sb}$ 不是一回事吗？`, en: `${narrator}: "Why simplify? Aren't $${a}:${b}$ and $${sa}:${sb}$ the same?"` },
-        hint: { zh: `是一回事！但 $${sa}:${sb}$ 更简洁\n就像 $\\frac{4}{8}$ 和 $\\frac{1}{2}$ 一样大\n但 $\\frac{1}{2}$ 更清楚\n\n化简 = 用最小的数字表达同一个关系`, en: `Yes, they're the same! But $${sa}:${sb}$ is cleaner\nLike $\\frac{4}{8}$ and $\\frac{1}{2}$ are equal\nBut $\\frac{1}{2}$ is clearer\n\nSimplify = express the same relationship with smallest numbers` },
+        text: {
+          zh: `${narrator}：为什么要化简？\n$${a}:${b}$ 和 $${sa}:${sb}$ 是同一个比例——但 $${sa}:${sb}$ 更简洁！\n\n就像 $\\frac{4}{8}$ 和 $\\frac{1}{2}$ 一样大，但 $\\frac{1}{2}$ 更清楚。\n化简 = 用最小的数字表达同一个关系。`,
+          en: `${narrator}: "Why simplify?\n$${a}:${b}$ and $${sa}:${sb}$ are the same ratio — but $${sa}:${sb}$ is cleaner!\n\nLike $\\frac{4}{8}$ and $\\frac{1}{2}$ are equal, but $\\frac{1}{2}$ is clearer.\nSimplify = smallest numbers, same relationship."`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：怎么化简？——找 $${a}$ 和 $${b}$ 的最大公因数`, en: `${narrator}: "How? — Find the HCF of $${a}$ and $${b}$"` },
-        hint: { zh: `回忆 Unit 0 学的 HCF：\n$${a}$ 的因数：${Array.from({length: a}, (_, i) => i + 1).filter(i => a % i === 0).join(', ')}$\n$${b}$ 的因数：${Array.from({length: b}, (_, i) => i + 1).filter(i => b % i === 0).join(', ')}$\n\n最大公因数 = $${g}$`, en: `Recall HCF from Unit 0:\nFactors of $${a}$: ${Array.from({length: a}, (_, i) => i + 1).filter(i => a % i === 0).join(', ')}$\nFactors of $${b}$: ${Array.from({length: b}, (_, i) => i + 1).filter(i => b % i === 0).join(', ')}$\n\nHCF = $${g}$` },
+        text: {
+          zh: `${narrator}：怎么化简？找 $${a}$ 和 $${b}$ 的最大公因数（HCF）！\n$${a}$ 的因数：$${Array.from({length: a}, (_, i) => i + 1).filter(i => a % i === 0).join(', ')}$\n$${b}$ 的因数：$${Array.from({length: b}, (_, i) => i + 1).filter(i => b % i === 0).join(', ')}$\n\n最大公因数 = $${g}$——还记得 Unit 0 学的 HCF 吗？这里派上用场了！`,
+          en: `${narrator}: "How? Find the HCF of $${a}$ and $${b}$!\nFactors of $${a}$: $${Array.from({length: a}, (_, i) => i + 1).filter(i => a % i === 0).join(', ')}$\nFactors of $${b}$: $${Array.from({length: b}, (_, i) => i + 1).filter(i => b % i === 0).join(', ')}$\n\nHCF = $${g}$ — remember HCF from Unit 0? It's useful here!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：两项同时除以 HCF`, en: `${narrator}: "Divide both terms by the HCF"` },
-        hint: { zh: `$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\n$${a}:${b} = ${sa}:${sb}$`, en: `$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\n$${a}:${b} = ${sa}:${sb}$` },
+        text: {
+          zh: `${narrator}：两项同时除以 HCF\n$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\n所以 $${a}:${b} = ${sa}:${sb}$——就这么简单！`,
+          en: `${narrator}: "Divide both terms by the HCF\n$${a} \\div ${g} = ${sa}$\n$${b} \\div ${g} = ${sb}$\n\nSo $${a}:${b} = ${sa}:${sb}$ — that's it!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：验算——$${sa}:${sb}$ 还能再化简吗？`, en: `${narrator}: "Verify — can $${sa}:${sb}$ be simplified further?"` },
-        hint: { zh: `$${sa}$ 和 $${sb}$ 的公因数只有 $1$（互质）\n→ 已经是最简比 ✓\n\n答案：$${a}:${b} = ${sa}:${sb}$\n第一项 = $${sa}$\n\n知识回环：HCF（Unit 0）→ 约分（Unit 0B）→ 化简比（这里！）`, en: `HCF of $${sa}$ and $${sb}$ is $1$ (coprime)\n→ Already simplest form ✓\n\nAnswer: $${a}:${b} = ${sa}:${sb}$\nFirst term = $${sa}$\n\nKnowledge loop: HCF (Unit 0) → Simplify fractions (Unit 0B) → Simplify ratios (here!)` },
+        text: {
+          zh: `${narrator}：答案\n$${a}:${b} = ${sa}:${sb}$，第一项 = $${sa}$`,
+          en: `${narrator}: "Answer\n$${a}:${b} = ${sa}:${sb}$, first term = $${sa}$"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算——$${sa}:${sb}$ 还能再化简吗？\n$${sa}$ 和 $${sb}$ 的公因数只有 $1$（互质）→ 已经最简 ✓\n\n知识回环：HCF（Unit 0）→ 约分（Unit 0B）→ 化简比（这里！）\n学过的东西都串起来了，做得漂亮！`,
+          en: `${narrator}: "Verify — can $${sa}:${sb}$ be simplified further?\nHCF of $${sa}$ and $${sb}$ is $1$ (coprime) → already simplest ✓\n\nKnowledge loop: HCF (Unit 0) → Simplify fractions (Unit 0B) → Simplify ratios (here!)\nEverything connects — brilliantly done!"`,
+        },
         highlightField: 'ans',
       },
     ];
