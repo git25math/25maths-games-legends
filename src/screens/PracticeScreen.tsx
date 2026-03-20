@@ -28,6 +28,7 @@ import { Triangle } from '../components/diagrams/Triangle';
 import { ParallelTransversal } from '../components/diagrams/ParallelTransversal';
 import { CircleDiagram } from '../components/diagrams/CircleDiagram';
 import { SymmetryPlane } from '../components/diagrams/SymmetryPlane';
+import { CylinderDiagram } from '../components/diagrams/CylinderDiagram';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -452,6 +453,12 @@ export const PracticeScreen = ({
                 ansX={currentMission.data.ansX as number}
                 ansY={currentMission.data.ansY as number}
                 mode={currentMission.data.mode as 'reflect_x' | 'reflect_y' | 'rotate_180'}
+                step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep)}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'VOLUME' && currentMission.data?.radius !== undefined ? (
+              <CylinderDiagram
+                radius={currentMission.data.radius as number}
+                height={currentMission.data.height as number}
                 step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep)}
               />
             ) : currentPhase !== 'red' ? (
