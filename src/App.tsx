@@ -15,6 +15,7 @@ import { MathBattle } from './components/MathBattle';
 import { SkillCardSelector } from './components/SkillCardSelector';
 import { generateMission } from './utils/generateMission';
 import { MISSIONS as LOCAL_MISSIONS } from './data/missions';
+import { getDailyKey, DAILY_MULTIPLIER, isDailyCompleted } from './utils/dailyChallenge';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
 import { MapScreen } from './screens/MapScreen';
@@ -95,6 +96,7 @@ export default function App() {
   const [selectedDifficulty] = useState<DifficultyMode>('red');
   const [isGuest, setIsGuest] = useState(persisted.isGuest);
   const [lastClearedMissionId, setLastClearedMissionId] = useState<number | null>(null);
+  const [isDailyBattle, setIsDailyBattle] = useState(false);
 
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
   const { profile, updateProfile, recordBattleComplete } = useProfile(user, isGuest);
@@ -150,6 +152,19 @@ export default function App() {
     setShowSecret(true);
   };
 
+  const handleDailyChallenge = (mission: Mission) => {
+    setIsDailyBattle(true);
+    handleMissionStart(mission);
+  };
+
+  const handleStreakToken = () => {
+    if (!profile) return;
+    const currentTokens = ((profile.completed_missions as Record<string, unknown>)['_streak_tokens'] as number) || 0;
+    updateProfile({
+      completed_missions: { ...profile.completed_missions, _streak_tokens: currentTokens + 1 } as any,
+    });
+  };
+
   const handlePracticeStart = (mission: Mission) => {
     setActiveMission(mission);
     setGameState('practice');
@@ -157,6 +172,13 @@ export default function App() {
 
   const handleBattleComplete = async (success: boolean, score = 0, durationSecs = 0, hpRemaining = 0) => {
     if (success && activeMission && profile) {
+      // If daily challenge, mark it completed BEFORE recordBattleComplete
+      // so the daily key is included in the same completed_missions object
+      if (isDailyBattle) {
+        const dailyKey = getDailyKey();
+        profile.completed_missions = { ...profile.completed_missions, [dailyKey]: true } as any;
+      }
+
       await recordBattleComplete(
         activeMission.id,
         selectedDifficulty,
@@ -169,6 +191,7 @@ export default function App() {
       );
       setLastClearedMissionId(activeMission.id);
     }
+    setIsDailyBattle(false);
     setGameState('map');
     setActiveMission(null);
   };
@@ -244,7 +267,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v1.0.2</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v6.1.0</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -300,6 +323,7 @@ export default function App() {
                   onCharChange={() => { setSelectedCharId(null); setGameState('welcome'); }}
                   onCreateRoom={createRoom}
                   onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
+                  onDailyChallenge={handleDailyChallenge}
                   lastClearedMissionId={lastClearedMissionId}
                   clearLastClearedMission={() => setLastClearedMissionId(null)}
                 />
@@ -321,7 +345,7 @@ export default function App() {
                   mission={activeMission}
                   character={selectedChar}
                   onComplete={handleBattleComplete}
-                  onCancel={() => setGameState('map')}
+                  onCancel={() => { setIsDailyBattle(false); setGameState('map'); }}
                   lang={lang}
                   difficultyMode={selectedDifficulty}
                   isMultiplayer={!!activeRoom}
@@ -329,6 +353,9 @@ export default function App() {
                   skillCard={selectedSkillCard}
                   isFirstClear={activeMission ? !profile?.completed_missions[String(activeMission.id)] : true}
                   completedDifficulties={activeMission && profile ? profile.completed_missions[String(activeMission.id)] : {}}
+                  isDailyChallenge={isDailyBattle}
+                  dailyMultiplier={isDailyBattle ? DAILY_MULTIPLIER : 1}
+                  onStreakToken={handleStreakToken}
                 />
               )}
 

@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen } from 'lucide-react';
+import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
@@ -10,6 +10,8 @@ import { interpolate } from '../utils/interpolate';
 import { useAudio } from '../audio';
 import { tapScale, hoverGlow, springIn, staggerContainer, staggerItem } from '../utils/animationPresets';
 import { EmptyState } from '../components/EmptyState';
+import { getLevelInfo } from '../utils/xpLevels';
+import { getDailyMission, isDailyCompleted, getSecondsUntilMidnight, formatCountdown } from '../utils/dailyChallenge';
 
 const CHAPTER_IMAGES = [
   './map/ch1-peach-garden.png',
@@ -34,6 +36,7 @@ export const MapScreen = ({
   onCharChange,
   onCreateRoom,
   onDashboard,
+  onDailyChallenge,
   lastClearedMissionId,
   clearLastClearedMission,
 }: {
@@ -47,11 +50,19 @@ export const MapScreen = ({
   onCharChange: () => void;
   onCreateRoom: (type: 'team' | 'pk', missionId: number) => void;
   onDashboard?: () => void;
+  onDailyChallenge?: (mission: Mission) => void;
   lastClearedMissionId?: number | null;
   clearLastClearedMission?: () => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
+
+  // Daily challenge countdown timer
+  const [countdown, setCountdown] = useState(getSecondsUntilMidnight());
+  useEffect(() => {
+    const timer = setInterval(() => setCountdown(getSecondsUntilMidnight()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     playBGMMap();
@@ -69,8 +80,21 @@ export const MapScreen = ({
 
   const gradeMissions = missions.filter(m => m.grade === profile.grade);
   const completedCount = Object.keys(profile.completed_missions).filter(id =>
+    // Skip special keys (daily_*, _streak_tokens)
+    !id.startsWith('daily_') && !id.startsWith('_') &&
     Object.values(profile.completed_missions[id] || {}).some(Boolean)
   ).length;
+
+  // XP Level info
+  const levelInfo = getLevelInfo(profile.total_score);
+  const rankName = levelInfo.rank[lang === 'zh_TW' ? 'zh_TW' : lang === 'en' ? 'en' : 'zh'];
+
+  // Daily challenge
+  const dailyMission = getDailyMission(missions, profile.grade);
+  const dailyDone = isDailyCompleted(profile.completed_missions);
+
+  // Streak tokens (stored in completed_missions as special keys)
+  const streakTokens = ((profile.completed_missions as Record<string, unknown>)['_streak_tokens'] as number) || 0;
 
   return (
     <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12">
@@ -82,15 +106,35 @@ export const MapScreen = ({
             <div className="border-4 border-white/20 shadow-2xl rounded-full group-hover:border-indigo-400 transition-colors">
               <CharacterAvatar characterId={selectedChar?.id || ''} size={72} />
             </div>
-            <div className="absolute -bottom-1 -right-1 bg-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-[10px]">↻</span>
+            {/* Level badge on avatar */}
+            <div className="absolute -bottom-2 -right-2 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-full w-8 h-8 flex items-center justify-center text-white font-black text-xs border-2 border-white/30 shadow-lg">
+              {levelInfo.level}
             </div>
           </button>
           <div>
             <h3 className="text-white font-black text-lg md:text-2xl flex items-center gap-2">
               {profile.display_name}
-              <Crown size={20} className="text-yellow-400" />
+              <span className="text-xs font-bold px-2 py-0.5 bg-amber-500/20 border border-amber-400/30 rounded-full text-amber-300">
+                {rankName}
+              </span>
             </h3>
+            {/* XP Progress Bar */}
+            <div className="flex items-center gap-2 mt-1.5">
+              <Star size={12} className="text-yellow-400" />
+              <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden min-w-[120px] max-w-[200px]">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${levelInfo.progress * 100}%` }}
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                  className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full"
+                />
+              </div>
+              <span className="text-[10px] text-yellow-400/70 font-bold">
+                {levelInfo.xpForNextLevel > 0
+                  ? `${levelInfo.currentXP}/${levelInfo.xpForNextLevel}`
+                  : 'MAX'}
+              </span>
+            </div>
             <div className="flex flex-wrap items-center gap-2 mt-1">
               <p className="text-indigo-400 font-bold text-sm">{selectedChar ? lt(selectedChar.name, lang) : ''}</p>
               <span className="text-white/20">|</span>
@@ -106,6 +150,13 @@ export const MapScreen = ({
               >
                 {lang === 'zh' ? '换主公' : 'Switch'}
               </button>
+              {/* Streak tokens */}
+              {streakTokens > 0 && (
+                <span className={`px-2 py-0.5 rounded text-xs font-black flex items-center gap-1 ${streakTokens >= 3 ? 'bg-yellow-500/20 border border-yellow-400/30 text-yellow-300' : 'bg-orange-600/20 border border-orange-500/30 text-orange-300'}`}>
+                  <Flame size={12} /> {streakTokens} {t.streakToken}
+                  {streakTokens >= 3 && <> · <Crown size={10} /> {t.streakKing}</>}
+                </span>
+              )}
               {onDashboard && (
                 <button
                   onClick={onDashboard}
@@ -117,10 +168,14 @@ export const MapScreen = ({
             </div>
           </div>
         </div>
-        <div className="flex gap-12">
+        <div className="flex gap-8 md:gap-12">
           <div className="text-center">
             <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.totalScore}</span>
             <MathView tex={profile.total_score} className="text-2xl md:text-4xl font-black text-yellow-400" />
+          </div>
+          <div className="text-center">
+            <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.level}</span>
+            <span className="text-2xl md:text-4xl font-black text-amber-400">{levelInfo.level}</span>
           </div>
           <div className="text-center">
             <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.completed}</span>
@@ -128,6 +183,56 @@ export const MapScreen = ({
           </div>
         </div>
       </div>
+
+      {/* Daily Challenge Banner */}
+      {dailyMission && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`relative overflow-hidden rounded-2xl border-2 p-4 md:p-6 ${
+            dailyDone
+              ? 'bg-emerald-900/30 border-emerald-500/30'
+              : 'bg-gradient-to-r from-yellow-900/40 via-amber-900/40 to-yellow-900/40 border-yellow-500/40'
+          }`}
+        >
+          {!dailyDone && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/5 to-transparent animate-pulse pointer-events-none" />
+          )}
+          <div className="relative flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${dailyDone ? 'bg-emerald-500/20' : 'bg-yellow-500/20'}`}>
+                <Zap size={24} className={dailyDone ? 'text-emerald-400' : 'text-yellow-400'} />
+              </div>
+              <div>
+                <h4 className={`font-black text-lg ${dailyDone ? 'text-emerald-300' : 'text-yellow-300'}`}>
+                  {t.dailyChallenge}
+                  {!dailyDone && <span className="ml-2 text-xs font-bold px-2 py-0.5 bg-yellow-500/20 rounded-full">{t.dailyReward}</span>}
+                </h4>
+                <p className="text-white/60 text-sm">
+                  {dailyDone
+                    ? <><CheckCircle2 size={14} className="inline text-emerald-400 mr-1" />{t.dailyCompleted} · {t.dailyCountdown} {formatCountdown(countdown)}</>
+                    : <>{lt(dailyMission.title, lang)} — {lt(dailyMission.description, lang).slice(0, 40)}...</>
+                  }
+                </p>
+              </div>
+            </div>
+            {!dailyDone && onDailyChallenge && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => { playTap(); onDailyChallenge(dailyMission); }}
+                className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-black rounded-xl shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40 transition-shadow"
+              >
+                <Swords size={16} className="inline mr-2" />
+                {t.missionStart}
+              </motion.button>
+            )}
+            {dailyDone && (
+              <div className="text-emerald-400/60 text-sm font-bold">{t.dailyTomorrow}</div>
+            )}
+          </div>
+        </motion.div>
+      )}
 
       {/* Multiplayer — hidden until Phase 5 */}
 

@@ -1,91 +1,98 @@
 // Skill sound effects: shield_on, shield_block, double_on, reveal
 import type { SoundFn } from '../engine';
-import { createNoiseBuffer, playNoiseBurst, playGong, playGuqinPluck, rand, randCents } from '../utils';
+import { playNoiseBurst, rand } from '../utils';
 
-/** Shield On — inharmonic bronze gong strike (铜锣) */
+/** Shield On — Tactical Energy Shield (Digital activation hum) */
 export const shieldOn: SoundFn = (ctx, time, dest) => {
-  playGong(ctx, dest, time, 0.06, 0.8);
+  // Rising pulse
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(220, time);
+  osc.frequency.exponentialRampToValueAtTime(880, time + 0.3);
+  
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0, time);
+  g.gain.linearRampToValueAtTime(0.08, time + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, time + 0.6);
+  
+  osc.connect(g).connect(dest);
+  osc.start(time);
+  osc.stop(time + 0.61);
+
+  // High-freq shimmer
+  playNoiseBurst(ctx, dest, time, 0.4, 3000, 'highpass', 0.02);
 };
 
-/** Shield Block — metallic clash: high partials + low-freq body thump */
+/** Shield Block — Mechanical Deflect (Metal-on-metal impact) */
 export const shieldBlock: SoundFn = (ctx, time, dest) => {
-  // Low-frequency body impact (shield mass)
+  // Low-frequency body impact
   const body = ctx.createOscillator();
   body.type = 'sine';
   body.frequency.value = rand(180, 220);
   const bg = ctx.createGain();
-  bg.gain.setValueAtTime(0.06, time);
-  bg.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+  bg.gain.setValueAtTime(0.1, time);
+  bg.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
   body.connect(bg).connect(dest);
   body.start(time);
-  body.stop(time + 0.1);
+  body.stop(time + 0.12);
 
-  // High inharmonic partials (metal-on-metal ring)
-  [2000, 2940, 3780].forEach((freq, i) => {
+  // High metallic ring
+  [2500, 3200, 4100].forEach((freq, i) => {
     const osc = ctx.createOscillator();
     osc.type = 'sine';
     osc.frequency.value = freq;
-    osc.detune.value = randCents(8);
     const g = ctx.createGain();
-    const amp = 0.07 / (1 + i * 0.5);
+    const amp = 0.08 / (1 + i * 0.5);
     g.gain.setValueAtTime(amp, time);
-    g.gain.exponentialRampToValueAtTime(0.001, time + 0.12 / (1 + i * 0.4));
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
     osc.connect(g).connect(dest);
     osc.start(time);
     osc.stop(time + 0.2);
   });
 
-  // Click transient
-  playNoiseBurst(ctx, dest, time, 0.012, 4000, 'highpass', 0.06);
+  playNoiseBurst(ctx, dest, time, 0.015, 5000, 'highpass', 0.1);
 };
 
-/** Double On — coin chime (硬币音) */
+/** Double On — System Overclock (Cybernetic chirp) */
 export const doubleOn: SoundFn = (ctx, time, dest) => {
-  // Beat frequency pair (40Hz shimmer)
-  [1480, 1520].forEach(freq => {
+  const t = time;
+  [1200, 1500, 1800].forEach((freq, i) => {
+    const st = t + i * 0.04;
     const osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    osc.detune.value = randCents(4);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.06, time);
-    g.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
-    osc.connect(g).connect(dest);
-    osc.start(time);
-    osc.stop(time + 0.4);
-  });
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, st);
+    
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 2000;
 
-  // Inharmonic sparkle (coin vibration modes)
-  const sparkleBase = 3200;
-  [1, 1.33, 1.78].forEach((ratio, i) => {
-    const t = time + 0.08 + i * rand(0.06, 0.08);
-    const osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = sparkleBase * ratio;
-    osc.detune.value = randCents(10);
     const g = ctx.createGain();
-    g.gain.setValueAtTime(0.03, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
-    osc.connect(g).connect(dest);
-    osc.start(t);
-    osc.stop(t + 0.06);
+    g.gain.setValueAtTime(0.04, st);
+    g.gain.exponentialRampToValueAtTime(0.001, st + 0.08);
+    
+    osc.connect(lp).connect(g).connect(dest);
+    osc.start(st);
+    osc.stop(st + 0.1);
   });
 };
 
-/** Reveal — bamboo scroll unfurl (竹简展开) + guqin pluck */
+/** Reveal — Tactical Scan (High-freq UI sweep) */
 export const reveal: SoundFn = (ctx, time, dest) => {
-  const noise = ctx.createBufferSource();
-  noise.buffer = createNoiseBuffer(ctx);
-  const hp = ctx.createBiquadFilter();
-  hp.type = 'highpass';
-  hp.frequency.setValueAtTime(200, time);
-  hp.frequency.exponentialRampToValueAtTime(2000, time + 0.3);
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(800, time);
+  osc.frequency.exponentialRampToValueAtTime(4000, time + 0.4);
+  
   const g = ctx.createGain();
   g.gain.setValueAtTime(0, time);
-  g.gain.linearRampToValueAtTime(0.05, time + 0.15);
-  g.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
-  noise.connect(hp).connect(g).connect(dest);
-  noise.start(time);
-  noise.stop(time + 0.4);
-  playGuqinPluck(ctx, dest, time + 0.28, 659.25, 0.3, 0.07);
+  g.gain.linearRampToValueAtTime(0.05, time + 0.1);
+  g.gain.exponentialRampToValueAtTime(0.001, time + 0.45);
+  
+  osc.connect(g).connect(dest);
+  osc.start(time);
+  osc.stop(time + 0.46);
+
+  // Sweep noise
+  playNoiseBurst(ctx, dest, time, 0.4, 2500, 'bandpass', 0.03);
 };
+

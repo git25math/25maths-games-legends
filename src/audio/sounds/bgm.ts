@@ -1,6 +1,6 @@
-// BGM: battle (ambient pulse) and map (meditation)
-// Design principle: 柔和舒缓 — soft, soothing, never demanding attention
-import { pentatonic, createPan, playGuqinPluck, rand } from '../utils';
+// BGM: Tactical Briefing (Map) and Operation Active (Battle)
+// Style: Modern Tactical Cinematic (Delta Force inspired)
+import { playNoiseBurst, playWarDrum, rand } from '../utils';
 
 type ScheduleFn = (timer: number) => void;
 type AddNodeFn = (node: AudioScheduledSourceNode) => void;
@@ -8,137 +8,85 @@ type AddNodeFn = (node: AudioScheduledSourceNode) => void;
 const LOOKAHEAD = 0.1;
 const SCHEDULER_INTERVAL = 50;
 
-// --- Shared: pure sine "xiao" (箫) flute tone — soft, breathy, no harsh harmonics ---
-function playXiaoNote(
-  ctx: AudioContext, dest: AudioNode, t: number,
-  freq: number, duration: number, gain: number,
-): void {
-  // Pure sine — the softest possible oscillator tone
-  const osc = ctx.createOscillator();
-  osc.type = 'sine';
-  osc.frequency.value = freq * (1 + (Math.random() - 0.5) * 0.003); // ±3 cents
-
-  // Slow attack (80ms) + long sustain + gentle release — no sharp transients
-  const g = ctx.createGain();
-  g.gain.setValueAtTime(0, t);
-  g.gain.linearRampToValueAtTime(gain, t + 0.08);
-  g.gain.setValueAtTime(gain, t + duration * 0.6);
-  g.gain.linearRampToValueAtTime(0, t + duration);
-
-  // LP filter to keep it dark and warm
-  const lp = ctx.createBiquadFilter();
-  lp.type = 'lowpass';
-  lp.frequency.value = freq * 3;
-  lp.Q.value = 0.3;
-
-  osc.connect(lp).connect(g).connect(dest);
-  osc.start(t);
-  osc.stop(t + duration + 0.01);
-}
-
-/** Battle BGM — gentle ambient pulse (BPM 88)
- *  Soft kick pulse + sine pad + xiao melody with many rests
- *  Feels like: studying in a lantern-lit tent, distant sounds of camp */
+/** Battle BGM — "Operation Active" (115 BPM)
+ *  Atmospheric pulses + heartbeat percussion + submerged synths
+ *  Optimized for deep concentration / math solving */
 export function bgmBattle(
   ctx: AudioContext, musicDest: AudioNode, _sfxDest: AudioNode,
   schedule: ScheduleFn, addNode: AddNodeFn,
 ): void {
-  const BPM = 88;
+  const BPM = 115;
   const beatSec = 60 / BPM;
   let nextBeatTime = ctx.currentTime + 0.05;
   let beat = 0;
 
-  // Melody patterns: -1 = rest. Many rests for breathing space.
-  const melodyPatterns = [
-    [0, -1, 2, -1, 4, -1, 2, -1],     // sparse ascending
-    [-1, 3, -1, 2, -1, 0, -1, -1],     // falling with silence
-    [0, -1, -1, 2, -1, -1, 4, -1],     // very sparse
-    [4, -1, 3, -1, 1, -1, 0, -1],      // gentle descend
-    [-1, -1, 0, -1, 2, -1, -1, -1],    // minimal — almost silence
-    [2, -1, 4, -1, -1, 3, -1, 1],      // floating
-  ];
-  const patternOrder = melodyPatterns.map((_, i) => i);
-  for (let i = patternOrder.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [patternOrder[i], patternOrder[j]] = [patternOrder[j], patternOrder[i]];
-  }
-  let melodyIdx = 0;
+  // D Minor / Phrygian
+  const bassRoots = [73.42, 73.42, 77.78, 65.41]; // D2, D2, Eb2, C2
 
-  // Bass root movement: gentle I → IV → V → I
-  const bassRoots = [196.0, 261.63, 220.0, 196.0];
-
-  // Phrase dynamics: very gentle breathing
-  function getDynamics(): number {
-    const phase = (beat % 32) / 32;
-    return 0.7 + 0.3 * Math.sin(phase * Math.PI * 2 - Math.PI / 2);
-  }
+  // Global "Breathing" Filter for the entire music bus (to be connected inside the loop)
+  const masterLP = ctx.createBiquadFilter();
+  masterLP.type = 'lowpass';
+  masterLP.Q.value = 0.5;
+  masterLP.connect(musicDest);
 
   function scheduleBeat(t: number) {
-    const beatInBar = beat % 8;
-    const dynamics = getDynamics();
+    const bar = Math.floor(beat / 16);
+    const beatInBar = beat % 16;
+    const barInPhrase = bar % 4;
 
-    // --- Soft kick: only on beats 0 and 4 (half density) ---
-    if (beatInBar === 0 || beatInBar === 4) {
-      const kick = ctx.createOscillator();
-      kick.type = 'sine';
-      kick.frequency.setValueAtTime(55, t);
-      kick.frequency.exponentialRampToValueAtTime(42, t + 0.15);
-      const kg = ctx.createGain();
-      kg.gain.setValueAtTime(0.035 * dynamics, t);
-      kg.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-      kick.connect(kg).connect(musicDest);
-      kick.start(t);
-      kick.stop(t + 0.25);
-      addNode(kick);
+    // --- Adaptive "Flow" Filter (Breathing LFO) ---
+    // Slow modulation of the master LPF to create a sense of movement
+    const breathingRate = 0.3 + (bar % 8) * 0.05; // Slightly speeds up/slows down
+    const lfo = Math.sin(t * breathingRate) * 0.5 + 0.5;
+    masterLP.frequency.setValueAtTime(350 + lfo * 1400, t);
+
+    // --- Heartbeat Percussion ---
+    if (beatInBar === 0 || beatInBar === 8) {
+      playWarDrum(ctx, masterLP, t, 0.07, 0.5);
+    }
+    
+    // --- Ghost Resonance (Cinematic Depth, every 4 bars) ---
+    if (beat % 64 === 0) {
+      const resonance = ctx.createOscillator();
+      resonance.type = 'sine';
+      resonance.frequency.setValueAtTime(220, t); // Deep A3
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.012, t + 1.0);
+      g.gain.linearRampToValueAtTime(0, t + 3.0);
+      resonance.connect(g).connect(masterLP);
+      resonance.start(t);
+      resonance.stop(t + 3.1);
+      addNode(resonance);
     }
 
-    // --- Xiao melody (pure sine, slow attack, many rests) ---
-    const patIdx = patternOrder[melodyIdx % patternOrder.length];
-    const pattern = melodyPatterns[patIdx];
-    const noteIdx = beat % 8;
-    const degree = pattern[noteIdx];
+    // --- Sub-Pulse ---
+    if (beat % 2 === 0) {
+      const root = bassRoots[barInPhrase];
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(root, t);
+      
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.04, t + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, t + beatSec * 0.9);
 
-    if (degree >= 0) {
-      const freq = pentatonic(degree, 1, 'gong'); // gong mode — peaceful, not martial
-      const vol = 0.018 * dynamics * rand(0.85, 1.15);
-      playXiaoNote(ctx, musicDest, t, freq, beatSec * 1.8, vol);
+      osc.connect(g).connect(masterLP);
+      osc.start(t);
+      osc.stop(t + beatSec);
+      addNode(osc);
     }
 
-    // --- Bass pad: recreate every 8 beats ---
-    if (beatInBar === 0) {
-      const chordIdx = Math.floor((beat / 8) % 4);
-      const bassFreq = bassRoots[chordIdx];
-
-      const drone = ctx.createOscillator();
-      drone.type = 'sine';
-      drone.frequency.value = bassFreq;
-      const dg = ctx.createGain();
-      dg.gain.setValueAtTime(0, t);
-      dg.gain.linearRampToValueAtTime(0.02 * dynamics, t + 0.3); // slow fade in
-      dg.gain.setValueAtTime(0.02 * dynamics, t + 7 * beatSec);
-      dg.gain.linearRampToValueAtTime(0, t + 8 * beatSec); // slow fade out
-      drone.connect(dg).connect(musicDest);
-      drone.start(t);
-      drone.stop(t + 8 * beatSec + 0.01);
-      addNode(drone);
-    }
-
-    if (noteIdx === 7) {
-      melodyIdx++;
-      if (melodyIdx % patternOrder.length === 0) {
-        for (let i = patternOrder.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [patternOrder[i], patternOrder[j]] = [patternOrder[j], patternOrder[i]];
-        }
-      }
-    }
     beat++;
   }
+
+
 
   function scheduler() {
     while (nextBeatTime < ctx.currentTime + LOOKAHEAD) {
       scheduleBeat(nextBeatTime);
-      nextBeatTime += beatSec;
+      nextBeatTime += beatSec / 2; // 8th note resolution
     }
     const timer = window.setTimeout(scheduler, SCHEDULER_INTERVAL);
     schedule(timer);
@@ -146,110 +94,77 @@ export function bgmBattle(
   scheduler();
 }
 
-/** Map BGM — meditation ambient: warm sine pad + very gentle guqin
- *  Feels like: sitting by a moonlit lake, bamboo swaying */
+/** Map BGM — "Tactical Briefing" (Ambient Tension)
+ *  Sub drones + rhythmic radar pulses + filtered pads */
 export function bgmMap(
   ctx: AudioContext, musicDest: AudioNode, _sfxDest: AudioNode,
   schedule: ScheduleFn, addNode: AddNodeFn,
 ): void {
-  const noteSec = 1.5; // slower than before (was 1.0s)
-  let nextNoteTime = ctx.currentTime + 0.05;
-  let step = 0;
+  let beat = 0;
+  const pulseSec = 0.8;
+  let nextPulseTime = ctx.currentTime + 0.05;
 
-  // Long melody with lots of rests
-  const melodyDegrees = [0, -1, 2, -1, 4, -1, -1, 2, 0, -1, -1, 1, 3, -1, 1, -1];
+  function schedulePulse(t: number) {
+    // --- Sub Drone (every 8 pulses) ---
+    if (beat % 8 === 0) {
+      const drone = ctx.createOscillator();
+      drone.type = 'sine';
+      drone.frequency.setValueAtTime(55, t); // A1
+      
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.03, t + 1.0);
+      g.gain.setValueAtTime(0.03, t + 5.0);
+      g.gain.linearRampToValueAtTime(0, t + 6.4);
 
-  const padPanL = createPan(ctx, -0.15);
-  padPanL.connect(musicDest);
-  const padPanR = createPan(ctx, 0.15);
-  padPanR.connect(musicDest);
-  const melPan = createPan(ctx, 0);
-  melPan.connect(musicDest);
-
-  const padRoots: [number, number][] = [
-    [261.63, 392.0],   // C4+G4
-    [220.0, 329.63],   // A3+E4
-    [261.63, 392.0],   // C4+G4
-    [196.0, 293.66],   // G3+D4
-  ];
-
-  function scheduleNote(t: number) {
-    // Pad: warm sine, very dark LP, changes every 4 notes
-    if (step % 4 === 0) {
-      const chordIdx = Math.floor((step / 4) % 4);
-      const [root, fifth] = padRoots[chordIdx];
-
-      // Root → left
-      const oscR = ctx.createOscillator();
-      oscR.type = 'sine';
-      oscR.frequency.value = root;
-      const gR = ctx.createGain();
-      gR.gain.setValueAtTime(0, t);
-      gR.gain.linearRampToValueAtTime(0.015, t + 0.5); // slow fade in
-      gR.gain.setValueAtTime(0.015, t + 5);
-      gR.gain.linearRampToValueAtTime(0, t + 6); // slow fade out
-      const padLP = ctx.createBiquadFilter();
-      padLP.type = 'lowpass';
-      padLP.frequency.value = 500; // very dark — just warmth, no brightness
-      padLP.Q.value = 0.3;
-      oscR.connect(padLP).connect(gR).connect(padPanL);
-      oscR.start(t);
-      oscR.stop(t + 6.01);
-      addNode(oscR);
-
-      // Detuned layer for subtle chorus
-      const oscR2 = ctx.createOscillator();
-      oscR2.type = 'sine';
-      oscR2.frequency.value = root;
-      oscR2.detune.value = rand(5, 8);
-      const gR2 = ctx.createGain();
-      gR2.gain.setValueAtTime(0, t);
-      gR2.gain.linearRampToValueAtTime(0.008, t + 0.5);
-      gR2.gain.setValueAtTime(0.008, t + 5);
-      gR2.gain.linearRampToValueAtTime(0, t + 6);
-      oscR2.connect(padLP).connect(gR2).connect(padPanL);
-      oscR2.start(t);
-      oscR2.stop(t + 6.01);
-      addNode(oscR2);
-
-      // Fifth → right
-      const oscF = ctx.createOscillator();
-      oscF.type = 'sine';
-      oscF.frequency.value = fifth;
-      const gF = ctx.createGain();
-      gF.gain.setValueAtTime(0, t);
-      gF.gain.linearRampToValueAtTime(0.012, t + 0.5);
-      gF.gain.setValueAtTime(0.012, t + 5);
-      gF.gain.linearRampToValueAtTime(0, t + 6);
-      const padLP2 = ctx.createBiquadFilter();
-      padLP2.type = 'lowpass';
-      padLP2.frequency.value = 550;
-      padLP2.Q.value = 0.3;
-      oscF.connect(padLP2).connect(gF).connect(padPanR);
-      oscF.start(t);
-      oscF.stop(t + 6.01);
-      addNode(oscF);
+      drone.connect(g).connect(musicDest);
+      drone.start(t);
+      drone.stop(t + 6.5);
+      addNode(drone);
     }
 
-    // Guqin melody: very quiet, gentle plucks with rests
-    const degree = melodyDegrees[step % melodyDegrees.length];
-
-    if (degree >= 0) {
-      const freq = pentatonic(degree, 0, 'gong');
-      melPan.pan.setValueAtTime(Math.sin(step * 0.3) * 0.1, t);
-      playGuqinPluck(ctx, melPan, t, freq, 1.2, rand(0.025, 0.035));
+    // --- Radar Pulse (every 2 pulses) ---
+    if (beat % 2 === 0) {
+      playNoiseBurst(ctx, musicDest, t, 0.05, 2500, 'bandpass', 0.01);
     }
 
-    step++;
+    // --- Filtered Saw Pad (D Minor / Phrygian context) ---
+    if (beat % 16 === 0) {
+      [146.83, 174.61, 220.0].forEach(freq => { // D3, F3, A3
+        const osc = ctx.createOscillator();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freq + rand(-1, 1), t);
+        
+        const lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.frequency.setValueAtTime(100, t);
+        lp.frequency.linearRampToValueAtTime(400, t + 4.0);
+        lp.frequency.linearRampToValueAtTime(100, t + 8.0);
+
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.015, t + 2.0);
+        g.gain.setValueAtTime(0.015, t + 10.0);
+        g.gain.linearRampToValueAtTime(0, t + 12.8);
+
+        osc.connect(lp).connect(g).connect(musicDest);
+        osc.start(t);
+        osc.stop(t + 13);
+        addNode(osc);
+      });
+    }
+
+    beat++;
   }
 
   function scheduler() {
-    while (nextNoteTime < ctx.currentTime + LOOKAHEAD) {
-      scheduleNote(nextNoteTime);
-      nextNoteTime += noteSec;
+    while (nextPulseTime < ctx.currentTime + LOOKAHEAD) {
+      schedulePulse(nextPulseTime);
+      nextPulseTime += pulseSec;
     }
     const timer = window.setTimeout(scheduler, SCHEDULER_INTERVAL);
     schedule(timer);
   }
   scheduler();
 }
+

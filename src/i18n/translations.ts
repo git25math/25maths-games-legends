@@ -161,6 +161,24 @@ export const translations = {
     gotItNextQuestion: "明白了，下一题",
     imReady: "我准备好了！",
     chooseSkillCard: "选择一张技能卡",
+    // XP Level System (1.1)
+    level: "等级",
+    rank: "军衔",
+    xpToNext: "距下一级",
+    // Daily Challenge (1.2)
+    dailyChallenge: "每日试炼",
+    dailyCompleted: "今日已完成",
+    dailyReward: "3 倍功勋",
+    dailyCountdown: "距离刷新",
+    dailyTomorrow: "明日再战",
+    // Partial Credit (1.3)
+    partialCorrect: "接近正确！",
+    methodCorrectCalcWrong: "方法正确，计算有误",
+    halfCredit: "50% 得分",
+    // Streak Tokens (1.4)
+    streakBonus: "连胜奖励",
+    streakToken: "连胜令牌",
+    streakKing: "连胜之王",
   },
   en: {
     title: "25 Math Legends",
@@ -322,6 +340,24 @@ export const translations = {
     gotItNextQuestion: "Got it, next question",
     imReady: "I'm Ready!",
     chooseSkillCard: "Choose a Skill Card",
+    // XP Level System (1.1)
+    level: "Level",
+    rank: "Rank",
+    xpToNext: "to next level",
+    // Daily Challenge (1.2)
+    dailyChallenge: "Daily Trial",
+    dailyCompleted: "Completed Today",
+    dailyReward: "3× Merit",
+    dailyCountdown: "Resets in",
+    dailyTomorrow: "Return Tomorrow",
+    // Partial Credit (1.3)
+    partialCorrect: "Almost Right!",
+    methodCorrectCalcWrong: "Right method, calculation error",
+    halfCredit: "50% Credit",
+    // Streak Tokens (1.4)
+    streakBonus: "Streak Bonus",
+    streakToken: "Streak Token",
+    streakKing: "Streak King",
   },
   zh_TW: {
     title: "25 數學三國",
@@ -483,6 +519,24 @@ export const translations = {
     gotItNextQuestion: "明白了，下一題",
     imReady: "我準備好了！",
     chooseSkillCard: "選擇一張技能卡",
+    // XP Level System (1.1)
+    level: "等級",
+    rank: "軍銜",
+    xpToNext: "距下一級",
+    // Daily Challenge (1.2)
+    dailyChallenge: "每日試煉",
+    dailyCompleted: "今日已完成",
+    dailyReward: "3 倍功勳",
+    dailyCountdown: "距離刷新",
+    dailyTomorrow: "明日再戰",
+    // Partial Credit (1.3)
+    partialCorrect: "接近正確！",
+    methodCorrectCalcWrong: "方法正確，計算有誤",
+    halfCredit: "50% 得分",
+    // Streak Tokens (1.4)
+    streakBonus: "連勝獎勵",
+    streakToken: "連勝令牌",
+    streakKing: "連勝之王",
   }
 } as const;
 

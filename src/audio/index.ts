@@ -8,7 +8,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import SoundEngine from './engine';
 import { tap, submit, correct, wrong } from './sounds/core';
-import { hpLoss, hpCriticalLoop, victory, defeat } from './sounds/combat';
+import { hpLoss, hpCriticalLoop, victory, defeat, partialCredit } from './sounds/combat';
 import { streak2, streak3, streak5, streakBreak } from './sounds/streak';
 import { shieldOn, shieldBlock, doubleOn, reveal } from './sounds/skills';
 import { tierUp, tierDown, phaseAdvance, badgeUnlock } from './sounds/progress';
@@ -56,6 +56,7 @@ export function useAudio() {
 
   // --- Combat ---
   const playHpLoss = useCallback(() => { if (guard()) engine.play(hpLoss); }, []);
+  const playPartialCredit = useCallback(() => { if (guard()) engine.play(partialCredit); }, []);
   const playVictory = useCallback(() => { if (guard()) engine.play(victory, 'sfx', true); }, []);
   const playDefeat = useCallback(() => { if (guard()) engine.play(defeat, 'sfx', true); }, []);
 
@@ -69,6 +70,7 @@ export function useAudio() {
     const dest = engine.getDest('sfx');
     criticalTimersRef.current = [];
     criticalNodesRef.current = [];
+    engine.setSuppression(true);
     criticalStopRef.current = hpCriticalLoop(ctx, dest,
       (t) => criticalTimersRef.current.push(t),
       (n) => criticalNodesRef.current.push(n),
@@ -82,6 +84,7 @@ export function useAudio() {
     criticalTimersRef.current = [];
     criticalNodesRef.current.forEach(n => { try { n.stop(); } catch { /* already stopped */ } });
     criticalNodesRef.current = [];
+    engine.setSuppression(false);
   }, []);
 
   // --- Streak ---
@@ -134,9 +137,16 @@ export function useAudio() {
   const playBattleExitWin = useCallback(() => { if (guard()) engine.play(battleExitWin); }, []);
   const playBattleExitLose = useCallback(() => { if (guard()) engine.play(battleExitLose); }, []);
 
-  // --- BGM (disabled — all background music off) ---
-  const playBGMBattle = useCallback(() => { /* BGM disabled */ }, []);
-  const playBGMMap = useCallback(() => { /* BGM disabled */ }, []);
+  // --- BGM ---
+  const playBGMBattle = useCallback(() => {
+    if (!guard()) return;
+    engine.playBGM(bgmBattle);
+  }, []);
+
+  const playBGMMap = useCallback(() => {
+    if (!guard()) return;
+    engine.playBGM(bgmMap);
+  }, []);
 
   const stopBGM = useCallback(() => {
     engine.stopBGM();
@@ -157,7 +167,7 @@ export function useAudio() {
     playTap, playSubmit, playCorrect, playWrong,
 
     // Combat
-    playHpLoss, playVictory, playDefeat,
+    playHpLoss, playVictory, playDefeat, playPartialCredit,
     startHpCritical, stopHpCritical,
 
     // Streak

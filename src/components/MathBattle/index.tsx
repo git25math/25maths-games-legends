@@ -4,7 +4,7 @@ import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Vo
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
 import { lt } from '../../i18n/resolveText';
-import { checkAnswer } from '../../utils/checkCorrectness';
+import { checkAnswer, checkPartialCredit } from '../../utils/checkCorrectness';
 import { interpolate } from '../../utils/interpolate';
 import { tapScale, hoverGlow, buttonBase, VICTORY_TIMING, BATTLE_TIMING } from '../../utils/animationPresets';
 import { LatexText, MathView } from '../MathView';
@@ -37,6 +37,9 @@ export const MathBattle = ({
   skillCard = null,
   isFirstClear = false,
   completedDifficulties = {},
+  isDailyChallenge = false,
+  dailyMultiplier = 1,
+  onStreakToken,
 }: {
   mission: Mission;
   character: Character;
@@ -49,6 +52,9 @@ export const MathBattle = ({
   skillCard?: string | null;
   isFirstClear?: boolean;
   completedDifficulties?: Record<string, boolean>;
+  isDailyChallenge?: boolean;
+  dailyMultiplier?: number;
+  onStreakToken?: () => void;
 }) => {
   const isMultiQuestion = !!mission.data?.generatorType;
 
@@ -83,6 +89,8 @@ export const MathBattle = ({
   const [finalScore, setFinalScore] = useState(0);
   const [finalDuration, setFinalDuration] = useState(0);
   const [shieldCharges, setShieldCharges] = useState(skillCard === 'shield' ? 2 : 0);
+  const [streakMilestone, setStreakMilestone] = useState<number | null>(null);
+  const [partialCreditInfo, setPartialCreditInfo] = useState<{ score: number } | null>(null);
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
   const achievementTimerRef = useRef<number | null>(null);
@@ -94,7 +102,7 @@ export const MathBattle = ({
     playBGM, stopBGM, playClick, muted, toggleMute,
     playCorrect, playWrong, playVictory, playDefeat,
     playStreak, playStreakBreak, playHpLoss,
-    playShieldBlock, playBattleEnter,
+    playShieldBlock, playBattleEnter, playPartialCredit,
   } = useAudio();
 
   const t = translations[lang];
@@ -173,23 +181,11 @@ export const MathBattle = ({
     }, VICTORY_TIMING.skillBadge);
   };
 
-  const advanceToNextQuestion = () => {
-    setInputs({});
-    setWrongAnswerData(null);
-    if (currentQIdx + 1 >= questionQueue.length) {
-      // All questions done — success
-      const duration = Math.round((Date.now() - startTime) / 1000);
-      setFinalDuration(duration);
-      setFinalScore(totalScore);
-      triggerVictorySequence();
-    } else {
-      setCurrentQIdx(prev => prev + 1);
-    }
-  };
-
   const handleSubmit = () => {
     playClick();
-    const result = checkAnswer(currentQuestion, inputs);
+    const rawResult = checkAnswer(currentQuestion, inputs);
+    const result = checkPartialCredit(currentQuestion, inputs, rawResult);
+
     if (result.correct) {
       if (isMultiQuestion) {
         // Multi-question: combo scoring
@@ -200,13 +196,21 @@ export const MathBattle = ({
         const streakMult = getStreakMultiplier(newStreak);
         const diffMult = DIFFICULTY_MULTIPLIER[difficultyMode];
         const doubleMult = (skillCard === 'double' && currentQIdx >= 2) ? 2 : 1;
-        const score = Math.round(currentQuestion.reward * streakMult * diffMult * doubleMult);
+        const score = Math.round(currentQuestion.reward * streakMult * diffMult * doubleMult * dailyMultiplier);
 
         setStreak(newStreak);
         setPeakStreak(prev => Math.max(prev, newStreak));
         setCorrectCount(prev => prev + 1);
         const newTotal = totalScore + score;
         setTotalScore(newTotal);
+
+        // Streak milestone flash (3/5/8)
+        if ([3, 5, 8].includes(newStreak)) {
+          setStreakMilestone(newStreak);
+          window.setTimeout(() => setStreakMilestone(null), 800);
+          // Award streak token at streak 5
+          if (newStreak === 5 && onStreakToken) onStreakToken();
+        }
 
         // Floating score
         const multLabel = doubleMult > 1 ? `x${streakMult * doubleMult}` : streakMult > 1 ? `x${streakMult}` : '';
@@ -216,7 +220,6 @@ export const MathBattle = ({
 
         // Check if this was the last question
         if (currentQIdx + 1 >= questionQueue.length) {
-          // Final question correct — show success after brief delay
           const duration = Math.round((Date.now() - startTime) / 1000);
           setFinalDuration(duration);
           setFinalScore(newTotal);
@@ -224,10 +227,10 @@ export const MathBattle = ({
             triggerVictorySequence();
           }, BATTLE_TIMING.advance);
         } else {
-          // Advance after brief delay
           advanceTimerRef.current = window.setTimeout(() => {
             setInputs({});
             setWrongAnswerData(null);
+            setPartialCreditInfo(null);
             setCurrentQIdx(prev => prev + 1);
           }, BATTLE_TIMING.advance);
         }
@@ -236,13 +239,38 @@ export const MathBattle = ({
         const duration = (Date.now() - startTime) / 1000;
         const speedBonus = Math.max(0, 100 - Math.floor(duration));
         const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
-        const score = Math.round((mission.reward + speedBonus) * multiplier);
+        const score = Math.round((mission.reward + speedBonus) * multiplier * dailyMultiplier);
         setFinalScore(score);
         setFinalDuration(Math.round(duration));
         triggerVictorySequence();
       }
+    } else if (result.partial) {
+      // Partial credit: 50% score, no HP loss, no streak break
+      playPartialCredit();
+      if (isMultiQuestion) {
+        const diffMult = DIFFICULTY_MULTIPLIER[difficultyMode];
+        const partialScore = Math.round(currentQuestion.reward * 0.5 * diffMult * dailyMultiplier);
+        const newTotal = totalScore + partialScore;
+        setTotalScore(newTotal);
+        // Don't break streak, don't increment correctCount (partial ≠ correct)
+
+        floatingKeyRef.current += 1;
+        setFloatingScore({ value: `+${partialScore} (50%)`, key: floatingKeyRef.current });
+        setPartialCreditInfo({ score: partialScore });
+
+        // Show partial wrong answer panel then advance
+        setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
+      } else {
+        // Single question partial: show review panel, let them retry
+        // (Score applied only if they eventually get it fully correct)
+        const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
+        const partialScore = Math.round(mission.reward * 0.5 * multiplier * dailyMultiplier);
+        setPartialCreditInfo({ score: partialScore });
+        setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
+      }
     } else {
       playWrong();
+      setPartialCreditInfo(null);
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       setShakeKey(k => k + 1);
       shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), BATTLE_TIMING.shake);
@@ -252,8 +280,26 @@ export const MathBattle = ({
   };
 
   const handleWrongAnswerContinue = () => {
+    const wasPartial = !!partialCreditInfo;
     setWrongAnswerData(null);
     setInputs({});
+    setPartialCreditInfo(null);
+
+    // Partial credit: no HP loss, no streak break — just advance
+    if (wasPartial) {
+      if (isMultiQuestion) {
+        if (currentQIdx + 1 >= questionQueue.length) {
+          const duration = Math.round((Date.now() - startTime) / 1000);
+          setFinalDuration(duration);
+          setFinalScore(totalScore);
+          advanceTimerRef.current = window.setTimeout(() => triggerVictorySequence(), BATTLE_TIMING.advance);
+        } else {
+          setCurrentQIdx(prev => prev + 1);
+        }
+      }
+      // Single question partial: just close the panel, let them retry
+      return;
+    }
 
     if (isMultiQuestion) {
       // Reset streak on wrong
@@ -325,6 +371,8 @@ export const MathBattle = ({
     setShowResult('none');
     setInputs({});
     setWrongAnswerData(null);
+    setPartialCreditInfo(null);
+    setStreakMilestone(null);
     setCurrentQIdx(0);
     setCorrectCount(0);
     setStreak(0);
@@ -388,6 +436,13 @@ export const MathBattle = ({
                 <span className="ml-4 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-rose-600">
                   {t.challenge}
                 </span>
+
+                {/* Daily challenge indicator */}
+                {isDailyChallenge && (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-black bg-yellow-500 text-black flex items-center gap-1">
+                    {t.dailyChallenge} ×{dailyMultiplier}
+                  </span>
+                )}
 
                 {/* Active skill card badge */}
                 {skillCard && (
@@ -504,7 +559,7 @@ export const MathBattle = ({
               lang={lang}
             />
 
-            {/* Wrong answer review panel */}
+            {/* Wrong answer review panel (with partial credit variant) */}
             {wrongAnswerData && (
               <WrongAnswerPanel
                 questionType={currentQuestion.type}
@@ -515,6 +570,8 @@ export const MathBattle = ({
                 lang={lang}
                 onContinue={handleWrongAnswerContinue}
                 storyText={mission.storyConsequence ? lt(mission.storyConsequence.wrong, lang) : undefined}
+                isPartial={!!partialCreditInfo}
+                partialScore={partialCreditInfo?.score}
               />
             )}
 
@@ -559,6 +616,37 @@ export const MathBattle = ({
 
           </div>
         </div>
+
+        {/* Streak Milestone Golden Flash */}
+        <AnimatePresence>
+          {streakMilestone && (
+            <motion.div
+              key={`milestone-${streakMilestone}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 0.6, 0] }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+              className="absolute inset-0 bg-gradient-to-b from-yellow-400/30 via-yellow-500/10 to-transparent pointer-events-none z-25"
+            />
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {streakMilestone && (
+            <motion.div
+              key={`milestone-text-${streakMilestone}`}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: [0.5, 1.3, 1], opacity: [0, 1, 0] }}
+              transition={{ duration: 0.8 }}
+              className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-30 text-center"
+            >
+              <div className="text-5xl font-black text-yellow-400 drop-shadow-lg" style={{ textShadow: '0 0 20px rgba(250,204,21,0.5)' }}>
+                {streakMilestone} {t.streakLabel}!
+              </div>
+              {streakMilestone === 5 && (
+                <div className="text-lg font-black text-amber-300 mt-1">{t.streakToken} +1</div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Floating Score Animation */}
         <AnimatePresence>

@@ -3,6 +3,8 @@ import { parseAnswer, toFraction } from './parseAnswer';
 
 export type CheckResult = {
   correct: boolean;
+  /** Partial credit: true when answer is close but not exact */
+  partial?: boolean;
   /** Expected answers keyed by input field id (e.g. { x: '7' }, { m: '2', b: '-1' }) */
   expected: Record<string, string>;
 };
@@ -330,6 +332,63 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: ok, expected: { x: String(data.ansX), y: String(data.ansY) } };
   }
   return { correct: false, expected: {} };
+}
+
+// --- Partial credit logic ---
+// Question types that explicitly support partial credit
+const PARTIAL_CREDIT_TYPES = new Set([
+  'LINEAR', 'SIMULTANEOUS', 'QUADRATIC', 'STD_FORM', 'COORDINATES', 'SYMMETRY',
+  // Single numeric types — tolerance-based partial credit
+  'AREA', 'VOLUME', 'PERCENTAGE', 'PYTHAGORAS', 'TRIGONOMETRY', 'CIRCLE',
+  'PROBABILITY', 'INTEGRATION', 'STATISTICS', 'SIMILARITY', 'FUNC_VAL',
+  'DERIVATIVE', 'SIMPLE_EQ', 'ANGLES', 'RATIO', 'INDICES',
+  'FRAC_ADD', 'FRAC_MUL', 'SUBSTITUTION', 'PERIMETER', 'EXPAND',
+  'FACTORISE', 'INEQUALITY', 'FDP_CONVERT', 'BODMAS', 'SIMPLIFY',
+  'ARITHMETIC', 'ESTIMATION', 'SQUARE_CUBE', 'SQUARE_ROOT',
+  'INTEGER_ADD', 'INTEGER_MUL', 'HCF', 'LCM',
+]);
+
+// Types that NEVER get partial credit (boolean/discrete answers)
+const NO_PARTIAL_TYPES = new Set(['PRIME', 'FACTOR_TREE', 'FACTORS_LIST', 'MIXED_IMPROPER']);
+
+/** Check if a result qualifies for partial credit */
+export function checkPartialCredit(mission: Mission, inputs: { [key: string]: string }, result: CheckResult): CheckResult {
+  if (result.correct || NO_PARTIAL_TYPES.has(mission.type)) return result;
+  if (!PARTIAL_CREDIT_TYPES.has(mission.type)) return result;
+
+  const expected = result.expected;
+  const fields = Object.keys(expected);
+  if (fields.length === 0) return result;
+
+  // Multi-field types: partial if at least one field is correct
+  if (fields.length >= 2) {
+    let correctFields = 0;
+    for (const f of fields) {
+      const userVal = parse(inputs[f] || '');
+      const expVal = parseFloat(expected[f]);
+      if (!isNaN(expVal) && Math.abs(userVal - expVal) < 0.01) {
+        correctFields++;
+      }
+    }
+    if (correctFields > 0 && correctFields < fields.length) {
+      return { correct: false, partial: true, expected };
+    }
+  }
+
+  // Single-field types: partial if within 15% error margin
+  if (fields.length === 1) {
+    const f = fields[0];
+    const userVal = parse(inputs[f] || '');
+    const expVal = parseFloat(expected[f]);
+    if (!isNaN(expVal) && !isNaN(userVal) && expVal !== 0) {
+      const relError = Math.abs(userVal - expVal) / Math.abs(expVal);
+      if (relError > 0 && relError < 0.15) {
+        return { correct: false, partial: true, expected };
+      }
+    }
+  }
+
+  return result;
 }
 
 /** Backward-compatible wrapper — returns boolean only */

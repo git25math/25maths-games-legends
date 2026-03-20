@@ -135,6 +135,20 @@ class SoundEngine {
     this.reverbSend.connect(this.convolver);
     this.convolver.connect(this.masterGain);
 
+    // --- Master Saturation Layer (The "Hardware" feel) ---
+    const saturator = ctx.createWaveShaper();
+    const curve = new Float32Array(257);
+    for (let i = 0; i < 257; i++) {
+      const x = (i - 128) / 128;
+      curve[i] = Math.tanh(x * 1.5); // Soft saturation
+    }
+    saturator.curve = curve;
+
+    // Master path: masterGain -> saturator -> compressor -> limiter
+    this.masterGain.disconnect();
+    this.masterGain.connect(saturator);
+    saturator.connect(this.compressor);
+
     // Stereo early reflections
     [
       { ms: 11, gain: 0.05, pan: -0.4 },
@@ -171,6 +185,61 @@ class SoundEngine {
     this.musicGain.gain.value = MIX.music;
     this.musicGain.connect(this.musicEQ);
     this.musicEQ.connect(this.masterGain);
+
+    // Create a very quiet procedural ambient air layer
+    this.startAmbientAir(ctx);
+  }
+
+  private startAmbientAir(ctx: AudioContext): void {
+    const sr = ctx.sampleRate;
+    const buf = ctx.createBuffer(1, sr * 2, sr);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < sr * 2; i++) data[i] = Math.random() * 2 - 1;
+    
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 400;
+
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 100;
+
+    const g = ctx.createGain();
+    g.gain.value = 0.008; // Extremely quiet but present
+
+    src.connect(lp).connect(hp).connect(g).connect(this.masterGain);
+    src.start();
+  }
+
+
+  /** Tactical "Suppression/Concussion" effect: low-pass filter everything */
+  setSuppression(active: boolean): void {
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    
+    // SFX Suppression
+    this.sfxEQ.cancelScheduledValues(now);
+    if (active) {
+      this.sfxEQ.type = 'lowpass';
+      this.sfxEQ.frequency.exponentialRampToValueAtTime(400, now + 0.1);
+    } else {
+      this.sfxEQ.type = 'highpass';
+      this.sfxEQ.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+    }
+
+    // Music Suppression
+    this.musicEQ.cancelScheduledValues(now);
+    if (active) {
+      this.musicEQ.type = 'lowpass';
+      this.musicEQ.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+    } else {
+      this.musicEQ.type = 'peaking';
+      this.musicEQ.frequency.exponentialRampToValueAtTime(800, now + 0.3);
+    }
   }
 
   getContext(): AudioContext {

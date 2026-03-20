@@ -1,46 +1,14 @@
 // UI sound effects: card_pick, countdown_warn
-import type { SoundFn } from '../engine';
-import { playNoiseBurst } from '../utils';
+import { playNoiseBurst, playTacticalBlip } from '../utils';
 
-/** Card Pick — card flip: bamboo slap + resonant wood click + tail (牌翻转) */
+/** Card Pick — Tactical Select (Short digital beep/click) */
 export const cardPick: SoundFn = (ctx, time, dest) => {
-  // Bamboo slap: short bandpass noise
-  playNoiseBurst(ctx, dest, time, 0.006, 1500, 'bandpass', 0.06);
-
-  // Wood click: body 700Hz + overtone 1400Hz
-  const body = ctx.createOscillator();
-  body.type = 'sine';
-  body.frequency.value = 700;
-  const bg = ctx.createGain();
-  bg.gain.setValueAtTime(0.09, time);
-  bg.gain.exponentialRampToValueAtTime(0.001, time + 0.015);
-  body.connect(bg).connect(dest);
-  body.start(time);
-  body.stop(time + 0.02);
-
-  const over = ctx.createOscillator();
-  over.type = 'sine';
-  over.frequency.value = 1400;
-  const og = ctx.createGain();
-  og.gain.setValueAtTime(0.04, time);
-  og.gain.exponentialRampToValueAtTime(0.001, time + 0.008);
-  over.connect(og).connect(dest);
-  over.start(time);
-  over.stop(time + 0.01);
-
-  // Triangle tail 550Hz with natural decay
-  const tail = ctx.createOscillator();
-  tail.type = 'triangle';
-  tail.frequency.value = 550;
-  const tg = ctx.createGain();
-  tg.gain.setValueAtTime(0.05, time + 0.01);
-  tg.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
-  tail.connect(tg).connect(dest);
-  tail.start(time + 0.01);
-  tail.stop(time + 0.13);
+  playTacticalBlip(ctx, dest, time, 2400, 0.03, 0.08);
+  playNoiseBurst(ctx, dest, time, 0.005, 5000, 'highpass', 0.04);
 };
 
-/** Countdown Warning — accelerating tick pulses with rising pitch.
+
+/** Countdown Warning — Tactical Urgency (Accelerating radar pulses)
  *  Returns a stop function. */
 export function countdownWarn(
   ctx: AudioContext, dest: AudioNode,
@@ -48,29 +16,26 @@ export function countdownWarn(
 ): () => void {
   let active = true;
   let interval = 500;
-  let gain = 0.05;
-  let pitch = 800;
+  let pitch = 1200;
+  let urgency = 0;
 
   function tick() {
     if (!active) return;
     const now = ctx.currentTime;
-    // Tick body
-    const osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = pitch;
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(gain, now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
-    osc.connect(g).connect(dest);
-    osc.start(now);
-    osc.stop(now + 0.03);
-    // Click transient
-    playNoiseBurst(ctx, dest, now, 0.004, 2000, 'bandpass', gain * 0.5);
+    
+    // High-freq tactical blip
+    playTacticalBlip(ctx, dest, now, pitch, 0.04, 0.06 + urgency * 0.04);
+    
+    // Subtle grit/distortion on pulse
+    if (urgency > 0.5) {
+      playNoiseBurst(ctx, dest, now, 0.015, 2000, 'bandpass', urgency * 0.05);
+    }
 
-    // Accelerate + escalate
-    interval = Math.max(100, interval * 0.85);
-    gain = Math.min(0.1, gain + 0.004);
-    pitch = Math.min(1400, pitch + 30); // rising urgency
+    // Accelerate + escalate urgency
+    interval = Math.max(80, interval * 0.9);
+    pitch = Math.min(2200, pitch + 50);
+    urgency = Math.min(1, urgency + 0.05);
+    
     const timer = window.setTimeout(tick, interval);
     schedule(timer);
   }
@@ -78,3 +43,4 @@ export function countdownWarn(
   tick();
   return () => { active = false; };
 }
+

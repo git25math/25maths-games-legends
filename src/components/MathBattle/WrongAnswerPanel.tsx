@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { AlertTriangle, ChevronRight } from 'lucide-react';
+import { AlertTriangle, ChevronRight, Star } from 'lucide-react';
 import type { Language } from '../../types';
 import { MathView } from '../MathView';
 import { lt } from '../../i18n/resolveText';
@@ -9,6 +9,8 @@ import { staggerContainer, staggerItem } from '../../utils/animationPresets';
 const LABELS = {
   zh: {
     title: '解题回顾',
+    partialTitle: '接近正确！',
+    partialHint: '方法正确，计算有误',
     yourAnswer: '你的答案',
     correctAnswer: '正确答案',
     explanation: '解题过程',
@@ -16,6 +18,8 @@ const LABELS = {
   },
   zh_TW: {
     title: '解題回顧',
+    partialTitle: '接近正確！',
+    partialHint: '方法正確，計算有誤',
     yourAnswer: '你的答案',
     correctAnswer: '正確答案',
     explanation: '解題過程',
@@ -23,6 +27,8 @@ const LABELS = {
   },
   en: {
     title: 'Solution Review',
+    partialTitle: 'Almost Right!',
+    partialHint: 'Right method, calculation error',
     yourAnswer: 'Your answer',
     correctAnswer: 'Correct answer',
     explanation: 'Solution steps',
@@ -41,6 +47,10 @@ type Props = {
   continueLabel?: string;
   /** Story consequence text for wrong answer */
   storyText?: string;
+  /** Partial credit mode: yellow border, encouraging message */
+  isPartial?: boolean;
+  /** Partial credit score earned */
+  partialScore?: number;
 };
 
 export function WrongAnswerPanel({
@@ -53,6 +63,8 @@ export function WrongAnswerPanel({
   onContinue,
   continueLabel,
   storyText,
+  isPartial = false,
+  partialScore,
 }: Props) {
   const t = LABELS[lang];
   const fc = INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || { zh: [], en: [] };
@@ -67,13 +79,23 @@ export function WrongAnswerPanel({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
-      className="bg-red-50 border-2 border-red-200 rounded-xl p-5 space-y-4"
+      className={`rounded-xl p-5 space-y-4 border-2 ${isPartial ? 'bg-yellow-50 border-yellow-300' : 'bg-red-50 border-red-200'}`}
     >
       {/* Header */}
-      <div className="flex items-center gap-2 text-red-700 font-bold">
-        <AlertTriangle size={20} />
-        <span>{t.title}</span>
+      <div className={`flex items-center gap-2 font-bold ${isPartial ? 'text-yellow-700' : 'text-red-700'}`}>
+        {isPartial ? <Star size={20} className="text-yellow-500" /> : <AlertTriangle size={20} />}
+        <span>{isPartial ? t.partialTitle : t.title}</span>
+        {isPartial && partialScore !== undefined && (
+          <span className="ml-auto text-sm bg-yellow-200 px-2 py-0.5 rounded-full font-black text-yellow-800">+{partialScore} (50%)</span>
+        )}
       </div>
+
+      {/* Partial credit encouragement */}
+      {isPartial && (
+        <div className="bg-yellow-100 rounded-lg p-3 text-yellow-800 text-sm font-bold">
+          {t.partialHint}
+        </div>
+      )}
 
       {/* Answer comparison */}
       <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-2">
