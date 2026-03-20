@@ -1605,11 +1605,8 @@ export function generateIntegrationMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：积分——求曲线下面围成的面积`,
-          en: `${narrator}: "Integration — find the area under the curve"`,
-        },
-          zh: `从 $x = ${lower}$ 到 $x = ${upper}$，$y = x$ 曲线下面有多大面积?`,
-          en: `From $x = ${lower}$ to $x = ${upper}$, how much area is under the $y = x$ curve?`,
+          zh: `${narrator}：积分——求 $y = x$ 从 $x = ${lower}$ 到 $x = ${upper}$ 的曲线下面积`,
+          en: `${narrator}: "Integration — find area under $y = x$ from $x = ${lower}$ to $x = ${upper}$"`,
         },
         highlightField: 'area',
       },
@@ -1659,11 +1656,8 @@ export function generateIntegrationMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：积分——求曲线下面围成的面积`,
-          en: `${narrator}: "Integration — find the area under the curve"`,
-        },
-          zh: `从 $x = ${lower}$ 到 $x = ${upper}$，$y = 3x^{2}$ 曲线下面有多大面积?`,
-          en: `From $x = ${lower}$ to $x = ${upper}$, how much area is under the $y = 3x^{2}$ curve?`,
+          zh: `${narrator}：积分——求 $y = 3x^{2}$ 从 $x = ${lower}$ 到 $x = ${upper}$ 的曲线下面积`,
+          en: `${narrator}: "Integration — find area under $y = 3x^{2}$ from $x = ${lower}$ to $x = ${upper}$"`,
         },
         highlightField: 'area',
       },
