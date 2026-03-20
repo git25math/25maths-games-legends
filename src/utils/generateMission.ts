@@ -2990,144 +2990,98 @@ export function generateIntegerAddMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：正数代表"有"、"得到"；负数代表"没有"、"失去"`,
-        en: `${narrator}: "Positive = 'have' or 'gain'; Negative = 'don't have' or 'lose'"`,
-      },
-      hint: {
-        zh: '想象一条数线：\n...−3, −2, −1, 0, 1, 2, 3...\n右边是正数（越来越多）\n左边是负数（越来越少）',
-        en: 'Imagine a number line:\n...−3, −2, −1, 0, 1, 2, 3...\nRight = positive (more)\nLeft = negative (less)',
+        zh: `${narrator}：为什么要学正负数加减？\n正数 = "有/得到"，负数 = "没有/失去"。\n想象一条数线：右边越来越多（正），左边越来越少（负）。\n\n加正数 = 往右走，加负数 = 往左走。学会了就能算盈亏！`,
+        en: `${narrator}: "Why learn adding/subtracting with negatives?\nPositive = 'have/gain', Negative = 'don't have/lose'.\nImagine a number line: right = more (positive), left = less (negative).\n\nAdd positive = go right, add negative = go left. Master this for profit/loss!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：题目是 $${exprStr}$，来算一算`,
-        en: `${narrator}: "The expression is $${exprStr}$, let's work it out"`,
+        zh: `${narrator}：题目是 $${exprStr}$，一步步来`,
+        en: `${narrator}: "The expression is $${exprStr}$, step by step"`,
       },
       highlightField: 'ans',
     },
-    // Case A: positive + negative
     ...(op === '+' && a >= 0 && b < 0 ? [
       {
         text: {
-          zh: `${narrator}：口袋有 $${a}$，花掉了 $${Math.abs(b)}$——加一个负数就是减去它`,
-          en: `${narrator}: "Have $${a}$, spend $${Math.abs(b)}$ — adding a negative means subtracting it"`,
-        },
-        hint: {
-          zh: `$${b}$ 是负数，去掉负号就是 ${Math.abs(b)}\n所以"加 $${b}$"就是"减 ${Math.abs(b)}"`,
-          en: `$${b}$ is negative, without the sign it's ${Math.abs(b)}\nSo "add $${b}$" means "subtract ${Math.abs(b)}"`,
+          zh: `${narrator}：口袋有 $${a}$，花掉 $${Math.abs(b)}$\n加一个负数 = 减去它的绝对值。\n$${b}$ 的绝对值是 $${Math.abs(b)}$，所以"加 $${b}$" = "减 $${Math.abs(b)}$"。`,
+          en: `${narrator}: "Have $${a}$, spend $${Math.abs(b)}$\nAdding a negative = subtracting its absolute value.\n$${b}$'s absolute value is $${Math.abs(b)}$, so 'add $${b}$' = 'subtract $${Math.abs(b)}$'."`,
         },
         highlightField: 'ans',
       },
       {
         text: {
-          zh: `${narrator}：$${a} + (${b}) = ${a} - ${Math.abs(b)} = ${answer}$`,
-          en: `${narrator}: "$${a} + (${b}) = ${a} - ${Math.abs(b)} = ${answer}$"`,
-        },
-        hint: {
-          zh: `数线验算：从 ${a} 出发，往左走 ${Math.abs(b)} 步，到 ${answer}`,
-          en: `Number line: start at ${a}, go left ${Math.abs(b)} steps, reach ${answer}`,
+          zh: `${narrator}：$${a} + (${b}) = ${a} - ${Math.abs(b)} = ${answer}$\n\n数线验算：从 $${a}$ 出发，往左走 $${Math.abs(b)}$ 步，到达 $${answer}$。`,
+          en: `${narrator}: "$${a} + (${b}) = ${a} - ${Math.abs(b)} = ${answer}$\n\nNumber line: start at $${a}$, go left $${Math.abs(b)}$ steps, reach $${answer}$."`,
         },
         highlightField: 'ans',
       },
     ] : op === '+' && a < 0 && b < 0 ? [
-      // Case B: negative + negative
       {
         text: {
-          zh: `${narrator}：第一笔亏了 ${Math.abs(a)}，第二笔又亏了 ${Math.abs(b)}——两笔亏损叠加`,
-          en: `${narrator}: "First loss: ${Math.abs(a)}. Second loss: ${Math.abs(b)} — losses add up"`,
-        },
-        hint: {
-          zh: '两个都是亏的，总亏损 = 两个数字加起来，结果取负号',
-          en: 'Both are losses, total loss = add the numbers, result is negative',
+          zh: `${narrator}：第一笔亏 $${Math.abs(a)}$，第二笔又亏 $${Math.abs(b)}$——两笔亏损叠加！\n两个都是负的 → 去掉负号加起来 → 结果取负号。`,
+          en: `${narrator}: "First loss $${Math.abs(a)}$, second loss $${Math.abs(b)}$ — losses pile up!\nBoth negative → add the numbers → result is negative."`,
         },
         highlightField: 'ans',
       },
       {
         text: {
-          zh: `${narrator}：去掉负号：${Math.abs(a)} 和 ${Math.abs(b)}，加起来 = ${Math.abs(a) + Math.abs(b)}，加回负号 → $${answer}$`,
-          en: `${narrator}: "Remove signs: ${Math.abs(a)} and ${Math.abs(b)}, add = ${Math.abs(a) + Math.abs(b)}, add back minus → $${answer}$"`,
-        },
-        hint: {
-          zh: `数线验算：从 0 往左 ${Math.abs(a)} 步到 ${a}，再往左 ${Math.abs(b)} 步到 ${answer}`,
-          en: `Number line: from 0 go left ${Math.abs(a)} to ${a}, then left ${Math.abs(b)} more to ${answer}`,
+          zh: `${narrator}：$${Math.abs(a)} + ${Math.abs(b)} = ${Math.abs(a) + Math.abs(b)}$，加负号 → $${answer}$\n\n数线：从 $0$ 往左 $${Math.abs(a)}$ 步到 $${a}$，再左 $${Math.abs(b)}$ 步到 $${answer}$。`,
+          en: `${narrator}: "$${Math.abs(a)} + ${Math.abs(b)} = ${Math.abs(a) + Math.abs(b)}$, add minus → $${answer}$\n\nNumber line: from $0$ left $${Math.abs(a)}$ to $${a}$, then left $${Math.abs(b)}$ more to $${answer}$."`,
         },
         highlightField: 'ans',
       },
     ] : op === '-' && a >= 0 && b <= a ? [
-      // Case C: big - small (positive result)
       {
         text: {
-          zh: `${narrator}：有 ${a}，减去 ${b}——减得够，直接减`,
-          en: `${narrator}: "Have ${a}, subtract ${b} — enough to subtract, just do it"`,
+          zh: `${narrator}：有 $${a}$，减去 $${b}$——减得够，直接减！\n这是最简单的情况：大数减小数，结果一定是正的。`,
+          en: `${narrator}: "Have $${a}$, subtract $${b}$ — enough to subtract, just do it!\nSimplest case: big minus small, result is always positive."`,
         },
         highlightField: 'ans',
       },
       {
         text: {
-          zh: `${narrator}：$${a} - ${b} = ${answer}$`,
-          en: `${narrator}: "$${a} - ${b} = ${answer}$"`,
-        },
-        hint: {
-          zh: `数线验算：从 ${a} 出发，往左走 ${b} 步，到 ${answer}`,
-          en: `Number line: start at ${a}, go left ${b} steps, reach ${answer}`,
+          zh: `${narrator}：$${a} - ${b} = ${answer}$\n\n数线：从 $${a}$ 往左 $${b}$ 步，到 $${answer}$。`,
+          en: `${narrator}: "$${a} - ${b} = ${answer}$\n\nNumber line: from $${a}$, left $${b}$ steps, reach $${answer}$."`,
         },
         highlightField: 'ans',
       },
     ] : op === '-' && a >= 0 && b > a ? [
-      // Case D: small - big (negative result)
       {
         text: {
-          zh: `${narrator}：只有 ${a}，要减去 ${b}——减不够！缺口是多少？`,
-          en: `${narrator}: "Only have ${a}, need to subtract ${b} — not enough! What's the gap?"`,
-        },
-        hint: {
-          zh: `${b} 比 ${a} 大，减不够，结果会变成负数`,
-          en: `${b} is bigger than ${a}, can't subtract fully, result will be negative`,
+          zh: `${narrator}：只有 $${a}$，要减 $${b}$——减不够！\n$${b} > ${a}$，减完会穿过 $0$ 变成负数。缺口就是答案的绝对值。`,
+          en: `${narrator}: "Only have $${a}$, subtract $${b}$ — not enough!\n$${b} > ${a}$, subtraction crosses $0$ into negatives. The gap is the answer's size."`,
         },
         highlightField: 'ans',
       },
       {
         text: {
-          zh: `${narrator}：交换算差值：$${b} - ${a} = ${b - a}$，加负号 → $${answer}$`,
-          en: `${narrator}: "Swap and find difference: $${b} - ${a} = ${b - a}$, add minus → $${answer}$"`,
-        },
-        hint: {
-          zh: `数线验算：从 ${a} 出发，往左走 ${b} 步，经过 0，到 ${answer}`,
-          en: `Number line: from ${a}, go left ${b} steps, past 0, reach ${answer}`,
+          zh: `${narrator}：交换算差值 $${b} - ${a} = ${b - a}$，加负号 → $${answer}$\n\n数线：从 $${a}$ 往左 $${b}$ 步，经过 $0$，到 $${answer}$。`,
+          en: `${narrator}: "Swap: $${b} - ${a} = ${b - a}$, add minus → $${answer}$\n\nNumber line: from $${a}$, left $${b}$ steps, past $0$, reach $${answer}$."`,
         },
         highlightField: 'ans',
       },
     ] : [
-      // Case E: negative - positive
       {
         text: {
-          zh: `${narrator}：已经亏了 ${Math.abs(a)}，再额外消耗 ${b}——亏损在增加`,
-          en: `${narrator}: "Already lost ${Math.abs(a)}, spend ${b} more — losses grow"`,
-        },
-        hint: {
-          zh: '已经在负数区，再减正数，就是往更负的方向走',
-          en: 'Already in negative territory, subtracting positive goes even more negative',
+          zh: `${narrator}：已经亏 $${Math.abs(a)}$，再消耗 $${b}$——亏损在增加！\n已经在负数区，再减正数 = 往更负的方向走。`,
+          en: `${narrator}: "Already lost $${Math.abs(a)}$, spend $${b}$ more — losses grow!\nAlready negative, subtract positive = go even more negative."`,
         },
         highlightField: 'ans',
       },
       {
         text: {
-          zh: `${narrator}：两个亏损加起来：${Math.abs(a)} + ${b} = ${Math.abs(a) + b}，取负号 → $${answer}$`,
-          en: `${narrator}: "Add both losses: ${Math.abs(a)} + ${b} = ${Math.abs(a) + b}, make negative → $${answer}$"`,
-        },
-        hint: {
-          zh: `数线验算：从 ${a} 出发，往左走 ${b} 步，到 ${answer}`,
-          en: `Number line: from ${a}, go left ${b} steps, reach ${answer}`,
+          zh: `${narrator}：$${Math.abs(a)} + ${b} = ${Math.abs(a) + b}$，取负号 → $${answer}$\n\n数线：从 $${a}$ 往左 $${b}$ 步，到 $${answer}$。`,
+          en: `${narrator}: "$${Math.abs(a)} + ${b} = ${Math.abs(a) + b}$, make negative → $${answer}$\n\nNumber line: from $${a}$, left $${b}$ steps, reach $${answer}$."`,
         },
         highlightField: 'ans',
       },
     ]),
-    // Final step for all cases
     {
       text: {
-        zh: `${narrator}：$${exprStr} = ${answer}$，账算清了！`,
-        en: `${narrator}: "$${exprStr} = ${answer}$, all accounted for!"`,
+        zh: `${narrator}：答案\n$${exprStr} = ${answer}$\n\n${answer >= 0 ? '结果是正数——赚了！' : '结果是负数——亏了！'}账算清了，做得漂亮！`,
+        en: `${narrator}: "Answer\n$${exprStr} = ${answer}$\n\n${answer >= 0 ? 'Positive result — profit!' : 'Negative result — loss!'} All accounted for — brilliantly done!"`,
       },
       highlightField: 'ans',
     },
