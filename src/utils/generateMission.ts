@@ -3872,64 +3872,88 @@ export function generateSubstitutionMission(template: Mission): Mission {
 
   const tutorialSteps = mode === 'power' ? [
     {
-      text: { zh: `${narrator}：军师用密码传令——把暗号 $x$ 代入公式，算出指令数字`, en: `${narrator}: "The strategist sends coded orders — substitute the code $x$ into the formula to decode"` },
-      hint: { zh: `为什么用字母？因为同一个公式可以换不同的数\n今天暗号 $x = 3$，明天可能 $x = 7$\n公式不变，代入不同的数，得到不同的结果`, en: `Why use letters? The same formula works with different numbers\nToday's code $x = 3$, tomorrow maybe $x = 7$\nSame formula, different inputs, different outputs` },
+      text: {
+        zh: `${narrator}：为什么要学代入？\n军师用密码传令：公式是 $${expr}$，暗号 $x = ${x}$。\n把 $x$ 代入公式，就能解读指令！\n\n公式像一台机器——放入不同的 $x$，吐出不同的答案。`,
+        en: `${narrator}: "Why learn substitution?\nThe strategist sends coded orders: formula is $${expr}$, code $x = ${x}$.\nSubstitute $x$ to decode the instruction!\n\nA formula is like a machine — different $x$, different output."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：先搞懂——$${a}x^2$ 是什么意思？`, en: `${narrator}: "First — what does $${a}x^2$ mean?"` },
-      hint: { zh: `$x^2$ 读作"$x$ 的平方"，意思是 $x \\times x$\n$${a}x^2$ 意思是 $${a} \\times x \\times x$\n\n注意：$${a}x^2$ 不是 $(${a}x)^2$！\n$${a}x^2 = ${a} \\times (x^2)$，只有 $x$ 要平方`, en: `$x^2$ reads "$x$ squared", meaning $x \\times x$\n$${a}x^2$ means $${a} \\times x \\times x$\n\nNote: $${a}x^2$ is NOT $(${a}x)^2$!\n$${a}x^2 = ${a} \\times (x^2)$, only $x$ gets squared` },
+      text: {
+        zh: `${narrator}：先搞懂——$${a}x^2$ 是什么意思？\n$x^2$ = $x$ 的平方 = $x \\times x$\n$${a}x^2$ = $${a} \\times x \\times x$\n\n**注意**：$${a}x^2$ 不是 $(${a}x)^2$！只有 $x$ 要平方，$${a}$ 不用。`,
+        en: `${narrator}: "First — what does $${a}x^2$ mean?\n$x^2$ = $x$ squared = $x \\times x$\n$${a}x^2$ = $${a} \\times x \\times x$\n\n**Note**: $${a}x^2$ is NOT $(${a}x)^2$! Only $x$ gets squared, not $${a}$."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第一步——把 $x = ${x}$ 代入，先算平方`, en: `${narrator}: "Step 1 — substitute $x = ${x}$, compute the square first"` },
-      hint: { zh: `$x^2 = ${x}^2 = ${x} \\times ${x} = ${x*x}$\n\n（平方就是自己乘自己，我们之前学过！）`, en: `$x^2 = ${x}^2 = ${x} \\times ${x} = ${x*x}$\n\n(Squaring means times itself — we learned this before!)` },
+      text: {
+        zh: `${narrator}：第一步——代入 $x = ${x}$，先算平方\n$x^2 = ${x}^2 = ${x} \\times ${x} = ${x*x}$\n\n平方就是自己乘自己——之前学过的！`,
+        en: `${narrator}: "Step 1 — substitute $x = ${x}$, square first\n$x^2 = ${x}^2 = ${x} \\times ${x} = ${x*x}$\n\nSquaring means times itself — we learned this before!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——乘以系数 $${a}$`, en: `${narrator}: "Step 2 — multiply by the coefficient $${a}$"` },
-      hint: { zh: `$${a} \\times ${x*x} = ${a*x*x}$`, en: `$${a} \\times ${x*x} = ${a*x*x}$` },
+      text: {
+        zh: `${narrator}：第二步——乘以系数 $${a}$\n$${a} \\times ${x*x} = ${a*x*x}$\n\n先幂后乘——运算顺序别忘了！`,
+        en: `${narrator}: "Step 2 — multiply by coefficient $${a}$\n$${a} \\times ${x*x} = ${a*x*x}$\n\nPowers first, then multiply — remember the order!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第三步——最后 ${bStrCalc} ${bAbs}`, en: `${narrator}: "Step 3 — finally ${bStrCalc} ${bAbs}"` },
-      hint: { zh: `$${a*x*x} ${bStr} = ${answer}$`, en: `$${a*x*x} ${bStr} = ${answer}$` },
+      text: {
+        zh: `${narrator}：第三步—— ${bStrCalc} $${bAbs}$\n$${a*x*x} ${bStr} = ${answer}$\n\n答案 = $${answer}$`,
+        en: `${narrator}: "Step 3 — ${bStrCalc} $${bAbs}$\n$${a*x*x} ${bStr} = ${answer}$\n\nAnswer = $${answer}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：完整过程回顾`, en: `${narrator}: "Full process review"` },
-      hint: { zh: `运算顺序口诀：幂 → 乘除 → 加减\n\n$${expr}$，$x = ${x}$\n① 平方：$${x}^2 = ${x*x}$\n② 乘系数：$${a} \\times ${x*x} = ${a*x*x}$\n③ 加减：$${a*x*x} ${bStr} = ${answer}$\n\n答案 = $${answer}$ ✓`, en: `Order of operations: Powers → Multiply/Divide → Add/Subtract\n\n$${expr}$, $x = ${x}$\n① Square: $${x}^2 = ${x*x}$\n② Multiply: $${a} \\times ${x*x} = ${a*x*x}$\n③ Add/Sub: $${a*x*x} ${bStr} = ${answer}$\n\nAnswer = $${answer}$ ✓` },
+      text: {
+        zh: `${narrator}：验算——完整回顾\n运算顺序：幂 → 乘除 → 加减\n\n① 平方：$${x}^2 = ${x*x}$\n② 乘系数：$${a} \\times ${x*x} = ${a*x*x}$\n③ 加减：$${a*x*x} ${bStr} = ${answer}$ ✓\n\n密码解读成功，做得漂亮！`,
+        en: `${narrator}: "Verify — full review\nOrder: Powers → Multiply → Add/Sub\n\n① Square: $${x}^2 = ${x*x}$\n② Multiply: $${a} \\times ${x*x} = ${a*x*x}$\n③ Add/Sub: $${a*x*x} ${bStr} = ${answer}$ ✓\n\nCode decoded — brilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ] : [
     {
-      text: { zh: `${narrator}：军师用密码传令——$x$ 是暗号，代入公式就能解密`, en: `${narrator}: "The strategist sends coded orders — $x$ is the code, substitute to decode"` },
-      hint: { zh: `为什么用字母代替数字？\n因为同一个公式要反复使用：今天 $x=3$，明天 $x=7$\n公式像一台"计算机器"，放入不同的数，吐出不同的答案`, en: `Why use letters instead of numbers?\nBecause the same formula is reused: today $x=3$, tomorrow $x=7$\nA formula is like a "calculation machine" — different input, different output` },
+      text: {
+        zh: `${narrator}：为什么要学代入？\n军师传令用密码：公式 $${expr}$，暗号 $x = ${x}$。\n把 $x$ 代进去就能解密！\n\n公式像一台机器——放入不同的数，吐出不同的答案。`,
+        en: `${narrator}: "Why learn substitution?\nThe strategist's coded message: formula $${expr}$, code $x = ${x}$.\nSubstitute $x$ to decode!\n\nA formula is a machine — different input, different output."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：先搞懂——$${a}x$ 是什么意思？`, en: `${narrator}: "First — what does $${a}x$ mean?"` },
-      hint: { zh: `$${a}x$ 读作"${a} 乘以 $x$"\n就是 $${a} \\times x$\n\n字母前面的数字叫"系数"\n比如 $${a}x$ 的系数是 $${a}$\n\n注意：$${a}x$ 不是 $${a} + x$！是乘法！`, en: `$${a}x$ reads "${a} times $x$"\nIt means $${a} \\times x$\n\nThe number in front is the "coefficient"\n$${a}x$ has coefficient $${a}$\n\nNote: $${a}x$ is NOT $${a} + x$! It's multiplication!` },
+      text: {
+        zh: `${narrator}：先搞懂——$${a}x$ 是什么意思？\n$${a}x$ = $${a} \\times x$（${a} 乘以 $x$）。\n字母前面的数字叫"系数"，$${a}x$ 的系数就是 $${a}$。\n\n**注意**：$${a}x$ 是乘法，不是 $${a} + x$！`,
+        en: `${narrator}: "First — what does $${a}x$ mean?\n$${a}x$ = $${a} \\times x$ (${a} times $x$).\nThe number in front is the 'coefficient' — $${a}x$ has coefficient $${a}$.\n\n**Note**: $${a}x$ is multiplication, NOT $${a} + x$!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：现在代入！把 $x = ${x}$ 放进去`, en: `${narrator}: "Now substitute! Put $x = ${x}$ in"` },
-      hint: { zh: `$${a}x ${bStr}$\n\n把 $x$ 换成 $${x}$：\n$${a} \\times ${x} ${bStr}$`, en: `$${a}x ${bStr}$\n\nReplace $x$ with $${x}$:\n$${a} \\times ${x} ${bStr}$` },
+      text: {
+        zh: `${narrator}：代入！把 $x$ 换成 $${x}$\n$${a}x ${bStr}$\n→ $${a} \\times ${x} ${bStr}$\n\n所有的 $x$ 都换成 $${x}$，其他不动。`,
+        en: `${narrator}: "Substitute! Replace $x$ with $${x}$\n$${a}x ${bStr}$\n→ $${a} \\times ${x} ${bStr}$\n\nReplace every $x$ with $${x}$, keep everything else."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：先算乘法——$${a} \\times ${x}$`, en: `${narrator}: "First, multiply — $${a} \\times ${x}$"` },
-      hint: { zh: `$${a} \\times ${x} = ${a*x}$\n\n（先乘除，后加减！）`, en: `$${a} \\times ${x} = ${a*x}$\n\n(Multiply before adding/subtracting!)` },
+      text: {
+        zh: `${narrator}：先算乘法\n$${a} \\times ${x} = ${a*x}$\n\n先乘除，后加减——运算顺序是铁律！`,
+        en: `${narrator}: "Multiply first\n$${a} \\times ${x} = ${a*x}$\n\nMultiply before add/subtract — order of operations is law!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：再算加减——$${a*x} ${bStr}$`, en: `${narrator}: "Then add/subtract — $${a*x} ${bStr}$"` },
-      hint: { zh: `$${a*x} ${bStr} = ${answer}$`, en: `$${a*x} ${bStr} = ${answer}$` },
+      text: {
+        zh: `${narrator}：再算加减\n$${a*x} ${bStr} = ${answer}$\n\n答案 = $${answer}$`,
+        en: `${narrator}: "Then add/subtract\n$${a*x} ${bStr} = ${answer}$\n\nAnswer = $${answer}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——把答案代回去检查`, en: `${narrator}: "Verify — plug the answer back to check"` },
-      hint: { zh: `$${a} \\times ${x} ${bStr} = ${a*x} ${bStr} = ${answer}$ ✓\n\n完整步骤回顾：\n① 看清式子 $${expr}$\n② 把 $x$ 换成 $${x}$\n③ 先乘：$${a} \\times ${x} = ${a*x}$\n④ 后加减：$${a*x} ${bStr} = ${answer}$`, en: `$${a} \\times ${x} ${bStr} = ${a*x} ${bStr} = ${answer}$ ✓\n\nFull steps:\n① Read expression $${expr}$\n② Replace $x$ with $${x}$\n③ Multiply first: $${a} \\times ${x} = ${a*x}$\n④ Then add/sub: $${a*x} ${bStr} = ${answer}$` },
+      text: {
+        zh: `${narrator}：验算\n$${a} \\times ${x} ${bStr} = ${a*x} ${bStr} = ${answer}$ ✓\n\n完整步骤：看清式子 → 代入 $x$ → 先乘 → 后加减。\n密码解读成功，做得漂亮！`,
+        en: `${narrator}: "Verify\n$${a} \\times ${x} ${bStr} = ${a*x} ${bStr} = ${answer}$ ✓\n\nFull process: read expression → substitute $x$ → multiply first → add/sub last.\nCode decoded — brilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ];
