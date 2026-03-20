@@ -248,12 +248,8 @@ export function generateIndicesMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是指数(index/power)?\n$2^{3}$ 表示 $2 \\times 2 \\times 2 = 8$\n右上角的小数字告诉你要乘多少次。`,
-        en: `${narrator}: "What is an index (power)?\n$2^{3}$ means $2 \\times 2 \\times 2 = 8$\nThe small number on top tells you how many times to multiply."`,
-      },
-      hint: {
-        zh: '底数(base)是被乘的数\n指数(index)是乘的次数',
-        en: 'The base is the number being multiplied\nThe index (power) is how many times',
+        zh: `${narrator}：什么是指数(index/power)?\n$2^{3}$ 表示 $2 \\times 2 \\times 2 = 8$\n右上角的小数字告诉你要乘多少次。\n\n底数(base)是被乘的数，指数(index)是乘的次数。`,
+        en: `${narrator}: "What is an index (power)?\n$2^{3}$ means $2 \\times 2 \\times 2 = 8$\nThe small number on top tells you how many times to multiply.\n\nBase = the number being multiplied. Index = how many times."`,
       },
       highlightField: 'x',
     },
@@ -271,13 +267,6 @@ export function generateIndicesMission(template: Mission): Mission {
       } : {
         zh: `${narrator}：指数乘法法则：$a^{m} \\times a^{n} = a^{m+n}$\n底数不变，指数相加。`,
         en: `${narrator}: "Index law for multiplication: $a^{m} \\times a^{n} = a^{m+n}$\nThe base stays the same, add the powers."`,
-      },
-      hint: op === 'div' ? {
-        zh: '底数相同时，除法就是把指数减掉',
-        en: 'When the bases are the same, division means subtract the powers',
-      } : {
-        zh: '底数相同时，乘法就是把指数加起来',
-        en: 'When the bases are the same, multiplication means add the powers',
       },
       highlightField: 'x',
     },
@@ -362,7 +351,7 @@ export function generateArithmeticMission(template: Mission): Mission {
   const narrator = pickRandom(['诸葛亮', '赵云', '曹操']);
   const tutorialSteps = [
     { text: { zh: `${narrator}：等差数列，首项 ${a1}，公差 ${d}，求第 ${n} 项。`, en: `${narrator}: "Arithmetic sequence: a1=${a1}, d=${d}, find term ${n}."` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：公式：a_n = ${a1} + (${n}-1)×${d}`, en: `${narrator}: "Formula: a_n = ${a1} + (${n}-1)×${d}"` }, hint: { zh: `${a1} + ${(n - 1) * d} = ?`, en: `${a1} + ${(n - 1) * d} = ?` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：公式：$a_n = ${a1} + (${n}-1) \\times ${d} = ${a1} + ${(n-1)*d} = ?$`, en: `${narrator}: "Formula: $a_n = ${a1} + (${n}-1) \\times ${d} = ${a1} + ${(n-1)*d} = ?$"` }, highlightField: 'ans' },
     { text: { zh: `${narrator}：所以 a_${n} = ${ans}！`, en: `${narrator}: "So a_${n} = ${ans}!"` }, highlightField: 'ans' },
   ];
 
@@ -1019,12 +1008,8 @@ export function generateRatioMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：找倍率(scale factor)：\n用已知量除以它对应的比例份数：$${knownValue} \\div ${a} = ${multiplier}$`,
-        en: `${narrator}: "Find the scale factor:\nDivide the known value by its ratio part: $${knownValue} \\div ${a} = ${multiplier}$"`,
-      },
-      hint: {
-        zh: '倍率告诉你每一份代表多少',
-        en: 'The scale factor tells you how much each part is worth',
+        zh: `${narrator}：找倍率(scale factor)\n$${knownValue} \\div ${a} = ${multiplier}$——每一份代表 $${multiplier}$。`,
+        en: `${narrator}: "Find the scale factor\n$${knownValue} \\div ${a} = ${multiplier}$ — each part is worth $${multiplier}$."`,
       },
       highlightField: 'y',
     },
@@ -1201,12 +1186,8 @@ export function generateTrigonometryMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：三角函数可以用来算直角三角形中的未知边长`,
-          en: `${narrator}: "Trig functions help us find unknown sides in a right triangle"`,
-        },
-        hint: {
-          zh: 'SOH-CAH-TOA 是记忆口诀\nSin = Opposite / Hypotenuse\nCos = Adjacent / Hypotenuse\nTan = Opposite / Adjacent',
-          en: 'SOH-CAH-TOA is the memory trick\nSin = Opposite / Hypotenuse\nCos = Adjacent / Hypotenuse\nTan = Opposite / Adjacent',
+          zh: `${narrator}：三角函数——直角三角形的万能工具\nSOH-CAH-TOA 口诀：\nSin = 对边/斜边，Cos = 邻边/斜边，Tan = 对边/邻边`,
+          en: `${narrator}: "Trig functions — the ultimate tool for right triangles\nSOH-CAH-TOA:\nSin = Opposite/Hypotenuse, Cos = Adjacent/Hypotenuse, Tan = Opposite/Adjacent"`,
         },
         highlightField: 'c',
       },
@@ -1269,12 +1250,8 @@ export function generateTrigonometryMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：三角函数可以用来算直角三角形中的未知边长`,
-          en: `${narrator}: "Trig functions help us find unknown sides in a right triangle"`,
-        },
-        hint: {
-          zh: 'SOH-CAH-TOA 是记忆口诀\nSin = Opposite / Hypotenuse\nCos = Adjacent / Hypotenuse\nTan = Opposite / Adjacent',
-          en: 'SOH-CAH-TOA is the memory trick\nSin = Opposite / Hypotenuse\nCos = Adjacent / Hypotenuse\nTan = Opposite / Adjacent',
+          zh: `${narrator}：三角函数——直角三角形的万能工具\nSOH-CAH-TOA 口诀：\nSin = 对边/斜边，Cos = 邻边/斜边，Tan = 对边/邻边`,
+          en: `${narrator}: "Trig functions — the ultimate tool for right triangles\nSOH-CAH-TOA:\nSin = Opposite/Hypotenuse, Cos = Adjacent/Hypotenuse, Tan = Opposite/Adjacent"`,
         },
         highlightField: 'angle',
       },
@@ -1358,12 +1335,8 @@ export function generateQuadraticMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：要找抛物线的顶点 -- 就是曲线的最高点或最低点`,
-          en: `${narrator}: "We need to find the vertex of the parabola — the highest or lowest point on the curve"`,
-        },
-        hint: {
-          zh: '顶点横坐标的公式是 $x = \\frac{-b}{2a}$',
-          en: 'The formula for the vertex x-coordinate is $x = \\frac{-b}{2a}$',
+          zh: `${narrator}：抛物线的顶点——曲线的最高/最低点\n顶点公式：$x = \\frac{-b}{2a}$`,
+          en: `${narrator}: "The vertex — highest or lowest point on the curve\nVertex formula: $x = \\frac{-b}{2a}$"`,
         },
         highlightField: 'x',
       },
@@ -1421,12 +1394,8 @@ export function generateQuadraticMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：先看第一个点 $(0, ${c})$，代入 $x = 0$：$y = a \\times 0^{2} + c = c$，所以 $c = ${c}$`,
-        en: `${narrator}: "Look at the first point $(0, ${c})$: substitute $x = 0$: $y = a \\times 0^{2} + c = c$, so $c = ${c}$"`,
-      },
-      hint: {
-        zh: '为什么? $a \\times 0^{2} + c = c$，$x=0$ 时 $a$ 项消失了',
-        en: 'Why? $a \\times 0^{2} + c = c$ — when $x=0$, the $a$ term vanishes',
+        zh: `${narrator}：代入第一个点 $(0, ${c})$\n$y = a \\times 0^{2} + c = c$，所以 $c = ${c}$\n（$x=0$ 时 $a$ 项消失，只剩 $c$！）`,
+        en: `${narrator}: "Substitute first point $(0, ${c})$\n$y = a \\times 0^{2} + c = c$, so $c = ${c}$\n(When $x=0$, the $a$ term vanishes — only $c$ remains!)"`,
       },
       highlightField: 'c',
     },
@@ -1570,12 +1539,8 @@ export function generateDerivativeMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：导数就是函数在某一点的"变化速度"（切线斜率）`,
-        en: `${narrator}: "The derivative is the 'rate of change' of a function at a specific point (slope of the tangent line)"`,
-      },
-      hint: {
-        zh: '对于 $y = x^{2}$，导数公式是 $y\\prime = 2x$',
-        en: 'For $y = x^{2}$, the derivative formula is $y\\prime = 2x$',
+        zh: `${narrator}：导数——函数在某一点的"变化速度"\n对于 $y = x^{2}$，导数公式：$y' = 2x$`,
+        en: `${narrator}: "Derivative — the 'rate of change' at a point\nFor $y = x^{2}$, derivative formula: $y' = 2x$"`,
       },
       highlightField: 'k',
     },
@@ -1640,10 +1605,9 @@ export function generateIntegrationMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：积分就是求曲线下面围成的面积`,
-          en: `${narrator}: "Integration means finding the area under the curve"`,
+          zh: `${narrator}：积分——求曲线下面围成的面积`,
+          en: `${narrator}: "Integration — find the area under the curve"`,
         },
-        hint: {
           zh: `从 $x = ${lower}$ 到 $x = ${upper}$，$y = x$ 曲线下面有多大面积?`,
           en: `From $x = ${lower}$ to $x = ${upper}$, how much area is under the $y = x$ curve?`,
         },
@@ -1653,10 +1617,6 @@ export function generateIntegrationMission(template: Mission): Mission {
         text: {
           zh: `${narrator}：反导数（原函数）是什么? $\\int x\\,dx = \\frac{x^{2}}{2}$`,
           en: `${narrator}: "What is the antiderivative? $\\int x\\,dx = \\frac{x^{2}}{2}$"`,
-        },
-        hint: {
-          zh: '求原函数就是"导数的反操作"',
-          en: 'Finding the antiderivative is the "reverse of differentiation"',
         },
         highlightField: 'area',
       },
@@ -1699,10 +1659,9 @@ export function generateIntegrationMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：积分就是求曲线下面围成的面积`,
-          en: `${narrator}: "Integration means finding the area under the curve"`,
+          zh: `${narrator}：积分——求曲线下面围成的面积`,
+          en: `${narrator}: "Integration — find the area under the curve"`,
         },
-        hint: {
           zh: `从 $x = ${lower}$ 到 $x = ${upper}$，$y = 3x^{2}$ 曲线下面有多大面积?`,
           en: `From $x = ${lower}$ to $x = ${upper}$, how much area is under the $y = 3x^{2}$ curve?`,
         },
@@ -1712,10 +1671,6 @@ export function generateIntegrationMission(template: Mission): Mission {
         text: {
           zh: `${narrator}：反导数（原函数）是什么? $\\int 3x^{2}\\,dx = x^{3}$`,
           en: `${narrator}: "What is the antiderivative? $\\int 3x^{2}\\,dx = x^{3}$"`,
-        },
-        hint: {
-          zh: '求原函数就是"导数的反操作"',
-          en: 'Finding the antiderivative is the "reverse of differentiation"',
         },
         highlightField: 'area',
       },
@@ -1758,23 +1713,15 @@ export function generateIntegrationMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：积分就是求曲线下面围成的面积`,
-        en: `${narrator}: "Integration means finding the area under the curve"`,
-      },
-      hint: {
-        zh: `从 $x = ${lower}$ 到 $x = ${upper}$，$y = 2x$ 曲线下面有多大面积?`,
-        en: `From $x = ${lower}$ to $x = ${upper}$, how much area is under the $y = 2x$ curve?`,
+        zh: `${narrator}：积分——求 $y = 2x$ 从 $x = ${lower}$ 到 $x = ${upper}$ 的曲线下面积`,
+        en: `${narrator}: "Integration — find area under $y = 2x$ from $x = ${lower}$ to $x = ${upper}$"`,
       },
       highlightField: 'area',
     },
     {
       text: {
-        zh: `${narrator}：反导数（原函数）是什么? $\\int 2x\\,dx = x^{2}$`,
-        en: `${narrator}: "What is the antiderivative? $\\int 2x\\,dx = x^{2}$"`,
-      },
-      hint: {
-        zh: '求原函数就是"导数的反操作"',
-        en: 'Finding the antiderivative is the "reverse of differentiation"',
+        zh: `${narrator}：反导数（"导数的反操作"）\n$\\int 2x\\,dx = x^{2}$`,
+        en: `${narrator}: "Antiderivative ('reverse of differentiation')\n$\\int 2x\\,dx = x^{2}$"`,
       },
       highlightField: 'area',
     },
