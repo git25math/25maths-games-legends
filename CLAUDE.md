@@ -52,17 +52,17 @@
 ### 核心源文件
 | 文件 | 行数 | 说明 |
 |------|------|------|
-| `src/data/missions.ts` | ~2500 | 全部关卡定义（Y7: 690-773, Y8: 811-842, Y9+: 1011+） |
-| `src/utils/generateMission.ts` | ~5100 | 全部生成器（28+个） |
-| `src/utils/checkCorrectness.ts` | ~300 | 答案校验 |
+| `src/data/missions.ts` | ~2700 | 全部关卡定义（Y7: 690-773, Y8: 811-896, Y9+: 1011+） |
+| `src/utils/generateMission.ts` | ~6650 | 全部生成器（28+个） |
+| `src/utils/checkCorrectness.ts` | ~340 | 答案校验 |
 | `src/types.ts` | ~140 | Language / QuestionType / Mission 类型 |
-| `src/i18n/translations.ts` | ~460 | 三语 UI 翻译 (zh/zh_TW/en) |
+| `src/i18n/translations.ts` | ~490 | 三语 UI 翻译 (zh/zh_TW/en) |
 | `src/i18n/zhHantMap.ts` | ~160 | 简→繁 300 字符映射 |
 | `src/i18n/resolveText.ts` | ~45 | lt() 三语访问函数 |
 | `src/data/curriculum/kp-registry.ts` | ~800 | CIE 0580 的 294 个知识点注册表 |
 | `src/components/diagrams/` | 11 文件 | SVG 图表组件库 |
-| `src/screens/PracticeScreen.tsx` | ~530 | 练习模式主屏幕 |
-| `src/components/MathBattle/index.tsx` | ~570 | 闯关模式主组件 |
+| `src/screens/PracticeScreen.tsx` | ~580 | 练习模式主屏幕 |
+| `src/components/MathBattle/index.tsx` | ~750 | 闯关模式主组件 |
 | `src/components/MathBattle/inputConfig.ts` | ~170 | 每个题型的输入字段配置 |
 | `.github/workflows/deploy.yml` | — | GitHub Actions 自动部署配置 |
 

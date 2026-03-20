@@ -1922,47 +1922,47 @@ export function generateFuncValMission(template: Mission): Mission {
   };
   const negBCoeff = -bCoeff;
   const twoA = 2 * a;
+  const fOfT = a * t * t + bCoeff * t;
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：求二次函数的顶点横坐标 $t$`,
-        en: `${narrator}: "Find the x-coordinate of the vertex, $t$"`,
-      },
-      hint: {
-        zh: '顶点是抛物线最高点或最低点的位置',
-        en: 'The vertex is the highest or lowest point of the parabola',
+        zh: `${narrator}：为什么要找顶点？\n抛物线像一座山（或一个碗）——顶点就是**最高点或最低点**。\n${a > 0 ? '这条抛物线开口朝上，顶点是最低点——比如山谷的谷底。' : '这条抛物线开口朝下，顶点是最高点——比如箭射出后飞到最高的那一瞬间。'}\n\n找到顶点，就知道"极限在哪里"——这在军事策略中极其重要！`,
+        en: `${narrator}: "Why find the vertex?\nA parabola is like a mountain (or a bowl) — the vertex is the HIGHEST or LOWEST point.\n${a > 0 ? 'This parabola opens upward, so the vertex is the lowest point — like the bottom of a valley.' : 'This parabola opens downward, so the vertex is the highest point — like an arrow at its peak.'}\n\nFind the vertex, and you know 'where the limit is' — crucial for military strategy!"`,
       },
       highlightField: 't',
     },
     {
       text: {
-        zh: `${narrator}：函数 $f(x) = ${a}x^{2} ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$，顶点公式 $t = \\frac{-b}{2a}$`,
-        en: `${narrator}: "Function $f(x) = ${a}x^{2} ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$, vertex formula $t = \\frac{-b}{2a}$"`,
-      },
-      hint: {
-        zh: `这个公式告诉我们顶点在哪里\n其中 $a = ${a}$，$b = ${bCoeff}$`,
-        en: `This formula tells us where the vertex is\nHere $a = ${a}$, $b = ${bCoeff}$`,
+        zh: `${narrator}：顶点公式\n对于 $f(x) = ax^2 + bx$，顶点的横坐标：\n$$t = \\frac{-b}{2a}$$\n\n这里 $a = ${a}$，$b = ${bCoeff}$。\n就是把这两个数代进去就行——两步搞定！`,
+        en: `${narrator}: "The vertex formula\nFor $f(x) = ax^2 + bx$, the vertex's x-coordinate is:\n$$t = \\frac{-b}{2a}$$\n\nHere $a = ${a}$, $b = ${bCoeff}$.\nJust plug these two numbers in — two steps and done!"`,
       },
       highlightField: 't',
     },
     {
       text: {
-        zh: `${narrator}：代入：$t = \\frac{-(${bCoeff})}{2 \\times ${a}}$`,
-        en: `${narrator}: "Substitute: $t = \\frac{-(${bCoeff})}{2 \\times ${a}}$"`,
+        zh: `${narrator}：第一步——算分子 $-b$\n$-b = -(${bCoeff}) = ${negBCoeff}$\n\n就是把 $b$ 变成相反数。${bCoeff > 0 ? '正变负！' : '负变正！'}`,
+        en: `${narrator}: "Step 1 — calculate the numerator $-b$\n$-b = -(${bCoeff}) = ${negBCoeff}$\n\nJust flip the sign of $b$. ${bCoeff > 0 ? 'Positive becomes negative!' : 'Negative becomes positive!'}"`,
       },
       highlightField: 't',
     },
     {
       text: {
-        zh: `${narrator}：计算：$t = \\frac{${negBCoeff}}{2 \\times ${a}} = \\frac{${negBCoeff}}{${twoA}} = ${t}$`,
-        en: `${narrator}: "Calculate: $t = \\frac{${negBCoeff}}{2 \\times ${a}} = \\frac{${negBCoeff}}{${twoA}} = ${t}$"`,
+        zh: `${narrator}：第二步——算分母 $2a$，然后相除\n$2a = 2 \\times ${a} = ${twoA}$\n\n$t = \\frac{${negBCoeff}}{${twoA}} = ${t}$`,
+        en: `${narrator}: "Step 2 — calculate denominator $2a$, then divide\n$2a = 2 \\times ${a} = ${twoA}$\n\n$t = \\frac{${negBCoeff}}{${twoA}} = ${t}$"`,
       },
       highlightField: 't',
     },
     {
       text: {
-        zh: `${narrator}：所以顶点横坐标 $t = ${t}$!`,
-        en: `${narrator}: "So the vertex x-coordinate is $t = ${t}$!"`,
+        zh: `${narrator}：答案\n顶点横坐标 $t = ${t}$\n\n${a > 0 ? '这就是抛物线的最低点位置！' : '这就是抛物线的最高点位置！'}做得好！`,
+        en: `${narrator}: "Answer\nVertex x-coordinate $t = ${t}$\n\n${a > 0 ? 'This is where the parabola hits its lowest point!' : 'This is where the parabola reaches its peak!'} Well done!"`,
+      },
+      highlightField: 't',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——代回原函数\n$f(${t}) = ${a} \\times (${t})^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff} \\times (${t}) = ${fOfT}$\n\n在 $t$ 左右各取一个点：\n$f(${t - 1}) = ${a * (t - 1) * (t - 1) + bCoeff * (t - 1)}$，$f(${t + 1}) = ${a * (t + 1) * (t + 1) + bCoeff * (t + 1)}$\n两边都${a > 0 ? '更大' : '更小'} → $t = ${t}$ 确实是${a > 0 ? '最低点' : '最高点'} ✓`,
+        en: `${narrator}: "Verify — substitute back into the function\n$f(${t}) = ${a} \\times (${t})^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff} \\times (${t}) = ${fOfT}$\n\nCheck a point on each side:\n$f(${t - 1}) = ${a * (t - 1) * (t - 1) + bCoeff * (t - 1)}$, $f(${t + 1}) = ${a * (t + 1) * (t + 1) + bCoeff * (t + 1)}$\nBoth are ${a > 0 ? 'higher' : 'lower'} → $t = ${t}$ really is the ${a > 0 ? 'minimum' : 'maximum'} ✓"`,
       },
       highlightField: 't',
     },
