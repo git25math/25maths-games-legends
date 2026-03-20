@@ -22,6 +22,7 @@ import { MapScreen } from './screens/MapScreen';
 import { LobbyScreen } from './screens/LobbyScreen';
 import { PracticeScreen } from './screens/PracticeScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
+import { pageWarp } from './utils/animationPresets';
 
 class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; error: any }> {
   state = { hasError: false, error: null };
