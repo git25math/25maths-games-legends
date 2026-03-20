@@ -1,9 +1,9 @@
 // UI sound effects: card_pick, countdown_warn
-import { playNoiseBurst, playTacticalBlip } from '../utils';
+import { playNoiseBurst, playTacticalPulse } from '../utils';
 
 /** Card Pick — Tactical Select (Short digital beep/click) */
 export const cardPick: SoundFn = (ctx, time, dest) => {
-  playTacticalBlip(ctx, dest, time, 2400, 0.03, 0.08);
+  playTacticalPulse(ctx, dest, time, 2400, 0.03, 0.08);
   playNoiseBurst(ctx, dest, time, 0.005, 5000, 'highpass', 0.04);
 };
 
@@ -24,7 +24,7 @@ export function countdownWarn(
     const now = ctx.currentTime;
     
     // High-freq tactical blip
-    playTacticalBlip(ctx, dest, now, pitch, 0.04, 0.06 + urgency * 0.04);
+    playTacticalPulse(ctx, dest, now, pitch, 0.04, 0.06 + urgency * 0.04);
     
     // Subtle grit/distortion on pulse
     if (urgency > 0.5) {
