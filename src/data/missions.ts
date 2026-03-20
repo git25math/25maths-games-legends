@@ -1286,7 +1286,7 @@ export const MISSIONS: Mission[] = [
     data: { givenAngle: 65, angleType: 'corresponding', answer: 65, parallel: true, highlight: 'corresponding', angle: 65, generatorType: 'PARALLEL_ANGLES_RANDOM' },
     difficulty: 'Medium', reward: 160, kpId: 'kp-4.6-03', sectionId: 'geometry',
     tutorialSteps: [],
-    secret: { concept: { zh: '同位角在截线同侧、平行线同方向，一定相等。', en: 'Corresponding angles: same side of transversal, same direction — always equal.' }, formula: '$\\text{Corresponding angles are equal}$', tips: [{ zh: '张飞提示：F字形一看就知道是同位角！', en: 'Zhang Fei Tip: F-shape = corresponding angles!' }] },
+    secret: { concept: { zh: '同位角在截线同侧、平行线同方向，一定相等。', en: 'Corresponding angles: same side of transversal, same direction — always equal.' }, formula: '$\\text{Corresponding angles are equal}$', tips: [{ zh: '关羽提示：F字形一看就知道是同位角！', en: 'Guan Yu Tip: F-shape = corresponding angles!' }] },
   },
   {
     id: 823, grade: 8, unitId: 2, order: 3,
@@ -1374,7 +1374,7 @@ export const MISSIONS: Mission[] = [
     data: { r: 7, pi: 3.14, mode: 'circumference', generatorType: 'CIRCLE_Y8_RANDOM' },
     difficulty: 'Medium', reward: 175, kpId: 'kp-5.3-01', sectionId: 'geometry',
     tutorialSteps: [],
-    secret: { concept: { zh: '周长 = 绕一圈的总长度。直径 × $\\pi$ 就是周长。', en: 'Circumference = distance around once. Diameter × $\\pi$ = circumference.' }, formula: '$C = 2\\pi r = \\pi d$', tips: [{ zh: '荀彧提示：围栏不够长，马就跑了！', en: 'Xun Yu Tip: Not enough fence and the horses escape!' }] },
+    secret: { concept: { zh: '周长 = 绕一圈的总长度。直径 × $\\pi$ 就是周长。', en: 'Circumference = distance around once. Diameter × $\\pi$ = circumference.' }, formula: '$C = 2\\pi r = \\pi d$', tips: [{ zh: '曹操提示：围栏不够长，马就跑了！', en: 'Cao Cao Tip: Not enough fence and the horses escape!' }] },
   },
   {
     id: 835, grade: 8, unitId: 3, order: 5,

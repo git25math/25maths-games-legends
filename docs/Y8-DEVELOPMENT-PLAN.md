@@ -1,4 +1,4 @@
-# Y8 课纲开发计划（v6.0.0 目标）
+# Y8 课纲开发计划（v6.0.0 完成）
 
 > **必读**: `docs/CONTRIBUTING.md` — 开发规范（金标准、叙事原则、审查标准、Bug 防范规则）
 > **必读**: `docs/DEVELOPMENT-PLAN.md` — 项目全局 + 版本历程
@@ -7,22 +7,26 @@
 
 ---
 
-## 一、Y8 现状
+## 一、Y8 完成状态（v6.0.0, 2026-03-20）
 
-### 现有 Y8 关卡清单（10 个，全部需重写教程）
+### ✅ 40 个 Y8 关卡全部完成
 
-| ID | unitId | Type | 标题(zh) | 标题(en) | 生成器 | 教程步数 | 问题 |
-|----|--------|------|---------|---------|--------|---------|------|
-| 811 | 1 | LINEAR | 急行军 | Forced March | LINEAR_RANDOM | 3 | 无WHY，步骤太少 |
-| 812 | 1 | FUNC_VAL | 追击哨兵 | Intercepting Scouts | FUNC_VAL_RANDOM | 3 | 同上 |
-| 813 | 1 | LINEAR | 合围之势 | Encirclement | LINEAR_RANDOM | 3 | 同上 |
-| 821 | 2 | AREA | 安营扎寨 | Setting Camp | AREA_RECT_RANDOM | 5 | 质量尚可但缺WHY |
-| 822 | 2 | VOLUME | 修筑粮仓 | Building Granaries | VOLUME_RANDOM | 3 | 步骤太少 |
-| 823 | 2 | AREA | 点将台 | Command Platform | AREA_TRAP_RANDOM | 3 | 步骤太少 |
-| 831 | 3 | PERCENTAGE | 征收粮税 | Collecting Grain Tax | PERCENTAGE_RANDOM | 6 | 质量可接受 |
-| 832 | 3 | PERCENTAGE | 军备折扣 | Armament Discount | PERCENTAGE_RANDOM | 6 | 同上 |
-| 841 | 4 | STATISTICS | 士兵平均年龄 | Average Soldier Age | STATISTICS_MEAN_RANDOM | 5 | 缺验算步骤 |
-| 842 | 4 | STATISTICS | 身高分布 | Height Distribution | STATISTICS_MEDIAN_RANDOM | 5 | 质量可接受 |
+| 单元 | 关卡数 | 题型 | 生成器 | 教程步数 | 金标准 |
+|------|--------|------|--------|---------|--------|
+| Unit 1: 进军篇 (190 AD) | 4 | LINEAR, FUNC_VAL | 2 | 6-8 | ✅ |
+| Unit 2: 攻城篇 (190 AD) | 4 | ANGLES, PYTHAGORAS | 2 | 6 | ✅ |
+| Unit 3: 营地篇 (199 AD) | 5 | AREA, CIRCLE, VOLUME | 4 | 6 | ✅ |
+| Unit 4: 治理篇 (200 AD) | 3 | PERCENTAGE, PERCENT_INTEREST | 2 | 6 | ✅ |
+| Unit 5: 情报篇 (200 AD) | 6 | STATISTICS, PROBABILITY, SIMULTANEOUS | 5 | 6-7 | ✅ |
+| Unit 6: 代数篇 (205 AD) | 8 | EXPAND, FACTORISE, INEQUALITY, SYMMETRY | 4 | 6 | ✅ |
+| Unit 7: 图表篇 (207 AD) | 6 | SPEED, STD_FORM, RATIO | 3 | 6 | ✅ |
+| Unit 8: 度量篇 (209 AD) | 4 | LINEAR, RATIO, SPEED | 3 | 6-8 | ✅ |
+
+**教程语言重写 (4 批次)**：所有 18 个 Y8 生成器完成对话式重写，text-only 格式，WHY + 验算 + 叙事贯穿。
+
+### 原始 10 个关卡（已升级）
+
+原始 Y8 关卡 (811-842) 全部保留并升级：教程从 3-5 步提升到 6+ 步，全部达到金标准。
 
 ### Y8 对 Y7 的前置依赖（详细映射）
 
