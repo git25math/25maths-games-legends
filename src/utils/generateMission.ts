@@ -4611,33 +4611,45 @@ export function generateFactorsListMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：$${n}$ 个新兵要编队——有几种等人数的分法？这就是找"因数"`, en: `${narrator}: "$${n}$ recruits need squads — how many ways to form equal groups? That's finding 'factors'"` },
-      hint: { zh: `比如 $${n}$ 人分成 2 人一队，行不行？\n$${n} \\div 2 = ${n / 2}$${n % 2 === 0 ? '，刚好整除 ✓ → 可以！' : '... 有余数 ✗ → 不行！'}\n\n"因数"就是能把这个数平均分开的数`, en: `E.g., $${n}$ people in groups of 2 — possible?\n$${n} \\div 2 = ${n / 2}$${n % 2 === 0 ? ', exact ✓ → yes!' : '... remainder ✗ → no!'}\n\nA "factor" is a number that divides evenly` },
+      text: {
+        zh: `${narrator}：$${n}$ 个新兵要编队——有几种等人数的分法？\n比如分成 2 人一队：$${n} \\div 2 = ${n / 2}$${n % 2 === 0 ? '，整除 ✓ 可以！' : '，有余数 ✗ 不行！'}\n\n"因数"就是能把一个数平均分开的数——没有余数才算！`,
+        en: `${narrator}: "$${n}$ recruits need squads — how many ways to form equal groups?\nE.g., groups of 2: $${n} \\div 2 = ${n / 2}$${n % 2 === 0 ? ', exact ✓ works!' : ', remainder ✗ doesn\'t work!'}\n\nA 'factor' is a number that divides evenly — no remainder!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：怎么判断"能不能整除"？——看有没有余数`, en: `${narrator}: "How to tell if it divides evenly? — Check for remainders"` },
-      hint: { zh: `$${n} \\div ${testYes} = ${n / testYes}$，没有余数 → 整除 ✓ → $${testYes}$ 是因数\n$${n} \\div ${testNo} = ${Math.floor(n / testNo)}$ 余 $${n % testNo}$ → 不整除 ✗ → $${testNo}$ 不是因数\n\n整除 = 除得刚刚好，一点都不剩`, en: `$${n} \\div ${testYes} = ${n / testYes}$, no remainder → divides ✓ → $${testYes}$ is a factor\n$${n} \\div ${testNo} = ${Math.floor(n / testNo)}$ r $${n % testNo}$ → doesn't divide ✗ → $${testNo}$ is not\n\nDivides evenly = nothing left over` },
+      text: {
+        zh: `${narrator}：怎么判断能不能整除？看有没有余数！\n$${n} \\div ${testYes} = ${n / testYes}$，没余数 → 整除 ✓ → $${testYes}$ 是因数\n$${n} \\div ${testNo} = ${Math.floor(n / testNo)}$ 余 $${n % testNo}$ → 不整除 ✗ → $${testNo}$ 不是因数\n\n整除 = 除得刚刚好，一点都不剩！`,
+        en: `${narrator}: "How to check? Look for remainders!\n$${n} \\div ${testYes} = ${n / testYes}$, no remainder → divides ✓ → $${testYes}$ is a factor\n$${n} \\div ${testNo} = ${Math.floor(n / testNo)}$ r $${n % testNo}$ → doesn't divide ✗ → $${testNo}$ is not\n\nDivides evenly = nothing left over!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：秘诀——因数总是成对出现`, en: `${narrator}: "Secret — factors always come in pairs"` },
-      hint: { zh: `找到一个因数，就自动得到另一个：\n${pairs.join('\n')}\n\n每一对相乘都等于 $${n}$！\n所以我们不用从 1 试到 $${n}$，只要试到 $\\sqrt{${n}}$ 就够了`, en: `Find one factor, automatically get another:\n${pairs.join('\n')}\n\nEach pair multiplies to $${n}$!\nSo we only need to test up to $\\sqrt{${n}}$` },
+      text: {
+        zh: `${narrator}：秘诀——因数总是成对出现！\n找到一个因数，就自动得到另一个：\n${pairs.join('\n')}\n\n每一对相乘都等于 $${n}$！所以只要试到 $\\sqrt{${n}}$ 就够了。`,
+        en: `${narrator}: "Secret — factors always come in pairs!\nFind one factor, automatically get another:\n${pairs.join('\n')}\n\nEach pair multiplies to $${n}$! So we only need to test up to $\\sqrt{${n}}$."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：把所有因数对拆开，从小到大排列`, en: `${narrator}: "Unpack all pairs and list from smallest to largest"` },
-      hint: { zh: `$${n}$ 的全部因数：\n$${factors.join(', ')}$\n\n一共 $${answer}$ 个因数`, en: `All factors of $${n}$:\n$${factors.join(', ')}$\n\nTotal: $${answer}$ factors` },
+      text: {
+        zh: `${narrator}：把所有因数从小到大排列\n$${n}$ 的全部因数：$${factors.join(', ')}$\n\n一共 $${answer}$ 个因数！`,
+        en: `${narrator}: "List all factors from smallest to largest\nAll factors of $${n}$: $${factors.join(', ')}$\n\nTotal: $${answer}$ factors!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——每个因数都能整除 $${n}$`, en: `${narrator}: "Verify — every factor divides $${n}$ evenly"` },
-      hint: { zh: `${factors.map(f => `$${n} \\div ${f} = ${n / f}$ ✓`).join('\n')}\n\n全部整除！$${n}$ 有 $${answer}$ 种编队方式`, en: `${factors.map(f => `$${n} \\div ${f} = ${n / f}$ ✓`).join('\n')}\n\nAll check out! $${n}$ has $${answer}$ ways to form equal groups` },
+      text: {
+        zh: `${narrator}：验算——每个因数都能整除 $${n}$\n${factors.map(f => `$${n} \\div ${f} = ${n / f}$ ✓`).join('\n')}\n\n全部整除！$${n}$ 有 $${answer}$ 种编队方式。`,
+        en: `${narrator}: "Verify — every factor divides $${n}$ evenly\n${factors.map(f => `$${n} \\div ${f} = ${n / f}$ ✓`).join('\n')}\n\nAll check out! $${n}$ has $${answer}$ ways to form equal groups."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：规律——1 和自身永远是因数`, en: `${narrator}: "Pattern — 1 and the number itself are always factors"` },
-      hint: { zh: `任何数都能被 $1$ 整除（$${n} \\div 1 = ${n}$）\n任何数都能被自己整除（$${n} \\div ${n} = 1$）\n\n所以因数至少有 2 个\n如果只有 $1$ 和自己——那就是质数！（下一关会学）`, en: `Any number is divisible by $1$ ($${n} \\div 1 = ${n}$)\nAny number is divisible by itself ($${n} \\div ${n} = 1$)\n\nSo there are always at least 2 factors\nIf ONLY 1 and itself — that's a prime! (next mission)` },
+      text: {
+        zh: `${narrator}：记住——1 和自身永远是因数！\n$${n} \\div 1 = ${n}$ ✓，$${n} \\div ${n} = 1$ ✓\n\n所以因数至少有 2 个。如果**只有** 1 和自己——那就是质数！（下一关会学）`,
+        en: `${narrator}: "Remember — 1 and the number itself are ALWAYS factors!\n$${n} \\div 1 = ${n}$ ✓, $${n} \\div ${n} = 1$ ✓\n\nSo there are always at least 2 factors. If ONLY 1 and itself — that's a prime! (next mission)"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -4694,33 +4706,45 @@ export function generateIntegerMulMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：为什么需要学负数乘除？——进攻退守，方向很重要`, en: `${narrator}: "Why learn multiplying negatives? — Advance or retreat, direction matters"` },
-      hint: { zh: `正数 = 前进/得到/增加\n负数 = 后退/失去/减少\n\n"3 队骑兵各前进 2 里" = $3 \\times 2 = 6$ 里（正 = 前进）\n"3 队骑兵各后退 2 里" = $3 \\times (-2) = -6$ 里（负 = 后退）\n\n乘除里正负号代表方向！`, en: `Positive = advance/gain/increase\nNegative = retreat/lose/decrease\n\n"3 units advance 2 miles each" = $3 \\times 2 = 6$ miles (positive = forward)\n"3 units retreat 2 miles each" = $3 \\times (-2) = -6$ miles (negative = backward)\n\nSigns in multiplication represent direction!` },
+      text: {
+        zh: `${narrator}：为什么要学负数乘除？——进攻退守，方向很重要！\n正数 = 前进/得到，负数 = 后退/失去。\n\n"3 队骑兵各前进 2 里" = $3 \\times 2 = 6$ 里（正 = 前进）\n"3 队骑兵各后退 2 里" = $3 \\times (-2) = -6$ 里（负 = 后退）`,
+        en: `${narrator}: "Why learn multiplying negatives? Direction matters!\nPositive = advance/gain, Negative = retreat/lose.\n\n'3 units advance 2 miles' = $3 \\times 2 = 6$ miles (positive = forward)\n'3 units retreat 2 miles' = $3 \\times (-2) = -6$ miles (negative = backward)"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：正负数乘除的核心规则`, en: `${narrator}: "Core rule for multiplying/dividing with signs"` },
-      hint: { zh: `口诀：\n• 正 × 正 = 正（同号得正）\n• 负 × 负 = 正（同号得正）\n• 正 × 负 = 负（异号得负）\n• 负 × 正 = 负（异号得负）\n\n乘法和除法规则相同！`, en: `Rule:\n• (+) × (+) = (+) (same signs → positive)\n• (−) × (−) = (+) (same signs → positive)\n• (+) × (−) = (−) (different signs → negative)\n• (−) × (+) = (−) (different signs → negative)\n\nSame rule for division!` },
+      text: {
+        zh: `${narrator}：核心口诀——两句话搞定\n• **同号得正**：正×正 = 正，负×负 = 正\n• **异号得负**：正×负 = 负，负×正 = 负\n\n乘法和除法规则完全相同！记住这两句就够了。`,
+        en: `${narrator}: "Core rule — two lines and you're done\n• **Same signs → positive**: (+)×(+) = (+), (−)×(−) = (+)\n• **Different signs → negative**: (+)×(−) = (−), (−)×(+) = (−)\n\nSame rule for division! Remember these two lines."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：为什么"负负得正"？`, en: `${narrator}: "Why does negative × negative = positive?"` },
-      hint: { zh: `想象敌人在撤退（负方向）\n如果我们"取消"撤退（再一个负）\n取消撤退 = 前进 = 正方向！\n\n负负得正，就像"敌退我进"`, en: `Imagine the enemy is retreating (negative direction)\nIf we "cancel" the retreat (another negative)\nCancelling retreat = advance = positive!\n\nNeg × Neg = Pos, like "enemy retreats, we advance"` },
+      text: {
+        zh: `${narrator}：为什么"负负得正"？\n想象敌人在撤退（负方向），我们"取消"撤退（再一个负）。\n取消撤退 = 前进 = 正方向！\n\n负负得正，就像"敌退我进"——两个负号互相抵消！`,
+        en: `${narrator}: "Why does negative × negative = positive?\nImagine the enemy retreating (negative). We 'cancel' the retreat (another negative).\nCancelling retreat = advance = positive!\n\nNeg × Neg = Pos, like 'enemy retreats, we advance' — two negatives cancel out!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第一步——判断符号`, en: `${narrator}: "Step 1 — determine the sign"` },
-      hint: { zh: `$(${a})$ 是${a >= 0 ? '正' : '负'}数\n$(${b})$ 是${b >= 0 ? '正' : '负'}数\n\n${signRuleZh}！结果是${signRule === 'positive' ? '正' : '负'}数`, en: `$(${a})$ is ${a >= 0 ? 'positive' : 'negative'}\n$(${b})$ is ${b >= 0 ? 'positive' : 'negative'}\n\n${signRuleEn}! Result is ${signRule}` },
+      text: {
+        zh: `${narrator}：第一步——判断符号\n$(${a})$ 是${a >= 0 ? '正' : '负'}数，$(${b})$ 是${b >= 0 ? '正' : '负'}数。\n\n${signRuleZh}！所以结果是${signRule === 'positive' ? '**正**' : '**负**'}数。`,
+        en: `${narrator}: "Step 1 — determine the sign\n$(${a})$ is ${a >= 0 ? 'positive' : 'negative'}, $(${b})$ is ${b >= 0 ? 'positive' : 'negative'}.\n\n${signRuleEn}! So the result is **${signRule}**."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——只看绝对值（不管正负，算数字）`, en: `${narrator}: "Step 2 — compute with absolute values (ignore signs, just multiply/divide)"` },
-      hint: { zh: `$${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$\n\n加上符号：${answer >= 0 ? '+' : '−'}$${Math.abs(answer)}$ = $${answer}$`, en: `$${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$\n\nAdd sign: ${answer >= 0 ? '+' : '−'}$${Math.abs(answer)}$ = $${answer}$` },
+      text: {
+        zh: `${narrator}：第二步——不管正负，先算数字\n$${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$\n\n加上符号：${answer >= 0 ? '' : '−'}$${Math.abs(answer)}$ → 答案 = $${answer}$`,
+        en: `${narrator}: "Step 2 — ignore signs, just calculate\n$${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$\n\nAdd sign: ${answer >= 0 ? '' : '−'}$${Math.abs(answer)}$ → answer = $${answer}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算`, en: `${narrator}: "Verify"` },
-      hint: { zh: `$(${a}) ${op} (${b}) = ${answer}$ ✓\n\n符号规则：${signRuleZh} ✓\n数值计算：$${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$ ✓`, en: `$(${a}) ${op} (${b}) = ${answer}$ ✓\n\nSign rule: ${signRuleEn} ✓\nValue: $${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$ ✓` },
+      text: {
+        zh: `${narrator}：验算\n$(${a}) ${op} (${b}) = ${answer}$ ✓\n符号：${signRuleZh} ✓\n数值：$${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$ ✓\n\n做得漂亮！`,
+        en: `${narrator}: "Verify\n$(${a}) ${op} (${b}) = ${answer}$ ✓\nSign: ${signRuleEn} ✓\nValue: $${Math.abs(a)} ${op} ${Math.abs(b)} = ${Math.abs(answer)}$ ✓\n\nBrilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -4787,42 +4811,53 @@ export function generateFdpConvertMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：为什么要学转换？——战场上同一种情报，不同人用不同写法`, en: `${narrator}: "Why learn conversions? — Same intel, different formats for different people"` },
-      hint: { zh: `将军说"半数兵力"\n军师说"0.5倍兵力"\n谋士说"50%兵力"\n\n说的是同一件事！\n你必须能在三种写法之间自由切换`, en: `The general says "half the troops"\nThe adviser says "0.5 of the troops"\nThe strategist says "50% of the troops"\n\nAll the same thing!\nYou must switch freely between all three forms` },
+      text: {
+        zh: `${narrator}：为什么要学转换？\n将军说"半数兵力"，军师说"0.5倍兵力"，谋士说"50%兵力"——说的是同一件事！\n\n分数、小数、百分比是三种写法，你必须能自由切换。`,
+        en: `${narrator}: "Why learn conversions?\nThe general says 'half the troops', the adviser says '0.5 of the troops', the strategist says '50%' — all the same thing!\n\nFractions, decimals, percentages are three forms. You must switch freely between them."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：分数、小数、百分比——三种写法，同一个数`, en: `${narrator}: "Fractions, decimals, percentages — three forms, one value"` },
-      hint: { zh: `$\\frac{1}{2} = 0.5 = 50\\%$\n\n就像同一个人有大名、小名、绰号\n换个写法，但数值不变`, en: `$\\frac{1}{2} = 0.5 = 50\\%$\n\nLike the same person with a formal name, nickname, and title\nDifferent form, same value` },
+      text: {
+        zh: `${narrator}：三种写法，同一个数\n$\\frac{1}{2} = 0.5 = 50\\%$\n\n就像同一个人有大名、小名、绰号——换个写法，但数值不变！`,
+        en: `${narrator}: "Three forms, one value\n$\\frac{1}{2} = 0.5 = 50\\%$\n\nLike the same person with a formal name, nickname, and title — different form, same value!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：转换秘诀——分数 → 小数 → 百分比`, en: `${narrator}: "Conversion chain: Fraction → Decimal → Percentage"` },
-      hint: { zh: `分数 → 小数：分子 ÷ 分母\n$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.num} \\div ${chosen.den} = ${chosen.dec}$\n\n小数 → 百分比：乘以 100\n$${chosen.dec} \\times 100 = ${chosen.pct}\\%$\n\n百分比 → 小数：除以 100\n$${chosen.pct}\\% \\div 100 = ${chosen.dec}$`, en: `Fraction → Decimal: numerator ÷ denominator\n$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.num} \\div ${chosen.den} = ${chosen.dec}$\n\nDecimal → Percentage: × 100\n$${chosen.dec} \\times 100 = ${chosen.pct}\\%$\n\nPercentage → Decimal: ÷ 100\n$${chosen.pct}\\% \\div 100 = ${chosen.dec}$` },
+      text: {
+        zh: `${narrator}：转换秘诀\n分数 → 小数：分子 ÷ 分母\n$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.num} \\div ${chosen.den} = ${chosen.dec}$\n\n小数 → 百分比：乘 100 → $${chosen.dec} \\times 100 = ${chosen.pct}\\%$\n百分比 → 小数：除 100 → $${chosen.pct}\\% \\div 100 = ${chosen.dec}$`,
+        en: `${narrator}: "Conversion secrets\nFraction → Decimal: numerator ÷ denominator\n$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.num} \\div ${chosen.den} = ${chosen.dec}$\n\nDecimal → %: × 100 → $${chosen.dec} \\times 100 = ${chosen.pct}\\%$\n% → Decimal: ÷ 100 → $${chosen.pct}\\% \\div 100 = ${chosen.dec}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：这道题的答案`, en: `${narrator}: "The answer to this question"` },
-      hint: { zh: `$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.dec} = ${chosen.pct}\\%$\n\n答案 = $${answer}$`, en: `$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.dec} = ${chosen.pct}\\%$\n\nAnswer = $${answer}$` },
+      text: {
+        zh: `${narrator}：答案\n$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.dec} = ${chosen.pct}\\%$\n\n答案 = $${answer}$`,
+        en: `${narrator}: "Answer\n$\\frac{${chosen.num}}{${chosen.den}} = ${chosen.dec} = ${chosen.pct}\\%$\n\nAnswer = $${answer}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——反向转换回去`, en: `${narrator}: "Verify — convert back the other way"` },
-      hint: { zh: dir === 'frac_to_pct'
-        ? `答案 $${chosen.pct}\\%$\n反向：$${chosen.pct} \\div 100 = ${chosen.dec}$\n$${chosen.dec} = \\frac{${chosen.num}}{${chosen.den}}$ ✓`
-        : dir === 'pct_to_dec'
-        ? `答案 $${chosen.dec}$\n反向：$${chosen.dec} \\times 100 = ${chosen.pct}\\%$ ✓`
-        : `答案 $${chosen.pct}\\%$\n反向：$${chosen.pct} \\div 100 = ${chosen.dec}$ ✓`,
-        en: dir === 'frac_to_pct'
-        ? `Answer $${chosen.pct}\\%$\nReverse: $${chosen.pct} \\div 100 = ${chosen.dec}$\n$${chosen.dec} = \\frac{${chosen.num}}{${chosen.den}}$ ✓`
-        : dir === 'pct_to_dec'
-        ? `Answer $${chosen.dec}$\nReverse: $${chosen.dec} \\times 100 = ${chosen.pct}\\%$ ✓`
-        : `Answer $${chosen.pct}\\%$\nReverse: $${chosen.pct} \\div 100 = ${chosen.dec}$ ✓` },
+      text: {
+        zh: `${narrator}：验算——反向转换回去\n${dir === 'frac_to_pct'
+          ? `$${chosen.pct}\\% \\div 100 = ${chosen.dec}$，$${chosen.dec} = \\frac{${chosen.num}}{${chosen.den}}$ ✓`
+          : dir === 'pct_to_dec'
+          ? `$${chosen.dec} \\times 100 = ${chosen.pct}\\%$ ✓`
+          : `$${chosen.pct}\\% \\div 100 = ${chosen.dec}$ ✓`}\n\n正反都对得上——转换正确！`,
+        en: `${narrator}: "Verify — convert back\n${dir === 'frac_to_pct'
+          ? `$${chosen.pct}\\% \\div 100 = ${chosen.dec}$, $${chosen.dec} = \\frac{${chosen.num}}{${chosen.den}}$ ✓`
+          : dir === 'pct_to_dec'
+          ? `$${chosen.dec} \\times 100 = ${chosen.pct}\\%$ ✓`
+          : `$${chosen.pct}\\% \\div 100 = ${chosen.dec}$ ✓`}\n\nBoth directions match — conversion correct!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：必背口诀——常见分数百分比对照表`, en: `${narrator}: "Must memorize — common fraction/percentage equivalents"` },
-      hint: { zh: `$\\frac{1}{2} = 50\\%$，$\\frac{1}{4} = 25\\%$，$\\frac{3}{4} = 75\\%$\n$\\frac{1}{5} = 20\\%$，$\\frac{2}{5} = 40\\%$，$\\frac{3}{5} = 60\\%$\n$\\frac{1}{10} = 10\\%$，$\\frac{1}{3} \\approx 33.3\\%$`, en: `$\\frac{1}{2} = 50\\%$, $\\frac{1}{4} = 25\\%$, $\\frac{3}{4} = 75\\%$\n$\\frac{1}{5} = 20\\%$, $\\frac{2}{5} = 40\\%$, $\\frac{3}{5} = 60\\%$\n$\\frac{1}{10} = 10\\%$, $\\frac{1}{3} \\approx 33.3\\%$` },
+      text: {
+        zh: `${narrator}：必背——常见对照表\n$\\frac{1}{2} = 50\\%$，$\\frac{1}{4} = 25\\%$，$\\frac{3}{4} = 75\\%$\n$\\frac{1}{5} = 20\\%$，$\\frac{2}{5} = 40\\%$，$\\frac{3}{5} = 60\\%$\n$\\frac{1}{10} = 10\\%$，$\\frac{1}{3} \\approx 33.3\\%$\n\n背下这些，考试快人一步！`,
+        en: `${narrator}: "Must memorize — quick reference\n$\\frac{1}{2} = 50\\%$, $\\frac{1}{4} = 25\\%$, $\\frac{3}{4} = 75\\%$\n$\\frac{1}{5} = 20\\%$, $\\frac{2}{5} = 40\\%$, $\\frac{3}{5} = 60\\%$\n$\\frac{1}{10} = 10\\%$, $\\frac{1}{3} \\approx 33.3\\%$\n\nMemorize these and you'll be faster than everyone!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -4984,33 +5019,45 @@ export function generateSimplifyMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：为什么要化简？——把复杂的式子变简洁`, en: `${narrator}: "Why simplify? — Turn complex expressions into clean ones"` },
-      hint: { zh: `行军布阵时，"3队骑兵加2队骑兵"说起来太啰嗦\n直接说"5队骑兵"更清楚\n\n化简就是把数学式子也这样"合并同类"`, en: `In battle planning, "3 cavalry units plus 2 cavalry units" is wordy\nJust say "5 cavalry units" — much clearer\n\nSimplifying does the same for math expressions` },
+      text: {
+        zh: `${narrator}：为什么要化简？\n"3队骑兵加2队骑兵"太啰嗦——直接说"5队骑兵"更清楚！\n化简就是把数学式子也这样"合并同类"。`,
+        en: `${narrator}: "Why simplify?\n'3 cavalry units plus 2 cavalry units' is wordy — just say '5 cavalry units'!\nSimplifying does the same for math expressions."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：什么是"同类项"？——字母部分完全相同`, en: `${narrator}: "What are 'like terms'? — Same letter part"` },
-      hint: { zh: `$3x + 2x$ 就像"3 箱苹果 + 2 箱苹果"\n苹果一样，箱子可以合并！\n$3x + 2x = 5x$（5 箱苹果）\n\n但 $3x + 2y$ 不能合并——苹果和橘子不能混！`, en: `$3x + 2x$ is like "3 boxes of apples + 2 boxes of apples"\nSame fruit, boxes can be combined!\n$3x + 2x = 5x$ (5 boxes)\n\nBut $3x + 2y$ can't combine — apples and oranges don't mix!` },
+      text: {
+        zh: `${narrator}：什么是"同类项"？\n$3x + 2x$ 就像"3箱苹果 + 2箱苹果"——苹果一样，箱子可以合并！\n$3x + 2x = 5x$（5箱苹果）\n\n但 $3x + 2y$ 不能合并——苹果和橘子不能混！`,
+        en: `${narrator}: "What are 'like terms'?\n$3x + 2x$ is like '3 boxes of apples + 2 boxes of apples' — same fruit, combine!\n$3x + 2x = 5x$ (5 boxes)\n\nBut $3x + 2y$ can't combine — apples and oranges don't mix!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：判断——$${expr}$ 中哪些是同类项？`, en: `${narrator}: "Identify — which terms in $${expr}$ are like terms?"` },
-      hint: { zh: `同类项 = 字母部分完全相同\n\n✓ $${a}x$ 和 $${b}x$ 是同类项（都是 $x$）\n✗ $3x$ 和 $3y$ 不是同类项（一个 $x$ 一个 $y$）\n✗ $3x$ 和 $3x^2$ 不是同类项（一个 $x$ 一个 $x^2$）${c !== null ? `\n✗ $${a}x$ 和 $${c}$（常数）不是同类项` : ''}`, en: `Like terms = exact same letter part\n\n✓ $${a}x$ and $${b}x$ are like terms (both $x$)\n✗ $3x$ and $3y$ are NOT (different letters)\n✗ $3x$ and $3x^2$ are NOT ($x$ vs $x^2$)${c !== null ? `\n✗ $${a}x$ and $${c}$ (constant) are NOT like terms` : ''}` },
+      text: {
+        zh: `${narrator}：$${expr}$ 中哪些是同类项？\n✓ $${a}x$ 和 $${b}x$ 是同类项（都是 $x$）${c !== null ? `\n✗ $${a}x$ 和 $${c}$（常数）不是同类项——一个有 $x$ 一个没有` : ''}\n\n同类项 = 字母部分完全相同！`,
+        en: `${narrator}: "Which terms in $${expr}$ are like terms?\n✓ $${a}x$ and $${b}x$ are like terms (both $x$)${c !== null ? `\n✗ $${a}x$ and $${c}$ (constant) are NOT like terms` : ''}\n\nLike terms = exact same letter part!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：合并！——只加系数，字母不变`, en: `${narrator}: "Combine! — Add the coefficients, keep the letter"` },
-      hint: { zh: `$${a}x + ${b}x$\n= $(${a} + ${b})x$\n= $${answer}x$\n\n系数相加：$${a} + ${b} = ${answer}$\n字母照抄：$x$${c !== null ? `\n\n$${c}$ 是常数项，不能和 $x$ 合并，保留` : ''}`, en: `$${a}x + ${b}x$\n= $(${a} + ${b})x$\n= $${answer}x$\n\nCoefficients add: $${a} + ${b} = ${answer}$\nLetter stays: $x$${c !== null ? `\n\n$${c}$ is a constant, can't combine with $x$, keep it` : ''}` },
+      text: {
+        zh: `${narrator}：合并！只加系数，字母不变\n$${a}x + ${b}x = (${a} + ${b})x = ${answer}x$\n\n系数相加：$${a} + ${b} = ${answer}$，字母 $x$ 照抄。${c !== null ? `\n$${c}$ 是常数项，保留不动。` : ''}`,
+        en: `${narrator}: "Combine! Add coefficients, keep the letter\n$${a}x + ${b}x = (${a} + ${b})x = ${answer}x$\n\nCoefficients: $${a} + ${b} = ${answer}$, letter $x$ stays.${c !== null ? `\n$${c}$ is a constant — keep it separate.` : ''}"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：答案——$x$ 的系数是 $${answer}$`, en: `${narrator}: "Answer — coefficient of $x$ is $${answer}$"` },
-      hint: { zh: `$${expr} = ${simplified}$\n\n$x$ 的系数 = $${answer}$`, en: `$${expr} = ${simplified}$\n\nCoefficient of $x$ = $${answer}$` },
+      text: {
+        zh: `${narrator}：答案\n$${expr} = ${simplified}$\n$x$ 的系数 = $${answer}$`,
+        en: `${narrator}: "Answer\n$${expr} = ${simplified}$\nCoefficient of $x$ = $${answer}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——代入 $x = 1$ 检验`, en: `${narrator}: "Verify — substitute $x = 1$ to check"` },
-      hint: { zh: `原式：$${a}(1) + ${b}(1)${c !== null ? ` + ${c}` : ''} = ${a + b}${c !== null ? ` + ${c} = ${a + b + c}` : ''}$\n化简后：$${answer}(1)${c !== null ? ` + ${c} = ${answer + c}` : ` = ${answer}`}$\n\n${a + b + (c || 0)} = ${answer + (c || 0)} ✓ 一致！`, en: `Original: $${a}(1) + ${b}(1)${c !== null ? ` + ${c}` : ''} = ${a + b}${c !== null ? ` + ${c} = ${a + b + c}` : ''}$\nSimplified: $${answer}(1)${c !== null ? ` + ${c} = ${answer + c}` : ` = ${answer}`}$\n\n${a + b + (c || 0)} = ${answer + (c || 0)} ✓ Match!` },
+      text: {
+        zh: `${narrator}：验算——代入 $x = 1$ 检查\n原式：$${a}(1) + ${b}(1)${c !== null ? ` + ${c}` : ''} = ${a + b + (c || 0)}$\n化简后：$${answer}(1)${c !== null ? ` + ${c}` : ''} = ${answer + (c || 0)}$\n\n$${a + b + (c || 0)} = ${answer + (c || 0)}$ ✓ 一致！做得漂亮！`,
+        en: `${narrator}: "Verify — substitute $x = 1$\nOriginal: $${a}(1) + ${b}(1)${c !== null ? ` + ${c}` : ''} = ${a + b + (c || 0)}$\nSimplified: $${answer}(1)${c !== null ? ` + ${c}` : ''} = ${answer + (c || 0)}$\n\n$${a + b + (c || 0)} = ${answer + (c || 0)}$ ✓ Match! Brilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -5065,33 +5112,45 @@ export function generateStatsModeMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：缴获一批兵器，哪种最多？——这就是"众数"`, en: `${narrator}: "Captured weapons — which type is most common? That's the 'mode'"` },
-      hint: { zh: `众数 = 出现次数最多的值\n就是数据里的"人气王"\n\n为什么有用？\n知道最常见的兵器 → 知道敌军偏好什么战术\n知道最常见的分数 → 知道大部分学生在什么水平`, en: `Mode = most frequent value — the "most popular"\n\nWhy useful?\nMost common weapon → enemy's preferred tactics\nMost common score → where most students are` },
+      text: {
+        zh: `${narrator}：缴获一批兵器，哪种最多？——这就是"众数"！\n众数 = 出现次数最多的值，就是数据里的"人气王"。\n\n知道最常见的兵器 → 知道敌军偏好什么战术！`,
+        en: `${narrator}: "Captured weapons — which type is most common? That's the 'mode'!\nMode = most frequent value — the 'most popular' in the data.\n\nMost common weapon → enemy's preferred tactics!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：怎么找？——给每个值"画正字"计数`, en: `${narrator}: "How? — Tally each value"` },
-      hint: { zh: `数据：$${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$：${'|'.repeat(e.count)}$ = $${e.count}$ 次`).join('\n')}`, en: `Data: $${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$: ${'|'.repeat(e.count)}$ = $${e.count}$ times`).join('\n')}` },
+      text: {
+        zh: `${narrator}：怎么找？给每个值"画正字"计数！\n数据：$${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$：${'|'.repeat(e.count)}$ = $${e.count}$ 次`).join('\n')}`,
+        en: `${narrator}: "How to find it? Tally each value!\nData: $${sorted.join(', ')}$\n\n${freqEntries.map(e => `$${e.val}$: ${'|'.repeat(e.count)}$ = $${e.count}$ times`).join('\n')}"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：谁的票数最多？`, en: `${narrator}: "Who got the most votes?"` },
-      hint: { zh: `$${modeValue}$ 出现了 $${modeCount}$ 次——最多！\n\n众数 = $${modeValue}$`, en: `$${modeValue}$ appears $${modeCount}$ times — the most!\n\nMode = $${modeValue}$` },
+      text: {
+        zh: `${narrator}：谁的票数最多？\n$${modeValue}$ 出现了 $${modeCount}$ 次——比任何其他值都多！\n\n众数 = $${modeValue}$`,
+        en: `${narrator}: "Who got the most votes?\n$${modeValue}$ appears $${modeCount}$ times — more than anything else!\n\nMode = $${modeValue}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：答案——众数 = $${modeValue}$`, en: `${narrator}: "Answer — Mode = $${modeValue}$"` },
-      hint: { zh: `数据 $${sorted.join(', ')}$\n\n$${modeValue}$ 出现了 $${modeCount}$ 次，比其他任何值都多\n\n众数 = $${modeValue}$`, en: `Data: $${sorted.join(', ')}$\n\n$${modeValue}$ appears $${modeCount}$ times, more than any other value\n\nMode = $${modeValue}$` },
+      text: {
+        zh: `${narrator}：答案\n众数 = $${modeValue}$\n\n$${modeValue}$ 出现了 $${modeCount}$ 次，稳居第一！`,
+        en: `${narrator}: "Answer\nMode = $${modeValue}$\n\n$${modeValue}$ appears $${modeCount}$ times — firmly in first place!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——确认没有其他值出现得更多`, en: `${narrator}: "Verify — confirm no other value appears more often"` },
-      hint: { zh: `${freqEntries.map(e => `$${e.val}$：${e.count} 次${e.val === modeValue ? ' ← 最多！' : ''}`).join('\n')}\n\n没有并列 → 众数唯一 = $${modeValue}$ ✓`, en: `${freqEntries.map(e => `$${e.val}$: ${e.count} times${e.val === modeValue ? ' ← most!' : ''}`).join('\n')}\n\nNo ties → unique mode = $${modeValue}$ ✓` },
+      text: {
+        zh: `${narrator}：验算——确认没有其他值出现得更多\n${freqEntries.map(e => `$${e.val}$：${e.count} 次${e.val === modeValue ? ' ← 最多！' : ''}`).join('\n')}\n\n没有并列 → 众数唯一 = $${modeValue}$ ✓`,
+        en: `${narrator}: "Verify — no other value appears more often\n${freqEntries.map(e => `$${e.val}$: ${e.count} times${e.val === modeValue ? ' ← most!' : ''}`).join('\n')}\n\nNo ties → unique mode = $${modeValue}$ ✓"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：注意——众数可能有多个，也可能没有`, en: `${narrator}: "Note — there can be multiple modes, or none"` },
-      hint: { zh: `• 如果两个值并列最多 → 两个众数\n• 如果所有值都出现一样多 → 没有众数\n\n这道题：$${modeValue}$ 独占鳌头，众数唯一`, en: `• Two values tied for most → two modes\n• All values appear equally → no mode\n\nThis problem: $${modeValue}$ is clearly dominant, unique mode` },
+      text: {
+        zh: `${narrator}：小贴士\n• 两个值并列最多 → 两个众数\n• 所有值出现一样多 → 没有众数\n\n这道题：$${modeValue}$ 独占鳌头，做得漂亮！`,
+        en: `${narrator}: "Tips\n• Two values tied for most → two modes\n• All values appear equally → no mode\n\nThis problem: $${modeValue}$ is clearly dominant — brilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -5138,33 +5197,45 @@ export function generateTwoStepEqMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：一步方程你已经会了——现在升级：两步方程`, en: `${narrator}: "You've mastered one-step equations — now level up: two-step equations"` },
-      hint: { zh: `一步方程：$${a}x = ${step1Result}$（只要除一次就解出 $x$）\n\n两步方程：$${a}x + ${b} = ${result}$（$x$ 被包了两层！）\n\n就像攻城——一步方程只有一道门\n两步方程有两道门：外门（$+${b}$）和内门（$\\times ${a}$）`, en: `One-step: $${a}x = ${step1Result}$ (one division solves it)\n\nTwo-step: $${a}x + ${b} = ${result}$ ($x$ is double-wrapped!)\n\nLike a siege — one-step has one gate\nTwo-step has two gates: outer ($+${b}$) and inner ($\\times ${a}$)` },
+      text: {
+        zh: `${narrator}：一步方程你会了——现在升级：两步方程！\n两步方程 $${a}x + ${b} = ${result}$，$x$ 被包了两层！\n\n就像攻城——两道门：外门（$+${b}$）和内门（$\\times ${a}$）。先攻外门，再攻内门。`,
+        en: `${narrator}: "You've mastered one-step — now level up: two-step equations!\n$${a}x + ${b} = ${result}$, $x$ is double-wrapped!\n\nLike a siege — two gates: outer ($+${b}$) and inner ($\\times ${a}$). Break outer first, then inner."`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：先看清"敌情"——$x$ 被怎么包的？`, en: `${narrator}: "First, assess the situation — how is $x$ wrapped?"` },
-      hint: { zh: `$${a}x + ${b} = ${result}$\n\n从 $x$ 出发，经历了什么？\n① $x$ 先被乘以 $${a}$ → 变成 $${a}x$（内层）\n② $${a}x$ 再加上 $${b}$ → 变成 $${a}x + ${b}$（外层）\n\n解方程 = 反过来拆：先拆外层，再拆内层`, en: `$${a}x + ${b} = ${result}$\n\nStarting from $x$, what happened?\n① $x$ multiplied by $${a}$ → becomes $${a}x$ (inner layer)\n② $${a}x$ plus $${b}$ → becomes $${a}x + ${b}$ (outer layer)\n\nSolving = reverse: outer layer first, then inner` },
+      text: {
+        zh: `${narrator}：$x$ 被怎么包的？\n① $x$ 先被乘以 $${a}$ → $${a}x$（内层）\n② $${a}x$ 再加 $${b}$ → $${a}x + ${b}$（外层）\n\n解方程 = 反过来拆：先拆外层，再拆内层！`,
+        en: `${narrator}: "How is $x$ wrapped?\n① $x$ multiplied by $${a}$ → $${a}x$ (inner)\n② $${a}x$ plus $${b}$ → $${a}x + ${b}$ (outer)\n\nSolving = reverse: outer first, then inner!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：第一步——拆外门：两边减 $${b}$`, en: `${narrator}: "Step 1 — break outer gate: subtract $${b}$ from both sides"` },
-      hint: { zh: `$${a}x + ${b} - ${b} = ${result} - ${b}$\n\n左边：$+${b}$ 和 $-${b}$ 互相抵消！\n$${a}x = ${step1Result}$\n\n外门攻破！现在只剩内门了`, en: `$${a}x + ${b} - ${b} = ${result} - ${b}$\n\nLeft: $+${b}$ and $-${b}$ cancel!\n$${a}x = ${step1Result}$\n\nOuter gate broken! Only inner gate remains` },
+      text: {
+        zh: `${narrator}：第一步——攻外门：两边减 $${b}$\n$${a}x + ${b} - ${b} = ${result} - ${b}$\n$+${b}$ 和 $-${b}$ 互相抵消！\n$${a}x = ${step1Result}$\n\n外门攻破！只剩内门了。`,
+        en: `${narrator}: "Step 1 — break outer gate: subtract $${b}$ from both sides\n$${a}x + ${b} - ${b} = ${result} - ${b}$\n$+${b}$ and $-${b}$ cancel!\n$${a}x = ${step1Result}$\n\nOuter gate broken! Only inner gate remains."`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：第二步——拆内门：两边除以 $${a}$`, en: `${narrator}: "Step 2 — break inner gate: divide both sides by $${a}$"` },
-      hint: { zh: `$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n\n左边：$\\times ${a}$ 和 $\\div ${a}$ 抵消！\n$x = ${x}$\n\n城门全破！$x$ 被解放了`, en: `$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n\nLeft: $\\times ${a}$ and $\\div ${a}$ cancel!\n$x = ${x}$\n\nAll gates broken! $x$ is free` },
+      text: {
+        zh: `${narrator}：第二步——攻内门：两边除以 $${a}$\n$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n$\\times ${a}$ 和 $\\div ${a}$ 抵消！\n$x = ${x}$\n\n城门全破！$x$ 解放了！`,
+        en: `${narrator}: "Step 2 — break inner gate: divide both sides by $${a}$\n$\\frac{${a}x}{${a}} = \\frac{${step1Result}}{${a}}$\n$\\times ${a}$ and $\\div ${a}$ cancel!\n$x = ${x}$\n\nAll gates broken! $x$ is free!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：验算——把 $x = ${x}$ 代回原方程`, en: `${narrator}: "Verify — substitute $x = ${x}$ back"` },
-      hint: { zh: `$${a} \\times ${x} + ${b}$\n$= ${a * x} + ${b}$\n$= ${result}$ ✓ 和右边一样！`, en: `$${a} \\times ${x} + ${b}$\n$= ${a * x} + ${b}$\n$= ${result}$ ✓ matches the right side!` },
+      text: {
+        zh: `${narrator}：验算——把 $x = ${x}$ 代回去\n$${a} \\times ${x} + ${b} = ${a * x} + ${b} = ${result}$ ✓\n\n和右边一样！答案正确。`,
+        en: `${narrator}: "Verify — substitute $x = ${x}$ back\n$${a} \\times ${x} + ${b} = ${a * x} + ${b} = ${result}$ ✓\n\nMatches the right side! Answer confirmed."`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：口诀总结`, en: `${narrator}: "Summary"` },
-      hint: { zh: `两步方程解法：\n① 看清两层：外层（加减）+ 内层（乘除）\n② 先拆外层：用反操作（加→减，减→加）\n③ 再拆内层：用反操作（乘→除，除→乘）\n④ 验算：代回原方程检查\n\n口诀：从外到内，逐层击破！`, en: `Two-step equation method:\n① Identify two layers: outer (add/sub) + inner (mul/div)\n② Remove outer layer with reverse operation\n③ Remove inner layer with reverse operation\n④ Verify: substitute back\n\nRule: outside in, layer by layer!` },
+      text: {
+        zh: `${narrator}：口诀——从外到内，逐层击破！\n① 看清两层：外层（加减）+ 内层（乘除）\n② 先拆外层（反操作：加→减）\n③ 再拆内层（反操作：乘→除）\n④ 代回验算\n\n两步方程就这么简单，做得漂亮！`,
+        en: `${narrator}: "Rule — outside in, layer by layer!\n① Identify two layers: outer (add/sub) + inner (mul/div)\n② Remove outer with reverse operation\n③ Remove inner with reverse operation\n④ Verify by substituting back\n\nTwo-step equations — that simple! Brilliantly done!"`,
+      },
       highlightField: 'x',
     },
   ];
@@ -5212,33 +5283,45 @@ export function generateCoordinatesMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：为什么需要坐标？——让每个位置都有"地址"`, en: `${narrator}: "Why do we need coordinates? — Give every position an 'address'"` },
-      hint: { zh: `"敌军在东边"——太模糊了！\n"敌军在东 5 里、北 3 里"——精确！\n\n坐标就是用数字精确描述位置的方法\n战场上每个点都有唯一的"数字地址"`, en: `"The enemy is to the east" — too vague!\n"The enemy is 5 miles east, 3 miles north" — precise!\n\nCoordinates use numbers to pinpoint locations\nEvery point on the battlefield has a unique "numerical address"` },
+      text: {
+        zh: `${narrator}：为什么需要坐标？\n"敌军在东边"——太模糊了！"敌军在东 5 里、北 3 里"——精确！\n\n坐标就是用数字精确描述位置的方法。战场上每个点都有唯一的"数字地址"。`,
+        en: `${narrator}: "Why do we need coordinates?\n'The enemy is east' — too vague! 'East 5, north 3' — precise!\n\nCoordinates use numbers to pinpoint locations. Every battlefield point has a unique 'numerical address'."`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：坐标系的结构——两条轴 + 原点`, en: `${narrator}: "Coordinate system — two axes + origin"` },
-      hint: { zh: `想象一张方格地图：\n• 横着看（→）= $x$ 轴\n• 竖着看（↑）= $y$ 轴\n• 两条轴交叉的点 = 原点 $(0, 0)$\n\n每个位置用 $(x, y)$ 表示：\n先走横的（$x$），再走竖的（$y$）\n\n口诀：先横后竖，先 $x$ 后 $y$`, en: `Imagine a grid map:\n• Horizontal (→) = $x$-axis\n• Vertical (↑) = $y$-axis\n• Where they cross = origin $(0, 0)$\n\nEvery position is written $(x, y)$:\nGo horizontal first ($x$), then vertical ($y$)\n\nRule: across first, then up — $x$ before $y$` },
+      text: {
+        zh: `${narrator}：坐标系——两条轴 + 原点\n想象一张方格地图：\n• 横着看（→）= $x$ 轴\n• 竖着看（↑）= $y$ 轴\n• 交叉点 = 原点 $(0, 0)$\n\n每个位置写成 $(x, y)$。口诀：**先横后竖，先 $x$ 后 $y$**！`,
+        en: `${narrator}: "Coordinate system — two axes + origin\nImagine a grid map:\n• Horizontal (→) = $x$-axis\n• Vertical (↑) = $y$-axis\n• Where they cross = origin $(0, 0)$\n\nEvery position is $(x, y)$. Rule: **across first, then up — $x$ before $y$**!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：$x$ 坐标——往右为正，往左为负`, en: `${narrator}: "$x$ coordinate — right is positive, left is negative"` },
-      hint: { zh: `从原点出发：\n• 往右走 3 步 → $x = 3$\n• 往左走 2 步 → $x = -2$\n\n$x = ${targetX}$ 表示从原点往${targetX >= 0 ? `右走 $${targetX}$` : `左走 $${Math.abs(targetX)}$`} 步`, en: `From the origin:\n• 3 steps right → $x = 3$\n• 2 steps left → $x = -2$\n\n$x = ${targetX}$ means ${targetX >= 0 ? `$${targetX}$ steps right` : `$${Math.abs(targetX)}$ steps left`} from origin` },
+      text: {
+        zh: `${narrator}：$x$ 坐标——横着走\n从原点出发，往右 = 正，往左 = 负。\n\n$x = ${targetX}$ 表示从原点往${targetX >= 0 ? `右走 $${targetX}$` : `左走 $${Math.abs(targetX)}$`} 步。`,
+        en: `${narrator}: "$x$ coordinate — move horizontally\nFrom the origin, right = positive, left = negative.\n\n$x = ${targetX}$ means ${targetX >= 0 ? `$${targetX}$ steps right` : `$${Math.abs(targetX)}$ steps left`} from origin."`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：$y$ 坐标——往上为正，往下为负`, en: `${narrator}: "$y$ coordinate — up is positive, down is negative"` },
-      hint: { zh: `接着刚才的位置：\n• 往上走 4 步 → $y = 4$\n• 往下走 1 步 → $y = -1$\n\n$y = ${targetY}$ 表示从那个位置往${targetY >= 0 ? `上走 $${targetY}$` : `下走 $${Math.abs(targetY)}$`} 步`, en: `From the current position:\n• 4 steps up → $y = 4$\n• 1 step down → $y = -1$\n\n$y = ${targetY}$ means ${targetY >= 0 ? `$${targetY}$ steps up` : `$${Math.abs(targetY)}$ steps down`}` },
+      text: {
+        zh: `${narrator}：$y$ 坐标——竖着走\n到了 $x$ 的位置后，往上 = 正，往下 = 负。\n\n$y = ${targetY}$ 表示往${targetY >= 0 ? `上走 $${targetY}$` : `下走 $${Math.abs(targetY)}$`} 步。`,
+        en: `${narrator}: "$y$ coordinate — move vertically\nFrom the $x$ position, up = positive, down = negative.\n\n$y = ${targetY}$ means ${targetY >= 0 ? `$${targetY}$ steps up` : `$${Math.abs(targetY)}$ steps down`}."`,
+      },
       highlightField: 'y',
     },
     {
-      text: { zh: `${narrator}：所以目标位置 = $(${targetX}, ${targetY})$`, en: `${narrator}: "So the target position = $(${targetX}, ${targetY})$"` },
-      hint: { zh: `从原点出发：\n① 先横走：${targetX >= 0 ? `右 $${targetX}$` : `左 $${Math.abs(targetX)}$`}\n② 再竖走：${targetY >= 0 ? `上 $${targetY}$` : `下 $${Math.abs(targetY)}$`}\n\n到达点 $(${targetX}, ${targetY})$，在${quadrantZh}\n\n$x = ${targetX}$，$y = ${targetY}$`, en: `From origin:\n① Horizontal: ${targetX >= 0 ? `right $${targetX}$` : `left $${Math.abs(targetX)}$`}\n② Vertical: ${targetY >= 0 ? `up $${targetY}$` : `down $${Math.abs(targetY)}$`}\n\nReaches $(${targetX}, ${targetY})$, in ${quadrantEn}\n\n$x = ${targetX}$, $y = ${targetY}$` },
+      text: {
+        zh: `${narrator}：答案\n$(${targetX}, ${targetY})$ 在${quadrantZh}。\n\n从原点：① 横走 ${targetX >= 0 ? `右 $${targetX}$` : `左 $${Math.abs(targetX)}$`} ② 竖走 ${targetY >= 0 ? `上 $${targetY}$` : `下 $${Math.abs(targetY)}$`}\n\n$x = ${targetX}$，$y = ${targetY}$`,
+        en: `${narrator}: "Answer\n$(${targetX}, ${targetY})$ is in ${quadrantEn}.\n\nFrom origin: ① Horizontal ${targetX >= 0 ? `right $${targetX}$` : `left $${Math.abs(targetX)}$`} ② Vertical ${targetY >= 0 ? `up $${targetY}$` : `down $${Math.abs(targetY)}$`}\n\n$x = ${targetX}$, $y = ${targetY}$"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：记住坐标的规矩`, en: `${narrator}: "Remember the coordinate rules"` },
-      hint: { zh: `① 永远先写 $x$（横），再写 $y$（竖）\n② 右和上 = 正数，左和下 = 负数\n③ 原点 $(0, 0)$ 是起点\n④ 四个象限：\n   I $(+,+)$ 右上  |  II $(-,+)$ 左上\n   III $(-,-)$ 左下  |  IV $(+,-)$ 右下`, en: `① Always write $x$ (horizontal) first, then $y$ (vertical)\n② Right/up = positive, left/down = negative\n③ Origin $(0, 0)$ is the starting point\n④ Four quadrants:\n   I $(+,+)$ top-right  |  II $(-,+)$ top-left\n   III $(-,-)$ bottom-left  |  IV $(+,-)$ bottom-right` },
+      text: {
+        zh: `${narrator}：记住四个象限\nI $(+,+)$ 右上 | II $(-,+)$ 左上\nIII $(-,-)$ 左下 | IV $(+,-)$ 右下\n\n永远先 $x$ 后 $y$，右上正正，逆时针转！做得漂亮！`,
+        en: `${narrator}: "Remember the four quadrants\nI $(+,+)$ top-right | II $(-,+)$ top-left\nIII $(-,-)$ bottom-left | IV $(+,-)$ bottom-right\n\nAlways $x$ first then $y$, start top-right, go counter-clockwise! Brilliantly done!"`,
+      },
       highlightField: 'x',
     },
   ];
