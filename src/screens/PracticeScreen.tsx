@@ -27,6 +27,7 @@ import { AngleArc } from '../components/diagrams/AngleArc';
 import { Triangle } from '../components/diagrams/Triangle';
 import { ParallelTransversal } from '../components/diagrams/ParallelTransversal';
 import { CircleDiagram } from '../components/diagrams/CircleDiagram';
+import { SymmetryPlane } from '../components/diagrams/SymmetryPlane';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -442,6 +443,15 @@ export const PracticeScreen = ({
                 movement={0}
                 inequalityOp={currentMission.data.op as '<' | '>' | '≤' | '≥'}
                 inequalityBoundary={currentMission.data.answer as number}
+                step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep)}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'SYMMETRY' && currentMission.data?.px !== undefined ? (
+              <SymmetryPlane
+                px={currentMission.data.px as number}
+                py={currentMission.data.py as number}
+                ansX={currentMission.data.ansX as number}
+                ansY={currentMission.data.ansY as number}
+                mode={currentMission.data.mode as 'reflect_x' | 'reflect_y' | 'rotate_180'}
                 step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep)}
               />
             ) : currentPhase !== 'red' ? (
