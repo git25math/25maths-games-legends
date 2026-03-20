@@ -26,6 +26,7 @@ import { BalanceScale } from '../components/diagrams/BalanceScale';
 import { AngleArc } from '../components/diagrams/AngleArc';
 import { Triangle } from '../components/diagrams/Triangle';
 import { ParallelTransversal } from '../components/diagrams/ParallelTransversal';
+import { CircleDiagram } from '../components/diagrams/CircleDiagram';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -427,6 +428,12 @@ export const PracticeScreen = ({
                 }
                 rightAngle={0}
                 labels={['', '', '']}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'CIRCLE' && currentMission.data?.r !== undefined ? (
+              <CircleDiagram
+                radius={currentMission.data.r as number}
+                showArea={currentMission.data.mode === 'area'}
+                showCircumference={currentMission.data.mode === 'circumference'}
               />
             ) : currentPhase !== 'red' ? (
               <VisualData mission={currentMission} lang={lang} />
