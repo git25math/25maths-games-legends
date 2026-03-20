@@ -4349,23 +4349,45 @@ export function generateSequenceY7Mission(template: Mission): Mission {
 
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}：每天招募新兵，看看人数有什么规律`, en: `${narrator}: "Daily recruitment numbers — spot the pattern"` },
-        hint: { zh: `数列：$${termsStr}$\n\n什么是"数列"？就是按一定规律排列的一串数\n就像每天记录新兵人数：\n第 1 天：${terms[0]} 人\n第 2 天：${terms[1]} 人\n第 3 天：${terms[2]} 人\n第 4 天：${terms[3]} 人`, en: `Sequence: $${termsStr}$\n\nWhat is a sequence? Numbers arranged in a pattern\nLike daily recruitment records:\nDay 1: ${terms[0]}\nDay 2: ${terms[1]}\nDay 3: ${terms[2]}\nDay 4: ${terms[3]}` },
+        text: {
+          zh: `${narrator}：为什么要学数列？\n每天招募新兵，人数有规律：$${termsStr}$\n\n什么是"数列"？按一定规律排列的一串数。\n就像每天的记录：第1天 ${terms[0]} 人，第2天 ${terms[1]} 人……看出来了吗？`,
+          en: `${narrator}: "Why learn sequences?\nDaily recruitment follows a pattern: $${termsStr}$\n\nWhat is a sequence? Numbers arranged in a pattern.\nLike daily records: Day 1: ${terms[0]}, Day 2: ${terms[1]}... See the pattern?"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：怎么找规律？看相邻两个数的差`, en: `${narrator}: "How to find the pattern? Look at the difference between neighbours"` },
-        hint: { zh: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n$${terms[3]} - ${terms[2]} = ${d}$\n\n每次都差 $${d}$！这叫"公差"\n意思是：每一天比前一天多招 $${d}$ 人`, en: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n$${terms[3]} - ${terms[2]} = ${d}$\n\nAlways a difference of $${d}$! This is the "common difference"\nMeaning: each day recruits $${d}$ more than the last` },
+        text: {
+          zh: `${narrator}：怎么找规律？看相邻两数的差！\n$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n$${terms[3]} - ${terms[2]} = ${d}$\n\n每次都差 $${d}$！这叫"公差"——每天比前一天多招 $${d}$ 人。`,
+          en: `${narrator}: "How to find the pattern? Look at differences!\n$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n$${terms[3]} - ${terms[2]} = ${d}$\n\nAlways $${d}$! This is the 'common difference' — $${d}$ more each day."`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：下一项 = 最后一项 + 公差`, en: `${narrator}: "Next term = last term + common difference"` },
-        hint: { zh: `最后一项是 $${terms[showCount - 1]}$\n公差是 $${d}$\n\n下一项 = $${terms[showCount - 1]} + ${d} = ${answer}$`, en: `Last term is $${terms[showCount - 1]}$\nCommon difference is $${d}$\n\nNext term = $${terms[showCount - 1]} + ${d} = ${answer}$` },
+        text: {
+          zh: `${narrator}：知道公差就能预测下一个！\n下一项 = 最后一项 + 公差\n$= ${terms[showCount - 1]} + ${d} = ${answer}$\n\n就像预测明天的招兵人数——有了规律，未来可预见！`,
+          en: `${narrator}: "With the common difference, predict the next!\nNext term = last term + common difference\n$= ${terms[showCount - 1]} + ${d} = ${answer}$\n\nLike predicting tomorrow's recruitment — with a pattern, the future is predictable!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：验算——新数字符合规律吗？`, en: `${narrator}: "Verify — does the new number fit the pattern?"` },
-        hint: { zh: `完整数列：$${termsStr}, ${answer}$\n\n检查：$${answer} - ${terms[showCount - 1]} = ${d}$ ✓\n公差不变，规律成立！`, en: `Full sequence: $${termsStr}, ${answer}$\n\nCheck: $${answer} - ${terms[showCount - 1]} = ${d}$ ✓\nConstant difference — pattern holds!` },
+        text: {
+          zh: `${narrator}：答案\n下一项 = $${answer}$\n\n完整数列：$${termsStr}, ${answer}$`,
+          en: `${narrator}: "Answer\nNext term = $${answer}$\n\nFull sequence: $${termsStr}, ${answer}$"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算——新数字符合规律吗？\n$${answer} - ${terms[showCount - 1]} = ${d}$ ✓ 公差不变！\n\n整个数列每一步都差 $${d}$，规律完美成立！`,
+          en: `${narrator}: "Verify — does the new number fit?\n$${answer} - ${terms[showCount - 1]} = ${d}$ ✓ Same difference!\n\nEvery step differs by $${d}$ — pattern holds perfectly!"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：总结\n等差数列：每一项比前一项多（或少）相同的数。\n找规律 → 算公差 → 加上去 → 验算。\n\n有了这个方法，任何等差数列都难不倒你！做得漂亮！`,
+          en: `${narrator}: "Summary\nArithmetic sequence: each term differs from the last by the same amount.\nFind pattern → calculate difference → add → verify.\n\nWith this method, no arithmetic sequence can stump you! Brilliantly done!"`,
+        },
         highlightField: 'ans',
       },
     ];
@@ -4391,28 +4413,45 @@ export function generateSequenceY7Mission(template: Mission): Mission {
 
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}：远征军第 $${n}$ 天的补给量是多少？不用逐天数，用公式直接算`, en: `${narrator}: "What's the supply on day $${n}$? Don't count day by day — use a formula"` },
-        hint: { zh: `数列：$${termsStr}, \\ldots$\n\n如果要求第 $${n}$ 项，逐个数太慢了\n我们需要一个"直达公式"——给出位置 $n$，直接算出值`, en: `Sequence: $${termsStr}, \\ldots$\n\nCounting to term $${n}$ one by one is too slow\nWe need a "direct formula" — give it position $n$, get the value` },
+        text: {
+          zh: `${narrator}：远征军第 $${n}$ 天的补给量是多少？\n数列：$${termsStr}, \\ldots$\n\n逐个数到第 $${n}$ 项太慢了——我们需要一个"直达公式"！\n给出位置 $n$，直接算出值。`,
+          en: `${narrator}: "What's the supply on day $${n}$?\nSequence: $${termsStr}, \\ldots$\n\nCounting one by one to term $${n}$ is too slow — we need a 'direct formula'!\nGive it position $n$, get the value instantly."`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：第一步——找公差`, en: `${narrator}: "Step 1 — find the common difference"` },
-        hint: { zh: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n\n公差 $d = ${d}$（每次加 $${d}$）`, en: `$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n\nCommon difference $d = ${d}$ (adding $${d}$ each time)` },
+        text: {
+          zh: `${narrator}：第一步——找公差\n$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n\n公差 $d = ${d}$（每次加 $${d}$）。有了公差就能用公式了！`,
+          en: `${narrator}: "Step 1 — find the common difference\n$${terms[1]} - ${terms[0]} = ${d}$\n$${terms[2]} - ${terms[1]} = ${d}$\n\nCommon difference $d = ${d}$ (adding $${d}$ each time). With this, we can use the formula!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：第二步——理解公式为什么是 $(n-1)$ 而不是 $n$`, en: `${narrator}: "Step 2 — why $(n-1)$ and not $n$?"` },
-        hint: { zh: `第 1 项（起点）：$${a1}$，加了 $0$ 次公差\n第 2 项：$${a1} + ${d} \\times 1 = ${a1 + d}$，加了 $1$ 次\n第 3 项：$${a1} + ${d} \\times 2 = ${a1 + 2*d}$，加了 $2$ 次\n\n看到规律了吗？第 $n$ 项加了 $(n-1)$ 次公差！\n因为第 1 项还没开始加`, en: `Term 1 (start): $${a1}$, added $0$ differences\nTerm 2: $${a1} + ${d} \\times 1 = ${a1 + d}$, added $1$ time\nTerm 3: $${a1} + ${d} \\times 2 = ${a1 + 2*d}$, added $2$ times\n\nSee the pattern? Term $n$ adds $(n-1)$ differences!\nBecause term 1 hasn't added any yet` },
+        text: {
+          zh: `${narrator}：公式为什么是 $(n-1)$？\n第 1 项：$${a1}$，加了 $0$ 次公差\n第 2 项：$${a1} + ${d} \\times 1 = ${a1 + d}$，加了 $1$ 次\n第 3 项：$${a1} + ${d} \\times 2 = ${a1 + 2*d}$，加了 $2$ 次\n\n规律：第 $n$ 项加了 $(n-1)$ 次公差——因为第 1 项还没开始加！`,
+          en: `${narrator}: "Why $(n-1)$ in the formula?\nTerm 1: $${a1}$, added $0$ differences\nTerm 2: $${a1} + ${d} \\times 1 = ${a1 + d}$, added $1$ time\nTerm 3: $${a1} + ${d} \\times 2 = ${a1 + 2*d}$, added $2$ times\n\nPattern: term $n$ adds $(n-1)$ differences — because term 1 hasn't added any yet!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：第三步——代入公式`, en: `${narrator}: "Step 3 — plug into the formula"` },
-        hint: { zh: `公式：第 $n$ 项 $= a_1 + (n-1) \\times d$\n\n$a_1 = ${a1}$（首项）\n$d = ${d}$（公差）\n$n = ${n}$（要求第几项）\n\n$= ${a1} + (${n} - 1) \\times ${d}$\n$= ${a1} + ${n-1} \\times ${d}$\n$= ${a1} + ${(n-1)*d}$\n$= ${answer}$`, en: `Formula: term $n$ $= a_1 + (n-1) \\times d$\n\n$a_1 = ${a1}$ (first term)\n$d = ${d}$ (common difference)\n$n = ${n}$ (which term)\n\n$= ${a1} + (${n} - 1) \\times ${d}$\n$= ${a1} + ${n-1} \\times ${d}$\n$= ${a1} + ${(n-1)*d}$\n$= ${answer}$` },
+        text: {
+          zh: `${narrator}：代入公式\n$\\text{第 } n \\text{ 项} = a_1 + (n-1) \\times d$\n$= ${a1} + (${n} - 1) \\times ${d}$\n$= ${a1} + ${n-1} \\times ${d}$\n$= ${a1} + ${(n-1)*d} = ${answer}$`,
+          en: `${narrator}: "Plug into the formula\n$\\text{Term } n = a_1 + (n-1) \\times d$\n$= ${a1} + (${n} - 1) \\times ${d}$\n$= ${a1} + ${n-1} \\times ${d}$\n$= ${a1} + ${(n-1)*d} = ${answer}$"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：验算——答案合理吗？`, en: `${narrator}: "Verify — is the answer reasonable?"` },
-        hint: { zh: `第 $${n}$ 项 = $${answer}$\n\n快速检查：\n• 比第 1 项（$${a1}$）大？$${answer} > ${a1}$ ✓\n• 每次加 $${d}$，加了 $${n-1}$ 次\n• 总共多了 $${d} \\times ${n-1} = ${(n-1)*d}$\n• $${a1} + ${(n-1)*d} = ${answer}$ ✓`, en: `Term $${n}$ = $${answer}$\n\nQuick check:\n• Bigger than term 1 ($${a1}$)? $${answer} > ${a1}$ ✓\n• Adding $${d}$ a total of $${n-1}$ times\n• Total added: $${d} \\times ${n-1} = ${(n-1)*d}$\n• $${a1} + ${(n-1)*d} = ${answer}$ ✓` },
+        text: {
+          zh: `${narrator}：答案\n第 $${n}$ 项 = $${answer}$\n\n不用逐个数，公式一步到位！`,
+          en: `${narrator}: "Answer\nTerm $${n}$ = $${answer}$\n\nNo counting one by one — the formula gets there in one shot!"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算\n• 比第 1 项（$${a1}$）大？$${answer} > ${a1}$ ✓\n• 加了 $${n-1}$ 次公差 $${d}$：$${d} \\times ${n-1} = ${(n-1)*d}$\n• $${a1} + ${(n-1)*d} = ${answer}$ ✓\n\n远征军补给计划精准无误，做得漂亮！`,
+          en: `${narrator}: "Verify\n• Bigger than term 1 ($${a1}$)? $${answer} > ${a1}$ ✓\n• Added $${d}$ exactly $${n-1}$ times: $${d} \\times ${n-1} = ${(n-1)*d}$\n• $${a1} + ${(n-1)*d} = ${answer}$ ✓\n\nExpedition supply plan spot-on — brilliantly done!"`,
+        },
         highlightField: 'ans',
       },
     ];
