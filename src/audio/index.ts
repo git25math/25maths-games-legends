@@ -90,12 +90,24 @@ export function useAudio() {
   // --- Streak ---
   const playStreak = useCallback((count: number) => {
     if (!guard()) return;
+    
+    // Drive music intensity based on streak (0 to 1)
+    const intensity = Math.min(1, count / 8);
+    engine.setMusicIntensity(intensity);
+    (window as any)._gl_musicIntensity = intensity; // Bridge to BGM loop
+
     if (count >= 5) engine.play(streak5);
     else if (count >= 3) engine.play(streak3);
     else if (count >= 2) engine.play(streak2);
   }, []);
 
-  const playStreakBreak = useCallback(() => { if (guard()) engine.play(streakBreak); }, []);
+  const playStreakBreak = useCallback(() => { 
+    if (guard()) {
+      engine.play(streakBreak);
+      engine.setMusicIntensity(0);
+      (window as any)._gl_musicIntensity = 0;
+    }
+  }, []);
 
   // --- Skills ---
   const playShieldOn = useCallback(() => { if (guard()) engine.play(shieldOn); }, []);

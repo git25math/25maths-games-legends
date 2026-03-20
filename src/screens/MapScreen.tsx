@@ -211,7 +211,7 @@ export const MapScreen = ({
                 <p className="text-white/60 text-sm">
                   {dailyDone
                     ? <><CheckCircle2 size={14} className="inline text-emerald-400 mr-1" />{t.dailyCompleted} · {t.dailyCountdown} {formatCountdown(countdown)}</>
-                    : <>{lt(dailyMission.title, lang)} — {lt(dailyMission.description, lang).slice(0, 40)}...</>
+                    : <>{lt(dailyMission.title, lang)} — {t.questionTypes[dailyMission.type]}</>
                   }
                 </p>
               </div>

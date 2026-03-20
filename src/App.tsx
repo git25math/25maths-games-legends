@@ -15,7 +15,7 @@ import { MathBattle } from './components/MathBattle';
 import { SkillCardSelector } from './components/SkillCardSelector';
 import { generateMission } from './utils/generateMission';
 import { MISSIONS as LOCAL_MISSIONS } from './data/missions';
-import { getDailyKey, DAILY_MULTIPLIER, isDailyCompleted } from './utils/dailyChallenge';
+import { getDailyKey, DAILY_MULTIPLIER } from './utils/dailyChallenge';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
 import { MapScreen } from './screens/MapScreen';
@@ -172,11 +172,11 @@ export default function App() {
 
   const handleBattleComplete = async (success: boolean, score = 0, durationSecs = 0, hpRemaining = 0) => {
     if (success && activeMission && profile) {
-      // If daily challenge, mark it completed BEFORE recordBattleComplete
-      // so the daily key is included in the same completed_missions object
+      // If daily challenge, inject daily key into completed_missions BEFORE
+      // recordBattleComplete, which spreads profile.completed_missions internally.
+      // This ensures both mission completion and daily flag are saved atomically.
       if (isDailyBattle) {
-        const dailyKey = getDailyKey();
-        profile.completed_missions = { ...profile.completed_missions, [dailyKey]: true } as any;
+        (profile.completed_missions as Record<string, unknown>)[getDailyKey()] = true;
       }
 
       await recordBattleComplete(
@@ -267,7 +267,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v6.1.0</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v6.2.0</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">

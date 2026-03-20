@@ -242,6 +242,17 @@ class SoundEngine {
     }
   }
 
+  private musicIntensity = 0;
+
+  /** Set global music intensity (0 to 1). Drives LPF and layering. */
+  setMusicIntensity(level: number): void {
+    this.musicIntensity = Math.max(0, Math.min(1, level));
+  }
+
+  getMusicIntensity(): number {
+    return this.musicIntensity;
+  }
+
   getContext(): AudioContext {
     return this.ensureCtx();
   }

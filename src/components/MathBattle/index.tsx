@@ -96,6 +96,7 @@ export const MathBattle = ({
   const achievementTimerRef = useRef<number | null>(null);
   const shakeTimerRef = useRef<number | null>(null);
   const advanceTimerRef = useRef<number | null>(null);
+  const milestoneTimerRef = useRef<number | null>(null);
   const floatingKeyRef = useRef(0);
 
   const {
@@ -132,6 +133,7 @@ export const MathBattle = ({
       if (achievementTimerRef.current !== null) clearTimeout(achievementTimerRef.current);
       if (shakeTimerRef.current !== null) clearTimeout(shakeTimerRef.current);
       if (advanceTimerRef.current !== null) clearTimeout(advanceTimerRef.current);
+      if (milestoneTimerRef.current !== null) clearTimeout(milestoneTimerRef.current);
     };
   }, []);
 
@@ -207,7 +209,8 @@ export const MathBattle = ({
         // Streak milestone flash (3/5/8)
         if ([3, 5, 8].includes(newStreak)) {
           setStreakMilestone(newStreak);
-          window.setTimeout(() => setStreakMilestone(null), 800);
+          if (milestoneTimerRef.current !== null) clearTimeout(milestoneTimerRef.current);
+          milestoneTimerRef.current = window.setTimeout(() => setStreakMilestone(null), 800);
           // Award streak token at streak 5
           if (newStreak === 5 && onStreakToken) onStreakToken();
         }
@@ -261,11 +264,9 @@ export const MathBattle = ({
         // Show partial wrong answer panel then advance
         setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
       } else {
-        // Single question partial: show review panel, let them retry
-        // (Score applied only if they eventually get it fully correct)
-        const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
-        const partialScore = Math.round(mission.reward * 0.5 * multiplier * dailyMultiplier);
-        setPartialCreditInfo({ score: partialScore });
+        // Single question partial: show encouraging review panel, let them retry
+        // No score awarded — score only on full correct
+        setPartialCreditInfo({ score: 0 });
         setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
       }
     } else {
@@ -569,7 +570,7 @@ export const MathBattle = ({
                 tutorialSteps={interpolatedTutorialSteps}
                 lang={lang}
                 onContinue={handleWrongAnswerContinue}
-                storyText={mission.storyConsequence ? lt(mission.storyConsequence.wrong, lang) : undefined}
+                storyText={!partialCreditInfo && mission.storyConsequence ? lt(mission.storyConsequence.wrong, lang) : undefined}
                 isPartial={!!partialCreditInfo}
                 partialScore={partialCreditInfo?.score}
               />
@@ -625,7 +626,7 @@ export const MathBattle = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.6, 0] }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="absolute inset-0 bg-gradient-to-b from-yellow-400/30 via-yellow-500/10 to-transparent pointer-events-none z-25"
+              className="absolute inset-0 bg-gradient-to-b from-yellow-400/30 via-yellow-500/10 to-transparent pointer-events-none z-[25]"
             />
           )}
         </AnimatePresence>

@@ -365,8 +365,8 @@ export function checkPartialCredit(mission: Mission, inputs: { [key: string]: st
     let correctFields = 0;
     for (const f of fields) {
       const userVal = parse(inputs[f] || '');
-      const expVal = parseFloat(expected[f]);
-      if (!isNaN(expVal) && Math.abs(userVal - expVal) < 0.01) {
+      const expVal = parse(expected[f] || '');
+      if (!isNaN(expVal) && !isNaN(userVal) && Math.abs(userVal - expVal) < 0.01) {
         correctFields++;
       }
     }
@@ -379,7 +379,7 @@ export function checkPartialCredit(mission: Mission, inputs: { [key: string]: st
   if (fields.length === 1) {
     const f = fields[0];
     const userVal = parse(inputs[f] || '');
-    const expVal = parseFloat(expected[f]);
+    const expVal = parse(expected[f] || '');
     if (!isNaN(expVal) && !isNaN(userVal) && expVal !== 0) {
       const relError = Math.abs(userVal - expVal) / Math.abs(expVal);
       if (relError > 0 && relError < 0.15) {

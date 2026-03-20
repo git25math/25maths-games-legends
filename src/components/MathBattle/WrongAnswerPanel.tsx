@@ -5,6 +5,7 @@ import { MathView } from '../MathView';
 import { lt } from '../../i18n/resolveText';
 import { INPUT_FIELDS } from './inputConfig';
 import { staggerContainer, staggerItem } from '../../utils/animationPresets';
+import { parseAnswer } from '../../utils/parseAnswer';
 
 const LABELS = {
   zh: {
@@ -85,7 +86,7 @@ export function WrongAnswerPanel({
       <div className={`flex items-center gap-2 font-bold ${isPartial ? 'text-yellow-700' : 'text-red-700'}`}>
         {isPartial ? <Star size={20} className="text-yellow-500" /> : <AlertTriangle size={20} />}
         <span>{isPartial ? t.partialTitle : t.title}</span>
-        {isPartial && partialScore !== undefined && (
+        {isPartial && partialScore !== undefined && partialScore > 0 && (
           <span className="ml-auto text-sm bg-yellow-200 px-2 py-0.5 rounded-full font-black text-yellow-800">+{partialScore} (50%)</span>
         )}
       </div>
@@ -102,11 +103,15 @@ export function WrongAnswerPanel({
         {relevantFields.map(field => {
           const userVal = userInputs[field.id] || '—';
           const correctVal = expected[field.id] || '?';
+          // In partial mode, check if this specific field was correct
+          const fieldCorrect = isPartial && userVal !== '—' && correctVal !== '?' &&
+            !isNaN(parseAnswer(userVal)) && !isNaN(parseFloat(correctVal)) &&
+            Math.abs(parseAnswer(userVal) - parseFloat(correctVal)) < 0.01;
           return (
             <motion.div variants={staggerItem} key={field.id} className="grid grid-cols-2 gap-3">
-              <div className="bg-red-100 rounded-lg p-3 text-center">
-                <div className="text-[10px] font-bold text-red-400 uppercase mb-1">{t.yourAnswer}</div>
-                <div className="text-lg font-black text-red-700">{userVal}</div>
+              <div className={`rounded-lg p-3 text-center ${fieldCorrect ? 'bg-emerald-100' : isPartial ? 'bg-yellow-100' : 'bg-red-100'}`}>
+                <div className={`text-[10px] font-bold uppercase mb-1 ${fieldCorrect ? 'text-emerald-500' : isPartial ? 'text-yellow-500' : 'text-red-400'}`}>{t.yourAnswer}</div>
+                <div className={`text-lg font-black ${fieldCorrect ? 'text-emerald-700' : isPartial ? 'text-yellow-700' : 'text-red-700'}`}>{userVal}</div>
               </div>
               <div className="bg-emerald-100 rounded-lg p-3 text-center">
                 <div className="text-[10px] font-bold text-emerald-500 uppercase mb-1">{t.correctAnswer}</div>
@@ -126,7 +131,7 @@ export function WrongAnswerPanel({
 
       {/* Formula reminder */}
       {formula && (
-        <div className="bg-white/60 rounded-lg p-3 border border-red-100">
+        <div className={`bg-white/60 rounded-lg p-3 border ${isPartial ? 'border-yellow-200' : 'border-red-100'}`}>
           <div className="text-[10px] font-bold text-slate-500 uppercase mb-1">{t.explanation}</div>
           <div className="flex justify-center">
             <MathView tex={formula.replace(/\$/g, '')} className="text-base text-slate-800" />
@@ -136,7 +141,7 @@ export function WrongAnswerPanel({
 
       {/* Tutorial steps if available (show last step = solution) */}
       {tutorialSteps && tutorialSteps.length > 0 && (
-        <div className="bg-white/60 rounded-lg p-3 border border-red-100 text-sm text-slate-700 leading-relaxed">
+        <div className={`bg-white/60 rounded-lg p-3 border text-sm text-slate-700 leading-relaxed ${isPartial ? 'border-yellow-200' : 'border-red-100'}`}>
           {lt(tutorialSteps[tutorialSteps.length - 1].text, lang)}
         </div>
       )}
