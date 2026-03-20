@@ -3735,68 +3735,86 @@ export function generateSquareRootMission(template: Mission): Mission {
   const tutorialSteps = op === 'sqrt' ? [
     {
       text: {
-        zh: `${narrator}：平方根是平方的反操作`,
-        en: `${narrator}: "Square root is the reverse of squaring"`,
-      },
-      hint: {
-        zh: `如果 $${answer}^2 = ${answer} \\times ${answer} = ${n}$\n那么 $\\sqrt{${n}} = ${answer}$\n\n"谁的平方等于 ${n}？"——答案是 ${answer}`,
-        en: `If $${answer}^2 = ${answer} \\times ${answer} = ${n}$\nThen $\\sqrt{${n}} = ${answer}$\n\n"Whose square equals ${n}?" — answer is ${answer}`,
+        zh: `${narrator}：为什么要学平方根？\n侦察到敌军方阵 $${n}$ 人——每行几人？\n\n知道总面积（$${n}$），反推边长——这就是平方根！\n平方根是平方的**反操作**："谁的平方等于 $${n}$？"`,
+        en: `${narrator}: "Why learn square roots?\nEnemy square formation has $${n}$ soldiers — how many per row?\n\nKnow the total area ($${n}$), find the side — that's the square root!\nSquare root is the REVERSE of squaring: 'whose square equals $${n}$?'"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：侦察到敌军方阵 $${n}$ 人，每行几人？`,
-        en: `${narrator}: "Enemy square formation has $${n}$ soldiers — how many per row?"`,
-      },
-      hint: {
-        zh: `方阵 = 正方形排列 → 总人数 = 行数 × 行数\n$${n} = ${answer} \\times ${answer}$\n所以每行 ${answer} 人`,
-        en: `Square formation → total = rows × rows\n$${n} = ${answer} \\times ${answer}$\nSo ${answer} per row`,
+        zh: `${narrator}：怎么找？想想哪个数乘以自己等于 $${n}$\n$${answer} \\times ${answer} = ${n}$ ✓\n\n所以 $\\sqrt{${n}} = ${answer}$——方阵每行 $${answer}$ 人！`,
+        en: `${narrator}: "How to find it? Think: which number times itself equals $${n}$?\n$${answer} \\times ${answer} = ${n}$ ✓\n\nSo $\\sqrt{${n}} = ${answer}$ — $${answer}$ soldiers per row!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：记住常见完全平方数`,
-        en: `${narrator}: "Remember common perfect squares"`,
+        zh: `${narrator}：如果不确定，可以试几个数\n$${answer > 2 ? `${answer-1} \\times ${answer-1} = ${(answer-1)*(answer-1)}$（太小）\n` : ''}${answer} \\times ${answer} = ${n}$（刚好！）\n${answer < 15 ? `$${answer+1} \\times ${answer+1} = ${(answer+1)*(answer+1)}$（太大）` : ''}\n\n夹在中间一试就知道了！`,
+        en: `${narrator}: "If unsure, try a few numbers\n${answer > 2 ? `$${answer-1} \\times ${answer-1} = ${(answer-1)*(answer-1)}$ (too small)\n` : ''}$${answer} \\times ${answer} = ${n}$ (perfect!)\n${answer < 15 ? `$${answer+1} \\times ${answer+1} = ${(answer+1)*(answer+1)}$ (too big)` : ''}\n\nBracket it and you'll find it!"`,
       },
-      hint: {
-        zh: '$\\sqrt{4}=2,\\ \\sqrt{9}=3,\\ \\sqrt{16}=4,\\ \\sqrt{25}=5$\n$\\sqrt{36}=6,\\ \\sqrt{49}=7,\\ \\sqrt{64}=8,\\ \\sqrt{81}=9,\\ \\sqrt{100}=10$',
-        en: '$\\sqrt{4}=2,\\ \\sqrt{9}=3,\\ \\sqrt{16}=4,\\ \\sqrt{25}=5$\n$\\sqrt{36}=6,\\ \\sqrt{49}=7,\\ \\sqrt{64}=8,\\ \\sqrt{81}=9,\\ \\sqrt{100}=10$',
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n$\\sqrt{${n}} = ${answer}$`,
+        en: `${narrator}: "Answer\n$\\sqrt{${n}} = ${answer}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——平方回去\n$${answer}^2 = ${answer} \\times ${answer} = ${n}$ ✓\n\n平方和平方根是互逆运算——就像乘法和除法！`,
+        en: `${narrator}: "Verify — square it back\n$${answer}^2 = ${answer} \\times ${answer} = ${n}$ ✓\n\nSquaring and square root are inverses — like multiplication and division!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：必背表\n$\\sqrt{4}=2$，$\\sqrt{9}=3$，$\\sqrt{16}=4$，$\\sqrt{25}=5$\n$\\sqrt{36}=6$，$\\sqrt{49}=7$，$\\sqrt{64}=8$，$\\sqrt{81}=9$，$\\sqrt{100}=10$\n\n背熟这些，平方根一秒搞定！做得漂亮！`,
+        en: `${narrator}: "Must memorize\n$\\sqrt{4}=2$, $\\sqrt{9}=3$, $\\sqrt{16}=4$, $\\sqrt{25}=5$\n$\\sqrt{36}=6$, $\\sqrt{49}=7$, $\\sqrt{64}=8$, $\\sqrt{81}=9$, $\\sqrt{100}=10$\n\nMemorize these and square roots take one second! Brilliantly done!"`,
       },
       highlightField: 'ans',
     },
   ] : [
     {
       text: {
-        zh: `${narrator}：立方根是立方的反操作`,
-        en: `${narrator}: "Cube root is the reverse of cubing"`,
-      },
-      hint: {
-        zh: `如果 $${answer}^3 = ${answer} \\times ${answer} \\times ${answer} = ${n}$\n那么 $\\sqrt[3]{${n}} = ${answer}$\n\n"谁的立方等于 ${n}？"——答案是 ${answer}`,
-        en: `If $${answer}^3 = ${answer} \\times ${answer} \\times ${answer} = ${n}$\nThen $\\sqrt[3]{${n}} = ${answer}$\n\n"Whose cube equals ${n}?" — answer is ${answer}`,
+        zh: `${narrator}：为什么要学立方根？\n粮仓体积 $${n}$ 立方，边长是多少？\n\n知道总体积，反推边长——这就是立方根！\n立方根是立方的**反操作**："谁的立方等于 $${n}$？"`,
+        en: `${narrator}: "Why learn cube roots?\nWarehouse volume is $${n}$ cubic — what's the side length?\n\nKnow the volume, find the side — that's the cube root!\nCube root is the REVERSE of cubing: 'whose cube equals $${n}$?'"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：粮仓体积 $${n}$ 箱，边长几箱？`,
-        en: `${narrator}: "Warehouse volume is $${n}$ crates — what's the side length?"`,
-      },
-      hint: {
-        zh: `正方体粮仓 → 体积 = 边长 × 边长 × 边长\n$${n} = ${answer} \\times ${answer} \\times ${answer}$\n所以边长 ${answer}`,
-        en: `Cube warehouse → volume = side × side × side\n$${n} = ${answer} \\times ${answer} \\times ${answer}$\nSo side = ${answer}`,
+        zh: `${narrator}：哪个数乘三次等于 $${n}$？\n$${answer} \\times ${answer} \\times ${answer} = ${n}$ ✓\n\n所以 $\\sqrt[3]{${n}} = ${answer}$——粮仓边长 $${answer}$！`,
+        en: `${narrator}: "Which number times itself three times equals $${n}$?\n$${answer} \\times ${answer} \\times ${answer} = ${n}$ ✓\n\nSo $\\sqrt[3]{${n}} = ${answer}$ — warehouse side = $${answer}$!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：记住常见完全立方数`,
-        en: `${narrator}: "Remember common perfect cubes"`,
+        zh: `${narrator}：答案\n$\\sqrt[3]{${n}} = ${answer}$`,
+        en: `${narrator}: "Answer\n$\\sqrt[3]{${n}} = ${answer}$"`,
       },
-      hint: {
-        zh: '$\\sqrt[3]{8}=2,\\ \\sqrt[3]{27}=3,\\ \\sqrt[3]{64}=4,\\ \\sqrt[3]{125}=5$\n$\\sqrt[3]{216}=6,\\ \\sqrt[3]{343}=7,\\ \\sqrt[3]{512}=8,\\ \\sqrt[3]{729}=9,\\ \\sqrt[3]{1000}=10$',
-        en: '$\\sqrt[3]{8}=2,\\ \\sqrt[3]{27}=3,\\ \\sqrt[3]{64}=4,\\ \\sqrt[3]{125}=5$\n$\\sqrt[3]{216}=6,\\ \\sqrt[3]{343}=7,\\ \\sqrt[3]{512}=8,\\ \\sqrt[3]{729}=9,\\ \\sqrt[3]{1000}=10$',
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——立方回去\n$${answer}^3 = ${answer} \\times ${answer} \\times ${answer} = ${n}$ ✓\n\n立方和立方根是互逆运算！`,
+        en: `${narrator}: "Verify — cube it back\n$${answer}^3 = ${answer} \\times ${answer} \\times ${answer} = ${n}$ ✓\n\nCubing and cube root are inverses!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：必背表\n$\\sqrt[3]{8}=2$，$\\sqrt[3]{27}=3$，$\\sqrt[3]{64}=4$，$\\sqrt[3]{125}=5$\n$\\sqrt[3]{216}=6$，$\\sqrt[3]{343}=7$，$\\sqrt[3]{512}=8$，$\\sqrt[3]{729}=9$，$\\sqrt[3]{1000}=10$`,
+        en: `${narrator}: "Must memorize\n$\\sqrt[3]{8}=2$, $\\sqrt[3]{27}=3$, $\\sqrt[3]{64}=4$, $\\sqrt[3]{125}=5$\n$\\sqrt[3]{216}=6$, $\\sqrt[3]{343}=7$, $\\sqrt[3]{512}=8$, $\\sqrt[3]{729}=9$, $\\sqrt[3]{1000}=10$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：平方根 vs 立方根——对比记忆\n$\\sqrt{n}$：谁 × 谁 = $n$？（面积→边长）\n$\\sqrt[3]{n}$：谁 × 谁 × 谁 = $n$？（体积→边长）\n\n根号里的小数字告诉你"乘几次"。没数字 = 2次，3 = 3次。做得漂亮！`,
+        en: `${narrator}: "Square root vs Cube root — compare\n$\\sqrt{n}$: who × who = $n$? (area → side)\n$\\sqrt[3]{n}$: who × who × who = $n$? (volume → side)\n\nThe small number in the root tells you 'how many times'. No number = 2, 3 = 3. Brilliantly done!"`,
       },
       highlightField: 'ans',
     },
