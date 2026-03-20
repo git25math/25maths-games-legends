@@ -2315,67 +2315,43 @@ export function generateFactorTreeMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：${n} 个新兵要拆成最小的战斗单元。怎么拆？`,
-        en: `${narrator}: "${n} recruits need to be split into the smallest units. How?"`,
-      },
-      hint: {
-        zh: '"最小单元"就是质数——只能被 1 和自己整除的数\n比如 2, 3, 5, 7, 11 都是质数\n4 不是（4=2×2），6 不是（6=2×3）',
-        en: '"Smallest units" are primes — only divisible by 1 and themselves\nE.g. 2, 3, 5, 7, 11\n4 is not (4=2×2), 6 is not (6=2×3)',
+        zh: `${narrator}：${n} 个新兵要拆成最小的战斗单元——怎么拆？\n"最小单元"就是质数——只能被 $1$ 和自己整除的数。\n$2, 3, 5, 7, 11$ 都是质数。$4$ 不是（$4=2\\times2$），$6$ 不是（$6=2\\times3$）。`,
+        en: `${narrator}: "${n} recruits need splitting into smallest units — how?\n'Smallest units' are primes — only divisible by $1$ and themselves.\n$2, 3, 5, 7, 11$ are primes. $4$ is not ($4=2\\times2$), $6$ is not ($6=2\\times3$)."`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：画"因数树"——从 ${n} 开始，一层一层往下拆`,
-        en: `${narrator}: "Draw a factor tree — start with ${n}, split layer by layer"`,
-      },
-      hint: {
-        zh: `方法：从最小的质数 2 开始试\n能整除就拆成两个数，不能就试下一个质数\n直到所有数都是质数为止`,
-        en: `Method: start with smallest prime 2\nIf it divides evenly, split into two numbers\nKeep going until all numbers are prime`,
+        zh: `${narrator}：画"因数树"——从 $${n}$ 开始一层层往下拆\n方法：从最小的质数 $2$ 开始试。\n能整除就拆成两个数，不能就试下一个质数（$3, 5, 7...$）。\n直到所有数都是质数为止！`,
+        en: `${narrator}: "Draw a 'factor tree' — start with $${n}$, split layer by layer\nMethod: try the smallest prime $2$ first.\nDivides evenly? Split into two. Doesn't? Try the next prime ($3, 5, 7...$).\nStop when every number is prime!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：一步步拆 ${n}`,
-        en: `${narrator}: "Break down ${n} step by step"`,
-      },
-      hint: {
-        zh: factSteps.join('\n'),
-        en: factStepsEn.join('\n'),
+        zh: `${narrator}：一步步拆 $${n}$\n${factSteps.join('\n')}`,
+        en: `${narrator}: "Break down $${n}$ step by step\n${factStepsEn.join('\n')}"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：看因数树的"叶子"——最底部不能再拆的数`,
-        en: `${narrator}: "Look at the 'leaves' — the numbers at the bottom that can't be split further"`,
-      },
-      hint: {
-        zh: `叶子们：${leaves.join(', ')}\n一共 ${primeCount} 个质因数`,
-        en: `Leaves: ${leaves.join(', ')}\nTotal: ${primeCount} prime factors`,
+        zh: `${narrator}：看因数树的"叶子"——最底部不能再拆的数\n叶子们：$${leaves.join(', ')}$\n一共 $${primeCount}$ 个质因数。\n\n这些就是 $${n}$ 的"基本零件"！`,
+        en: `${narrator}: "Look at the 'leaves' — bottom numbers that can't split further\nLeaves: $${leaves.join(', ')}$\nTotal: $${primeCount}$ prime factors.\n\nThese are $${n}$'s 'building blocks'!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：所以 $${n} = ${factorization}$`,
-        en: `${narrator}: "So $${n} = ${factorization}$"`,
-      },
-      hint: {
-        zh: `一共 ${primeCount} 个质因数（重复的也要算）\n验算：${leaves.join(' × ')} = ${n} ✓`,
-        en: `Total ${primeCount} prime factors (count repeats)\nVerify: ${leaves.join(' × ')} = ${n} ✓`,
+        zh: `${narrator}：答案\n$${n} = ${factorization}$\n\n验算：$${leaves.join(' \\times ')} = ${n}$ ✓`,
+        en: `${narrator}: "Answer\n$${n} = ${factorization}$\n\nVerify: $${leaves.join(' \\times ')} = ${n}$ ✓"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：不管怎么拆，最终结果都一样——这叫"算术基本定理"`,
-        en: `${narrator}: "No matter how you split it, the result is always the same — this is the Fundamental Theorem of Arithmetic"`,
-      },
-      hint: {
-        zh: '试试从不同的数开始拆（比如先拆成 6×6 而不是 2×18）\n最终叶子排列出来一定相同',
-        en: 'Try splitting differently (e.g. 6×6 instead of 2×18)\nThe leaves will always be the same',
+        zh: `${narrator}：神奇的事——不管怎么拆，最终结果都一样！\n这叫"算术基本定理"。试试从不同的数开始（比如先拆成 $6\\times6$ 而不是 $2\\times18$），叶子排出来一定相同。\n\n每个数的"质数配方"是唯一的——做得漂亮！`,
+        en: `${narrator}: "Amazing fact — no matter how you split, the result is always the same!\nThis is the 'Fundamental Theorem of Arithmetic'. Try splitting differently (e.g. $6\\times6$ vs $2\\times18$) — the leaves are always identical.\n\nEvery number has a unique 'prime recipe' — brilliantly done!"`,
       },
       highlightField: 'ans',
     },
