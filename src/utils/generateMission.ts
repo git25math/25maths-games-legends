@@ -3948,33 +3948,45 @@ export function generatePerimeterRectMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：扎营第一步——算围栅需要多长。这就是"周长"`, en: `${narrator}: "First step in setting camp — calculate how much fencing we need. That's the perimeter"` },
-      hint: { zh: `周长就是沿着图形的边走一整圈，总共走了多远\n\n想象一只蚂蚁沿着营地围墙走一圈\n它走过的总距离 = 周长`, en: `Perimeter = the total distance walking around the edge of a shape\n\nImagine an ant walking along the camp fence\nTotal distance walked = perimeter` },
+      text: {
+        zh: `${narrator}：为什么要算周长？\n扎营第一步——围栏围起来！但围栏总共要多长？\n\n周长就是沿着图形的边走一整圈的总距离。\n想象一只蚂蚁沿着营地围墙走一圈，它走过的路 = 周长。`,
+        en: `${narrator}: "Why calculate perimeter?\nFirst step in setting camp — put up the fence! But how much fencing do we need?\n\nPerimeter is the total distance walking around the edge of a shape.\nImagine an ant walking along the camp fence — distance walked = perimeter."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：长方形有几条边？分别多长？`, en: `${narrator}: "How many sides does a rectangle have? How long are they?"` },
-      hint: { zh: `长方形有 4 条边：\n• 上边 = $${length}$\n• 下边 = $${length}$（和上边一样长）\n• 左边 = $${width}$\n• 右边 = $${width}$（和左边一样长）\n\n对面的边总是相等的——这就是长方形的特点！`, en: `A rectangle has 4 sides:\n• Top = $${length}$\n• Bottom = $${length}$ (same as top)\n• Left = $${width}$\n• Right = $${width}$ (same as left)\n\nOpposite sides are always equal — that's what makes it a rectangle!` },
+      text: {
+        zh: `${narrator}：长方形有 4 条边\n• 上边 = $${length}$\n• 下边 = $${length}$（和上边一样长）\n• 左边 = $${width}$\n• 右边 = $${width}$（和左边一样长）\n\n对面的边总是相等的——这就是长方形的特点！`,
+        en: `${narrator}: "A rectangle has 4 sides\n• Top = $${length}$\n• Bottom = $${length}$ (same as top)\n• Left = $${width}$\n• Right = $${width}$ (same as left)\n\nOpposite sides are always equal — that's what makes it a rectangle!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：笨办法——把 4 条边加起来`, en: `${narrator}: "Simple way — add all 4 sides"` },
-      hint: { zh: `$${length} + ${width} + ${length} + ${width}$\n$= ${length + width} + ${length + width}$\n$= ${answer}$\n\n这就是周长！`, en: `$${length} + ${width} + ${length} + ${width}$\n$= ${length + width} + ${length + width}$\n$= ${answer}$\n\nThat's the perimeter!` },
+      text: {
+        zh: `${narrator}：笨办法——把 4 条边全加起来\n$${length} + ${width} + ${length} + ${width}$\n$= ${length + width} + ${length + width}$\n$= ${answer}$\n\n这就是周长！虽然笨，但绝对不会错。`,
+        en: `${narrator}: "Simple way — add all 4 sides\n$${length} + ${width} + ${length} + ${width}$\n$= ${length + width} + ${length + width}$\n$= ${answer}$\n\nThat's the perimeter! Simple but foolproof."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：快捷公式——因为有两对相同的边`, en: `${narrator}: "Shortcut — since there are two pairs of equal sides"` },
-      hint: { zh: `先把一条长和一条宽加起来：$${length} + ${width} = ${length + width}$\n然后乘以 2（因为有两对）：$2 \\times ${length + width} = ${answer}$\n\n这就是公式 $P = 2(l + w)$ 的含义！`, en: `Add one length and one width: $${length} + ${width} = ${length + width}$\nMultiply by 2 (two pairs): $2 \\times ${length + width} = ${answer}$\n\nThat's what $P = 2(l + w)$ means!` },
+      text: {
+        zh: `${narrator}：快捷公式——因为有两对相同的边\n先把一条长和一条宽加起来：$${length} + ${width} = ${length + width}$\n然后乘以 2（因为有两对）：$2 \\times ${length + width} = ${answer}$\n\n这就是公式 $P = 2(l + w)$ 的含义！记住这个就够了。`,
+        en: `${narrator}: "Shortcut — two pairs of equal sides\nAdd one length and one width: $${length} + ${width} = ${length + width}$\nMultiply by 2 (two pairs): $2 \\times ${length + width} = ${answer}$\n\nThat's what $P = 2(l + w)$ means! Remember this and you're set."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：答案——周长 = $${answer}$`, en: `${narrator}: "Answer — Perimeter = $${answer}$"` },
-      hint: { zh: `营地的围栅需要 $${answer}$ 单位长\n\n公式：$P = 2(${length} + ${width}) = 2 \\times ${length + width} = ${answer}$`, en: `The camp fence needs $${answer}$ units of fencing\n\nFormula: $P = 2(${length} + ${width}) = 2 \\times ${length + width} = ${answer}$` },
+      text: {
+        zh: `${narrator}：答案\n周长 $P = ${answer}$\n\n营地的围栅需要 $${answer}$ 单位长！`,
+        en: `${narrator}: "Answer\nPerimeter $P = ${answer}$\n\nThe camp fence needs $${answer}$ units of fencing!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——用笨办法检查`, en: `${narrator}: "Verify — check with the simple method"` },
-      hint: { zh: `$${length} + ${width} + ${length} + ${width} = ${answer}$ ✓\n$2 \\times (${length} + ${width}) = ${answer}$ ✓\n\n两种方法答案一样——围栅需要 $${answer}$ 单位长！`, en: `$${length} + ${width} + ${length} + ${width} = ${answer}$ ✓\n$2 \\times (${length} + ${width}) = ${answer}$ ✓\n\nBoth methods match — we need $${answer}$ units of fencing!` },
+      text: {
+        zh: `${narrator}：验算——两种方法互相检查\n笨办法：$${length} + ${width} + ${length} + ${width} = ${answer}$ ✓\n公式法：$2 \\times (${length} + ${width}) = ${answer}$ ✓\n\n两种方法答案一样——围栅准备好了，做得漂亮！`,
+        en: `${narrator}: "Verify — cross-check with both methods\nSimple: $${length} + ${width} + ${length} + ${width} = ${answer}$ ✓\nFormula: $2 \\times (${length} + ${width}) = ${answer}$ ✓\n\nBoth methods match — fencing ready, brilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -4009,33 +4021,45 @@ export function generatePercentageOfMission(template: Mission): Mission {
   const tenPct = n / 10;
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：军粮 $${n}$ 石，要拨出 $${pct}\\%$ 给前锋营。到底是多少？`, en: `${narrator}: "We have $${n}$ units of grain. $${pct}\\%$ goes to the vanguard. How much is that?"` },
-      hint: { zh: `"百分"两个字拆开看：\n"百" = 100\n"分" = 份\n百分比就是"每 100 份里取几份"\n\n$${pct}\\%$ 的意思：每 100 份里取 ${pct} 份`, en: `"Per cent" literally means "per hundred"\n\n$${pct}\\%$ means: out of every 100, take ${pct}` },
+      text: {
+        zh: `${narrator}：什么是"百分比"？\n军粮 $${n}$ 石，要拨出 $${pct}\\%$ 给前锋营——到底拨多少？\n\n"百分"两个字拆开看："百" = 100，"分" = 份。\n百分比就是"每 100 份里取几份"。$${pct}\\%$ 就是每 100 份取 ${pct} 份。`,
+        en: `${narrator}: "What is 'percentage'?\nWe have $${n}$ units of grain. $${pct}\\%$ goes to the vanguard — how much exactly?\n\n'Per cent' literally means 'per hundred'.\n$${pct}\\%$ means: out of every 100, take ${pct}."`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：先从简单的开始——如果只有 100 石粮草`, en: `${narrator}: "Let's start simple — what if we only had 100 units?"` },
-      hint: { zh: `100 石粮草的 $${pct}\\%$？\n直接取 ${pct} 石就好了！\n\n因为 $${pct}\\%$ = 每 100 里取 ${pct}\n$100$ 里取 $${pct}$ → 答案就是 $${pct}$`, en: `$${pct}\\%$ of 100?\nJust take ${pct}!\n\nBecause $${pct}\\%$ = ${pct} out of every 100\n$100$ → take $${pct}$` },
+      text: {
+        zh: `${narrator}：先想简单的——如果只有 100 石粮草\n100 石的 $${pct}\\%$ 是多少？直接取 $${pct}$ 石就好了！\n\n因为 $${pct}\\%$ = 每 100 份取 ${pct} 份。\n所以 100 里取 $${pct}$ → 答案就是 $${pct}$。超简单！`,
+        en: `${narrator}: "Start simple — what if we only had 100 units?\n$${pct}\\%$ of 100? Just take $${pct}$!\n\nBecause $${pct}\\%$ = ${pct} out of every 100.\nSo from 100, take $${pct}$ → answer is $${pct}$. Super easy!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：但我们有 $${n}$ 石，不是 100 石——怎么办？`, en: `${narrator}: "But we have $${n}$, not 100 — what do we do?"` },
-      hint: { zh: `方法：先算 $1\\%$（即 $\\frac{1}{100}$），再乘以 ${pct}\n\n$1\\%$ of $${n}$ = $${n} \\div 100 = ${n/100}$\n$${pct}\\%$ of $${n}$ = $${n/100} \\times ${pct} = ${answer}$\n\n或者一步算：$${n} \\times \\frac{${pct}}{100} = ${answer}$`, en: `Method: find $1\\%$ first ($\\frac{1}{100}$), then multiply by ${pct}\n\n$1\\%$ of $${n}$ = $${n} \\div 100 = ${n/100}$\n$${pct}\\%$ of $${n}$ = $${n/100} \\times ${pct} = ${answer}$\n\nOr in one step: $${n} \\times \\frac{${pct}}{100} = ${answer}$` },
+      text: {
+        zh: `${narrator}：但我们有 $${n}$ 石，不是 100 石——怎么办？\n先算 $1\\%$（把总数除以 100），再乘以 ${pct}：\n\n$1\\%$ of $${n}$ = $${n} \\div 100 = ${n/100}$\n$${pct}\\%$ of $${n}$ = $${n/100} \\times ${pct} = ${answer}$\n\n或者一步到位：$${n} \\times \\frac{${pct}}{100} = ${answer}$`,
+        en: `${narrator}: "But we have $${n}$, not 100 — what do we do?\nFind $1\\%$ first (divide total by 100), then multiply by ${pct}:\n\n$1\\%$ of $${n}$ = $${n} \\div 100 = ${n/100}$\n$${pct}\\%$ of $${n}$ = $${n/100} \\times ${pct} = ${answer}$\n\nOr in one step: $${n} \\times \\frac{${pct}}{100} = ${answer}$"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：小捷径——先算 $10\\%$，再凑其他`, en: `${narrator}: "Shortcut — find $10\\%$ first, then build from there"` },
-      hint: { zh: `$10\\%$ 就是除以 10：$${n} \\div 10 = ${tenPct}$\n$50\\%$ 就是除以 2：$${n} \\div 2 = ${n/2}$\n$25\\%$ 就是除以 4：$${n} \\div 4 = ${n/4}$\n$1\\%$ 就是除以 100：$${n} \\div 100 = ${n/100}$\n\n任何百分比都能用 $10\\%$ 和 $1\\%$ 凑出来！`, en: `$10\\%$ = divide by 10: $${n} \\div 10 = ${tenPct}$\n$50\\%$ = divide by 2: $${n} \\div 2 = ${n/2}$\n$25\\%$ = divide by 4: $${n} \\div 4 = ${n/4}$\n$1\\%$ = divide by 100: $${n} \\div 100 = ${n/100}$\n\nAny percentage can be built from $10\\%$ and $1\\%$!` },
+      text: {
+        zh: `${narrator}：小捷径——记住这些"快速百分比"\n$10\\%$ = 除以 10：$${n} \\div 10 = ${tenPct}$\n$50\\%$ = 除以 2：$${n} \\div 2 = ${n/2}$\n$25\\%$ = 除以 4：$${n} \\div 4 = ${n/4}$\n$1\\%$ = 除以 100：$${n} \\div 100 = ${n/100}$\n\n任何百分比都能用这几个"积木"拼出来！`,
+        en: `${narrator}: "Shortcut — remember these 'quick percentages'\n$10\\%$ = divide by 10: $${n} \\div 10 = ${tenPct}$\n$50\\%$ = divide by 2: $${n} \\div 2 = ${n/2}$\n$25\\%$ = divide by 4: $${n} \\div 4 = ${n/4}$\n$1\\%$ = divide by 100: $${n} \\div 100 = ${n/100}$\n\nAny percentage can be built from these 'building blocks'!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：答案——$${pct}\\%$ of $${n}$ = $${answer}$`, en: `${narrator}: "Answer — $${pct}\\%$ of $${n}$ = $${answer}$"` },
-      hint: { zh: `$${n} \\times \\frac{${pct}}{100} = ${answer}$\n\n前锋营获得 $${answer}$ 石军粮`, en: `$${n} \\times \\frac{${pct}}{100} = ${answer}$\n\nThe vanguard gets $${answer}$ units of grain` },
+      text: {
+        zh: `${narrator}：答案\n$${pct}\\%$ of $${n}$ = $${answer}$\n\n$${n} \\times \\frac{${pct}}{100} = ${answer}$\n前锋营获得 $${answer}$ 石军粮！`,
+        en: `${narrator}: "Answer\n$${pct}\\%$ of $${n}$ = $${answer}$\n\n$${n} \\times \\frac{${pct}}{100} = ${answer}$\nThe vanguard gets $${answer}$ units of grain!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——答案合理吗？`, en: `${narrator}: "Verify — does the answer make sense?"` },
-      hint: { zh: `$${pct}\\%$ of $${n}$ = $${answer}$\n\n合理性检查：\n• $${pct}\\%$ ${pct < 50 ? '不到一半' : pct === 50 ? '刚好一半' : '超过一半'}，$${n}$ 的一半是 $${n/2}$\n• $${answer}$ ${answer < n/2 ? '< ' + n/2 : answer === n/2 ? '= ' + n/2 : '> ' + n/2} ✓ 合理！`, en: `$${pct}\\%$ of $${n}$ = $${answer}$\n\nSense check:\n• $${pct}\\%$ is ${pct < 50 ? 'less than half' : pct === 50 ? 'exactly half' : 'more than half'}, half of $${n}$ is $${n/2}$\n• $${answer}$ ${answer < n/2 ? '< ' + n/2 : answer === n/2 ? '= ' + n/2 : '> ' + n/2} ✓ Makes sense!` },
+      text: {
+        zh: `${narrator}：验算——答案合理吗？\n$${pct}\\%$ ${pct < 50 ? '不到一半' : pct === 50 ? '刚好一半' : '超过一半'}，$${n}$ 的一半是 $${n/2}$。\n$${answer}$ ${answer < n/2 ? '< ' + n/2 : answer === n/2 ? '= ' + n/2 : '> ' + n/2} ✓ 合理！\n\n军粮分配完毕，做得漂亮！`,
+        en: `${narrator}: "Verify — does the answer make sense?\n$${pct}\\%$ is ${pct < 50 ? 'less than half' : pct === 50 ? 'exactly half' : 'more than half'}, half of $${n}$ is $${n/2}$.\n$${answer}$ ${answer < n/2 ? '< ' + n/2 : answer === n/2 ? '= ' + n/2 : '> ' + n/2} ✓ Makes sense!\n\nGrain allocation complete — brilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -4090,33 +4114,45 @@ export function generateEstimationRoundMission(template: Mission): Mission {
   const roundUp = roundDown + place;
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：斥候回报敌军约 $${n}$ 人——但主公不需要精确数字，大概就行`, en: `${narrator}: "Scouts report about $${n}$ enemies — but the general just needs a rough number"` },
-      hint: { zh: `四舍五入就是——找到最接近的"整数"\n比如四舍五入到${placeNameZh}，就是找最近的 ${place} 的倍数\n\n为什么要四舍五入？\n• 快速估算（战场上没时间算精确）\n• 方便比较大小\n• 简化计算`, en: `Rounding means finding the nearest "round number"\nRounding to ${placeNameEn} = finding the nearest multiple of ${place}\n\nWhy round?\n• Quick estimates (no time for exact math in battle)\n• Easier to compare sizes\n• Simplifies calculations` },
+      text: {
+        zh: `${narrator}：为什么要四舍五入？\n斥候回报敌军约 $${n}$ 人——但主公不需要精确数字，大概就行！\n\n四舍五入就是找到最接近的"整数"。\n四舍五入到${placeNameZh}，就是找最近的 $${place}$ 的倍数。\n战场上没时间算精确数字，快速估算才能赢！`,
+        en: `${narrator}: "Why do we need rounding?\nScouts report about $${n}$ enemies — but the general just needs a rough number!\n\nRounding means finding the nearest 'round number'.\nRounding to ${placeNameEn} = finding the nearest multiple of $${place}$.\nNo time for exact math in battle — quick estimates win wars!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：四舍五入的核心——"5"是分界线`, en: `${narrator}: "The key to rounding — '5' is the dividing line"` },
-      hint: { zh: `四舍五入的规则只有一条：\n\n看关键位右边那个数字\n• $0, 1, 2, 3, 4$ → 舍（往小的走）\n• $5, 6, 7, 8, 9$ → 入（往大的走）\n\n为什么 5 归"入"？因为 5 正好在中间，约定归大`, en: `The rounding rule is simple:\n\nLook at the digit right after the rounding position\n• $0, 1, 2, 3, 4$ → round DOWN\n• $5, 6, 7, 8, 9$ → round UP\n\nWhy does 5 round up? It's exactly in the middle, by convention we round up` },
+      text: {
+        zh: `${narrator}：四舍五入的唯一规则——"5"是分界线\n看关键位右边那个数字：\n• $0, 1, 2, 3, 4$ → 舍（往小的走）\n• $5, 6, 7, 8, 9$ → 入（往大的走）\n\n为什么 5 归"入"？因为 5 正好在中间，约定归大。就这一条规则！`,
+        en: `${narrator}: "The ONE rule of rounding — '5' is the dividing line\nLook at the digit right after the rounding position:\n• $0, 1, 2, 3, 4$ → round DOWN\n• $5, 6, 7, 8, 9$ → round UP\n\nWhy does 5 round up? It's exactly in the middle — by convention we go up. Just this one rule!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：$${n}$ 夹在哪两个"整数"之间？`, en: `${narrator}: "$${n}$ sits between which two round numbers?"` },
-      hint: { zh: `$${n}$ 在 $${roundDown}$ 和 $${roundUp}$ 之间\n\n想象一条数轴：\n$${roundDown}$ ←——— $${n}$ ———→ $${roundUp}$\n\n$${n}$ 离哪个更近？`, en: `$${n}$ is between $${roundDown}$ and $${roundUp}$\n\nImagine a number line:\n$${roundDown}$ ←——— $${n}$ ———→ $${roundUp}$\n\nWhich is $${n}$ closer to?` },
+      text: {
+        zh: `${narrator}：$${n}$ 夹在哪两个"整数"之间？\n$${n}$ 在 $${roundDown}$ 和 $${roundUp}$ 之间。\n\n想象一条数轴：\n$${roundDown}$ ←——— $${n}$ ———→ $${roundUp}$\n\n$${n}$ 离哪个更近？看下一步就知道！`,
+        en: `${narrator}: "$${n}$ sits between which two round numbers?\n$${n}$ is between $${roundDown}$ and $${roundUp}$.\n\nImagine a number line:\n$${roundDown}$ ←——— $${n}$ ———→ $${roundUp}$\n\nWhich is $${n}$ closer to? Next step reveals it!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：怎么判断？看关键的那一位数字`, en: `${narrator}: "How to decide? Look at the key digit"` },
-      hint: { zh: `看${placeNameZh}右边紧挨着的那个数字：$${decider}$\n\n规则：\n• $0, 1, 2, 3, 4$（小于 5）→ 靠近左边 → 舍（往小的走）\n• $5, 6, 7, 8, 9$（大于等于 5）→ 靠近右边 → 入（往大的走）\n\n$${decider}$ ${decider >= 5 ? `\\geq 5$ → 入！往大的走` : `< 5$ → 舍！往小的走`}`, en: `Look at the digit right after the ${placeNameEn} position: $${decider}$\n\nRule:\n• $0, 1, 2, 3, 4$ (less than 5) → closer to left → round DOWN\n• $5, 6, 7, 8, 9$ (5 or more) → closer to right → round UP\n\n$${decider}$ ${decider >= 5 ? `\\geq 5$ → round UP!` : `< 5$ → round DOWN!`}` },
+      text: {
+        zh: `${narrator}：看关键的那一位数字\n${placeNameZh}右边紧挨着的那个数字是 $${decider}$。\n\n$${decider}$ ${decider >= 5 ? `$\\geq 5$ → 入！往大的走（$${roundUp}$）` : `$< 5$ → 舍！往小的走（$${roundDown}$）`}\n\n就这么简单——一个数字决定方向！`,
+        en: `${narrator}: "Look at the key digit\nThe digit right after the ${placeNameEn} position is $${decider}$.\n\n$${decider}$ ${decider >= 5 ? `$\\geq 5$ → round UP! Go to $${roundUp}$` : `$< 5$ → round DOWN! Go to $${roundDown}$`}\n\nThat simple — one digit decides the direction!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：所以 $${n}$ 四舍五入到${placeNameZh} = $${answer}$`, en: `${narrator}: "So $${n}$ rounded to ${placeNameEn} = $${answer}$"` },
-      hint: { zh: `关键数字 $${decider}$ ${decider >= 5 ? `$\\geq 5$，往上进到 $${roundUp}$` : `$< 5$，往下舍到 $${roundDown}$`}\n\n答案 = $${answer}$`, en: `Key digit $${decider}$ ${decider >= 5 ? `$\\geq 5$, round up to $${roundUp}$` : `$< 5$, round down to $${roundDown}$`}\n\nAnswer = $${answer}$` },
+      text: {
+        zh: `${narrator}：答案\n$${n}$ 四舍五入到${placeNameZh} $= ${answer}$\n\n关键数字 $${decider}$ ${decider >= 5 ? `$\\geq 5$，进位到 $${roundUp}$` : `$< 5$，舍去到 $${roundDown}$`}。做得好！`,
+        en: `${narrator}: "Answer\n$${n}$ rounded to ${placeNameEn} $= ${answer}$\n\nKey digit $${decider}$ ${decider >= 5 ? `$\\geq 5$, round up to $${roundUp}$` : `$< 5$, round down to $${roundDown}$`}. Well done!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——答案合理吗？`, en: `${narrator}: "Verify — does it make sense?"` },
-      hint: { zh: `$${n}$ 四舍五入到${placeNameZh} = $${answer}$\n\n检查：\n• $${answer}$ 是 $${place}$ 的倍数吗？$${answer} \\div ${place} = ${answer/place}$ ✓\n• $${n}$ 和 $${answer}$ 差多少？$|${n} - ${answer}| = ${Math.abs(n - answer)}$\n• 差距不超过 $${place/2}$？$${Math.abs(n - answer)} ${Math.abs(n - answer) <= place/2 ? '\\leq' : '>'} ${place/2}$ ✓`, en: `$${n}$ rounded to ${placeNameEn} = $${answer}$\n\nCheck:\n• Is $${answer}$ a multiple of $${place}$? $${answer} \\div ${place} = ${answer/place}$ ✓\n• Difference: $|${n} - ${answer}| = ${Math.abs(n - answer)}$\n• Within $${place/2}$? $${Math.abs(n - answer)} ${Math.abs(n - answer) <= place/2 ? '\\leq' : '>'} ${place/2}$ ✓` },
+      text: {
+        zh: `${narrator}：验算\n• $${answer}$ 是 $${place}$ 的倍数吗？$${answer} \\div ${place} = ${answer/place}$ ✓\n• $${n}$ 和 $${answer}$ 差多少？$|${n} - ${answer}| = ${Math.abs(n - answer)}$\n• 差距不超过 $${place/2}$？$${Math.abs(n - answer)} ${Math.abs(n - answer) <= place/2 ? '\\leq' : '>'} ${place/2}$ ✓\n\n军情估算完毕，万无一失！`,
+        en: `${narrator}: "Verify\n• Is $${answer}$ a multiple of $${place}$? $${answer} \\div ${place} = ${answer/place}$ ✓\n• Difference: $|${n} - ${answer}| = ${Math.abs(n - answer)}$\n• Within $${place/2}$? $${Math.abs(n - answer)} ${Math.abs(n - answer) <= place/2 ? '\\leq' : '>'} ${place/2}$ ✓\n\nIntelligence estimate complete — spot on!"`,
+      },
       highlightField: 'ans',
     },
   ];
@@ -4151,33 +4187,45 @@ export function generateAnglesTriangleMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：为什么要算三角形的角？——裁旗、搭营都得知道每个角`, en: `${narrator}: "Why find triangle angles? — Cutting banners and pitching tents requires knowing every angle"` },
-      hint: { zh: `三角旗只知道两个角，第三个角不知道\n没有第三个角，裁缝就没法裁布！\n\n好消息：三角形有一个神奇的规律\n只要知道两个角，第三个角一定能算出来`, en: `A triangular banner has two known angles, but the third is missing\nWithout it, the tailor can't cut the fabric!\n\nGood news: triangles have a magical rule\nIf you know two angles, the third can always be calculated` },
+      text: {
+        zh: `${narrator}：为什么要算三角形的角？\n三角旗只知道两个角，第三个角不知道——没有它，裁缝就没法裁布！\n\n好消息：三角形有一个神奇的规律，只要知道两个角，第三个角一定能算出来。`,
+        en: `${narrator}: "Why find triangle angles?\nA triangular banner has two known angles, but the third is missing — without it, the tailor can't cut the fabric!\n\nGood news: triangles have a magical rule. Know two angles, and the third can always be found."`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：什么是"角"？两条线交叉的张开程度`, en: `${narrator}: "What is an 'angle'? How far two lines spread apart"` },
-      hint: { zh: `什么是"角"？两条线相交形成的张开程度\n角度越大，两条线张得越开\n\n我们用"度"（°）来衡量：\n• 直角 = $90°$（像书角）\n• 半圈 = $180°$（一条直线）\n• 整圈 = $360°$`, en: `What is an "angle"? How far apart two lines spread when they meet\nBigger angle = wider spread\n\nWe measure in "degrees" (°):\n• Right angle = $90°$ (like a book corner)\n• Half turn = $180°$ (a straight line)\n• Full turn = $360°$` },
+      text: {
+        zh: `${narrator}：角度怎么量？\n"角"就是两条线交叉张开的程度。我们用"度"（°）来衡量：\n• 直角 = $90°$（像书角）\n• 半圈 = $180°$（一条直线）\n• 整圈 = $360°$\n\n角度越大，两条线张得越开！`,
+        en: `${narrator}: "How do we measure angles?\nAn 'angle' is how far two lines spread when they meet. We measure in 'degrees' (°):\n• Right angle = $90°$ (like a book corner)\n• Half turn = $180°$ (a straight line)\n• Full turn = $360°$\n\nBigger angle = wider spread!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：重要定理——三角形三个内角之和 = $180°$`, en: `${narrator}: "Key theorem — the three angles inside a triangle sum to $180°$"` },
-      hint: { zh: `为什么？试试看：\n把三角形的三个角撕下来，拼在一起\n它们刚好拼成一条直线！\n一条直线 = $180°$\n\n所以不管什么形状的三角形——\n尖的、扁的、等边的——三个角加起来都是 $180°$`, en: `Why? Try this:\nTear off the three corners of a paper triangle\nArrange them together — they form a straight line!\nA straight line = $180°$\n\nSo ANY triangle — pointy, flat, equilateral —\nthe three angles always add to $180°$` },
+      text: {
+        zh: `${narrator}：重要定理——三角形三个角加起来永远 = $180°$\n为什么？把三角形的三个角撕下来，拼在一起——刚好拼成一条直线！\n一条直线 = $180°$。\n\n不管什么形状的三角形——尖的、扁的、等边的——三个角之和都是 $180°$！`,
+        en: `${narrator}: "Key theorem — triangle angles ALWAYS add to $180°$\nWhy? Tear off the three corners of a paper triangle and arrange them — they form a straight line!\nA straight line = $180°$.\n\nANY triangle — pointy, flat, equilateral — the three angles always sum to $180°$!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：已知两个角——先加起来`, en: `${narrator}: "Two angles known — add them first"` },
-      hint: { zh: `角 1 = $${a1}°$\n角 2 = $${a2}°$\n\n两角之和：$${a1} + ${a2} = ${a1 + a2}°$\n\n三个角总共 $180°$，已经用掉了 $${a1 + a2}°$`, en: `Angle 1 = $${a1}°$\nAngle 2 = $${a2}°$\n\nSum of two: $${a1} + ${a2} = ${a1 + a2}°$\n\nThree angles total $180°$, already used $${a1 + a2}°$` },
+      text: {
+        zh: `${narrator}：已知两个角——先加起来\n角 1 = $${a1}°$，角 2 = $${a2}°$\n\n两角之和：$${a1} + ${a2} = ${a1 + a2}°$\n\n三个角总共 $180°$，已经用掉了 $${a1 + a2}°$——剩下的就是第三个角！`,
+        en: `${narrator}: "Two angles known — add them first\nAngle 1 = $${a1}°$, Angle 2 = $${a2}°$\n\nSum of two: $${a1} + ${a2} = ${a1 + a2}°$\n\nTotal is $180°$, already used $${a1 + a2}°$ — the rest is the third angle!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：第三个角 = 总和 - 已知角`, en: `${narrator}: "Third angle = total − known angles"` },
-      hint: { zh: `$x = 180° - ${a1 + a2}°$\n$x = ${answer}°$`, en: `$x = 180° - ${a1 + a2}°$\n$x = ${answer}°$` },
+      text: {
+        zh: `${narrator}：答案\n$x = 180° - ${a1 + a2}° = ${answer}°$\n\n三角旗的第三个角找到了！做得好！`,
+        en: `${narrator}: "Answer\n$x = 180° - ${a1 + a2}° = ${answer}°$\n\nThe banner's third angle is found! Well done!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：验算——三个角加起来是不是 $180°$？`, en: `${narrator}: "Verify — do all three angles add to $180°$?"` },
-      hint: { zh: `$${a1}° + ${a2}° + ${answer}° = ${a1 + a2 + answer}°$ ✓\n\n${answer < 90 ? `$${answer}°$ 是锐角（小于 $90°$）` : answer === 90 ? `$${answer}°$ 是直角` : `$${answer}°$ 是钝角（大于 $90°$）`}\n\n记住：三角形最多只能有一个钝角或直角！`, en: `$${a1}° + ${a2}° + ${answer}° = ${a1 + a2 + answer}°$ ✓\n\n${answer < 90 ? `$${answer}°$ is acute (less than $90°$)` : answer === 90 ? `$${answer}°$ is a right angle` : `$${answer}°$ is obtuse (greater than $90°$)`}\n\nRemember: a triangle can have at most ONE obtuse or right angle!` },
+      text: {
+        zh: `${narrator}：验算——三个角加起来是 $180°$ 吗？\n$${a1}° + ${a2}° + ${answer}° = ${a1 + a2 + answer}°$ ✓\n\n${answer < 90 ? `$${answer}°$ 是锐角（小于 $90°$）` : answer === 90 ? `$${answer}°$ 是直角` : `$${answer}°$ 是钝角（大于 $90°$）`}\n记住：三角形最多只能有一个钝角或直角！`,
+        en: `${narrator}: "Verify — do all three add to $180°$?\n$${a1}° + ${a2}° + ${answer}° = ${a1 + a2 + answer}°$ ✓\n\n${answer < 90 ? `$${answer}°$ is acute (less than $90°$)` : answer === 90 ? `$${answer}°$ is a right angle` : `$${answer}°$ is obtuse (greater than $90°$)`}\nRemember: a triangle can have at most ONE obtuse or right angle!"`,
+      },
       highlightField: 'x',
     },
   ];
@@ -4221,33 +4269,45 @@ export function generateAnglesPointMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：在瞭望台上四面观察——转一整圈看遍所有方向`, en: `${narrator}: "From the watchtower, look in every direction — a full turn covers them all"` },
-      hint: { zh: `想象你站在瞭望台上：\n• 面朝北开始\n• 慢慢转身，向东→南→西\n• 转回朝北 = 转了一整圈\n\n一整圈 = $360°$\n\n为什么是 360？古人把天空分成 360 份\n（大约每天太阳移动 1°，一年 ≈ 360 天）`, en: `Imagine standing on a watchtower:\n• Start facing North\n• Turn slowly: East → South → West\n• Back to North = one full turn\n\nOne full turn = $360°$\n\nWhy 360? Ancient people divided the sky into 360 parts\n(The sun moves about 1° per day, ~360 days in a year)` },
+      text: {
+        zh: `${narrator}：为什么是 $360°$？\n想象你站在瞭望台上，面朝北开始，慢慢转身——东→南→西→回到北。\n转了一整圈 = $360°$。\n\n为什么是 360？古人把天空分成 360 份（大约每天太阳移动 $1°$，一年 ≈ 360 天）。`,
+        en: `${narrator}: "Why $360°$?\nImagine standing on a watchtower, facing North. Turn slowly — East → South → West → back to North.\nOne full turn = $360°$.\n\nWhy 360? Ancient people divided the sky into 360 parts (the sun moves about $1°$ per day, ~360 days in a year)."`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：所以——围绕一点的所有角加起来 = $360°$`, en: `${narrator}: "So — all angles around a point add up to $360°$"` },
-      hint: { zh: `就像把一个圆饼切成几块\n不管切多少块，所有块合起来还是一个完整的圆\n完整的圆 = $360°$`, en: `Like cutting a round pie into pieces\nNo matter how many pieces, they all form a complete circle\nComplete circle = $360°$` },
+      text: {
+        zh: `${narrator}：核心规则——围绕一点的所有角加起来 = $360°$\n就像把一个圆饼切成几块——不管切多少块，所有块合起来还是一个完整的圆！\n\n完整的圆 = $360°$，一度都不会多，一度也不会少。`,
+        en: `${narrator}: "Core rule — all angles around a point add up to $360°$\nLike cutting a round pie into pieces — no matter how many, they all form a complete circle!\n\nComplete circle = $360°$. Not one degree more, not one less."`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：已知的角加起来是多少？`, en: `${narrator}: "What do the known angles add up to?"` },
-      hint: { zh: `$${angles.join('° + ')}°$\n$= ${sum}°$\n\n还剩多少度没有被覆盖？`, en: `$${angles.join('° + ')}°$\n$= ${sum}°$\n\nHow many degrees are left uncovered?` },
+      text: {
+        zh: `${narrator}：先把已知的角加起来\n$${angles.join('° + ')}°$\n$= ${sum}°$\n\n$360°$ 里已经有 $${sum}°$ 了——还剩多少度？`,
+        en: `${narrator}: "Add up the known angles first\n$${angles.join('° + ')}°$\n$= ${sum}°$\n\n$360°$ has $${sum}°$ accounted for — how many degrees left?"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：未知角 = 总度数 - 已知角`, en: `${narrator}: "Unknown angle = total − known angles"` },
-      hint: { zh: `$x = 360° - ${sum}°$\n$x = ${answer}°$`, en: `$x = 360° - ${sum}°$\n$x = ${answer}°$` },
+      text: {
+        zh: `${narrator}：用总度数减去已知角\n$x = 360° - ${sum}° = ${answer}°$\n\n就像分蛋糕：总共 $360°$，别人分走了 $${sum}°$，你拿到剩下的 $${answer}°$！`,
+        en: `${narrator}: "Subtract known from total\n$x = 360° - ${sum}° = ${answer}°$\n\nLike sharing a cake: total $360°$, others took $${sum}°$, you get the remaining $${answer}°$!"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：答案——$x = ${answer}°$`, en: `${narrator}: "Answer — $x = ${answer}°$"` },
-      hint: { zh: `围绕一点的所有角：${angles.map(a => `$${a}°$`).join(' + ')} + $${answer}°$\n总计 $360°$ ✓`, en: `All angles around the point: ${angles.map(a => `$${a}°$`).join(' + ')} + $${answer}°$\nTotal $360°$ ✓` },
+      text: {
+        zh: `${narrator}：答案\n$x = ${answer}°$\n\n围绕一点的所有角：${angles.map(a => `$${a}°$`).join(' + ')} + $${answer}°$ = $360°$`,
+        en: `${narrator}: "Answer\n$x = ${answer}°$\n\nAll angles around the point: ${angles.map(a => `$${a}°$`).join(' + ')} + $${answer}°$ = $360°$"`,
+      },
       highlightField: 'x',
     },
     {
-      text: { zh: `${narrator}：验算——所有角加起来是不是 $360°$？`, en: `${narrator}: "Verify — do all angles sum to $360°$?"` },
-      hint: { zh: `$${angles.join('° + ')}° + ${answer}° = ${sum + answer}°$ ✓\n\n$${sum + answer} = 360$ ✓ 正好一整圈！`, en: `$${angles.join('° + ')}° + ${answer}° = ${sum + answer}°$ ✓\n\n$${sum + answer} = 360$ ✓ Exactly one full turn!` },
+      text: {
+        zh: `${narrator}：验算——所有角加起来是 $360°$ 吗？\n$${angles.join('° + ')}° + ${answer}° = ${sum + answer}°$ ✓\n\n$${sum + answer} = 360$ ✓ 正好一整圈！瞭望完毕，做得漂亮！`,
+        en: `${narrator}: "Verify — do all angles sum to $360°$?\n$${angles.join('° + ')}° + ${answer}° = ${sum + answer}°$ ✓\n\n$${sum + answer} = 360$ ✓ Exactly one full turn! Lookout complete — brilliantly done!"`,
+      },
       highlightField: 'x',
     },
   ];
@@ -4390,33 +4450,45 @@ export function generateStatsRangeMission(template: Mission): Mission {
 
   const tutorialSteps = [
     {
-      text: { zh: `${narrator}：为什么需要"极差"？——一个数字看出差距`, en: `${narrator}: "Why do we need 'range'? — One number shows the spread"` },
-      hint: { zh: `将军选兵，不光看平均战力\n还要看最强和最弱差多少\n\n差距大 → 水平参差不齐，需要整训\n差距小 → 水平齐整，可以出征\n\n极差就是用一个数字衡量这个差距`, en: `A general doesn't just look at average strength\nHe needs to know the gap between best and worst\n\nLarge gap → uneven, needs training\nSmall gap → consistent, ready for battle\n\nRange measures this gap with a single number` },
+      text: {
+        zh: `${narrator}：为什么需要"极差"？\n将军选兵，不光看平均战力，还要看最强和最弱差多少。\n\n差距大 → 水平参差不齐，需要整训。\n差距小 → 水平齐整，可以出征。\n\n极差就是用一个数字衡量这个差距！`,
+        en: `${narrator}: "Why do we need 'range'?\nA general doesn't just look at average strength — he needs to know the gap between best and worst.\n\nLarge gap → uneven, needs training.\nSmall gap → consistent, ready for battle.\n\nRange measures this gap with a single number!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：极差的公式——极差 = 最大值 − 最小值`, en: `${narrator}: "Range formula — Range = Maximum − Minimum"` },
-      hint: { zh: `就这么简单！\n\n极差 = 最大值 − 最小值\n\n注意：只需要最大和最小两个数\n中间的数据不影响极差`, en: `That's it!\n\nRange = Maximum − Minimum\n\nNote: only need the largest and smallest\nMiddle values don't affect the range` },
+      text: {
+        zh: `${narrator}：极差的公式——超简单！\n$$\\text{极差} = \\text{最大值} - \\text{最小值}$$\n\n只需要最大和最小两个数，中间的数据不影响极差。\n所以找到最大最小就行了！`,
+        en: `${narrator}: "Range formula — super simple!\n$$\\text{Range} = \\text{Maximum} - \\text{Minimum}$$\n\nOnly need the largest and smallest — middle values don't affect the range.\nSo just find max and min!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第一步——排序后找最大最小`, en: `${narrator}: "Step 1 — Sort to find max and min"` },
-      hint: { zh: `数据（已排序）：$${sorted.join(', ')}$\n\n最小值 = $${min}$（最左边）\n最大值 = $${max}$（最右边）\n\n排好序就能一眼看出！`, en: `Data (sorted): $${sorted.join(', ')}$\n\nMinimum = $${min}$ (leftmost)\nMaximum = $${max}$ (rightmost)\n\nSorting makes it obvious!` },
+      text: {
+        zh: `${narrator}：第一步——排序，找最大最小\n数据（已排序）：$${sorted.join(', ')}$\n\n最小值 = $${min}$（最左边）\n最大值 = $${max}$（最右边）\n\n排好序一眼就能看出来！`,
+        en: `${narrator}: "Step 1 — sort to find max and min\nData (sorted): $${sorted.join(', ')}$\n\nMinimum = $${min}$ (leftmost)\nMaximum = $${max}$ (rightmost)\n\nSorting makes it obvious!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：第二步——相减`, en: `${narrator}: "Step 2 — Subtract"` },
-      hint: { zh: `极差 = $${max} - ${min} = ${answer}$`, en: `Range = $${max} - ${min} = ${answer}$` },
+      text: {
+        zh: `${narrator}：第二步——最大减最小\n极差 $= ${max} - ${min} = ${answer}$\n\n就一步减法，搞定！`,
+        en: `${narrator}: "Step 2 — subtract min from max\nRange $= ${max} - ${min} = ${answer}$\n\nOne subtraction — done!"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：答案：极差 = $${answer}$`, en: `${narrator}: "Answer: Range = $${answer}$"` },
-      hint: { zh: `数据 $${sorted.join(', ')}$ 的极差是 $${answer}$\n\n这意味着最强和最弱之间相差 $${answer}$`, en: `Range of $${sorted.join(', ')}$ is $${answer}$\n\nThis means the gap between highest and lowest is $${answer}$` },
+      text: {
+        zh: `${narrator}：答案\n极差 = $${answer}$\n\n最强和最弱之间相差 $${answer}$——${answer > 50 ? '差距很大，需要加紧整训！' : answer > 20 ? '差距中等，还需努力。' : '差距不大，队伍齐整！'}`,
+        en: `${narrator}: "Answer\nRange = $${answer}$\n\nGap between highest and lowest is $${answer}$ — ${answer > 50 ? 'large gap, training needed!' : answer > 20 ? 'moderate gap, keep working.' : 'small gap, troops are well-matched!'}"`,
+      },
       highlightField: 'ans',
     },
     {
-      text: { zh: `${narrator}：验算——极差合理吗？`, en: `${narrator}: "Verify — is the range reasonable?"` },
-      hint: { zh: `极差 $${answer}$\n• 所有数据都在 $${min}$ 到 $${max}$ 之间？$${sorted.join(', ')}$ ✓\n• $${max} - ${min} = ${answer}$ ✓\n• 没有任何数据超出这个范围 ✓`, en: `Range $${answer}$\n• All data between $${min}$ and $${max}$? $${sorted.join(', ')}$ ✓\n• $${max} - ${min} = ${answer}$ ✓\n• No data outside this range ✓` },
+      text: {
+        zh: `${narrator}：验算\n• 所有数据都在 $${min}$ 到 $${max}$ 之间？$${sorted.join(', ')}$ ✓\n• $${max} - ${min} = ${answer}$ ✓\n• 没有数据超出范围 ✓\n\n极差计算完毕，做得漂亮！`,
+        en: `${narrator}: "Verify\n• All data between $${min}$ and $${max}$? $${sorted.join(', ')}$ ✓\n• $${max} - ${min} = ${answer}$ ✓\n• No data outside this range ✓\n\nRange calculated — brilliantly done!"`,
+      },
       highlightField: 'ans',
     },
   ];
