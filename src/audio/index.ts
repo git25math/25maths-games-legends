@@ -198,11 +198,6 @@ export function useAudio() {
     // Transitions
     playBattleEnter, playBattleExitWin, playBattleExitLose,
 
-    // Voice
-    speakTactical: useCallback((text: string, l: Language) => {
-      if (guard()) engine.speakTactical(text, l);
-    }, []),
-
     // BGM
     playBGMBattle, playBGMMap,
   };

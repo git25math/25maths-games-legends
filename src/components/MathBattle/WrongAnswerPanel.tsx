@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { AlertTriangle, ChevronRight, Activity } from 'lucide-react';
+import { AlertTriangle, ChevronRight, Star } from 'lucide-react';
 import type { Language } from '../../types';
 import { MathView } from '../MathView';
 import { lt } from '../../i18n/resolveText';
@@ -9,31 +9,31 @@ import { parseAnswer } from '../../utils/parseAnswer';
 
 const LABELS = {
   zh: {
-    title: '系统故障诊断',
-    partialTitle: '信号偏差已修正',
-    partialHint: '算法逻辑正确，数值解析误差',
-    yourAnswer: '输入数值',
-    correctAnswer: '预期数值',
-    explanation: '逻辑参照',
-    continue: '重置诊断程序',
+    title: '解题回顾',
+    partialTitle: '接近正确！',
+    partialHint: '方法正确，计算有误',
+    yourAnswer: '你的答案',
+    correctAnswer: '正确答案',
+    explanation: '解题过程',
+    continue: '我明白了，继续',
   },
   zh_TW: {
-    title: '系統故障診斷',
-    partialTitle: '信號偏差已修正',
-    partialHint: '算法邏輯正確，數值解析誤差',
-    yourAnswer: '輸入數值',
-    correctAnswer: '預期數值',
-    explanation: '邏輯參照',
-    continue: '重置診斷程序',
+    title: '解題回顧',
+    partialTitle: '接近正確！',
+    partialHint: '方法正確，計算有誤',
+    yourAnswer: '你的答案',
+    correctAnswer: '正確答案',
+    explanation: '解題過程',
+    continue: '我明白了，繼續',
   },
   en: {
-    title: 'SYSTEM_DIAGNOSTIC',
-    partialTitle: 'SIGNAL_DEVIATION_DETECTED',
-    partialHint: 'Logic verified // Precision error',
-    yourAnswer: 'UPLINK_VAL',
-    correctAnswer: 'EXPECTED_VAL',
-    explanation: 'LOGIC_REFERENCE',
-    continue: 'RESOLVE_DIAGNOSTIC',
+    title: 'Solution Review',
+    partialTitle: 'Almost Right!',
+    partialHint: 'Right method, calculation error',
+    yourAnswer: 'Your answer',
+    correctAnswer: 'Correct answer',
+    explanation: 'Solution steps',
+    continue: 'Got it, continue',
   },
 } as const;
 
@@ -46,8 +46,11 @@ type Props = {
   lang: Language;
   onContinue: () => void;
   continueLabel?: string;
+  /** Story consequence text for wrong answer */
   storyText?: string;
+  /** Partial credit mode: yellow border, encouraging message */
   isPartial?: boolean;
+  /** Partial credit score earned */
   partialScore?: number;
 };
 
@@ -68,113 +71,92 @@ export function WrongAnswerPanel({
   const fc = INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || { zh: [], en: [] };
   const fields = fc[lang as keyof typeof fc] || fc[lang === 'zh_TW' ? 'zh' : 'zh'] || [];
 
+  // Only show fields that have expected values
   const relevantFields = fields.filter(f => expected[f.id] !== undefined);
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      className={`rounded-2xl p-6 space-y-6 border backdrop-blur-xl shadow-2xl relative overflow-hidden ${
-        isPartial 
-          ? 'bg-amber-500/5 border-amber-500/30 shadow-amber-500/10' 
-          : 'bg-red-500/5 border-red-500/30 shadow-red-500/10'
-      }`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.3 }}
+      className={`rounded-xl p-5 space-y-4 border-2 ${isPartial ? 'bg-yellow-50 border-yellow-300' : 'bg-red-50 border-red-200'}`}
     >
-      {/* Glitch Overlay Effect */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[length:100%_2px] bg-[linear-gradient(rgba(255,255,255,0)_50%,rgba(255,255,255,0.2)_50%)]" />
-
       {/* Header */}
-      <div className={`flex items-center gap-3 font-mono ${isPartial ? 'text-amber-400' : 'text-red-500'}`}>
-        <div className={`p-2 rounded-lg ${isPartial ? 'bg-amber-500/20' : 'bg-red-500/20'}`}>
-          {isPartial ? <Activity size={18} /> : <AlertTriangle size={18} />}
-        </div>
-        <div className="flex flex-col">
-          <span className="text-[10px] uppercase tracking-[0.3em] opacity-50">Diagnostic_Status</span>
-          <span className="text-sm font-black uppercase tracking-widest">{isPartial ? t.partialTitle : t.title}</span>
-        </div>
-        {isPartial && partialScore !== undefined && (
-          <div className="ml-auto px-3 py-1 bg-amber-500/20 rounded-full font-mono text-[10px] font-bold border border-amber-500/30">
-            SYNC_YIELD: +{partialScore} (50%)
-          </div>
+      <div className={`flex items-center gap-2 font-bold ${isPartial ? 'text-yellow-700' : 'text-red-700'}`}>
+        {isPartial ? <Star size={20} className="text-yellow-500" /> : <AlertTriangle size={20} />}
+        <span>{isPartial ? t.partialTitle : t.title}</span>
+        {isPartial && partialScore !== undefined && partialScore > 0 && (
+          <span className="ml-auto text-sm bg-yellow-200 px-2 py-0.5 rounded-full font-black text-yellow-800">+{partialScore} (50%)</span>
         )}
       </div>
 
-      {/* Hint/Status Text */}
-      <div className={`font-mono text-[11px] p-3 rounded-xl border border-dashed uppercase tracking-widest ${
-        isPartial ? 'bg-amber-500/10 border-amber-500/20 text-amber-200/70' : 'bg-red-500/10 border-red-500/20 text-red-400/70'
-      }`}>
-        {isPartial ? t.partialHint : 'CORE_CALCULATION_MISMATCH'}
-      </div>
+      {/* Partial credit encouragement */}
+      {isPartial && (
+        <div className="bg-yellow-100 rounded-lg p-3 text-yellow-800 text-sm font-bold">
+          {t.partialHint}
+        </div>
+      )}
 
-      {/* Answer Data Comparison */}
-      <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-3">
+      {/* Answer comparison */}
+      <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-2">
         {relevantFields.map(field => {
           const userVal = userInputs[field.id] || '—';
           const correctVal = expected[field.id] || '?';
+          // In partial mode, check if this specific field was correct
           const fieldCorrect = isPartial && userVal !== '—' && correctVal !== '?' &&
             !isNaN(parseAnswer(userVal)) && !isNaN(parseFloat(correctVal)) &&
             Math.abs(parseAnswer(userVal) - parseFloat(correctVal)) < 0.01;
-          
           return (
-            <motion.div variants={staggerItem} key={field.id} className="grid grid-cols-2 gap-4">
-              <div className={`rounded-xl p-4 border transition-all ${
-                fieldCorrect ? 'bg-emerald-500/10 border-emerald-500/30' : 
-                isPartial ? 'bg-amber-500/10 border-amber-500/20' : 'bg-red-500/10 border-red-500/30'
-              }`}>
-                <div className={`text-[9px] font-mono font-bold uppercase mb-2 tracking-widest ${
-                  fieldCorrect ? 'text-emerald-400/60' : isPartial ? 'text-amber-400/60' : 'text-red-400/60'
-                }`}>{t.yourAnswer}</div>
-                <div className={`text-xl font-black font-mono ${
-                  fieldCorrect ? 'text-emerald-400' : isPartial ? 'text-amber-400' : 'text-red-500'
-                }`}>{userVal}</div>
+            <motion.div variants={staggerItem} key={field.id} className="grid grid-cols-2 gap-3">
+              <div className={`rounded-lg p-3 text-center ${fieldCorrect ? 'bg-emerald-100' : isPartial ? 'bg-yellow-100' : 'bg-red-100'}`}>
+                <div className={`text-[10px] font-bold uppercase mb-1 ${fieldCorrect ? 'text-emerald-500' : isPartial ? 'text-yellow-500' : 'text-red-400'}`}>{t.yourAnswer}</div>
+                <div className={`text-lg font-black ${fieldCorrect ? 'text-emerald-700' : isPartial ? 'text-yellow-700' : 'text-red-700'}`}>{userVal}</div>
               </div>
-
-              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4">
-                <div className="text-[9px] font-mono font-bold text-emerald-400/60 uppercase mb-2 tracking-widest">{t.correctAnswer}</div>
-                <div className="text-xl font-black font-mono text-emerald-400">{correctVal}</div>
+              <div className="bg-emerald-100 rounded-lg p-3 text-center">
+                <div className="text-[10px] font-bold text-emerald-500 uppercase mb-1">{t.correctAnswer}</div>
+                <div className="text-lg font-black text-emerald-700">{correctVal}</div>
               </div>
             </motion.div>
           );
         })}
       </motion.div>
 
-      {/* Story/Consequence — Digital Log Entry */}
+      {/* Story consequence */}
       {storyText && (
-        <div className="bg-white/5 border-l-2 border-indigo-500 p-4 rounded-r-xl">
-          <div className="text-[8px] font-mono text-white/30 uppercase mb-1 tracking-widest">Environmental_Consequence</div>
-          <p className="text-xs text-indigo-300/80 font-mono italic leading-relaxed">
-            "{storyText}"
-          </p>
+        <div className="bg-amber-50 rounded-lg p-3 border border-amber-200 text-amber-800 text-sm italic leading-relaxed">
+          {storyText}
         </div>
       )}
 
-      {/* Logic Reference (Formula) */}
+      {/* Formula reminder */}
       {formula && (
-        <div className="bg-slate-900/60 border border-white/5 rounded-xl p-4 space-y-2">
-          <div className="text-[9px] font-mono text-white/30 font-bold uppercase tracking-widest flex items-center gap-2">
-            <div className="w-1 h-1 bg-indigo-500 rounded-full" />
-            {t.explanation}
-          </div>
-          <div className="flex justify-center bg-white/[0.02] p-3 rounded-lg">
-            <MathView tex={formula.replace(/\$/g, '')} className="text-lg text-white/80" />
+        <div className={`bg-white/60 rounded-lg p-3 border ${isPartial ? 'border-yellow-200' : 'border-red-100'}`}>
+          <div className="text-[10px] font-bold text-slate-500 uppercase mb-1">{t.explanation}</div>
+          <div className="flex justify-center">
+            <MathView tex={formula.replace(/\$/g, '')} className="text-base text-slate-800" />
           </div>
         </div>
       )}
 
-      {/* Continue Action */}
+      {/* Tutorial steps if available (show last step = solution) */}
+      {tutorialSteps && tutorialSteps.length > 0 && (
+        <div className={`bg-white/60 rounded-lg p-3 border text-sm text-slate-700 leading-relaxed ${isPartial ? 'border-yellow-200' : 'border-red-100'}`}>
+          {lt(tutorialSteps[tutorialSteps.length - 1].text, lang)}
+        </div>
+      )}
+
+      {/* Continue button */}
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
         onClick={onContinue}
-        className={`w-full py-4 rounded-xl font-mono text-[11px] font-black uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-3 ${
-          isPartial ? 'bg-amber-600 text-white shadow-[0_0_20px_rgba(217,119,6,0.3)]' : 'bg-slate-800 text-white border border-white/10 hover:bg-slate-700'
-        }`}
+        className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         {continueLabel || t.continue}
-        <ChevronRight size={16} />
+        <ChevronRight size={18} />
       </motion.button>
     </motion.div>
   );
 }
-
