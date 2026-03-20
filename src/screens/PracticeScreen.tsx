@@ -24,6 +24,8 @@ import { FractionPie } from '../components/diagrams/FractionPie';
 import { NumberGrid } from '../components/diagrams/NumberGrid';
 import { BalanceScale } from '../components/diagrams/BalanceScale';
 import { AngleArc } from '../components/diagrams/AngleArc';
+import { Triangle } from '../components/diagrams/Triangle';
+import { ParallelTransversal } from '../components/diagrams/ParallelTransversal';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -406,11 +408,25 @@ export const PracticeScreen = ({
                 resultLeft="x"
                 resultRight={String(currentMission.data.x)}
               />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'ANGLES' && currentMission.data?.parallel ? (
+              <ParallelTransversal
+                angle={currentMission.data.angle as number}
+                highlight={currentMission.data.highlight as 'corresponding' | 'alternate' | 'cointerior'}
+              />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'ANGLES' && currentMission.data?.angle ? (
               <AngleArc
                 angle={currentMission.data.angle as number}
                 label={`${currentMission.data.angle}°`}
                 showProtractor
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'PYTHAGORAS' && currentMission.data?.a !== undefined ? (
+              <Triangle
+                sides={currentMission.data.c
+                  ? [{ label: `a = ${currentMission.data.a}` }, { label: 'b = ?' }, { label: `c = ${currentMission.data.c}` }]
+                  : [{ label: `a = ${currentMission.data.a}` }, { label: `b = ${currentMission.data.b}` }, { label: 'c = ?' }]
+                }
+                rightAngle={0}
+                labels={['', '', '']}
               />
             ) : currentPhase !== 'red' ? (
               <VisualData mission={currentMission} lang={lang} />
