@@ -5520,28 +5520,45 @@ export function generateMixedImproperMission(template: Mission): Mission {
 
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}：什么是"带分数"和"假分数"？`, en: `${narrator}: "What are mixed numbers and improper fractions?"` },
-        hint: { zh: `带分数 = 整数 + 真分数\n例如 $${whole}\\frac{${num}}{${den}}$ = ${whole} 又 $\\frac{${num}}{${den}}$\n\n假分数 = 分子 ≥ 分母\n例如 $\\frac{${improperNum}}{${den}}$（${improperNum} ≥ ${den}）\n\n它们是同一个数的两种写法！`, en: `Mixed number = whole + proper fraction\nE.g., $${whole}\\frac{${num}}{${den}}$ = ${whole} and $\\frac{${num}}{${den}}$\n\nImproper fraction = numerator ≥ denominator\nE.g., $\\frac{${improperNum}}{${den}}$ (${improperNum} ≥ ${den})\n\nThey're the same number, two forms!` },
+        text: {
+          zh: `${narrator}：什么是带分数和假分数？\n带分数 = 整数 + 真分数，比如 $${whole}\\frac{${num}}{${den}}$ = ${whole} 又 $\\frac{${num}}{${den}}$。\n假分数 = 分子 ≥ 分母，比如 $\\frac{${improperNum}}{${den}}$。\n\n它们是同一个数的两种写法！`,
+          en: `${narrator}: "What are mixed numbers and improper fractions?\nMixed = whole + proper fraction, e.g. $${whole}\\frac{${num}}{${den}}$ = ${whole} and $\\frac{${num}}{${den}}$.\nImproper = numerator ≥ denominator, e.g. $\\frac{${improperNum}}{${den}}$.\n\nSame number, two forms!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：为什么要互转？`, en: `${narrator}: "Why convert between them?"` },
-        hint: { zh: `带分数好理解（"两块多一点"）\n假分数好计算（乘除法用假分数更方便）\n\n就像把整箱+散装的粮草全部拆成散装\n方便统一计算！`, en: `Mixed numbers are easy to understand ("two and a bit")\nImproper fractions are easy to calculate (better for × ÷)\n\nLike unpacking full crates + loose items into all loose items\nEasier to count uniformly!` },
+        text: {
+          zh: `${narrator}：为什么要互转？\n带分数好理解（"${whole}块多一点"），假分数好计算（乘除法更方便）。\n\n就像整箱+散装粮草全拆成散装——方便统一计算！`,
+          en: `${narrator}: "Why convert?\nMixed numbers are easy to understand ('${whole} and a bit'), improper fractions are easy to calculate (better for × ÷).\n\nLike unpacking full crates into loose items — easier to count!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：转换方法——整数部分 × 分母 + 分子`, en: `${narrator}: "Conversion: whole × denominator + numerator"` },
-        hint: { zh: `$${whole}\\frac{${num}}{${den}}$ 怎么转？\n\n想象 ${whole} 个完整的饼，每个切成 ${den} 份：\n${whole} 个饼 = $${whole} \\times ${den} = ${whole * den}$ 份\n\n再加上零散的 ${num} 份：\n$${whole * den} + ${num} = ${improperNum}$ 份\n\n分母不变：还是 ${den}\n\n所以 $${whole}\\frac{${num}}{${den}} = \\frac{${improperNum}}{${den}}$`, en: `How to convert $${whole}\\frac{${num}}{${den}}$?\n\nImagine ${whole} whole pies, each cut into ${den} slices:\n${whole} pies = $${whole} \\times ${den} = ${whole * den}$ slices\n\nPlus ${num} loose slices:\n$${whole * den} + ${num} = ${improperNum}$ slices\n\nDenominator stays: still ${den}\n\nSo $${whole}\\frac{${num}}{${den}} = \\frac{${improperNum}}{${den}}$` },
+        text: {
+          zh: `${narrator}：转换方法——整数×分母+分子\n想象 ${whole} 个饼，每个切成 ${den} 份：\n${whole} 个饼 = $${whole} \\times ${den} = ${whole * den}$ 份\n加上散装 ${num} 份：$${whole * den} + ${num} = ${improperNum}$ 份\n\n分母不变，还是 ${den}。所以 $${whole}\\frac{${num}}{${den}} = \\frac{${improperNum}}{${den}}$`,
+          en: `${narrator}: "Method — whole × denominator + numerator\nImagine ${whole} pies, each cut into ${den} slices:\n${whole} pies = $${whole} \\times ${den} = ${whole * den}$ slices\nPlus ${num} loose: $${whole * den} + ${num} = ${improperNum}$ slices\n\nDenominator stays ${den}. So $${whole}\\frac{${num}}{${den}} = \\frac{${improperNum}}{${den}}$"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：公式一步到位`, en: `${narrator}: "Formula in one step"` },
-        hint: { zh: `$${whole}\\frac{${num}}{${den}} = \\frac{${whole} \\times ${den} + ${num}}{${den}} = \\frac{${improperNum}}{${den}}$\n\n分子 = $${improperNum}$`, en: `$${whole}\\frac{${num}}{${den}} = \\frac{${whole} \\times ${den} + ${num}}{${den}} = \\frac{${improperNum}}{${den}}$\n\nNumerator = $${improperNum}$` },
+        text: {
+          zh: `${narrator}：公式一步到位\n$${whole}\\frac{${num}}{${den}} = \\frac{${whole} \\times ${den} + ${num}}{${den}} = \\frac{${improperNum}}{${den}}$\n\n分子 = $${improperNum}$。就这么简单！`,
+          en: `${narrator}: "Formula in one step\n$${whole}\\frac{${num}}{${den}} = \\frac{${whole} \\times ${den} + ${num}}{${den}} = \\frac{${improperNum}}{${den}}$\n\nNumerator = $${improperNum}$. That's it!"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：验算——反过来除一下`, en: `${narrator}: "Verify — divide back"` },
-        hint: { zh: `$${improperNum} \\div ${den} = ${whole}$ 余 $${num}$\n→ $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$ ✓\n\n口诀：整数×分母+分子，分母不变`, en: `$${improperNum} \\div ${den} = ${whole}$ remainder $${num}$\n→ $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$ ✓\n\nRule: whole × denominator + numerator, denominator stays` },
+        text: {
+          zh: `${narrator}：答案\n分子 = $${improperNum}$\n\n$${whole}\\frac{${num}}{${den}} = \\frac{${improperNum}}{${den}}$`,
+          en: `${narrator}: "Answer\nNumerator = $${improperNum}$\n\n$${whole}\\frac{${num}}{${den}} = \\frac{${improperNum}}{${den}}$"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算——反过来除\n$${improperNum} \\div ${den} = ${whole}$ 余 $${num}$\n→ $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$ ✓\n\n口诀：整数×分母+分子，分母不变。做得漂亮！`,
+          en: `${narrator}: "Verify — divide back\n$${improperNum} \\div ${den} = ${whole}$ remainder $${num}$\n→ $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$ ✓\n\nRule: whole × denom + numerator, denom stays. Brilliantly done!"`,
+        },
         highlightField: 'ans',
       },
     ];
@@ -5563,23 +5580,31 @@ export function generateMixedImproperMission(template: Mission): Mission {
 
     const tutorialSteps = [
       {
-        text: { zh: `${narrator}：假分数——分子比分母大，说明超过了 1 个整体`, en: `${narrator}: "Improper fraction — numerator bigger than denominator, meaning more than 1 whole"` },
-        hint: { zh: `$\\frac{${improperNum}}{${den}}$：${improperNum} 份，每 ${den} 份是一个整体\n\n$${improperNum} > ${den}$，所以肯定超过 1 个整体\n具体超过多少？做除法就知道了`, en: `$\\frac{${improperNum}}{${den}}$: ${improperNum} slices, every ${den} makes one whole\n\n$${improperNum} > ${den}$, so definitely more than 1 whole\nHow many? Division tells us` },
+        text: {
+          zh: `${narrator}：假分数是什么意思？\n$\\frac{${improperNum}}{${den}}$：有 ${improperNum} 份，每 ${den} 份组成 1 个整体。\n$${improperNum} > ${den}$，肯定超过 1 个整体！\n\n具体超过多少？做个除法就知道了。`,
+          en: `${narrator}: "What does an improper fraction mean?\n$\\frac{${improperNum}}{${den}}$: ${improperNum} slices, every ${den} makes 1 whole.\n$${improperNum} > ${den}$, so definitely more than 1 whole!\n\nExactly how many? Division will tell us."`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：方法——用分子 ÷ 分母`, en: `${narrator}: "Method — divide numerator by denominator"` },
-        hint: { zh: `$${improperNum} \\div ${den} = ?$\n\n$${den} \\times ${whole} = ${whole * den}$（还剩 $${improperNum} - ${whole * den} = ${num}$）\n\n商 = $${whole}$（整数部分）\n余数 = $${num}$（分子）\n分母不变 = $${den}$`, en: `$${improperNum} \\div ${den} = ?$\n\n$${den} \\times ${whole} = ${whole * den}$ (remaining: $${improperNum} - ${whole * den} = ${num}$)\n\nQuotient = $${whole}$ (whole part)\nRemainder = $${num}$ (numerator)\nDenominator stays = $${den}$` },
+        text: {
+          zh: `${narrator}：方法——分子 ÷ 分母\n$${improperNum} \\div ${den}$：$${den} \\times ${whole} = ${whole * den}$（还剩 $${improperNum} - ${whole * den} = ${num}$）\n\n商 $${whole}$ = 整数部分（装满了几个整饼）\n余数 $${num}$ = 新分子（散装几份）\n分母不变 = $${den}$`,
+          en: `${narrator}: "Method — numerator ÷ denominator\n$${improperNum} \\div ${den}$: $${den} \\times ${whole} = ${whole * den}$ (remaining: $${improperNum} - ${whole * den} = ${num}$)\n\nQuotient $${whole}$ = whole part (how many full pies)\nRemainder $${num}$ = new numerator (loose slices)\nDenominator stays = $${den}$"`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：所以 $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$`, en: `${narrator}: "So $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$"` },
-        hint: { zh: `${improperNum} 份饼（每份 $\\frac{1}{${den}}$）\n= ${whole} 整个饼 + ${num} 份散装\n= $${whole}\\frac{${num}}{${den}}$\n\n整数部分 = $${whole}$`, en: `${improperNum} slices (each $\\frac{1}{${den}}$)\n= ${whole} whole pies + ${num} loose slices\n= $${whole}\\frac{${num}}{${den}}$\n\nWhole part = $${whole}$` },
+        text: {
+          zh: `${narrator}：答案\n$\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$\n\n${improperNum} 份饼 = ${whole} 整个 + ${num} 份散装。整数部分 = $${whole}$。`,
+          en: `${narrator}: "Answer\n$\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$\n\n${improperNum} slices = ${whole} whole pies + ${num} loose. Whole part = $${whole}$."`,
+        },
         highlightField: 'ans',
       },
       {
-        text: { zh: `${narrator}：验算——转回假分数`, en: `${narrator}: "Verify — convert back"` },
-        hint: { zh: `$${whole} \\times ${den} + ${num} = ${whole * den} + ${num} = ${improperNum}$\n$\\frac{${improperNum}}{${den}}$ ✓\n\n口诀：分子÷分母，商=整数，余数=新分子`, en: `$${whole} \\times ${den} + ${num} = ${whole * den} + ${num} = ${improperNum}$\n$\\frac{${improperNum}}{${den}}$ ✓\n\nRule: numerator ÷ denominator, quotient = whole, remainder = new numerator` },
+        text: {
+          zh: `${narrator}：验算——转回假分数检查\n$${whole} \\times ${den} + ${num} = ${whole * den} + ${num} = ${improperNum}$\n$\\frac{${improperNum}}{${den}}$ ✓\n\n口诀：分子÷分母，商=整数，余数=新分子。做得漂亮！`,
+          en: `${narrator}: "Verify — convert back to check\n$${whole} \\times ${den} + ${num} = ${whole * den} + ${num} = ${improperNum}$\n$\\frac{${improperNum}}{${den}}$ ✓\n\nRule: numerator ÷ denom, quotient = whole, remainder = new numerator. Brilliantly done!"`,
+        },
         highlightField: 'ans',
       },
     ];
