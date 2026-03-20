@@ -2159,111 +2159,69 @@ export function generatePrimeMission(template: Mission): Mission {
   }
 
   const tutorialSteps = [
-    // Step 1: What is "\u6574\u9664"
     {
       text: {
-        zh: `${narrator}\uff1a\u5728\u5224\u65ad\u8d28\u6570\u4e4b\u524d\uff0c\u5148\u641e\u61c2\u4e00\u4e2a\u8bcd\u2014\u2014\u201c\u6574\u9664\u201d`,
-        en: `${narrator}: "Before checking primes, understand one word \u2014 'divides evenly'"`,
-      },
-      hint: {
-        zh: '12 \u00f7 3 = 4\uff0c\u6ca1\u6709\u4f59\u6570 \u2192 \u6574\u9664 \u2713\n12 \u00f7 5 = 2 \u4f59 2\uff0c\u6709\u4f59\u6570 \u2192 \u4e0d\u6574\u9664 \u2717\n\n\u6574\u9664 = \u9664\u5f97\u5c3d = \u6ca1\u6709\u4f59\u6570',
-        en: '12 \u00f7 3 = 4, no remainder \u2192 divides \u2713\n12 \u00f7 5 = 2 r 2, has remainder \u2192 doesn\'t divide \u2717\n\nDivides evenly = no remainder',
+        zh: `${narrator}：先搞懂一个词——"整除"\n$12 \\div 3 = 4$，没有余数 → 整除 ✓\n$12 \\div 5 = 2$ 余 $2$，有余数 → 不整除 ✗\n\n整除 = 除得刚刚好，一点不剩！`,
+        en: `${narrator}: "First understand one word — 'divides evenly'\n$12 \\div 3 = 4$, no remainder → divides ✓\n$12 \\div 5 = 2$ r $2$, has remainder → doesn't divide ✗\n\nDivides evenly = nothing left over!"`,
       },
       highlightField: 'ans',
     },
-    // Step 2: What is a prime (definition with examples)
     {
       text: {
-        zh: `${narrator}\uff1a\u8d28\u6570\u5c31\u662f\u2014\u2014\u9664\u4e86 1 \u548c\u5b83\u81ea\u5df1\uff0c\u6ca1\u6709\u522b\u7684\u6570\u80fd\u6574\u9664\u5b83`,
-        en: `${narrator}: "A prime is a number that NOTHING else can divide \u2014 only 1 and itself"`,
-      },
-      hint: {
-        zh: '\u5c31\u50cf\u7cbe\u9510\u4eb2\u536b\uff1a\u53ea\u6548\u5fe0\u5929\u5b50\uff081\uff09\u548c\u81ea\u5df1\uff0c\u4e0d\u63a5\u53d7\u4efb\u4f55\u5176\u4ed6\u5c06\u9886\u7684\u6307\u6325\n\n7 \u00f7 2 = 3.5 \u2717\uff0c7 \u00f7 3 = 2.3 \u2717 ... \u53ea\u6709 1 \u548c 7 \u80fd\u6574\u9664\u5b83 \u2192 \u8d28\u6570\n6 \u00f7 2 = 3 \u2713 \u2192 6 \u80fd\u88ab 2 \u6574\u9664\uff0c\u4e0d\u662f\u8d28\u6570',
-        en: 'Like elite guards: only answer to the emperor (1) and themselves\n\n7 \u00f7 2 = 3.5 \u2717, 7 \u00f7 3 = 2.3 \u2717 \u2192 only 1 and 7 work \u2192 prime\n6 \u00f7 2 = 3 \u2713 \u2192 6 is divisible by 2 \u2192 not prime',
+        zh: `${narrator}：什么是质数？\n除了 $1$ 和它自己，没有别的数能整除它——就像精锐亲卫：只效忠天子和自己。\n\n$7 \\div 2$ ✗，$7 \\div 3$ ✗ → 只有 $1$ 和 $7$ 能整除 → 质数\n$6 \\div 2 = 3$ ✓ → 有别的因数 → 不是质数`,
+        en: `${narrator}: "What is a prime?\nNothing else divides it except $1$ and itself — like elite guards: only answer to the emperor.\n\n$7 \\div 2$ ✗, $7 \\div 3$ ✗ → only $1$ and $7$ work → prime\n$6 \\div 2 = 3$ ✓ → has other factors → not prime"`,
       },
       highlightField: 'ans',
     },
-    // Step 3: Special cases (1 and 2)
     {
       text: {
-        zh: `${narrator}\uff1a\u4e24\u4e2a\u7279\u6b8a\u60c5\u51b5\u2014\u20141 \u4e0d\u662f\u8d28\u6570\uff0c2 \u662f\u552f\u4e00\u7684\u5076\u6570\u8d28\u6570`,
-        en: `${narrator}: "Two special cases \u2014 1 is NOT prime, 2 is the ONLY even prime"`,
-      },
-      hint: {
-        zh: '1 \u4e0d\u662f\u8d28\u6570\uff1a\u8d28\u6570\u8981\u6c42\u201c1 \u548c\u81ea\u5df1\u201d\u662f\u4e24\u4e2a\u4e0d\u540c\u7684\u6570\uff0c\u4f46 1 \u7684\u201c\u81ea\u5df1\u201d\u5c31\u662f 1\n\n2 \u662f\u8d28\u6570\uff1a\u53ea\u80fd\u88ab 1 \u548c 2 \u6574\u9664\n\u6240\u6709\u5176\u4ed6\u5076\u6570\uff084, 6, 8...\uff09\u90fd\u80fd\u88ab 2 \u6574\u9664 \u2192 \u4e0d\u662f\u8d28\u6570\n\u6240\u4ee5\u9664\u4e86 2\uff0c\u6240\u6709\u8d28\u6570\u90fd\u662f\u5947\u6570',
-        en: '1 is not prime: "1 and itself" must be two DIFFERENT numbers, but for 1 they\'re the same\n\n2 is prime: only 1 and 2 divide it\nAll other even numbers (4,6,8...) are divisible by 2 \u2192 not prime\nSo except 2, all primes are odd',
+        zh: `${narrator}：两个特殊情况\n• $1$ 不是质数——"$1$ 和自己"不是两个不同的数\n• $2$ 是唯一的偶数质数——所有其他偶数都能被 $2$ 整除\n\n所以除了 $2$，所有质数都是奇数！`,
+        en: `${narrator}: "Two special cases\n• $1$ is NOT prime — '1 and itself' aren't two different numbers\n• $2$ is the ONLY even prime — all other evens are divisible by $2$\n\nSo except $2$, all primes are odd!"`,
       },
       highlightField: 'ans',
     },
-    // Step 4: How to check \u2014 when to stop
     {
       text: {
-        zh: `${narrator}\uff1a\u600e\u4e48\u5224\u65ad $${n}$ \u662f\u4e0d\u662f\u8d28\u6570\uff1f\u4ece 2 \u5f00\u59cb\u9010\u4e2a\u8bd5\u9664`,
-        en: `${narrator}: "How to check if $${n}$ is prime? Try dividing from 2 upward"`,
-      },
-      hint: {
-        zh: `\u4e0d\u7528\u4e00\u76f4\u8bd5\u5230 ${n}\uff01\u8bd5\u5230\u201c\u67d0\u4e2a\u6570\u00d7\u81ea\u5df1\u8d85\u8fc7 ${n}\u201d\u5c31\u591f\u4e86\n\n${stopBase}\u00d7${stopBase}=${stopBase*stopBase}${stopBase*stopBase <= n ? ` \u2264 ${n}\uff0c\u8fd8\u6ca1\u8d85\u8fc7` : ` > ${n}\uff0c\u8d85\u8fc7\u4e86`}\n${stopNext}\u00d7${stopNext}=${stopNext*stopNext}${stopNext*stopNext > n ? ` > ${n}\uff0c\u8d85\u8fc7\u4e86\uff01\u6240\u4ee5\u8bd5\u5230 ${stopBase} \u5c31\u591f` : ` \u2264 ${n}`}`,
-        en: `Don't test up to ${n}! Stop when "a number \u00d7 itself > ${n}"\n\n${stopBase}\u00d7${stopBase}=${stopBase*stopBase}${stopBase*stopBase <= n ? ` \u2264 ${n}` : ` > ${n}`}\n${stopNext}\u00d7${stopNext}=${stopNext*stopNext}${stopNext*stopNext > n ? ` > ${n}, so test up to ${stopBase} only` : ` \u2264 ${n}`}`,
+        zh: `${narrator}：怎么判断 $${n}$？从 $2$ 开始逐个试除\n不用试到 $${n}$！试到 $\\sqrt{${n}}$ 就够了。\n\n$${stopBase}\\times${stopBase}=${stopBase*stopBase}$${stopBase*stopBase <= n ? ` \\leq ${n}` : ` > ${n}`}，$${stopNext}\\times${stopNext}=${stopNext*stopNext} > ${n}$\n所以只要试到 $${stopBase}$ 就够了！`,
+        en: `${narrator}: "How to check $${n}$? Try dividing from $2$ up\nNo need to go to $${n}$! Up to $\\sqrt{${n}}$ is enough.\n\n$${stopBase}\\times${stopBase}=${stopBase*stopBase}$${stopBase*stopBase <= n ? ` \\leq ${n}` : ` > ${n}`}, $${stopNext}\\times${stopNext}=${stopNext*stopNext} > ${n}$\nSo we only need to test up to $${stopBase}$!"`,
       },
       highlightField: 'ans',
     },
-    // Step 5: Trial division table
     {
       text: {
-        zh: `${narrator}\uff1a\u9010\u4e2a\u8bd5\u9664 $${n}$`,
-        en: `${narrator}: "Try dividing $${n}$ one by one"`,
-      },
-      hint: {
-        zh: trialTable.join('\n'),
-        en: trialTableEn.join('\n'),
+        zh: `${narrator}：逐个试除 $${n}$\n${trialTable.join('\n')}`,
+        en: `${narrator}: "Try dividing $${n}$ one by one\n${trialTableEn.join('\n')}"`,
       },
       highlightField: 'ans',
     },
-    // Step 6: Conclusion (conditional)
     ...(result ? [
       {
         text: {
-          zh: `${narrator}\uff1a\u5168\u90e8\u9664\u4e0d\u5c3d\uff01\u9664\u4e86 $1$ \u548c $${n}$\uff0c\u6ca1\u6709\u522b\u7684\u6570\u80fd\u6574\u9664\u5b83`,
-          en: `${narrator}: "None divide evenly! Only $1$ and $${n}$ divide it"`,
-        },
-        highlightField: 'ans',
-      },
-      {
-        text: {
-          zh: `${narrator}\uff1a$${n}$ \u662f\u8d28\u6570 \u2713 \u7cbe\u9510\u4eb2\u536b\uff0c\u53ea\u6548\u5fe0\u5929\u5b50\u548c\u81ea\u5df1\uff01`,
-          en: `${narrator}: "$${n}$ IS prime \u2713 Elite guard \u2014 answers only to the emperor and himself!"`,
+          zh: `${narrator}：全部除不尽！$${n}$ 是质数 ✓\n除了 $1$ 和 $${n}$，没有别的数能整除它。\n\n精锐亲卫，只效忠天子和自己！`,
+          en: `${narrator}: "None divide evenly! $${n}$ IS prime ✓\nOnly $1$ and $${n}$ divide it.\n\nElite guard — answers only to the emperor and himself!"`,
         },
         highlightField: 'ans',
       },
     ] : [
       {
         text: {
-          zh: `${narrator}\uff1a\u627e\u5230\u4e86\uff01$${n} \\div ${firstFactor} = ${n/firstFactor}$\uff0c\u6574\u9664\u4e86`,
-          en: `${narrator}: "Found it! $${n} \\div ${firstFactor} = ${n/firstFactor}$, divides evenly"`,
-        },
-        hint: {
-          zh: `$${n} = ${firstFactor} \\times ${n/firstFactor}$\n\u80fd\u88ab\u62c6\u5f00 \u2192 \u6709\u5176\u4ed6\u4e0a\u7ea7 \u2192 \u8fdb\u4e0d\u4e86\u4eb2\u536b\u961f`,
-          en: `$${n} = ${firstFactor} \\times ${n/firstFactor}$\nCan be split \u2192 has other commanders \u2192 can't join the guards`,
-        },
-        highlightField: 'ans',
-      },
-      {
-        text: {
-          zh: `${narrator}\uff1a$${n}$ \u4e0d\u662f\u8d28\u6570\uff08\u662f\u5408\u6570\uff09\u2717`,
-          en: `${narrator}: "$${n}$ is NOT prime (it's composite) \u2717"`,
+          zh: `${narrator}：找到了！$${n} \\div ${firstFactor} = ${n/firstFactor}$，整除了！\n$${n} = ${firstFactor} \\times ${n/firstFactor}$——能被拆开，说明有别的"上级"。\n\n$${n}$ 不是质数（是合数）✗`,
+          en: `${narrator}: "Found it! $${n} \\div ${firstFactor} = ${n/firstFactor}$, divides evenly!\n$${n} = ${firstFactor} \\times ${n/firstFactor}$ — can be split, meaning other 'commanders' exist.\n\n$${n}$ is NOT prime (it's composite) ✗"`,
         },
         highlightField: 'ans',
       },
     ]),
-    // Step 7/8: First 10 primes
     {
       text: {
-        zh: `${narrator}\uff1a\u8bb0\u4f4f\u524d 10 \u4e2a\u8d28\u6570\u2014\u2014\u540e\u9762\u505a\u56e0\u6570\u5206\u89e3\u4f1a\u7528\u5230`,
-        en: `${narrator}: "Remember the first 10 primes \u2014 you'll need them for factorization"`,
+        zh: `${narrator}：答案\n$${n}$ ${result ? '是质数 → 答 $1$' : '不是质数 → 答 $0$'}`,
+        en: `${narrator}: "Answer\n$${n}$ ${result ? 'IS prime → answer $1$' : 'is NOT prime → answer $0$'}"`,
       },
-      hint: {
-        zh: '$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$\n\n\u4e2a\u4f4d\u6570\uff1a2, 3, 5, 7\uff084\u4e2a\uff09\n\u5341\u51e0\uff1a11, 13, 17, 19\uff084\u4e2a\uff09\n\u4e8c\u5341\u51e0\uff1a23, 29\uff082\u4e2a\uff09',
-        en: '$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$\n\nSingle digits: 2, 3, 5, 7 (4)\nTeens: 11, 13, 17, 19 (4)\nTwenties: 23, 29 (2)',
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：必背——前 10 个质数\n$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$\n\n个位数：$2, 3, 5, 7$（4个）\n十几：$11, 13, 17, 19$（4个）\n二十几：$23, 29$（2个）\n\n后面做因数树会用到！做得漂亮！`,
+        en: `${narrator}: "Must memorize — first 10 primes\n$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$\n\nSingle digits: $2, 3, 5, 7$ (4)\nTeens: $11, 13, 17, 19$ (4)\nTwenties: $23, 29$ (2)\n\nYou'll need these for factor trees! Brilliantly done!"`,
       },
       highlightField: 'ans',
     },
