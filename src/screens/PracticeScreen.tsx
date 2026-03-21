@@ -33,6 +33,7 @@ import { SpeedTriangle } from '../components/diagrams/SpeedTriangle';
 import { SimultaneousGraph } from '../components/diagrams/SimultaneousGraph';
 import { StatsDotPlot } from '../components/diagrams/StatsDotPlot';
 import { AreaShape } from '../components/diagrams/AreaShape';
+import { AlgebraBox } from '../components/diagrams/AlgebraBox';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -466,6 +467,10 @@ export const PracticeScreen = ({
                 time={currentMission.data.time as number}
                 mode={currentMission.data.mode as 'speed' | 'distance' | 'time'}
               />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'EXPAND' && currentMission.data?.a !== undefined ? (
+              <AlgebraBox mode="expand" a={currentMission.data.a as number} b={currentMission.data.b as number} c={currentMission.data.c as number} />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'FACTORISE' && currentMission.data?.factor !== undefined ? (
+              <AlgebraBox mode="factorise" factor={currentMission.data.factor as number} p={currentMission.data.p as number} q={currentMission.data.q as number} />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'AREA' && currentMission.data?.generatorType === 'AREA_TRAP_RANDOM' ? (
               <AreaShape shape="trap" a={currentMission.data.a as number} b={currentMission.data.b as number} h={currentMission.data.h as number} />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'AREA' && currentMission.data?.length !== undefined ? (
