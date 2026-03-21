@@ -37,6 +37,8 @@ import { AlgebraBox } from '../components/diagrams/AlgebraBox';
 import { PercentageBar } from '../components/diagrams/PercentageBar';
 import { StandardFormScale } from '../components/diagrams/StandardFormScale';
 import { IndicesTower } from '../components/diagrams/IndicesTower';
+import { FunctionMachine } from '../components/diagrams/FunctionMachine';
+import { ProportionGraph } from '../components/diagrams/ProportionGraph';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -469,6 +471,17 @@ export const PracticeScreen = ({
                 distance={currentMission.data.distance as number}
                 time={currentMission.data.time as number}
                 mode={currentMission.data.mode as 'speed' | 'distance' | 'time'}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.data?.generatorType === 'FUNC_VAL_RANDOM' && currentMission.data?.m !== undefined ? (
+              <FunctionMachine x={currentMission.data.x as number} m={currentMission.data.m as number} b={currentMission.data.b as number} />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.data?.generatorType === 'RATIO_Y8_RANDOM' && currentMission.data?.k !== undefined ? (
+              <ProportionGraph
+                mode={currentMission.data.mode as 'direct' | 'inverse'}
+                k={currentMission.data.k as number}
+                x1={currentMission.data.x1 as number}
+                y1={currentMission.data.y1 as number}
+                x2={currentMission.data.x2 as number}
+                y2={currentMission.data.y2 as number}
               />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'PERCENTAGE' && currentMission.data?.initial !== undefined && currentMission.data?.pct !== undefined ? (
               <PercentageBar
