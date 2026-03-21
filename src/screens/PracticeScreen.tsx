@@ -42,6 +42,7 @@ import { ProportionGraph } from '../components/diagrams/ProportionGraph';
 import { ArithmeticSequence } from '../components/diagrams/ArithmeticSequence';
 import { PerimeterRect } from '../components/diagrams/PerimeterRect';
 import { CoordinatePlane } from '../components/diagrams/CoordinatePlane';
+import { SubstitutionFlow } from '../components/diagrams/SubstitutionFlow';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -474,6 +475,13 @@ export const PracticeScreen = ({
                 distance={currentMission.data.distance as number}
                 time={currentMission.data.time as number}
                 mode={currentMission.data.mode as 'speed' | 'distance' | 'time'}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'SUBSTITUTION' && currentMission.data?.x !== undefined ? (
+              <SubstitutionFlow
+                expr={currentMission.data.expr as string || ''}
+                x={currentMission.data.x as number}
+                answer={currentMission.data.answer as number}
+                mode={currentMission.data.mode as string || 'linear'}
               />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'COORDINATES' && currentMission.data?.targetX !== undefined ? (
               <CoordinatePlane
