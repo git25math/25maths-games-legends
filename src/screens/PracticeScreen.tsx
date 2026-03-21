@@ -34,6 +34,9 @@ import { SimultaneousGraph } from '../components/diagrams/SimultaneousGraph';
 import { StatsDotPlot } from '../components/diagrams/StatsDotPlot';
 import { AreaShape } from '../components/diagrams/AreaShape';
 import { AlgebraBox } from '../components/diagrams/AlgebraBox';
+import { PercentageBar } from '../components/diagrams/PercentageBar';
+import { StandardFormScale } from '../components/diagrams/StandardFormScale';
+import { IndicesTower } from '../components/diagrams/IndicesTower';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -466,6 +469,25 @@ export const PracticeScreen = ({
                 distance={currentMission.data.distance as number}
                 time={currentMission.data.time as number}
                 mode={currentMission.data.mode as 'speed' | 'distance' | 'time'}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'PERCENTAGE' && currentMission.data?.initial !== undefined && currentMission.data?.pct !== undefined ? (
+              <PercentageBar
+                initial={currentMission.data.initial as number}
+                pct={currentMission.data.pct as number}
+                increase={(currentMission.data.rate as number) >= 0}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'INDICES' && currentMission.data?.base !== undefined && currentMission.data?.e1 !== undefined ? (
+              <IndicesTower
+                base={currentMission.data.base as number}
+                e1={currentMission.data.e1 as number}
+                e2={currentMission.data.e2 as number}
+                op={(currentMission.data.op as 'div' | undefined) === 'div' ? 'div' : 'mul'}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.data?.generatorType === 'STD_FORM_RANDOM' && currentMission.data?.a !== undefined ? (
+              <StandardFormScale
+                number={currentMission.data.number as number}
+                a={currentMission.data.a as number}
+                n={currentMission.data.n as number}
               />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'EXPAND' && currentMission.data?.a !== undefined ? (
               <AlgebraBox mode="expand" a={currentMission.data.a as number} b={currentMission.data.b as number} c={currentMission.data.c as number} />
