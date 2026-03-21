@@ -11,4 +11,26 @@ export default defineConfig({
       '@': path.resolve(__dirname, '.'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split heavy modules into separate chunks for parallel loading
+          'generators': ['./src/utils/generateMission.ts'],
+          'diagrams': [
+            './src/utils/renderDiagram.tsx',
+            './src/components/diagrams/AnimatedCoordinatePlane.tsx',
+            './src/components/diagrams/AnimatedQuadraticPlane.tsx',
+            './src/components/diagrams/AnimatedNumberLine.tsx',
+            './src/components/diagrams/CoordinatePlane.tsx',
+          ],
+          'katex': ['katex'],
+          'motion': ['motion/react'],
+          'missions': ['./src/data/missions.ts'],
+          'lucide': ['lucide-react'],
+          'supabase': ['@supabase/supabase-js'],
+        },
+      },
+    },
+  },
 });
