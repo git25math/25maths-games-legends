@@ -3,6 +3,8 @@
  * Covers: STATISTICS type (Y8 Unit 5: resource counting)
  * Shows data points on a number line with the target statistic highlighted
  */
+import type { JSX } from 'react';
+
 
 type Props = {
   values: number[];

@@ -75,7 +75,7 @@ export function AnimatedCoordinatePlane({ step, points, m, c, label }: Props) {
   }
 
   return (
-    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full max-w-xs mx-auto">
+    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full max-w-xs mx-auto" role="img" aria-label="Coordinate plane with plotted line">
       {/* Step 0+: Grid + axes (always visible, fade in) */}
       <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
         {grid}

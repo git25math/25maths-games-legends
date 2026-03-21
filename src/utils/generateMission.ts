@@ -4514,7 +4514,7 @@ export function generateFdpConvertMission(template: Mission): Mission {
 
   // Decide conversion direction
   const directions = ['frac_to_pct', 'pct_to_dec', 'dec_to_frac'] as const;
-  const dir = pickRandom(tier === 1 ? directions.slice(0, 1) : directions);
+  const dir = pickRandom([...(tier === 1 ? directions.slice(0, 1) : directions)]);
 
   let answer: number;
   let description: BilingualText;

@@ -8,6 +8,7 @@
  * Step 3: converted pies with LCD (e.g., 4/6 + 2/6) — "通分" animation
  * Step 4: result pie (single pie showing combined result, e.g., 6/6)
  */
+import type { JSX } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 const COLORS = {
@@ -126,7 +127,7 @@ export function FractionPie({ numerator1, denominator1, numerator2, denominator2
   const row3CY = HEIGHT - R - 18;
 
   return (
-    <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full max-w-sm mx-auto">
+    <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full max-w-sm mx-auto" role="img" aria-label="Fraction pie diagram">
       <AnimatePresence>
         {/* ─── Row 1: Original fractions ─── */}
         {showRow1 && (

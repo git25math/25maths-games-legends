@@ -4,6 +4,8 @@
  * Direct: y = kx (straight line through origin)
  * Inverse: y = k/x (hyperbola)
  */
+import type { JSX } from 'react';
+
 
 type Props = {
   mode: 'direct' | 'inverse';

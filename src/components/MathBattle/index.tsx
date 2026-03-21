@@ -757,8 +757,8 @@ export const MathBattle = ({
                         className="flex gap-4 mt-8 z-10"
                       >
                         {[
-                          { icon: <Trophy size={20} className="text-yellow-600" />, label: t.score, value: finalScore, color: 'bg-yellow-100 border-yellow-300' },
-                          { icon: <span className="text-xl">⏱️</span>, label: t.time, value: `${finalDuration}s`, color: 'bg-blue-100 border-blue-300' },
+                          { icon: <Trophy size={20} className="text-yellow-600" />, label: lang === 'zh' ? '得分' : lang === 'zh_TW' ? '得分' : 'Score', value: finalScore, color: 'bg-yellow-100 border-yellow-300' },
+                          { icon: <span className="text-xl">⏱️</span>, label: lang === 'zh' ? '用时' : lang === 'zh_TW' ? '用時' : 'Time', value: `${finalDuration}s`, color: 'bg-blue-100 border-blue-300' },
                           { icon: <Heart size={20} className="text-red-500 fill-red-500" />, label: lang === 'zh' ? '剩余体力' : lang === 'zh_TW' ? '剩餘體力' : 'HP Left', value: hp, color: 'bg-red-100 border-red-300' },
                         ].map((stat, i) => (
                           <motion.div

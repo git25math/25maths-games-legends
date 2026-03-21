@@ -115,7 +115,7 @@ export function AnimatedQuadraticPlane({ step, points, a, b = 0, c, label }: Pro
     : `y = ${a === 1 ? '' : a === -1 ? '-' : a}x² ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)}`);
 
   return (
-    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full max-w-xs mx-auto">
+    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full max-w-xs mx-auto" role="img" aria-label="Quadratic curve on coordinate plane">
       {/* Step 0+: Grid + axes (always visible, fade in) */}
       <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
         {grid}

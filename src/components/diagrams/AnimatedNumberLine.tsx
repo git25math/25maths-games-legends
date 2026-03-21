@@ -5,6 +5,7 @@
  * Usage:
  *   <AnimatedNumberLine start={5} end={2} movement={-3} step={tutorialStep} />
  */
+import type { JSX } from 'react';
 import { motion } from 'motion/react';
 
 const COLORS = {
@@ -75,7 +76,7 @@ export function AnimatedNumberLine({ start, end, movement, step = 999, inequalit
   const arrowColor = movement > 0 ? COLORS.green : COLORS.red;
 
   return (
-    <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full max-w-xs mx-auto">
+    <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full max-w-xs mx-auto" role="img" aria-label="Animated number line">
       {/* Number line */}
       <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
         <line x1={PAD} y1={LINE_Y} x2={WIDTH - PAD} y2={LINE_Y} stroke={COLORS.wood} strokeWidth={2} />

@@ -11,6 +11,8 @@
  *
  * HCF = left column product, LCM = left × bottom
  */
+import type { JSX } from 'react';
+
 
 const COLORS = {
   wood: '#3d2b1f',

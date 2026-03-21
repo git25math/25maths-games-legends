@@ -222,7 +222,7 @@ class SoundEngine {
     const now = this.ctx.currentTime;
     
     // SFX Suppression
-    this.sfxEQ.cancelScheduledValues(now);
+    this.sfxEQ.frequency.cancelScheduledValues(now);
     if (active) {
       this.sfxEQ.type = 'lowpass';
       this.sfxEQ.frequency.exponentialRampToValueAtTime(400, now + 0.1);
@@ -232,7 +232,7 @@ class SoundEngine {
     }
 
     // Music Suppression
-    this.musicEQ.cancelScheduledValues(now);
+    this.musicEQ.frequency.cancelScheduledValues(now);
     if (active) {
       this.musicEQ.type = 'lowpass';
       this.musicEQ.frequency.exponentialRampToValueAtTime(300, now + 0.1);

@@ -70,7 +70,7 @@ function getTagColor(tag: string): string {
 }
 
 // Tag badge component
-function TagBadge({ tag, onRemove }: { tag: string; onRemove?: () => void }) {
+function TagBadge({ tag, onRemove }: { key?: string | number; tag: string; onRemove?: () => void }) {
   return (
     <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold border ${getTagColor(tag)}`}>
       {tag}

@@ -1,4 +1,5 @@
 // UI sound effects: card_pick, countdown_warn
+import type { SoundFn } from '../engine';
 import { playNoiseBurst, playTacticalPulse } from '../utils';
 
 /** Card Pick — Tactical Select (Short digital beep/click) */

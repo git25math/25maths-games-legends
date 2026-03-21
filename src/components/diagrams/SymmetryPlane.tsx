@@ -3,6 +3,7 @@
  * Covers: SYMMETRY type (Y8 Unit 6)
  * Modes: reflect_x (over x-axis), reflect_y (over y-axis), rotate_180 (about origin)
  */
+import type { JSX } from 'react';
 import { motion } from 'motion/react';
 
 type Props = {

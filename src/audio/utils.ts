@@ -1,7 +1,7 @@
 // Audio utility functions: Tactical Synthesis, Noise, Percussion, Foley
 // Style: Modern Tactical / Immersive Minimalist (Non-fatiguing)
 
-export const rand = (min: number) => Math.random() * min;
+export const rand = (min: number, max?: number) => max !== undefined ? min + Math.random() * (max - min) : Math.random() * min;
 export const jitter = (center: number, range: number) => center + (Math.random() - 0.5) * 2 * range;
 export const randCents = (cents: number) => (Math.random() - 0.5) * 2 * cents;
 

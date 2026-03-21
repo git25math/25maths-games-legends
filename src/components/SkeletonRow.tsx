@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const SkeletonRow = ({ columns = 1 }: { columns?: number }) => {
+export const SkeletonRow = ({ columns = 1 }: { key?: string | number; columns?: number }) => {
   return (
     <div className="flex w-full gap-4 py-3">
       {Array.from({ length: columns }).map((_, i) => (

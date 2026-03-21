@@ -22,7 +22,7 @@ type Props = {
   equationSteps?: EquationStep[];
   characterId: string;
   currentStep: number;
-  lang: 'zh' | 'en';
+  lang: 'zh' | 'zh_TW' | 'en';
 };
 
 /**

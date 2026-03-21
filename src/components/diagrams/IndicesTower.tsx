@@ -3,6 +3,8 @@
  * Covers: INDICES type (Y8 Unit 7: military strength)
  * Shows base^exponent as stacked blocks of multiplication
  */
+import type { JSX } from 'react';
+
 
 type Props = {
   base: number;

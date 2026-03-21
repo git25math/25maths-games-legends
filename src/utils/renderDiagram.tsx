@@ -2,6 +2,7 @@
  * renderDiagram — Selects and renders the appropriate SVG diagram for a mission.
  * Extracted from PracticeScreen to reduce JSX nesting depth.
  */
+import type { JSX } from 'react';
 import type { Mission } from '../types';
 import { AnimatedCoordinatePlane } from '../components/diagrams/AnimatedCoordinatePlane';
 import { AnimatedQuadraticPlane } from '../components/diagrams/AnimatedQuadraticPlane';

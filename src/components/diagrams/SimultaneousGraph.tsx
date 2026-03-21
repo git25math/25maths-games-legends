@@ -3,6 +3,8 @@
  * Covers: SIMULTANEOUS type (Y8 Unit 8: substitution method)
  * Shows y = ax + b and cx + dy = e as two lines meeting at (solX, solY)
  */
+import type { JSX } from 'react';
+
 
 type Props = {
   /** y = ax + b */
