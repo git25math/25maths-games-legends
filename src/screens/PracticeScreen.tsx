@@ -32,6 +32,7 @@ import { CylinderDiagram } from '../components/diagrams/CylinderDiagram';
 import { SpeedTriangle } from '../components/diagrams/SpeedTriangle';
 import { SimultaneousGraph } from '../components/diagrams/SimultaneousGraph';
 import { StatsDotPlot } from '../components/diagrams/StatsDotPlot';
+import { AreaShape } from '../components/diagrams/AreaShape';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -465,6 +466,10 @@ export const PracticeScreen = ({
                 time={currentMission.data.time as number}
                 mode={currentMission.data.mode as 'speed' | 'distance' | 'time'}
               />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'AREA' && currentMission.data?.generatorType === 'AREA_TRAP_RANDOM' ? (
+              <AreaShape shape="trap" a={currentMission.data.a as number} b={currentMission.data.b as number} h={currentMission.data.h as number} />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'AREA' && currentMission.data?.length !== undefined ? (
+              <AreaShape shape="rect" length={currentMission.data.length as number} width={currentMission.data.width as number} />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.data?.generatorType === 'SIMULTANEOUS_Y8_RANDOM' && currentMission.data?.subEq1 ? (
               <SimultaneousGraph
                 eq1={currentMission.data.subEq1 as [number, number]}
