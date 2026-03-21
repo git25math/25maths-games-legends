@@ -39,6 +39,9 @@ import { StandardFormScale } from '../components/diagrams/StandardFormScale';
 import { IndicesTower } from '../components/diagrams/IndicesTower';
 import { FunctionMachine } from '../components/diagrams/FunctionMachine';
 import { ProportionGraph } from '../components/diagrams/ProportionGraph';
+import { ArithmeticSequence } from '../components/diagrams/ArithmeticSequence';
+import { PerimeterRect } from '../components/diagrams/PerimeterRect';
+import { CoordinatePlane } from '../components/diagrams/CoordinatePlane';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -472,6 +475,16 @@ export const PracticeScreen = ({
                 time={currentMission.data.time as number}
                 mode={currentMission.data.mode as 'speed' | 'distance' | 'time'}
               />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'COORDINATES' && currentMission.data?.targetX !== undefined ? (
+              <CoordinatePlane
+                xRange={[-5, 5]}
+                yRange={[-5, 5]}
+                points={[{ x: currentMission.data.targetX as number, y: currentMission.data.targetY as number, label: `(${currentMission.data.targetX}, ${currentMission.data.targetY})`, color: '#c0392b' }]}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'ARITHMETIC' && currentMission.data?.a1 !== undefined ? (
+              <ArithmeticSequence a1={currentMission.data.a1 as number} d={currentMission.data.d as number} n={currentMission.data.n as number} />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'PERIMETER' && currentMission.data?.length !== undefined ? (
+              <PerimeterRect length={currentMission.data.length as number} width={currentMission.data.width as number} />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.data?.generatorType === 'FUNC_VAL_RANDOM' && currentMission.data?.m !== undefined ? (
               <FunctionMachine x={currentMission.data.x as number} m={currentMission.data.m as number} b={currentMission.data.b as number} />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.data?.generatorType === 'RATIO_Y8_RANDOM' && currentMission.data?.k !== undefined ? (
