@@ -30,6 +30,8 @@ import { CircleDiagram } from '../components/diagrams/CircleDiagram';
 import { SymmetryPlane } from '../components/diagrams/SymmetryPlane';
 import { CylinderDiagram } from '../components/diagrams/CylinderDiagram';
 import { SpeedTriangle } from '../components/diagrams/SpeedTriangle';
+import { SimultaneousGraph } from '../components/diagrams/SimultaneousGraph';
+import { StatsDotPlot } from '../components/diagrams/StatsDotPlot';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 
@@ -462,6 +464,19 @@ export const PracticeScreen = ({
                 distance={currentMission.data.distance as number}
                 time={currentMission.data.time as number}
                 mode={currentMission.data.mode as 'speed' | 'distance' | 'time'}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.data?.generatorType === 'SIMULTANEOUS_Y8_RANDOM' && currentMission.data?.subEq1 ? (
+              <SimultaneousGraph
+                eq1={currentMission.data.subEq1 as [number, number]}
+                eq2={currentMission.data.subEq2 as [number, number, number]}
+                solX={currentMission.data.x as number}
+                solY={currentMission.data.y as number}
+                step={currentPhase === 'amber' ? 999 : Math.max(0, tutorialStep - 1)}
+              />
+            ) : (currentPhase === 'green' || currentPhase === 'amber') && (currentMission.type === 'STATISTICS' || currentMission.type === 'PROBABILITY') && currentMission.data?.values && currentMission.data?.mode ? (
+              <StatsDotPlot
+                values={currentMission.data.values as number[]}
+                mode={currentMission.data.mode as 'mean' | 'median' | 'mode' | 'range'}
               />
             ) : (currentPhase === 'green' || currentPhase === 'amber') && currentMission.type === 'VOLUME' && currentMission.data?.radius !== undefined ? (
               <CylinderDiagram
