@@ -10,7 +10,7 @@ export const CharacterCard = ({ character, isSelected, onSelect, lang }: { chara
     whileHover={isSelected ? undefined : { scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
     onClick={onSelect}
-    animate={isSelected ? { borderColor: ["#b8860b", "#daa520", "#b8860b"] } : {}}
+    animate={isSelected ? { borderColor: ["#b8860b", "#daa520", "#b8860b"] } : { borderColor: "transparent" }}
     transition={isSelected ? { repeat: Infinity, duration: 2 } : undefined}
     className={`cursor-pointer p-4 rounded-2xl border-4 transition-all ${
       isSelected ? 'shadow-xl scale-105 bg-white/10' : 'border-transparent bg-white/5'

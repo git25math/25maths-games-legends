@@ -10,6 +10,44 @@ function randInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/** Format a number with sign for display in equations: positive → "+ 3", negative → "- 3" */
+/** Format number with sign for equation display: 3→"+ 3", -3→"- 3" */
+function signTerm(n: number): string {
+  return n >= 0 ? `+ ${n}` : `- ${Math.abs(n)}`;
+}
+
+/** Format coefficient×variable: 1→"x", -1→"-x", 3→"3x", -2→"-2x" */
+function coeffStr(coeff: number, variable: string): string {
+  if (coeff === 1) return variable;
+  if (coeff === -1) return `-${variable}`;
+  return `${coeff}${variable}`;
+}
+
+/** Format coefficient×variable with leading sign: 1→"+ x", -1→"- x", 3→"+ 3x", -2→"- 2x" */
+function signCoeff(coeff: number, variable: string): string {
+  if (coeff === 0) return '+ 0';
+  return coeff > 0 ? `+ ${coeffStr(coeff, variable)}` : `- ${coeffStr(Math.abs(coeff), variable)}`;
+}
+
+/** Format "ax + by = c" with correct signs, omitting 1/-1 coefficients */
+function eqStr(a: number, b: number, c: number, xVar = 'x', yVar = 'y'): string {
+  return `${coeffStr(a, xVar)} ${signCoeff(b, yVar)} = ${c}`;
+}
+
+/** Format "mx + c" style linear expression */
+function linearExpr(m: number, c: number, variable = 'x'): string {
+  if (c === 0) return coeffStr(m, variable);
+  return `${coeffStr(m, variable)} ${signTerm(c)}`;
+}
+
+const MAX_RETRY = 20;
+/** Safe retry: increments _retryCount on template and throws if exceeded */
+function safeRetry<T>(template: Mission, generator: (t: Mission) => T): T {
+  const count = ((template as any)._retryCount || 0) + 1;
+  if (count > MAX_RETRY) throw new Error(`Generator exceeded ${MAX_RETRY} retries`);
+  return generator({ ...template, _retryCount: count } as any);
+}
+
 /* ── Generator type registry ── */
 
 export type GeneratorType =
@@ -76,7 +114,13 @@ export type GeneratorType =
   | 'PARALLEL_ANGLES_RANDOM'
   | 'SYMMETRY_RANDOM'
   | 'SIMULTANEOUS_Y8_RANDOM'
-  | 'RATIO_Y8_RANDOM';
+  | 'RATIO_Y8_RANDOM'
+  | 'VENN_RANDOM'
+  | 'ROTATION_RANDOM'
+  | 'ENLARGEMENT_RANDOM'
+  | 'VECTOR_ADD_RANDOM'
+  | 'CUMFREQ_RANDOM'
+  | 'SECTOR_RANDOM';
 
 /** Adaptive difficulty tier: 1=easy, 2=medium(default), 3=hard */
 export type DifficultyTier = 1 | 2 | 3;
@@ -149,6 +193,12 @@ const GENERATOR_MAP: Record<GeneratorType, (t: Mission) => Mission> = {
   SYMMETRY_RANDOM: generateSymmetryMission,
   SIMULTANEOUS_Y8_RANDOM: generateSimultaneousY8Mission,
   RATIO_Y8_RANDOM: generateRatioY8Mission,
+  VENN_RANDOM: generateVennMission,
+  ROTATION_RANDOM: generateRotationMission,
+  ENLARGEMENT_RANDOM: generateEnlargementMission,
+  VECTOR_ADD_RANDOM: generateVectorAddMission,
+  CUMFREQ_RANDOM: generateCumFreqMission,
+  SECTOR_RANDOM: generateSectorMission,
 };
 
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
@@ -179,6 +229,7 @@ export function generateSimpleEqMission(template: Mission): Mission {
     { tex: `${a}x = ${result}`, annotation: { zh: '原方程', en: 'Original equation' } },
     { tex: `\\frac{${a}x}{${a}} = \\frac{${result}}{${a}}`, annotation: { zh: `两边÷${a}`, en: `÷${a} both sides` } },
     { tex: `x = ${x}`, annotation: { zh: '求解', en: 'Solution' } },
+    { tex: `${a} \\times ${x} = ${result}`, annotation: { zh: `验算：代回原式 ✓`, en: `Verify: substitute back ✓` } },
   ];
 
   return {
@@ -207,6 +258,7 @@ export function generateAddEqMission(template: Mission): Mission {
     { tex: `x + ${a} = ${result}`, annotation: { zh: '原方程', en: 'Original equation' } },
     { tex: `x + ${a} - ${a} = ${result} - ${a}`, annotation: { zh: `两边-${a}`, en: `-${a} both sides` } },
     { tex: `x = ${x}`, annotation: { zh: '求解', en: 'Solution' } },
+    { tex: `${x} + ${a} = ${result}`, annotation: { zh: `验算：代回原式 ✓`, en: `Verify: substitute back ✓` } },
   ];
 
   return {
@@ -349,10 +401,17 @@ export function generateArithmeticMission(template: Mission): Mission {
   };
 
   const narrator = pickRandom(['诸葛亮', '赵云', '曹操']);
+  const a2 = a1 + d;
+  const a3 = a1 + 2 * d;
+  const nMinus1 = n - 1;
+  const step = nMinus1 * d;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：等差数列，首项 ${a1}，公差 ${d}，求第 ${n} 项。`, en: `${narrator}: "Arithmetic sequence: a1=${a1}, d=${d}, find term ${n}."` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：公式：$a_n = ${a1} + (${n}-1) \\times ${d} = ${a1} + ${(n-1)*d} = ?$`, en: `${narrator}: "Formula: $a_n = ${a1} + (${n}-1) \\times ${d} = ${a1} + ${(n-1)*d} = ?$"` }, highlightField: 'ans' },
-    { text: { zh: `${narrator}：所以 a_${n} = ${ans}！`, en: `${narrator}: "So a_${n} = ${ans}!"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：什么是等差数列？\n就像士兵排队报数——每个人比前一个多喊同样的数！\n第一个喊 $${a1}$，每次多 $${d}$：$${a1}, ${a2}, ${a3}, ...$\n\n这个"每次多的数"叫**公差** $d = ${d}$。`, en: `${narrator}: "What is an arithmetic sequence?\nLike soldiers counting off — each adds the same number!\nFirst calls $${a1}$, each adds $${d}$: $${a1}, ${a2}, ${a3}, ...$\n\nThis 'added number' is the **common difference** $d = ${d}$."` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：核心公式\n$a_n = a_1 + (n-1) \\times d$\n\n为什么是 $n-1$？第 1 项不用加，第 2 项加 1 次，第 3 项加 2 次……\n第 $n$ 项加 $(n-1)$ 次！`, en: `${narrator}: "Core formula\n$a_n = a_1 + (n-1) \\times d$\n\nWhy $n-1$? Term 1 adds nothing, Term 2 adds once, Term 3 adds twice...\nTerm $n$ adds $(n-1)$ times!"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：代入数值\n$a_{${n}} = ${a1} + (${n}-1) \\times ${d}$\n\n先算括号：$${n} - 1 = ${nMinus1}$`, en: `${narrator}: "Substitute values\n$a_{${n}} = ${a1} + (${n}-1) \\times ${d}$\n\nBrackets first: $${n} - 1 = ${nMinus1}$"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：再算乘法\n$${nMinus1} \\times ${d} = ${step}$\n\n意思就是：从第 1 项开始，公差加了 ${nMinus1} 次，总共多了 $${step}$。`, en: `${narrator}: "Then multiply\n$${nMinus1} \\times ${d} = ${step}$\n\nMeaning: from term 1, the common difference was added ${nMinus1} times, totaling $${step}$ more."` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：答案\n$a_{${n}} = ${a1} + ${step} = ${ans}$\n\n第 ${n} 项 = $${ans}$！`, en: `${narrator}: "Answer\n$a_{${n}} = ${a1} + ${step} = ${ans}$\n\nTerm ${n} = $${ans}$!"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：验算\n反过来想：$${ans} - ${a1} = ${step}$\n$${step} \\div ${d} = ${nMinus1}$\n$${nMinus1} + 1 = ${n}$ ✓ 确实是第 ${n} 项！`, en: `${narrator}: "Verify\nThink backwards: $${ans} - ${a1} = ${step}$\n$${step} \\div ${d} = ${nMinus1}$\n$${nMinus1} + 1 = ${n}$ ✓ Confirmed as term ${n}!"` }, highlightField: 'ans' },
   ];
 
   return {
@@ -892,8 +951,8 @@ export function generateLinearMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：答案\n$$y = ${m}x ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)}$$\n这就是这条直线的方程！有了它，给任何 $x$ 都能算出对应的 $y$。`,
-        en: `${narrator}: "Answer\n$$y = ${m}x ${c >= 0 ? '+ ' + c : '- ' + Math.abs(c)}$$\nThis is the equation of the line! With it, give any $x$ and you can find the matching $y$."`,
+        zh: `${narrator}：答案\n$$y = ${linearExpr(m, c)}$$\n这就是这条直线的方程！有了它，给任何 $x$ 都能算出对应的 $y$。`,
+        en: `${narrator}: "Answer\n$$y = ${linearExpr(m, c)}$$\nThis is the equation of the line! With it, give any $x$ and you can find the matching $y$."`,
       },
       highlightField: 'c',
     },
@@ -934,15 +993,19 @@ export function generateSimultaneousMission(template: Mission): Mission {
 
   // Ensure the system has unique solution (det ≠ 0)
   const det = a1 * b2 - a2 * b1;
-  if (det === 0) return generateSimultaneousMission(template); // retry
+  if (det === 0) return safeRetry(template, generateSimultaneousMission); // retry
 
   const narrator = pickRandom(['周瑜', '诸葛亮']);
+  const eq1Display = eqStr(a1, b1, c1);
+  const eq2Display = eqStr(a2, b2, c2);
   const description: BilingualText = {
-    zh: `解联立方程：$${a1}x + ${b1}y = ${c1}$，$${a2}x + ${b2}y = ${c2}$`,
-    en: `Solve: $${a1}x + ${b1}y = ${c1}$, $${a2}x + ${b2}y = ${c2}$`,
+    zh: `解联立方程：$${eq1Display}$，$${eq2Display}$`,
+    en: `Solve: $${eq1Display}$, $${eq2Display}$`,
   };
 
   // Compute elimination intermediate values for tutorial
+  // Use sign-aware multipliers so b-coefficients cancel (same sign → subtract, diff sign → add)
+  const sameSignB = (b1 > 0 && b2 > 0) || (b1 < 0 && b2 < 0);
   const elimMul1 = Math.abs(b2);
   const elimMul2 = Math.abs(b1);
   const newA1 = a1 * elimMul1;
@@ -951,16 +1014,19 @@ export function generateSimultaneousMission(template: Mission): Mission {
   const newA2 = a2 * elimMul2;
   const newB2 = b2 * elimMul2;
   const newC2 = c2 * elimMul2;
-  const elimA = newA1 - newA2;
-  const elimC = newC1 - newC2;
+  // When b1,b2 same sign: subtract to cancel; when opposite sign: add to cancel
+  const elimA = sameSignB ? newA1 - newA2 : newA1 + newA2;
+  const elimC = sameSignB ? newC1 - newC2 : newC1 + newC2;
+  // Safety: if elimA is still 0 after sign-aware elimination, retry
+  if (elimA === 0) return safeRetry(template, generateSimultaneousMission);
 
   const tutorialSteps = [
     { text: { zh: `${narrator}：什么是联立方程?\n两个方程包含两个未知数，需要同时求解。`, en: `${narrator}: "What are simultaneous equations?\nTwo equations with two unknowns — solve both at the same time."` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：写出两个方程：\n方程1: $${a1}x + ${b1}y = ${c1}$\n方程2: $${a2}x + ${b2}y = ${c2}$`, en: `${narrator}: "Write the two equations:\nEq1: $${a1}x + ${b1}y = ${c1}$\nEq2: $${a2}x + ${b2}y = ${c2}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：写出两个方程：\n方程1: $${eq1Display}$\n方程2: $${eq2Display}$`, en: `${narrator}: "Write the two equations:\nEq1: $${eq1Display}$\nEq2: $${eq2Display}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：目标：让一个变量的系数相同，这样就能消去它。\n我们选择消去 $y$。`, en: `${narrator}: "Goal: make the coefficient of one variable the same in both equations, so we can eliminate it.\nLet's eliminate $y$."` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：方程1 乘以 $${elimMul1}$: $${newA1}x + ${newB1}y = ${newC1}$\n方程2 乘以 $${elimMul2}$: $${newA2}x + ${newB2}y = ${newC2}$`, en: `${narrator}: "Multiply Eq1 by $${elimMul1}$: $${newA1}x + ${newB1}y = ${newC1}$\nMultiply Eq2 by $${elimMul2}$: $${newA2}x + ${newB2}y = ${newC2}$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：两式相减，$y$ 消去：\n$${elimA}x = ${elimC}$\n$x = ${elimC} \\div ${elimA} = ${x}$`, en: `${narrator}: "Subtract one from the other, $y$ disappears:\n$${elimA}x = ${elimC}$\n$x = ${elimC} \\div ${elimA} = ${x}$"` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：把 $x = ${x}$ 代回方程1：\n$${a1} \\times ${x} + ${b1}y = ${c1}$\n$${b1}y = ${c1 - a1 * x}$\n$y = ${y}$`, en: `${narrator}: "Substitute $x = ${x}$ back into Eq1:\n$${a1} \\times ${x} + ${b1}y = ${c1}$\n$${b1}y = ${c1 - a1 * x}$\n$y = ${y}$"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}：方程1 乘以 $${elimMul1}$: $${eqStr(newA1, newB1, newC1)}$\n方程2 乘以 $${elimMul2}$: $${eqStr(newA2, newB2, newC2)}$`, en: `${narrator}: "Multiply Eq1 by $${elimMul1}$: $${eqStr(newA1, newB1, newC1)}$\nMultiply Eq2 by $${elimMul2}$: $${eqStr(newA2, newB2, newC2)}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：两式${sameSignB ? '相减' : '相加'}，$y$ 消去：\n$${coeffStr(elimA, 'x')} = ${elimC}$\n$x = ${elimC} \\div ${elimA} = ${x}$`, en: `${narrator}: "${sameSignB ? 'Subtract' : 'Add'} the equations, $y$ disappears:\n$${coeffStr(elimA, 'x')} = ${elimC}$\n$x = ${elimC} \\div ${elimA} = ${x}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：把 $x = ${x}$ 代回方程1：\n$${a1} \\times (${x}) ${signCoeff(b1, 'y')} = ${c1}$\n$${coeffStr(b1, 'y')} = ${c1 - a1 * x}$\n$y = ${y}$`, en: `${narrator}: "Substitute $x = ${x}$ back into Eq1:\n$${a1} \\times (${x}) ${signCoeff(b1, 'y')} = ${c1}$\n$${coeffStr(b1, 'y')} = ${c1 - a1 * x}$\n$y = ${y}$"` }, highlightField: 'y' },
     { text: { zh: `${narrator}：答案：$x = ${x}$，$y = ${y}$!`, en: `${narrator}: "Answer: $x = ${x}$, $y = ${y}$!"` }, highlightField: 'x' },
   ];
 
@@ -1027,6 +1093,13 @@ export function generateRatioMission(template: Mission): Mission {
       },
       highlightField: 'y',
     },
+    {
+      text: {
+        zh: `${narrator}：验算\n检查比例：$${knownValue} : ${answerValue} = ${knownValue / multiplier} : ${answerValue / multiplier} = ${a} : ${b}$ ✓\n化简后回到原比例，验证成功！`,
+        en: `${narrator}: "Verify\nCheck ratio: $${knownValue} : ${answerValue} = ${knownValue / multiplier} : ${answerValue / multiplier} = ${a} : ${b}$ ✓\nSimplifies back to the original ratio, verified!"`,
+      },
+      highlightField: 'y',
+    },
   ];
 
   return {
@@ -1054,7 +1127,7 @@ export function generateSimilarityMission(template: Mission): Mission {
   const correctX = (a / b) * c;
 
   // Ensure clean answer
-  if (correctX !== Math.round(correctX * 100) / 100) return generateSimilarityMission(template);
+  if (correctX !== Math.round(correctX * 100) / 100) return safeRetry(template, generateSimilarityMission);
 
   const narrator = pickRandom(['关羽', '赵云']);
   const description: BilingualText = {
@@ -1069,6 +1142,7 @@ export function generateSimilarityMission(template: Mission): Mission {
     { text: { zh: `${narrator}：找出需要求的边：\n已知第二个三角形的对应边 = $${c}$\n我们要求 $x$。`, en: `${narrator}: "Identify which side we need:\nThe corresponding side in the second triangle = $${c}$\nWe need to find $x$."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：计算：\n$x = ${c} \\times ${scaleFactor} = ${correctX}$`, en: `${narrator}: "Calculate:\n$x = ${c} \\times ${scaleFactor} = ${correctX}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：答案：$x = ${correctX}$!`, en: `${narrator}: "Answer: $x = ${correctX}$!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：验算\n检查比例：$\\frac{${a}}{${b}} = ${scaleFactor}$，$\\frac{${correctX}}{${c}} = ${correctX / c}$\n两个比例相等 ✓ 验证成功！`, en: `${narrator}: "Verify\nCheck ratios: $\\frac{${a}}{${b}} = ${scaleFactor}$, $\\frac{${correctX}}{${c}} = ${correctX / c}$\nBoth ratios are equal ✓ Verified!"` }, highlightField: 'x' },
   ];
 
   return {
@@ -1236,10 +1310,19 @@ export function generateTrigonometryMission(template: Mission): Mission {
       [1, Math.round(Math.tan(Math.PI / 6) * 1000) / 1000 > 0 ? 1 : 1], // fallback
     ];
     // Use known-angle combos for clean results
+    // Checker uses Math.atan2(opp, adj) * 180/PI with tolerance 0.01
+    // So angle = round(atan2(opp, adj) * 180/PI) — must match at display level
     const knownAngles: { opp: number; adj: number; angle: number }[] = [
-      { opp: 1, adj: 1, angle: 45 }, { opp: 3, adj: 3, angle: 45 }, { opp: 5, adj: 5, angle: 45 },
-      { opp: 8, adj: 8, angle: 45 }, { opp: 10, adj: 10, angle: 45 }, { opp: 15, adj: 15, angle: 45 },
-      { opp: 20, adj: 20, angle: 45 }, { opp: 50, adj: 50, angle: 45 }, { opp: 100, adj: 100, angle: 45 },
+      // 45° (tan = 1)
+      { opp: 1, adj: 1, angle: 45 }, { opp: 5, adj: 5, angle: 45 }, { opp: 10, adj: 10, angle: 45 },
+      // ~37° (3-4-5 triangle: atan(3/4) ≈ 36.87°)
+      { opp: 3, adj: 4, angle: 36.87 }, { opp: 6, adj: 8, angle: 36.87 }, { opp: 9, adj: 12, angle: 36.87 },
+      // ~53° (4-3: atan(4/3) ≈ 53.13°)
+      { opp: 4, adj: 3, angle: 53.13 }, { opp: 8, adj: 6, angle: 53.13 }, { opp: 12, adj: 9, angle: 53.13 },
+      // ~27° (atan(1/2) ≈ 26.57°)
+      { opp: 1, adj: 2, angle: 26.57 }, { opp: 3, adj: 6, angle: 26.57 },
+      // ~63° (atan(2/1) ≈ 63.43°)
+      { opp: 2, adj: 1, angle: 63.43 }, { opp: 6, adj: 3, angle: 63.43 },
     ];
     const chosen = pickRandom(knownAngles);
 
@@ -1278,8 +1361,15 @@ export function generateTrigonometryMission(template: Mission): Mission {
       },
       {
         text: {
-          zh: `${narrator}：所以 $\\theta = ${chosen.angle}^\\circ$!`,
-          en: `${narrator}: "So $\\theta = ${chosen.angle}^\\circ$!"`,
+          zh: `${narrator}：答案\n$\\theta = ${chosen.angle}^\\circ$`,
+          en: `${narrator}: "Answer\n$\\theta = ${chosen.angle}^\\circ$"`,
+        },
+        highlightField: 'angle',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算\n$\\tan(${chosen.angle}^\\circ) \\approx \\frac{${chosen.opp}}{${chosen.adj}} = ${Math.round(chosen.opp / chosen.adj * 1000) / 1000}$ ✓\n反正切还原了比值，角度确认！`,
+          en: `${narrator}: "Verify\n$\\tan(${chosen.angle}^\\circ) \\approx \\frac{${chosen.opp}}{${chosen.adj}} = ${Math.round(chosen.opp / chosen.adj * 1000) / 1000}$ ✓\nInverse tan recovers the ratio — angle confirmed!"`,
         },
         highlightField: 'angle',
       },
@@ -1298,10 +1388,14 @@ export function generateTrigonometryMission(template: Mission): Mission {
     zh: `求正切值 $\\tan(\\theta) = ${opposite} / ${adjacent}$。`,
     en: `Find $\\tan(\\theta) = ${opposite} / ${adjacent}$.`,
   };
+  const tanRounded = Math.round(tanVal * 10000) / 10000;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：$\\tan(\\theta) = \\text{对边}/\\text{邻边}$`, en: `${narrator}: "$\\tan(\\theta) = \\text{opposite}/\\text{adjacent}$"` }, highlightField: 'tan' },
-    { text: { zh: `${narrator}：$= ${opposite} / ${adjacent}$`, en: `${narrator}: "$= ${opposite} / ${adjacent}$"` }, highlightField: 'tan' },
-    { text: { zh: `${narrator}：$\\tan(\\theta) = ${Math.round(tanVal * 10000) / 10000}$！`, en: `${narrator}: "$\\tan(\\theta) = ${Math.round(tanVal * 10000) / 10000}$!"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：为什么要学三角函数？\n直角三角形在现实中无处不在：测量城墙高度、计算箭的射程、判断敌营距离……\n三角函数就是用"边的比值"来描述角度，是军事测量的核心工具！`, en: `${narrator}: "Why learn trigonometry?\nRight triangles are everywhere: measuring wall heights, calculating arrow range, judging enemy distance...\nTrig functions use 'side ratios' to describe angles — the core tool of military surveying!"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：SOH-CAH-TOA 口诀\nSin = 对边/斜边\nCos = 邻边/斜边\n**Tan = 对边/邻边**\n\n这道题已知对边和邻边，所以用 $\\tan$！`, en: `${narrator}: "SOH-CAH-TOA\nSin = Opposite/Hypotenuse\nCos = Adjacent/Hypotenuse\n**Tan = Opposite/Adjacent**\n\nWe know opposite and adjacent, so use $\\tan$!"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：写出公式\n$\\tan(\\theta) = \\frac{\\text{对边}}{\\text{邻边}}$\n\n对边 = $${opposite}$，邻边 = $${adjacent}$`, en: `${narrator}: "Write the formula\n$\\tan(\\theta) = \\frac{\\text{opposite}}{\\text{adjacent}}$\n\nOpposite = $${opposite}$, Adjacent = $${adjacent}$"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：代入数值\n$\\tan(\\theta) = \\frac{${opposite}}{${adjacent}}$\n\n这就是一道除法：$${opposite} \\div ${adjacent}$`, en: `${narrator}: "Substitute the values\n$\\tan(\\theta) = \\frac{${opposite}}{${adjacent}}$\n\nThis is simply: $${opposite} \\div ${adjacent}$"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：答案\n$\\tan(\\theta) = ${tanRounded}$\n\n$${opposite} \\div ${adjacent} = ${tanRounded}$`, en: `${narrator}: "Answer\n$\\tan(\\theta) = ${tanRounded}$\n\n$${opposite} \\div ${adjacent} = ${tanRounded}$"` }, highlightField: 'tan' },
+    { text: { zh: `${narrator}：验算\n$\\tan(\\theta) \\times \\text{邻边} = \\text{对边}$\n$${tanRounded} \\times ${adjacent} = ${Math.round(tanRounded * adjacent * 100) / 100}$\n\n≈ $${opposite}$ ✓ 测量精准！`, en: `${narrator}: "Verify\n$\\tan(\\theta) \\times \\text{adjacent} = \\text{opposite}$\n$${tanRounded} \\times ${adjacent} = ${Math.round(tanRounded * adjacent * 100) / 100}$\n\n≈ $${opposite}$ ✓ Measurement confirmed!"` }, highlightField: 'tan' },
   ];
   return { ...template, description, data: { opposite, adjacent, generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
 }
@@ -1325,7 +1419,7 @@ export function generateQuadraticMission(template: Mission): Mission {
     const b = pickRandom(calBPools[tier]);
     const vertexX = -b / (2 * a);
     // Ensure clean integer
-    if (vertexX !== Math.round(vertexX)) return generateQuadraticMission(template);
+    if (vertexX !== Math.round(vertexX)) return safeRetry(template, generateQuadraticMission);
     const vertexY = a * vertexX * vertexX + b * vertexX;
 
     const description: BilingualText = {
@@ -1363,8 +1457,15 @@ export function generateQuadraticMission(template: Mission): Mission {
       },
       {
         text: {
-          zh: `${narrator}：答案 $x = ${vertexX}$! 顶点在 $x = ${vertexX}$ 处，此时 $f(${vertexX}) = ${vertexY}$`,
-          en: `${narrator}: "Answer: $x = ${vertexX}$! The vertex is at $x = ${vertexX}$, where $f(${vertexX}) = ${vertexY}$"`,
+          zh: `${narrator}：答案\n$x = ${vertexX}$\n顶点在 $x = ${vertexX}$ 处，此时 $f(${vertexX}) = ${vertexY}$`,
+          en: `${narrator}: "Answer\n$x = ${vertexX}$\nThe vertex is at $x = ${vertexX}$, where $f(${vertexX}) = ${vertexY}$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算\n代入 $x = ${vertexX}$：$f(${vertexX}) = ${a} \\times ${vertexX}^2 + ${b} \\times ${vertexX} = ${a * vertexX * vertexX} + ${b * vertexX} = ${vertexY}$ ✓\n顶点位置确认！`,
+          en: `${narrator}: "Verify\nSubstitute $x = ${vertexX}$: $f(${vertexX}) = ${a} \\times ${vertexX}^2 + ${b} \\times ${vertexX} = ${a * vertexX * vertexX} + ${b * vertexX} = ${vertexY}$ ✓\nVertex confirmed!"`,
         },
         highlightField: 'x',
       },
@@ -1408,15 +1509,15 @@ export function generateQuadraticMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：$${y2} = a \\times ${x2}^{2} + ${c}$，解出 $a$`,
-        en: `${narrator}: "$${y2} = a \\times ${x2}^{2} + ${c}$, solve for $a$"`,
+        zh: `${narrator}：$${y2} = a \\times ${x2}^{2} ${signTerm(c)}$，解出 $a$`,
+        en: `${narrator}: "$${y2} = a \\times ${x2}^{2} ${signTerm(c)}$, solve for $a$"`,
       },
       highlightField: 'a',
     },
     {
       text: {
-        zh: `${narrator}：$a = \\frac{${y2} - ${c}}{${x2}^{2}} = \\frac{${y2 - c}}{${x2 * x2}} = ${a}$`,
-        en: `${narrator}: "$a = \\frac{${y2} - ${c}}{${x2}^{2}} = \\frac{${y2 - c}}{${x2 * x2}} = ${a}$"`,
+        zh: `${narrator}：$a = \\frac{${y2} ${signTerm(-c)}}{${x2}^{2}} = \\frac{${y2 - c}}{${x2 * x2}} = ${a}$`,
+        en: `${narrator}: "$a = \\frac{${y2} ${signTerm(-c)}}{${x2}^{2}} = \\frac{${y2 - c}}{${x2 * x2}} = ${a}$"`,
       },
       highlightField: 'a',
     },
@@ -1450,17 +1551,18 @@ export function generateRootsMission(template: Mission): Mission {
   // Verify discriminant >= 0 (always true for real roots from factored form)
   const narrator = pickRandom(['周瑜', '曹仁', '诸葛亮']);
 
+  const quadDisplay = `x^2 ${signCoeff(b, 'x')} ${signTerm(c)} = 0`;
   const description: BilingualText = {
-    zh: `求方程 $x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$ 的一个根。`,
-    en: `Find a root of $x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0$.`,
+    zh: `求方程 $${quadDisplay}$ 的一个根。`,
+    en: `Find a root of $${quadDisplay}$.`,
   };
-  const eqStr = `x^{2} ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0`;
+  const quadEqStr = `x^{2} ${signCoeff(b, 'x')} ${signTerm(c)} = 0`;
   const factorStr = `(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0`;
   const tutorialSteps = [
     { text: { zh: `${narrator}：什么是"求根"?\n找到让方程等于零的 $x$ 值。`, en: `${narrator}: "What does 'finding roots' mean?\nFinding the values of $x$ that make the equation equal zero."` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：方程是：\n$${eqStr}$`, en: `${narrator}: "The equation is:\n$${eqStr}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：方程是：\n$${quadEqStr}$`, en: `${narrator}: "The equation is:\n$${quadEqStr}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：方法：因式分解\n把方程写成 $(x - r_1)(x - r_2) = 0$ 的形式。\n我们需要两个数，乘积 = $${c}$，相加 = $${-b}$。`, en: `${narrator}: "Method: factorize\nWrite the equation as $(x - r_1)(x - r_2) = 0$.\nWe need two numbers that multiply to give $${c}$ and add to give $${-b}$."` }, highlightField: 'x' },
-    { text: { zh: `${narrator}：这两个数是 $${r1}$ 和 $${r2}$：\n验证：$${r1} \\times ${r2} = ${r1 * r2}$ (= $${c}$)\n验证：$${r1} + ${r2} = ${r1 + r2}$ (= $${-b}$)`, en: `${narrator}: "The two numbers are $${r1}$ and $${r2}$:\nCheck: $${r1} \\times ${r2} = ${r1 * r2}$ (= $${c}$)\nCheck: $${r1} + ${r2} = ${r1 + r2}$ (= $${-b}$)"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：这两个数是 $${r1}$ 和 $${r2}$：\n验证：$(${r1}) \\times (${r2}) = ${r1 * r2}$ (= $${c}$)\n验证：$(${r1}) + (${r2}) = ${r1 + r2}$ (= $${-b}$)`, en: `${narrator}: "The two numbers are $${r1}$ and $${r2}$:\nCheck: $(${r1}) \\times (${r2}) = ${r1 * r2}$ (= $${c}$)\nCheck: $(${r1}) + (${r2}) = ${r1 + r2}$ (= $${-b}$)"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：所以 $${factorStr}$\n意味着 $x = ${r1}$ 或 $x = ${r2}$`, en: `${narrator}: "So $${factorStr}$\nThis means $x = ${r1}$ or $x = ${r2}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：答案：$x = ${r1}$ 或 $x = ${r2}$!`, en: `${narrator}: "Answer: $x = ${r1}$ or $x = ${r2}$!"` }, highlightField: 'x' },
   ];
@@ -1522,6 +1624,13 @@ export function generateDerivativeMission(template: Mission): Mission {
         },
         highlightField: 'x',
       },
+      {
+        text: {
+          zh: `${narrator}：验算\n代入 $x = ${x}$：$3 \\times ${x}^{2} - 3 = 3 \\times ${x * x} - 3 = ${3 * x * x - 3}$ ✓\n结果确实等于 $0$，验证成功！`,
+          en: `${narrator}: "Verify\nSubstitute $x = ${x}$: $3 \\times ${x}^{2} - 3 = 3 \\times ${x * x} - 3 = ${3 * x * x - 3}$ ✓\nResult is indeed $0$, verified!"`,
+        },
+        highlightField: 'x',
+      },
     ];
     return { ...template, description, data: { x, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
   }
@@ -1569,6 +1678,13 @@ export function generateDerivativeMission(template: Mission): Mission {
       text: {
         zh: `${narrator}：答案 $k = ${k}$! 在 $x = ${x}$ 处，曲线的倾斜程度是 ${k}`,
         en: `${narrator}: "Answer: $k = ${k}$! At $x = ${x}$, the steepness of the curve is ${k}"`,
+      },
+      highlightField: 'k',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n在 $x = ${x}$ 附近取一点 $x = ${x + 0.1}$：$y = ${((x + 0.1) * (x + 0.1)).toFixed(2)}$\n斜率 $\\approx \\frac{${((x + 0.1) * (x + 0.1)).toFixed(2)} - ${y}}{0.1} = ${(((x + 0.1) * (x + 0.1) - y) / 0.1).toFixed(1)}$，接近 $${k}$ ✓`,
+        en: `${narrator}: "Verify\nNear $x = ${x}$, try $x = ${x + 0.1}$: $y = ${((x + 0.1) * (x + 0.1)).toFixed(2)}$\nSlope $\\approx \\frac{${((x + 0.1) * (x + 0.1)).toFixed(2)} - ${y}}{0.1} = ${(((x + 0.1) * (x + 0.1) - y) / 0.1).toFixed(1)}$, close to $${k}$ ✓"`,
       },
       highlightField: 'k',
     },
@@ -1638,6 +1754,13 @@ export function generateIntegrationMission(template: Mission): Mission {
         },
         highlightField: 'area',
       },
+      {
+        text: {
+          zh: `${narrator}：验算\n$y = x$ 是一条直线，面积 = 梯形面积\n$= \\frac{(${lower} + ${upper}) \\times (${upper} - ${lower})}{2} = \\frac{${lower + upper} \\times ${upper - lower}}{2} = ${(lower + upper) * (upper - lower) / 2}$ ✓`,
+          en: `${narrator}: "Verify\n$y = x$ is a straight line, area = trapezoid area\n$= \\frac{(${lower} + ${upper}) \\times (${upper} - ${lower})}{2} = \\frac{${lower + upper} \\times ${upper - lower}}{2} = ${(lower + upper) * (upper - lower) / 2}$ ✓"`,
+        },
+        highlightField: 'area',
+      },
     ];
     return { ...template, description, data: { lower, upper, func: 'x', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
   }
@@ -1684,8 +1807,15 @@ export function generateIntegrationMission(template: Mission): Mission {
       },
       {
         text: {
-          zh: `${narrator}：相减得到面积：$${fUpper} - ${fLower} = ${area}$!`,
-          en: `${narrator}: "Subtract to get the area: $${fUpper} - ${fLower} = ${area}$!"`,
+          zh: `${narrator}：答案\n面积 = $${fUpper} - ${fLower} = ${area}$`,
+          en: `${narrator}: "Answer\nArea = $${fUpper} - ${fLower} = ${area}$"`,
+        },
+        highlightField: 'area',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算\n导数检查：$(x^3)' = 3x^2$ ✓ 原函数正确\n$F(${upper}) - F(${lower}) = ${fUpper} - ${fLower} = ${area}$ ✓`,
+          en: `${narrator}: "Verify\nDerivative check: $(x^3)' = 3x^2$ ✓ Antiderivative correct\n$F(${upper}) - F(${lower}) = ${fUpper} - ${fLower} = ${area}$ ✓"`,
         },
         highlightField: 'area',
       },
@@ -1735,8 +1865,15 @@ export function generateIntegrationMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：相减得到面积：$${fUpper} - ${fLower} = ${area}$!`,
-        en: `${narrator}: "Subtract to get the area: $${fUpper} - ${fLower} = ${area}$!"`,
+        zh: `${narrator}：答案\n面积 = $${fUpper} - ${fLower} = ${area}$`,
+        en: `${narrator}: "Answer\nArea = $${fUpper} - ${fLower} = ${area}$"`,
+      },
+      highlightField: 'area',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n导数检查：$(x^2)' = 2x$ ✓ 原函数正确\n$F(${upper}) - F(${lower}) = ${fUpper} - ${fLower} = ${area}$ ✓`,
+        en: `${narrator}: "Verify\nDerivative check: $(x^2)' = 2x$ ✓ Antiderivative correct\n$F(${upper}) - F(${lower}) = ${fUpper} - ${fLower} = ${area}$ ✓"`,
       },
       highlightField: 'area',
     },
@@ -1764,11 +1901,16 @@ export function generateVolumeMission(template: Mission): Mission {
     ? { zh: `求圆锥体积 $V = \\frac{1}{3}\\pi r^2 h$（$\\pi=${pi}$）。`, en: `Find cone volume $V = \\frac{1}{3}\\pi r^2 h$ ($\\pi=${pi}$).` }
     : { zh: `求圆柱体积 $V = \\pi r^2 h$（$\\pi=${pi}$）。`, en: `Find cylinder volume $V = \\pi r^2 h$ ($\\pi=${pi}$).` };
 
-  const baseArea = pi * radius * radius;
+  const baseArea = Math.round(pi * radius * radius * 100) / 100;
+  const volRounded = Math.round(vol * 100) / 100;
+  const rSquared = radius * radius;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：半径 ${radius}，高 ${height}，$\\pi=${pi}$`, en: `${narrator}: "Radius ${radius}, height ${height}, $\\pi=${pi}$"` }, highlightField: 'v' },
-    { text: { zh: `${narrator}：底面积 = $\\pi r^2 = ${pi} \\times ${radius}^2 = ${baseArea}$`, en: `${narrator}: "Base area = $\\pi r^2 = ${pi} \\times ${radius}^2 = ${baseArea}$"` }, highlightField: 'v' },
-    { text: { zh: `${narrator}：$V = ${Math.round(vol * 100) / 100}$！`, en: `${narrator}: "$V = ${Math.round(vol * 100) / 100}$!"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：为什么要学体积？\n${isCone ? '锥形建筑从烽火台到箭塔随处可见。' : '圆柱形容器从粮仓到水井无处不在。'}\n知道体积才能算出能装多少东西！\n\n体积 = 空间的大小。`, en: `${narrator}: "Why learn volume?\n${isCone ? 'Conical structures are everywhere — from beacons to arrow towers.' : 'Cylindrical containers are everywhere — from granaries to wells.'}\nKnowing volume tells us capacity!\n\nVolume = amount of space."` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：${isCone ? '锥体' : '圆柱'}体积公式\n${isCone ? '$$V = \\frac{1}{3} \\pi r^2 h$$\n锥体是同底同高圆柱的 $\\frac{1}{3}$——三个锥体拼成一个柱体！' : '$$V = \\pi r^2 h$$\n底面积 × 高 = 体积。想象一摞圆饼叠起来。'}`, en: `${narrator}: "${isCone ? 'Cone' : 'Cylinder'} volume formula\n${isCone ? '$$V = \\frac{1}{3} \\pi r^2 h$$\nA cone is $\\frac{1}{3}$ of the same cylinder — three cones make one cylinder!' : '$$V = \\pi r^2 h$$\nBase area × height = volume. Imagine stacking round pancakes.'}"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：代入数据\n$r = ${radius}$，$h = ${height}$，$\\pi = ${pi}$\n\n第 1 步：$r^2 = ${radius} \\times ${radius} = ${rSquared}$`, en: `${narrator}: "Substitute\n$r = ${radius}$, $h = ${height}$, $\\pi = ${pi}$\n\nStep 1: $r^2 = ${radius} \\times ${radius} = ${rSquared}$"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：第 2 步：底面积\n$\\pi r^2 = ${pi} \\times ${rSquared} = ${baseArea}$${isCone ? '\n\n第 3 步：乘以高再除以 3\n$\\frac{1}{3} \\times ${baseArea} \\times ${height}$' : '\n\n第 3 步：乘以高\n$${baseArea} \\times ${height}$'}`, en: `${narrator}: "Step 2: Base area\n$\\pi r^2 = ${pi} \\times ${rSquared} = ${baseArea}$${isCone ? '\n\nStep 3: Multiply by height and divide by 3\n$\\frac{1}{3} \\times ${baseArea} \\times ${height}$' : '\n\nStep 3: Multiply by height\n$${baseArea} \\times ${height}$'}"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：答案\n$V = ${volRounded}$\n${isCone ? '烽火台石料量确认！' : '容器容积确认！'}`, en: `${narrator}: "Answer\n$V = ${volRounded}$\n${isCone ? 'Beacon tower materials confirmed!' : 'Container capacity confirmed!'}"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：验算\n${isCone ? '$V \\times 3 = ' + Math.round(volRounded * 3 * 100) / 100 + '$ 应等于同底同高圆柱体积 $\\pi r^2 h = ' + Math.round(baseArea * height * 100) / 100 + '$ ✓' : '$V \\div h = ' + baseArea + '$ 应等于底面积 $\\pi r^2$ ✓'}`, en: `${narrator}: "Verify\n${isCone ? '$V \\times 3 = ' + Math.round(volRounded * 3 * 100) / 100 + '$ should equal cylinder volume $\\pi r^2 h = ' + Math.round(baseArea * height * 100) / 100 + '$ ✓' : '$V \\div h = ' + baseArea + '$ should equal base area $\\pi r^2$ ✓'}"` }, highlightField: 'v' },
   ];
 
   return {
@@ -1799,16 +1941,17 @@ export function generateFuncValMission(template: Mission): Mission {
     const x = pickRandom(xPools[tier]);
     const y = m * x + b;
 
+    const funcDisplay = linearExpr(m, b);
     const description: BilingualText = {
-      zh: `求 $y = ${m}x ${b >= 0 ? '+' : ''}${b}$ 在 $x=${x}$ 处的值。`,
-      en: `Find $y = ${m}x ${b >= 0 ? '+' : ''}${b}$ at $x=${x}$.`,
+      zh: `求 $y = ${funcDisplay}$ 在 $x=${x}$ 处的值。`,
+      en: `Find $y = ${funcDisplay}$ at $x=${x}$.`,
     };
     const bSign = b >= 0 ? '+ ' + b : '- ' + Math.abs(b);
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：函数是什么？\n你可以把函数想象成一台机器——你往里面丢一个数($x$)，它就吐出另一个数($y$)。\n每次丢同一个数进去，出来的结果一定一样。\n今天这台机器的规则是：$y = ${m}x ${bSign}$`,
-          en: `${narrator}: "What is a function?\nThink of it as a machine — you feed in a number ($x$), and it spits out another ($y$).\nSame input always gives the same output.\nToday's machine rule is: $y = ${m}x ${bSign}$"`,
+          zh: `${narrator}：函数是什么？\n你可以把函数想象成一台机器——你往里面丢一个数($x$)，它就吐出另一个数($y$)。\n每次丢同一个数进去，出来的结果一定一样。\n今天这台机器的规则是：$y = ${funcDisplay}$`,
+          en: `${narrator}: "What is a function?\nThink of it as a machine — you feed in a number ($x$), and it spits out another ($y$).\nSame input always gives the same output.\nToday's machine rule is: $y = ${funcDisplay}$"`,
         },
         highlightField: 'y',
       },
@@ -1855,7 +1998,7 @@ export function generateFuncValMission(template: Mission): Mission {
   const a = pickRandom([-3, -2, -1, 1, 2, 3]);
   const bCoeff = pickRandom([2, 4, 6, 8, 10, 12, -2, -4, -6]);
   const t = -bCoeff / (2 * a);
-  if (t !== Math.round(t * 100) / 100) return generateFuncValMission(template);
+  if (t !== Math.round(t * 100) / 100) return safeRetry(template, generateFuncValMission);
 
   const description: BilingualText = {
     zh: `求 $f(x) = ${a}x^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$ 的顶点 $t$。`,
@@ -2906,6 +3049,13 @@ export function generateIntegerAddMission(template: Mission): Mission {
       },
       highlightField: 'ans',
     },
+    {
+      text: {
+        zh: `${narrator}：验算\n反向运算：$${answer} ${op === '+' ? '-' : '+'} ${op === '+' ? (b < 0 ? `(${b})` : `${b}`) : `${b}`} = ${a}$ ✓\n回到了第一个数 $${a}$，说明计算正确！`,
+        en: `${narrator}: "Verify\nReverse operation: $${answer} ${op === '+' ? '-' : '+'} ${op === '+' ? (b < 0 ? `(${b})` : `${b}`) : `${b}`} = ${a}$ ✓\nWe get back to the first number $${a}$, so the calculation is correct!"`,
+      },
+      highlightField: 'ans',
+    },
   ];
 
   return {
@@ -2939,7 +3089,7 @@ export function generateFracAddMission(template: Mission): Mission {
   const adjN2 = n2 * (lcd / d2);
 
   // Guard: if subtraction would give 0 (equal fractions), regenerate
-  if (isSubtract && adjN1 === adjN2) return generateFracAddMission(template);
+  if (isSubtract && adjN1 === adjN2) return safeRetry(template, generateFracAddMission);
 
   let ansNum: number, ansDen: number;
   if (isSubtract) {
@@ -3151,17 +3301,27 @@ export function generateFracMulMission(template: Mission): Mission {
       },
       highlightField: 'ans',
     },
-    ...(needsSimplify ? [{
-      text: {
+    {
+      text: needsSimplify ? {
         zh: `${narrator}：化简——$${rawNum}$ 和 $${rawDen}$ 的公因数是 $${simplifyG}$\n都除以 $${simplifyG}$：$\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$`,
         en: `${narrator}: "Simplify — HCF of $${rawNum}$ and $${rawDen}$ is $${simplifyG}$\nDivide both: $\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$"`,
+      } : {
+        zh: `${narrator}：检查是否需要化简\n$\\frac{${rawNum}}{${rawDen}}$——分子分母没有公因数，已经是最简分数！\n\n化简就是找分子分母的最大公因数 (HCF)，都除以它。`,
+        en: `${narrator}: "Check if simplification is needed\n$\\frac{${rawNum}}{${rawDen}}$ — no common factor between numerator and denominator. Already in simplest form!\n\nSimplifying = find HCF of top and bottom, divide both by it."`,
       },
       highlightField: 'ans',
-    }] : []),
+    },
     {
       text: {
-        zh: `${narrator}：答案\n$${ansDisplay}$\n\n验算：$\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$——做得漂亮！`,
-        en: `${narrator}: "Answer\n$${ansDisplay}$\n\nCheck: $\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$ — brilliantly done!"`,
+        zh: `${narrator}：答案\n$${ansDisplay}$\n\n$\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$——做得漂亮！`,
+        en: `${narrator}: "Answer\n$${ansDisplay}$\n\n$\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$ — brilliantly done!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n反向运算：$${ansDisplay} \\times \\frac{${n2}}{${d2}} = \\frac{${ansNum} \\times ${n2}}{${ansDen} \\times ${d2}} = \\frac{${ansNum * n2}}{${ansDen * d2}}$${gcdCalc(ansNum * n2, ansDen * d2) > 1 ? ` = \\frac{${n1}}{${d1}}` : ` = \\frac{${n1}}{${d1}}`}$ ✓\n回到了原来的 $\\frac{${n1}}{${d1}}$，验证成功！`,
+        en: `${narrator}: "Verify\nReverse: $${ansDisplay} \\times \\frac{${n2}}{${d2}} = \\frac{${ansNum} \\times ${n2}}{${ansDen} \\times ${d2}} = \\frac{${n1}}{${d1}}$ ✓\nWe get back to $\\frac{${n1}}{${d1}}$, verified!"`,
       },
       highlightField: 'ans',
     },
@@ -3187,17 +3347,27 @@ export function generateFracMulMission(template: Mission): Mission {
       },
       highlightField: 'ans',
     },
-    ...(needsSimplify ? [{
-      text: {
+    {
+      text: needsSimplify ? {
         zh: `${narrator}：化简——$${rawNum}$ 和 $${rawDen}$ 的公因数是 $${simplifyG}$\n都除以 $${simplifyG}$：$\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$`,
         en: `${narrator}: "Simplify — HCF of $${rawNum}$ and $${rawDen}$ is $${simplifyG}$\nDivide both: $\\frac{${rawNum} \\div ${simplifyG}}{${rawDen} \\div ${simplifyG}} = ${ansDisplay}$"`,
+      } : {
+        zh: `${narrator}：检查是否需要化简\n$\\frac{${rawNum}}{${rawDen}}$——已经是最简分数，无需化简！`,
+        en: `${narrator}: "Check if simplification needed\n$\\frac{${rawNum}}{${rawDen}}$ — already in simplest form!"`,
       },
       highlightField: 'ans',
-    }] : []),
+    },
     {
       text: {
-        zh: `${narrator}：答案\n$${ansDisplay}$\n\n分数乘法的结果通常比原来更小——取一部分的一部分，当然更少！\n验算：$\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$——做得漂亮！`,
-        en: `${narrator}: "Answer\n$${ansDisplay}$\n\nFraction multiplication usually gives a smaller result — a part of a part is naturally less!\nCheck: $\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$ — brilliantly done!"`,
+        zh: `${narrator}：答案\n$${ansDisplay}$\n\n分数乘法的结果通常比原来更小——取一部分的一部分，当然更少！\n$\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$——做得漂亮！`,
+        en: `${narrator}: "Answer\n$${ansDisplay}$\n\nFraction multiplication usually gives a smaller result — a part of a part is naturally less!\n$\\frac{${ansNum}}{${ansDen}} \\approx ${(ansNum/ansDen).toFixed(3)}$ — brilliantly done!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n反向运算：$${ansDisplay} \\div \\frac{${n2}}{${d2}} = ${ansDisplay} \\times \\frac{${d2}}{${n2}} = \\frac{${n1}}{${d1}}$ ✓\n回到了原来的 $\\frac{${n1}}{${d1}}$，验证成功！`,
+        en: `${narrator}: "Verify\nReverse: $${ansDisplay} \\div \\frac{${n2}}{${d2}} = ${ansDisplay} \\times \\frac{${d2}}{${n2}} = \\frac{${n1}}{${d1}}$ ✓\nWe get back to $\\frac{${n1}}{${d1}}$, verified!"`,
       },
       highlightField: 'ans',
     },
@@ -3942,12 +4112,16 @@ export function generateAnglesPointMission(template: Mission): Mission {
   const angles: number[] = [];
   let remaining = 360;
   for (let i = 0; i < numKnown; i++) {
-    const maxAngle = remaining - (numKnown - i) * 20;
-    const a = randInt(40, Math.min(160, maxAngle));
+    const minA = 30;
+    const maxA = Math.min(160, remaining - (numKnown - i) * minA);
+    // Safety: if maxA < minA, cap to avoid randInt inversion
+    const a = maxA < minA ? minA : randInt(minA, maxA);
     angles.push(a);
     remaining -= a;
   }
   const answer = remaining;
+  // Safety: ensure answer is positive and reasonable; retry if not
+  if (answer < 10 || answer > 350) return safeRetry(template, generateAnglesPointMission);
 
   const anglesStr = angles.map(a => `$${a}°$`).join('、');
   const anglesStrEn = angles.map(a => `$${a}°$`).join(', ');
@@ -4506,7 +4680,7 @@ export function generateFdpConvertMission(template: Mission): Mission {
     { frac: '1/10', num: 1, den: 10, dec: 0.1, pct: 10 },
     { frac: '3/10', num: 3, den: 10, dec: 0.3, pct: 30 },
     { frac: '1/8', num: 1, den: 8, dec: 0.125, pct: 12.5 },
-    { frac: '1/3', num: 1, den: 3, dec: 0.333, pct: 33.3 },
+    { frac: '7/10', num: 7, den: 10, dec: 0.7, pct: 70 },
   ];
 
   const pool = tier === 1 ? fdpSets.slice(0, 4) : tier === 2 ? fdpSets.slice(0, 7) : fdpSets;
@@ -4762,14 +4936,14 @@ export function generateSimplifyMission(template: Mission): Mission {
 
   if (tier >= 2 && pickRandom([true, false])) {
     c = randInt(1, 10);
-    expr = `${a}x + ${b}x + ${c}`;
+    expr = `${coeffStr(a, 'x')} + ${coeffStr(b, 'x')} + ${c}`;
     exprEn = expr;
   } else {
-    expr = `${a}x + ${b}x`;
+    expr = `${coeffStr(a, 'x')} + ${coeffStr(b, 'x')}`;
     exprEn = expr;
   }
 
-  const simplified = c !== null ? `${answer}x + ${c}` : `${answer}x`;
+  const simplified = c !== null ? `${coeffStr(answer, 'x')} + ${c}` : `${coeffStr(answer, 'x')}`;
 
   const description: BilingualText = {
     zh: `化简 $${expr}$，$x$ 的系数是多少？`,
@@ -4793,15 +4967,15 @@ export function generateSimplifyMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：$${expr}$ 中哪些是同类项？\n✓ $${a}x$ 和 $${b}x$ 是同类项（都是 $x$）${c !== null ? `\n✗ $${a}x$ 和 $${c}$（常数）不是同类项——一个有 $x$ 一个没有` : ''}\n\n同类项 = 字母部分完全相同！`,
-        en: `${narrator}: "Which terms in $${expr}$ are like terms?\n✓ $${a}x$ and $${b}x$ are like terms (both $x$)${c !== null ? `\n✗ $${a}x$ and $${c}$ (constant) are NOT like terms` : ''}\n\nLike terms = exact same letter part!"`,
+        zh: `${narrator}：$${expr}$ 中哪些是同类项？\n✓ $${coeffStr(a, 'x')}$ 和 $${coeffStr(b, 'x')}$ 是同类项（都是 $x$）${c !== null ? `\n✗ $${coeffStr(a, 'x')}$ 和 $${c}$（常数）不是同类项——一个有 $x$ 一个没有` : ''}\n\n同类项 = 字母部分完全相同！`,
+        en: `${narrator}: "Which terms in $${expr}$ are like terms?\n✓ $${coeffStr(a, 'x')}$ and $${coeffStr(b, 'x')}$ are like terms (both $x$)${c !== null ? `\n✗ $${coeffStr(a, 'x')}$ and $${c}$ (constant) are NOT like terms` : ''}\n\nLike terms = exact same letter part!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：合并！只加系数，字母不变\n$${a}x + ${b}x = (${a} + ${b})x = ${answer}x$\n\n系数相加：$${a} + ${b} = ${answer}$，字母 $x$ 照抄。${c !== null ? `\n$${c}$ 是常数项，保留不动。` : ''}`,
-        en: `${narrator}: "Combine! Add coefficients, keep the letter\n$${a}x + ${b}x = (${a} + ${b})x = ${answer}x$\n\nCoefficients: $${a} + ${b} = ${answer}$, letter $x$ stays.${c !== null ? `\n$${c}$ is a constant — keep it separate.` : ''}"`,
+        zh: `${narrator}：合并！只加系数，字母不变\n$${coeffStr(a, 'x')} + ${coeffStr(b, 'x')} = (${a} + ${b})x = ${coeffStr(answer, 'x')}$\n\n系数相加：$${a} + ${b} = ${answer}$，字母 $x$ 照抄。${c !== null ? `\n$${c}$ 是常数项，保留不动。` : ''}`,
+        en: `${narrator}: "Combine! Add coefficients, keep the letter\n$${coeffStr(a, 'x')} + ${coeffStr(b, 'x')} = (${a} + ${b})x = ${coeffStr(answer, 'x')}$\n\nCoefficients: $${a} + ${b} = ${answer}$, letter $x$ stays.${c !== null ? `\n$${c}$ is a constant — keep it separate.` : ''}"`,
       },
       highlightField: 'ans',
     },
@@ -5340,22 +5514,36 @@ export function generateMixedImproperMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：假分数是什么意思？\n$\\frac{${improperNum}}{${den}}$：有 ${improperNum} 份，每 ${den} 份组成 1 个整体。\n$${improperNum} > ${den}$，肯定超过 1 个整体！\n\n具体超过多少？做个除法就知道了。`,
-          en: `${narrator}: "What does an improper fraction mean?\n$\\frac{${improperNum}}{${den}}$: ${improperNum} slices, every ${den} makes 1 whole.\n$${improperNum} > ${den}$, so definitely more than 1 whole!\n\nExactly how many? Division will tell us."`,
+          zh: `${narrator}：假分数是什么意思？\n$\\frac{${improperNum}}{${den}}$：有 ${improperNum} 份，每 ${den} 份组成 1 个整体。\n$${improperNum} > ${den}$，肯定超过 1 个整体！\n\n想象散装粮草要装箱——能装满几箱？`,
+          en: `${narrator}: "What does an improper fraction mean?\n$\\frac{${improperNum}}{${den}}$: ${improperNum} slices, every ${den} makes 1 whole.\n$${improperNum} > ${den}$, so definitely more than 1 whole!\n\nImagine packing loose grain into crates — how many full crates?"`,
         },
         highlightField: 'ans',
       },
       {
         text: {
-          zh: `${narrator}：方法——分子 ÷ 分母\n$${improperNum} \\div ${den}$：$${den} \\times ${whole} = ${whole * den}$（还剩 $${improperNum} - ${whole * den} = ${num}$）\n\n商 $${whole}$ = 整数部分（装满了几个整饼）\n余数 $${num}$ = 新分子（散装几份）\n分母不变 = $${den}$`,
-          en: `${narrator}: "Method — numerator ÷ denominator\n$${improperNum} \\div ${den}$: $${den} \\times ${whole} = ${whole * den}$ (remaining: $${improperNum} - ${whole * den} = ${num}$)\n\nQuotient $${whole}$ = whole part (how many full pies)\nRemainder $${num}$ = new numerator (loose slices)\nDenominator stays = $${den}$"`,
+          zh: `${narrator}：带分数好在哪？\n假分数 $\\frac{${improperNum}}{${den}}$ 不直观——"${improperNum} 份"到底是多少？\n带分数 $${whole}\\frac{${num}}{${den}}$ 一看就懂——"${whole} 个整的加 $\\frac{${num}}{${den}}$"！\n\n日常交流用带分数，计算用假分数——各有所长。`,
+          en: `${narrator}: "Why are mixed numbers better for understanding?\nImproper $\\frac{${improperNum}}{${den}}$ isn't intuitive — '${improperNum} slices' means what exactly?\nMixed $${whole}\\frac{${num}}{${den}}$ is clear — '${whole} wholes plus $\\frac{${num}}{${den}}$'!\n\nUse mixed for everyday, improper for calculation — each has its strength."`,
         },
         highlightField: 'ans',
       },
       {
         text: {
-          zh: `${narrator}：答案\n$\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$\n\n${improperNum} 份饼 = ${whole} 整个 + ${num} 份散装。整数部分 = $${whole}$。`,
-          en: `${narrator}: "Answer\n$\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$\n\n${improperNum} slices = ${whole} whole pies + ${num} loose. Whole part = $${whole}$."`,
+          zh: `${narrator}：方法——分子 ÷ 分母\n$${improperNum} \\div ${den}$\n\n商 = 整数部分（装满了几箱）\n余数 = 新分子（散装几份）\n分母不变 = $${den}$`,
+          en: `${narrator}: "Method — numerator ÷ denominator\n$${improperNum} \\div ${den}$\n\nQuotient = whole part (how many full crates)\nRemainder = new numerator (loose items)\nDenominator stays = $${den}$"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：计算\n$${den} \\times ${whole} = ${whole * den}$，还剩 $${improperNum} - ${whole * den} = ${num}$\n\n商 $${whole}$，余数 $${num}$\n所以 $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$`,
+          en: `${narrator}: "Calculate\n$${den} \\times ${whole} = ${whole * den}$, remaining: $${improperNum} - ${whole * den} = ${num}$\n\nQuotient $${whole}$, remainder $${num}$\nSo $\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：答案\n整数部分 = $${whole}$\n\n$\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$\n${improperNum} 份 = ${whole} 整箱 + ${num} 份散装。`,
+          en: `${narrator}: "Answer\nWhole part = $${whole}$\n\n$\\frac{${improperNum}}{${den}} = ${whole}\\frac{${num}}{${den}}$\n${improperNum} slices = ${whole} full crates + ${num} loose."`,
         },
         highlightField: 'ans',
       },
@@ -5397,8 +5585,8 @@ export function generateExpandMission(template: Mission): Mission {
   const answer = ab;
 
   const description = {
-    zh: `展开 $${a}(${b}x + ${c})$，$x$ 的系数是多少？`,
-    en: `Expand $${a}(${b}x + ${c})$. What is the coefficient of $x$?`,
+    zh: `展开 $${a}(${coeffStr(b, 'x')} + ${c})$，$x$ 的系数是多少？`,
+    en: `Expand $${a}(${coeffStr(b, 'x')} + ${c})$. What is the coefficient of $x$?`,
   };
 
   const tutorialSteps = [
@@ -5411,15 +5599,15 @@ export function generateExpandMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：展开的规则其实特别简单\n就一句话：外面的数要跟里面的**每一项**都乘一遍。\n就像发东西——每种物资都得发到，不能漏掉任何一项！\n\n$${a}(${b}x + ${c})$ = $${a} \\times ${b}x$ ＋ $${a} \\times ${c}$`,
-        en: `${narrator}: "The rule for expanding is really simple\nOne sentence: the outside number multiplies EVERY term inside.\nLike handing out supplies — every type of gear gets distributed, nothing skipped!\n\n$${a}(${b}x + ${c})$ = $${a} \\times ${b}x$ + $${a} \\times ${c}$"`,
+        zh: `${narrator}：展开的规则其实特别简单\n就一句话：外面的数要跟里面的**每一项**都乘一遍。\n就像发东西——每种物资都得发到，不能漏掉任何一项！\n\n$${a}(${coeffStr(b, 'x')} + ${c})$ = $${a} \\times ${coeffStr(b, 'x')}$ ＋ $${a} \\times ${c}$`,
+        en: `${narrator}: "The rule for expanding is really simple\nOne sentence: the outside number multiplies EVERY term inside.\nLike handing out supplies — every type of gear gets distributed, nothing skipped!\n\n$${a}(${coeffStr(b, 'x')} + ${c})$ = $${a} \\times ${coeffStr(b, 'x')}$ + $${a} \\times ${c}$"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：先算第一项\n外面的 $${a}$ 乘以里面的第一项 $${b}x$：\n$${a} \\times ${b}x = ${ab}x$\n\n就是说：${a} 支队 × 每队 ${b} 把刀 = ${ab} 把刀！`,
-        en: `${narrator}: "Calculate the first term\nThe outside $${a}$ times the first inside term $${b}x$:\n$${a} \\times ${b}x = ${ab}x$\n\nThat means: ${a} squads × ${b} swords each = ${ab} swords!"`,
+        zh: `${narrator}：先算第一项\n外面的 $${a}$ 乘以里面的第一项 $${coeffStr(b, 'x')}$：\n$${a} \\times ${coeffStr(b, 'x')} = ${coeffStr(ab, 'x')}$\n\n就是说：${a} 支队 × 每队 ${b} 把刀 = ${ab} 把刀！`,
+        en: `${narrator}: "Calculate the first term\nThe outside $${a}$ times the first inside term $${coeffStr(b, 'x')}$:\n$${a} \\times ${coeffStr(b, 'x')} = ${coeffStr(ab, 'x')}$\n\nThat means: ${a} squads × ${b} swords each = ${ab} swords!"`,
       },
       highlightField: 'ans',
     },
@@ -5432,8 +5620,8 @@ export function generateExpandMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：把两项拼起来就是答案\n$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\n题目问 $x$ 的系数是多少？就是 $x$ 前面那个数：$${ab}$\n\n总共 ${ab} 把刀和 ${ac} 张弓，装备齐全！`,
-        en: `${narrator}: "Put both terms together for the answer\n$${a}(${b}x + ${c}) = ${ab}x + ${ac}$\n\nThe question asks for the coefficient of $x$ — that's the number in front: $${ab}$\n\n${ab} swords and ${ac} bows — fully equipped!"`,
+        zh: `${narrator}：把两项拼起来就是答案\n$${a}(${coeffStr(b, 'x')} + ${c}) = ${coeffStr(ab, 'x')} + ${ac}$\n\n题目问 $x$ 的系数是多少？就是 $x$ 前面那个数：$${ab}$\n\n总共 ${ab} 把刀和 ${ac} 张弓，装备齐全！`,
+        en: `${narrator}: "Put both terms together for the answer\n$${a}(${coeffStr(b, 'x')} + ${c}) = ${coeffStr(ab, 'x')} + ${ac}$\n\nThe question asks for the coefficient of $x$ — that's the number in front: $${ab}$\n\n${ab} swords and ${ac} bows — fully equipped!"`,
       },
       highlightField: 'ans',
     },
@@ -5464,8 +5652,11 @@ export function generateFactoriseMission(template: Mission): Mission {
   const qPools: Record<number, number[]> = { 1: [1, 3], 2: [1, 3, 5, 7], 3: [1, 3, 5, 7, 9] };
 
   const factor = pickRandom(factorPools[tier]);
-  const p = pickRandom(pPools[tier]);
-  const q = pickRandom(qPools[tier]);
+  let p = pickRandom(pPools[tier]);
+  let q = pickRandom(qPools[tier]);
+  // Ensure gcd(p,q) === 1 so that `factor` is the true HCF of a and b
+  const pqGcd = (a: number, b: number): number => { while (b) { [a, b] = [b, a % b]; } return a; };
+  if (pqGcd(p, q) !== 1) return safeRetry(template, generateFactoriseMission);
   const a = factor * p;
   const b = factor * q;
   const answer = factor;
@@ -5484,8 +5675,8 @@ export function generateFactoriseMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：因式分解是什么？其实就是"展开"的反操作\n展开是拆包裹：$${factor}(${p}x + ${q}) = ${a}x + ${b}$\n因式分解是重新打包：$${a}x + ${b} = ?(... + ...)$\n\n想象桌上散着 ${a} 把刀和 ${b} 张弓，你要把它们按"每队一份"重新打包。\n第一件事：找出每种东西的"公共份数"——也就是最大公因数！`,
-        en: `${narrator}: "What is factorising? It's just the REVERSE of expanding!\nExpanding is unpacking: $${factor}(${p}x + ${q}) = ${a}x + ${b}$\nFactorising is re-packing: $${a}x + ${b} = ?(...+...)$\n\nImagine ${a} swords and ${b} bows scattered on the table — you need to re-pack them into squad bundles.\nFirst job: find how many squads they can split into equally — the highest common factor!"`,
+        zh: `${narrator}：因式分解是什么？其实就是"展开"的反操作\n展开是拆包裹：$${factor}(${coeffStr(p, 'x')} + ${q}) = ${a}x + ${b}$\n因式分解是重新打包：$${a}x + ${b} = ?(... + ...)$\n\n想象桌上散着 ${a} 把刀和 ${b} 张弓，你要把它们按"每队一份"重新打包。\n第一件事：找出每种东西的"公共份数"——也就是最大公因数！`,
+        en: `${narrator}: "What is factorising? It's just the REVERSE of expanding!\nExpanding is unpacking: $${factor}(${coeffStr(p, 'x')} + ${q}) = ${a}x + ${b}$\nFactorising is re-packing: $${a}x + ${b} = ?(...+...)$\n\nImagine ${a} swords and ${b} bows scattered on the table — you need to re-pack them into squad bundles.\nFirst job: find how many squads they can split into equally — the highest common factor!"`,
       },
       highlightField: 'ans',
     },
@@ -5498,29 +5689,29 @@ export function generateFactoriseMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：用最大公因数去除每一项\n$${a}x \\div ${factor} = ${p}x$（${a} 把刀分成 ${factor} 份，每份 ${p} 把）\n$${b} \\div ${factor} = ${q}$（${b} 张弓分成 ${factor} 份，每份 ${q} 张）\n\n看，分得刚刚好，没有剩余！`,
-        en: `${narrator}: "Divide each term by the HCF\n$${a}x \\div ${factor} = ${p}x$ (${a} swords into ${factor} packs = ${p} each)\n$${b} \\div ${factor} = ${q}$ (${b} bows into ${factor} packs = ${q} each)\n\nSee — divides perfectly, nothing left over!"`,
+        zh: `${narrator}：用最大公因数去除每一项\n$${a}x \\div ${factor} = ${coeffStr(p, 'x')}$（${a} 把刀分成 ${factor} 份，每份 ${p} 把）\n$${b} \\div ${factor} = ${q}$（${b} 张弓分成 ${factor} 份，每份 ${q} 张）\n\n看，分得刚刚好，没有剩余！`,
+        en: `${narrator}: "Divide each term by the HCF\n$${a}x \\div ${factor} = ${coeffStr(p, 'x')}$ (${a} swords into ${factor} packs = ${p} each)\n$${b} \\div ${factor} = ${q}$ (${b} bows into ${factor} packs = ${q} each)\n\nSee — divides perfectly, nothing left over!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：拼起来就行了\n公因数放外面，除完的结果放括号里：\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\n意思就是：${factor} 个包裹，每个包裹里 ${p} 把刀和 ${q} 张弓。`,
-        en: `${narrator}: "Put it together\nHCF goes outside, the quotients go inside brackets:\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n\nMeaning: ${factor} packs, each containing ${p} swords and ${q} bows."`,
+        zh: `${narrator}：拼起来就行了\n公因数放外面，除完的结果放括号里：\n$${a}x + ${b} = ${factor}(${coeffStr(p, 'x')} + ${q})$\n\n意思就是：${factor} 个包裹，每个包裹里 ${p} 把刀和 ${q} 张弓。`,
+        en: `${narrator}: "Put it together\nHCF goes outside, the quotients go inside brackets:\n$${a}x + ${b} = ${factor}(${coeffStr(p, 'x')} + ${q})$\n\nMeaning: ${factor} packs, each containing ${p} swords and ${q} bows."`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：答案\n提出来的公因数 = $${factor}$\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\n做得好！因式分解就是"打包"，你学会了！`,
-        en: `${narrator}: "Answer\nThe common factor = $${factor}$\n\n$${a}x + ${b} = ${factor}(${p}x + ${q})$\nWell done — factorising is just 're-packing', and you've got it!"`,
+        zh: `${narrator}：答案\n提出来的公因数 = $${factor}$\n\n$${a}x + ${b} = ${factor}(${coeffStr(p, 'x')} + ${q})$\n做得好！因式分解就是"打包"，你学会了！`,
+        en: `${narrator}: "Answer\nThe common factor = $${factor}$\n\n$${a}x + ${b} = ${factor}(${coeffStr(p, 'x')} + ${q})$\nWell done — factorising is just 're-packing', and you've got it!"`,
       },
       highlightField: 'ans',
     },
     {
       text: {
-        zh: `${narrator}：验算——拆开检查\n把包裹拆开看看对不对：\n$${factor} \\times ${p}x = ${a}x$ ✓\n$${factor} \\times ${q} = ${b}$ ✓\n\n$${factor}(${p}x + ${q}) = ${a}x + ${b}$ ✓ 完全一致！\n军需打包零失误！`,
-        en: `${narrator}: "Verify — unpack and check\nOpen the packs to see if they're right:\n$${factor} \\times ${p}x = ${a}x$ ✓\n$${factor} \\times ${q} = ${b}$ ✓\n\n$${factor}(${p}x + ${q}) = ${a}x + ${b}$ ✓ Perfect match!\nZero packing errors!"`,
+        zh: `${narrator}：验算——拆开检查\n把包裹拆开看看对不对：\n$${factor} \\times ${coeffStr(p, 'x')} = ${a}x$ ✓\n$${factor} \\times ${q} = ${b}$ ✓\n\n$${factor}(${coeffStr(p, 'x')} + ${q}) = ${a}x + ${b}$ ✓ 完全一致！\n军需打包零失误！`,
+        en: `${narrator}: "Verify — unpack and check\nOpen the packs to see if they're right:\n$${factor} \\times ${coeffStr(p, 'x')} = ${a}x$ ✓\n$${factor} \\times ${q} = ${b}$ ✓\n\n$${factor}(${coeffStr(p, 'x')} + ${q}) = ${a}x + ${b}$ ✓ Perfect match!\nZero packing errors!"`,
       },
       highlightField: 'ans',
     },
@@ -5691,7 +5882,7 @@ export function generateSpeedMission(template: Mission): Mission {
   const narrator = pickRandom(narrators);
 
   const modes = ['speed', 'distance', 'time'] as const;
-  const mode = pickRandom([...modes]);
+  const mode = (template.data?.mode as typeof modes[number]) || pickRandom([...modes]);
 
   const speedPools: Record<number, number[]> = { 1: [5, 10, 20], 2: [8, 12, 15, 25], 3: [6, 14, 18, 22, 35] };
   const timePools: Record<number, number[]> = { 1: [2, 3, 4], 2: [3, 4, 5, 6], 3: [3, 5, 7, 8] };
@@ -5794,7 +5985,7 @@ export function generateCircleY8Mission(template: Mission): Mission {
   const r = pickRandom(rPools[tier]);
   const pi = 3.14;
   const modes = ['circumference', 'area'] as const;
-  const mode = pickRandom([...modes]);
+  const mode = (template.data?.mode as typeof modes[number]) || pickRandom([...modes]);
 
   const circumference = parseFloat((2 * pi * r).toFixed(2));
   const area = parseFloat((pi * r * r).toFixed(2));
@@ -5990,7 +6181,7 @@ export function generatePercentageInterestMission(template: Mission): Mission {
   const narrator = pickRandom(narrators);
 
   const modes = ['simple', 'compound'] as const;
-  const mode = pickRandom([...modes]);
+  const mode = (template.data?.mode as typeof modes[number]) || pickRandom([...modes]);
 
   const principalPools: Record<number, number[]> = { 1: [100, 200, 500], 2: [200, 500, 800, 1000], 3: [500, 1000, 2000, 5000] };
   const ratePools: Record<number, number[]> = { 1: [5, 10], 2: [5, 8, 10], 3: [3, 5, 8, 10, 12] };
@@ -6410,11 +6601,11 @@ export function generateSimultaneousY8Mission(template: Mission): Mission {
   const constant = d * b;
 
   // Avoid trivial or zero-coefficient cases
-  if (combinedCoeff === 0) return generateSimultaneousY8Mission(template);
+  if (combinedCoeff === 0) return safeRetry(template, generateSimultaneousY8Mission);
 
-  const eq1Zh = `$y = ${a === 1 ? '' : a === -1 ? '-' : a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}$`;
+  const eq1Zh = `$y = ${linearExpr(a, b)}$`;
   const eq1En = eq1Zh;
-  const eq2Zh = `$${c}x + ${d}y = ${e}$`;
+  const eq2Zh = `$${coeffStr(c, 'x')} ${signCoeff(d, 'y')} = ${e}$`;
   const eq2En = eq2Zh;
 
   const description: BilingualText = {
@@ -6451,22 +6642,22 @@ export function generateSimultaneousY8Mission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：执行代入\n方程2原来是 $${c}x + ${d}y = ${e}$\n用 $(${aDisplay}x ${bSign})$ 替换 $y$：\n$$${c}x + ${d}(${aDisplay}x ${bSign}) = ${e}$$\n现在方程里只剩 $x$ 一个未知数了！`,
-        en: `${narrator}: "Do the substitution\nEquation 2 was $${c}x + ${d}y = ${e}$\nReplace $y$ with $(${aDisplay}x ${bSign})$:\n$$${c}x + ${d}(${aDisplay}x ${bSign}) = ${e}$$\nNow there's only ONE unknown — $x$!"`,
+        zh: `${narrator}：执行代入\n方程2原来是 ${eq2Zh}\n用 $(${aDisplay}x ${bSign})$ 替换 $y$：\n$$${coeffStr(c, 'x')} + ${coeffStr(d, '')}(${aDisplay}x ${bSign}) = ${e}$$\n现在方程里只剩 $x$ 一个未知数了！`,
+        en: `${narrator}: "Do the substitution\nEquation 2 was ${eq2En}\nReplace $y$ with $(${aDisplay}x ${bSign})$:\n$$${coeffStr(c, 'x')} + ${coeffStr(d, '')}(${aDisplay}x ${bSign}) = ${e}$$\nNow there's only ONE unknown — $x$!"`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：展开括号\n$${d} \\times ${aDisplay}x = ${d * a}x$\n$${d} \\times (${bSign.replace('+ ', '').replace('- ', '-')}) = ${constant >= 0 ? constant : constant}$\n\n展开后得到：$${c}x + ${d * a}x ${constSign} = ${e}$\n合并 $x$ 的项：$${combinedCoeff}x ${constSign} = ${e}$`,
-        en: `${narrator}: "Expand the brackets\n$${d} \\times ${aDisplay}x = ${d * a}x$\n$${d} \\times (${bSign.replace('+ ', '').replace('- ', '-')}) = ${constant}$\n\nAfter expanding: $${c}x + ${d * a}x ${constSign} = ${e}$\nCombine the $x$ terms: $${combinedCoeff}x ${constSign} = ${e}$"`,
+        zh: `${narrator}：展开括号\n$${coeffStr(d, '')} \\times ${aDisplay}x = ${coeffStr(d * a, 'x')}$\n$${coeffStr(d, '')} \\times (${bSign.replace('+ ', '').replace('- ', '-')}) = ${constant}$\n\n展开后得到：$${coeffStr(c, 'x')} ${signCoeff(d * a, 'x')} ${constSign} = ${e}$\n合并 $x$ 的项：$${coeffStr(combinedCoeff, 'x')} ${constSign} = ${e}$`,
+        en: `${narrator}: "Expand the brackets\n$${coeffStr(d, '')} \\times ${aDisplay}x = ${coeffStr(d * a, 'x')}$\n$${coeffStr(d, '')} \\times (${bSign.replace('+ ', '').replace('- ', '-')}) = ${constant}$\n\nAfter expanding: $${coeffStr(c, 'x')} ${signCoeff(d * a, 'x')} ${constSign} = ${e}$\nCombine the $x$ terms: $${coeffStr(combinedCoeff, 'x')} ${constSign} = ${e}$"`,
       },
       highlightField: 'x',
     },
     {
       text: {
-        zh: `${narrator}：解出 $x$\n$${combinedCoeff}x ${constSign} = ${e}$\n移项：$${combinedCoeff}x = ${e} ${constant >= 0 ? '- ' + constant : '+ ' + Math.abs(constant)} = ${e - constant}$\n除以系数：$x = \\frac{${e - constant}}{${combinedCoeff}} = ${x}$\n\n$x$ 找到了！你做得太好了！`,
-        en: `${narrator}: "Solve for $x$\n$${combinedCoeff}x ${constSign} = ${e}$\nRearrange: $${combinedCoeff}x = ${e} ${constant >= 0 ? '- ' + constant : '+ ' + Math.abs(constant)} = ${e - constant}$\nDivide: $x = \\frac{${e - constant}}{${combinedCoeff}} = ${x}$\n\n$x$ found! You're doing brilliantly!"`,
+        zh: `${narrator}：解出 $x$\n$${coeffStr(combinedCoeff, 'x')} ${constSign} = ${e}$\n移项：$${coeffStr(combinedCoeff, 'x')} = ${e} ${signTerm(-constant)} = ${e - constant}$\n除以系数：$x = \\frac{${e - constant}}{${combinedCoeff}} = ${x}$\n\n$x$ 找到了！你做得太好了！`,
+        en: `${narrator}: "Solve for $x$\n$${coeffStr(combinedCoeff, 'x')} ${constSign} = ${e}$\nRearrange: $${coeffStr(combinedCoeff, 'x')} = ${e} ${signTerm(-constant)} = ${e - constant}$\nDivide: $x = \\frac{${e - constant}}{${combinedCoeff}} = ${x}$\n\n$x$ found! You're doing brilliantly!"`,
       },
       highlightField: 'x',
     },
@@ -6486,8 +6677,8 @@ export function generateSimultaneousY8Mission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：验算——把答案代回方程2检查：\n$${c} \\times (${x}) + ${d} \\times (${y})$\n$= ${c * x} + ${d * y}$\n$= ${e}$ ✓ 和方程2右边一致！\n\n恭喜你！代入法的每一步你都跟上了，非常出色！`,
-        en: `${narrator}: "Verify — plug the answer back into Equation 2:\n$${c} \\times (${x}) + ${d} \\times (${y})$\n$= ${c * x} + ${d * y}$\n$= ${e}$ ✓ Matches Equation 2!\n\nCongratulations! You followed every step of substitution perfectly — outstanding!"`,
+        zh: `${narrator}：验算——把答案代回方程2检查：\n$${c} \\times (${x}) + ${d} \\times (${y})$\n$= ${c * x} ${signTerm(d * y)}$\n$= ${e}$ ✓ 和方程2右边一致！\n\n恭喜你！代入法的每一步你都跟上了，非常出色！`,
+        en: `${narrator}: "Verify — plug the answer back into Equation 2:\n$${c} \\times (${x}) + ${d} \\times (${y})$\n$= ${c * x} ${signTerm(d * y)}$\n$= ${e}$ ✓ Matches Equation 2!\n\nCongratulations! You followed every step of substitution perfectly — outstanding!"`,
       },
       highlightField: 'y',
     },
@@ -6507,25 +6698,29 @@ export function generateSimultaneousY8Mission(template: Mission): Mission {
 
 export function generateRatioY8Mission(template: Mission): Mission {
   const tier = getTier();
-  const mode = pickRandom(['direct', 'inverse']) as 'direct' | 'inverse';
+  const mode = (template.data?.mode as 'direct' | 'inverse') || pickRandom(['direct', 'inverse']) as 'direct' | 'inverse';
 
-  const kPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8, 10], 3: [2, 3, 4, 5, 6, 7, 8, 10, 12, 15] };
-  const k = pickRandom(kPools[tier]);
-
-  // Known pair
   const x1Pools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8], 3: [2, 3, 4, 5, 6, 8, 10] };
-  const x1 = pickRandom(x1Pools[tier]);
-  const y1 = mode === 'direct' ? k * x1 : k / x1;
-
-  // Target: given x2, find y2
   const x2Pools = { 1: [2, 3, 5], 2: [2, 3, 4, 5, 6, 8, 10], 3: [2, 3, 4, 5, 6, 8, 10, 12] };
+  const x1 = pickRandom(x1Pools[tier]);
   let x2 = pickRandom(x2Pools[tier]);
   while (x2 === x1) x2 = pickRandom(x2Pools[tier]);
 
-  const y2 = mode === 'direct' ? k * x2 : k / x2;
-
-  // Skip non-integer answers
-  if (!Number.isInteger(y1) || !Number.isInteger(y2)) return generateRatioY8Mission(template);
+  let k: number, y1: number, y2: number;
+  if (mode === 'inverse') {
+    // For inverse proportion y=k/x, k must be divisible by both x1 and x2
+    const lcm = (a: number, b: number) => { const g = (a: number, b: number): number => b ? g(b, a % b) : a; return a * b / g(a, b); };
+    const minK = lcm(x1, x2);
+    const kMultipliers = { 1: [1, 2], 2: [1, 2, 3], 3: [1, 2, 3, 4] };
+    k = minK * pickRandom(kMultipliers[tier]);
+    y1 = k / x1;
+    y2 = k / x2;
+  } else {
+    const kPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8, 10], 3: [2, 3, 4, 5, 6, 7, 8, 10, 12, 15] };
+    k = pickRandom(kPools[tier]);
+    y1 = k * x1;
+    y2 = k * x2;
+  }
 
   const narrator = pickRandom(['曹操', '刘备']);
 
@@ -6632,6 +6827,376 @@ export function generateRatioY8Mission(template: Mission): Mission {
     ...template,
     description,
     data: { ...template.data, mode, k, x1, y1, x2, y2, answer: y2, generatorType: 'RATIO_Y8_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   VENN generator: two-set Venn diagram problems
+   Asks for intersection, union, complement, or set-only count
+   ══════════════════════════════════════════════════════════ */
+
+export function generateVennMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = pickRandom(['司马炎', '杜预', '诸葛亮']);
+
+  // Total, set A only, intersection, set B only
+  const totalPools = { 1: [20, 30, 40], 2: [30, 50, 80, 100], 3: [50, 100, 150, 200] };
+  const total = pickRandom(totalPools[tier]);
+
+  // Generate set sizes ensuring valid Venn diagram
+  const aOnlyPools = { 1: [3, 5, 8], 2: [5, 8, 10, 15], 3: [10, 15, 20, 25] };
+  const bothPools = { 1: [2, 3, 4], 2: [3, 5, 8, 10], 3: [5, 10, 15, 20] };
+  const bOnlyPools = { 1: [4, 6, 7], 2: [6, 8, 12, 14], 3: [8, 12, 18, 22] };
+
+  const aOnly = pickRandom(aOnlyPools[tier]);
+  const both = pickRandom(bothPools[tier]);
+  const bOnly = pickRandom(bOnlyPools[tier]);
+  const neither = total - aOnly - both - bOnly;
+
+  // Ensure neither >= 0
+  if (neither < 0) return safeRetry(template, generateVennMission);
+
+  const setA = aOnly + both;
+  const setB = bOnly + both;
+  const union = aOnly + both + bOnly;
+
+  // Pick question mode
+  const modes = tier === 1
+    ? ['intersection', 'union'] as const
+    : ['intersection', 'union', 'a_only', 'neither'] as const;
+  const mode = pickRandom([...modes]);
+
+  let answer: number;
+  let questionZh: string;
+  let questionEn: string;
+
+  switch (mode) {
+    case 'intersection':
+      answer = both;
+      questionZh = `两类都参加的有多少人？`;
+      questionEn = `How many are in both groups?`;
+      break;
+    case 'union':
+      answer = union;
+      questionZh = `至少参加一类的有多少人？`;
+      questionEn = `How many are in at least one group?`;
+      break;
+    case 'a_only':
+      answer = aOnly;
+      questionZh = `只参加 A 类的有多少人？`;
+      questionEn = `How many are in group A only?`;
+      break;
+    case 'neither':
+      answer = neither;
+      questionZh = `两类都不参加的有多少人？`;
+      questionEn = `How many are in neither group?`;
+      break;
+  }
+
+  const description: BilingualText = {
+    zh: `总共 $${total}$ 人，A 类 $${setA}$ 人，B 类 $${setB}$ 人，两类都参加 $${both}$ 人。${questionZh}`,
+    en: `Total $${total}$ people, Group A: $${setA}$, Group B: $${setB}$, both: $${both}$. ${questionEn}`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：什么是韦恩图？\n想象两个圆圈有一部分重叠——重叠区域就是"两类都参加"的人。\n左圈 = A 类，右圈 = B 类，重叠 = 都参加，圈外 = 都不参加。\n这就是韦恩图——把复杂的分类变得一目了然！`,
+        en: `${narrator}: "What is a Venn diagram?\nImagine two circles overlapping — the overlap is people in BOTH groups.\nLeft circle = A, right circle = B, overlap = both, outside = neither.\nThis is a Venn diagram — makes complex classification crystal clear!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：韦恩图的四个区域\n① A 类独有 = $${aOnly}$ 人\n② 两类都有（交集）= $${both}$ 人\n③ B 类独有 = $${bOnly}$ 人\n④ 都不在（圈外）= $${neither}$ 人\n\n四个区域加起来 = 总数 $${total}$！`,
+        en: `${narrator}: "Four regions of the Venn diagram\n① A only = $${aOnly}$\n② Both (intersection) = $${both}$\n③ B only = $${bOnly}$\n④ Neither (outside) = $${neither}$\n\nAll four add up to total $${total}$!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：核心关系\n$|A| = \\text{A独有} + \\text{交集} = ${aOnly} + ${both} = ${setA}$\n$|B| = \\text{B独有} + \\text{交集} = ${bOnly} + ${both} = ${setB}$\n$|A \\cup B| = \\text{A独有} + \\text{交集} + \\text{B独有} = ${union}$`,
+        en: `${narrator}: "Core relationships\n$|A| = \\text{A only} + \\text{both} = ${aOnly} + ${both} = ${setA}$\n$|B| = \\text{B only} + \\text{both} = ${bOnly} + ${both} = ${setB}$\n$|A \\cup B| = \\text{A only} + \\text{both} + \\text{B only} = ${union}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：解题\n题目问的是：${questionZh}\n从韦恩图中直接读出对应区域的数值。`,
+        en: `${narrator}: "Solve\nThe question asks: ${questionEn}\nRead the corresponding region directly from the Venn diagram."`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n$${answer}$`,
+        en: `${narrator}: "Answer\n$${answer}$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n四个区域：$${aOnly} + ${both} + ${bOnly} + ${neither} = ${aOnly + both + bOnly + neither}$\n总数 = $${total}$ ✓ 分类无遗漏！`,
+        en: `${narrator}: "Verify\nFour regions: $${aOnly} + ${both} + ${bOnly} + ${neither} = ${aOnly + both + bOnly + neither}$\nTotal = $${total}$ ✓ No one missed!"`,
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { total, setA, setB, aOnly, both, bOnly, neither, union, answer, mode, generatorType: 'VENN_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   ROTATION generator: rotate a point around origin by 90/180/270°
+   ══════════════════════════════════════════════════════════ */
+
+export function generateRotationMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = pickRandom(['诸葛亮', '马谡', '魏延']);
+
+  const pointPools = { 1: [1, 2, 3, 4], 2: [-4, -3, -2, 2, 3, 4, 5], 3: [-5, -4, -3, 3, 4, 5, 6] };
+  const px = pickRandom(pointPools[tier]);
+  const py = pickRandom(pointPools[tier]);
+
+  const angles = tier === 1 ? [90, 180] : [90, 180, 270];
+  const angle = pickRandom(angles);
+
+  let ansX: number, ansY: number;
+  if (angle === 90) { ansX = -py; ansY = px; }
+  else if (angle === 180) { ansX = -px; ansY = -py; }
+  else { ansX = py; ansY = -px; } // 270°
+
+  const description: BilingualText = {
+    zh: `将点 $(${px}, ${py})$ 绕原点逆时针旋转 $${angle}°$，求新坐标。`,
+    en: `Rotate point $(${px}, ${py})$ by $${angle}°$ anticlockwise about the origin. Find new coordinates.`,
+  };
+
+  const ruleZh = angle === 90 ? '$(x,y) \\to (-y, x)$' : angle === 180 ? '$(x,y) \\to (-x, -y)$' : '$(x,y) \\to (y, -x)$';
+  const ruleEn = ruleZh;
+
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：什么是旋转？\n想象一个棋子钉在棋盘中心，绕着中心转动。\n转 $90°$ = 向左转一个直角，$180°$ = 掉头，$270°$ = 向右转一个直角。`, en: `${narrator}: "What is rotation?\nImagine a chess piece pinned at the board's center, spinning around it.\n$90°$ = turn left one right angle, $180°$ = about-face, $270°$ = turn right one right angle."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：旋转 $${angle}°$ 的规则\n${ruleZh}\n\n记住：逆时针是正方向（数学约定）。`, en: `${narrator}: "The $${angle}°$ rotation rule\n${ruleEn}\n\nRemember: anticlockwise is the positive direction (math convention)."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：代入坐标\n原点 $(${px}, ${py})$\n按规则变换每个坐标。`, en: `${narrator}: "Substitute coordinates\nOriginal $(${px}, ${py})$\nApply the rule to each coordinate."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：计算\n$x' = ${ansX}$，$y' = ${ansY}$`, en: `${narrator}: "Calculate\n$x' = ${ansX}$, $y' = ${ansY}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：答案\n旋转后的新坐标 = $(${ansX}, ${ansY})$\n阵型变换完成！`, en: `${narrator}: "Answer\nNew coordinates after rotation = $(${ansX}, ${ansY})$\nFormation transform complete!"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}：验算\n新点到原点的距离应该和原点到旧点的距离相等（旋转不改变距离）。\n$\\sqrt{(${px})^2 + (${py})^2} = \\sqrt{(${ansX})^2 + (${ansY})^2}$ ✓`, en: `${narrator}: "Verify\nDistance from origin to new point should equal distance to old point (rotation preserves distance).\n$\\sqrt{(${px})^2 + (${py})^2} = \\sqrt{(${ansX})^2 + (${ansY})^2}$ ✓"` }, highlightField: 'x' },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { ...template.data, targetX: ansX, targetY: ansY, px, py, angle, generatorType: 'ROTATION_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   ENLARGEMENT generator: enlarge a point from the origin by scale factor k
+   ══════════════════════════════════════════════════════════ */
+
+export function generateEnlargementMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = pickRandom(['诸葛亮', '魏延', '姜维']);
+
+  const pointPools = { 1: [1, 2, 3], 2: [1, 2, 3, 4, 5], 3: [-3, -2, 2, 3, 4, 5] };
+  const px = pickRandom(pointPools[tier]);
+  const py = pickRandom(pointPools[tier]);
+  const kPools = { 1: [2, 3], 2: [2, 3, -1, -2], 3: [2, 3, -1, -2, -3] };
+  const k = pickRandom(kPools[tier]);
+
+  const ansX = k * px;
+  const ansY = k * py;
+
+  const description: BilingualText = {
+    zh: `以原点为中心，将点 $(${px}, ${py})$ 放大 $${k}$ 倍，求新坐标。`,
+    en: `Enlarge point $(${px}, ${py})$ by scale factor $${k}$ from the origin. Find new coordinates.`,
+  };
+
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：什么是放大（缩放）？\n以某个中心点为基准，把所有距离乘以一个倍数。\n倍数 > 1 → 放大，0 < 倍数 < 1 → 缩小，负数 → 翻转！`, en: `${narrator}: "What is enlargement?\nFrom a center point, multiply all distances by a scale factor.\nFactor > 1 → enlarge, 0 < factor < 1 → shrink, negative → flip!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：从原点放大的规则\n$$（x, y) \\to (kx, ky)$$\n每个坐标都乘以放大倍数 $k = ${k}$。就这么简单！`, en: `${narrator}: "Enlargement from origin rule\n$$(x, y) \\to (kx, ky)$$\nMultiply each coordinate by scale factor $k = ${k}$. That simple!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：代入\n原点 $(${px}, ${py})$，倍数 $k = ${k}$\n$x' = ${k} \\times ${px} = ${ansX}$\n$y' = ${k} \\times ${py} = ${ansY}$`, en: `${narrator}: "Substitute\nOriginal $(${px}, ${py})$, factor $k = ${k}$\n$x' = ${k} \\times ${px} = ${ansX}$\n$y' = ${k} \\times ${py} = ${ansY}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：答案\n放大后坐标 = $(${ansX}, ${ansY})$`, en: `${narrator}: "Answer\nEnlarged coordinates = $(${ansX}, ${ansY})$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：答案确认\n阵型放大 ${Math.abs(k)} 倍${k < 0 ? '并翻转' : ''}完成！`, en: `${narrator}: "Confirmed\nFormation enlarged ${Math.abs(k)}×${k < 0 ? ' and flipped' : ''} — done!"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}：验算\n新坐标 ÷ $k$ 应该等于原坐标：\n$${ansX} \\div ${k} = ${px}$ ✓\n$${ansY} \\div ${k} = ${py}$ ✓`, en: `${narrator}: "Verify\nNew coordinates ÷ $k$ should equal original:\n$${ansX} \\div ${k} = ${px}$ ✓\n$${ansY} \\div ${k} = ${py}$ ✓"` }, highlightField: 'x' },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { ...template.data, targetX: ansX, targetY: ansY, px, py, k, generatorType: 'ENLARGEMENT_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   VECTOR_ADD generator: add two 2D vectors
+   ══════════════════════════════════════════════════════════ */
+
+export function generateVectorAddMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = pickRandom(['诸葛亮', '姜维', '赵云']);
+
+  const pools = { 1: [1, 2, 3, 4], 2: [-4, -3, -2, 2, 3, 4, 5], 3: [-5, -4, -3, 3, 4, 5, 6] };
+  const a1 = pickRandom(pools[tier]);
+  const a2 = pickRandom(pools[tier]);
+  const b1 = pickRandom(pools[tier]);
+  const b2 = pickRandom(pools[tier]);
+
+  const ansX = a1 + b1;
+  const ansY = a2 + b2;
+
+  const description: BilingualText = {
+    zh: `向量 $\\vec{a} = \\binom{${a1}}{${a2}}$，$\\vec{b} = \\binom{${b1}}{${b2}}$，求 $\\vec{a} + \\vec{b}$ 的 $x$ 和 $y$ 分量。`,
+    en: `Vector $\\vec{a} = \\binom{${a1}}{${a2}}$, $\\vec{b} = \\binom{${b1}}{${b2}}$. Find the $x$ and $y$ components of $\\vec{a} + \\vec{b}$.`,
+  };
+
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：什么是向量？\n向量就是"带方向的距离"。普通数字只有大小，向量有大小**和**方向。\n$\\binom{${a1}}{${a2}}$ 表示"水平 ${a1}，垂直 ${a2}"。`, en: `${narrator}: "What is a vector?\nA vector is 'distance with direction'. Regular numbers have only size; vectors have size AND direction.\n$\\binom{${a1}}{${a2}}$ means 'horizontal ${a1}, vertical ${a2}'."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：向量加法\n两段行军路线首尾相接——终点就是总位移。\n$$\\vec{a} + \\vec{b} = \\binom{${a1} ${signTerm(b1)}}{${a2} ${signTerm(b2)}}$$\n$x$ 分量加 $x$ 分量，$y$ 分量加 $y$ 分量。`, en: `${narrator}: "Vector addition\nTwo march routes end-to-end — the endpoint is the total displacement.\n$$\\vec{a} + \\vec{b} = \\binom{${a1} ${signTerm(b1)}}{${a2} ${signTerm(b2)}}$$\nAdd $x$ to $x$, $y$ to $y$."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：计算 $x$ 分量\n$${a1} ${signTerm(b1)} = ${ansX}$`, en: `${narrator}: "Calculate $x$ component\n$${a1} ${signTerm(b1)} = ${ansX}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：计算 $y$ 分量\n$${a2} ${signTerm(b2)} = ${ansY}$`, en: `${narrator}: "Calculate $y$ component\n$${a2} ${signTerm(b2)} = ${ansY}$"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}：答案\n$\\vec{a} + \\vec{b} = \\binom{${ansX}}{${ansY}}$\n两段行军合并，总位移确认！`, en: `${narrator}: "Answer\n$\\vec{a} + \\vec{b} = \\binom{${ansX}}{${ansY}}$\nTwo marches combined, total displacement confirmed!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：验算\n$\\binom{${ansX}}{${ansY}} - \\binom{${b1}}{${b2}} = \\binom{${a1}}{${a2}}$ ✓ 减回去等于第一段！`, en: `${narrator}: "Verify\n$\\binom{${ansX}}{${ansY}} - \\binom{${b1}}{${b2}} = \\binom{${a1}}{${a2}}$ ✓ Subtract back = first segment!"` }, highlightField: 'x' },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { ...template.data, targetX: ansX, targetY: ansY, a1, a2, b1, b2, generatorType: 'VECTOR_ADD_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   CUMFREQ generator: cumulative frequency — find median from grouped data
+   Uses STATISTICS type with mode='mean' (checker uses data.answer path)
+   ══════════════════════════════════════════════════════════ */
+
+export function generateCumFreqMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = pickRandom(['司马炎', '杜预', '羊祜']);
+
+  // Generate grouped frequency data
+  const groupCount = tier === 1 ? 4 : tier === 2 ? 5 : 6;
+  const widthPools = { 1: [10], 2: [10, 20], 3: [5, 10, 20] };
+  const width = pickRandom(widthPools[tier]);
+  const freqPools = { 1: [3, 5, 8, 10, 12, 15], 2: [4, 6, 8, 10, 12, 15, 20], 3: [5, 8, 10, 15, 20, 25] };
+
+  const groups: { lower: number; upper: number; freq: number }[] = [];
+  let lower = 0;
+  let totalFreq = 0;
+  for (let i = 0; i < groupCount; i++) {
+    const freq = pickRandom(freqPools[tier]);
+    groups.push({ lower, upper: lower + width, freq });
+    totalFreq += freq;
+    lower += width;
+  }
+
+  // Compute cumulative frequencies
+  const cumFreqs: number[] = [];
+  let cum = 0;
+  for (const g of groups) {
+    cum += g.freq;
+    cumFreqs.push(cum);
+  }
+
+  // Find median class (where cumulative frequency first exceeds n/2)
+  const medianPos = totalFreq / 2;
+  let medianClass = 0;
+  for (let i = 0; i < cumFreqs.length; i++) {
+    if (cumFreqs[i] >= medianPos) { medianClass = i; break; }
+  }
+
+  // Estimate median using linear interpolation within the class
+  const prevCum = medianClass > 0 ? cumFreqs[medianClass - 1] : 0;
+  const g = groups[medianClass];
+  const median = g.lower + ((medianPos - prevCum) / g.freq) * width;
+  const answer = Math.round(median * 10) / 10; // round to 1dp
+
+  const tableZh = groups.map(g => `$${g.lower}$-$${g.upper}$: ${g.freq} 人`).join('，');
+  const tableEn = groups.map(g => `$${g.lower}$-$${g.upper}$: ${g.freq}`).join(', ');
+
+  const description: BilingualText = {
+    zh: `分组数据：${tableZh}。估计中位数。`,
+    en: `Grouped data: ${tableEn}. Estimate the median.`,
+  };
+
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：什么是累积频率？\n把频率逐组累加——第 1 组的频率、前 2 组的频率和、前 3 组的……\n累积到最后一组 = 总数 $${totalFreq}$。\n累积频率帮你找到"第 N 个数据落在哪个组"。`, en: `${narrator}: "What is cumulative frequency?\nAdd frequencies group by group — group 1 frequency, first 2 groups total, first 3...\nFinal cumulative = total $${totalFreq}$.\nCumulative frequency helps find 'which group contains the Nth value'."` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：累积频率表\n${groups.map((g, i) => `$${g.lower}$-$${g.upper}$: 频率 ${g.freq}，累积 ${cumFreqs[i]}`).join('\n')}\n\n总数 = $${totalFreq}$`, en: `${narrator}: "Cumulative frequency table\n${groups.map((g, i) => `$${g.lower}$-$${g.upper}$: freq ${g.freq}, cum ${cumFreqs[i]}`).join('\n')}\n\nTotal = $${totalFreq}$"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：找中位数位置\n中位数在第 $\\frac{${totalFreq}}{2} = ${medianPos}$ 个数据处。\n从累积频率表中找：哪个组的累积频率**首次达到或超过** ${medianPos}？`, en: `${narrator}: "Find median position\nMedian is at the $\\frac{${totalFreq}}{2} = ${medianPos}$th value.\nFrom the cumulative table: which group's cumulative first reaches or exceeds ${medianPos}?"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：线性插值估计\n中位数在 $${g.lower}$-$${g.upper}$ 这个组内。\n用插值公式精确估计位置。`, en: `${narrator}: "Linear interpolation estimate\nMedian falls in the $${g.lower}$-$${g.upper}$ group.\nUse interpolation to estimate its exact position."` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：答案\n估计中位数 ≈ $${answer}$`, en: `${narrator}: "Answer\nEstimated median ≈ $${answer}$"` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：验算\n中位数应该在中位数所在组的范围内：$${g.lower} \\leq ${answer} \\leq ${g.upper}$ ✓`, en: `${narrator}: "Verify\nMedian should be within the median class: $${g.lower} \\leq ${answer} \\leq ${g.upper}$ ✓"` }, highlightField: 'ans' },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { values: [answer], mode: 'mean', answer, groups, cumFreqs, totalFreq, generatorType: 'CUMFREQ_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTOR generator: arc length or sector area
+   Uses CIRCLE type with answer field
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSectorMission(template: Mission): Mission {
+  const tier = getTier();
+  const narrator = pickRandom(['诸葛亮', '马良', '姜维']);
+
+  const rPools = { 1: [5, 10], 2: [6, 8, 10, 12], 3: [5, 8, 10, 14, 20] };
+  const anglePools = { 1: [90, 180], 2: [60, 90, 120, 180], 3: [45, 60, 72, 90, 120, 150] };
+  const r = pickRandom(rPools[tier]);
+  const angle = pickRandom(anglePools[tier]);
+  const pi = 3.14;
+
+  const mode = (template.data?.mode as 'arc' | 'sector_area') || pickRandom(['arc', 'sector_area'] as const);
+
+  let answer: number;
+  let questionZh: string, questionEn: string;
+
+  if (mode === 'arc') {
+    answer = parseFloat(((angle / 360) * 2 * pi * r).toFixed(2));
+    questionZh = `求弧长。`;
+    questionEn = `Find the arc length.`;
+  } else {
+    answer = parseFloat(((angle / 360) * pi * r * r).toFixed(2));
+    questionZh = `求扇形面积。`;
+    questionEn = `Find the sector area.`;
+  }
+
+  const description: BilingualText = {
+    zh: `半径 $r = ${r}$，圆心角 $${angle}°$，$\\pi = ${pi}$。${questionZh}`,
+    en: `Radius $r = ${r}$, central angle $${angle}°$, $\\pi = ${pi}$. ${questionEn}`,
+  };
+
+  const fracStr = angle === 360 ? '1' : angle === 180 ? '\\frac{1}{2}' : angle === 90 ? '\\frac{1}{4}' : `\\frac{${angle}}{360}`;
+  const formulaZh = mode === 'arc' ? `$l = \\frac{\\theta}{360} \\times 2\\pi r$` : `$A = \\frac{\\theta}{360} \\times \\pi r^2$`;
+
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：扇形是什么？\n把圆饼切一刀——切出来的那一块就是扇形。\n圆心角越大，扇形越大。$360°$ = 整个圆，$180°$ = 半圆，$90°$ = 四分之一圆。`, en: `${narrator}: "What is a sector?\nCut a pizza slice — that's a sector.\nLarger central angle = larger sector. $360°$ = full circle, $180°$ = half, $90°$ = quarter."` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：核心思路\n扇形就是"圆的一部分"，占整个圆的 $\\frac{\\theta}{360}$。\n所以${mode === 'arc' ? '弧长' : '扇形面积'} = $\\frac{\\theta}{360}$ × ${mode === 'arc' ? '整个圆周长' : '整个圆面积'}。\n\n公式：${formulaZh}`, en: `${narrator}: "Core idea\nA sector is 'part of a circle', taking up $\\frac{\\theta}{360}$ of the whole.\nSo ${mode === 'arc' ? 'arc length' : 'sector area'} = $\\frac{\\theta}{360}$ × ${mode === 'arc' ? 'full circumference' : 'full area'}.\n\nFormula: ${formulaZh}"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：代入数据\n$\\theta = ${angle}°$，$r = ${r}$，$\\pi = ${pi}$\n分数部分：$\\frac{${angle}}{360} = ${fracStr}$`, en: `${narrator}: "Substitute\n$\\theta = ${angle}°$, $r = ${r}$, $\\pi = ${pi}$\nFraction: $\\frac{${angle}}{360} = ${fracStr}$"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：计算\n先算${mode === 'arc' ? '整圆周长 $2\\pi r$' : '整圆面积 $\\pi r^2$'}，\n再乘以 $\\frac{${angle}}{360}$。`, en: `${narrator}: "Calculate\nFirst find ${mode === 'arc' ? 'full circumference $2\\pi r$' : 'full area $\\pi r^2$'},\nthen multiply by $\\frac{${angle}}{360}$."` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：答案\n${mode === 'arc' ? '弧长' : '扇形面积'} = $${answer}$`, en: `${narrator}: "Answer\n${mode === 'arc' ? 'Arc length' : 'Sector area'} = $${answer}$"` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：验算\n$${answer} \\times \\frac{360}{${angle}}$ 应该等于${mode === 'arc' ? '整圆周长' : '整圆面积'} ✓`, en: `${narrator}: "Verify\n$${answer} \\times \\frac{360}{${angle}}$ should equal ${mode === 'arc' ? 'full circumference' : 'full area'} ✓"` }, highlightField: 'area' },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { r, pi, angle, mode: mode === 'arc' ? 'circumference' : 'area', answer, generatorType: 'SECTOR_RANDOM' },
     tutorialSteps,
   };
 }

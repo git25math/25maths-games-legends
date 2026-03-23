@@ -227,7 +227,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     }
   }
   if (type === 'RATIO') {
-    if (data.answer !== undefined && inputs.ans !== undefined) {
+    if (data.answer !== undefined) {
       return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
     }
     const { a, b } = data;
@@ -330,6 +330,9 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   if (type === 'SYMMETRY') {
     const ok = parse(inputs.x || '') === data.ansX && parse(inputs.y || '') === data.ansY;
     return { correct: ok, expected: { x: String(data.ansX), y: String(data.ansY) } };
+  }
+  if (type === 'VENN') {
+    return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
   }
   return { correct: false, expected: {} };
 }
