@@ -88,8 +88,8 @@ export function getLevelInfo(totalScore: number): LevelInfo {
 
   const currentThreshold = XP_THRESHOLDS[level - 1];
   const nextThreshold = level < 50 ? XP_THRESHOLDS[level] : currentThreshold;
-  const currentXP = totalScore - currentThreshold;
   const xpForNextLevel = level < 50 ? nextThreshold - currentThreshold : 0;
+  const currentXP = level < 50 ? totalScore - currentThreshold : 0;
   const progress = xpForNextLevel > 0 ? Math.min(1, currentXP / xpForNextLevel) : 1;
 
   return {

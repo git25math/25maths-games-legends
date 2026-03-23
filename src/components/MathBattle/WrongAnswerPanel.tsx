@@ -105,8 +105,8 @@ export function WrongAnswerPanel({
           const correctVal = expected[field.id] || '?';
           // In partial mode, check if this specific field was correct
           const fieldCorrect = isPartial && userVal !== '—' && correctVal !== '?' &&
-            !isNaN(parseAnswer(userVal)) && !isNaN(parseFloat(correctVal)) &&
-            Math.abs(parseAnswer(userVal) - parseFloat(correctVal)) < 0.01;
+            !isNaN(parseAnswer(userVal)) && !isNaN(parseAnswer(correctVal)) &&
+            Math.abs(parseAnswer(userVal) - parseAnswer(correctVal)) < 0.01;
           return (
             <motion.div variants={staggerItem} key={field.id} className="grid grid-cols-2 gap-3">
               <div className={`rounded-lg p-3 text-center ${fieldCorrect ? 'bg-emerald-100' : isPartial ? 'bg-yellow-100' : 'bg-red-100'}`}>
