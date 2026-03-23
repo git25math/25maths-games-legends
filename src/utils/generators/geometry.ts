@@ -846,7 +846,7 @@ export function generateSimilarityMission(template: Mission): Mission {
 
   const scaleFactor = a / b;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：什么是"相似"?\n形状相同，大小不同。对应边的比例相同。`, en: `${narrator}: "What does 'similar' mean?\nSame shape, different size. Corresponding sides have the same ratio."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：为什么要学相似？\n想象你站在山顶侦察敌军阵地——远处的帐篷和近处的帐篷形状一模一样，只是大小不同。\n如果你知道近处帐篷的尺寸和距离比例，就能算出远处帐篷的真实大小！\n不用冒险过去量——这就是"相似"的威力：形状相同、比例相同，大小可以不同。`, en: `${narrator}: "Why learn similarity?\nImagine standing on a hilltop scouting the enemy camp — the distant tents look exactly the same shape as the nearby ones, just smaller.\nIf you know the size of the nearby tent and the distance ratio, you can calculate the real size of the far-away tent!\nNo need to risk going over to measure — that's the power of similarity: same shape, same ratio, different size."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：求比例系数(scale factor)：\n$\\frac{${a}}{${b}} = ${scaleFactor}$`, en: `${narrator}: "Find the scale factor:\n$\\frac{${a}}{${b}} = ${scaleFactor}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：找出需要求的边：\n已知第二个三角形的对应边 = $${c}$\n我们要求 $x$。`, en: `${narrator}: "Identify which side we need:\nThe corresponding side in the second triangle = $${c}$\nWe need to find $x$."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：计算：\n$x = ${c} \\times ${scaleFactor} = ${correctX}$`, en: `${narrator}: "Calculate:\n$x = ${c} \\times ${scaleFactor} = ${correctX}$"` }, highlightField: 'x' },

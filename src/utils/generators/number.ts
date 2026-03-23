@@ -651,8 +651,8 @@ export function generateMixedImproperMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：什么是带分数和假分数？\n带分数 = 整数 + 真分数，比如 $${whole}\\frac{${num}}{${den}}$ = ${whole} 又 $\\frac{${num}}{${den}}$。\n假分数 = 分子 ≥ 分母，比如 $\\frac{${improperNum}}{${den}}$。\n\n它们是同一个数的两种写法！`,
-          en: `${narrator}: "What are mixed numbers and improper fractions?\nMixed = whole + proper fraction, e.g. $${whole}\\frac{${num}}{${den}}$ = ${whole} and $\\frac{${num}}{${den}}$.\nImproper = numerator ≥ denominator, e.g. $\\frac{${improperNum}}{${den}}$.\n\nSame number, two forms!"`,
+          zh: `${narrator}：为什么有两种分数写法？\n分粮食时，说"${whole}又$\\frac{${num}}{${den}}$石"比"$\\frac{${improperNum}}{${den}}$石"更直观——一听就知道大概${whole}石多一点。\n但做计算时，假分数 $\\frac{${improperNum}}{${den}}$ 乘除更方便。\n\n两种写法各有方便之处！带分数 = 整数 + 真分数，假分数 = 分子 ≥ 分母。`,
+          en: `${narrator}: "Why are there two ways to write fractions?\nWhen distributing grain, '${whole} and $\\frac{${num}}{${den}}$' is clearer — you instantly know it's about ${whole} and a bit more.\nBut for calculation, $\\frac{${improperNum}}{${den}}$ is easier to multiply and divide.\n\nEach form has its use! Mixed = whole + proper fraction, improper = numerator ≥ denominator."`,
         },
         highlightField: 'ans',
       },
@@ -1846,8 +1846,8 @@ export function generateIndicesMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是指数(index/power)?\n$2^{3}$ 表示 $2 \\times 2 \\times 2 = 8$\n右上角的小数字告诉你要乘多少次。\n\n底数(base)是被乘的数，指数(index)是乘的次数。`,
-        en: `${narrator}: "What is an index (power)?\n$2^{3}$ means $2 \\times 2 \\times 2 = 8$\nThe small number on top tells you how many times to multiply.\n\nBase = the number being multiplied. Index = how many times."`,
+        zh: `${narrator}：为什么指数这么有用？\n粮草倍增的故事：1石粮食，每月翻倍，3个月后多少？$2^3=8$ 石！\n指数就是"连续乘"的简写——$2^{3}$ 表示 $2 \\times 2 \\times 2$。\n底数(base)是被乘的数，指数(index)是乘的次数。`,
+        en: `${narrator}: "Why are indices so useful?\nA grain-doubling story: 1 bushel of grain doubles each month — after 3 months? $2^3=8$ bushels!\nAn index is shorthand for 'repeated multiplication' — $2^{3}$ means $2 \\times 2 \\times 2$.\nBase = the number being multiplied. Index = how many times."`,
       },
       highlightField: 'x',
     },
@@ -1886,6 +1886,16 @@ export function generateIndicesMission(template: Mission): Mission {
       text: {
         zh: `${narrator}：答案：$x = ${ans}$`,
         en: `${narrator}: "Answer: $x = ${ans}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: op === 'div' ? {
+        zh: `${narrator}：验算\n把指数展开：$${base}^{${e1}} = ${base}$ 乘 $${e1}$ 次，$${base}^{${e2}} = ${base}$ 乘 $${e2}$ 次。\n除法 = 消去 $${e2}$ 个 $${base}$，剩下 $${e1} - ${e2} = ${ans}$ 个，即 $${base}^{${ans}}$ ✓`,
+        en: `${narrator}: "Verify\nExpand: $${base}^{${e1}}$ = $${base}$ multiplied $${e1}$ times, $${base}^{${e2}}$ = $${base}$ multiplied $${e2}$ times.\nDivision = cancel $${e2}$ copies of $${base}$, leaving $${e1} - ${e2} = ${ans}$ copies, i.e. $${base}^{${ans}}$ ✓"`,
+      } : {
+        zh: `${narrator}：验算\n把指数展开：$${base}^{${e1}} = ${base}$ 乘 $${e1}$ 次，$${base}^{${e2}} = ${base}$ 乘 $${e2}$ 次。\n合在一起 = $${base}$ 乘 $${e1} + ${e2} = ${ans}$ 次，即 $${base}^{${ans}}$ ✓`,
+        en: `${narrator}: "Verify\nExpand: $${base}^{${e1}}$ = $${base}$ multiplied $${e1}$ times, $${base}^{${e2}}$ = $${base}$ multiplied $${e2}$ times.\nCombined = $${base}$ multiplied $${e1} + ${e2} = ${ans}$ times, i.e. $${base}^{${ans}}$ ✓"`,
       },
       highlightField: 'x',
     },
@@ -2178,8 +2188,8 @@ export function generatePercentageOfMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是"百分比"？\n军粮 $${n}$ 石，要拨出 $${pct}\\%$ 给前锋营——到底拨多少？\n\n"百分"两个字拆开看："百" = 100，"分" = 份。\n百分比就是"每 100 份里取几份"。$${pct}\\%$ 就是每 100 份取 ${pct} 份。`,
-        en: `${narrator}: "What is 'percentage'?\nWe have $${n}$ units of grain. $${pct}\\%$ goes to the vanguard — how much exactly?\n\n'Per cent' literally means 'per hundred'.\n$${pct}\\%$ means: out of every 100, take ${pct}."`,
+        zh: `${narrator}：为什么要算百分比？\n军粮 $${n}$ 石，要拨 $${pct}\\%$ 给前锋营。知道比例才能精确分配——多一石浪费，少一石前线挨饿。\n\n百分比让"部分占整体多少"一目了然：$${pct}\\%$ 就是每 100 份里取 ${pct} 份。`,
+        en: `${narrator}: "Why do we need percentages?\nWe have $${n}$ units of grain, and $${pct}\\%$ must go to the vanguard. Knowing the ratio means precise allocation — too much is wasteful, too little and the front line starves.\n\nPercentages make 'how much of the whole' crystal clear: $${pct}\\%$ means ${pct} out of every 100."`,
       },
       highlightField: 'ans',
     },
@@ -2789,8 +2799,8 @@ export function generateVennMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是韦恩图？\n想象两个圆圈有一部分重叠——重叠区域就是"两类都参加"的人。\n左圈 = A 类，右圈 = B 类，重叠 = 都参加，圈外 = 都不参加。\n这就是韦恩图——把复杂的分类变得一目了然！`,
-        en: `${narrator}: "What is a Venn diagram?\nImagine two circles overlapping — the overlap is people in BOTH groups.\nLeft circle = A, right circle = B, overlap = both, outside = neither.\nThis is a Venn diagram — makes complex classification crystal clear!"`,
+        zh: `${narrator}：为什么要用韦恩图？\n清点诸侯！有人会骑马，有人会射箭，有人两样都会——怎么不重复地数清楚？\n画两个圈，重叠的就是"都会"的人！\n韦恩图就是这样把复杂的分类变得一目了然。`,
+        en: `${narrator}: "Why use Venn diagrams?\nCounting warriors! Some can ride, some can shoot, some can do both — how do you count without double-counting?\nDraw two circles — the overlap is people who can do both!\nThat's how Venn diagrams make complex classification crystal clear."`,
       },
       highlightField: 'ans',
     },

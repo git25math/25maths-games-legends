@@ -170,7 +170,7 @@ export function generateRotationMission(template: Mission): Mission {
   const ruleEn = ruleZh;
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：什么是旋转？\n想象一个棋子钉在棋盘中心，绕着中心转动。\n转 $90°$ = 向左转一个直角，$180°$ = 掉头，$270°$ = 向右转一个直角。`, en: `${narrator}: "What is rotation?\nImagine a chess piece pinned at the board's center, spinning around it.\n$90°$ = turn left one right angle, $180°$ = about-face, $270°$ = turn right one right angle."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：为什么要学旋转？\n八阵图的奥秘！阵法变换就是把士兵的位置绕中心点旋转。\n掌握旋转规则，就能预测阵法变化后每个人的新位置。\n$90°$ = 向左转一个直角，$180°$ = 掉头，$270°$ = 向右转一个直角。`, en: `${narrator}: "Why learn rotation?\nThe secret of the Eight Formations! Changing formations means rotating soldiers' positions around a center.\nMaster rotation rules, and you can predict everyone's new position after a formation change.\n$90°$ = turn left one right angle, $180°$ = about-face, $270°$ = turn right one right angle."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：旋转 $${angle}°$ 的规则\n${ruleZh}\n\n记住：逆时针是正方向（数学约定）。`, en: `${narrator}: "The $${angle}°$ rotation rule\n${ruleEn}\n\nRemember: anticlockwise is the positive direction (math convention)."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：代入坐标\n原点 $(${px}, ${py})$\n按规则变换每个坐标。`, en: `${narrator}: "Substitute coordinates\nOriginal $(${px}, ${py})$\nApply the rule to each coordinate."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：计算\n$x' = ${ansX}$，$y' = ${ansY}$`, en: `${narrator}: "Calculate\n$x' = ${ansX}$, $y' = ${ansY}$"` }, highlightField: 'x' },
@@ -209,7 +209,7 @@ export function generateEnlargementMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：什么是放大（缩放）？\n以某个中心点为基准，把所有距离乘以一个倍数。\n倍数 > 1 → 放大，0 < 倍数 < 1 → 缩小，负数 → 翻转！`, en: `${narrator}: "What is enlargement?\nFrom a center point, multiply all distances by a scale factor.\nFactor > 1 → enlarge, 0 < factor < 1 → shrink, negative → flip!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：为什么要学缩放？\n地图制图！把实际地形按比例缩小画在图上——或者反过来，从地图推算实际距离。\n缩放就是"保持形状，改变大小"。\n倍数 > 1 → 放大，0 < 倍数 < 1 → 缩小，负数 → 翻转！`, en: `${narrator}: "Why learn enlargement?\nMap-making! Scale real terrain down onto a map — or work backwards to find real distances.\nEnlargement means 'keep the shape, change the size'.\nFactor > 1 → enlarge, 0 < factor < 1 → shrink, negative → flip!"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：从原点放大的规则\n$$（x, y) \\to (kx, ky)$$\n每个坐标都乘以放大倍数 $k = ${k}$。就这么简单！`, en: `${narrator}: "Enlargement from origin rule\n$$(x, y) \\to (kx, ky)$$\nMultiply each coordinate by scale factor $k = ${k}$. That simple!"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：代入\n原点 $(${px}, ${py})$，倍数 $k = ${k}$\n$x' = ${k} \\times ${px} = ${ansX}$\n$y' = ${k} \\times ${py} = ${ansY}$`, en: `${narrator}: "Substitute\nOriginal $(${px}, ${py})$, factor $k = ${k}$\n$x' = ${k} \\times ${px} = ${ansX}$\n$y' = ${k} \\times ${py} = ${ansY}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：答案\n放大后坐标 = $(${ansX}, ${ansY})$`, en: `${narrator}: "Answer\nEnlarged coordinates = $(${ansX}, ${ansY})$"` }, highlightField: 'x' },
@@ -248,7 +248,7 @@ export function generateVectorAddMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：什么是向量？\n向量就是"带方向的距离"。普通数字只有大小，向量有大小**和**方向。\n$\\binom{${a1}}{${a2}}$ 表示"水平 ${a1}，垂直 ${a2}"。`, en: `${narrator}: "What is a vector?\nA vector is 'distance with direction'. Regular numbers have only size; vectors have size AND direction.\n$\\binom{${a1}}{${a2}}$ means 'horizontal ${a1}, vertical ${a2}'."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：为什么要学向量？\n赵云从A点出发，先向东走3里再向北走4里。最终在哪？光知道距离不够，还得知道方向！\n向量就是同时记录"走多远"和"往哪走"。\n$\\binom{${a1}}{${a2}}$ 表示"水平 ${a1}，垂直 ${a2}"。`, en: `${narrator}: "Why learn vectors?\nZhao Yun starts at point A, walks 3 li east then 4 li north. Where does he end up? Distance alone isn't enough — you need direction too!\nA vector records both 'how far' and 'which way'.\n$\\binom{${a1}}{${a2}}$ means 'horizontal ${a1}, vertical ${a2}'."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：向量加法\n两段行军路线首尾相接——终点就是总位移。\n$$\\vec{a} + \\vec{b} = \\binom{${a1} ${signTerm(b1)}}{${a2} ${signTerm(b2)}}$$\n$x$ 分量加 $x$ 分量，$y$ 分量加 $y$ 分量。`, en: `${narrator}: "Vector addition\nTwo march routes end-to-end — the endpoint is the total displacement.\n$$\\vec{a} + \\vec{b} = \\binom{${a1} ${signTerm(b1)}}{${a2} ${signTerm(b2)}}$$\nAdd $x$ to $x$, $y$ to $y$."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：计算 $x$ 分量\n$${a1} ${signTerm(b1)} = ${ansX}$`, en: `${narrator}: "Calculate $x$ component\n$${a1} ${signTerm(b1)} = ${ansX}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：计算 $y$ 分量\n$${a2} ${signTerm(b2)} = ${ansY}$`, en: `${narrator}: "Calculate $y$ component\n$${a2} ${signTerm(b2)} = ${ansY}$"` }, highlightField: 'y' },
@@ -597,8 +597,8 @@ export function generateRatioMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：什么是比例?\n比例是比较两个量的方式。\n$${a}:${b}$ 意思是"每 $${a}$ 份的一种，就有 $${b}$ 份的另一种"。`,
-        en: `${narrator}: "What is a ratio?\nA ratio compares two quantities.\n$${a}:${b}$ means 'for every $${a}$ of one, there are $${b}$ of the other'."`,
+        zh: `${narrator}：为什么要学比例？\n分军粮！100石粮食要按 $${a}:${b}$ 分给两营，怎么分才公平？\n比例就是"几份对几份"的分配方案——$${a}:${b}$ 意思是每 $${a}$ 份配 $${b}$ 份。`,
+        en: `${narrator}: "Why learn ratios?\nDividing army rations! 100 bushels split $${a}:${b}$ between two camps — how to be fair?\nA ratio is a 'how many parts each' plan — $${a}:${b}$ means $${a}$ parts to $${b}$ parts."`,
       },
       highlightField: 'x',
     },

@@ -851,12 +851,13 @@ export function generateRootsMission(template: Mission): Mission {
   const quadEqStr = `x^{2} ${signCoeff(b, 'x')} ${signTerm(c)} = 0`;
   const factorStr = `(x ${r1 >= 0 ? '-' : '+'}${Math.abs(r1)})(x ${r2 >= 0 ? '-' : '+'}${Math.abs(r2)}) = 0`;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：什么是"求根"?\n找到让方程等于零的 $x$ 值。`, en: `${narrator}: "What does 'finding roots' mean?\nFinding the values of $x$ that make the equation equal zero."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：为什么要"求根"？\n投石车发射后，石头什么时候落地？就是找抛物线和地面的交点——让 $y=0$ 的那个 $x$ 值！\n求根 = 找到让方程等于零的 $x$。`, en: `${narrator}: "Why do we 'find roots'?\nWhen a catapult launches a boulder, when does it hit the ground? That's finding where the parabola meets the ground — the $x$ value that makes $y=0$!\nFinding roots = finding the $x$ that makes the equation equal zero."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：方程是：\n$${quadEqStr}$`, en: `${narrator}: "The equation is:\n$${quadEqStr}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：方法：因式分解\n把方程写成 $(x - r_1)(x - r_2) = 0$ 的形式。\n我们需要两个数，乘积 = $${c}$，相加 = $${-b}$。`, en: `${narrator}: "Method: factorize\nWrite the equation as $(x - r_1)(x - r_2) = 0$.\nWe need two numbers that multiply to give $${c}$ and add to give $${-b}$."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：这两个数是 $${r1}$ 和 $${r2}$：\n验证：$(${r1}) \\times (${r2}) = ${r1 * r2}$ (= $${c}$)\n验证：$(${r1}) + (${r2}) = ${r1 + r2}$ (= $${-b}$)`, en: `${narrator}: "The two numbers are $${r1}$ and $${r2}$:\nCheck: $(${r1}) \\times (${r2}) = ${r1 * r2}$ (= $${c}$)\nCheck: $(${r1}) + (${r2}) = ${r1 + r2}$ (= $${-b}$)"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：所以 $${factorStr}$\n意味着 $x = ${r1}$ 或 $x = ${r2}$`, en: `${narrator}: "So $${factorStr}$\nThis means $x = ${r1}$ or $x = ${r2}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：答案：$x = ${r1}$ 或 $x = ${r2}$!`, en: `${narrator}: "Answer: $x = ${r1}$ or $x = ${r2}$!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：验算——代根回原方程 ✓\n把 $x = ${r1}$ 代入：$(${r1})^2 ${signCoeff(b, '')}(${r1}) ${signTerm(c)} = ${r1*r1 + b*r1 + c}$ ✓\n把 $x = ${r2}$ 代入：$(${r2})^2 ${signCoeff(b, '')}(${r2}) ${signTerm(c)} = ${r2*r2 + b*r2 + c}$ ✓\n两个都等于 0，验证通过！`, en: `${narrator}: "Verify — substitute roots back ✓\nPut $x = ${r1}$: $(${r1})^2 ${signCoeff(b, '')}(${r1}) ${signTerm(c)} = ${r1*r1 + b*r1 + c}$ ✓\nPut $x = ${r2}$: $(${r2})^2 ${signCoeff(b, '')}(${r2}) ${signTerm(c)} = ${r2*r2 + b*r2 + c}$ ✓\nBoth equal 0 — verified!"` }, highlightField: 'x' },
   ];
   return { ...template, description, data: { a, b, c, generatorType: 'ROOTS_RANDOM' }, tutorialSteps };
 }
@@ -911,13 +912,14 @@ export function generateSimultaneousMission(template: Mission): Mission {
   if (elimA === 0) return safeRetry(template, generateSimultaneousMission);
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：什么是联立方程?\n两个方程包含两个未知数，需要同时求解。`, en: `${narrator}: "What are simultaneous equations?\nTwo equations with two unknowns — solve both at the same time."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：为什么需要两个方程？\n一个未知数用一个方程就够，但两个未知数——比如粮草和兵力——必须两个条件才能定位答案！\n联立方程 = 用两个条件锁定两个未知数。`, en: `${narrator}: "Why do we need two equations?\nOne unknown needs just one equation, but two unknowns — like grain supply and troop count — require two conditions to pin down the answer!\nSimultaneous equations = using two conditions to lock in two unknowns."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：写出两个方程：\n方程1: $${eq1Display}$\n方程2: $${eq2Display}$`, en: `${narrator}: "Write the two equations:\nEq1: $${eq1Display}$\nEq2: $${eq2Display}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：目标：让一个变量的系数相同，这样就能消去它。\n我们选择消去 $y$。`, en: `${narrator}: "Goal: make the coefficient of one variable the same in both equations, so we can eliminate it.\nLet's eliminate $y$."` }, highlightField: 'x' },
     { text: { zh: `${narrator}：方程1 乘以 $${elimMul1}$: $${eqStr(newA1, newB1, newC1)}$\n方程2 乘以 $${elimMul2}$: $${eqStr(newA2, newB2, newC2)}$`, en: `${narrator}: "Multiply Eq1 by $${elimMul1}$: $${eqStr(newA1, newB1, newC1)}$\nMultiply Eq2 by $${elimMul2}$: $${eqStr(newA2, newB2, newC2)}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：两式${sameSignB ? '相减' : '相加'}，$y$ 消去：\n$${coeffStr(elimA, 'x')} = ${elimC}$\n$x = ${elimC} \\div ${elimA} = ${x}$`, en: `${narrator}: "${sameSignB ? 'Subtract' : 'Add'} the equations, $y$ disappears:\n$${coeffStr(elimA, 'x')} = ${elimC}$\n$x = ${elimC} \\div ${elimA} = ${x}$"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：把 $x = ${x}$ 代回方程1：\n$${a1} \\times (${x}) ${signCoeff(b1, 'y')} = ${c1}$\n$${coeffStr(b1, 'y')} = ${c1 - a1 * x}$\n$y = ${y}$`, en: `${narrator}: "Substitute $x = ${x}$ back into Eq1:\n$${a1} \\times (${x}) ${signCoeff(b1, 'y')} = ${c1}$\n$${coeffStr(b1, 'y')} = ${c1 - a1 * x}$\n$y = ${y}$"` }, highlightField: 'y' },
     { text: { zh: `${narrator}：答案：$x = ${x}$，$y = ${y}$!`, en: `${narrator}: "Answer: $x = ${x}$, $y = ${y}$!"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}：验算——把 $x = ${x}$，$y = ${y}$ 代回两个方程 ✓\n方程1：$${a1}(${x}) ${signCoeff(b1, '')}(${y}) = ${a1*x + b1*y}$ = $${c1}$ ✓\n方程2：$${a2}(${x}) ${signCoeff(b2, '')}(${y}) = ${a2*x + b2*y}$ = $${c2}$ ✓\n两个方程都成立，验证通过！`, en: `${narrator}: "Verify — substitute $x = ${x}$, $y = ${y}$ back into both equations ✓\nEq1: $${a1}(${x}) ${signCoeff(b1, '')}(${y}) = ${a1*x + b1*y}$ = $${c1}$ ✓\nEq2: $${a2}(${x}) ${signCoeff(b2, '')}(${y}) = ${a2*x + b2*y}$ = $${c2}$ ✓\nBoth equations hold — verified!"` }, highlightField: 'x' },
   ];
 
   return {
@@ -1206,7 +1208,7 @@ export function generateArithmeticMission(template: Mission): Mission {
   const nMinus1 = n - 1;
   const step = nMinus1 * d;
   const tutorialSteps = [
-    { text: { zh: `${narrator}：什么是等差数列？\n就像士兵排队报数——每个人比前一个多喊同样的数！\n第一个喊 $${a1}$，每次多 $${d}$：$${a1}, ${a2}, ${a3}, ...$\n\n这个"每次多的数"叫**公差** $d = ${d}$。`, en: `${narrator}: "What is an arithmetic sequence?\nLike soldiers counting off — each adds the same number!\nFirst calls $${a1}$, each adds $${d}$: $${a1}, ${a2}, ${a3}, ...$\n\nThis 'added number' is the **common difference** $d = ${d}$."` }, highlightField: 'ans' },
+    { text: { zh: `${narrator}：为什么要学等差数列？\n曹操每天招兵 $${a1}$ 人，每天比前一天多招 $${d}$ 人。第 $${n}$ 天能招多少？\n不用一天天数，公式直接算！\n\n这种"每次多同样的数"的数列，就是**等差数列**，每次多的数叫**公差** $d = ${d}$。`, en: `${narrator}: "Why learn arithmetic sequences?\nCao Cao recruits $${a1}$ soldiers on day 1, adding $${d}$ more each day. How many on day $${n}$?\nNo need to count day by day — a formula gives the answer instantly!\n\nThis pattern of 'adding the same amount each time' is an **arithmetic sequence**, and the amount added is the **common difference** $d = ${d}$."` }, highlightField: 'ans' },
     { text: { zh: `${narrator}：核心公式\n$a_n = a_1 + (n-1) \\times d$\n\n为什么是 $n-1$？第 1 项不用加，第 2 项加 1 次，第 3 项加 2 次……\n第 $n$ 项加 $(n-1)$ 次！`, en: `${narrator}: "Core formula\n$a_n = a_1 + (n-1) \\times d$\n\nWhy $n-1$? Term 1 adds nothing, Term 2 adds once, Term 3 adds twice...\nTerm $n$ adds $(n-1)$ times!"` }, highlightField: 'ans' },
     { text: { zh: `${narrator}：代入数值\n$a_{${n}} = ${a1} + (${n}-1) \\times ${d}$\n\n先算括号：$${n} - 1 = ${nMinus1}$`, en: `${narrator}: "Substitute values\n$a_{${n}} = ${a1} + (${n}-1) \\times ${d}$\n\nBrackets first: $${n} - 1 = ${nMinus1}$"` }, highlightField: 'ans' },
     { text: { zh: `${narrator}：再算乘法\n$${nMinus1} \\times ${d} = ${step}$\n\n意思就是：从第 1 项开始，公差加了 ${nMinus1} 次，总共多了 $${step}$。`, en: `${narrator}: "Then multiply\n$${nMinus1} \\times ${d} = ${step}$\n\nMeaning: from term 1, the common difference was added ${nMinus1} times, totaling $${step}$ more."` }, highlightField: 'ans' },

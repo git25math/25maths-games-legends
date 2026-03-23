@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
-import { AlertTriangle, ChevronRight, Star } from 'lucide-react';
+import { AlertTriangle, ChevronDown, ChevronRight, ChevronUp, Star } from 'lucide-react';
 import type { Language } from '../../types';
 import { MathView } from '../MathView';
 import { lt } from '../../i18n/resolveText';
+import { LatexText } from '../MathView';
 import { INPUT_FIELDS } from './inputConfig';
 import { staggerContainer, staggerItem } from '../../utils/animationPresets';
 import { parseAnswer } from '../../utils/parseAnswer';
+import { diagnoseError } from '../../utils/diagnoseError';
 
 const LABELS = {
   zh: {
@@ -15,7 +18,9 @@ const LABELS = {
     yourAnswer: '你的答案',
     correctAnswer: '正确答案',
     explanation: '解题过程',
-    continue: '我明白了，继续',
+    continue: '明白了，再来一题！',
+    showSteps: '看解题过程',
+    hideSteps: '收起',
   },
   zh_TW: {
     title: '解題回顧',
@@ -24,7 +29,9 @@ const LABELS = {
     yourAnswer: '你的答案',
     correctAnswer: '正確答案',
     explanation: '解題過程',
-    continue: '我明白了，繼續',
+    continue: '明白了，再來一題！',
+    showSteps: '看解題過程',
+    hideSteps: '收起',
   },
   en: {
     title: 'Solution Review',
@@ -33,7 +40,9 @@ const LABELS = {
     yourAnswer: 'Your answer',
     correctAnswer: 'Correct answer',
     explanation: 'Solution steps',
-    continue: 'Got it, continue',
+    continue: 'Got it, next question!',
+    showSteps: 'Show solution steps',
+    hideSteps: 'Hide',
   },
 } as const;
 
@@ -70,9 +79,20 @@ export function WrongAnswerPanel({
   const t = LABELS[lang];
   const fc = INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || { zh: [], en: [] };
   const fields = fc[lang as keyof typeof fc] || fc[lang === 'zh_TW' ? 'zh' : 'zh'] || [];
+  const [showAllSteps, setShowAllSteps] = useState(false);
 
   // Only show fields that have expected values
   const relevantFields = fields.filter(f => expected[f.id] !== undefined);
+
+  // Error diagnosis
+  const diagnosis = diagnoseError(userInputs, expected, isPartial);
+
+  // Show last 3 tutorial steps (answer + verify + key step), or all if expanded
+  const stepsToShow = tutorialSteps && tutorialSteps.length > 0
+    ? showAllSteps
+      ? tutorialSteps
+      : tutorialSteps.slice(Math.max(0, tutorialSteps.length - 3))
+    : [];
 
   return (
     <motion.div
@@ -91,12 +111,15 @@ export function WrongAnswerPanel({
         )}
       </div>
 
-      {/* Partial credit encouragement */}
-      {isPartial && (
-        <div className="bg-yellow-100 rounded-lg p-3 text-yellow-800 text-sm font-bold">
-          {t.partialHint}
-        </div>
-      )}
+      {/* Error diagnosis — the soul of the panel */}
+      <div className={`rounded-lg p-3 text-sm font-bold leading-relaxed ${
+        diagnosis.type === 'method' ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' :
+        diagnosis.type === 'sign' || diagnosis.type === 'rounding' ? 'bg-blue-50 text-blue-800 border border-blue-200' :
+        diagnosis.type === 'magnitude' ? 'bg-orange-50 text-orange-800 border border-orange-200' :
+        'bg-slate-100 text-slate-700 border border-slate-200'
+      }`}>
+        {diagnosis.message[lang]}
+      </div>
 
       {/* Answer comparison */}
       <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-2">
@@ -139,10 +162,22 @@ export function WrongAnswerPanel({
         </div>
       )}
 
-      {/* Tutorial steps if available (show last step = solution) */}
-      {tutorialSteps && tutorialSteps.length > 0 && (
-        <div className={`bg-white/60 rounded-lg p-3 border text-sm text-slate-700 leading-relaxed ${isPartial ? 'border-yellow-200' : 'border-red-100'}`}>
-          {lt(tutorialSteps[tutorialSteps.length - 1].text, lang)}
+      {/* Tutorial steps — show last 3 by default, expandable to all */}
+      {stepsToShow.length > 0 && (
+        <div className={`bg-white/60 rounded-lg p-3 border text-sm text-slate-700 leading-relaxed space-y-2 ${isPartial ? 'border-yellow-200' : 'border-red-100'}`}>
+          {stepsToShow.map((step, i) => (
+            <div key={i} className={i < stepsToShow.length - 1 ? 'pb-2 border-b border-slate-200' : ''}>
+              <LatexText text={lt(step.text, lang)} />
+            </div>
+          ))}
+          {tutorialSteps && tutorialSteps.length > 3 && (
+            <button
+              onClick={() => setShowAllSteps(!showAllSteps)}
+              className="text-xs text-indigo-600 font-bold flex items-center gap-1 hover:text-indigo-800 transition-colors"
+            >
+              {showAllSteps ? <><ChevronUp size={14} /> {t.hideSteps}</> : <><ChevronDown size={14} /> {t.showSteps}</>}
+            </button>
+          )}
         </div>
       )}
 
