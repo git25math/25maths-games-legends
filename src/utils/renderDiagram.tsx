@@ -34,6 +34,9 @@ import { CoordinatePlane } from '../components/diagrams/CoordinatePlane';
 import { SubstitutionFlow } from '../components/diagrams/SubstitutionFlow';
 import { ProbabilityBar } from '../components/diagrams/ProbabilityBar';
 import { VennDiagram } from '../components/diagrams/VennDiagram';
+import { RatioBar } from '../components/diagrams/RatioBar';
+import { RoundingNumberLine } from '../components/diagrams/RoundingNumberLine';
+import { MixedFractionPie } from '../components/diagrams/MixedFractionPie';
 
 type Phase = 'green' | 'amber' | 'red';
 
@@ -373,6 +376,24 @@ export function renderDiagram(
         universalLabel={`ξ = ${d.total}`}
       />
     );
+  }
+
+  // ── RatioBar for RATIO_Y7 and RATIO_RANDOM ──
+  if (gen === 'RATIO_Y7_RANDOM' && d.a !== undefined) {
+    return <RatioBar a={d.a as number} b={d.b as number} total={d.total as number | undefined} />;
+  }
+  if (gen === 'RATIO_RANDOM' && d.a !== undefined && d.knownValue !== undefined) {
+    return <RatioBar a={d.a as number} b={d.b as number} knownValue={d.knownValue as number} />;
+  }
+
+  // ── RoundingNumberLine for ESTIMATION ──
+  if (gen === 'ESTIMATION_ROUND_RANDOM' && d.n !== undefined) {
+    return <RoundingNumberLine n={d.n as number} place={d.place as number} answer={d.answer as number} />;
+  }
+
+  // ── MixedFractionPie for MIXED_IMPROPER ──
+  if (gen === 'MIXED_IMPROPER_RANDOM' && d.whole !== undefined) {
+    return <MixedFractionPie whole={d.whole as number} num={d.num as number} den={d.den as number} mode={d.mode as 'to_improper' | 'to_mixed'} />;
   }
 
   return null;
