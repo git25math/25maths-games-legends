@@ -31,6 +31,8 @@ export const PracticeScreen = ({
   onComplete,
   onCancel,
   onEnterBattle,
+  repairMode = false,
+  onRepairComplete,
 }: {
   mission: Mission;
   character: Character;
@@ -38,17 +40,22 @@ export const PracticeScreen = ({
   onComplete: () => void;
   onCancel: () => void;
   onEnterBattle?: () => void;
+  repairMode?: boolean;
+  onRepairComplete?: () => void;
 }) => {
   const t = translations[lang];
 
   // Persisted practice state (survives page refresh)
+  // Repair mode: force Red phase, ignore persistence
   const {
-    phase: currentPhase, setPhase: setCurrentPhase,
+    phase: persistedPhase, setPhase: setCurrentPhase,
     tutorialStep, setTutorialStep,
     adaptiveTier, setAdaptiveTier,
     consecutiveCorrect, setConsecutiveCorrect,
     consecutiveWrong, setConsecutiveWrong,
   } = usePracticePersistedState(mission.id);
+
+  const currentPhase = repairMode ? 'red' as const : persistedPhase;
 
   const [currentMission, setCurrentMission] = useState<Mission>(() => generateMission(mission, adaptiveTier));
   const [inputs, setInputs] = useState<Record<string, string>>({});
@@ -61,6 +68,9 @@ export const PracticeScreen = ({
   const shaking = shakeKey > 0;
   const [showBadge, setShowBadge] = useState(false);
   const [phaseToast, setPhaseToast] = useState<string | null>(null);
+  // v7.0: Repair mode — count correct answers, complete after 3
+  const [repairCorrect, setRepairCorrect] = useState(0);
+  const REPAIR_TARGET = 3;
 
   const {
     playSuccess, playFail, playClick,
@@ -107,6 +117,15 @@ export const PracticeScreen = ({
       }
       setTimeout(() => {
         setShowCorrectFlash(false);
+        // v7.0: Repair mode — complete after 3 correct
+        if (repairMode) {
+          const newRepair = repairCorrect + 1;
+          setRepairCorrect(newRepair);
+          if (newRepair >= REPAIR_TARGET) {
+            if (onRepairComplete) onRepairComplete();
+            return;
+          }
+        }
         regenerateQuestion();
       }, DURATION.entrance * 1000);
     } else {
@@ -245,7 +264,17 @@ export const PracticeScreen = ({
                 <BookOpen size={18} />
                 {lt(mission.title, lang)}
               </h2>
-              {/* Phase indicator */}
+              {/* Phase indicator — repair mode shows progress bar instead */}
+              {repairMode ? (
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-amber-400 text-xs font-bold">
+                    {lang === 'en' ? `Repair ${repairCorrect}/${REPAIR_TARGET}` : `修复 ${repairCorrect}/${REPAIR_TARGET}`}
+                  </span>
+                  <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden max-w-[120px]">
+                    <div className="h-full bg-amber-400 rounded-full transition-all" style={{ width: `${(repairCorrect / REPAIR_TARGET) * 100}%` }} />
+                  </div>
+                </div>
+              ) : (
               <div className="flex items-center gap-2 mt-1">
                 {PHASE_ORDER.map((phase, i) => {
                   const isCurrent = phase === currentPhase;
@@ -293,6 +322,7 @@ export const PracticeScreen = ({
                 </div>
               )}
               </div>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2">

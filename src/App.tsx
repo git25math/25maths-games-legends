@@ -104,6 +104,7 @@ export default function App() {
   const [isGuest, setIsGuest] = useState(persisted.isGuest);
   const [lastClearedMissionId, setLastClearedMissionId] = useState<number | null>(null);
   const [isDailyBattle, setIsDailyBattle] = useState(false);
+  const [isRepairMode, setIsRepairMode] = useState(false);
 
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
   const {
@@ -370,10 +371,10 @@ export default function App() {
                   onUnlockSkill={unlockSkill}
                   onEquipSkill={equipSkill}
                   onRepairEquipment={(missionId) => {
-                    // Enter repair mode: find mission, start practice
                     const m = missions.find(m => m.id === missionId);
                     if (m) {
                       setActiveMission(m);
+                      setIsRepairMode(true);
                       setGameState('practice');
                     }
                   }}
@@ -417,15 +418,25 @@ export default function App() {
                   character={selectedChar}
                   lang={lang}
                   onComplete={() => {
+                    setIsRepairMode(false);
                     setGameState('map');
                     setActiveMission(null);
                   }}
                   onCancel={() => {
+                    setIsRepairMode(false);
                     setGameState('map');
                     setActiveMission(null);
                   }}
                   onEnterBattle={() => {
                     handleMissionStart(activeMission);
+                  }}
+                  repairMode={isRepairMode}
+                  onRepairComplete={async () => {
+                    const bonus = await repairEquipment(activeMission.id);
+                    setIsRepairMode(false);
+                    setGameState('map');
+                    setActiveMission(null);
+                    // TODO: show repair success toast with bonus XP on MapScreen
                   }}
                 />
               )}
