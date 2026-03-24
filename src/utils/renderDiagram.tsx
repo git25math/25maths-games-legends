@@ -226,19 +226,23 @@ export function renderDiagram(
     return <AngleArc angle={d.angle as number} label={`${d.angle}°`} showProtractor />;
   }
 
+  // ── Pythagoras → Right triangle with rightAngle=0 at bottom-left ──
+  // Layout: sides[0]=bottom leg (a), sides[1]=hypotenuse (c), sides[2]=left leg (b)
   if (mission.type === 'PYTHAGORAS' && d.a !== undefined) {
     return (
       <Triangle
         sides={d.c
-          ? [{ label: `a = ${d.a}` }, { label: 'b = ?' }, { label: `c = ${d.c}` }]
-          : [{ label: `a = ${d.a}` }, { label: `b = ${d.b}` }, { label: 'c = ?' }]
+          ? [{ label: `a = ${d.a}` }, { label: `c = ${d.c}` }, { label: 'b = ?' }]
+          : [{ label: `a = ${d.a}` }, { label: 'c = ?' }, { label: `b = ${d.b}` }]
         }
         rightAngle={0} labels={['', '', '']}
       />
     );
   }
 
-  // ── Trigonometry → Triangle with angle + side labels ──
+  // ── Trigonometry → Right triangle with angle at vertex 1 (bottom-right) ──
+  // Layout: sides[0]=bottom (adjacent), sides[1]=diagonal (hypotenuse), sides[2]=left (opposite)
+  // Right angle marker at vertex 0 via rightAngle={0}; angle label at vertex 1
   if (mission.type === 'TRIGONOMETRY' && d.opposite !== undefined) {
     const opp = d.opposite as number;
     const adj = d.adjacent as number | undefined;
@@ -246,12 +250,12 @@ export function renderDiagram(
     return (
       <Triangle
         sides={func === 'sin'
-          ? [{ label: `opp = ${opp}` }, { label: 'c = ?' }, { label: '' }]
-          : [{ label: `opp = ${opp}` }, { label: '' }, { label: `adj = ${adj}` }]}
+          ? [{ label: '' }, { label: 'c = ?' }, { label: `opp = ${opp}` }]
+          : [{ label: `adj = ${adj}` }, { label: '' }, { label: `opp = ${opp}` }]}
         rightAngle={0}
         angles={func === 'tan_inv'
-          ? [{ label: '? °' }, {}, { label: '90°' }]
-          : [{ label: `${d.angle}°` }, {}, { label: '90°' }]}
+          ? [{}, { label: '?' }, {}]
+          : [{}, { label: `${d.angle}\u00b0` }, {}]}
       />
     );
   }

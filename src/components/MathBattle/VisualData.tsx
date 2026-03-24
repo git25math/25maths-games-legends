@@ -243,8 +243,8 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
           <Triangle
             sides={[
               { label: String(a) },
-              { label: String(b) },
               { label: '?' },
+              { label: String(b) },
             ]}
             rightAngle={0}
             labels={['A', 'B', 'C']}
