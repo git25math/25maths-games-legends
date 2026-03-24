@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
@@ -79,6 +79,9 @@ export const MapScreen = ({
     }
   }, [lastClearedMissionId, clearLastClearedMission]);
 
+  const nextUpRef = useRef<HTMLDivElement>(null);
+  const hasScrolled = useRef(false);
+
   const gradeMissions = missions.filter(m => m.grade === profile.grade);
   const completedCount = Object.keys(profile.completed_missions).filter(id =>
     // Skip special keys (daily_*, _streak_tokens)
@@ -93,6 +96,17 @@ export const MapScreen = ({
   // Daily challenge
   const dailyMission = getDailyMission(missions, profile.grade);
   const dailyDone = isDailyCompleted(profile.completed_missions);
+
+  // Auto-scroll to "Start here" card on initial load
+  useEffect(() => {
+    if (nextUpRef.current && !hasScrolled.current) {
+      hasScrolled.current = true;
+      const timer = setTimeout(() => {
+        nextUpRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 600); // wait for entrance animations
+      return () => clearTimeout(timer);
+    }
+  }, [gradeMissions.length]);
 
   // Streak tokens (stored in completed_missions as special keys)
   const streakTokens = ((profile.completed_missions as Record<string, unknown>)['_streak_tokens'] as number) || 0;
@@ -314,6 +328,7 @@ export const MapScreen = ({
                   return (
                     <motion.div
                       key={mission.id}
+                      ref={isNextUp ? nextUpRef : undefined}
                       variants={cardVariants}
                       className="relative group"
                       {...(!isLocked ? {
@@ -335,11 +350,11 @@ export const MapScreen = ({
                         {isLastCleared && (
                           <motion.div
                             initial={{ opacity: 0, y: 0, scale: 0.5 }}
-                            animate={{ opacity: [0, 1, 1, 0], y: -80, scale: 1.5 }}
-                            transition={{ duration: 2, ease: "easeOut" }}
-                            className="absolute -top-4 left-1/2 -translate-x-1/2 text-2xl font-black text-yellow-400 z-50 pointer-events-none drop-shadow-md"
+                            animate={{ opacity: [0, 1, 1, 0], y: -60, scale: 1.3 }}
+                            transition={{ duration: 2.5, ease: "easeOut" }}
+                            className="absolute -top-4 left-1/2 -translate-x-1/2 text-lg font-black text-yellow-400 z-50 pointer-events-none drop-shadow-md whitespace-nowrap"
                           >
-                            + Score
+                            {lang === 'en' ? 'Cleared!' : '通关！'}
                           </motion.div>
                         )}
                         {isPerfect && (
