@@ -53,6 +53,20 @@ function pickQuote(quotes: ExpeditionQuote[]): ExpeditionQuote {
   return quotes[dayOfYear % quotes.length];
 }
 
+/** Extract correct answer text from mission data, matching visible input fields */
+function getCorrectDisplay(question: Mission, lang: Language): string {
+  const fieldConfig = INPUT_FIELDS[question.type];
+  const langKey = lang === 'en' ? 'en' : 'zh';
+  const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
+  const data = question.data ?? {};
+  const usedFieldIds = question.tutorialSteps
+    ?.map(s => s.highlightField).filter(Boolean) as string[] | undefined;
+  const visibleFields = usedFieldIds && usedFieldIds.length > 0
+    ? fields.filter(f => usedFieldIds.includes(f.id))
+    : fields;
+  return visibleFields.map(f => `${f.id} = ${data[f.id] ?? '?'}`).join('\u3000');
+}
+
 // ── Component ────────────────────────────────────────────────────────
 
 export const ExpeditionScreen = ({
@@ -87,6 +101,9 @@ export const ExpeditionScreen = ({
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [showResult, setShowResult] = useState<'none' | 'correct' | 'wrong'>('none');
   const [showRetreatConfirm, setShowRetreatConfirm] = useState(false);
+  const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
+  const [correctAnswerText, setCorrectAnswerText] = useState('');
+  const [nodeCompleteXP, setNodeCompleteXP] = useState<number | null>(null);
 
   // Record state (saved when expedition ends)
   const [savedRecord, setSavedRecord] = useState<ExpeditionRecord | null>(null);
@@ -153,15 +170,21 @@ export const ExpeditionScreen = ({
       setRations(newRations);
       setTimeout(() => {
         setShowResult('none');
-        setInputs({});
         if (newRations <= 0) {
           playDefeat();
           finishExpedition(nodesCleared, xpEarned, 'defeat');
         } else {
-          const qs = [...battleQuestions];
-          const template = LOCAL_MISSIONS.find(m => m.id === question.id) || question;
-          qs[battleQIdx] = template.data?.generatorType ? generateMission(template) : template;
-          setBattleQuestions(qs);
+          // Show correct answer (keep student's input visible for comparison)
+          setCorrectAnswerText(getCorrectDisplay(question, lang));
+          setShowCorrectAnswer(true);
+          setTimeout(() => {
+            setShowCorrectAnswer(false);
+            setInputs({});
+            const qs = [...battleQuestions];
+            const template = LOCAL_MISSIONS.find(m => m.id === question.id) || question;
+            qs[battleQIdx] = template.data?.generatorType ? generateMission(template) : template;
+            setBattleQuestions(qs);
+          }, 1500);
         }
       }, 800);
     }
@@ -181,8 +204,13 @@ export const ExpeditionScreen = ({
       playVictory();
       finishExpedition(newNodes, newXP, 'victory');
     } else {
-      setCurrentNodeIdx(prev => prev + 1);
-      setPhase('map');
+      // Show node completion celebration
+      setNodeCompleteXP(nodeXP);
+      setTimeout(() => {
+        setNodeCompleteXP(null);
+        setCurrentNodeIdx(prev => prev + 1);
+        setPhase('map');
+      }, 1200);
     }
   };
 
@@ -299,6 +327,22 @@ export const ExpeditionScreen = ({
               {(t as any).retreat ?? 'Retreat'}
             </button>
           )}
+        </div>
+
+        {/* Expedition progress bar */}
+        <div className="w-full max-w-sm mb-3">
+          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full"
+              initial={false}
+              animate={{ width: `${(nodesCleared / expedition.nodes.length) * 100}%` }}
+              transition={{ type: 'spring', stiffness: 100 }}
+            />
+          </div>
+          <div className="flex justify-between mt-1 text-[9px] text-white/20">
+            <span>{lang === 'en' ? 'Start' : '\u51fa\u53d1'}</span>
+            <span>{lang === 'en' ? 'Final Battle' : '\u51b3\u6218'}</span>
+          </div>
         </div>
 
         <div className="flex flex-col gap-2 w-full max-w-sm">
@@ -487,13 +531,42 @@ export const ExpeditionScreen = ({
               )}
             </AnimatePresence>
 
+            {/* Correct answer display (after wrong, before regeneration) */}
+            <AnimatePresence>
+              {showCorrectAnswer && (
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                  className="mt-3 bg-amber-900/30 border border-amber-600/20 rounded-xl p-3 text-center">
+                  <p className="text-amber-400/50 text-[10px] mb-0.5">{lang === 'en' ? 'Correct answer' : '\u6b63\u786e\u7b54\u6848'}</p>
+                  <p className="text-amber-300 font-bold text-sm">{correctAnswerText}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <button
               onClick={handleSubmit}
-              disabled={showResult !== 'none'}
+              disabled={showResult !== 'none' || showCorrectAnswer}
               className="w-full mt-4 py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 disabled:opacity-50 transition-all"
             >
               {t.attack}
             </button>
+
+            {/* Node completion celebration */}
+            <AnimatePresence>
+              {nodeCompleteXP !== null && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="absolute inset-0 z-20 flex items-center justify-center bg-emerald-900/40 rounded-3xl backdrop-blur-sm">
+                  <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 200 }}
+                    className="text-center">
+                    <Shield size={40} className="text-emerald-400 mx-auto mb-2" />
+                    <h3 className="text-emerald-400 font-black text-xl">{lang === 'en' ? 'Node Cleared!' : '\u5173\u5361\u901a\u8fc7\uff01'}</h3>
+                    <p className="text-amber-400 font-bold mt-1">+{nodeCompleteXP} XP</p>
+                    {currentNode.rationReward > 0 && (
+                      <p className="text-amber-400/60 text-xs mt-0.5">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '\u519b\u7cae'}</p>
+                    )}
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -610,6 +683,8 @@ export const ExpeditionScreen = ({
                   setInputs({});
                   setShowResult('none');
                   setShowRetreatConfirm(false);
+                  setShowCorrectAnswer(false);
+                  setNodeCompleteXP(null);
                   setSavedRecord(null);
                   setPhase('briefing');
                 }}
