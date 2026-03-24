@@ -224,6 +224,40 @@ export function renderDiagram(
     );
   }
 
+  // ── Trigonometry → Triangle with angle + side labels ──
+  if (mission.type === 'TRIGONOMETRY' && d.opposite !== undefined) {
+    const opp = d.opposite as number;
+    const adj = d.adjacent as number | undefined;
+    const func = d.func as string;
+    return (
+      <Triangle
+        sides={func === 'sin'
+          ? [{ label: `opp = ${opp}` }, { label: 'c = ?' }, { label: '' }]
+          : [{ label: `opp = ${opp}` }, { label: '' }, { label: `adj = ${adj}` }]}
+        rightAngle={0}
+        angles={func === 'tan_inv'
+          ? [{ label: '? °' }, {}, { label: '90°' }]
+          : [{ label: `${d.angle}°` }, {}, { label: '90°' }]}
+      />
+    );
+  }
+
+  // ── Similarity → Triangle with scale labels ──
+  if (mission.type === 'SIMILARITY' && d.a !== undefined && d.b !== undefined) {
+    return (
+      <Triangle
+        sides={[{ label: `${d.a}` }, { label: `${d.b}` }, { label: 'x = ?' }]}
+        labels={['', '', '']}
+        color="#2980b9"
+      />
+    );
+  }
+
+  // ── Area triangle ──
+  if (mission.type === 'AREA' && gen === 'AREA_TRIANGLE_RANDOM' && d.base !== undefined) {
+    return <AreaShape shape="triangle" base={d.base as number} height={d.height as number} />;
+  }
+
   if (mission.type === 'CIRCLE' && d.r !== undefined) {
     return <CircleDiagram radius={d.r as number} showArea={d.mode === 'area'} showCircumference={d.mode === 'circumference'} />;
   }
@@ -285,6 +319,26 @@ export function renderDiagram(
 
   if (mission.type === 'PERCENTAGE' && d.initial !== undefined && d.pct !== undefined) {
     return <PercentageBar initial={d.initial as number} pct={d.pct as number} increase={(d.rate as number) >= 0} />;
+  }
+
+  // PERCENTAGE_OF uses 'n' instead of 'initial'
+  if (gen === 'PERCENTAGE_OF_RANDOM' && d.n !== undefined && d.pct !== undefined) {
+    return <PercentageBar initial={d.n as number} pct={d.pct as number} increase={true} />;
+  }
+
+  // SIMULTANEOUS Y10 — convert eq arrays to slope-intercept for graph
+  if (gen === 'SIMULTANEOUS_RANDOM' && d.eq1 && d.eq2) {
+    const [a1, b1, c1] = d.eq1 as number[];
+    const [a2, b2, c2] = d.eq2 as number[];
+    if (b1 !== 0) {
+      return (
+        <SimultaneousGraph
+          eq1={[-a1 / b1, c1 / b1]}
+          eq2={[a2, b2, c2]}
+          solX={d.x as number} solY={d.y as number} step={step}
+        />
+      );
+    }
   }
 
   if (mission.type === 'ARITHMETIC' && d.a1 !== undefined) {

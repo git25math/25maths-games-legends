@@ -6,7 +6,8 @@
 
 type RectProps = { shape: 'rect'; length: number; width: number };
 type TrapProps = { shape: 'trap'; a: number; b: number; h: number };
-type Props = RectProps | TrapProps;
+type TriProps = { shape: 'triangle'; base: number; height: number };
+type Props = RectProps | TrapProps | TriProps;
 
 const COLORS = {
   wood: '#3d2b1f',
@@ -47,6 +48,35 @@ export function AreaShape(props: Props) {
 
         {/* Formula */}
         <text x={W / 2} y={H - 10} textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.wood}>A = l x w</text>
+      </svg>
+    );
+  }
+
+  if (props.shape === 'triangle') {
+    const { base, height } = props;
+    const area = (base * height) / 2;
+    const triH = 100;
+    const triW = 160;
+    const bx = (W - triW) / 2;
+    const by = 25 + triH;
+    const apex = W / 2;
+    const ay = 25;
+
+    return (
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-w-xs mx-auto" role="img" aria-label={`Triangle base=${base} height=${height}`}>
+        <polygon
+          points={`${bx},${by} ${bx + triW},${by} ${apex},${ay}`}
+          fill={COLORS.fill} stroke={COLORS.stroke} strokeWidth={2} strokeLinejoin="round"
+        />
+        {/* Base label */}
+        <text x={W / 2} y={by + 16} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.dim}>base = {base}</text>
+        {/* Height dashed line */}
+        <line x1={apex} y1={ay} x2={apex} y2={by} stroke={COLORS.dim} strokeWidth={1} strokeDasharray="4,2" />
+        <text x={apex + 8} y={(ay + by) / 2 + 4} fontSize={12} fontWeight="bold" fill={COLORS.dim}>h = {height}</text>
+        {/* Area */}
+        <text x={W / 2} y={(ay + by) / 2 - 10} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.gold}>= {area}</text>
+        {/* Formula */}
+        <text x={W / 2} y={H - 6} textAnchor="middle" fontSize={11} fontWeight="bold" fill={COLORS.wood}>A = base x h / 2</text>
       </svg>
     );
   }
