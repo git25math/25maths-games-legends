@@ -52,6 +52,7 @@ export const PracticeScreen = ({
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
   const [showBadge, setShowBadge] = useState(false);
+  const [phaseToast, setPhaseToast] = useState<string | null>(null);
   // Adaptive difficulty: tracks consecutive correct/wrong to adjust number ranges
   const [adaptiveTier, setAdaptiveTier] = useState<DifficultyTier>(1);
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
@@ -139,6 +140,11 @@ export const PracticeScreen = ({
     playPhaseAdvance();
     const nextPhase = PHASE_ORDER[phaseIndex + 1];
     setCurrentPhase(nextPhase);
+    // Show phase transition toast
+    const toastMsg = nextPhase === 'amber' ? (lang === 'en' ? 'Examples complete! Now try with hints.' : '例题看完了！现在试试有提示的练习。')
+      : (lang === 'en' ? 'Hints removed! You\'re on your own now.' : '提示已移除！现在独立挑战。');
+    setPhaseToast(toastMsg);
+    setTimeout(() => setPhaseToast(null), 2500);
     regenerateQuestion();
   };
 
@@ -197,6 +203,20 @@ export const PracticeScreen = ({
                 {t.correct}
               </span>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Phase transition toast */}
+      <AnimatePresence>
+        {phaseToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            className="absolute top-4 left-1/2 -translate-x-1/2 z-40 px-6 py-3 bg-indigo-600 text-white text-sm font-bold rounded-xl shadow-2xl pointer-events-none"
+          >
+            {phaseToast}
           </motion.div>
         )}
       </AnimatePresence>

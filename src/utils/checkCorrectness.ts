@@ -233,6 +233,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const { a, b } = data;
     const x = parse(inputs.x || '');
     const y = parse(inputs.y || '');
+    if (y === 0 || b === 0) return { correct: false, expected: { x: String(a), y: String(b) } };
     return { correct: Math.abs(x / y - a / b) < 0.01, expected: { x: String(a), y: String(b) } };
   }
   if (type === 'SIMILARITY') {

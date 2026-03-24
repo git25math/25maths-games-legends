@@ -18,8 +18,8 @@ export const translations = {
     attack: "全军突击！",
     successTitle: "大获全胜！",
     successDesc: "你精准地计算出了奇袭路线。",
-    failTitle: "痛失良机...",
-    failDesc: "计算有误，敌军已撤退，请重新布阵！",
+    failTitle: "别灰心，再来一次！",
+    failDesc: "每一次失败都是进步的一部分。看看哪里可以改进，你一定能过关！",
     retry: "重整旗鼓",
     encouragements: [
       "你的思路是对的，就差最后一步了！",
@@ -208,8 +208,8 @@ export const translations = {
     attack: "Full Charge!",
     successTitle: "Great Victory!",
     successDesc: "You calculated the surprise attack route perfectly.",
-    failTitle: "Opportunity Lost...",
-    failDesc: "Calculation error, the enemy has retreated!",
+    failTitle: "Don't give up, try again!",
+    failDesc: "Every setback is part of the journey. Check where you can improve — you'll get it!",
     retry: "Regroup",
     encouragements: [
       "Your thinking is right — just one more step!",
@@ -396,8 +396,8 @@ export const translations = {
     attack: "全軍突擊！",
     successTitle: "大獲全勝！",
     successDesc: "你精準地計算出了奇襲路線。",
-    failTitle: "痛失良機...",
-    failDesc: "計算有誤，敵軍已撤退，請重新佈陣！",
+    failTitle: "別灰心，再來一次！",
+    failDesc: "每一次失敗都是進步的一部分。看看哪裡可以改進，你一定能過關！",
     retry: "重整旗鼓",
     encouragements: [
       "你的思路是對的，就差最後一步了！",
