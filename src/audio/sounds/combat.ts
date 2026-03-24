@@ -1,10 +1,13 @@
 // Combat sound effects: hp_loss, hp_critical, victory, defeat
 import type { SoundFn } from '../engine';
 import { playNoiseBurst, playWarDrum, playTacticalPulse, jitter } from '../utils';
+import { playSample } from '../sampleLoader';
 
 /** HP Loss — Damped Impact (Subtle feedback) */
 export const hpLoss: SoundFn = (ctx, time, dest) => {
-  // Very soft low-freq thump
+  // Try real drum sample
+  if (playSample(ctx, 'drum', dest, { gain: 0.08, time })) return;
+  // Fallback: synthesis
   playWarDrum(ctx, dest, time, 0.06, 0.3);
 };
 

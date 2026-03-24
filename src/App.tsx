@@ -22,6 +22,11 @@ import { MapScreen } from './screens/MapScreen';
 import { LobbyScreen } from './screens/LobbyScreen';
 import { PracticeScreen } from './screens/PracticeScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
+import { OnboardingScreen, isOnboardingDone } from './screens/OnboardingScreen';
+import { cleanStalePracticeKeys } from './hooks/usePracticeState';
+
+// Clean up stale practice localStorage keys on startup
+cleanStalePracticeKeys();
 
 class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; error: any }> {
   state = { hasError: false, error: null };
@@ -70,8 +75,8 @@ function loadPersistedState(): PersistedState {
 
 function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
-    // Battle can't be restored (complex internal state) → save as map
-    const safeState = gameState === 'battle' ? 'map' : gameState;
+    // Battle/onboarding can't be restored → save as map
+    const safeState = (gameState === 'battle' || gameState === 'onboarding') ? 'map' : gameState;
     const safeMission = safeState === 'practice' ? missionId : null;
     localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
@@ -267,7 +272,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v6.2.0</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v6.5.0</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -281,6 +286,7 @@ export default function App() {
               key={
                 gameState === 'map'
                   ? (profile && !profile.grade ? 'grade' : 'map')
+                  : gameState === 'onboarding' ? 'onboarding'
                   : gameState
               }
               initial={{ opacity: 0, x: 300 }}
@@ -307,7 +313,19 @@ export default function App() {
               {gameState === 'map' && profile && !profile.grade && (
                 <GradeSelectScreen
                   lang={lang}
-                  onSelect={(g, cls) => updateProfile({ grade: g, ...(cls ? { class_name: cls, class_tags: [cls] } : {}) })}
+                  onSelect={(g, cls) => {
+                    updateProfile({ grade: g, ...(cls ? { class_name: cls, class_tags: [cls] } : {}) });
+                    if (!isOnboardingDone()) {
+                      setGameState('onboarding');
+                    }
+                  }}
+                />
+              )}
+
+              {gameState === 'onboarding' && (
+                <OnboardingScreen
+                  lang={lang}
+                  onComplete={() => setGameState('map')}
                 />
               )}
 

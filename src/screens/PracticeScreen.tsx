@@ -18,6 +18,7 @@ import { CalculatorWidget } from '../components/Calculator';
 import { renderDiagram } from '../utils/renderDiagram';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
+import { usePracticePersistedState } from '../hooks/usePracticeState';
 
 type PracticePhase = 'green' | 'amber' | 'red';
 
@@ -40,23 +41,26 @@ export const PracticeScreen = ({
 }) => {
   const t = translations[lang];
 
-  const [currentPhase, setCurrentPhase] = useState<PracticePhase>('green');
-  const [currentMission, setCurrentMission] = useState<Mission>(() => generateMission(mission));
+  // Persisted practice state (survives page refresh)
+  const {
+    phase: currentPhase, setPhase: setCurrentPhase,
+    tutorialStep, setTutorialStep,
+    adaptiveTier, setAdaptiveTier,
+    consecutiveCorrect, setConsecutiveCorrect,
+    consecutiveWrong, setConsecutiveWrong,
+  } = usePracticePersistedState(mission.id);
+
+  const [currentMission, setCurrentMission] = useState<Mission>(() => generateMission(mission, adaptiveTier));
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [wrongAnswerData, setWrongAnswerData] = useState<{
     userInputs: Record<string, string>;
     expected: Record<string, string>;
   } | null>(null);
   const [showCorrectFlash, setShowCorrectFlash] = useState(false);
-  const [tutorialStep, setTutorialStep] = useState(0);
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
   const [showBadge, setShowBadge] = useState(false);
   const [phaseToast, setPhaseToast] = useState<string | null>(null);
-  // Adaptive difficulty: tracks consecutive correct/wrong to adjust number ranges
-  const [adaptiveTier, setAdaptiveTier] = useState<DifficultyTier>(1);
-  const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
-  const [consecutiveWrong, setConsecutiveWrong] = useState(0);
 
   const {
     playSuccess, playFail, playClick,

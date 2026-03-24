@@ -1,9 +1,13 @@
 // Core sound effects: tap, submit, correct, wrong
 import type { SoundFn } from '../engine';
 import { playNoiseBurst, playTacticalPulse, jitter, rand } from '../utils';
+import { playSample } from '../sampleLoader';
 
 /** Tap — Soft Physical Click (Damped mechanical feel) */
 export const tap: SoundFn = (ctx, time, dest) => {
+  // Try real muyu sample first
+  if (playSample(ctx, 'muyu', dest, { gain: 0.15, time })) return;
+  // Fallback: synthesis
   const vol = rand(0.08) + 0.05;
   // Mid-range pulse (warm)
   playTacticalPulse(ctx, dest, time, 600, 0.04, vol);
@@ -23,6 +27,9 @@ export const submit: SoundFn = (ctx, time, dest) => {
 
 /** Correct — Intel Sync (Warm rising chords) */
 export const correct: SoundFn = (ctx, time, dest) => {
+  // Try real guqin sample (pitch up for bright feel)
+  if (playSample(ctx, 'guqin', dest, { rate: 1.2, gain: 0.2, time })) return;
+  // Fallback: synthesis
   const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
   notes.forEach((freq, i) => {
     const t = time + i * 0.06;

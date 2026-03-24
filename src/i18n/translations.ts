@@ -188,6 +188,17 @@ export const translations = {
     noMissions: "暂无关卡",
     noMissionsDesc: "该年级的关卡正在建设中。",
     perfectClear: "完美通关！",
+    // Onboarding (v6.3)
+    onboardingStory: "东汉末年，天下大乱。一位少年军师，用数学的力量改变了历史……",
+    onboardingStart: "开始我的传奇",
+    onboardingPhaseTitle: "三种修炼方式",
+    onboardingPhaseGreen: "名师手把手教你",
+    onboardingPhaseAmber: "给你提示，自己挑战",
+    onboardingPhaseRed: "完全独立——证明你的实力",
+    onboardingPhaseBtn: "明白了",
+    onboardingGuideTitle: "准备好了吗？",
+    onboardingGuideDesc: "点击你的第一个关卡，开始征途！",
+    onboardingGuideBtn: "出发！",
   },
   en: {
     title: "25 Math Legends",
@@ -376,6 +387,17 @@ export const translations = {
     noMissions: "No Missions",
     noMissionsDesc: "Missions for this grade are coming soon.",
     perfectClear: "Perfect Clear!",
+    // Onboarding (v6.3)
+    onboardingStory: "In the twilight of the Han Dynasty, chaos reigned. A young strategist changed history — with the power of mathematics…",
+    onboardingStart: "Begin My Legend",
+    onboardingPhaseTitle: "Three Ways to Learn",
+    onboardingPhaseGreen: "A master guides you step by step",
+    onboardingPhaseAmber: "Hints to help, but you solve it",
+    onboardingPhaseRed: "Fully independent — prove yourself",
+    onboardingPhaseBtn: "Got it",
+    onboardingGuideTitle: "Ready?",
+    onboardingGuideDesc: "Tap your first mission to begin!",
+    onboardingGuideBtn: "Let's go!",
   },
   zh_TW: {
     title: "25 數學三國",
@@ -564,6 +586,17 @@ export const translations = {
     noMissions: "暫無關卡",
     noMissionsDesc: "該年級的關卡正在建設中。",
     perfectClear: "完美通關！",
+    // Onboarding (v6.3)
+    onboardingStory: "東漢末年，天下大亂。一位少年軍師，用數學的力量改變了歷史……",
+    onboardingStart: "開始我的傳奇",
+    onboardingPhaseTitle: "三種修煉方式",
+    onboardingPhaseGreen: "名師手把手教你",
+    onboardingPhaseAmber: "給你提示，自己挑戰",
+    onboardingPhaseRed: "完全獨立——證明你的實力",
+    onboardingPhaseBtn: "明白了",
+    onboardingGuideTitle: "準備好了嗎？",
+    onboardingGuideDesc: "點擊你的第一個關卡，開始征途！",
+    onboardingGuideBtn: "出發！",
   }
 } as const;
 

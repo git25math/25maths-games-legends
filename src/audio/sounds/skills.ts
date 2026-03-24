@@ -1,10 +1,13 @@
 // Skill sound effects: shield_on, shield_block, double_on, reveal
 import type { SoundFn } from '../engine';
 import { playNoiseBurst, rand } from '../utils';
+import { playSample } from '../sampleLoader';
 
 /** Shield On — Tactical Energy Shield (Digital activation hum) */
 export const shieldOn: SoundFn = (ctx, time, dest) => {
-  // Rising pulse
+  // Try real gong sample (low gain for shield activation feel)
+  if (playSample(ctx, 'gong', dest, { gain: 0.1, rate: 1.5, time })) return;
+  // Fallback: synthesis — rising pulse
   const osc = ctx.createOscillator();
   osc.type = 'sine';
   osc.frequency.setValueAtTime(220, time);

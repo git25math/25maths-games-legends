@@ -2,7 +2,7 @@
 
 > **项目地址**：https://play.25maths.com
 > **仓库**：git25math/25maths-games-legends
-> **版本**：v6.2.0 | 最后更新：2026-03-20
+> **版本**：v6.5.0 | 最后更新：2026-03-24
 > **开发规范**：`docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）
 > **Bug 防范**：`docs/BUG-POSTMORTEM.md`（9 条规则 + 根因分析）
 > **Y8 计划**：`docs/Y8-DEVELOPMENT-PLAN.md`（完整接手方案）
@@ -524,6 +524,108 @@ Step 5: 最终结果 — y = mx + b
 
 **审查记录**：4 轮迭代，20 项审计发现，修复 16 个真实问题（含 2 Critical：completedCount 污染 + 每日完成竞态条件）。
 
+#### v6.3 — 新用户引导 Onboarding（最高优先级）
+
+> **问题**：当前首次进入流程是 Welcome→选角色→选年级→地图，没有任何引导告诉学生"这是什么"、"怎么玩"、"三种颜色是什么意思"。学生看到地图后容易迷茫。
+>
+> **目标**：3 屏沉浸式引导，让学生在 30 秒内理解核心玩法，产生"我想试试"的冲动。
+
+| # | 屏幕 | 内容 | 交互 | 时长 |
+|---|------|------|------|------|
+| O.1 | **欢迎故事** | "东汉末年，天下大乱。一位少年军师，用数学的力量改变了历史……" + 三国卷轴动画 | 点击"开始我的传奇" | 5s |
+| O.2 | **三色教学** | 展示 Green/Amber/Red 三阶段：🟢"名师手把手" → 🟡"给你提示" → 🔴"独立挑战"。配合一个 1+1=2 的迷你示范 | 点击"明白了" | 10s |
+| O.3 | **地图导览** | 高亮第一个可玩关卡 + pulse 动画 + "点这里开始你的第一场战役！" | 点击关卡进入 | 5s |
+
+**技术方案**：
+- 新建 `src/screens/OnboardingScreen.tsx`（3 屏轮播）
+- `localStorage` key `gl_onboarding_done`（布尔值，完成后不再显示）
+- App.tsx 路由：首次用户 welcome→grade→**onboarding**→map
+- 地图导览用 `MapScreen` 内的 overlay 实现（非独立屏幕），避免重复渲染地图
+- 三语支持：`translations.ts` 新增 ~9 个 key（3 屏 × 标题/正文/按钮）
+- **不阻塞老用户**：有 `gl_onboarding_done` 直接跳到地图
+
+**文件变更**：
+- 新建：`src/screens/OnboardingScreen.tsx`
+- 修改：`App.tsx`（路由插入）、`MapScreen.tsx`（导览 overlay）、`translations.ts`（+9 key × 3 语言）
+
+**风险**：低。纯前端，无 DB 改动，可独立上线。
+
+#### v6.4 — Practice 进度持久化
+
+> **问题**：练习模式的所有状态（当前阶段 green/amber/red、教程步骤、连续正确/错误次数、自适应难度 tier）全部存在 React useState 中，刷新即丢失。学生在 Green 阶段看到第 5 步教程时不小心刷新 → 从头开始，体验很差。
+>
+> **目标**：刷新后恢复到上次的精确位置（阶段+教程步骤+tier）。
+
+| # | 持久化字段 | 存储 key | 说明 |
+|---|-----------|---------|------|
+| P.1 | `currentPhase` | `gl_practice_{missionId}_phase` | green/amber/red |
+| P.2 | `tutorialStep` | `gl_practice_{missionId}_step` | 教程当前步骤（仅 green 阶段） |
+| P.3 | `adaptiveTier` | `gl_practice_{missionId}_tier` | 1/2/3 难度等级 |
+| P.4 | `consecutiveCorrect` | `gl_practice_{missionId}_cc` | 连续正确计数 |
+| P.5 | `phaseCompleted` | `gl_practice_{missionId}_done` | 已完成的阶段列表 |
+
+**技术方案**：
+- 新建 `src/hooks/usePracticeState.ts` — 封装 useState + localStorage 双写
+  - `usePersisted<T>(key, defaultValue)` — 初始值从 localStorage 读取，每次 setState 时同步写入
+  - 避免在 PracticeScreen 中散落大量 `localStorage.setItem` 调用
+- PracticeScreen.tsx 将 5 个 useState 替换为 `usePersisted` 调用
+- 进入新 mission 时清除旧 mission 的持久化数据（防止 key 膨胀）
+- **过期清理**：每次启动时扫描 `gl_practice_*`，删除 >7 天的 key
+
+**文件变更**：
+- 新建：`src/hooks/usePracticeState.ts`
+- 修改：`PracticeScreen.tsx`（替换 useState → usePersisted）
+
+**风险**：低。纯前端 localStorage，无 DB 改动。注意 `generateMission()` 每次生成不同数字 → 教程步骤中的插值变量会变化。解决方案：同时持久化 `currentMission` 的 seed/data，刷新后用相同参数重新生成。
+
+#### v6.5 — 音频体系升级（采样混合 Phase 1）
+
+> **现状**：当前 30+ 音效全部是 Web Audio API 程序化合成（Karplus-Strong 弦建模、PeriodicWave 唢呐等），纯合成天花板 ~90%。音色"电子感"明显，缺乏真实乐器的泛音和质感。
+>
+> **目标**：为 5 个核心音色引入真实采样，合成系统保留为 fallback。总增量 <100KB。
+
+| # | 音色 | 当前方案 | 升级方案 | 采样时长 | 估计大小 |
+|---|------|---------|---------|---------|---------|
+| A.1 | 古琴拨弦 | Karplus-Strong | 单次采样 + KS fallback | 2s | ~20KB |
+| A.2 | 战鼓击打 | 3 层合成鼓 | 单次采样 + 合成 fallback | 1s | ~15KB |
+| A.3 | 铜锣 | 非谐波圆板模态 | 单次采样 + 模态 fallback | 2s | ~25KB |
+| A.4 | 唢呐单音 | PeriodicWave 16 次谐波 | 单次采样 + PW fallback | 2s | ~25KB |
+| A.5 | 木鱼 | 600Hz 脉冲 | 单次采样 + 脉冲 fallback | 0.5s | ~8KB |
+
+**技术方案**：
+- 新建 `src/audio/samples/` 目录 + 5 个 `.mp3` 文件（MP3 128kbps mono，比 WAV 小 10x）
+- 新建 `src/audio/sampleLoader.ts` — `loadSample(url): Promise<AudioBuffer>`
+  - 启动时异步 `fetch` + `decodeAudioData`，不阻塞首屏
+  - 加载完成前使用现有合成音效（零体验降级）
+  - `WeakRef` 缓存已解码的 AudioBuffer
+- 修改各 `sounds/*.ts` 中的播放函数：检查采样是否已加载 → 有则用 `BufferSource`，无则走原合成路径
+- **Vite 配置**：`public/audio/` 存放采样文件，避免被 hash 打包（便于 CDN 缓存）
+
+**文件变更**：
+- 新建：`src/audio/sampleLoader.ts`、`public/audio/guqin.mp3`、`public/audio/drum.mp3`、`public/audio/gong.mp3`、`public/audio/suona.mp3`、`public/audio/muyu.mp3`
+- 修改：`src/audio/sounds/core.ts`（tap/correct/wrong 加采样分支）、`combat.ts`（drum）、`skills.ts`（gong）、`bgm.ts`（suona）、`engine.ts`（启动时触发预加载）
+
+**风险**：中。需要获取合适的无版权采样素材（建议 freesound.org CC0 许可）。移动端首次加载增加 ~93KB（但异步，不影响首屏）。
+
+**采样来源建议**：
+- freesound.org（CC0 许可，免费商用）
+- 自录（手机录制 → Audacity 裁剪 → MP3 导出）
+- AI 生成（Stable Audio 等工具）
+
+---
+
+**v6.3~v6.5 实施顺序**：
+
+```
+v6.3 Onboarding (2-3h) ──→ v6.4 Practice 持久化 (2-3h) ──→ v6.5 音频采样 (3-4h)
+     │                           │                              │
+     └ 纯 UI，独立上线            └ 纯前端，独立上线              └ 需采样素材
+```
+
+三个版本完全独立，无相互依赖，可并行开发。优先级：Onboarding > Practice 持久化 > 音频采样。
+
+---
+
 #### v7.x — 深度系统（Phase 2，待实施）
 
 | # | 特性 | 规模 | 依赖 | 风险 |
@@ -716,7 +818,9 @@ Step 5: 最终结果 — y = mx + b
 | 2026-03-20 | v6.0.4 | **SVG集成**: Triangle(勾股定理) + ParallelTransversal(平行线角) 接入PracticeScreen，Y8 SVG覆盖2→4 |
 | 2026-03-20 | **v6.1.0** | **全站教程对话化**: 52个生成器(Y7:28+Y8:18+Y9+:6)全部hint→text对话式重写，~195个hint字段清零，每步自包含+WHY+验算+叙事 |
 | 2026-03-20 | **v6.2.0** | **三角洲行动 Phase 1 游戏化**: XP等级系统(50级三国军衔) + 每日试炼(coprime选题+3x奖励) + 部分得分(15%容差+多字段检测) + 连胜宝箱(3/5/8里程碑+令牌+称号) + partialCredit音效 + 12翻译key×3语言 + 4轮审查修复16个bug |
-| — | v6.3+ | 三角洲 Phase 1 后续: 音频体系升级 + 生成器质量打磨 |
+| 2026-03-24 | **v6.3** | **新用户引导 Onboarding**: 3 屏沉浸式引导（欢迎故事+三色教学+地图导览）+ `gl_onboarding_done` localStorage + 三语 9 key |
+| 2026-03-24 | v6.4 | **Practice 进度持久化**: `usePersisted` hook + 5 字段 localStorage 双写（phase/step/tier/cc/cw）+ 7 天过期清理 |
+| 2026-03-24 | **v6.5.0** | **音频采样架构**: `sampleLoader.ts` 异步加载框架 + 5 核心音色采样分支（tap/correct/hpLoss/shieldOn）+ 合成 fallback + `public/audio/` 目录 |
 | — | v7.0.0 | **三角洲 Phase 2**: 武将修炼(技能树) + 装备耐久(遗忘可视化) + 学期成长手册(赛季通行证) + 远征模式(搜打撤) |
 | — | v8.0.0 | **三角洲 Phase 3**: 三币经济 + 班级远征 + 武将外观商店 |
 | — | v9.0.0 | Phase 4: ExamHub 集成（KP 桥接 + leaderboard 扩展 + 教师 Tab + ELO 段位） |

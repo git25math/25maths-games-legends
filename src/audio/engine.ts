@@ -1,5 +1,7 @@
 // SoundEngine — AudioContext + reverb + EQ + limiter + crossfade + ducking
 
+import { preloadSamples } from './sampleLoader';
+
 export type SoundFn = (ctx: AudioContext, time: number, dest: AudioNode) => void;
 export type SoundCategory = 'sfx' | 'music';
 
@@ -188,6 +190,9 @@ class SoundEngine {
 
     // Create a very quiet procedural ambient air layer
     this.startAmbientAir(ctx);
+
+    // Preload real instrument samples (async, non-blocking)
+    preloadSamples(ctx);
   }
 
   private startAmbientAir(ctx: AudioContext): void {
