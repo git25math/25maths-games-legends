@@ -9,6 +9,7 @@ import { MISSIONS as LOCAL_MISSIONS } from '../data/missions';
 import { generateMission } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
 import { InputFields } from '../components/MathBattle/InputFields';
+import { INPUT_FIELDS } from '../components/MathBattle/inputConfig';
 import { VisualData } from '../components/MathBattle/VisualData';
 import { LatexText } from '../components/MathView';
 import { interpolate } from '../utils/interpolate';
@@ -252,17 +253,21 @@ export const ExpeditionScreen = ({
     return (
       <div className="fixed inset-0 z-50 overflow-y-auto p-4 bg-slate-900/95 backdrop-blur-md">
         <div className="min-h-full flex items-center justify-center py-4">
-          <CalculatorWidget lang={lang} onUseResult={(val) => setInputs(prev => {
-            const fields = Object.keys(prev);
-            const emptyField = fields.find(f => !prev[f]) || fields[0];
-            if (emptyField) return { ...prev, [emptyField]: val };
-            return prev;
-          })} />
+          <CalculatorWidget lang={lang} onUseResult={(val) => {
+            const fieldConfig = INPUT_FIELDS[question.type];
+            const langKey = lang === 'en' ? 'en' : 'zh';
+            const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
+            const targetId = fields.find(f => !inputs[f.id])?.id ?? fields[0]?.id;
+            if (targetId) setInputs(prev => ({ ...prev, [targetId]: val }));
+          }} />
 
           <div className="bg-white/5 backdrop-blur-xl p-6 rounded-3xl border border-white/10 w-full max-w-lg">
             {/* Battle header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
+                <button onClick={handleRetreat} className="p-1.5 text-white/30 hover:text-white/60 transition-colors">
+                  <ArrowLeft size={18} />
+                </button>
                 <CharacterAvatar characterId={character.id} size={36} />
                 <div>
                   <div className="text-white font-bold text-sm">{lt(currentNode.name, lang)}</div>
