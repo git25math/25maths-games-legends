@@ -704,8 +704,8 @@ export function generateTrigonometryMission(template: Mission): Mission {
       },
       {
         text: {
-          zh: `${narrator}：写出等式：$\\sin(${angle}^\\circ) = \\frac{\\text{opposite}}{\\text{hypotenuse}} = \\frac{${opposite}}{c}$`,
-          en: `${narrator}: "Write the equation: $\\sin(${angle}^\\circ) = \\frac{\\text{opposite}}{\\text{hypotenuse}} = \\frac{${opposite}}{c}$"`,
+          zh: `${narrator}：写出等式：$\\sin(${angle}^\\circ) = \\frac{\\text{对边}}{\\text{斜边}} = \\frac{${opposite}}{c}$`,
+          en: `${narrator}: "Write the equation: $\\sin(${angle}^\\circ) = \\frac{${opposite}}{c}$"`,
         },
         highlightField: 'c',
       },
@@ -1035,7 +1035,7 @@ export function generateVolumeMission(template: Mission): Mission {
     { text: { zh: `${narrator}：为什么要学体积？\n${isCone ? '锥形建筑从烽火台到箭塔随处可见。' : '圆柱形容器从粮仓到水井无处不在。'}\n知道体积才能算出能装多少东西！\n\n体积 = 空间的大小。`, en: `${narrator}: "Why learn volume?\n${isCone ? 'Conical structures are everywhere — from beacons to arrow towers.' : 'Cylindrical containers are everywhere — from granaries to wells.'}\nKnowing volume tells us capacity!\n\nVolume = amount of space."` }, highlightField: 'v' },
     { text: { zh: `${narrator}：${isCone ? '锥体' : '圆柱'}体积公式\n${isCone ? '$$V = \\frac{1}{3} \\pi r^2 h$$\n锥体是同底同高圆柱的 $\\frac{1}{3}$——三个锥体拼成一个柱体！' : '$$V = \\pi r^2 h$$\n底面积 × 高 = 体积。想象一摞圆饼叠起来。'}`, en: `${narrator}: "${isCone ? 'Cone' : 'Cylinder'} volume formula\n${isCone ? '$$V = \\frac{1}{3} \\pi r^2 h$$\nA cone is $\\frac{1}{3}$ of the same cylinder — three cones make one cylinder!' : '$$V = \\pi r^2 h$$\nBase area × height = volume. Imagine stacking round pancakes.'}"` }, highlightField: 'v' },
     { text: { zh: `${narrator}：代入数据\n$r = ${radius}$，$h = ${height}$，$\\pi = ${pi}$\n\n第 1 步：$r^2 = ${radius} \\times ${radius} = ${rSquared}$`, en: `${narrator}: "Substitute\n$r = ${radius}$, $h = ${height}$, $\\pi = ${pi}$\n\nStep 1: $r^2 = ${radius} \\times ${radius} = ${rSquared}$"` }, highlightField: 'v' },
-    { text: { zh: `${narrator}：第 2 步：底面积\n$\\pi r^2 = ${pi} \\times ${rSquared} = ${baseArea}$${isCone ? '\n\n第 3 步：乘以高再除以 3\n$\\frac{1}{3} \\times ${baseArea} \\times ${height}$' : '\n\n第 3 步：乘以高\n$${baseArea} \\times ${height}$'}`, en: `${narrator}: "Step 2: Base area\n$\\pi r^2 = ${pi} \\times ${rSquared} = ${baseArea}$${isCone ? '\n\nStep 3: Multiply by height and divide by 3\n$\\frac{1}{3} \\times ${baseArea} \\times ${height}$' : '\n\nStep 3: Multiply by height\n$${baseArea} \\times ${height}$'}"` }, highlightField: 'v' },
+    { text: { zh: `${narrator}：第 2 步：底面积\n$\\pi r^2 = ${pi} \\times ${rSquared} = ${baseArea}$${isCone ? `\n\n第 3 步：乘以高再除以 3\n$\\frac{1}{3} \\times ${baseArea} \\times ${height}$` : `\n\n第 3 步：乘以高\n$${baseArea} \\times ${height}$`}`, en: `${narrator}: "Step 2: Base area\n$\\pi r^2 = ${pi} \\times ${rSquared} = ${baseArea}$${isCone ? `\n\nStep 3: Multiply by height and divide by 3\n$\\frac{1}{3} \\times ${baseArea} \\times ${height}$` : `\n\nStep 3: Multiply by height\n$${baseArea} \\times ${height}$`}"` }, highlightField: 'v' },
     { text: { zh: `${narrator}：答案\n$V = ${volRounded}$\n${isCone ? '烽火台石料量确认！' : '容器容积确认！'}`, en: `${narrator}: "Answer\n$V = ${volRounded}$\n${isCone ? 'Beacon tower materials confirmed!' : 'Container capacity confirmed!'}"` }, highlightField: 'v' },
     { text: { zh: `${narrator}：验算\n${isCone ? '$V \\times 3 = ' + Math.round(volRounded * 3 * 100) / 100 + '$ 应等于同底同高圆柱体积 $\\pi r^2 h = ' + Math.round(baseArea * height * 100) / 100 + '$ ✓' : '$V \\div h = ' + baseArea + '$ 应等于底面积 $\\pi r^2$ ✓'}`, en: `${narrator}: "Verify\n${isCone ? '$V \\times 3 = ' + Math.round(volRounded * 3 * 100) / 100 + '$ should equal cylinder volume $\\pi r^2 h = ' + Math.round(baseArea * height * 100) / 100 + '$ ✓' : '$V \\div h = ' + baseArea + '$ should equal base area $\\pi r^2$ ✓'}"` }, highlightField: 'v' },
   ];
