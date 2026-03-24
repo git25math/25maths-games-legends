@@ -4214,19 +4214,78 @@ export const MISSIONS: Mission[] = [
     data: { p1: 0.7, p2: 0.7, generatorType: 'PROBABILITY_IND_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-8.3-02', sectionId: 'statistics',
     tutorialSteps: [
-      {
-        text: { zh: '司马炎："魏国每次胜率 0.7。两次独立战争全胜，用乘法原理。"', en: 'Sima Yan: "Wei win rate is 0.7 each time. For both wins in independent wars, use multiplication."' },
-        highlightField: 'p'
-      },
-      {
-        text: { zh: '司马炎："$P = 0.7 \\times 0.7$"', en: 'Sima Yan: "$P = 0.7 \\times 0.7$"' },
-        highlightField: 'p'
-      },
-      {
-        text: { zh: '司马炎："$P = 0.49$！天下大势，合久必分，分久必合。"', en: 'Sima Yan: "$P = 0.49$! The world\'s trend: unite after division, divide after union."' },
-        highlightField: 'p'
-      }
+      { text: { zh: '司马炎：为什么需要联合概率？\n魏国打一场能赢，不代表连打两场都能赢。\n每多打一场，"全胜"的概率就在缩小——这就是独立事件乘法原理。', en: 'Sima Yan: "Why joint probability?\nWinning one battle doesn\'t guarantee winning two.\nEach extra battle shrinks the \'win all\' probability — that\'s the multiplication rule."' }, highlightField: 'p' },
+      { text: { zh: '司马炎：独立事件\n"独立"= 第一场的结果不影响第二场。\n就像抛两次硬币——第一次正面不会影响第二次。\n如果两件事互相不影响，概率就相乘。', en: 'Sima Yan: "Independent events\n\'Independent\' = first result doesn\'t affect the second.\nLike flipping a coin twice — first flip doesn\'t change the second.\nIf two events don\'t affect each other, multiply probabilities."' }, highlightField: 'p' },
+      { text: { zh: '司马炎：公式\n$$P(A \\text{ 且 } B) = P(A) \\times P(B)$$\n前提：A 和 B 必须独立。', en: 'Sima Yan: "Formula\n$$P(A \\text{ and } B) = P(A) \\times P(B)$$\nCondition: A and B must be independent."' }, highlightField: 'p' },
+      { text: { zh: '司马炎：代入\n$P = {p1} \\times {p2}$', en: 'Sima Yan: "Substitute\n$P = {p1} \\times {p2}$"' }, highlightField: 'p' },
+      { text: { zh: '司马炎：答案\n$P = {answer}$\n天下大势，合久必分，分久必合。', en: 'Sima Yan: "Answer\n$P = {answer}$\nThe world unites after division, divides after union."' }, highlightField: 'p' },
+      { text: { zh: '司马炎：验算\n$P(全胜)$ 应该小于单场胜率（$0.49 < 0.7$）✓\n$P(全败) = 0.3 \\times 0.3 = 0.09$\n$P(全胜) + P(至少一败) = 1$ ✓', en: 'Sima Yan: "Verify\n$P(\\text{win all})$ should be less than single win rate ($0.49 < 0.7$) ✓\n$P(\\text{lose all}) = 0.3 \\times 0.3 = 0.09$\n$P(\\text{win all}) + P(\\text{at least one loss}) = 1$ ✓"' }, highlightField: 'p' },
     ],
-    secret: { concept: { zh: '独立事件的乘法原理。', en: 'Multiplication principle for independent events.' }, formula: '$0.7 \\times 0.7 = 0.49$', tips: [{ zh: "司马炎提示：天下大势，合久必分，分久必合。", en: "Sima Yan Tip: The world's trend is to unite after long division, and divide after long union." }] }
+    secret: { concept: { zh: '独立事件联合概率 = 各自概率相乘。P(A且B) = P(A)×P(B)。', en: 'Joint probability of independent events = multiply individual probabilities.' }, formula: '$P(A \\cap B) = P(A) \\times P(B)$', tips: [{ zh: '司马炎提示：独立相乘——天下大势的数学。', en: 'Sima Yan Tip: Independent events multiply — the mathematics of destiny.' }] }
+  },
+
+  // --- Y12 Unit 3: 综合应用 · 三分归晋 (Synthesis) ---
+  {
+    id: 1231, grade: 12, unitId: 3, order: 1,
+    unitTitle: { zh: "Unit 3: 三分归晋·综合篇", en: "Unit 3: Reunification — Synthesis" },
+    topic: 'Algebra', type: 'SIMULTANEOUS',
+    title: { zh: '三国均势', en: 'Balance of Power' },
+    skillName: { zh: '联立方程组术', en: 'Simultaneous Equations' },
+    skillSummary: { zh: '消元法解二元方程组', en: 'Elimination method for 2-variable systems' },
+    story: { zh: '魏蜀两国军费关系：$2x + y = 100$（魏预算），$x + 3y = 110$（蜀预算）。求各项开支。', en: 'Wei and Shu military budgets: $2x + y = 100$ (Wei), $x + 3y = 110$ (Shu). Find each expenditure.' },
+    description: { zh: '用消元法解联立方程组。', en: 'Solve simultaneous equations by elimination.' },
+    data: { a1: 2, b1: 1, c1: 100, a2: 1, b2: 3, c2: 110, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Medium', reward: 500,
+    kpId: 'kp-2.5-08', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '司马炎：为什么需要联立方程？\n一个方程只有一个限制——答案有无数种可能。\n两个方程 = 两个限制 = 精确定位唯一解。\n就像用两条路线交叉确定一个地点。', en: 'Sima Yan: "Why simultaneous equations?\nOne equation = one constraint — infinite solutions.\nTwo equations = two constraints = one unique solution.\nLike two routes intersecting to pinpoint a location."' }, highlightField: 'x' },
+      { text: { zh: '司马炎：消元法思路\n让其中一个未知数"消失"——把两个方程组合成只含一个未知数的新方程。\n就像审讯两个俘虏——交叉对比就能找到真相。', en: 'Sima Yan: "Elimination method\nMake one unknown \'disappear\' — combine equations into one with a single unknown.\nLike interrogating two prisoners — cross-reference to find the truth."' }, highlightField: 'x' },
+      { text: { zh: '司马炎：第一步——配平系数\n让某个未知数的系数在两个方程中一样。', en: 'Sima Yan: "Step 1 — balance coefficients\nMake one unknown\'s coefficient the same in both equations."' }, highlightField: 'x' },
+      { text: { zh: '司马炎：第二步——相减消元\n两个方程相减，一个未知数消失。', en: 'Sima Yan: "Step 2 — subtract to eliminate\nSubtract equations, one unknown vanishes."' }, highlightField: 'x' },
+      { text: { zh: '司马炎：第三步——回代\n把已求出的值代回任一方程，求另一个未知数。', en: 'Sima Yan: "Step 3 — back-substitute\nPlug the found value into either equation to find the other."' }, highlightField: 'y' },
+      { text: { zh: '司马炎：验算\n两个值代入两个方程，两个方程都要满足 ✓', en: 'Sima Yan: "Verify\nSubstitute both values into BOTH equations — both must be satisfied ✓"' }, highlightField: 'x' },
+    ],
+    secret: { concept: { zh: '联立方程：两个方程两个未知数。消元法：配平→相减→回代。', en: 'Simultaneous: 2 equations, 2 unknowns. Elimination: balance → subtract → back-substitute.' }, formula: '$\\begin{cases} 2x+y=100 \\\\ x+3y=110 \\end{cases}$', tips: [{ zh: '司马炎提示：消元 = 让一个未知数消失。', en: 'Sima Yan Tip: Elimination = make one unknown vanish.' }] }
+  },
+  {
+    id: 1232, grade: 12, unitId: 3, order: 2,
+    unitTitle: { zh: "Unit 3: 三分归晋·综合篇", en: "Unit 3: Reunification — Synthesis" },
+    topic: 'Functions', type: 'FUNC_VAL',
+    title: { zh: '国力函数', en: 'National Power Function' },
+    skillName: { zh: '函数求值术', en: 'Function Evaluation' },
+    skillSummary: { zh: 'f(x) 代入求值', en: 'Substitute into f(x)' },
+    story: { zh: '魏国国力函数 $f(x) = 2x^2 - 3x + 1$。当 $x = 5$（第五年）时国力是多少？', en: 'Wei national power $f(x) = 2x^2 - 3x + 1$. What\'s the power at $x = 5$ (year 5)?' },
+    description: { zh: '将 $x$ 代入函数求值。', en: 'Substitute $x$ into the function to evaluate.' },
+    data: { a: 2, b: -3, c: 1, x: 5, generatorType: 'FUNC_VAL_RANDOM' }, difficulty: 'Easy', reward: 450,
+    kpId: 'kp-2.13-01', sectionId: 'functions',
+    tutorialSteps: [
+      { text: { zh: '司马炎：函数是什么？\n函数就是一台"输入→输出"的机器。\n给它一个 $x$，它吐出一个 $f(x)$。\n$f(5)$ 就是把 $5$ 塞进机器看出来什么。', en: 'Sima Yan: "What\'s a function?\nA function is an input→output machine.\nGive it an $x$, it gives back $f(x)$.\n$f(5)$ means feed 5 into the machine and see what comes out."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：代入法\n$f(x) = 2x^2 - 3x + 1$\n$f(5)$ = 把所有 $x$ 换成 $5$。\n注意：$x^2$ 是"先平方再乘系数"，不是"先乘系数再平方"！', en: 'Sima Yan: "Substitution\n$f(x) = 2x^2 - 3x + 1$\n$f(5)$ = replace every $x$ with 5.\nNote: $x^2$ means \'square first, then multiply by coefficient\'!"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：逐项代入\n$f(5) = 2(5)^2 - 3(5) + 1$\n$= 2 \\times 25 - 15 + 1$', en: 'Sima Yan: "Substitute term by term\n$f(5) = 2(5)^2 - 3(5) + 1$\n$= 2 \\times 25 - 15 + 1$"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：计算\n$= 50 - 15 + 1 = 36$', en: 'Sima Yan: "Calculate\n$= 50 - 15 + 1 = 36$"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：答案\n$f(5) = {answer}$\n第五年魏国国力值！', en: 'Sima Yan: "Answer\n$f(5) = {answer}$\nWei\'s power in year 5!"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：验算\n用计算器验证：$2 \\times 25 = 50$，$50 - 15 = 35$，$35 + 1 = 36$ ✓', en: 'Sima Yan: "Verify\nCalculator check: $2 \\times 25 = 50$, $50 - 15 = 35$, $35 + 1 = 36$ ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '函数求值：把 x 的值代入每一项，按运算顺序计算。', en: 'Function evaluation: substitute x into each term, follow order of operations.' }, formula: '$f(x) = ax^2 + bx + c$', tips: [{ zh: '司马炎提示：x 换数字，一项一项算。', en: 'Sima Yan Tip: Replace x with the number, calculate term by term.' }] }
+  },
+  {
+    id: 1233, grade: 12, unitId: 3, order: 3,
+    unitTitle: { zh: "Unit 3: 三分归晋·综合篇", en: "Unit 3: Reunification — Synthesis" },
+    topic: 'Geometry', type: 'TRIGONOMETRY',
+    title: { zh: '最终防线', en: 'The Final Defense' },
+    skillName: { zh: '综合三角术', en: 'Combined Trigonometry' },
+    skillSummary: { zh: 'SOH-CAH-TOA 综合应用', en: 'SOH-CAH-TOA combined application' },
+    story: { zh: '天下归一前的最后一道防线。瞭望塔高 $h$，观察角 $\\theta$，求敌军距离。所有三角知识的综合运用！', en: 'The final defense before reunification. Tower height $h$, observation angle $\\theta$, find enemy distance. All trigonometry combined!' },
+    description: { zh: '用 tan 求三角形的未知边。', en: 'Use tan to find an unknown side.' },
+    data: { angle: 50, adj: 20, generatorType: 'TRIGONOMETRY_RANDOM', func: 'tan' }, difficulty: 'Hard', reward: 600,
+    kpId: 'kp-6.2-01', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '司马炎：三年所学，此刻汇聚\n从 Y9 的 SOH-CAH-TOA 到 Y11 的正弦余弦定理——你已经走过了完整的三角旅程。\n这最后一题，用最基本的 tan，但心境已不同。', en: 'Sima Yan: "Three years of learning converge here\nFrom Y9\'s SOH-CAH-TOA to Y11\'s sine and cosine rules — you\'ve completed the full trig journey.\nThis final problem uses basic tan, but your understanding is now complete."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：正切 = 对边 ÷ 邻边\n$\\tan \\theta = \\frac{\\text{对边}}{\\text{邻边}}$\n瞭望塔高度（对边）和敌军水平距离（邻边）的关系。', en: 'Sima Yan: "Tangent = opposite ÷ adjacent\n$\\tan \\theta = \\frac{\\text{opposite}}{\\text{adjacent}}$\nRelationship between tower height (opposite) and enemy distance (adjacent)."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：代入\n$\\tan {angle}° = \\frac{x}{{adj}}$\n$x = {adj} \\times \\tan {angle}°$', en: 'Sima Yan: "Substitute\n$\\tan {angle}° = \\frac{x}{{adj}}$\n$x = {adj} \\times \\tan {angle}°$"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：计算\n$\\tan {angle}° = {tan_val}$\n$x = {adj} \\times {tan_val} = {answer}$', en: 'Sima Yan: "Calculate\n$\\tan {angle}° = {tan_val}$\n$x = {adj} \\times {tan_val} = {answer}$"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：答案\n$x = {answer}$\n天下归一。三国故事到此终章。', en: 'Sima Yan: "Answer\n$x = {answer}$\nThe realm is reunited. The Three Kingdoms saga ends here."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：验算\n$\\frac{{answer}}{{adj}} = \\tan {angle}°$ ✓\n\n"天下大势，合久必分，分久必合。"\n—— 你的数学之旅，才刚刚开始。', en: 'Sima Yan: "Verify\n$\\frac{{answer}}{{adj}} = \\tan {angle}°$ ✓\n\n"The world unites after division, divides after union."\n— Your math journey has just begun."' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: 'tan θ = 对边/邻边。三国故事结束，数学旅途永远在路上。', en: 'tan θ = opp/adj. The Three Kingdoms end, but the math journey continues forever.' }, formula: '$\\tan\\theta = \\frac{\\text{opp}}{\\text{adj}}$', tips: [{ zh: '司马炎提示：天下大势，合久必分，分久必合。你的数学之路，永远不会结束。', en: 'Sima Yan Tip: The world unites and divides. Your math journey never ends.' }] }
   }
 ];
