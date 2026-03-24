@@ -12,6 +12,7 @@ import { tapScale, hoverGlow, springIn, staggerContainer, staggerItem } from '..
 import { EmptyState } from '../components/EmptyState';
 import { getLevelInfo } from '../utils/xpLevels';
 import { getDailyMission, isDailyCompleted, getSecondsUntilMidnight, formatCountdown } from '../utils/dailyChallenge';
+import { MissionProgressBar } from '../components/MissionProgressBar';
 
 const CHAPTER_IMAGES = [
   './map/ch1-peach-garden.png',
@@ -252,7 +253,22 @@ export const MapScreen = ({
             description={t.noMissionsDesc} 
           />
         ) : (
-          Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang)))).map((unitTitle, unitIndex) => (
+          Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang)))).map((unitTitle, unitIndex) => {
+            const unitMissions = gradeMissions.filter(m => lt(m.unitTitle, lang) === unitTitle).sort((a, b) => a.order - b.order);
+            const completedSet = new Set(unitMissions.filter(m => {
+              const c = profile.completed_missions[String(m.id)];
+              return c && Object.values(c).some(Boolean);
+            }).map(m => String(m.id)));
+            const unitComplete = unitMissions.length > 0 && completedSet.size === unitMissions.length;
+            // Find first playable (unlocked + not completed) mission in unit
+            const firstPlayable = unitMissions.find((m, i) => {
+              const done = completedSet.has(String(m.id));
+              if (done) return false;
+              if (i === 0) return true;
+              return completedSet.has(String(unitMissions[i - 1].id));
+            });
+
+            return (
             <div key={unitTitle} className="space-y-6">
             <motion.div initial={{ x: -20, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} className="flex items-center gap-4">
               <div className="h-px flex-1 bg-white/10" />
@@ -265,16 +281,26 @@ export const MapScreen = ({
                 <h3 className="text-2xl font-black text-white uppercase tracking-widest flex items-center gap-3">
                   <MapIcon className="text-indigo-400" />
                   {unitTitle}
+                  {unitComplete && (
+                    <span className="ml-1 px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full normal-case tracking-normal">
+                      {lang === 'en' ? 'Conquered' : '已征服'}
+                    </span>
+                  )}
                 </h3>
               </div>
               <div className="h-px flex-1 bg-white/10" />
             </motion.div>
+            {/* Mission progress bar */}
+            <MissionProgressBar
+              missions={unitMissions}
+              completedIds={completedSet}
+              currentId={firstPlayable?.id}
+            />
             <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {gradeMissions
-                .filter(m => lt(m.unitTitle, lang) === unitTitle)
-                .sort((a, b) => a.order - b.order)
+              {unitMissions
                 .map(mission => {
                   const comp = profile.completed_missions[String(mission.id)];
+                  const isNextUp = mission.id === firstPlayable?.id;
                   const isCompleted = comp && Object.values(comp).some(Boolean);
                   const prevMission = gradeMissions.find(m => m.unitId === mission.unitId && m.order === mission.order - 1);
                   const prevComp = prevMission ? profile.completed_missions[String(prevMission.id)] : null;
@@ -299,8 +325,13 @@ export const MapScreen = ({
                       <motion.div
                         animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})}
                         transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : (isLastCleared ? { duration: 2.5, ease: "easeInOut" } : {})}
-                        className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
+                        className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isNextUp ? 'border-amber-400 shadow-amber-500/20' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
                       >
+                        {isNextUp && (
+                          <div className="absolute -top-3 left-4 px-3 py-1 bg-amber-500 text-white text-[10px] font-black rounded-full z-10 shadow-md">
+                            {lang === 'en' ? 'Start here!' : '从这里开始！'}
+                          </div>
+                        )}
                         {isLastCleared && (
                           <motion.div
                             initial={{ opacity: 0, y: 0, scale: 0.5 }}
@@ -376,7 +407,8 @@ export const MapScreen = ({
                 })}
             </motion.div>
           </div>
-        )))}
+          );
+        }))}
         </div>
       </div>
     </motion.div>
