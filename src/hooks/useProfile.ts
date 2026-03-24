@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../supabase';
-import type { UserProfile, CompletedMissions, DifficultyMode, BattleResult } from '../types';
+import type { UserProfile, CompletedMissions, DifficultyMode, BattleResult, CharacterProgression, KPEquipment } from '../types';
 import type { User } from '@supabase/supabase-js';
 import { handleSupabaseError } from '../utils/errors';
+import { getSkillById, defaultProgression } from '../data/heroSkills';
+import { computeRepairBonus } from '../utils/equipment';
 
 const DEFAULT_STATS = { Algebra: 0, Geometry: 0, Functions: 0, Calculus: 0, Statistics: 0 };
 const GUEST_STORAGE_KEY = 'gl_guest_profile';
@@ -143,5 +145,104 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     }
   };
 
-  return { profile, updateProfile, recordBattleComplete };
+  // --- v7.0: Skill Tree helpers ---
+
+  const getCharProgression = useCallback((charId: string): CharacterProgression => {
+    const progs = (profile?.completed_missions as any)?._char_progression as Record<string, CharacterProgression> | undefined;
+    return progs?.[charId] ?? defaultProgression(charId);
+  }, [profile]);
+
+  const getTotalSP = useCallback((): { total: number; spent: number } => {
+    const cm = profile?.completed_missions as any;
+    return {
+      total: cm?._total_skill_points ?? 0,
+      spent: cm?._spent_skill_points ?? 0,
+    };
+  }, [profile]);
+
+  const unlockSkill = async (charId: string, skillId: string) => {
+    if (!profile) return false;
+    const skill = getSkillById(skillId);
+    if (!skill || skill.charId !== charId) return false;
+
+    const { total, spent } = getTotalSP();
+    const available = total - spent;
+    if (available < skill.cost) return false;
+
+    const prog = getCharProgression(charId);
+    if (prog.unlocked_skills.includes(skillId)) return false;
+
+    const cm = { ...profile.completed_missions } as any;
+    if (!cm._char_progression) cm._char_progression = {};
+    cm._char_progression[charId] = {
+      ...prog,
+      unlocked_skills: [...prog.unlocked_skills, skillId],
+      active_skill: prog.active_skill ?? skillId, // auto-equip first skill
+    };
+    cm._spent_skill_points = spent + skill.cost;
+
+    await updateProfile({ completed_missions: cm });
+    return true;
+  };
+
+  const equipSkill = async (charId: string, skillId: string | null) => {
+    if (!profile) return;
+    const prog = getCharProgression(charId);
+    if (skillId && !prog.unlocked_skills.includes(skillId)) return;
+
+    const cm = { ...profile.completed_missions } as any;
+    if (!cm._char_progression) cm._char_progression = {};
+    cm._char_progression[charId] = { ...prog, active_skill: skillId };
+    await updateProfile({ completed_missions: cm });
+  };
+
+  const grantSkillPoint = async () => {
+    if (!profile) return;
+    const cm = { ...profile.completed_missions } as any;
+    cm._total_skill_points = (cm._total_skill_points ?? 0) + 1;
+    await updateProfile({ completed_missions: cm });
+  };
+
+  // --- v7.0: Equipment helpers ---
+
+  const markEquipment = async (missionId: number) => {
+    if (!profile) return;
+    const cm = { ...profile.completed_missions } as any;
+    if (!cm._equipment) cm._equipment = {};
+    const existing = cm._equipment[String(missionId)] as KPEquipment | undefined;
+    cm._equipment[String(missionId)] = {
+      missionId,
+      lastMasteredAt: Date.now(),
+      repairCount: existing?.repairCount ?? 0,
+    };
+    await updateProfile({ completed_missions: cm });
+  };
+
+  const repairEquipment = async (missionId: number): Promise<number> => {
+    if (!profile) return 0;
+    const cm = { ...profile.completed_missions } as any;
+    if (!cm._equipment?.[String(missionId)]) return 0;
+
+    const eq = cm._equipment[String(missionId)] as KPEquipment;
+    const bonus = computeRepairBonus(eq.repairCount);
+
+    cm._equipment[String(missionId)] = {
+      ...eq,
+      lastMasteredAt: Date.now(),
+      repairCount: eq.repairCount + 1,
+    };
+    await updateProfile({
+      completed_missions: cm,
+      total_score: profile.total_score + bonus,
+    });
+    return bonus;
+  };
+
+  return {
+    profile, updateProfile, recordBattleComplete,
+    // Skill tree
+    getCharProgression, getTotalSP, unlockSkill, equipSkill, grantSkillPoint,
+    // Equipment
+    markEquipment, repairEquipment,
+  };
 }

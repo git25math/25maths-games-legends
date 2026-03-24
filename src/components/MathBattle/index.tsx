@@ -40,6 +40,7 @@ export const MathBattle = ({
   isDailyChallenge = false,
   dailyMultiplier = 1,
   onStreakToken,
+  heroSkillEffect = null,
 }: {
   mission: Mission;
   character: Character;
@@ -55,6 +56,7 @@ export const MathBattle = ({
   isDailyChallenge?: boolean;
   dailyMultiplier?: number;
   onStreakToken?: () => void;
+  heroSkillEffect?: { effect: 'extra_hint' | 'time_extend' | 'error_forgive'; value: number } | null;
 }) => {
   const isMultiQuestion = !!mission.data?.generatorType;
 
@@ -82,6 +84,10 @@ export const MathBattle = ({
   const [showResult, setShowResult] = useState<'none' | 'success' | 'fail'>('none');
   const [wrongAnswerData, setWrongAnswerData] = useState<{ userInputs: Record<string, string>; expected: Record<string, string> } | null>(null);
   const [hp, setHp] = useState(4);
+  // v7.0: Hero skill error_forgive charges
+  const [heroForgiveCharges, setHeroForgiveCharges] = useState(
+    heroSkillEffect?.effect === 'error_forgive' ? heroSkillEffect.value : 0
+  );
   const [startTime] = useState(Date.now());
   const [victoryPhase, setVictoryPhase] = useState<0|1|2|3|4|5>(0);
   const [confettiTrigger, setConfettiTrigger] = useState(0);
@@ -327,6 +333,21 @@ export const MathBattle = ({
         return;
       }
 
+      // v7.0: Hero skill error_forgive absorbs wrong (after shield)
+      if (heroForgiveCharges > 0) {
+        playShieldBlock();
+        setHeroForgiveCharges(prev => prev - 1);
+        if (currentQIdx + 1 >= questionQueue.length) {
+          const duration = Math.round((Date.now() - startTime) / 1000);
+          setFinalDuration(duration);
+          setFinalScore(totalScore);
+          advanceTimerRef.current = window.setTimeout(() => triggerVictorySequence(), BATTLE_TIMING.shieldVictory);
+        } else {
+          setCurrentQIdx(prev => prev + 1);
+        }
+        return;
+      }
+
       playHpLoss();
       const nextHp = hp - 1;
       setHp(nextHp);
@@ -365,8 +386,13 @@ export const MathBattle = ({
     }
   };
 
+  // v7.0: Apply time_extend as score bonus percentage
+  const heroScoreBonus = heroSkillEffect?.effect === 'time_extend' ? (heroSkillEffect.value / 100) : 0;
+
   const handleAchievementClose = () => {
-    onComplete(true, isMultiQuestion ? totalScore : finalScore, finalDuration, hp);
+    const baseScore = isMultiQuestion ? totalScore : finalScore;
+    const bonusScore = Math.round(baseScore * heroScoreBonus);
+    onComplete(true, baseScore + bonusScore, finalDuration, hp);
   };
 
   const handleRetry = () => {
@@ -808,7 +834,7 @@ export const MathBattle = ({
                       <motion.button
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        onClick={() => onComplete(true, isMultiQuestion ? totalScore : finalScore, finalDuration, hp)}
+                        onClick={handleAchievementClose}
                         className="absolute bottom-8 px-12 py-5 bg-indigo-600 text-white font-black text-xl rounded-2xl shadow-xl hover:bg-indigo-500 transition-colors z-30"
                       >
                         {t.backToMap}

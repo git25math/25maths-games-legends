@@ -150,3 +150,36 @@ export type BattleResult = {
 };
 
 export type GameState = 'welcome' | 'onboarding' | 'map' | 'battle' | 'lobby' | 'practice' | 'dashboard';
+
+// --- v7.0 Phase 2: Skill Tree ---
+
+export type SkillEffectType = 'extra_hint' | 'time_extend' | 'error_forgive';
+
+export type HeroSkill = {
+  id: string;
+  charId: string;
+  name: BilingualText;
+  description: BilingualText;
+  effect: SkillEffectType;
+  effectValue: number;
+  tier: 1 | 2 | 3;
+  cost: number;
+  statRequirement: 'power' | 'speed' | 'wisdom';
+};
+
+export type CharacterProgression = {
+  char_id: string;
+  skill_points: number;
+  unlocked_skills: string[];
+  active_skill: string | null;
+};
+
+// --- v7.0 Phase 2: Equipment Durability ---
+
+export type EquipmentState = 'pristine' | 'worn' | 'damaged' | 'broken';
+
+export type KPEquipment = {
+  missionId: number;
+  lastMasteredAt: number;
+  repairCount: number;
+};

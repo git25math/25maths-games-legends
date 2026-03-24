@@ -13,6 +13,11 @@ import { EmptyState } from '../components/EmptyState';
 import { getLevelInfo } from '../utils/xpLevels';
 import { getDailyMission, isDailyCompleted, getSecondsUntilMidnight, formatCountdown } from '../utils/dailyChallenge';
 import { MissionProgressBar } from '../components/MissionProgressBar';
+import { SkillTreePanel } from '../components/SkillTreePanel';
+import { EquipmentPanel } from '../components/EquipmentPanel';
+import { EquipmentBadge } from '../components/EquipmentBadge';
+import { getEquipmentState, countNeedsRepair } from '../utils/equipment';
+import type { CharacterProgression } from '../types';
 
 const CHAPTER_IMAGES = [
   './map/ch1-peach-garden.png',
@@ -40,6 +45,11 @@ export const MapScreen = ({
   onDailyChallenge,
   lastClearedMissionId,
   clearLastClearedMission,
+  getCharProgression,
+  getTotalSP,
+  onUnlockSkill,
+  onEquipSkill,
+  onRepairEquipment,
 }: {
   lang: Language;
   profile: UserProfile;
@@ -54,9 +64,19 @@ export const MapScreen = ({
   onDailyChallenge?: (mission: Mission) => void;
   lastClearedMissionId?: number | null;
   clearLastClearedMission?: () => void;
+  // v7.0: Skill tree + Equipment
+  getCharProgression?: (charId: string) => CharacterProgression;
+  getTotalSP?: () => { total: number; spent: number };
+  onUnlockSkill?: (charId: string, skillId: string) => void;
+  onEquipSkill?: (charId: string, skillId: string | null) => void;
+  onRepairEquipment?: (missionId: number) => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
+
+  // v7.0: Panel overlays
+  const [showSkillTree, setShowSkillTree] = useState(false);
+  const [showEquipmentPanel, setShowEquipmentPanel] = useState(false);
 
   // Daily challenge countdown timer
   const [countdown, setCountdown] = useState(getSecondsUntilMidnight());
@@ -172,6 +192,31 @@ export const MapScreen = ({
                   {streakTokens >= 3 && <> · <Crown size={10} /> {t.streakKing}</>}
                 </span>
               )}
+              {/* v7.0: Skill Tree + Equipment buttons */}
+              {getCharProgression && selectedChar && (
+                <button
+                  onClick={() => setShowSkillTree(true)}
+                  className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors"
+                >
+                  {lang === 'en' ? 'Skills' : '修炼'}
+                </button>
+              )}
+              {onRepairEquipment && (() => {
+                const repairCount = countNeedsRepair(profile.completed_missions as Record<string, unknown>);
+                return (
+                  <button
+                    onClick={() => setShowEquipmentPanel(true)}
+                    className="relative px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors"
+                  >
+                    {lang === 'en' ? 'Arsenal' : '装备库'}
+                    {repairCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">
+                        {repairCount}
+                      </span>
+                    )}
+                  </button>
+                );
+              })()}
               {onDashboard && (
                 <button
                   onClick={onDashboard}
@@ -426,6 +471,33 @@ export const MapScreen = ({
         }))}
         </div>
       </div>
+      {/* v7.0: Skill Tree Panel */}
+      {showSkillTree && selectedChar && getCharProgression && getTotalSP && onUnlockSkill && onEquipSkill && (
+        <SkillTreePanel
+          lang={lang}
+          charId={selectedChar.id}
+          charName={lt(selectedChar.name, lang)}
+          progression={getCharProgression(selectedChar.id)}
+          availableSP={(() => { const sp = getTotalSP(); return sp.total - sp.spent; })()}
+          onUnlock={(skillId) => onUnlockSkill(selectedChar.id, skillId)}
+          onEquip={(skillId) => onEquipSkill(selectedChar.id, skillId)}
+          onClose={() => setShowSkillTree(false)}
+        />
+      )}
+
+      {/* v7.0: Equipment Panel */}
+      {showEquipmentPanel && onRepairEquipment && (
+        <EquipmentPanel
+          lang={lang}
+          completedMissions={profile.completed_missions as Record<string, unknown>}
+          missions={missions}
+          onRepair={(missionId) => {
+            setShowEquipmentPanel(false);
+            onRepairEquipment(missionId);
+          }}
+          onClose={() => setShowEquipmentPanel(false)}
+        />
+      )}
     </motion.div>
   );
 };

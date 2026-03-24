@@ -24,6 +24,8 @@ import { PracticeScreen } from './screens/PracticeScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { OnboardingScreen, isOnboardingDone, clearOnboardingFlag } from './screens/OnboardingScreen';
 import { cleanStalePracticeKeys } from './hooks/usePracticeState';
+import { getActiveSkillEffect } from './data/heroSkills';
+import { getLevelInfo } from './utils/xpLevels';
 
 // Clean up stale practice localStorage keys on startup
 cleanStalePracticeKeys();
@@ -104,7 +106,11 @@ export default function App() {
   const [isDailyBattle, setIsDailyBattle] = useState(false);
 
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
-  const { profile, updateProfile, recordBattleComplete } = useProfile(user, isGuest);
+  const {
+    profile, updateProfile, recordBattleComplete,
+    getCharProgression, getTotalSP, unlockSkill, equipSkill, grantSkillPoint,
+    markEquipment, repairEquipment,
+  } = useProfile(user, isGuest);
   const { missions } = useMissions();
   const { activeRoom, createRoom, toggleReady, startGame, leaveRoom } = useMultiplayer(user, profile);
 
@@ -177,9 +183,11 @@ export default function App() {
 
   const handleBattleComplete = async (success: boolean, score = 0, durationSecs = 0, hpRemaining = 0) => {
     if (success && activeMission && profile) {
+      // v7.0: Detect level-up for skill point grant
+      const prevLevel = getLevelInfo(profile.total_score).level;
+
       // If daily challenge, inject daily key into completed_missions BEFORE
       // recordBattleComplete, which spreads profile.completed_missions internally.
-      // This ensures both mission completion and daily flag are saved atomically.
       if (isDailyBattle) {
         (profile.completed_missions as Record<string, unknown>)[getDailyKey()] = true;
       }
@@ -195,6 +203,17 @@ export default function App() {
         activeMission.kpId,
       );
       setLastClearedMissionId(activeMission.id);
+
+      // v7.0: Grant skill points on level-up
+      const newLevel = getLevelInfo(profile.total_score + score).level;
+      for (let i = 0; i < newLevel - prevLevel; i++) {
+        await grantSkillPoint();
+      }
+
+      // v7.0: Mark equipment on Red difficulty win
+      if (selectedDifficulty === 'red') {
+        await markEquipment(activeMission.id);
+      }
     }
     setIsDailyBattle(false);
     setGameState('map');
@@ -273,7 +292,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v6.5.0</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v7.0.0</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -345,6 +364,18 @@ export default function App() {
                   onDailyChallenge={handleDailyChallenge}
                   lastClearedMissionId={lastClearedMissionId}
                   clearLastClearedMission={() => setLastClearedMissionId(null)}
+                  getCharProgression={getCharProgression}
+                  getTotalSP={getTotalSP}
+                  onUnlockSkill={unlockSkill}
+                  onEquipSkill={equipSkill}
+                  onRepairEquipment={(missionId) => {
+                    // Enter repair mode: find mission, start practice
+                    const m = missions.find(m => m.id === missionId);
+                    if (m) {
+                      setActiveMission(m);
+                      setGameState('practice');
+                    }
+                  }}
                 />
               )}
 
@@ -375,6 +406,7 @@ export default function App() {
                   isDailyChallenge={isDailyBattle}
                   dailyMultiplier={isDailyBattle ? DAILY_MULTIPLIER : 1}
                   onStreakToken={handleStreakToken}
+                  heroSkillEffect={selectedChar ? getActiveSkillEffect(getCharProgression(selectedChar.id)) : null}
                 />
               )}
 
