@@ -464,29 +464,35 @@ export default function App() {
                 />
               )}
 
-              {gameState === 'expedition' && profile?.grade && selectedChar && activeExpedition && (
-                <ExpeditionScreen
-                  expedition={activeExpedition}
-                  character={selectedChar}
-                  lang={lang}
-                  grade={profile.grade}
-                  onComplete={async (xpEarned, nodesCleared) => {
-                    if (profile && xpEarned > 0) {
-                      const cm = { ...profile.completed_missions } as any;
-                      let sp = getSeasonProgress(cm);
-                      for (let i = 0; i < nodesCleared; i++) {
-                        sp = incrementTaskCount(sp, 'daily_battles_3');
-                      }
-                      const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
-                      cm._season = updatedProgress;
-                      await updateProfile({ total_score: profile.total_score + xpEarned, completed_missions: cm });
+              {gameState === 'expedition' && profile?.grade && selectedChar && activeExpedition && (() => {
+                const saveExpeditionXP = async (xp: number, nodes: number) => {
+                  if (profile && xp > 0) {
+                    const cm = { ...profile.completed_missions } as any;
+                    let sp = getSeasonProgress(cm);
+                    for (let i = 0; i < nodes; i++) {
+                      sp = incrementTaskCount(sp, 'daily_battles_3');
                     }
-                    setActiveExpedition(null);
-                    setGameState('map');
-                  }}
-                  onCancel={() => { setActiveExpedition(null); setGameState('map'); }}
-                />
-              )}
+                    const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
+                    cm._season = updatedProgress;
+                    await updateProfile({ total_score: profile.total_score + xp, completed_missions: cm });
+                  }
+                };
+                return (
+                  <ExpeditionScreen
+                    expedition={activeExpedition}
+                    character={selectedChar}
+                    lang={lang}
+                    grade={profile.grade}
+                    onSaveRun={saveExpeditionXP}
+                    onComplete={async (xpEarned, nodesCleared) => {
+                      await saveExpeditionXP(xpEarned, nodesCleared);
+                      setActiveExpedition(null);
+                      setGameState('map');
+                    }}
+                    onCancel={() => { setActiveExpedition(null); setGameState('map'); }}
+                  />
+                );
+              })()}
 
               {gameState === 'dashboard' && (
                 <DashboardScreen

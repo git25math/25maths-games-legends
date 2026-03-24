@@ -1,10 +1,10 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, Swords, Coffee, Crown, ArrowLeft, Package, ChevronRight, Shield, Trophy, Skull, Scroll } from 'lucide-react';
 import type { Language, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
-import type { Expedition, ExpeditionNode, ExpeditionQuote } from '../data/expeditions';
+import type { Expedition, ExpeditionQuote } from '../data/expeditions';
 import { MISSIONS as LOCAL_MISSIONS } from '../data/missions';
 import { generateMission } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
@@ -61,6 +61,7 @@ export const ExpeditionScreen = ({
   lang,
   grade,
   onComplete,
+  onSaveRun,
   onCancel,
 }: {
   expedition: Expedition;
@@ -68,6 +69,7 @@ export const ExpeditionScreen = ({
   lang: Language;
   grade: number;
   onComplete: (xpEarned: number, nodesCleared: number) => void;
+  onSaveRun?: (xpEarned: number, nodesCleared: number) => Promise<void>;
   onCancel: () => void;
 }) => {
   const t = translations[lang];
@@ -84,10 +86,11 @@ export const ExpeditionScreen = ({
   const [battleQIdx, setBattleQIdx] = useState(0);
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [showResult, setShowResult] = useState<'none' | 'correct' | 'wrong'>('none');
+  const [showRetreatConfirm, setShowRetreatConfirm] = useState(false);
 
   // Record state (saved when expedition ends)
   const [savedRecord, setSavedRecord] = useState<ExpeditionRecord | null>(null);
-  const prevRecord = useMemo(() => getExpeditionRecord(expedition.id), [expedition.id]);
+  const [prevRecord, setPrevRecord] = useState<ExpeditionRecord | null>(() => getExpeditionRecord(expedition.id));
 
   const currentNode = expedition.nodes[currentNodeIdx];
 
@@ -185,6 +188,16 @@ export const ExpeditionScreen = ({
 
   const handleRetreat = () => {
     playTap();
+    // In battle phase, show confirmation first
+    if (phase === 'battle') {
+      setShowRetreatConfirm(true);
+      return;
+    }
+    finishExpedition(nodesCleared, xpEarned, 'retreat');
+  };
+
+  const confirmRetreat = () => {
+    setShowRetreatConfirm(false);
     finishExpedition(nodesCleared, xpEarned, 'retreat');
   };
 
@@ -276,7 +289,7 @@ export const ExpeditionScreen = ({
           <div className="flex-1">
             <h2 className="text-lg font-black text-white">{lt(expedition.name, lang)}</h2>
             <div className="flex items-center gap-3 text-xs mt-1">
-              <span className="flex items-center gap-1 text-amber-400 font-bold"><Package size={14} /> {rations}</span>
+              <span className={`flex items-center gap-1 font-bold ${rations <= 2 ? 'text-rose-400 animate-pulse' : 'text-amber-400'}`}><Package size={14} /> {rations}</span>
               <span className="flex items-center gap-1 text-emerald-400 font-bold"><Trophy size={14} /> {xpEarned} XP</span>
               <span className="text-white/30">{nodesCleared}/{expedition.nodes.length}</span>
             </div>
@@ -405,10 +418,32 @@ export const ExpeditionScreen = ({
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1 text-amber-400 text-xs font-bold"><Package size={14} /> {rations}</span>
+                <span className={`flex items-center gap-1 text-xs font-bold ${rations <= 2 ? 'text-rose-400 animate-pulse' : 'text-amber-400'}`}><Package size={14} /> {rations}</span>
                 {currentNode.type === 'boss' && <span className="text-rose-400 text-xs font-black">\u00d7{currentNode.xpMultiplier}</span>}
               </div>
             </div>
+
+            {/* Retreat confirmation */}
+            <AnimatePresence>
+              {showRetreatConfirm && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-3xl backdrop-blur-sm">
+                  <div className="text-center p-6">
+                    <Shield size={32} className="text-amber-400 mx-auto mb-3" />
+                    <p className="text-white font-bold text-sm mb-1">{lang === 'en' ? 'Retreat?' : '\u786e\u5b9a\u64a4\u9000\uff1f'}</p>
+                    <p className="text-white/40 text-xs mb-4">{lang === 'en' ? 'Keep earned XP, end expedition.' : '\u4fdd\u7559\u5df2\u83b7\u7ecf\u9a8c\uff0c\u7ed3\u675f\u8fdc\u5f81\u3002'}</p>
+                    <div className="flex gap-2 justify-center">
+                      <button onClick={() => setShowRetreatConfirm(false)} className="px-4 py-2 bg-white/10 text-white/70 rounded-xl text-xs font-bold">
+                        {lang === 'en' ? 'Continue' : '\u7ee7\u7eed\u6218\u6597'}
+                      </button>
+                      <button onClick={confirmRetreat} className="px-4 py-2 bg-amber-500 text-white rounded-xl text-xs font-bold">
+                        {lang === 'en' ? 'Retreat' : '\u64a4\u9000'}
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Node intel (first question only) */}
             {battleQIdx === 0 && currentNode.intel && (
@@ -558,7 +593,13 @@ export const ExpeditionScreen = ({
             {/* Action buttons */}
             <div className="flex gap-2">
               <button
-                onClick={() => {
+                onClick={async () => {
+                  // Save XP from this run before replaying
+                  if (xpEarned > 0 && onSaveRun) {
+                    await onSaveRun(xpEarned, nodesCleared);
+                  }
+                  // Update prevRecord so briefing shows latest
+                  setPrevRecord(savedRecord);
                   // Reset and replay
                   setCurrentNodeIdx(0);
                   setRations(expedition.startingRations);
@@ -568,6 +609,7 @@ export const ExpeditionScreen = ({
                   setBattleQIdx(0);
                   setInputs({});
                   setShowResult('none');
+                  setShowRetreatConfirm(false);
                   setSavedRecord(null);
                   setPhase('briefing');
                 }}
