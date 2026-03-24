@@ -470,7 +470,15 @@ export default function App() {
                     grade={profile.grade}
                     onComplete={async (xpEarned, nodesCleared) => {
                       if (profile && xpEarned > 0) {
-                        await updateProfile({ total_score: profile.total_score + xpEarned });
+                        const cm = { ...profile.completed_missions } as any;
+                        // Season tracking: count expedition nodes as battles
+                        let sp = getSeasonProgress(cm);
+                        for (let i = 0; i < nodesCleared; i++) {
+                          sp = incrementTaskCount(sp, 'daily_battles_3');
+                        }
+                        const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
+                        cm._season = updatedProgress;
+                        await updateProfile({ total_score: profile.total_score + xpEarned, completed_missions: cm });
                       }
                       setGameState('map');
                     }}
