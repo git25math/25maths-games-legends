@@ -358,7 +358,7 @@ export const PracticeScreen = ({
           >            {currentPhase === 'green' ? (
               <>
                 {/* GREEN PHASE: Worked example — no input, just watch the solution */}
-                <div className="px-3 py-2 bg-emerald-600/10 border border-emerald-500/20 rounded-lg text-emerald-300 text-xs font-bold text-center">
+                <div className="px-3 py-2 bg-amber-500/10 border border-amber-400/20 rounded-lg text-amber-200 text-xs font-bold text-center">
                   {lang === 'en' ? 'Just watch — no need to answer! Click through each step.' : '只需要看——不用答题！逐步点击学习。'}
                 </div>
                 {currentMission.tutorialSteps && (
