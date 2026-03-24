@@ -37,6 +37,10 @@ import { VennDiagram } from '../components/diagrams/VennDiagram';
 import { RatioBar } from '../components/diagrams/RatioBar';
 import { RoundingNumberLine } from '../components/diagrams/RoundingNumberLine';
 import { MixedFractionPie } from '../components/diagrams/MixedFractionPie';
+import { ParabolaRoots } from '../components/diagrams/ParabolaRoots';
+import { TangentLine } from '../components/diagrams/TangentLine';
+import { AreaUnderCurve } from '../components/diagrams/AreaUnderCurve';
+import { InterestGrowth } from '../components/diagrams/InterestGrowth';
 
 type Phase = 'green' | 'amber' | 'red';
 
@@ -394,6 +398,41 @@ export function renderDiagram(
   // ── MixedFractionPie for MIXED_IMPROPER ──
   if (gen === 'MIXED_IMPROPER_RANDOM' && d.whole !== undefined) {
     return <MixedFractionPie whole={d.whole as number} num={d.num as number} den={d.den as number} mode={d.mode as 'to_improper' | 'to_mixed'} />;
+  }
+
+  // ── Calculus ──
+  if (gen === 'ROOTS_RANDOM' && d.a !== undefined && d.b !== undefined && d.c !== undefined) {
+    return <ParabolaRoots a={d.a as number} b={d.b as number} c={d.c as number} />;
+  }
+
+  if (gen === 'DERIVATIVE_RANDOM' && d.x !== undefined) {
+    const xVal = d.x as number;
+    const derivSlope = d.func === '3x^2-3' ? 6 * xVal : 2 * xVal;
+    return <TangentLine x={xVal} slope={derivSlope} />;
+  }
+
+  if (gen === 'INTEGRATION_RANDOM') {
+    return (
+      <AreaUnderCurve
+        func={d.func as 'x' | '3x^2' | '2x'}
+        lower={(d.lower ?? d.a) as number}
+        upper={(d.upper ?? d.b) as number}
+        area={0}
+      />
+    );
+  }
+
+  // ── Interest ──
+  if (gen === 'PERCENTAGE_INTEREST_RANDOM' && d.principal !== undefined) {
+    return (
+      <InterestGrowth
+        principal={d.principal as number}
+        rate={d.rate as number}
+        years={d.years as number}
+        mode={(d.mode as 'simple' | 'compound') || 'compound'}
+        answer={d.answer as number}
+      />
+    );
   }
 
   return null;
