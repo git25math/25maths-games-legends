@@ -1402,9 +1402,11 @@ export function generateCoordinatesMission(template: Mission): Mission {
     targetY = randInt(1, 8);
   }
 
-  const quadrant = targetX > 0 && targetY > 0 ? 'I' : targetX < 0 && targetY > 0 ? 'II' : targetX < 0 && targetY < 0 ? 'III' : 'IV';
-  const quadrantZh = { I: '第一象限（右上）', II: '第二象限（左上）', III: '第三象限（左下）', IV: '第四象限（右下）' }[quadrant];
-  const quadrantEn = { I: 'Quadrant I (top-right)', II: 'Quadrant II (top-left)', III: 'Quadrant III (bottom-left)', IV: 'Quadrant IV (bottom-right)' }[quadrant];
+  const onAxis = targetX === 0 || targetY === 0;
+  const quadrant = onAxis ? (targetX === 0 && targetY === 0 ? 'O' : targetX === 0 ? 'Y' : 'X')
+    : targetX > 0 && targetY > 0 ? 'I' : targetX < 0 && targetY > 0 ? 'II' : targetX < 0 && targetY < 0 ? 'III' : 'IV';
+  const quadrantZh: Record<string, string> = { I: '第一象限（右上）', II: '第二象限（左上）', III: '第三象限（左下）', IV: '第四象限（右下）', X: '$x$ 轴上', Y: '$y$ 轴上', O: '原点' };
+  const quadrantEn: Record<string, string> = { I: 'Quadrant I (top-right)', II: 'Quadrant II (top-left)', III: 'Quadrant III (bottom-left)', IV: 'Quadrant IV (bottom-right)', X: 'on the $x$-axis', Y: 'on the $y$-axis', O: 'at the origin' };
 
   const description: BilingualText = {
     zh: `敌营位于坐标 $(${targetX}, ${targetY})$。输入 $x$ 和 $y$ 坐标。`,
@@ -1442,8 +1444,8 @@ export function generateCoordinatesMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：答案\n$(${targetX}, ${targetY})$ 在${quadrantZh}。\n\n从原点：① 横走 ${targetX >= 0 ? `右 $${targetX}$` : `左 $${Math.abs(targetX)}$`} ② 竖走 ${targetY >= 0 ? `上 $${targetY}$` : `下 $${Math.abs(targetY)}$`}\n\n$x = ${targetX}$，$y = ${targetY}$`,
-        en: `${narrator}: "Answer\n$(${targetX}, ${targetY})$ is in ${quadrantEn}.\n\nFrom origin: ① Horizontal ${targetX >= 0 ? `right $${targetX}$` : `left $${Math.abs(targetX)}$`} ② Vertical ${targetY >= 0 ? `up $${targetY}$` : `down $${Math.abs(targetY)}$`}\n\n$x = ${targetX}$, $y = ${targetY}$"`,
+        zh: `${narrator}：答案\n$(${targetX}, ${targetY})$ 在${quadrantZh[quadrant]}。\n\n从原点：① 横走 ${targetX >= 0 ? `右 $${targetX}$` : `左 $${Math.abs(targetX)}$`} ② 竖走 ${targetY >= 0 ? `上 $${targetY}$` : `下 $${Math.abs(targetY)}$`}\n\n$x = ${targetX}$，$y = ${targetY}$`,
+        en: `${narrator}: "Answer\n$(${targetX}, ${targetY})$ is ${quadrantEn[quadrant]}.\n\nFrom origin: ① Horizontal ${targetX >= 0 ? `right $${targetX}$` : `left $${Math.abs(targetX)}$`} ② Vertical ${targetY >= 0 ? `up $${targetY}$` : `down $${Math.abs(targetY)}$`}\n\n$x = ${targetX}$, $y = ${targetY}$"`,
       },
       highlightField: 'x',
     },
@@ -1456,8 +1458,12 @@ export function generateCoordinatesMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：验算\n点 $(${targetX}, ${targetY})$ 在第 ${quadrant} 象限\n${targetX > 0 ? '正' : '负'} x + ${targetY > 0 ? '正' : '负'} y → 象限判断 ✓`,
-        en: `${narrator}: "Verify\nPoint $(${targetX}, ${targetY})$ is in Quadrant ${quadrant}\n${targetX > 0 ? 'positive' : 'negative'} x + ${targetY > 0 ? 'positive' : 'negative'} y → quadrant confirmed ✓"`,
+        zh: onAxis
+          ? `${narrator}：验算\n点 $(${targetX}, ${targetY})$ 在${quadrantZh[quadrant]}\n${targetX === 0 ? '$x = 0$ → 在 $y$ 轴上' : '$y = 0$ → 在 $x$ 轴上'} ✓`
+          : `${narrator}：验算\n点 $(${targetX}, ${targetY})$ 在${quadrantZh[quadrant]}\n${targetX > 0 ? '正' : '负'} $x$ + ${targetY > 0 ? '正' : '负'} $y$ → 象限判断 ✓`,
+        en: onAxis
+          ? `${narrator}: "Verify\nPoint $(${targetX}, ${targetY})$ is ${quadrantEn[quadrant]}\n${targetX === 0 ? '$x = 0$ → on the $y$-axis' : '$y = 0$ → on the $x$-axis'} ✓"`
+          : `${narrator}: "Verify\nPoint $(${targetX}, ${targetY})$ is in ${quadrantEn[quadrant]}\n${targetX > 0 ? 'positive' : 'negative'} $x$ + ${targetY > 0 ? 'positive' : 'negative'} $y$ → quadrant confirmed ✓"`,
       },
       highlightField: 'x',
     },
