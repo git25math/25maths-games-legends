@@ -51,6 +51,7 @@ export const MapScreen = ({
   onUnlockSkill,
   onEquipSkill,
   onRepairEquipment,
+  onStartExpedition,
 }: {
   lang: Language;
   profile: UserProfile;
@@ -71,6 +72,7 @@ export const MapScreen = ({
   onUnlockSkill?: (charId: string, skillId: string) => void;
   onEquipSkill?: (charId: string, skillId: string | null) => void;
   onRepairEquipment?: (missionId: number) => void;
+  onStartExpedition?: () => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
@@ -225,6 +227,14 @@ export const MapScreen = ({
               >
                 {lang === 'en' ? 'Handbook' : '手册'}
               </button>
+              {onStartExpedition && (
+                <button
+                  onClick={onStartExpedition}
+                  className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors animate-pulse"
+                >
+                  {lang === 'en' ? 'Expedition' : '远征'}
+                </button>
+              )}
               {onDashboard && (
                 <button
                   onClick={onDashboard}

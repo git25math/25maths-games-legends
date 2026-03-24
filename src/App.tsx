@@ -27,6 +27,8 @@ import { cleanStalePracticeKeys } from './hooks/usePracticeState';
 import { getActiveSkillEffect } from './data/heroSkills';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
+import { ExpeditionScreen } from './screens/ExpeditionScreen';
+import { getExpeditionForGrade } from './data/expeditions';
 
 // Clean up stale practice localStorage keys on startup
 cleanStalePracticeKeys();
@@ -78,8 +80,8 @@ function loadPersistedState(): PersistedState {
 
 function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
-    // Battle/onboarding can't be restored → save as map
-    const safeState = (gameState === 'battle' || gameState === 'onboarding') ? 'map' : gameState;
+    // Battle/onboarding/expedition can't be restored → save as map
+    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition') ? 'map' : gameState;
     const safeMission = safeState === 'practice' ? missionId : null;
     localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
@@ -385,6 +387,7 @@ export default function App() {
                   getTotalSP={getTotalSP}
                   onUnlockSkill={unlockSkill}
                   onEquipSkill={equipSkill}
+                  onStartExpedition={profile?.grade && getExpeditionForGrade(profile.grade) ? () => setGameState('expedition') : undefined}
                   onRepairEquipment={(missionId) => {
                     const m = missions.find(m => m.id === missionId);
                     if (m) {
@@ -455,6 +458,26 @@ export default function App() {
                   }}
                 />
               )}
+
+              {gameState === 'expedition' && profile?.grade && selectedChar && (() => {
+                const exp = getExpeditionForGrade(profile.grade);
+                if (!exp) return null;
+                return (
+                  <ExpeditionScreen
+                    expedition={exp}
+                    character={selectedChar}
+                    lang={lang}
+                    grade={profile.grade}
+                    onComplete={async (xpEarned, nodesCleared) => {
+                      if (profile && xpEarned > 0) {
+                        await updateProfile({ total_score: profile.total_score + xpEarned });
+                      }
+                      setGameState('map');
+                    }}
+                    onCancel={() => setGameState('map')}
+                  />
+                );
+              })()}
 
               {gameState === 'dashboard' && (
                 <DashboardScreen
