@@ -290,9 +290,11 @@ export const ExpeditionScreen = ({
               <InputFields
                 mission={question}
                 inputs={inputs}
-                onChange={(field, val) => setInputs(prev => ({ ...prev, [field]: val }))}
+                setInputs={setInputs}
+                difficultyMode="red"
+                tutorialStep={0}
+                isTutorial={false}
                 lang={lang}
-                disabled={showResult !== 'none'}
               />
             </div>
 

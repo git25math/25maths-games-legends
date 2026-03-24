@@ -451,7 +451,7 @@ export const PracticeScreen = ({
                   </div>
                 )}
                 {currentPhase === 'red' && (
-                  <div className="px-3 py-2 bg-rose-600/10 border border-rose-500/20 rounded-lg text-rose-300 text-xs font-bold text-center mb-2">
+                  <div className="px-3 py-2 bg-amber-900/40 border border-amber-600/30 rounded-lg text-amber-100 text-xs font-bold text-center mb-2">
                     {(t as any).redPhaseHint ?? 'No hints — you can do it!'}
                   </div>
                 )}
