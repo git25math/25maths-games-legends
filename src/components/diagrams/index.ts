@@ -48,3 +48,10 @@ export { PercentageBar } from './PercentageBar';
 export { ProportionGraph } from './ProportionGraph';
 export { ArithmeticSequence } from './ArithmeticSequence';
 export { StatsDotPlot } from './StatsDotPlot';
+
+// Final coverage components
+export { FactorPairsGrid } from './FactorPairsGrid';
+export { SignedMultiply } from './SignedMultiply';
+export { FDPTriangle } from './FDPTriangle';
+export { ExpressionOrder } from './ExpressionOrder';
+export { SimplifyFlow } from './SimplifyFlow';

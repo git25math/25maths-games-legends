@@ -41,6 +41,11 @@ import { ParabolaRoots } from '../components/diagrams/ParabolaRoots';
 import { TangentLine } from '../components/diagrams/TangentLine';
 import { AreaUnderCurve } from '../components/diagrams/AreaUnderCurve';
 import { InterestGrowth } from '../components/diagrams/InterestGrowth';
+import { FactorPairsGrid } from '../components/diagrams/FactorPairsGrid';
+import { SignedMultiply } from '../components/diagrams/SignedMultiply';
+import { FDPTriangle } from '../components/diagrams/FDPTriangle';
+import { ExpressionOrder } from '../components/diagrams/ExpressionOrder';
+import { SimplifyFlow } from '../components/diagrams/SimplifyFlow';
 
 type Phase = 'green' | 'amber' | 'red';
 
@@ -386,7 +391,7 @@ export function renderDiagram(
   if (gen === 'RATIO_Y7_RANDOM' && d.a !== undefined) {
     return <RatioBar a={d.a as number} b={d.b as number} total={d.total as number | undefined} />;
   }
-  if (gen === 'RATIO_RANDOM' && d.a !== undefined && d.knownValue !== undefined) {
+  if (gen === 'RATIO_RANDOM' && d.a !== undefined) {
     return <RatioBar a={d.a as number} b={d.b as number} knownValue={d.knownValue as number} />;
   }
 
@@ -433,6 +438,27 @@ export function renderDiagram(
         answer={d.answer as number}
       />
     );
+  }
+
+  // ── Final coverage: factors, signed multiply, FDP, BODMAS, simplify ──
+  if (gen === 'FACTORS_LIST_RANDOM' && d.factors) {
+    return <FactorPairsGrid n={d.n as number} factors={d.factors as number[]} />;
+  }
+
+  if (gen === 'INTEGER_MUL_RANDOM' && d.a !== undefined) {
+    return <SignedMultiply a={d.a as number} b={d.b as number} answer={d.answer as number} op={(d.op as string) || '×'} />;
+  }
+
+  if (gen === 'FDP_CONVERT_RANDOM' && d.num !== undefined) {
+    return <FDPTriangle num={d.num as number} den={d.den as number} dec={d.dec as number} pct={d.pct as number} />;
+  }
+
+  if (gen === 'BODMAS_RANDOM' && d.expr !== undefined) {
+    return <ExpressionOrder expr={d.expr as string} answer={d.answer as number} />;
+  }
+
+  if (gen === 'SIMPLIFY_RANDOM' && d.expr !== undefined) {
+    return <SimplifyFlow expr={d.expr as string} simplified={d.simplified as string} />;
   }
 
   return null;
