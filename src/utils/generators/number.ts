@@ -879,6 +879,16 @@ export function generatePrimeMission(template: Mission): Mission {
       },
       highlightField: 'ans',
     },
+    {
+      text: result ? {
+        zh: `${narrator}：验算\n$${n}$ 是质数吗？用小质数逐个试除：\n${trialTable.join('\n')}\n没有能整除的 → 确认是质数 ✓`,
+        en: `${narrator}: "Verify\nIs $${n}$ prime? Try dividing by small primes:\n${trialTableEn.join('\n')}\nNone divide evenly → confirmed prime ✓"`,
+      } : {
+        zh: `${narrator}：验算\n$${n}$ 是质数吗？用小质数逐个试除：\n$${n} \\div ${firstFactor} = ${n/firstFactor}$，整除了！\n有能整除的 → 确认不是质数 ✓`,
+        en: `${narrator}: "Verify\nIs $${n}$ prime? Try dividing by small primes:\n$${n} \\div ${firstFactor} = ${n/firstFactor}$, divides evenly!\nFound a divisor → confirmed NOT prime ✓"`,
+      },
+      highlightField: 'ans',
+    },
   ];
 
   return {
@@ -979,6 +989,13 @@ export function generateFactorTreeMission(template: Mission): Mission {
       text: {
         zh: `${narrator}：神奇的事——不管怎么拆，最终结果都一样！\n这叫"算术基本定理"。试试从不同的数开始（比如先拆成 $6\\times6$ 而不是 $2\\times18$），叶子排出来一定相同。\n\n每个数的"质数配方"是唯一的——做得漂亮！`,
         en: `${narrator}: "Amazing fact — no matter how you split, the result is always the same!\nThis is the 'Fundamental Theorem of Arithmetic'. Try splitting differently (e.g. $6\\times6$ vs $2\\times18$) — the leaves are always identical.\n\nEvery number has a unique 'prime recipe' — brilliantly done!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——质因数全部乘回来\n$${leaves.join(' \\times ')} = ${n}$ ✓\n拆对了！`,
+        en: `${narrator}: "Verify — multiply all prime factors back\n$${leaves.join(' \\times ')} = ${n}$ ✓\nCorrectly factored!"`,
       },
       highlightField: 'ans',
     },
@@ -1300,8 +1317,8 @@ export function generateHcfMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：三种方法各有用处\n• 挨个试：最简单，适合初学\n• 短除法：最快，同时求 HCF 和 LCM，推荐做题用\n• 质因数分解：适合理解原理\n\n做得漂亮！`,
-        en: `${narrator}: "Each method has its use\n• Test one by one: simplest, good for beginners\n• Short division: fastest, gives both HCF and LCM, best for exams\n• Prime factorization: best for understanding theory\n\nBrilliantly done!"`,
+        zh: `${narrator}：验算\n$${a} \\div ${h} = ${a/h}$（整除 ✓）\n$${b} \\div ${h} = ${b/h}$（整除 ✓）\nHCF 确认无误！`,
+        en: `${narrator}: "Verify\n$${a} \\div ${h} = ${a/h}$ (divides evenly ✓)\n$${b} \\div ${h} = ${b/h}$ (divides evenly ✓)\nHCF confirmed!"`,
       },
       highlightField: 'ans',
     },
@@ -1460,8 +1477,8 @@ export function generateLcmMission(template: Mission): Mission {
     // Phase 1: listing multiples
     {
       text: {
-        zh: `${narrator}：先用最简单的方法——列出倍数，看哪个最先"撞上"\n倍数 = 用这个数 × 1, 2, 3, 4... 得到的数。`,
-        en: `${narrator}: "Simplest method first — list multiples and see which matches first\nMultiples = multiply the number by 1, 2, 3, 4..."`,
+        zh: `${narrator}：为什么要学最小公倍数？\n想象两队巡逻兵，一队每 $${a}$ 天巡一次，另一队每 $${b}$ 天巡一次。\n什么时候两队会同时出现在同一个地点？找到那个最小的"共同日"——就是最小公倍数！`,
+        en: `${narrator}: "Why learn the Least Common Multiple?\nImagine two patrol teams: one patrols every $${a}$ days, the other every $${b}$ days.\nWhen will both teams be at the same place at the same time? Find that smallest 'common day' — that's the LCM!"`,
       },
       highlightField: 'ans',
     },
@@ -1529,8 +1546,8 @@ export function generateLcmMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：三种方法各有用处\n• 列倍数：最简单，适合初学\n• 短除法：最快，同时求 HCF 和 LCM，推荐做题用\n• 质因数分解：适合理解原理\n\n做得漂亮！`,
-        en: `${narrator}: "Each method has its use\n• List multiples: simplest, good for beginners\n• Short division: fastest, gives both HCF and LCM, best for exams\n• Prime factorization: best for understanding theory\n\nBrilliantly done!"`,
+        zh: `${narrator}：验算\n$${lcm} \\div ${a} = ${lcm/a}$（整除 ✓）\n$${lcm} \\div ${b} = ${lcm/b}$（整除 ✓）\n两个都能整除，LCM 确认无误！`,
+        en: `${narrator}: "Verify\n$${lcm} \\div ${a} = ${lcm/a}$ (divides evenly ✓)\n$${lcm} \\div ${b} = ${lcm/b}$ (divides evenly ✓)\nBoth divide evenly — LCM confirmed!"`,
       },
       highlightField: 'ans',
     },
@@ -1617,8 +1634,8 @@ export function generateSquareCubeMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：小窍门——平方数的规律\n$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$\n相邻平方数的差：$3, 5, 7, 9, 11, 13, 15, 17, 19$\n\n差总是连续的奇数！这就是平方的秘密。做得漂亮！`,
-        en: `${narrator}: "Cool pattern — differences between squares\n$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$\nDifferences: $3, 5, 7, 9, 11, 13, 15, 17, 19$\n\nAlways consecutive odd numbers! That's the secret of squares. Brilliantly done!"`,
+        zh: `${narrator}：验算\n$\\sqrt{${answer}} = ${n}$ ✓\n$${n}^2 = ${answer}$ ✓\n平方确认无误！`,
+        en: `${narrator}: "Verify\n$\\sqrt{${answer}} = ${n}$ ✓\n$${n}^2 = ${answer}$ ✓\nSquare confirmed!"`,
       },
       highlightField: 'ans',
     },
@@ -1660,8 +1677,8 @@ export function generateSquareCubeMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：平方 vs 立方——对比记忆\n平方（$n^2$）= 面积（二维，$n \\times n$）\n立方（$n^3$）= 体积（三维，$n \\times n \\times n$）\n\n指数 2 = 二维，指数 3 = 三维——指数就是维度！做得漂亮！`,
-        en: `${narrator}: "Square vs Cube — compare and remember\nSquare ($n^2$) = area (2D, $n \\times n$)\nCube ($n^3$) = volume (3D, $n \\times n \\times n$)\n\nExponent 2 = 2D, exponent 3 = 3D — the exponent IS the dimension! Brilliantly done!"`,
+        zh: `${narrator}：验算\n$\\sqrt[3]{${answer}} = ${n}$ ✓\n$${n}^3 = ${answer}$ ✓\n立方确认无误！`,
+        en: `${narrator}: "Verify\n$\\sqrt[3]{${answer}} = ${n}$ ✓\n$${n}^3 = ${answer}$ ✓\nCube confirmed!"`,
       },
       highlightField: 'ans',
     },
@@ -1756,8 +1773,8 @@ export function generateSquareRootMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：必背表\n$\\sqrt{4}=2$，$\\sqrt{9}=3$，$\\sqrt{16}=4$，$\\sqrt{25}=5$\n$\\sqrt{36}=6$，$\\sqrt{49}=7$，$\\sqrt{64}=8$，$\\sqrt{81}=9$，$\\sqrt{100}=10$\n\n背熟这些，平方根一秒搞定！做得漂亮！`,
-        en: `${narrator}: "Must memorize\n$\\sqrt{4}=2$, $\\sqrt{9}=3$, $\\sqrt{16}=4$, $\\sqrt{25}=5$\n$\\sqrt{36}=6$, $\\sqrt{49}=7$, $\\sqrt{64}=8$, $\\sqrt{81}=9$, $\\sqrt{100}=10$\n\nMemorize these and square roots take one second! Brilliantly done!"`,
+        zh: `${narrator}：验算\n$${answer} \\times ${answer} = ${answer*answer}$ ✓ $= ${n}$\n平方根确认无误！`,
+        en: `${narrator}: "Verify\n$${answer} \\times ${answer} = ${answer*answer}$ ✓ $= ${n}$\nSquare root confirmed!"`,
       },
       highlightField: 'ans',
     },
@@ -1799,8 +1816,8 @@ export function generateSquareRootMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：平方根 vs 立方根——对比记忆\n$\\sqrt{n}$：谁 × 谁 = $n$？（面积→边长）\n$\\sqrt[3]{n}$：谁 × 谁 × 谁 = $n$？（体积→边长）\n\n根号里的小数字告诉你"乘几次"。没数字 = 2次，3 = 3次。做得漂亮！`,
-        en: `${narrator}: "Square root vs Cube root — compare\n$\\sqrt{n}$: who × who = $n$? (area → side)\n$\\sqrt[3]{n}$: who × who × who = $n$? (volume → side)\n\nThe small number in the root tells you 'how many times'. No number = 2, 3 = 3. Brilliantly done!"`,
+        zh: `${narrator}：验算\n$${answer} \\times ${answer} \\times ${answer} = ${answer*answer*answer}$ ✓ $= ${n}$\n立方根确认无误！`,
+        en: `${narrator}: "Verify\n$${answer} \\times ${answer} \\times ${answer} = ${answer*answer*answer}$ ✓ $= ${n}$\nCube root confirmed!"`,
       },
       highlightField: 'ans',
     },
@@ -2008,8 +2025,16 @@ export function generateFdpConvertMission(template: Mission): Mission {
     },
     {
       text: {
-        zh: `${narrator}：必背——常见对照表\n$\\frac{1}{2} = 50\\%$，$\\frac{1}{4} = 25\\%$，$\\frac{3}{4} = 75\\%$\n$\\frac{1}{5} = 20\\%$，$\\frac{2}{5} = 40\\%$，$\\frac{3}{5} = 60\\%$\n$\\frac{1}{10} = 10\\%$，$\\frac{1}{3} \\approx 33.3\\%$\n\n背下这些，考试快人一步！`,
-        en: `${narrator}: "Must memorize — quick reference\n$\\frac{1}{2} = 50\\%$, $\\frac{1}{4} = 25\\%$, $\\frac{3}{4} = 75\\%$\n$\\frac{1}{5} = 20\\%$, $\\frac{2}{5} = 40\\%$, $\\frac{3}{5} = 60\\%$\n$\\frac{1}{10} = 10\\%$, $\\frac{1}{3} \\approx 33.3\\%$\n\nMemorize these and you'll be faster than everyone!"`,
+        zh: `${narrator}：验算——反向转换\n${dir === 'frac_to_pct'
+          ? `$${chosen.pct}\\% \\div 100 = ${chosen.dec}$，$${chosen.dec} = \\frac{${chosen.num}}{${chosen.den}}$ ✓\n从百分比转回分数，完全吻合！`
+          : dir === 'pct_to_dec'
+          ? `$${chosen.dec} \\times 100 = ${chosen.pct}\\%$ ✓\n从小数转回百分比，完全吻合！`
+          : `$${chosen.pct}\\% \\div 100 = ${chosen.dec}$ ✓\n从百分比转回小数，完全吻合！`}`,
+        en: `${narrator}: "Verify — reverse conversion\n${dir === 'frac_to_pct'
+          ? `$${chosen.pct}\\% \\div 100 = ${chosen.dec}$, $${chosen.dec} = \\frac{${chosen.num}}{${chosen.den}}$ ✓\nConverted back from percentage to fraction — perfect match!`
+          : dir === 'pct_to_dec'
+          ? `$${chosen.dec} \\times 100 = ${chosen.pct}\\%$ ✓\nConverted back from decimal to percentage — perfect match!`
+          : `$${chosen.pct}\\% \\div 100 = ${chosen.dec}$ ✓\nConverted back from percentage to decimal — perfect match!`}"`,
       },
       highlightField: 'ans',
     },
@@ -2263,8 +2288,8 @@ export function generatePercentageMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：百分比是什么意思？\n很简单——"百分之${pct}"就是"每 100 份里取 ${pct} 份"。\n生活中到处都是：商店打折、考试得分、税率……\n${isDiscount ? '今天我们算的是打折——原价便宜了多少。' : '今天我们算的是涨价——原来的基础上多了多少。'}`,
-        en: `${narrator}: "What does percentage mean?\nSimple — '${pct} percent' means 'take ${pct} out of every 100'.\nIt's everywhere in life: shop discounts, exam scores, tax rates...\n${isDiscount ? 'Today we\'re calculating a discount — how much cheaper.' : 'Today we\'re calculating an increase — how much more.'}"`,
+        zh: `${narrator}：为什么要学百分比增长？\n物价每年都在涨——粮食今年 $${initial}$ 石，涨了 $${pct}\\%$，明年多少？\n知道涨幅百分比，就能预测未来的开支。这在生活中比你想的更常用！`,
+        en: `${narrator}: "Why learn percentage change?\nPrices rise every year — grain costs $${initial}$ units this year, up $${pct}\\%$, how much next year?\nKnowing the percentage change lets you predict future costs. It's more useful in daily life than you'd think!"`,
       },
       highlightField: 'ans',
     },

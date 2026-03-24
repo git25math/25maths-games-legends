@@ -342,8 +342,8 @@ export function generateDerivativeMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：导数——函数在某一点的"变化速度"\n对于 $y = x^{2}$，导数公式：$y' = 2x$`,
-        en: `${narrator}: "Derivative — the 'rate of change' at a point\nFor $y = x^{2}$, derivative formula: $y' = 2x$"`,
+        zh: `${narrator}：为什么要学导数？\n想象一辆马车在加速——速度一直在变。某一瞬间到底有多快？\n导数就是回答"此刻的变化有多快"的工具。函数是位置，导数就是速度！`,
+        en: `${narrator}: "Why learn derivatives?\nImagine a chariot accelerating — its speed keeps changing. How fast is it going at one exact moment?\nThe derivative answers 'how fast is the change right now'. The function is position, the derivative is speed!"`,
       },
       highlightField: 'k',
     },
@@ -415,8 +415,8 @@ export function generateIntegrationMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：积分——求 $y = x$ 从 $x = ${lower}$ 到 $x = ${upper}$ 的曲线下面积`,
-          en: `${narrator}: "Integration — find area under $y = x$ from $x = ${lower}$ to $x = ${upper}$"`,
+          zh: `${narrator}：为什么要学积分？\n导数告诉你"速度"，积分告诉你"走了多远"。\n知道每一刻的速度，怎么算总路程？把每小段加起来——这就是积分的核心思想！`,
+          en: `${narrator}: "Why learn integration?\nDerivatives tell you 'speed', integrals tell you 'how far you've gone'.\nKnowing the speed at every moment, how do you find total distance? Add up every tiny piece — that's the core idea of integration!"`,
         },
         highlightField: 'area',
       },
@@ -473,8 +473,8 @@ export function generateIntegrationMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：积分——求 $y = 3x^{2}$ 从 $x = ${lower}$ 到 $x = ${upper}$ 的曲线下面积`,
-          en: `${narrator}: "Integration — find area under $y = 3x^{2}$ from $x = ${lower}$ to $x = ${upper}$"`,
+          zh: `${narrator}：为什么要学积分？\n导数告诉你"速度"，积分告诉你"走了多远"。\n知道每一刻的速度，怎么算总路程？把每小段加起来——这就是积分的核心思想！`,
+          en: `${narrator}: "Why learn integration?\nDerivatives tell you 'speed', integrals tell you 'how far you've gone'.\nKnowing the speed at every moment, how do you find total distance? Add up every tiny piece — that's the core idea of integration!"`,
         },
         highlightField: 'area',
       },
@@ -531,8 +531,8 @@ export function generateIntegrationMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：积分——求 $y = 2x$ 从 $x = ${lower}$ 到 $x = ${upper}$ 的曲线下面积`,
-        en: `${narrator}: "Integration — find area under $y = 2x$ from $x = ${lower}$ to $x = ${upper}$"`,
+        zh: `${narrator}：为什么要学积分？\n导数告诉你"速度"，积分告诉你"走了多远"。\n知道每一刻的速度，怎么算总路程？把每小段加起来——这就是积分的核心思想！`,
+        en: `${narrator}: "Why learn integration?\nDerivatives tell you 'speed', integrals tell you 'how far you've gone'.\nKnowing the speed at every moment, how do you find total distance? Add up every tiny piece — that's the core idea of integration!"`,
       },
       highlightField: 'area',
     },
@@ -931,6 +931,13 @@ export function generateRatioY8Mission(template: Mission): Mission {
       text: {
         zh: `${narrator}：总结规律\n${mode === 'direct' ? '正比例：$x$ 变大 → $y$ 也变大（同向变化）' : '反比例：$x$ 变大 → $y$ 反而变小（反向变化）'}\n公式：${formulaZh}\n\n掌握了这个规律，以后碰到类似题目就不怕了！了不起！`,
         en: `${narrator}: "Summary\n${mode === 'direct' ? 'Direct proportion: $x$ increases → $y$ increases too (same direction)' : 'Inverse proportion: $x$ increases → $y$ decreases (opposite direction)'}\nFormula: ${formulaEn}\n\nWith this pattern mastered, you'll never fear proportion problems again! Impressive!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n$${x2} \\times ${k} = ${y2}$ ✓\n比例关系确认无误！`,
+        en: `${narrator}: "Verify\n$${x2} \\times ${k} = ${y2}$ ✓\nProportion confirmed!"`,
       },
       highlightField: 'ans',
     },

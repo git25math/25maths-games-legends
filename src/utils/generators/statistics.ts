@@ -481,6 +481,13 @@ export function generateStatsModeMission(template: Mission): Mission {
       },
       highlightField: 'ans',
     },
+    {
+      text: {
+        zh: `${narrator}：验算\n数一数 $${modeValue}$ 出现了几次：$${modeCount}$ 次\n其他值最多出现 $${freqEntries[1]?.count ?? 0}$ 次\n$${modeValue}$ 确实最多 ✓`,
+        en: `${narrator}: "Verify\nCount how many times $${modeValue}$ appears: $${modeCount}$ times\nOther values appear at most $${freqEntries[1]?.count ?? 0}$ times\n$${modeValue}$ is indeed the most frequent ✓"`,
+      },
+      highlightField: 'ans',
+    },
   ];
 
   return {

@@ -10,16 +10,29 @@ export function generateAnglesMission(template: Mission): Mission {
   const angle = randInt(range[0], range[1]);
   const ans = total - angle;
   const kind = total === 90 ? { zh: '余角', en: 'complementary' } : { zh: '补角', en: 'supplementary' };
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '吕布';
 
   const description: BilingualText = {
     zh: `计算${kind.zh}：$${total} - ${angle} = x$。`,
     en: `Calculate ${kind.en} angle: $${total} - ${angle} = x$.`,
   };
 
+  const tutorialSteps = [
+    ...(template.tutorialSteps || []),
+    {
+      text: {
+        zh: `${narrator}：验算——所有角加起来\n$${ans} + ${angle} = ${total}$ ✓\n等于 $${total}°$，完全正确！`,
+        en: `${narrator}: "Verify — all angles add up\n$${ans} + ${angle} = ${total}$ ✓\nEquals $${total}°$, perfectly correct!"`,
+      },
+      highlightField: 'x',
+    },
+  ];
+
   return {
     ...template,
     description,
     data: { ...template.data, angle, total, ans, generatorType: 'ANGLES_RANDOM' },
+    tutorialSteps,
   };
 }
 
@@ -717,6 +730,13 @@ export function generateTrigonometryMission(template: Mission): Mission {
         },
         highlightField: 'c',
       },
+      {
+        text: {
+          zh: `${narrator}：代回检验：$\\sin(${angle}°) \\times ${hypRounded} = ${opposite}$ ✓`,
+          en: `${narrator}: "Verify: $\\sin(${angle}°) \\times ${hypRounded} = ${opposite}$ ✓"`,
+        },
+        highlightField: 'c',
+      },
     ];
     return { ...template, description, data: { angle, opposite, func: 'sin', generatorType: 'TRIGONOMETRY_RANDOM' }, tutorialSteps };
   }
@@ -1141,7 +1161,7 @@ export function generateSectorMission(template: Mission): Mission {
   const formulaZh = mode === 'arc' ? `$l = \\frac{\\theta}{360} \\times 2\\pi r$` : `$A = \\frac{\\theta}{360} \\times \\pi r^2$`;
 
   const tutorialSteps = [
-    { text: { zh: `${narrator}：扇形是什么？\n把圆饼切一刀——切出来的那一块就是扇形。\n圆心角越大，扇形越大。$360°$ = 整个圆，$180°$ = 半圆，$90°$ = 四分之一圆。`, en: `${narrator}: "What is a sector?\nCut a pizza slice — that's a sector.\nLarger central angle = larger sector. $360°$ = full circle, $180°$ = half, $90°$ = quarter."` }, highlightField: 'area' },
+    { text: { zh: `${narrator}：为什么要学扇形？\n想象一块圆形的军营地盘——将军只分到其中一个扇形区域。\n圆心角决定了你分到多大一块。学会扇形面积和弧长，就知道自己到底分到了多少地盘！`, en: `${narrator}: "Why learn about sectors?\nImagine a circular military camp — the general only gets one sector of the land.\nThe central angle determines how big your share is. Learn sector area and arc length to know exactly how much territory you've been given!"` }, highlightField: 'area' },
     { text: { zh: `${narrator}：核心思路\n扇形就是"圆的一部分"，占整个圆的 $\\frac{\\theta}{360}$。\n所以${mode === 'arc' ? '弧长' : '扇形面积'} = $\\frac{\\theta}{360}$ × ${mode === 'arc' ? '整个圆周长' : '整个圆面积'}。\n\n公式：${formulaZh}`, en: `${narrator}: "Core idea\nA sector is 'part of a circle', taking up $\\frac{\\theta}{360}$ of the whole.\nSo ${mode === 'arc' ? 'arc length' : 'sector area'} = $\\frac{\\theta}{360}$ × ${mode === 'arc' ? 'full circumference' : 'full area'}.\n\nFormula: ${formulaZh}"` }, highlightField: 'area' },
     { text: { zh: `${narrator}：代入数据\n$\\theta = ${angle}°$，$r = ${r}$，$\\pi = ${pi}$\n分数部分：$\\frac{${angle}}{360} = ${fracStr}$`, en: `${narrator}: "Substitute\n$\\theta = ${angle}°$, $r = ${r}$, $\\pi = ${pi}$\nFraction: $\\frac{${angle}}{360} = ${fracStr}$"` }, highlightField: 'area' },
     { text: { zh: `${narrator}：计算\n先算${mode === 'arc' ? '整圆周长 $2\\pi r$' : '整圆面积 $\\pi r^2$'}，\n再乘以 $\\frac{${angle}}{360}$。`, en: `${narrator}: "Calculate\nFirst find ${mode === 'arc' ? 'full circumference $2\\pi r$' : 'full area $\\pi r^2$'},\nthen multiply by $\\frac{${angle}}{360}$."` }, highlightField: 'area' },

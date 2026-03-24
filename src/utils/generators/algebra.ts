@@ -820,6 +820,13 @@ export function generateQuadraticMission(template: Mission): Mission {
       },
       highlightField: 'c',
     },
+    {
+      text: {
+        zh: `${narrator}：验算——代点 B 回方程\n$y = ${a} \\times ${x2}^2 + ${c} = ${a * x2 * x2 + c}$\n$= ${y2}$ ✓ 和点 B 的 y 坐标一致！`,
+        en: `${narrator}: "Verify — substitute point B back into the equation\n$y = ${a} \\times ${x2}^2 + ${c} = ${a * x2 * x2 + c}$\n$= ${y2}$ ✓ Matches point B's y-coordinate!"`,
+      },
+      highlightField: 'c',
+    },
   ];
   return { ...template, description, data: { p1: [0, c], p2: [x2, y2], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
 }
@@ -1444,6 +1451,13 @@ export function generateCoordinatesMission(template: Mission): Mission {
       text: {
         zh: `${narrator}：记住四个象限\nI $(+,+)$ 右上 | II $(-,+)$ 左上\nIII $(-,-)$ 左下 | IV $(+,-)$ 右下\n\n永远先 $x$ 后 $y$，右上正正，逆时针转！做得漂亮！`,
         en: `${narrator}: "Remember the four quadrants\nI $(+,+)$ top-right | II $(-,+)$ top-left\nIII $(-,-)$ bottom-left | IV $(+,-)$ bottom-right\n\nAlways $x$ first then $y$, start top-right, go counter-clockwise! Brilliantly done!"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n点 $(${targetX}, ${targetY})$ 在第 ${quadrant} 象限\n${targetX > 0 ? '正' : '负'} x + ${targetY > 0 ? '正' : '负'} y → 象限判断 ✓`,
+        en: `${narrator}: "Verify\nPoint $(${targetX}, ${targetY})$ is in Quadrant ${quadrant}\n${targetX > 0 ? 'positive' : 'negative'} x + ${targetY > 0 ? 'positive' : 'negative'} y → quadrant confirmed ✓"`,
       },
       highlightField: 'x',
     },
