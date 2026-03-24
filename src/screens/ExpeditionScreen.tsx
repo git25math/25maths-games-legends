@@ -52,7 +52,10 @@ export const ExpeditionScreen = ({
 
   // Pick random missions matching grade for battle nodes
   const generateBattleQuestions = useCallback((count: number) => {
-    const pool = LOCAL_MISSIONS.filter(m => m.grade === grade && m.data?.generatorType);
+    // Try exact grade first, fall back to ±1 grade, then all dynamic missions
+    let pool = LOCAL_MISSIONS.filter(m => m.grade === grade && m.data?.generatorType);
+    if (pool.length === 0) pool = LOCAL_MISSIONS.filter(m => Math.abs(m.grade - grade) <= 1 && m.data?.generatorType);
+    if (pool.length === 0) pool = LOCAL_MISSIONS.filter(m => m.data?.generatorType);
     const questions: Mission[] = [];
     for (let i = 0; i < count; i++) {
       const template = pool[Math.floor(Math.random() * pool.length)];

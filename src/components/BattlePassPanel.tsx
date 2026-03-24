@@ -65,15 +65,15 @@ export const BattlePassPanel = ({
 
         {/* Tabs */}
         <div className="flex gap-2 mb-4">
-          {(['tasks', 'rewards'] as const).map(t => (
+          {(['tasks', 'rewards'] as const).map(tabId => (
             <button
-              key={t}
-              onClick={() => { playTap(); setTab(t); }}
+              key={tabId}
+              onClick={() => { playTap(); setTab(tabId); }}
               className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
-                tab === t ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-white/5 text-white/40 border border-white/10'
+                tab === tabId ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-white/5 text-white/40 border border-white/10'
               }`}
             >
-              {t === 'tasks' ? ((translations[lang] as any).tasks ?? 'Tasks') : ((translations[lang] as any).rewards ?? 'Rewards')}
+              {tabId === 'tasks' ? ((t as any).tasks ?? 'Tasks') : ((t as any).rewards ?? 'Rewards')}
             </button>
           ))}
         </div>
