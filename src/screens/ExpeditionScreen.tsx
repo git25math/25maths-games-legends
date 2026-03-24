@@ -1,10 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapPin, Swords, Coffee, Crown, ArrowLeft, Package, ChevronRight, Shield, Trophy, Skull } from 'lucide-react';
+import { MapPin, Swords, Coffee, Crown, ArrowLeft, Package, ChevronRight, Shield, Trophy, Skull, Scroll } from 'lucide-react';
 import type { Language, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
-import type { Expedition, ExpeditionNode } from '../data/expeditions';
+import type { Expedition, ExpeditionNode, ExpeditionQuote } from '../data/expeditions';
 import { MISSIONS as LOCAL_MISSIONS } from '../data/missions';
 import { generateMission } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
@@ -16,8 +16,44 @@ import { interpolate } from '../utils/interpolate';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { CalculatorWidget } from '../components/Calculator';
 import { useAudio } from '../audio';
+import { getExpeditionRecord, saveExpeditionRecord, getRating, type ExpeditionRecord } from '../utils/expeditionRecords';
 
-type Phase = 'map' | 'battle' | 'rest' | 'victory' | 'defeat' | 'retreat';
+type Phase = 'briefing' | 'map' | 'battle' | 'rest' | 'victory' | 'defeat' | 'retreat';
+
+// ── Helpers ──────────────────────────────────────────────────────────
+
+function getChineseDay(d: number): string {
+  const n = ['', '\u4e00', '\u4e8c', '\u4e09', '\u56db', '\u4e94', '\u516d', '\u4e03', '\u516b', '\u4e5d'];
+  if (d <= 9) return '\u521d' + n[d]; // 初X
+  if (d === 10) return '\u521d\u5341'; // 初十
+  if (d < 20) return '\u5341' + n[d - 10]; // 十X
+  if (d === 20) return '\u4e8c\u5341'; // 二十
+  if (d < 30) return '\u5eff' + n[d - 20]; // 廿X
+  if (d === 30) return '\u4e09\u5341'; // 三十
+  return '\u4e09\u5341\u4e00'; // 三十一
+}
+
+function getAuspiciousDate(era: { zh: string; en: string } | undefined, lang: Language) {
+  const now = new Date();
+  const m = now.getMonth() + 1;
+  const d = now.getDate();
+  if (lang === 'en' || lang === 'zh_TW') {
+    const eraStr = era?.[lang === 'zh_TW' ? 'zh' : 'en'] ?? '';
+    return { date: `${eraStr}  \u00b7  Month ${m}, Day ${d}`, auspicious: lang === 'zh_TW' ? '\u51fa\u5f81' : 'March Out' };
+  }
+  const months = ['\u6b63', '\u4e8c', '\u4e09', '\u56db', '\u4e94', '\u516d', '\u4e03', '\u516b', '\u4e5d', '\u5341', '\u5341\u4e00', '\u814a'];
+  const opts = ['\u51fa\u5f81', '\u7528\u5175', '\u514b\u654c', '\u8fdb\u519b'];
+  return { date: `${era?.zh ?? ''}  ${months[m - 1]}\u6708  ${getChineseDay(d)}`, auspicious: opts[(m + d) % opts.length] };
+}
+
+function pickQuote(quotes: ExpeditionQuote[]): ExpeditionQuote {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86400000);
+  return quotes[dayOfYear % quotes.length];
+}
+
+// ── Component ────────────────────────────────────────────────────────
 
 export const ExpeditionScreen = ({
   expedition,
@@ -40,7 +76,7 @@ export const ExpeditionScreen = ({
   const [currentNodeIdx, setCurrentNodeIdx] = useState(0);
   const [rations, setRations] = useState(expedition.startingRations);
   const [xpEarned, setXpEarned] = useState(0);
-  const [phase, setPhase] = useState<Phase>('map');
+  const [phase, setPhase] = useState<Phase>('briefing');
   const [nodesCleared, setNodesCleared] = useState(0);
 
   // Battle state
@@ -49,11 +85,13 @@ export const ExpeditionScreen = ({
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [showResult, setShowResult] = useState<'none' | 'correct' | 'wrong'>('none');
 
+  // Record state (saved when expedition ends)
+  const [savedRecord, setSavedRecord] = useState<ExpeditionRecord | null>(null);
+  const prevRecord = useMemo(() => getExpeditionRecord(expedition.id), [expedition.id]);
+
   const currentNode = expedition.nodes[currentNodeIdx];
 
-  // Pick random missions matching grade for battle nodes
   const generateBattleQuestions = useCallback((count: number) => {
-    // Try exact grade first, fall back to ±1 grade, then all dynamic missions
     let pool = LOCAL_MISSIONS.filter(m => m.grade === grade && m.data?.generatorType);
     if (pool.length === 0) pool = LOCAL_MISSIONS.filter(m => Math.abs(m.grade - grade) <= 1 && m.data?.generatorType);
     if (pool.length === 0) pool = LOCAL_MISSIONS.filter(m => m.data?.generatorType);
@@ -69,12 +107,10 @@ export const ExpeditionScreen = ({
     playTap();
     const node = expedition.nodes[currentNodeIdx];
     if (node.type === 'rest') {
-      // Rest node: just grant rations
       setRations(r => r + node.rationReward);
       playPhaseAdvance();
       setPhase('rest');
     } else {
-      // Battle or boss node
       const qs = generateBattleQuestions(node.questionCount);
       setBattleQuestions(qs);
       setBattleQIdx(0);
@@ -82,6 +118,12 @@ export const ExpeditionScreen = ({
       setShowResult('none');
       setPhase('battle');
     }
+  };
+
+  const finishExpedition = (finalNodes: number, finalXP: number, endPhase: Phase) => {
+    const record = saveExpeditionRecord(expedition.id, finalNodes, finalXP);
+    setSavedRecord(record);
+    setPhase(endPhase);
   };
 
   const handleSubmit = () => {
@@ -95,7 +137,6 @@ export const ExpeditionScreen = ({
       setTimeout(() => {
         setShowResult('none');
         setInputs({});
-        // Next question or complete node
         if (battleQIdx + 1 >= battleQuestions.length) {
           completeNode();
         } else {
@@ -111,11 +152,9 @@ export const ExpeditionScreen = ({
         setShowResult('none');
         setInputs({});
         if (newRations <= 0) {
-          // Expedition failed
           playDefeat();
-          setPhase('defeat');
+          finishExpedition(nodesCleared, xpEarned, 'defeat');
         } else {
-          // Continue — same question with new numbers
           const qs = [...battleQuestions];
           const template = LOCAL_MISSIONS.find(m => m.id === question.id) || question;
           qs[battleQIdx] = template.data?.generatorType ? generateMission(template) : template;
@@ -128,17 +167,17 @@ export const ExpeditionScreen = ({
   const completeNode = () => {
     const node = expedition.nodes[currentNodeIdx];
     const nodeXP = Math.round(100 * node.xpMultiplier);
-    setXpEarned(prev => prev + nodeXP);
-    setNodesCleared(prev => prev + 1);
+    const newXP = xpEarned + nodeXP;
+    const newNodes = nodesCleared + 1;
+    setXpEarned(newXP);
+    setNodesCleared(newNodes);
     setRations(r => r + node.rationReward);
     playPhaseAdvance();
 
     if (currentNodeIdx + 1 >= expedition.nodes.length) {
-      // All nodes cleared — victory!
       playVictory();
-      setPhase('victory');
+      finishExpedition(newNodes, newXP, 'victory');
     } else {
-      // Advance to next node
       setCurrentNodeIdx(prev => prev + 1);
       setPhase('map');
     }
@@ -146,16 +185,92 @@ export const ExpeditionScreen = ({
 
   const handleRetreat = () => {
     playTap();
-    setPhase('retreat');
+    finishExpedition(nodesCleared, xpEarned, 'retreat');
   };
 
   const NODE_ICONS: Record<string, typeof MapPin> = { battle: Swords, rest: Coffee, boss: Crown };
 
-  // --- MAP PHASE ---
+  // ═══════════════════════════════════════════════════════════════════
+  // BRIEFING PHASE
+  // ═══════════════════════════════════════════════════════════════════
+  if (phase === 'briefing') {
+    const quote = expedition.quotes && expedition.quotes.length > 0 ? pickQuote(expedition.quotes) : null;
+    const { date, auspicious } = getAuspiciousDate(expedition.era, lang);
+
+    return (
+      <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 py-8">
+        <motion.div className="w-full max-w-sm" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          {/* Auspicious date header */}
+          <div className="text-center mb-6">
+            <div className="text-amber-400/60 text-xs tracking-[0.25em] mb-1 font-bold">{date}</div>
+            <div className="text-amber-300/40 text-[10px] tracking-widest">
+              {lang === 'en' ? `Today is auspicious for: ${auspicious}` : `\u4eca\u65e5\u5b9c\uff1a${auspicious}`}
+            </div>
+          </div>
+
+          {/* Main scroll card */}
+          <div className="bg-amber-950/30 border border-amber-700/30 rounded-2xl p-6 backdrop-blur-sm">
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <Scroll size={18} className="text-amber-500/60" />
+              <h2 className="text-2xl font-black text-amber-300">{lt(expedition.name, lang)}</h2>
+            </div>
+            <p className="text-white/40 text-xs text-center mb-5 leading-relaxed">{lt(expedition.description, lang)}</p>
+
+            {/* Quote */}
+            {quote && (
+              <motion.div className="border-l-2 border-amber-600/40 pl-4 mb-5" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
+                <p className="text-white/70 text-sm italic leading-relaxed">&ldquo;{lt(quote.text, lang)}&rdquo;</p>
+                <p className="text-amber-400/60 text-xs mt-1">&mdash;&mdash; {lt(quote.author, lang)}</p>
+              </motion.div>
+            )}
+
+            {/* Expedition info */}
+            <div className="flex justify-center gap-4 mb-5 text-xs">
+              <span className="flex items-center gap-1 text-amber-400/70"><Package size={12} /> {expedition.startingRations} {lang === 'en' ? 'rations' : '\u519b\u7cae'}</span>
+              <span className="flex items-center gap-1 text-white/30"><Swords size={12} /> {expedition.nodes.filter(n => n.type !== 'rest').length} {lang === 'en' ? 'battles' : '\u5173'}</span>
+            </div>
+
+            {/* Records */}
+            {prevRecord ? (
+              <div className="bg-white/5 rounded-xl p-3 mb-5 space-y-1.5">
+                <div className="flex justify-between text-xs">
+                  <span className="text-white/40">{lang === 'en' ? 'Last run' : '\u4e0a\u6b21\u6218\u7ee9'}</span>
+                  <span className="text-white/60">{prevRecord.lastNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '\u5173'}  \u00b7  +{prevRecord.lastXP} XP</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-white/40">{lang === 'en' ? 'Best' : '\u6700\u4f73\u6218\u7ee9'}</span>
+                  <span className="text-amber-400 font-bold">{prevRecord.bestNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '\u5173'}  \u00b7  +{prevRecord.bestXP} XP  {getRating(prevRecord.bestNodes, expedition.nodes.length)}</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-white/40">{lang === 'en' ? 'Attempts' : '\u51fa\u5f81\u6b21\u6570'}</span>
+                  <span className="text-white/40">{lang === 'en' ? `#${prevRecord.attempts + 1}` : `\u7b2c ${prevRecord.attempts + 1} \u6b21`}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-white/5 rounded-xl p-3 mb-5 text-center">
+                <p className="text-white/30 text-xs">{lang === 'en' ? 'First expedition' : '\u9996\u6b21\u51fa\u5f81'}</p>
+              </div>
+            )}
+
+            {/* Buttons */}
+            <button onClick={() => { playTap(); setPhase('map'); }} className="w-full py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 transition-all text-sm">
+              {lang === 'en' ? 'March Out \u2192' : '\u4eca\u65e5\u51fa\u5f81 \u2192'}
+            </button>
+            <button onClick={onCancel} className="w-full mt-2 py-2 text-white/30 text-sm hover:text-white/50 transition-colors">
+              {lang === 'en' ? 'Return' : '\u8fd4\u56de'}
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // MAP PHASE
+  // ═══════════════════════════════════════════════════════════════════
   if (phase === 'map') {
     return (
       <div className="min-h-[80vh] flex flex-col items-center px-4 py-8">
-        {/* Header */}
         <div className="flex items-center gap-3 mb-6 w-full max-w-sm">
           <button onClick={onCancel} className="p-2 text-white/40 hover:text-white"><ArrowLeft size={20} /></button>
           <div className="flex-1">
@@ -173,12 +288,10 @@ export const ExpeditionScreen = ({
           )}
         </div>
 
-        {/* Node map */}
         <div className="flex flex-col gap-2 w-full max-w-sm">
           {expedition.nodes.map((node, idx) => {
             const isCompleted = idx < currentNodeIdx;
             const isCurrent = idx === currentNodeIdx;
-            const isLocked = idx > currentNodeIdx;
             const Icon = NODE_ICONS[node.type];
             const diffColors: Record<string, string> = {
               green: 'border-emerald-500/40 bg-emerald-500/10',
@@ -208,10 +321,18 @@ export const ExpeditionScreen = ({
                 <div className="flex-1 min-w-0">
                   <div className="text-white text-sm font-bold truncate">{lt(node.name, lang)}</div>
                   <div className="text-white/40 text-[10px]">
-                    {node.type === 'rest' ? (lang === 'en' ? `+${node.rationReward} rations` : `+${node.rationReward} 军粮`)
-                      : node.type === 'boss' ? (lang === 'en' ? `${node.questionCount}Q · ×${node.xpMultiplier} XP` : `${node.questionCount}题 · ×${node.xpMultiplier} XP`)
-                      : `${node.questionCount}${lang === 'en' ? 'Q' : '题'}`}
+                    {node.type === 'rest' ? (lang === 'en' ? `+${node.rationReward} rations` : `+${node.rationReward} \u519b\u7cae`)
+                      : node.type === 'boss' ? (lang === 'en' ? `${node.questionCount}Q \u00b7 \u00d7${node.xpMultiplier} XP` : `${node.questionCount}\u9898 \u00b7 \u00d7${node.xpMultiplier} XP`)
+                      : `${node.questionCount}${lang === 'en' ? 'Q' : '\u9898'}`}
                   </div>
+                  {/* Node intel for current node */}
+                  {isCurrent && node.intel && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
+                      className="text-amber-400/60 text-[10px] italic mt-0.5 leading-snug"
+                    >
+                      {lt(node.intel, lang)}
+                    </motion.div>
+                  )}
                 </div>
                 {isCurrent && (
                   <button onClick={startNode} className="px-4 py-2 bg-amber-500 text-white font-bold text-xs rounded-xl hover:bg-amber-400 transition-all shrink-0">
@@ -226,15 +347,20 @@ export const ExpeditionScreen = ({
     );
   }
 
-  // --- REST PHASE ---
+  // ═══════════════════════════════════════════════════════════════════
+  // REST PHASE
+  // ═══════════════════════════════════════════════════════════════════
   if (phase === 'rest') {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center px-4">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center">
           <Coffee size={48} className="text-amber-400 mx-auto mb-4" />
           <h2 className="text-2xl font-black text-white mb-2">{lt(currentNode.name, lang)}</h2>
-          <p className="text-amber-400 font-bold mb-6">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '军粮'}</p>
-          <p className="text-white/40 text-sm mb-8">{lang === 'en' ? `You now have ${rations} rations.` : `现在有 ${rations} 份军粮。`}</p>
+          {currentNode.intel && (
+            <p className="text-amber-400/60 text-xs italic mb-3 max-w-xs mx-auto">{lt(currentNode.intel, lang)}</p>
+          )}
+          <p className="text-amber-400 font-bold mb-6">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '\u519b\u7cae'}</p>
+          <p className="text-white/40 text-sm mb-8">{lang === 'en' ? `You now have ${rations} rations.` : `\u73b0\u5728\u6709 ${rations} \u4efd\u519b\u7cae\u3002`}</p>
           <button onClick={() => { setCurrentNodeIdx(prev => prev + 1); setPhase('map'); }} className="px-8 py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 transition-all">
             {(t as any).continueMarching ?? 'Continue March'}
           </button>
@@ -243,7 +369,9 @@ export const ExpeditionScreen = ({
     );
   }
 
-  // --- BATTLE PHASE ---
+  // ═══════════════════════════════════════════════════════════════════
+  // BATTLE PHASE
+  // ═══════════════════════════════════════════════════════════════════
   if (phase === 'battle') {
     const question = battleQuestions[battleQIdx];
     if (!question) return null;
@@ -261,7 +389,7 @@ export const ExpeditionScreen = ({
             if (targetId) setInputs(prev => ({ ...prev, [targetId]: val }));
           }} />
 
-          <div className="bg-white/5 backdrop-blur-xl p-6 rounded-3xl border border-white/10 w-full max-w-lg">
+          <div className="bg-white/5 backdrop-blur-xl p-6 rounded-3xl border border-white/10 w-full max-w-lg relative">
             {/* Battle header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
@@ -272,25 +400,30 @@ export const ExpeditionScreen = ({
                 <div>
                   <div className="text-white font-bold text-sm">{lt(currentNode.name, lang)}</div>
                   <div className="text-white/40 text-[10px]">
-                    {lang === 'en' ? `Q${battleQIdx + 1}/${battleQuestions.length}` : `第${battleQIdx + 1}/${battleQuestions.length}题`}
+                    {lang === 'en' ? `Q${battleQIdx + 1}/${battleQuestions.length}` : `\u7b2c${battleQIdx + 1}/${battleQuestions.length}\u9898`}
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <span className="flex items-center gap-1 text-amber-400 text-xs font-bold"><Package size={14} /> {rations}</span>
-                {currentNode.type === 'boss' && <span className="text-rose-400 text-xs font-black">×{currentNode.xpMultiplier}</span>}
+                {currentNode.type === 'boss' && <span className="text-rose-400 text-xs font-black">\u00d7{currentNode.xpMultiplier}</span>}
               </div>
             </div>
+
+            {/* Node intel (first question only) */}
+            {battleQIdx === 0 && currentNode.intel && (
+              <div className="text-amber-400/60 text-[10px] italic mb-3 border-l-2 border-amber-700/30 pl-2">
+                {lt(currentNode.intel, lang)}
+              </div>
+            )}
 
             {/* Question */}
             <div className="mb-4">
               <LatexText text={descText} className="text-white/80 text-sm leading-relaxed" />
             </div>
 
-            {/* Visual data */}
             <VisualData mission={question} lang={lang} />
 
-            {/* Input */}
             <div className="mt-4">
               <InputFields
                 mission={question}
@@ -314,12 +447,11 @@ export const ExpeditionScreen = ({
               {showResult === 'wrong' && (
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
                   className="absolute inset-0 flex items-center justify-center bg-rose-500/20 rounded-3xl pointer-events-none">
-                  <span className="text-rose-400 font-black text-xl">-1 {lang === 'en' ? 'ration' : '军粮'}</span>
+                  <span className="text-rose-400 font-black text-xl">-1 {lang === 'en' ? 'ration' : '\u519b\u7cae'}</span>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Submit */}
             <button
               onClick={handleSubmit}
               disabled={showResult !== 'none'}
@@ -333,50 +465,125 @@ export const ExpeditionScreen = ({
     );
   }
 
-  // --- VICTORY / DEFEAT / RETREAT ---
+  // ═══════════════════════════════════════════════════════════════════
+  // RESULT PHASE (Victory / Defeat / Retreat)
+  // ═══════════════════════════════════════════════════════════════════
   const isVictory = phase === 'victory';
   const isRetreat = phase === 'retreat';
+  const isNewBest = savedRecord && prevRecord && savedRecord.bestNodes > prevRecord.bestNodes;
+  const isFirstRun = !prevRecord;
+  const rating = getRating(nodesCleared, expedition.nodes.length);
+  const { date: reportDate } = getAuspiciousDate(expedition.era, lang);
 
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center px-4">
-      <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center max-w-sm">
-        {isVictory ? (
-          <Crown size={64} className="text-amber-400 mx-auto mb-4" />
-        ) : isRetreat ? (
-          <Shield size={64} className="text-amber-400 mx-auto mb-4" />
-        ) : (
-          <Skull size={64} className="text-rose-400 mx-auto mb-4" />
-        )}
-
-        <h2 className={`text-2xl font-black mb-2 ${isVictory ? 'text-amber-400' : isRetreat ? 'text-amber-300' : 'text-rose-400'}`}>
-          {isVictory ? ((t as any).expeditionVictory ?? 'Expedition Complete!')
-            : isRetreat ? ((t as any).safeRetreat ?? 'Safe Retreat')
-            : ((t as any).rationsDepleted ?? 'Rations Depleted')}
-        </h2>
-
-        <p className="text-white/50 text-sm mb-6">
-          {isVictory ? ((t as any).expeditionVictoryDesc ?? 'Full rewards earned.')
-            : isRetreat ? ((t as any).safeRetreatDesc ?? 'Keep what you earned.')
-            : ((t as any).rationsDepletedDesc ?? 'Keep the XP you earned.')}
-        </p>
-
-        <div className="flex justify-center gap-8 mb-8">
-          <div className="text-center">
-            <span className="text-white/30 text-xs font-bold block">{(t as any).nodes ?? 'Nodes'}</span>
-            <span className="text-2xl font-black text-emerald-400">{nodesCleared}/{expedition.nodes.length}</span>
+      <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="w-full max-w-sm">
+        {/* Battle report card */}
+        <div className="bg-amber-950/20 border border-amber-700/20 rounded-2xl overflow-hidden">
+          {/* Report header */}
+          <div className="bg-amber-900/30 px-5 py-3 border-b border-amber-700/20 flex items-center justify-between">
+            <div>
+              <h3 className="text-amber-300 font-black text-sm">{lt(expedition.name, lang)} {lang === 'en' ? 'Report' : '\u6218\u62a5'}</h3>
+              <div className="text-amber-400/40 text-[10px]">{reportDate}</div>
+            </div>
+            {isVictory ? (
+              <Crown size={28} className="text-amber-400" />
+            ) : isRetreat ? (
+              <Shield size={28} className="text-amber-400/60" />
+            ) : (
+              <Skull size={28} className="text-rose-400/60" />
+            )}
           </div>
-          <div className="text-center">
-            <span className="text-white/30 text-xs font-bold block">XP</span>
-            <span className="text-2xl font-black text-amber-400">+{xpEarned}</span>
+
+          {/* Result title */}
+          <div className="text-center py-4">
+            <h2 className={`text-xl font-black mb-1 ${isVictory ? 'text-amber-400' : isRetreat ? 'text-amber-300' : 'text-rose-400'}`}>
+              {isVictory ? ((t as any).expeditionVictory ?? 'Expedition Complete!')
+                : isRetreat ? ((t as any).safeRetreat ?? 'Safe Retreat')
+                : ((t as any).rationsDepleted ?? 'Rations Depleted')}
+            </h2>
+            <p className="text-white/40 text-xs">
+              {isVictory ? (lang === 'en' ? 'Full victory. All rewards earned.' : '\u5927\u83b7\u5168\u80dc\uff0c\u5168\u989d\u5956\u52b1\u5df2\u53d1\u653e\u3002')
+                : isRetreat ? (lang === 'en' ? 'Withdrew safely. Keep what you earned.' : '\u5b89\u5168\u64a4\u9000\uff0c\u5df2\u83b7\u7ecf\u9a8c\u4fdd\u7559\u3002')
+                : (lang === 'en' ? 'Rations depleted. Keep the XP you earned.' : '\u519b\u7cae\u8017\u5c3d\uff0c\u5df2\u83b7\u7ecf\u9a8c\u4fdd\u7559\u3002')}
+            </p>
+          </div>
+
+          {/* This run stats */}
+          <div className="px-5 pb-4">
+            <div className="bg-white/5 rounded-xl p-4 mb-3">
+              <div className="text-white/30 text-[10px] font-bold uppercase tracking-wider mb-2">
+                {lang === 'en' ? 'This Run' : '\u672c\u6b21\u6218\u7ee9'}
+              </div>
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-white/50 text-xs">{lang === 'en' ? 'Nodes' : '\u901a\u5173'}</span>
+                <span className="text-white font-black">{nodesCleared}/{expedition.nodes.length} {rating}</span>
+              </div>
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-white/50 text-xs">XP</span>
+                <span className="text-amber-400 font-black">+{xpEarned}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-white/50 text-xs">{lang === 'en' ? 'Rations left' : '\u519b\u7cae\u4f59\u91cf'}</span>
+                <span className="text-white/60 font-bold">{rations}</span>
+              </div>
+            </div>
+
+            {/* Historical records */}
+            <div className="bg-white/5 rounded-xl p-4 mb-4">
+              <div className="text-white/30 text-[10px] font-bold uppercase tracking-wider mb-2">
+                {lang === 'en' ? 'Historical' : '\u5386\u53f2\u6218\u7ee9'}
+              </div>
+              {savedRecord && (
+                <>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Best' : '\u6700\u4f73'}</span>
+                    <span className="text-amber-400 font-bold text-sm">
+                      {savedRecord.bestNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '\u5173'}
+                      {(isNewBest || isFirstRun) && <span className="text-amber-300 ml-1 text-[10px]">{lang === 'en' ? 'NEW!' : '\u65b0\u7eaa\u5f55\uff01'}</span>}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Best XP' : '\u6700\u9ad8XP'}</span>
+                    <span className="text-amber-400/70 font-bold text-sm">+{savedRecord.bestXP}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Attempts' : '\u51fa\u5f81\u6b21\u6570'}</span>
+                    <span className="text-white/40 text-sm">{savedRecord.attempts}</span>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  // Reset and replay
+                  setCurrentNodeIdx(0);
+                  setRations(expedition.startingRations);
+                  setXpEarned(0);
+                  setNodesCleared(0);
+                  setBattleQuestions([]);
+                  setBattleQIdx(0);
+                  setInputs({});
+                  setShowResult('none');
+                  setSavedRecord(null);
+                  setPhase('briefing');
+                }}
+                className="flex-1 py-3 bg-amber-500/20 text-amber-400 border border-amber-500/30 font-black rounded-2xl hover:bg-amber-500/30 transition-all text-sm"
+              >
+                {lang === 'en' ? 'Try Again' : '\u518d\u6218\u4e00\u6b21'}
+              </button>
+              <button
+                onClick={() => onComplete(xpEarned, nodesCleared)}
+                className="flex-1 py-3 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-all text-sm"
+              >
+                {t.backToMap}
+              </button>
+            </div>
           </div>
         </div>
-
-        <button
-          onClick={() => onComplete(xpEarned, nodesCleared)}
-          className="px-8 py-3 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-all"
-        >
-          {t.backToMap}
-        </button>
       </motion.div>
     </div>
   );
