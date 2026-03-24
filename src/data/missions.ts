@@ -4019,6 +4019,161 @@ export const MISSIONS: Mission[] = [
     secret: { concept: { zh: '四分位数将数据分为四等份。IQR = Q3 - Q1 衡量中间 50% 的离散度。', en: 'Quartiles divide data into four equal parts. IQR = Q3 - Q1 measures spread of middle 50%.' }, formula: '$IQR = Q3 - Q1$', tips: [{ zh: '司马炎提示：四分位——把天下分为四份来分析。', en: 'Sima Yan Tip: Quartiles — analyze the realm in four parts.' }] }
   },
 
+  // --- Y11 Unit 8: 微积分深化 · 六出祁山 (Calculus Extension) ---
+  {
+    id: 1181, grade: 11, unitId: 8, order: 1,
+    unitTitle: { zh: "Unit 8: 六出祁山·微积分篇", en: "Unit 8: Six Campaigns — Calculus" },
+    topic: 'Calculus', type: 'DERIVATIVE',
+    title: { zh: '行军速率', en: 'March Rate' },
+    skillName: { zh: '微分求速度术', en: 'Derivative for Rate' },
+    skillSummary: { zh: 'dy/dx 表示变化率', en: 'dy/dx represents rate of change' },
+    story: { zh: '诸葛亮北伐，军队位置 $s = 3t^2 + 2t$ 随时间变化。某时刻行军速度是多少？', en: 'Zhuge Liang marches north. Position $s = 3t^2 + 2t$ changes with time. What\'s the speed at a given moment?' },
+    description: { zh: '求导数 $\\frac{ds}{dt}$，然后代入指定时刻。', en: 'Find derivative $\\frac{ds}{dt}$, then substitute the given time.' },
+    data: { coeffA: 3, coeffB: 2, powerA: 2, powerB: 1, generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Medium', reward: 500,
+    kpId: 'kp-2.12-01', sectionId: 'calculus',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：为什么需要微分？\n位置告诉你"在哪"，但军事需要知道"多快"——速度！\n微分就是从"位置函数"提取"速度函数"的数学工具。', en: 'Zhuge Liang: "Why differentiation?\nPosition tells \'where\', but military needs \'how fast\' — speed!\nDifferentiation extracts the \'speed function\' from the \'position function\'."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：幂规则\n$$\\frac{d}{dx}(ax^n) = nax^{n-1}$$\n系数乘以指数，指数减 1。就这么简单！', en: 'Zhuge Liang: "Power rule\n$$\\frac{d}{dx}(ax^n) = nax^{n-1}$$\nMultiply by the power, reduce power by 1. That simple!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：逐项求导\n$s = {coeffA}t^{powerA} + {coeffB}t^{powerB}$\n$\\frac{ds}{dt} = {powerA} \\times {coeffA}t^{pAm1} + {powerB} \\times {coeffB}t^{pBm1}$', en: 'Zhuge Liang: "Differentiate term by term\n$s = {coeffA}t^{powerA} + {coeffB}t^{powerB}$\n$\\frac{ds}{dt} = {powerA}\\times{coeffA}t^{pAm1} + {powerB}\\times{coeffB}t^{pBm1}$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：化简导数', en: 'Zhuge Liang: "Simplify the derivative"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：答案\n速度函数已求出！', en: 'Zhuge Liang: "Answer\nSpeed function found!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n对导数再积分，应该回到原函数（加常数）✓', en: 'Zhuge Liang: "Verify\nIntegrate the derivative back — should return to original (plus constant) ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '微分 = 求变化率。幂规则：指数下来乘，指数减1。', en: 'Differentiation = rate of change. Power rule: bring down power, reduce by 1.' }, formula: '$\\frac{d}{dx}(ax^n) = nax^{n-1}$', tips: [{ zh: '诸葛亮提示：指数搬下来，再减1。', en: 'Zhuge Liang Tip: Bring the power down, reduce by 1.' }] }
+  },
+  {
+    id: 1182, grade: 11, unitId: 8, order: 2,
+    unitTitle: { zh: "Unit 8: 六出祁山·微积分篇", en: "Unit 8: Six Campaigns — Calculus" },
+    topic: 'Calculus', type: 'INTEGRATION',
+    title: { zh: '粮草总量', en: 'Total Supplies' },
+    skillName: { zh: '定积分求面积术', en: 'Definite Integration for Area' },
+    skillSummary: { zh: '∫ f(x)dx 求曲线下面积', en: '∫ f(x)dx finds area under curve' },
+    story: { zh: '粮草消耗率随时间变化。要算总消耗量，就是求消耗率曲线下的面积——定积分！', en: 'Supply consumption rate varies with time. Total consumption = area under the rate curve — definite integration!' },
+    description: { zh: '求定积分的值。', en: 'Evaluate the definite integral.' },
+    data: { coeffA: 2, coeffB: 3, powerA: 2, powerB: 1, constant: 0, generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 550,
+    kpId: 'kp-2.12-02', sectionId: 'calculus',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：积分是微分的逆操作\n微分：位置→速度（变化率）\n积分：速度→位置（累积量）\n"知道每时每刻的速度，算出总路程"就是积分。', en: 'Zhuge Liang: "Integration is the reverse of differentiation\nDiff: position→speed (rate)\nIntegration: speed→position (cumulative)\n\'Know speed at every moment, find total distance\' = integration."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：幂规则（反向）\n$$\\int ax^n dx = \\frac{a}{n+1}x^{n+1} + C$$\n指数加 1，再除以新指数。和微分完全相反！', en: 'Zhuge Liang: "Power rule (reversed)\n$$\\int ax^n dx = \\frac{a}{n+1}x^{n+1} + C$$\nAdd 1 to power, divide by new power. Exact reverse of differentiation!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：逐项积分', en: 'Zhuge Liang: "Integrate term by term"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：化简', en: 'Zhuge Liang: "Simplify"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：答案\n积分完成！', en: 'Zhuge Liang: "Answer\nIntegration complete!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n对结果求导，应该得到原函数 ✓', en: 'Zhuge Liang: "Verify\nDifferentiate the result — should give back the original ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '积分 = 微分的逆操作。幂规则：指数加1，除以新指数。', en: 'Integration = reverse of differentiation. Power rule: add 1 to power, divide by new power.' }, formula: '$\\int ax^n dx = \\frac{a}{n+1}x^{n+1} + C$', tips: [{ zh: '诸葛亮提示：指数加1再除——积分口诀。', en: 'Zhuge Liang Tip: Add 1 then divide — integration mantra.' }] }
+  },
+
+  // --- Y11 Unit 9: 向量运算 · 八阵图 (Vector Operations) ---
+  {
+    id: 1191, grade: 11, unitId: 9, order: 1,
+    unitTitle: { zh: "Unit 9: 八阵图·向量运算", en: "Unit 9: Eight Formations — Vector Ops" },
+    topic: 'Geometry', type: 'COORDINATES',
+    title: { zh: '阵法向量', en: 'Formation Vectors' },
+    skillName: { zh: '向量加法术', en: 'Vector Addition' },
+    skillSummary: { zh: 'a + b = (a₁+b₁, a₂+b₂)', en: 'a + b = (a₁+b₁, a₂+b₂)' },
+    story: { zh: '八阵图中，两支部队分别沿向量 $\\vec{a}$ 和 $\\vec{b}$ 移动。合力方向是什么？向量加法！', en: 'In the Eight Formations, two units move along vectors $\\vec{a}$ and $\\vec{b}$. What\'s the combined direction? Vector addition!' },
+    description: { zh: '求两个向量的和。', en: 'Find the sum of two vectors.' },
+    data: { a: [3, 4], b: [1, -2], generatorType: 'VECTOR_ADD_RANDOM' }, difficulty: 'Medium', reward: 500,
+    kpId: 'kp-7.4-01', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：向量 = 有方向的数\n普通数只有大小（如"5公里"）。\n向量有方向+大小（如"向东北走5公里"）。\n在坐标系里，向量 = $(x, y)$。', en: 'Zhuge Liang: "Vectors = numbers with direction\nOrdinary numbers have only magnitude (\'5 km\').\nVectors have direction + magnitude (\'5 km northeast\').\nIn coordinates, vector = $(x, y)$."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：向量加法 = 分量分别相加\n$$\\vec{a} + \\vec{b} = (a_1 + b_1, \\; a_2 + b_2)$$\n$x$ 分量加 $x$，$y$ 分量加 $y$。就像合兵——东西方向各算各的。', en: 'Zhuge Liang: "Vector addition = add components\n$$\\vec{a} + \\vec{b} = (a_1 + b_1, \\; a_2 + b_2)$$\nAdd $x$\'s together, add $y$\'s together. Like combining forces — each direction independently."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：代入\n$\\vec{a} = ({a[0]}, {a[1]})$，$\\vec{b} = ({b[0]}, {b[1]})$\n$\\vec{a} + \\vec{b} = ({a[0]}+{b[0]}, \\; {a[1]}+{b[1]})$', en: 'Zhuge Liang: "Substitute\n$\\vec{a} = ({a[0]}, {a[1]})$, $\\vec{b} = ({b[0]}, {b[1]})$\n$\\vec{a}+\\vec{b} = ({a[0]}+{b[0]}, \\; {a[1]}+{b[1]})$"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：计算\n$= ({sum_x}, {sum_y})$', en: 'Zhuge Liang: "Calculate\n$= ({sum_x}, {sum_y})$"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：答案\n合力向量 = $({sum_x}, {sum_y})$。', en: 'Zhuge Liang: "Answer\nResultant vector = $({sum_x}, {sum_y})$."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：验算\n$(\\vec{a}+\\vec{b}) - \\vec{b}$ 应等于 $\\vec{a}$ ✓', en: 'Zhuge Liang: "Verify\n$(\\vec{a}+\\vec{b}) - \\vec{b}$ should equal $\\vec{a}$ ✓"' }, highlightField: 'x' },
+    ],
+    secret: { concept: { zh: '向量加法：分量分别相加。合力方向 = 各分力之和。', en: 'Vector addition: add components separately. Resultant = sum of individual vectors.' }, formula: '$\\vec{a}+\\vec{b} = (a_1+b_1, a_2+b_2)$', tips: [{ zh: '诸葛亮提示：x加x，y加y——向量加法就这样。', en: 'Zhuge Liang Tip: x plus x, y plus y — that\'s vector addition.' }] }
+  },
+
+  // --- Y11 Unit 10: 高级三角 · 赤壁遗策 (Advanced Trigonometry) ---
+  {
+    id: 11101, grade: 11, unitId: 10, order: 1,
+    unitTitle: { zh: "Unit 10: 赤壁遗策·高级三角", en: "Unit 10: Legacy of Red Cliffs — Advanced Trig" },
+    topic: 'Geometry', type: 'TRIGONOMETRY',
+    title: { zh: '斜岸测量', en: 'Oblique Shore Survey' },
+    skillName: { zh: '正弦定理术', en: 'Sine Rule' },
+    skillSummary: { zh: 'a/sinA = b/sinB = c/sinC', en: 'a/sinA = b/sinB = c/sinC' },
+    story: { zh: '赤壁遗址勘测——三角形不是直角的！用正弦定理可以解任意三角形。', en: 'Surveying Red Cliffs ruins — the triangle isn\'t right-angled! The sine rule solves ANY triangle.' },
+    description: { zh: '用正弦定理求未知边或角。', en: 'Use sine rule to find unknown side or angle.' },
+    data: { angle: 40, hyp: 15, generatorType: 'TRIGONOMETRY_RANDOM', func: 'sin' }, difficulty: 'Hard', reward: 550,
+    kpId: 'kp-6.3-01', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '周瑜：为什么需要正弦定理？\nSOH-CAH-TOA 只对直角三角形有效！\n现实中大多数三角形都不是直角的。正弦定理对所有三角形通用。', en: 'Zhou Yu: "Why the sine rule?\nSOH-CAH-TOA only works for RIGHT triangles!\nMost real triangles aren\'t right-angled. The sine rule works for ALL triangles."' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：正弦定理\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$\n边和它对面的角的正弦值成正比。\n知道两组"边-角对"就能解三角形。', en: 'Zhou Yu: "Sine rule\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$\nEach side is proportional to the sine of its opposite angle.\nKnowing two side-angle pairs lets you solve the triangle."' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：选择哪两个比\n找已知的"边-角配对"，和要求的"边或角"对应的比。', en: 'Zhou Yu: "Choose which two ratios\nFind the known side-angle pair, match with the unknown side or angle."' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：代入计算', en: 'Zhou Yu: "Substitute and calculate"' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：答案\n斜岸距离测出来了！', en: 'Zhou Yu: "Answer\nOblique shore distance measured!"' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：验算\n三角形三角之和 = $180°$ ✓\n结果代回正弦定理，等式两边应该相等 ✓', en: 'Zhou Yu: "Verify\nAngles sum to 180° ✓\nSubstitute back into sine rule — both sides should be equal ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '正弦定理：a/sinA = b/sinB = c/sinC。适用于所有三角形。', en: 'Sine rule: a/sinA = b/sinB = c/sinC. Works for ALL triangles.' }, formula: '$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$', tips: [{ zh: '周瑜提示：边配角，角配边——正弦定理万能。', en: 'Zhou Yu Tip: Side pairs with angle — sine rule is universal.' }] }
+  },
+  {
+    id: 11102, grade: 11, unitId: 10, order: 2,
+    unitTitle: { zh: "Unit 10: 赤壁遗策·高级三角", en: "Unit 10: Legacy of Red Cliffs — Advanced Trig" },
+    topic: 'Geometry', type: 'TRIGONOMETRY',
+    title: { zh: '夹角攻防', en: 'Included Angle Battle' },
+    skillName: { zh: '余弦定理术', en: 'Cosine Rule' },
+    skillSummary: { zh: 'a² = b² + c² - 2bc·cosA', en: 'a² = b² + c² - 2bc·cosA' },
+    story: { zh: '两军夹角已知，两边长度已知——求对面的距离。余弦定理是勾股定理的升级版！', en: 'The angle between two armies is known, both side lengths known — find the opposite distance. Cosine rule = upgraded Pythagoras!' },
+    description: { zh: '用余弦定理求未知边。', en: 'Use cosine rule to find unknown side.' },
+    data: { angle: 60, hyp: 10, generatorType: 'TRIGONOMETRY_RANDOM', func: 'cos' }, difficulty: 'Hard', reward: 600,
+    kpId: 'kp-6.4-01', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '周瑜：余弦定理 = 勾股定理 Plus\n勾股定理：$c^2 = a^2 + b^2$（只限直角三角形）\n余弦定理：$c^2 = a^2 + b^2 - 2ab\\cos C$（所有三角形）\n多了一个"修正项" $-2ab\\cos C$。', en: 'Zhou Yu: "Cosine rule = Pythagoras Plus\nPythagoras: $c^2 = a^2 + b^2$ (right triangles only)\nCosine rule: $c^2 = a^2 + b^2 - 2ab\\cos C$ (ALL triangles)\nAdds a correction term $-2ab\\cos C$."' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：什么时候用？\n知道两边 + 夹角 → 求第三边。\n知道三边 → 求某个角。\n"两边夹角"或"三边"就用余弦定理！', en: 'Zhou Yu: "When to use?\nKnow 2 sides + included angle → find 3rd side.\nKnow 3 sides → find an angle.\n\'Two sides + included angle\' or \'three sides\' = cosine rule!"' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：代入公式', en: 'Zhou Yu: "Substitute into formula"' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：计算', en: 'Zhou Yu: "Calculate"' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：答案\n对面距离确认！', en: 'Zhou Yu: "Answer\nOpposite distance confirmed!"' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：验算\n当角度 = $90°$ 时，$\\cos 90° = 0$，公式变回勾股定理 ✓', en: 'Zhou Yu: "Verify\nWhen angle = 90°, $\\cos 90° = 0$, formula becomes Pythagoras ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '余弦定理：a² = b² + c² - 2bc·cosA。勾股定理的通用版。', en: 'Cosine rule: a² = b² + c² - 2bc·cosA. Generalized Pythagoras.' }, formula: '$a^2 = b^2 + c^2 - 2bc\\cos A$', tips: [{ zh: '周瑜提示：两边夹角→余弦定理。三边→也是余弦定理。', en: 'Zhou Yu Tip: Two sides + angle → cosine rule. Three sides → also cosine rule.' }] }
+  },
+
+  // --- Y11 Unit 11: 函数图像 · 隆中对策 (Function Graphs) ---
+  {
+    id: 11111, grade: 11, unitId: 11, order: 1,
+    unitTitle: { zh: "Unit 11: 隆中对策·函数图像", en: "Unit 11: Longzhong Strategy — Function Graphs" },
+    topic: 'Functions', type: 'QUADRATIC',
+    title: { zh: '抛物线顶点', en: 'Parabola Vertex' },
+    skillName: { zh: '配方求顶点术', en: 'Completing the Square' },
+    skillSummary: { zh: '顶点 = (-b/2a, f(-b/2a))', en: 'Vertex = (-b/2a, f(-b/2a))' },
+    story: { zh: '投石车轨迹 $y = -x^2 + 6x - 5$。最高点在哪？找到顶点就找到了最大射程！', en: 'Catapult trajectory $y = -x^2 + 6x - 5$. Where\'s the peak? Finding the vertex reveals maximum range!' },
+    description: { zh: '求二次函数的顶点坐标。', en: 'Find the vertex of a quadratic function.' },
+    data: { a: -1, b: 6, c: -5, generatorType: 'QUADRATIC_RANDOM' }, difficulty: 'Medium', reward: 500,
+    kpId: 'kp-2.10-01', sectionId: 'functions',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：抛物线的顶点就是"转折点"\n$y = ax^2 + bx + c$ 的图像是一条抛物线。\n$a > 0$：开口朝上（最低点）。\n$a < 0$：开口朝下（最高点）。\n顶点就是那个转折的地方。', en: 'Zhuge Liang: "The vertex is the turning point\n$y = ax^2 + bx + c$ graphs as a parabola.\n$a > 0$: opens up (minimum).\n$a < 0$: opens down (maximum).\nThe vertex is where it turns."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：顶点公式\n$$x = -\\frac{b}{2a}$$\n然后代回原式求 $y$。\n不需要配方法，这个公式直接给出 $x$ 坐标！', en: 'Zhuge Liang: "Vertex formula\n$$x = -\\frac{b}{2a}$$\nThen substitute back to find $y$.\nNo completing the square needed — this formula gives $x$ directly!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：求 x 坐标\n$x = -\\frac{{b}}{2 \\times ({a})} = {vertex_x}$', en: 'Zhuge Liang: "Find x\n$x = -\\frac{{b}}{2 \\times ({a})} = {vertex_x}$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：求 y 坐标\n代入 $x = {vertex_x}$：$y = {a}({vertex_x})^2 + {b}({vertex_x}) + ({c})$', en: 'Zhuge Liang: "Find y\nSub $x = {vertex_x}$: $y = {a}({vertex_x})^2 + {b}({vertex_x}) + ({c})$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：答案\n顶点 = $({vertex_x}, {vertex_y})$。最大射高确认！', en: 'Zhuge Liang: "Answer\nVertex = $({vertex_x}, {vertex_y})$. Maximum range confirmed!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n顶点左右各代一个 $x$，$y$ 值应该更小（因为 $a < 0$）✓', en: 'Zhuge Liang: "Verify\nSub one $x$ to the left and right of vertex — $y$ should be smaller (since $a < 0$) ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '顶点公式：x = -b/(2a)，再代回求 y。是抛物线的最高/低点。', en: 'Vertex: x = -b/(2a), sub back for y. It\'s the max/min of the parabola.' }, formula: '$x = -\\frac{b}{2a}$', tips: [{ zh: '诸葛亮提示：-b/2a 一步到位，不用配方。', en: 'Zhuge Liang Tip: -b/2a gives x directly, no completing the square needed.' }] }
+  },
+  {
+    id: 11112, grade: 11, unitId: 11, order: 2,
+    unitTitle: { zh: "Unit 11: 隆中对策·函数图像", en: "Unit 11: Longzhong Strategy — Function Graphs" },
+    topic: 'Functions', type: 'ROOTS',
+    title: { zh: '函数零点', en: 'Function Zeros' },
+    skillName: { zh: '求根公式术', en: 'Quadratic Formula' },
+    skillSummary: { zh: 'x = (-b ± √(b²-4ac)) / 2a', en: 'x = (-b ± √(b²-4ac)) / 2a' },
+    story: { zh: '投石轨迹何时落地？$y = 0$ 时的 $x$ 值就是着地点——用求根公式！', en: 'When does the catapult stone land? The $x$ values when $y = 0$ are the landing points — use the quadratic formula!' },
+    description: { zh: '用求根公式求二次方程的解。', en: 'Use the quadratic formula to solve a quadratic equation.' },
+    data: { a: 1, b: -5, c: 6, generatorType: 'ROOTS_RANDOM' }, difficulty: 'Hard', reward: 550,
+    kpId: 'kp-2.10-02', sectionId: 'functions',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：什么是"根"？\n$ax^2 + bx + c = 0$ 的解叫做"根"。\n几何意义：抛物线和 x 轴交叉的地方。\n投石落地点 = 轨迹方程的根。', en: 'Zhuge Liang: "What are \'roots\'?\nSolutions of $ax^2 + bx + c = 0$ are called roots.\nGeometric meaning: where the parabola crosses the x-axis.\nLanding points = roots of the trajectory equation."' }, highlightField: 'x1' },
+      { text: { zh: '诸葛亮：求根公式\n$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$\n$b^2 - 4ac$ 叫"判别式"：\n$> 0$：两个实根（两个落点）\n$= 0$：一个重根（刚好触地）\n$< 0$：无实根（飞过去了）', en: 'Zhuge Liang: "Quadratic formula\n$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$\n$b^2 - 4ac$ is the discriminant:\n$> 0$: two real roots\n$= 0$: one repeated root\n$< 0$: no real roots"' }, highlightField: 'x1' },
+      { text: { zh: '诸葛亮：代入 $a={a}, b={b}, c={c}$', en: 'Zhuge Liang: "Sub $a={a}, b={b}, c={c}$"' }, highlightField: 'x1' },
+      { text: { zh: '诸葛亮：计算判别式和根', en: 'Zhuge Liang: "Calculate discriminant and roots"' }, highlightField: 'x1' },
+      { text: { zh: '诸葛亮：答案\n两个落点确认！', en: 'Zhuge Liang: "Answer\nTwo landing points confirmed!"' }, highlightField: 'x1' },
+      { text: { zh: '诸葛亮：验算\n把每个根代回原式，结果应为 $0$ ✓', en: 'Zhuge Liang: "Verify\nSub each root back — result should be 0 ✓"' }, highlightField: 'x1' },
+    ],
+    secret: { concept: { zh: '求根公式：x = (-b±√(b²-4ac))/2a。判别式决定根的个数。', en: 'Quadratic formula: x = (-b±√(b²-4ac))/2a. Discriminant determines number of roots.' }, formula: '$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$', tips: [{ zh: '诸葛亮提示：记住公式，判别式先算。', en: 'Zhuge Liang Tip: Memorize the formula, calculate discriminant first.' }] }
+  },
+
   // --- Year 12: The Final Stand (Grand Unification) ---
   {
     id: 1211, grade: 12, unitId: 1, order: 1,
