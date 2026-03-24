@@ -32,6 +32,7 @@ import { ArithmeticSequence } from '../components/diagrams/ArithmeticSequence';
 import { PerimeterRect } from '../components/diagrams/PerimeterRect';
 import { CoordinatePlane } from '../components/diagrams/CoordinatePlane';
 import { SubstitutionFlow } from '../components/diagrams/SubstitutionFlow';
+import { ProbabilityBar } from '../components/diagrams/ProbabilityBar';
 
 type Phase = 'green' | 'amber' | 'red';
 
@@ -348,6 +349,15 @@ export function renderDiagram(
   // ── Statistics ──
   if ((mission.type === 'STATISTICS' || mission.type === 'PROBABILITY') && d.values && d.mode) {
     return <StatsDotPlot values={d.values as number[]} mode={d.mode as 'mean' | 'median' | 'mode' | 'range'} />;
+  }
+
+  // ── Probability (simple & independent) ──
+  if (gen === 'PROBABILITY_SIMPLE_RANDOM' && d.target !== undefined && d.total !== undefined) {
+    return <ProbabilityBar mode="simple" target={d.target as number} total={d.total as number} />;
+  }
+
+  if (gen === 'PROBABILITY_IND_RANDOM' && d.p1 !== undefined && d.p2 !== undefined) {
+    return <ProbabilityBar mode="independent" p1={d.p1 as number} p2={d.p2 as number} />;
   }
 
   return null;
