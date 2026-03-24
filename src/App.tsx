@@ -204,10 +204,11 @@ export default function App() {
       );
       setLastClearedMissionId(activeMission.id);
 
-      // v7.0: Grant skill points on level-up
+      // v7.0: Grant skill points on level-up (batch, single update)
       const newLevel = getLevelInfo(profile.total_score + score).level;
-      for (let i = 0; i < newLevel - prevLevel; i++) {
-        await grantSkillPoint();
+      const levelsGained = newLevel - prevLevel;
+      if (levelsGained > 0) {
+        await grantSkillPoint(levelsGained);
       }
 
       // v7.0: Mark equipment on Red difficulty win

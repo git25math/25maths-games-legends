@@ -55,7 +55,7 @@ export const OnboardingScreen = ({
         onClick={skip}
         className="absolute top-6 right-20 text-white/30 hover:text-white/60 text-sm font-bold transition-colors"
       >
-        {lang === 'en' ? 'Skip' : '跳过'}
+        {(t as any).skipOnboarding ?? 'Skip'}
       </button>
 
       {/* Step indicators */}

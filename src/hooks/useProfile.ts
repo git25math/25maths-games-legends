@@ -196,10 +196,10 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     await updateProfile({ completed_missions: cm });
   };
 
-  const grantSkillPoint = async () => {
-    if (!profile) return;
+  const grantSkillPoint = async (count = 1) => {
+    if (!profile || count <= 0) return;
     const cm = { ...profile.completed_missions } as any;
-    cm._total_skill_points = (cm._total_skill_points ?? 0) + 1;
+    cm._total_skill_points = (cm._total_skill_points ?? 0) + count;
     await updateProfile({ completed_missions: cm });
   };
 

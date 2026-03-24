@@ -5,11 +5,15 @@ import { useState, useCallback, useEffect } from 'react';
  * writes back on every setState call. Falls back to defaultValue
  * if key is absent or unparseable.
  */
-export function usePersisted<T>(key: string, defaultValue: T): [T, (val: T | ((prev: T) => T)) => void] {
+export function usePersisted<T>(key: string, defaultValue: T, validate?: (v: unknown) => boolean): [T, (val: T | ((prev: T) => T)) => void] {
   const [value, setValueRaw] = useState<T>(() => {
     try {
       const stored = localStorage.getItem(key);
-      if (stored !== null) return JSON.parse(stored) as T;
+      if (stored !== null) {
+        const parsed = JSON.parse(stored);
+        if (validate && !validate(parsed)) return defaultValue;
+        return parsed as T;
+      }
     } catch { /* ignore */ }
     return defaultValue;
   });
@@ -77,9 +81,15 @@ export function cleanStalePracticeKeys(maxAgeDays = 7): void {
  * Returns the same interface as individual useStates but backed by localStorage.
  */
 export function usePracticePersistedState(missionId: number) {
-  const [phase, setPhase] = usePersisted<'green' | 'amber' | 'red'>(pk(missionId, 'phase'), 'green');
+  const [phase, setPhase] = usePersisted<'green' | 'amber' | 'red'>(
+    pk(missionId, 'phase'), 'green',
+    v => v === 'green' || v === 'amber' || v === 'red'
+  );
   const [tutorialStep, setTutorialStep] = usePersisted<number>(pk(missionId, 'step'), 0);
-  const [adaptiveTier, setAdaptiveTier] = usePersisted<1 | 2 | 3>(pk(missionId, 'tier'), 1);
+  const [adaptiveTier, setAdaptiveTier] = usePersisted<1 | 2 | 3>(
+    pk(missionId, 'tier'), 1,
+    v => v === 1 || v === 2 || v === 3
+  );
   const [consecutiveCorrect, setConsecutiveCorrect] = usePersisted<number>(pk(missionId, 'cc'), 0);
   const [consecutiveWrong, setConsecutiveWrong] = usePersisted<number>(pk(missionId, 'cw'), 0);
 

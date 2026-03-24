@@ -198,7 +198,7 @@ export const MapScreen = ({
                   onClick={() => setShowSkillTree(true)}
                   className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors"
                 >
-                  {lang === 'en' ? 'Skills' : '修炼'}
+                  {(t as any).skillTree ?? 'Skills'}
                 </button>
               )}
               {onRepairEquipment && (() => {
@@ -208,7 +208,7 @@ export const MapScreen = ({
                     onClick={() => setShowEquipmentPanel(true)}
                     className="relative px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors"
                   >
-                    {lang === 'en' ? 'Arsenal' : '装备库'}
+                    {(t as any).equipmentArsenal ?? 'Arsenal'}
                     {repairCount > 0 && (
                       <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">
                         {repairCount}
@@ -342,7 +342,7 @@ export const MapScreen = ({
                   {unitTitle}
                   {unitComplete && (
                     <span className="ml-1 px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full normal-case tracking-normal">
-                      {lang === 'en' ? 'Conquered' : '已征服'}
+                      {(t as any).unitConquered ?? 'Conquered'}
                     </span>
                   )}
                 </h3>
@@ -389,7 +389,7 @@ export const MapScreen = ({
                       >
                         {isNextUp && (
                           <div className="absolute -top-3 left-4 px-3 py-1 bg-amber-500 text-white text-[10px] font-black rounded-full z-10 shadow-md">
-                            {lang === 'en' ? 'Start here!' : '从这里开始！'}
+                            {(t as any).startHere ?? 'Start here!'}
                           </div>
                         )}
                         {isLastCleared && (
@@ -399,7 +399,7 @@ export const MapScreen = ({
                             transition={{ duration: 2.5, ease: "easeOut" }}
                             className="absolute -top-4 left-1/2 -translate-x-1/2 text-lg font-black text-yellow-400 z-50 pointer-events-none drop-shadow-md whitespace-nowrap"
                           >
-                            {lang === 'en' ? 'Cleared!' : '通关！'}
+                            {(t as any).missionCleared ?? 'Cleared!'}
                           </motion.div>
                         )}
                         {isPerfect && (
