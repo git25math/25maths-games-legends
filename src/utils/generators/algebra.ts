@@ -774,8 +774,8 @@ export function generateQuadraticMission(template: Mission): Mission {
   const y2 = a * x2 * x2 + c;
 
   const description: BilingualText = {
-    zh: `求抛物线 $y = ax^2 + c$ 的系数 $a$ 和 $c$。`,
-    en: `Find coefficients $a$ and $c$ of $y = ax^2 + c$.`,
+    zh: `抛物线经过 $A(${0}, ${c})$ 和 $B(${x2}, ${y2})$，求 $a$ 和 $c$。`,
+    en: `Parabola through $A(${0}, ${c})$ and $B(${x2}, ${y2})$ — find $a$ and $c$.`,
   };
   const tutorialSteps = [
     {

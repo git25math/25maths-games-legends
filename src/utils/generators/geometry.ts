@@ -315,8 +315,8 @@ export function generateAreaRectMission(template: Mission): Mission {
   const narrator = pickRandom(['刘备', '曹操', '孙权']);
 
   const description: BilingualText = {
-    zh: `计算营地面积。`,
-    en: `Calculate the camp area.`,
+    zh: `计算营地面积：长 $${length}$，宽 $${width}$。`,
+    en: `Calculate camp area: length $${length}$, width $${width}$.`,
   };
 
   const area = length * width;
@@ -391,8 +391,8 @@ export function generateAreaTrapMission(template: Mission): Mission {
   const narrator = pickRandom(['赵云', '关羽']);
 
   const description: BilingualText = {
-    zh: `计算梯形面积：$(a+b)h/2$。`,
-    en: `Calculate trapezoid area: $(a+b)h/2$.`,
+    zh: `计算梯形阵地面积：上底 $${a}$，下底 $${b}$，高 $${h}$。`,
+    en: `Calculate trapezoid area: top $${a}$, base $${b}$, height $${h}$.`,
   };
 
   const sumAB = a + b;
@@ -1025,8 +1025,8 @@ export function generateVolumeMission(template: Mission): Mission {
   const narrator = pickRandom(['满宠', '曹操', '刘备']);
 
   const description: BilingualText = isCone
-    ? { zh: `求圆锥体积 $V = \\frac{1}{3}\\pi r^2 h$（$\\pi=${pi}$）。`, en: `Find cone volume $V = \\frac{1}{3}\\pi r^2 h$ ($\\pi=${pi}$).` }
-    : { zh: `求圆柱体积 $V = \\pi r^2 h$（$\\pi=${pi}$）。`, en: `Find cylinder volume $V = \\pi r^2 h$ ($\\pi=${pi}$).` };
+    ? { zh: `求圆锥体积：半径 $${radius}$，高 $${height}$（$\\pi=${pi}$）。`, en: `Find cone volume: radius $${radius}$, height $${height}$ ($\\pi=${pi}$).` }
+    : { zh: `求圆柱体积：半径 $${radius}$，高 $${height}$（$\\pi=${pi}$）。`, en: `Find cylinder volume: radius $${radius}$, height $${height}$ ($\\pi=${pi}$).` };
 
   const baseArea = Math.round(pi * radius * radius * 100) / 100;
   const volRounded = Math.round(vol * 100) / 100;

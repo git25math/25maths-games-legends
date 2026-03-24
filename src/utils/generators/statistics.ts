@@ -12,8 +12,8 @@ export function generateProbSimpleMission(template: Mission): Mission {
   const narrator = '诸葛亮';
 
   const description: BilingualText = {
-    zh: `随机观一象，抽中吉兆的概率是多少？`,
-    en: `What is the probability of an auspicious omen?`,
+    zh: `$${total}$ 个卦象中有 $${target}$ 个吉兆，随机抽中的概率是？`,
+    en: `$${target}$ favorable outcomes out of $${total}$ total — find the probability.`,
   };
 
   const p = target / total;
@@ -91,8 +91,8 @@ export function generateProbIndMission(template: Mission): Mission {
   const narrator = '周瑜';
 
   const description: BilingualText = {
-    zh: `计算独立事件同时发生的概率：$P(A \\cap B) = P(A) \\times P(B)$。`,
-    en: `Calculate prob of independent events: $P(A \\cap B) = P(A) \\times P(B)$.`,
+    zh: `两场独立战役，胜率分别为 $${p1}$ 和 $${p2}$。两场都赢的概率是？`,
+    en: `Two independent battles with win rates $${p1}$ and $${p2}$. Probability of winning both?`,
   };
 
   const ans = p1 * p2;
