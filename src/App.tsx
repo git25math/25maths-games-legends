@@ -26,6 +26,7 @@ import { OnboardingScreen, isOnboardingDone, clearOnboardingFlag } from './scree
 import { cleanStalePracticeKeys } from './hooks/usePracticeState';
 import { getActiveSkillEffect } from './data/heroSkills';
 import { getLevelInfo } from './utils/xpLevels';
+import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
 
 // Clean up stale practice localStorage keys on startup
 cleanStalePracticeKeys();
@@ -215,6 +216,20 @@ export default function App() {
       // v7.0: Mark equipment on Red difficulty win
       if (selectedDifficulty === 'red') {
         await markEquipment(activeMission.id);
+      }
+
+      // v7.2: Season task tracking
+      if (profile) {
+        const cm = { ...profile.completed_missions } as any;
+        let sp = getSeasonProgress(cm);
+        sp = incrementTaskCount(sp, 'daily_battles_3');
+        if (selectedDifficulty === 'red') {
+          sp = incrementTaskCount(sp, 'weekly_red_3');
+        }
+        // Evaluate milestones
+        const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
+        cm._season = updatedProgress;
+        await updateProfile({ completed_missions: cm });
       }
     }
     setIsDailyBattle(false);

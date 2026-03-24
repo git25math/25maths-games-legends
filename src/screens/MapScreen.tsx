@@ -16,6 +16,7 @@ import { MissionProgressBar } from '../components/MissionProgressBar';
 import { SkillTreePanel } from '../components/SkillTreePanel';
 import { EquipmentPanel } from '../components/EquipmentPanel';
 import { EquipmentBadge } from '../components/EquipmentBadge';
+import { BattlePassPanel } from '../components/BattlePassPanel';
 import { getEquipmentState, countNeedsRepair } from '../utils/equipment';
 import type { CharacterProgression } from '../types';
 
@@ -77,6 +78,7 @@ export const MapScreen = ({
   // v7.0: Panel overlays
   const [showSkillTree, setShowSkillTree] = useState(false);
   const [showEquipmentPanel, setShowEquipmentPanel] = useState(false);
+  const [showBattlePass, setShowBattlePass] = useState(false);
 
   // Daily challenge countdown timer
   const [countdown, setCountdown] = useState(getSecondsUntilMidnight());
@@ -217,6 +219,12 @@ export const MapScreen = ({
                   </button>
                 );
               })()}
+              <button
+                onClick={() => setShowBattlePass(true)}
+                className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors"
+              >
+                {lang === 'en' ? 'Handbook' : '手册'}
+              </button>
               {onDashboard && (
                 <button
                   onClick={onDashboard}
@@ -482,6 +490,15 @@ export const MapScreen = ({
           onUnlock={(skillId) => onUnlockSkill(selectedChar.id, skillId)}
           onEquip={(skillId) => onEquipSkill(selectedChar.id, skillId)}
           onClose={() => setShowSkillTree(false)}
+        />
+      )}
+
+      {/* v7.2: Battle Pass / Growth Handbook */}
+      {showBattlePass && (
+        <BattlePassPanel
+          lang={lang}
+          completedMissions={profile.completed_missions as Record<string, unknown>}
+          onClose={() => setShowBattlePass(false)}
         />
       )}
 
