@@ -33,6 +33,7 @@ import { PerimeterRect } from '../components/diagrams/PerimeterRect';
 import { CoordinatePlane } from '../components/diagrams/CoordinatePlane';
 import { SubstitutionFlow } from '../components/diagrams/SubstitutionFlow';
 import { ProbabilityBar } from '../components/diagrams/ProbabilityBar';
+import { VennDiagram } from '../components/diagrams/VennDiagram';
 
 type Phase = 'green' | 'amber' | 'red';
 
@@ -358,6 +359,20 @@ export function renderDiagram(
 
   if (gen === 'PROBABILITY_IND_RANDOM' && d.p1 !== undefined && d.p2 !== undefined) {
     return <ProbabilityBar mode="independent" p1={d.p1 as number} p2={d.p2 as number} />;
+  }
+
+  // ── Venn diagram ──
+  if (gen === 'VENN_RANDOM' && d.aOnly !== undefined) {
+    return (
+      <VennDiagram
+        sets={[
+          { label: 'A', elements: [String(d.aOnly)] },
+          { label: 'B', elements: [String(d.bOnly)] },
+        ]}
+        intersection={[String(d.both)]}
+        universalLabel={`ξ = ${d.total}`}
+      />
+    );
   }
 
   return null;
