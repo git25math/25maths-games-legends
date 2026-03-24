@@ -15,6 +15,10 @@ export function markOnboardingDone(): void {
   localStorage.setItem(LS_ONBOARDING_KEY, '1');
 }
 
+export function clearOnboardingFlag(): void {
+  localStorage.removeItem(LS_ONBOARDING_KEY);
+}
+
 export const OnboardingScreen = ({
   lang,
   onComplete,
@@ -37,8 +41,23 @@ export const OnboardingScreen = ({
     }
   };
 
+  const skip = () => {
+    markOnboardingDone();
+    onComplete();
+  };
+
+  const phaseLabels = t.practicePhase as Record<string, string>;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] px-4">
+      {/* Skip button */}
+      <button
+        onClick={skip}
+        className="absolute top-6 right-20 text-white/30 hover:text-white/60 text-sm font-bold transition-colors"
+      >
+        {lang === 'en' ? 'Skip' : '跳过'}
+      </button>
+
       {/* Step indicators */}
       <div className="flex gap-2 mb-8">
         {[0, 1, 2].map(i => (
@@ -103,7 +122,7 @@ export const OnboardingScreen = ({
                 </div>
                 <div className="text-left">
                   <div className="text-emerald-400 font-black text-sm uppercase tracking-wide">
-                    {(t.practicePhase as any).green}
+                    {phaseLabels.green}
                   </div>
                   <div className="text-emerald-100/80 text-sm mt-0.5">
                     {t.onboardingPhaseGreen}
@@ -118,7 +137,7 @@ export const OnboardingScreen = ({
                 </div>
                 <div className="text-left">
                   <div className="text-amber-400 font-black text-sm uppercase tracking-wide">
-                    {(t.practicePhase as any).amber}
+                    {phaseLabels.amber}
                   </div>
                   <div className="text-amber-100/80 text-sm mt-0.5">
                     {t.onboardingPhaseAmber}
@@ -133,7 +152,7 @@ export const OnboardingScreen = ({
                 </div>
                 <div className="text-left">
                   <div className="text-rose-400 font-black text-sm uppercase tracking-wide">
-                    {(t.practicePhase as any).red}
+                    {phaseLabels.red}
                   </div>
                   <div className="text-rose-100/80 text-sm mt-0.5">
                     {t.onboardingPhaseRed}

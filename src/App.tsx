@@ -22,7 +22,7 @@ import { MapScreen } from './screens/MapScreen';
 import { LobbyScreen } from './screens/LobbyScreen';
 import { PracticeScreen } from './screens/PracticeScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
-import { OnboardingScreen, isOnboardingDone } from './screens/OnboardingScreen';
+import { OnboardingScreen, isOnboardingDone, clearOnboardingFlag } from './screens/OnboardingScreen';
 import { cleanStalePracticeKeys } from './hooks/usePracticeState';
 
 // Clean up stale practice localStorage keys on startup
@@ -243,6 +243,7 @@ export default function App() {
                 setSelectedCharId(null);
                 localStorage.removeItem(LS_STATE_KEY);
                 localStorage.removeItem(LS_GUEST_KEY);
+                clearOnboardingFlag();
               }}
               className="p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-full hover:bg-rose-500/30 transition-all"
             >
