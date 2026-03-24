@@ -762,7 +762,11 @@ export function generateQuadraticMission(template: Mission): Mission {
         highlightField: 'x',
       },
     ];
-    return { ...template, description, data: { p1: [0, 0], p2: [vertexX, vertexY], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
+    const story: BilingualText = {
+      zh: `最优化策略：目标函数 $f(x) = ${a}x^2 ${signCoeff(b, 'x')}$。求最大值时的 $x$。`,
+      en: `Optimize strategy: function $f(x) = ${a}x^2 ${signCoeff(b, 'x')}$. Find $x$ for maximum.`,
+    };
+    return { ...template, story, description, data: { p1: [0, 0], p2: [vertexX, vertexY], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
   }
 
   // Functions mode: y = ax² + c, p1=[0,c], p2=[x2, a*x2²+c]. Student finds a and c.
@@ -828,7 +832,11 @@ export function generateQuadraticMission(template: Mission): Mission {
       highlightField: 'c',
     },
   ];
-  return { ...template, description, data: { p1: [0, c], p2: [x2, y2], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
+  const story: BilingualText = {
+    zh: `抛物线 $y = ax^2 ${signTerm(c)}$ 经过点 $A(0,\\ ${c})$ 和 $B(${x2},\\ ${y2})$，求系数 $a$ 和 $c$。`,
+    en: `Parabola $y = ax^2 ${signTerm(c)}$ passes through $A(0,\\ ${c})$ and $B(${x2},\\ ${y2})$ — find $a$ and $c$.`,
+  };
+  return { ...template, story, description, data: { p1: [0, c], p2: [x2, y2], generatorType: 'QUADRATIC_RANDOM' }, tutorialSteps };
 }
 
 /* ══════════════════════════════════════════════════════════
