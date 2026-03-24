@@ -175,7 +175,12 @@ export const ExpeditionScreen = ({
           finishExpedition(nodesCleared, xpEarned, 'defeat');
         } else {
           // Show correct answer (keep student's input visible for comparison)
-          setCorrectAnswerText(getCorrectDisplay(question, lang));
+          // Prefer checker's expected values (handles computed answers like Pythagoras)
+          const expectedEntries = Object.entries(result.expected || {});
+          const answerText = expectedEntries.length > 0
+            ? expectedEntries.map(([k, v]) => `${k} = ${v}`).join('\u3000')
+            : getCorrectDisplay(question, lang);
+          setCorrectAnswerText(answerText);
           setShowCorrectAnswer(true);
           setTimeout(() => {
             setShowCorrectAnswer(false);
