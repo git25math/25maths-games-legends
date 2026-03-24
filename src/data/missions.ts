@@ -3504,7 +3504,7 @@ export const MISSIONS: Mission[] = [
     skillSummary: { zh: 'A = (θ/360)πr²', en: 'A = (θ/360)πr²' },
     story: { zh: '赤壁水寨呈扇形布局，需要计算扇形区域的面积来安排船只停泊。', en: 'The Red Cliffs harbor is sector-shaped. Calculate the sector area to arrange ship docking.' },
     description: { zh: '求扇形面积，已知半径和角度。', en: 'Find sector area given radius and angle.' },
-    data: { r: 10, angle: 90, generatorType: 'SECTOR_RANDOM', mode: 'area' }, difficulty: 'Medium', reward: 450,
+    data: { r: 10, angle: 90, generatorType: 'SECTOR_RANDOM', mode: 'sector_area' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-5.3-03', sectionId: 'geometry',
     tutorialSteps: [
       { text: { zh: '周瑜：扇形是什么？\n把一个圆"切一刀"——切出来的那块就是扇形。\n就像切披萨！角度决定你切了多大一块。', en: 'Zhou Yu: "What\'s a sector?\nCut a circle — the slice you get is a sector.\nLike cutting pizza! The angle decides how big your slice is."' }, highlightField: 'ans' },
