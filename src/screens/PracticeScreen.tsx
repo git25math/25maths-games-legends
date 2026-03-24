@@ -112,7 +112,7 @@ export const PracticeScreen = ({
         playTierUp();
         setAdaptiveTier(prev => Math.min(3, prev + 1) as DifficultyTier);
         setConsecutiveCorrect(0);
-        setPhaseToast(lang === 'en' ? 'Difficulty up! Numbers getting bigger.' : '难度提升！数字变大了。');
+        setPhaseToast((t as any).difficultyUp ?? 'Difficulty up!');
         setTimeout(() => setPhaseToast(null), 2000);
       }
       setTimeout(() => {
@@ -140,7 +140,7 @@ export const PracticeScreen = ({
         playTierDown();
         setAdaptiveTier(prev => Math.max(1, prev - 1) as DifficultyTier);
         setConsecutiveWrong(0);
-        setPhaseToast(lang === 'en' ? 'Easier numbers — keep going!' : '数字变简单了——继续加油！');
+        setPhaseToast((t as any).difficultyDown ?? 'Easier numbers!');
         setTimeout(() => setPhaseToast(null), 2000);
       }
       setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
@@ -168,8 +168,8 @@ export const PracticeScreen = ({
     const nextPhase = PHASE_ORDER[phaseIndex + 1];
     setCurrentPhase(nextPhase);
     // Show phase transition toast
-    const toastMsg = nextPhase === 'amber' ? (lang === 'en' ? 'Examples complete! Now try with hints.' : '例题看完了！现在试试有提示的练习。')
-      : (lang === 'en' ? 'Hints removed! You\'re on your own now.' : '提示已移除！现在独立挑战。');
+    const toastMsg = nextPhase === 'amber' ? ((t as any).phaseToAmber ?? 'Now try with hints.')
+      : ((t as any).phaseToRed ?? 'No hints — independent challenge!');
     setPhaseToast(toastMsg);
     setTimeout(() => setPhaseToast(null), 2500);
     regenerateQuestion();
@@ -268,7 +268,7 @@ export const PracticeScreen = ({
               {repairMode ? (
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-amber-400 text-xs font-bold">
-                    {lang === 'en' ? `Repair ${repairCorrect}/${REPAIR_TARGET}` : `修复 ${repairCorrect}/${REPAIR_TARGET}`}
+                    {`${(t as any).repair ?? '修复'} ${repairCorrect}/${REPAIR_TARGET}`}
                   </span>
                   <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden max-w-[120px]">
                     <div className="h-full bg-amber-400 rounded-full transition-all" style={{ width: `${(repairCorrect / REPAIR_TARGET) * 100}%` }} />
@@ -393,7 +393,7 @@ export const PracticeScreen = ({
               <>
                 {/* GREEN PHASE: Worked example — no input, just watch the solution */}
                 <div className="px-3 py-2 bg-amber-900/40 border border-amber-600/30 rounded-lg text-amber-100 text-xs font-bold text-center">
-                  {lang === 'en' ? 'Just watch — no need to answer! Click through each step.' : '只需要看——不用答题！逐步点击学习。'}
+                  {(t as any).greenPhaseHint ?? 'Just watch — click through each step.'}
                 </div>
                 {currentMission.tutorialSteps && (
                   <AnimatedTutorial
@@ -446,13 +446,13 @@ export const PracticeScreen = ({
                     <div className="text-amber-800 text-xs font-bold mb-1">{t.secretFormula}</div>
                     <MathView tex={resolveFormula(currentMission.secret.formula, lang)} className="text-lg font-black text-amber-900" />
                     <div className="text-amber-700/60 text-[10px] font-bold mt-1">
-                      {lang === 'en' ? 'Hint: use this formula with your numbers!' : '提示：把题目的数字代入这个公式！'}
+                      {(t as any).amberPhaseHint ?? 'Hint: use this formula!'}
                     </div>
                   </div>
                 )}
                 {currentPhase === 'red' && (
                   <div className="px-3 py-2 bg-rose-600/10 border border-rose-500/20 rounded-lg text-rose-300 text-xs font-bold text-center mb-2">
-                    {lang === 'en' ? 'No hints — you\'re on your own! You can do it.' : '没有提示了——独立挑战！你一定行。'}
+                    {(t as any).redPhaseHint ?? 'No hints — you can do it!'}
                   </div>
                 )}
 
