@@ -98,6 +98,8 @@ export const PracticeScreen = ({
         playTierUp();
         setAdaptiveTier(prev => Math.min(3, prev + 1) as DifficultyTier);
         setConsecutiveCorrect(0);
+        setPhaseToast(lang === 'en' ? 'Difficulty up! Numbers getting bigger.' : '难度提升！数字变大了。');
+        setTimeout(() => setPhaseToast(null), 2000);
       }
       setTimeout(() => {
         setShowCorrectFlash(false);
@@ -115,6 +117,8 @@ export const PracticeScreen = ({
         playTierDown();
         setAdaptiveTier(prev => Math.max(1, prev - 1) as DifficultyTier);
         setConsecutiveWrong(0);
+        setPhaseToast(lang === 'en' ? 'Easier numbers — keep going!' : '数字变简单了——继续加油！');
+        setTimeout(() => setPhaseToast(null), 2000);
       }
       setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
     }
@@ -275,6 +279,15 @@ export const PracticeScreen = ({
                   ))}
                 </div>
               )}
+              {/* Consecutive correct streak mini-bar */}
+              {currentPhase !== 'green' && consecutiveCorrect > 0 && (
+                <div className="flex items-center gap-1 ml-2">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className={`w-1.5 h-3 rounded-sm ${i <= consecutiveCorrect ? 'bg-emerald-400' : 'bg-white/15'}`} />
+                  ))}
+                  <span className="text-[8px] text-emerald-400/70 font-bold ml-0.5">{consecutiveCorrect}/3</span>
+                </div>
+              )}
               </div>
             </div>
           </div>
@@ -345,6 +358,9 @@ export const PracticeScreen = ({
           >            {currentPhase === 'green' ? (
               <>
                 {/* GREEN PHASE: Worked example — no input, just watch the solution */}
+                <div className="px-3 py-2 bg-emerald-600/10 border border-emerald-500/20 rounded-lg text-emerald-300 text-xs font-bold text-center">
+                  {lang === 'en' ? 'Just watch — no need to answer! Click through each step.' : '只需要看——不用答题！逐步点击学习。'}
+                </div>
                 {currentMission.tutorialSteps && (
                   <AnimatedTutorial
                     tutorialSteps={interpolatedTutorialSteps!}
@@ -395,6 +411,14 @@ export const PracticeScreen = ({
                   <div className="p-3 bg-amber-100 border-2 border-amber-300 rounded-lg mb-2">
                     <div className="text-amber-800 text-xs font-bold mb-1">{t.secretFormula}</div>
                     <MathView tex={resolveFormula(currentMission.secret.formula, lang)} className="text-lg font-black text-amber-900" />
+                    <div className="text-amber-700/60 text-[10px] font-bold mt-1">
+                      {lang === 'en' ? 'Hint: use this formula with your numbers!' : '提示：把题目的数字代入这个公式！'}
+                    </div>
+                  </div>
+                )}
+                {currentPhase === 'red' && (
+                  <div className="px-3 py-2 bg-rose-600/10 border border-rose-500/20 rounded-lg text-rose-300 text-xs font-bold text-center mb-2">
+                    {lang === 'en' ? 'No hints — you\'re on your own! You can do it.' : '没有提示了——独立挑战！你一定行。'}
                   </div>
                 )}
 
