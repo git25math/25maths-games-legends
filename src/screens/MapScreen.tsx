@@ -225,14 +225,14 @@ export const MapScreen = ({
                 onClick={() => setShowBattlePass(true)}
                 className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors"
               >
-                {lang === 'en' ? 'Handbook' : '手册'}
+                {(t as any).growthHandbook ?? '手册'}
               </button>
               {onStartExpedition && (
                 <button
                   onClick={onStartExpedition}
                   className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors animate-pulse"
                 >
-                  {lang === 'en' ? 'Expedition' : '远征'}
+                  {(t as any).expedition ?? '远征'}
                 </button>
               )}
               {onDashboard && (

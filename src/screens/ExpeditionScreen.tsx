@@ -164,7 +164,7 @@ export const ExpeditionScreen = ({
           </div>
           {nodesCleared > 0 && (
             <button onClick={handleRetreat} className="px-3 py-1.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-bold">
-              {lang === 'en' ? 'Retreat' : '撤退'}
+              {(t as any).retreat ?? 'Retreat'}
             </button>
           )}
         </div>
@@ -232,7 +232,7 @@ export const ExpeditionScreen = ({
           <p className="text-amber-400 font-bold mb-6">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '军粮'}</p>
           <p className="text-white/40 text-sm mb-8">{lang === 'en' ? `You now have ${rations} rations.` : `现在有 ${rations} 份军粮。`}</p>
           <button onClick={() => { setCurrentNodeIdx(prev => prev + 1); setPhase('map'); }} className="px-8 py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 transition-all">
-            {lang === 'en' ? 'Continue March' : '继续行军'}
+            {(t as any).continueMarching ?? 'Continue March'}
           </button>
         </motion.div>
       </div>
@@ -339,20 +339,20 @@ export const ExpeditionScreen = ({
         )}
 
         <h2 className={`text-2xl font-black mb-2 ${isVictory ? 'text-amber-400' : isRetreat ? 'text-amber-300' : 'text-rose-400'}`}>
-          {isVictory ? (lang === 'en' ? 'Expedition Complete!' : '远征胜利！')
-            : isRetreat ? (lang === 'en' ? 'Safe Retreat' : '安全撤退')
-            : (lang === 'en' ? 'Rations Depleted' : '军粮耗尽')}
+          {isVictory ? ((t as any).expeditionVictory ?? 'Expedition Complete!')
+            : isRetreat ? ((t as any).safeRetreat ?? 'Safe Retreat')
+            : ((t as any).rationsDepleted ?? 'Rations Depleted')}
         </h2>
 
         <p className="text-white/50 text-sm mb-6">
-          {isVictory ? (lang === 'en' ? 'You conquered all nodes! Full rewards earned.' : '你征服了所有节点！获得全额奖励。')
-            : isRetreat ? (lang === 'en' ? 'Smart retreat — keep what you earned.' : '明智的撤退——保留已获得的战果。')
-            : (lang === 'en' ? 'Your supplies ran out. Keep the XP you earned.' : '补给耗尽了。保留已获得的功勋。')}
+          {isVictory ? ((t as any).expeditionVictoryDesc ?? 'Full rewards earned.')
+            : isRetreat ? ((t as any).safeRetreatDesc ?? 'Keep what you earned.')
+            : ((t as any).rationsDepletedDesc ?? 'Keep the XP you earned.')}
         </p>
 
         <div className="flex justify-center gap-8 mb-8">
           <div className="text-center">
-            <span className="text-white/30 text-xs font-bold block">{lang === 'en' ? 'Nodes' : '节点'}</span>
+            <span className="text-white/30 text-xs font-bold block">{(t as any).nodes ?? 'Nodes'}</span>
             <span className="text-2xl font-black text-emerald-400">{nodesCleared}/{expedition.nodes.length}</span>
           </div>
           <div className="text-center">

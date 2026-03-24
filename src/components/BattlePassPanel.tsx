@@ -48,7 +48,7 @@ export const BattlePassPanel = ({
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-black text-white">
-              {lang === 'en' ? 'Growth Handbook' : '成长手册'}
+              {(t as any).growthHandbook ?? 'Growth Handbook'}
             </h2>
             <div className="flex items-center gap-2 mt-1">
               <span className="text-amber-400 font-black text-sm">Lv.{level}</span>
@@ -73,7 +73,7 @@ export const BattlePassPanel = ({
                 tab === t ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-white/5 text-white/40 border border-white/10'
               }`}
             >
-              {t === 'tasks' ? (lang === 'en' ? 'Tasks' : '任务') : (lang === 'en' ? 'Rewards' : '奖励')}
+              {t === 'tasks' ? ((translations[lang] as any).tasks ?? 'Tasks') : ((translations[lang] as any).rewards ?? 'Rewards')}
             </button>
           ))}
         </div>
@@ -86,7 +86,7 @@ export const BattlePassPanel = ({
               return (
                 <div key={freq}>
                   <div className="text-[10px] font-bold uppercase text-white/30 mb-1 tracking-wider">
-                    {freq === 'daily' ? (lang === 'en' ? 'Daily' : '每日') : freq === 'weekly' ? (lang === 'en' ? 'Weekly' : '每周') : (lang === 'en' ? 'Milestone' : '里程碑')}
+                    {freq === 'daily' ? ((translations[lang] as any).freqDaily ?? 'Daily') : freq === 'weekly' ? ((translations[lang] as any).freqWeekly ?? 'Weekly') : ((translations[lang] as any).freqMilestone ?? 'Milestone')}
                   </div>
                   {tasks.map(task => {
                     const status = getTaskStatus(task, progress);
