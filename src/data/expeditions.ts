@@ -77,10 +77,14 @@ export const EXPEDITIONS: Expedition[] = [
   },
 ];
 
-/** Get the best expedition for a grade (prefer grade-specific, fallback to broad range) */
+/** Get all expeditions available for a grade */
+export function getExpeditionsForGrade(grade: number): Expedition[] {
+  return EXPEDITIONS.filter(e => grade >= e.gradeMin && grade <= e.gradeMax);
+}
+
+/** Get the best single expedition for a grade (prefer grade-specific) */
 export function getExpeditionForGrade(grade: number): Expedition | undefined {
-  // Prefer narrow range first
-  const specific = EXPEDITIONS.find(e => grade >= e.gradeMin && grade <= e.gradeMax && (e.gradeMax - e.gradeMin <= 3));
-  if (specific) return specific;
-  return EXPEDITIONS.find(e => grade >= e.gradeMin && grade <= e.gradeMax);
+  const all = getExpeditionsForGrade(grade);
+  // Prefer narrower range (more targeted)
+  return all.sort((a, b) => (a.gradeMax - a.gradeMin) - (b.gradeMax - b.gradeMin))[0];
 }

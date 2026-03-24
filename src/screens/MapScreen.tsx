@@ -18,6 +18,7 @@ import { EquipmentPanel } from '../components/EquipmentPanel';
 import { EquipmentBadge } from '../components/EquipmentBadge';
 import { BattlePassPanel } from '../components/BattlePassPanel';
 import { getEquipmentState, countNeedsRepair } from '../utils/equipment';
+import { getExpeditionsForGrade, type Expedition } from '../data/expeditions';
 import type { CharacterProgression } from '../types';
 
 const CHAPTER_IMAGES = [
@@ -72,7 +73,7 @@ export const MapScreen = ({
   onUnlockSkill?: (charId: string, skillId: string) => void;
   onEquipSkill?: (charId: string, skillId: string | null) => void;
   onRepairEquipment?: (missionId: number) => void;
-  onStartExpedition?: () => void;
+  onStartExpedition?: (expeditionId: string) => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
@@ -227,14 +228,28 @@ export const MapScreen = ({
               >
                 {(t as any).growthHandbook ?? '手册'}
               </button>
-              {onStartExpedition && (
-                <button
-                  onClick={onStartExpedition}
-                  className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors animate-pulse"
-                >
-                  {(t as any).expedition ?? '远征'}
-                </button>
-              )}
+              {onStartExpedition && (() => {
+                const exps = getExpeditionsForGrade(profile.grade!);
+                if (exps.length === 0) return null;
+                if (exps.length === 1) return (
+                  <button
+                    onClick={() => onStartExpedition(exps[0].id)}
+                    className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors animate-pulse"
+                  >
+                    {(t as any).expedition ?? '远征'}
+                  </button>
+                );
+                // Multiple expeditions: show dropdown-like buttons
+                return exps.map(exp => (
+                  <button
+                    key={exp.id}
+                    onClick={() => onStartExpedition(exp.id)}
+                    className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors"
+                  >
+                    {lt(exp.name, lang)}
+                  </button>
+                ));
+              })()}
               {onDashboard && (
                 <button
                   onClick={onDashboard}

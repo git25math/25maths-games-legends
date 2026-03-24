@@ -28,7 +28,8 @@ import { getActiveSkillEffect } from './data/heroSkills';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
 import { ExpeditionScreen } from './screens/ExpeditionScreen';
-import { getExpeditionForGrade } from './data/expeditions';
+import { getExpeditionForGrade, getExpeditionsForGrade } from './data/expeditions';
+import type { Expedition } from './data/expeditions';
 
 // Clean up stale practice localStorage keys on startup
 cleanStalePracticeKeys();
@@ -108,6 +109,7 @@ export default function App() {
   const [lastClearedMissionId, setLastClearedMissionId] = useState<number | null>(null);
   const [isDailyBattle, setIsDailyBattle] = useState(false);
   const [isRepairMode, setIsRepairMode] = useState(false);
+  const [activeExpedition, setActiveExpedition] = useState<Expedition | null>(null);
 
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
   const {
@@ -387,7 +389,10 @@ export default function App() {
                   getTotalSP={getTotalSP}
                   onUnlockSkill={unlockSkill}
                   onEquipSkill={equipSkill}
-                  onStartExpedition={profile?.grade && getExpeditionForGrade(profile.grade) ? () => setGameState('expedition') : undefined}
+                  onStartExpedition={profile?.grade && getExpeditionsForGrade(profile.grade).length > 0 ? (expId: string) => {
+                    const exp = getExpeditionsForGrade(profile.grade!).find(e => e.id === expId);
+                    if (exp) { setActiveExpedition(exp); setGameState('expedition'); }
+                  } : undefined}
                   onRepairEquipment={(missionId) => {
                     const m = missions.find(m => m.id === missionId);
                     if (m) {
@@ -459,33 +464,29 @@ export default function App() {
                 />
               )}
 
-              {gameState === 'expedition' && profile?.grade && selectedChar && (() => {
-                const exp = getExpeditionForGrade(profile.grade);
-                if (!exp) return null;
-                return (
-                  <ExpeditionScreen
-                    expedition={exp}
-                    character={selectedChar}
-                    lang={lang}
-                    grade={profile.grade}
-                    onComplete={async (xpEarned, nodesCleared) => {
-                      if (profile && xpEarned > 0) {
-                        const cm = { ...profile.completed_missions } as any;
-                        // Season tracking: count expedition nodes as battles
-                        let sp = getSeasonProgress(cm);
-                        for (let i = 0; i < nodesCleared; i++) {
-                          sp = incrementTaskCount(sp, 'daily_battles_3');
-                        }
-                        const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
-                        cm._season = updatedProgress;
-                        await updateProfile({ total_score: profile.total_score + xpEarned, completed_missions: cm });
+              {gameState === 'expedition' && profile?.grade && selectedChar && activeExpedition && (
+                <ExpeditionScreen
+                  expedition={activeExpedition}
+                  character={selectedChar}
+                  lang={lang}
+                  grade={profile.grade}
+                  onComplete={async (xpEarned, nodesCleared) => {
+                    if (profile && xpEarned > 0) {
+                      const cm = { ...profile.completed_missions } as any;
+                      let sp = getSeasonProgress(cm);
+                      for (let i = 0; i < nodesCleared; i++) {
+                        sp = incrementTaskCount(sp, 'daily_battles_3');
                       }
-                      setGameState('map');
-                    }}
-                    onCancel={() => setGameState('map')}
-                  />
-                );
-              })()}
+                      const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
+                      cm._season = updatedProgress;
+                      await updateProfile({ total_score: profile.total_score + xpEarned, completed_missions: cm });
+                    }
+                    setActiveExpedition(null);
+                    setGameState('map');
+                  }}
+                  onCancel={() => { setActiveExpedition(null); setGameState('map'); }}
+                />
+              )}
 
               {gameState === 'dashboard' && (
                 <DashboardScreen
