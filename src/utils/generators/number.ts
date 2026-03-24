@@ -693,8 +693,13 @@ export function generateMixedImproperMission(template: Mission): Mission {
       },
     ];
 
+    const story: BilingualText = {
+      zh: `运粮队有 ${whole} 整箱加 $\\frac{${num}}{${den}}$ 箱散装。全拆成散装，$${whole}\\frac{${num}}{${den}}$ 拆成多少个 $\\frac{1}{${den}}$？`,
+      en: `Supply convoy: ${whole} full crates plus $\\frac{${num}}{${den}}$ crate loose. Unpack everything — $${whole}\\frac{${num}}{${den}}$ = how many ${den}ths?`,
+    };
     return {
       ...template,
+      story,
       description,
       data: { whole, num, den, improperNum, answer, mode, generatorType: 'MIXED_IMPROPER_RANDOM' },
       tutorialSteps,
@@ -753,8 +758,13 @@ export function generateMixedImproperMission(template: Mission): Mission {
       },
     ];
 
+    const story: BilingualText = {
+      zh: `散装粮草 $\\frac{${improperNum}}{${den}}$ 份，重新装箱。每 ${den} 份一箱，能装几整箱？`,
+      en: `Loose grain: $\\frac{${improperNum}}{${den}}$ portions. Repack — every ${den} portions = 1 crate. How many full crates?`,
+    };
     return {
       ...template,
+      story,
       description,
       data: { whole, num, den, improperNum, answer, mode, generatorType: 'MIXED_IMPROPER_RANDOM' },
       tutorialSteps,

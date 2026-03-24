@@ -383,7 +383,11 @@ export function generateDerivativeMission(template: Mission): Mission {
       highlightField: 'k',
     },
   ];
-  return { ...template, description, data: { x, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
+  const story: BilingualText = {
+    zh: `山坡曲线 $y = x^2$，在 $x = ${x}$ 处修筑切线支架，斜率 $k$ 是多少？`,
+    en: `Slope curve $y = x^2$: build a tangent support at $x = ${x}$. What is the slope $k$?`,
+  };
+  return { ...template, story, description, data: { x, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
 }
 
 /* ══════════════════════════════════════════════════════════

@@ -458,8 +458,13 @@ export function generateInequalityMission(template: Mission): Mission {
     },
   ];
 
+  const story: BilingualText = {
+    zh: `出征前条件必须满足！解不等式 $${a}x + ${b} ${op} ${c}$，找到 $x$ 的范围。`,
+    en: `Before marching, the condition must hold! Solve $${a}x + ${b} ${op} ${c}$ to find the range of $x$.`,
+  };
   return {
     ...template,
+    story,
     description,
     data: { a, b, c, op, answer, generatorType: 'INEQUALITY_RANDOM' },
     tutorialSteps,
@@ -592,8 +597,13 @@ export function generateSubstitutionMission(template: Mission): Mission {
     },
   ];
 
+  const story: BilingualText = {
+    zh: `军师密令：代入 $x = ${x}$，计算 $${expr}$ 的值。`,
+    en: `Strategist's coded order: substitute $x = ${x}$ to find the value of $${expr}$.`,
+  };
   return {
     ...template,
+    story,
     description,
     data: { a, b, x, answer, mode, expr, generatorType: 'SUBSTITUTION_RANDOM' },
     tutorialSteps,
@@ -874,7 +884,12 @@ export function generateRootsMission(template: Mission): Mission {
     { text: { zh: `${narrator}：答案：$x = ${r1}$ 或 $x = ${r2}$!`, en: `${narrator}: "Answer: $x = ${r1}$ or $x = ${r2}$!"` }, highlightField: 'x' },
     { text: { zh: `${narrator}：验算——代根回原方程 ✓\n把 $x = ${r1}$ 代入：$(${r1})^2 ${signCoeff(b, '')}(${r1}) ${signTerm(c)} = ${r1*r1 + b*r1 + c}$ ✓\n把 $x = ${r2}$ 代入：$(${r2})^2 ${signCoeff(b, '')}(${r2}) ${signTerm(c)} = ${r2*r2 + b*r2 + c}$ ✓\n两个都等于 0，验证通过！`, en: `${narrator}: "Verify — substitute roots back ✓\nPut $x = ${r1}$: $(${r1})^2 ${signCoeff(b, '')}(${r1}) ${signTerm(c)} = ${r1*r1 + b*r1 + c}$ ✓\nPut $x = ${r2}$: $(${r2})^2 ${signCoeff(b, '')}(${r2}) ${signTerm(c)} = ${r2*r2 + b*r2 + c}$ ✓\nBoth equal 0 — verified!"` }, highlightField: 'x' },
   ];
-  return { ...template, description, data: { a, b, c, generatorType: 'ROOTS_RANDOM' }, tutorialSteps };
+  const quadEqOnly = `x^2 ${signCoeff(b, 'x')} ${signTerm(c)}`;
+  const story: BilingualText = {
+    zh: `投石轨迹 $y = ${quadEqOnly}$，令 $y = 0$ 求落地点——求方程 $${quadDisplay}$ 的根。`,
+    en: `Catapult trajectory $y = ${quadEqOnly}$. Set $y = 0$ to find landing — solve $${quadDisplay}$.`,
+  };
+  return { ...template, story, description, data: { a, b, c, generatorType: 'ROOTS_RANDOM' }, tutorialSteps };
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -937,8 +952,13 @@ export function generateSimultaneousMission(template: Mission): Mission {
     { text: { zh: `${narrator}：验算——把 $x = ${x}$，$y = ${y}$ 代回两个方程 ✓\n方程1：$${a1}(${x}) ${signCoeff(b1, '')}(${y}) = ${a1*x + b1*y}$ = $${c1}$ ✓\n方程2：$${a2}(${x}) ${signCoeff(b2, '')}(${y}) = ${a2*x + b2*y}$ = $${c2}$ ✓\n两个方程都成立，验证通过！`, en: `${narrator}: "Verify — substitute $x = ${x}$, $y = ${y}$ back into both equations ✓\nEq1: $${a1}(${x}) ${signCoeff(b1, '')}(${y}) = ${a1*x + b1*y}$ = $${c1}$ ✓\nEq2: $${a2}(${x}) ${signCoeff(b2, '')}(${y}) = ${a2*x + b2*y}$ = $${c2}$ ✓\nBoth equations hold — verified!"` }, highlightField: 'x' },
   ];
 
+  const story: BilingualText = {
+    zh: `两军军费联立方程：$${eq1Display}$，$${eq2Display}$。求各项开支 $x$ 和 $y$。`,
+    en: `Military budget system: $${eq1Display}$, $${eq2Display}$. Find expenditures $x$ and $y$.`,
+  };
   return {
     ...template,
+    story,
     description,
     data: { eq1: [a1, b1, c1], eq2: [a2, b2, c2], x, y, generatorType: 'SIMULTANEOUS_RANDOM' },
     tutorialSteps,
@@ -1135,7 +1155,11 @@ export function generateFuncValMission(template: Mission): Mission {
         highlightField: 'y',
       },
     ];
-    return { ...template, description, data: { m, b, x, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
+    const story: BilingualText = {
+      zh: `函数 $y = ${funcDisplay}$，当 $x = ${x}$ 时，函数值是多少？`,
+      en: `Function $y = ${funcDisplay}$: what is the value when $x = ${x}$?`,
+    };
+    return { ...template, story, description, data: { m, b, x, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
   }
 
   // Vertex form: t = -b/(2a)
@@ -1195,7 +1219,12 @@ export function generateFuncValMission(template: Mission): Mission {
       highlightField: 't',
     },
   ];
-  return { ...template, description, data: { a, b: bCoeff, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
+  const funcDisp = `${a}x^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff}x`;
+  const story: BilingualText = {
+    zh: `函数 $f(x) = ${funcDisp}$ 的${a > 0 ? '最小' : '最大'}值在哪里？求顶点横坐标 $t$。`,
+    en: `Where is the ${a > 0 ? 'minimum' : 'maximum'} of $f(x) = ${funcDisp}$? Find the vertex coordinate $t$.`,
+  };
+  return { ...template, story, description, data: { a, b: bCoeff, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
 }
 
 /* ══════════════════════════════════════════════════════════
