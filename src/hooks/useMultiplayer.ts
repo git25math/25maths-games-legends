@@ -7,8 +7,9 @@ import { handleSupabaseError } from '../utils/errors';
 export function useMultiplayer(user: User | null, profile: UserProfile | null) {
   const [activeRoom, setActiveRoom] = useState<Room | null>(null);
 
-  const createRoom = async (type: 'team' | 'pk', missionId: number) => {
-    if (!user || !profile) return;
+  /** Create a room. Returns true on success. */
+  const createRoom = async (type: 'team' | 'pk', missionId: number): Promise<boolean> => {
+    if (!user || !profile) return false;
     const roomData = {
       type,
       mission_id: missionId,
@@ -24,13 +25,14 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
       host_id: user.id,
     };
     const { data, error } = await supabase.from('gl_rooms').insert(roomData).select().single();
-    if (error) { handleSupabaseError(error, 'create', 'gl_rooms'); return; }
+    if (error) { handleSupabaseError(error, 'create', 'gl_rooms'); return false; }
     setActiveRoom({ ...data, id: data.id, hostId: data.host_id, missionId: data.mission_id } as Room);
+    return true;
   };
 
-  /** Join a room by full UUID or short code prefix. Returns true on success. */
-  const joinRoom = async (roomId: string): Promise<boolean> => {
-    if (!user || !profile) return false;
+  /** Join a room by full UUID or short code prefix. Returns error message or empty string on success. */
+  const joinRoom = async (roomId: string): Promise<string> => {
+    if (!user || !profile) return 'not_logged_in';
 
     let actualId = roomId;
 
@@ -38,27 +40,29 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     // (UUID columns don't support ilike in PostgREST)
     if (roomId.length < 36) {
       const code = roomId.toLowerCase();
-      const { data: rooms } = await supabase
+      const { data: rooms, error: listErr } = await supabase
         .from('gl_rooms')
         .select('*')
         .eq('status', 'waiting')
         .order('created_at', { ascending: false })
         .limit(50);
-      const match = rooms?.find(r => r.id.toLowerCase().startsWith(code));
-      if (!match) return false;
+      if (listErr) return `query_error: ${listErr.message}`;
+      if (!rooms?.length) return 'no_waiting_rooms';
+      const match = rooms.find(r => r.id.toLowerCase().startsWith(code));
+      if (!match) return `no_match: ${rooms.length} rooms checked, code=${code}`;
       actualId = match.id;
     }
 
     const { data: room, error: getErr } = await supabase.from('gl_rooms').select('*').eq('id', actualId).single();
-    if (getErr || !room) return false;
+    if (getErr || !room) return `room_not_found: ${getErr?.message ?? 'null'}`;
 
-    if (room.status !== 'waiting') return false;
+    if (room.status !== 'waiting') return `room_status: ${room.status}`;
 
     const players = { ...room.players, [user.id]: { name: profile.display_name, score: 0, isReady: false, charId: profile.selected_char_id } };
     const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', actualId);
-    if (error) return false;
+    if (error) return `update_error: ${error.message}`;
     setActiveRoom({ ...room, players, id: room.id, hostId: room.host_id, missionId: room.mission_id } as Room);
-    return true;
+    return '';
   };
 
   const toggleReady = async () => {

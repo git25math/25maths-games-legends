@@ -830,15 +830,22 @@ export default function App() {
                   lang={lang}
                   grade={profile.grade}
                   onCreateRoom={async (missionId) => {
-                    await createRoom('pk', missionId);
-                    setGameState('lobby');
-                  }}
-                  onJoinRoom={async (code) => {
-                    const ok = await joinRoom(code);
+                    const ok = await createRoom('pk', missionId);
                     if (ok) {
                       setGameState('lobby');
                     } else {
-                      alert(lang === 'en' ? 'Room not found. Check the code and try again.' : '未找到房间，请检查代码后重试。');
+                      alert(lang === 'en' ? 'Failed to create room. Please try again.' : '创建房间失败，请重试。');
+                    }
+                  }}
+                  onJoinRoom={async (code) => {
+                    const err = await joinRoom(code);
+                    if (!err) {
+                      setGameState('lobby');
+                    } else {
+                      const msg = lang === 'en'
+                        ? `Could not join room: ${err}`
+                        : `无法加入房间: ${err}`;
+                      alert(msg);
                     }
                   }}
                   onClose={() => setGameState('map')}
