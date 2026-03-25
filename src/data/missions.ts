@@ -9,7 +9,7 @@ export const MISSIONS: Mission[] = [
     title: { zh: '点兵编队', en: 'Troop Formation Count' },
     skillName: { zh: '因数列举术', en: 'Listing Factors' },
     skillSummary: { zh: '因数就是能整除一个数的数——把士兵分成几种等分方式', en: 'Factors are numbers that divide evenly — find all ways to split soldiers into equal groups' },
-    story: { zh: '刘备刚招募了一批新兵，要想办法编队。24 个士兵可以分成几种等人数的队？2 人一队、3 人一队、4 人一队...把所有可能的分法都找出来！', en: 'Liu Bei just recruited soldiers and needs to form squads. 24 soldiers — how many ways to divide them into equal groups? 2 per squad, 3 per squad, 4 per squad... find all possible divisions!' },
+    story: { zh: '刘备刚招募了一批新兵，要想办法编队。{n} 个士兵可以分成几种等人数的队？2 人一队、3 人一队、4 人一队...把所有可能的分法都找出来！', en: 'Liu Bei just recruited soldiers and needs to form squads. {n} soldiers — how many ways to divide them into equal groups? 2 per squad, 3 per squad, 4 per squad... find all possible divisions!' },
     description: { zh: '这个数有几个因数？', en: 'How many factors does this number have?' },
     data: { n: 24, factors: [1, 2, 3, 4, 6, 8, 12, 24], answer: 8, generatorType: 'FACTORS_LIST_RANDOM' }, difficulty: 'Easy', reward: 35,
     kpId: 'kp-1.1-02', sectionId: 'number',
