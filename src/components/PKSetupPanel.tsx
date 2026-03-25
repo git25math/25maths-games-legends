@@ -5,6 +5,7 @@ import type { Language, Mission } from '../types';
 import { lt } from '../i18n/resolveText';
 import { MISSIONS } from '../data/missions';
 import { useAudio } from '../audio';
+import { useEscapeKey } from '../hooks/useEscapeKey';
 
 export const PKSetupPanel = ({
   lang,
@@ -20,6 +21,7 @@ export const PKSetupPanel = ({
   onClose: () => void;
 }) => {
   const { playTap } = useAudio();
+  useEscapeKey(onClose);
   const [mode, setMode] = useState<'choose' | 'create' | 'join'>('choose');
   const [roomCode, setRoomCode] = useState('');
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);

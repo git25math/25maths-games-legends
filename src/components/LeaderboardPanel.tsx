@@ -5,6 +5,7 @@ import { supabase } from '../supabase';
 import { getLevelInfo } from '../utils/xpLevels';
 import { CharacterAvatar } from './CharacterAvatar';
 import type { Language } from '../types';
+import { useEscapeKey } from '../hooks/useEscapeKey';
 
 type LeaderEntry = {
   user_id: string;
@@ -47,6 +48,7 @@ export const LeaderboardPanel = ({
   classTags?: string[];
   onClose: () => void;
 }) => {
+  useEscapeKey(onClose);
   const hasClass = classTags && classTags.length > 0;
   const availableTabs: TabId[] = hasClass ? ['grade', 'class', 'weekly'] : ['grade', 'weekly'];
   const [tab, setTab] = useState<TabId>(hasClass ? 'class' : 'grade');

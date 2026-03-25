@@ -8,6 +8,7 @@ import { STREAK_MILESTONES } from '../data/streakMilestones';
 import { SEASON_BORDERS, getSeasonLevel } from '../data/seasons/season1';
 import { getSeasonProgress } from '../utils/seasonTracker';
 import { useAudio } from '../audio';
+import { useEscapeKey } from '../hooks/useEscapeKey';
 
 type AchievementCategory = 'journey' | 'streak' | 'season' | 'collection';
 
@@ -234,6 +235,7 @@ export const AchievementWallPanel = ({
   onClose: () => void;
 }) => {
   const { playTap } = useAudio();
+  useEscapeKey(onClose);
   const [activeCategory, setActiveCategory] = useState<AchievementCategory>('journey');
 
   const { stats, catCounts } = useMemo(() => {

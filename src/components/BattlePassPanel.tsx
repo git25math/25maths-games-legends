@@ -7,6 +7,7 @@ import { lt } from '../i18n/resolveText';
 import { SEASON_1_TASKS, SEASON_1_REWARDS, getSeasonLevel, type SeasonTask } from '../data/seasons/season1';
 import { getSeasonProgress, getTaskStatus, type SeasonProgress } from '../utils/seasonTracker';
 import { useAudio } from '../audio';
+import { useEscapeKey } from '../hooks/useEscapeKey';
 
 const FREQ_ICONS: Record<string, typeof Star> = { daily: Flame, weekly: Swords, milestone: Star };
 const FREQ_COLORS: Record<string, string> = {
@@ -26,6 +27,7 @@ export const BattlePassPanel = ({
 }) => {
   const t = translations[lang];
   const { playTap } = useAudio();
+  useEscapeKey(onClose);
   const [tab, setTab] = useState<'tasks' | 'rewards'>('tasks');
 
   const progress = getSeasonProgress(completedMissions);

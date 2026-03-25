@@ -170,6 +170,7 @@ export default function App() {
   useEffect(() => {
     if (gameState !== 'battle' || !pkFirstFinish) {
       setPkCountdown(null);
+      pkAutoCompleteRef.current = false; // reset on any non-battle state
       return;
     }
     // If current user already finished, no countdown
@@ -895,7 +896,7 @@ export default function App() {
                       alert(msg);
                     }
                   }}
-                  onClose={() => setGameState('map')}
+                  onClose={() => { leaveRoom(); setGameState('map'); }}
                 />
               )}
             </motion.div>
