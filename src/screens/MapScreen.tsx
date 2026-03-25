@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
@@ -400,6 +400,19 @@ export const MapScreen = ({
     </div>
   );
 
+  // Memoize smart recommendation to avoid re-computing on every render
+  const smartRecommendation = useMemo(() => {
+    const mistakes = getMistakes(profile.completed_missions as Record<string, unknown>);
+    const weakRanked = rankByWeakness(mistakes);
+    const gradeMissionIds = new Set(gradeMissions.map(m => m.id));
+    const weakInGrade = weakRanked.find(id => gradeMissionIds.has(id));
+    if (weakInGrade) {
+      const m = gradeMissions.find(gm => gm.id === weakInGrade);
+      if (m) return { recommendedMission: m, isWeakRecommendation: true as const };
+    }
+    return { recommendedMission: currentUnit?.firstPlayable ?? null, isWeakRecommendation: false as const };
+  }, [profile.completed_missions, gradeMissions, currentUnit]);
+
   return (
     <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12">
       {/* ═══════════════════ Profile Header ═══════════════════ */}
@@ -596,18 +609,7 @@ export const MapScreen = ({
         lang={lang}
         completedMissions={profile.completed_missions as Record<string, unknown>}
         onSmartStart={(m) => { playTap(); onPracticeStart(m); }}
-        {...(() => {
-          // Priority: weakest mission in current grade > firstPlayable
-          const mistakes = getMistakes(profile.completed_missions as Record<string, unknown>);
-          const weakRanked = rankByWeakness(mistakes);
-          const gradeMissionIds = new Set(gradeMissions.map(m => m.id));
-          const weakInGrade = weakRanked.find(id => gradeMissionIds.has(id));
-          if (weakInGrade) {
-            const m = gradeMissions.find(gm => gm.id === weakInGrade);
-            if (m) return { recommendedMission: m, isWeakRecommendation: true };
-          }
-          return { recommendedMission: currentUnit?.firstPlayable ?? null, isWeakRecommendation: false };
-        })()}
+        {...smartRecommendation}
       />
 
       {/* ═══════════════════ Mission Map ═══════════════════ */}

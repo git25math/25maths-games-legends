@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Swords, Zap, Target } from 'lucide-react';
 import type { Language } from '../types';
@@ -36,12 +37,21 @@ export const BattleModeSelector = ({
   onSelect: (mode: BattleMode) => void;
 }) => {
   const l = LABELS[lang] ?? LABELS.en;
+
+  // Escape key defaults to classic mode
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onSelect('classic'); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onSelect]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[65] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+      onClick={(e) => { if (e.target === e.currentTarget) onSelect('classic'); }}
     >
       <motion.div
         initial={{ scale: 0.9, y: 30 }}

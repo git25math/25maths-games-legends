@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { Trophy, X, RefreshCw, Users, TrendingUp } from 'lucide-react';
 import { supabase } from '../supabase';
@@ -117,12 +117,15 @@ export const LeaderboardPanel = ({
     });
   };
 
+  const mountedRef = useRef(true);
+  useEffect(() => () => { mountedRef.current = false; }, []);
+
   const fetchData = () => {
     setLoading(true);
     setError(false);
     Promise.all([fetchGrade(), fetchClass(), fetchWeekly()])
-      .then(() => setLoading(false))
-      .catch(() => { setError(true); setLoading(false); });
+      .then(() => { if (mountedRef.current) setLoading(false); })
+      .catch(() => { if (mountedRef.current) { setError(true); setLoading(false); } });
   };
 
   useEffect(fetchData, [grade]);
