@@ -15,6 +15,8 @@ import { MISSIONS } from '../data/missions';
 import { lt } from '../i18n/resolveText';
 import { AlertPanel, computeAlerts } from '../components/dashboard/AlertPanel';
 import { StudentDetailCard } from '../components/dashboard/StudentDetailCard';
+import { ClassOverview } from '../components/dashboard/ClassOverview';
+import { KPHeatmap } from '../components/dashboard/KPHeatmap';
 import type { StudentRow, UnitEntry } from '../components/dashboard/types';
 
 type Props = {
@@ -305,6 +307,9 @@ export function DashboardScreen({ lang, onClose }: Props) {
         if (s) setSelectedStudent(s);
       }} />
 
+      {/* ═══ Class Overview Cards (v8.1) ═══ */}
+      <ClassOverview lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} totalMissions={totalMissions} />
+
       {/* Tag filter chips */}
       <div className="flex items-center gap-2 mb-4 px-1 flex-wrap">
         <Tag size={14} className="text-slate-500" />
@@ -358,6 +363,12 @@ export function DashboardScreen({ lang, onClose }: Props) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ═══ KP Heatmap (v8.1) ═══ */}
+      <KPHeatmap lang={lang} grade={grade} filterTag={filterTag} students={students} onStudentClick={(uid) => {
+        const s = students.find(st => st.user_id === uid);
+        if (s) setSelectedStudent(s);
+      }} />
 
       {/* Live indicator + stats row */}
       <div className="flex items-center justify-between mb-3 px-1">

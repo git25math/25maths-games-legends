@@ -94,19 +94,11 @@ export const StudentDetailCard = ({
   const [kpRecords, setKpRecords] = useState<KPRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch battle history + KP records
-  // NOTE: gl_battle_results RLS policy only allows user to see own data.
-  // Teacher sees empty battles unless RLS is updated or an RPC with SECURITY DEFINER is added.
-  // play_kp_progress has the same limitation. Radar degrades gracefully with zeros.
+  // Fetch battle history + KP records via SECURITY DEFINER RPCs (bypasses RLS for teacher access)
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      supabase
-        .from('gl_battle_results')
-        .select('mission_id, success, score, duration_secs, created_at')
-        .eq('user_id', student.user_id)
-        .order('created_at', { ascending: false })
-        .limit(100),
+      supabase.rpc('get_student_battles', { p_user_id: student.user_id }),
       supabase
         .from('play_kp_progress')
         .select('kp_id, wins, attempts, mastered_at')
