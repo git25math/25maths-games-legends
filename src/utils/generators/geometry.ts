@@ -18,11 +18,45 @@ export function generateAnglesMission(template: Mission): Mission {
   };
 
   const tutorialSteps = [
-    ...(template.tutorialSteps || []),
     {
       text: {
-        zh: `${narrator}：验算——所有角加起来\n$${ans} + ${angle} = ${total}$ ✓\n等于 $${total}°$，完全正确！`,
-        en: `${narrator}: "Verify — all angles add up\n$${ans} + ${angle} = ${total}$ ✓\nEquals $${total}°$, perfectly correct!"`,
+        zh: `${narrator}：为什么要学角度？\n想象你站在城墙上——射箭的角度、城门的开合、军旗的倾斜——全是角度！\n${total === 90 ? '两个角加起来 = 90°，叫"余角"。' : '两个角加起来 = 180°（一条直线），叫"补角"。'}\n学会角度计算，才能精准攻防！`,
+        en: `${narrator}: "Why learn angles?\nImagine standing on the city wall — arrow angles, gate openings, flag tilts — all angles!\n${total === 90 ? 'Two angles adding to 90° are complementary.' : 'Two angles adding to 180° (a straight line) are supplementary.'}\nMaster angle calculations for precise attack and defense!"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：${kind.zh}的关系——两个角加起来等于 $${total}°$\n已知一个角是 $${angle}°$，另一个是多少？\n\n就像天平——一边放了 $${angle}°$，另一边要放多少才能平衡到 $${total}°$？`,
+        en: `${narrator}: "${kind.en} angles add up to $${total}°$\nOne angle is $${angle}°$ — what's the other?\n\nLike a balance — $${angle}°$ on one side, how much on the other to reach $${total}°$?"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：列式——$x = ${total} - ${angle}$`,
+        en: `${narrator}: "Set up: $x = ${total} - ${angle}$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算——$x = ${total} - ${angle} = ${ans}$\n\n所以${kind.zh}是 $${ans}°$！`,
+        en: `${narrator}: "Calculate: $x = ${total} - ${angle} = ${ans}$\n\nSo the ${kind.en} angle is $${ans}°$!"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——把两个角加起来\n$${ans} + ${angle} = ${total}$ ✓\n等于 $${total}°$，完全正确！`,
+        en: `${narrator}: "Verify — add both angles\n$${ans} + ${angle} = ${total}$ ✓\nEquals $${total}°$, correct!"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：记住！${total === 90 ? '余角 = 90° 减已知角' : '补角 = 180° 减已知角'}\n公式：$x = ${total} - \\text{已知角}$\n\n城墙上每个角度都关乎生死——算准了才能赢！`,
+        en: `${narrator}: "Remember! ${total === 90 ? 'Complementary = 90° minus known angle' : 'Supplementary = 180° minus known angle'}\nFormula: $x = ${total} - \\text{known angle}$\n\nEvery angle on the wall matters — get it right to win!"`,
       },
       highlightField: 'x',
     },
@@ -383,9 +417,9 @@ export function generateAreaTrapMission(template: Mission): Mission {
   const aPools = { 1: [3, 5, 8], 2: null, 3: [10, 15, 20] };
   const bOffsets = { 1: [2, 5], 2: null, 3: [5, 15] };
   const hPools = { 1: [3, 5, 7], 2: null, 3: [8, 12, 18] };
-  let a = tier === 2 ? randInt(5, 20) : pickRandom(aPools[tier]!);
-  let b = tier === 2 ? randInt(a + 2, a + 20) : a + pickRandom(bOffsets[tier]!);
-  let h = tier === 2 ? randInt(4, 15) : pickRandom(hPools[tier]!);
+  let a = tier === 2 ? randInt(5, 15) : pickRandom(aPools[tier]!);
+  let b = tier === 2 ? randInt(a + 2, a + 10) : a + pickRandom(bOffsets[tier]!);
+  let h = tier === 2 ? randInt(4, 12) : pickRandom(hPools[tier]!);
   // Ensure (a+b)*h is even so area is integer
   if (((a + b) * h) % 2 !== 0) h += 1;
   const narrator = pickRandom(['赵云', '关羽']);

@@ -88,8 +88,15 @@ export function generateTwoStepEqMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
-        zh: `${narrator}：一步方程你会了——现在升级：两步方程！\n两步方程 $${a}x + ${b} = ${result}$，$x$ 被包了两层！\n\n就像攻城——两道门：外门（$+${b}$）和内门（$\\times ${a}$）。先攻外门，再攻内门。`,
-        en: `${narrator}: "You've mastered one-step — now level up: two-step equations!\n$${a}x + ${b} = ${result}$, $x$ is double-wrapped!\n\nLike a siege — two gates: outer ($+${b}$) and inner ($\\times ${a}$). Break outer first, then inner."`,
+        zh: `${narrator}：为什么要学两步方程？\n现实中的问题很少"一步到位"——"买 ${a} 件东西再付 ${b} 元运费，共花了 ${result} 元，每件多少钱？"\n两步方程就是帮你一层层拆开这种"包裹"的工具。\n\n学会两步方程，现实中大部分未知数都能求出来！`,
+        en: `${narrator}: "Why learn two-step equations?\nReal problems rarely have one step — '${a} items plus ${b} yuan shipping = ${result} yuan total, how much per item?'\nTwo-step equations help you unwrap these layers.\n\nMaster this, and you can solve most real-world unknowns!"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：两步方程 $${a}x + ${b} = ${result}$，$x$ 被包了两层！\n\n就像攻城——两道门：外门（$+${b}$）和内门（$\\times ${a}$）。先攻外门，再攻内门。`,
+        en: `${narrator}: "Two-step equation $${a}x + ${b} = ${result}$, $x$ is double-wrapped!\n\nLike a siege — two gates: outer ($+${b}$) and inner ($\\times ${a}$). Break outer first, then inner."`,
       },
       highlightField: 'x',
     },
@@ -621,7 +628,8 @@ export function generateLinearMission(template: Mission): Mission {
   const m = pickRandom(mPools[tier]);
   const c = pickRandom(cPools[tier]);
   const x1 = pickRandom([-2, -1, 0, 1, 2, 3]);
-  const x2 = x1 + pickRandom([1, 2, 3]);
+  const x2 = x1 + pickRandom([1, 2, 3]); // guarantees x2 > x1 (no division by zero)
+  if (x2 === x1) return safeRetry(template, generateLinearMission); // defensive guard
   const y1 = m * x1 + c;
   const y2 = m * x2 + c;
 
@@ -729,6 +737,13 @@ export function generateQuadraticMission(template: Mission): Mission {
       en: `Find $x$ where $f(x)$ is maximum.`,
     };
     const tutorialSteps = [
+      {
+        text: {
+          zh: `${narrator}：为什么要学二次函数？\n想象投石车——石头飞出去的轨迹就是抛物线！\n$f(x) = ax^2 + bx + c$ 描述了这种曲线。\n找到"顶点"= 找到石头飞得最高/最远的那个点——这就是战场上的关键信息！`,
+          en: `${narrator}: "Why learn quadratics?\nImagine a catapult — the stone's path is a parabola!\n$f(x) = ax^2 + bx + c$ describes this curve.\nFinding the vertex = finding the highest/farthest point — crucial battlefield intelligence!"`,
+        },
+        highlightField: 'x',
+      },
       {
         text: {
           zh: `${narrator}：抛物线的顶点——曲线的最高/最低点\n顶点公式：$x = \\frac{-b}{2a}$`,

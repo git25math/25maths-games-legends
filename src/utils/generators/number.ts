@@ -516,6 +516,13 @@ export function generateFracMulMission(template: Mission): Mission {
   const tutorialSteps = isDivide ? [
     {
       text: {
+        zh: `${narrator}：为什么要学分数乘除？\n想象分军粮——半袋粮食分给 3 个人，每人多少？$\\frac{1}{2} \\div 3 = \\frac{1}{6}$\n现实中"半个""三分之一"到处都是，会分数运算才能精确分配！`,
+        en: `${narrator}: "Why learn fraction multiplication/division?\nImagine sharing rations — half a bag split among 3 people, how much each? $\\frac{1}{2} \\div 3 = \\frac{1}{6}$\nHalves, thirds, quarters are everywhere — fraction operations let you divide precisely!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
         zh: `${narrator}：分数除法——先用整数感受\n有 6 个苹果，每人分 2 个：$6 \\div 2 = 3$ 人。\n有 6 个苹果，每人分 $\\frac{1}{2}$ 个：$6 \\div \\frac{1}{2} = 12$ 人！\n\n注意：$6 \\div \\frac{1}{2} = 6 \\times 2 = 12$——除以分数 = 乘以倒数！`,
         en: `${narrator}: "Fraction division — feel it with whole numbers first\n6 apples, 2 per person: $6 \\div 2 = 3$ people.\n6 apples, $\\frac{1}{2}$ per person: $6 \\div \\frac{1}{2} = 12$ people!\n\nNotice: $6 \\div \\frac{1}{2} = 6 \\times 2 = 12$ — dividing by a fraction = multiplying by its reciprocal!"`,
       },
@@ -777,7 +784,8 @@ export function generateMixedImproperMission(template: Mission): Mission {
 export function generatePrimeMission(template: Mission): Mission {
   const tier = getTier();
   // Mix of primes and non-primes for variety
-  const primePools: Record<DifficultyTier, number[]> = { 1: [2, 3, 5, 7, 11, 13], 2: [17, 19, 23, 29, 31, 37], 3: [41, 43, 47, 53, 59, 61, 67, 71] };
+  // Tier 1: exclude 2 (only even prime, confuses beginners who expect "odd = prime")
+  const primePools: Record<DifficultyTier, number[]> = { 1: [3, 5, 7, 11, 13], 2: [2, 17, 19, 23, 29, 31, 37], 3: [41, 43, 47, 53, 59, 61, 67, 71] };
   const compositePools: Record<DifficultyTier, number[]> = { 1: [4, 6, 8, 9, 10, 12, 14, 15], 2: [16, 18, 20, 21, 22, 24, 25, 26, 27, 28], 3: [33, 35, 39, 49, 51, 55, 57, 63, 65, 69] };
 
   // 50% chance prime, 50% composite
@@ -823,6 +831,13 @@ export function generatePrimeMission(template: Mission): Mission {
   }
 
   const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么要学质数？\n想象一支军队——有些士兵"不可拆分"，只能单独行动。这些就是质数！\n所有数字都是由质数"组装"出来的。知道了质数，就掌握了数字世界的零件表！\n\n判断 $${n}$ 是不是质数——看它能不能被拆开。`,
+        en: `${narrator}: "Why learn primes?\nImagine an army — some soldiers can't be split, they operate alone. Those are primes!\nAll numbers are 'assembled' from primes. Know the primes, know the building blocks of all numbers!\n\nIs $${n}$ prime — can it be broken apart?"`,
+      },
+      highlightField: 'ans',
+    },
     {
       text: {
         zh: `${narrator}：先搞懂一个词——"整除"\n$12 \\div 3 = 4$，没有余数 → 整除 ✓\n$12 \\div 5 = 2$ 余 $2$，有余数 → 不整除 ✗\n\n整除 = 除得刚刚好，一点不剩！`,
@@ -956,6 +971,13 @@ export function generateFactorTreeMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
+        zh: `${narrator}：为什么要学质因数分解？\n想象一台机器——要修它，得先拆成最小的零件。数字也一样！\n把 $${n}$ 拆成最小的"数字零件"（质数），就能看清它的内部结构。\n这是学 HCF（公因数）和 LCM（公倍数）的基础——先学会"拆"！`,
+        en: `${narrator}: "Why learn prime factorization?\nImagine a machine — to fix it, break it into smallest parts. Numbers work the same!\nBreak $${n}$ into its smallest 'number parts' (primes) to see its structure.\nThis is the foundation for HCF and LCM — first learn to 'take apart'!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
         zh: `${narrator}：${n} 个新兵要拆成最小的战斗单元——怎么拆？\n"最小单元"就是质数——只能被 $1$ 和自己整除的数。\n$2, 3, 5, 7, 11$ 都是质数。$4$ 不是（$4=2\\times2$），$6$ 不是（$6=2\\times3$）。`,
         en: `${narrator}: "${n} recruits need splitting into smallest units — how?\n'Smallest units' are primes — only divisible by $1$ and themselves.\n$2, 3, 5, 7, 11$ are primes. $4$ is not ($4=2\\times2$), $6$ is not ($6=2\\times3$)."`,
       },
@@ -1046,6 +1068,13 @@ export function generateFactorsListMission(template: Mission): Mission {
   const testNo = [5, 7, 9, 11].find(d => n % d !== 0) || 7;
 
   const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么要学因数？\n想象你要把 $${n}$ 个士兵分成整齐的队伍——不能有人落单！\n"因数"就是告诉你"有几种等分方式"。\n学会找因数，以后分东西、拆数字、算公因数都用得上！`,
+        en: `${narrator}: "Why learn factors?\nImagine splitting $${n}$ soldiers into equal squads — nobody left over!\n'Factors' tell you how many ways to divide evenly.\nLearn factors, and division, HCF, and LCM all become easy!"`,
+      },
+      highlightField: 'ans',
+    },
     {
       text: {
         zh: `${narrator}：$${n}$ 个新兵要编队——有几种等人数的分法？\n比如分成 2 人一队：$${n} \\div 2 = ${n / 2}$${n % 2 === 0 ? '，整除 ✓ 可以！' : '，有余数 ✗ 不行！'}\n\n"因数"就是能把一个数平均分开的数——没有余数才算！`,
