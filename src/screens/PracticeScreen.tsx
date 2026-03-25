@@ -9,6 +9,7 @@ import { checkAnswer } from '../utils/checkCorrectness';
 import { interpolate } from '../utils/interpolate';
 import { LatexText, MathView } from '../components/MathView';
 import { InputFields } from '../components/MathBattle/InputFields';
+import { INPUT_FIELDS } from '../components/MathBattle/inputConfig';
 import { VisualData } from '../components/MathBattle/VisualData';
 import { AnimatedTutorial } from '../components/MathBattle/AnimatedTutorial';
 import { WrongAnswerPanel } from '../components/MathBattle/WrongAnswerPanel';
@@ -203,12 +204,13 @@ export const PracticeScreen = ({
     <div className="min-h-full flex items-center justify-center py-4">
       <CalculatorWidget
         lang={lang}
-        onUseResult={(val) => setInputs(prev => {
-          const fields = Object.keys(prev);
-          const emptyField = fields.find(f => !prev[f]) || fields[0];
-          if (emptyField) return { ...prev, [emptyField]: val };
-          return prev;
-        })}
+        onUseResult={(val) => {
+          const fieldConfig = INPUT_FIELDS[currentMission.type];
+          const langKey = lang === 'en' ? 'en' : 'zh';
+          const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
+          const targetId = fields.find(f => !inputs[f.id])?.id ?? fields[0]?.id;
+          if (targetId) setInputs(prev => ({ ...prev, [targetId]: val }));
+        }}
       />
 
       {/* Correct answer flash overlay */}

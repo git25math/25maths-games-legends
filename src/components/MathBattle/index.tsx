@@ -9,6 +9,7 @@ import { interpolate } from '../../utils/interpolate';
 import { tapScale, hoverGlow, buttonBase, VICTORY_TIMING, BATTLE_TIMING } from '../../utils/animationPresets';
 import { LatexText, MathView } from '../MathView';
 import { InputFields } from './InputFields';
+import { INPUT_FIELDS } from './inputConfig';
 import { VisualData } from './VisualData';
 import { AnimatedTutorial } from './AnimatedTutorial';
 import { useAudio } from '../../audio';
@@ -420,13 +421,13 @@ export const MathBattle = ({
       <Confetti trigger={confettiTrigger} />
       <CalculatorWidget
         lang={lang}
-        onUseResult={(val) => setInputs(prev => {
-          // Put result in the first empty field, or the first field
-          const fields = Object.keys(prev);
-          const emptyField = fields.find(f => !prev[f]) || fields[0];
-          if (emptyField) return { ...prev, [emptyField]: val };
-          return prev;
-        })}
+        onUseResult={(val) => {
+          const fieldConfig = INPUT_FIELDS[currentQuestion.type];
+          const langKey = lang === 'en' ? 'en' : 'zh';
+          const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
+          const targetId = fields.find(f => !inputs[f.id])?.id ?? fields[0]?.id;
+          if (targetId) setInputs(prev => ({ ...prev, [targetId]: val }));
+        }}
       />
 
       <motion.div
