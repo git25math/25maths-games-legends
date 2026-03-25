@@ -422,6 +422,8 @@ export const MathBattle = ({
         // Speed mode: -10s penalty instead of HP loss
         playHpLoss();
         setSpeedTimeLeft(prev => Math.max(0, prev - 10000));
+        floatingKeyRef.current += 1;
+        setFloatingScore({ value: '-10s', key: floatingKeyRef.current });
       } else if (battleMode === 'marathon') {
         // Marathon mode: no HP loss, just play sound
         playHpLoss();
@@ -563,6 +565,15 @@ export const MathBattle = ({
                   {t.challenge}
                 </span>
 
+                {/* Battle mode badge */}
+                {battleMode !== 'classic' && (
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${
+                    battleMode === 'speed' ? 'bg-amber-600' : 'bg-emerald-600'
+                  }`}>
+                    {battleMode === 'speed' ? (lang === 'en' ? 'SPEED' : '极速') : (lang === 'en' ? 'MARATHON' : '马拉松')}
+                  </span>
+                )}
+
                 {/* Daily challenge indicator */}
                 {isDailyChallenge && (
                   <span className="px-2 py-0.5 rounded text-[10px] font-black bg-yellow-500 text-black flex items-center gap-1">
@@ -583,26 +594,32 @@ export const MathBattle = ({
               {isMultiQuestion && (
                 <div className="flex items-center gap-2 mt-1.5">
                   <span className="text-[10px] font-bold text-[#f4e4bc]/70">
-                    {(t.questionProgress as string).replace('{n}', String(currentQIdx + 1)).replace('{total}', String(questionQueue.length))}
+                    {battleMode === 'speed'
+                      ? `Q${currentQIdx + 1} · ${correctCount}✓`
+                      : (t.questionProgress as string).replace('{n}', String(currentQIdx + 1)).replace('{total}', String(questionQueue.length))}
                   </span>
-                  <div className="hidden sm:flex gap-1">
-                    {questionQueue.map((_, i) => (
-                      <div
-                        key={i}
-                        className={`w-2 h-2 rounded-full ${
-                          i < currentQIdx ? 'bg-emerald-400' :
-                          i === currentQIdx ? 'bg-yellow-400' :
-                          'bg-parchment/30'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <div className="flex sm:hidden flex-1 h-1.5 bg-parchment/20 rounded-full overflow-hidden max-w-[80px]">
-                    <div
-                      className="h-full bg-emerald-400 rounded-full transition-all"
-                      style={{ width: `${((currentQIdx + 1) / questionQueue.length) * 100}%` }}
-                    />
-                  </div>
+                  {battleMode !== 'speed' && (
+                    <>
+                      <div className="hidden sm:flex gap-1">
+                        {questionQueue.map((_, i) => (
+                          <div
+                            key={i}
+                            className={`w-2 h-2 rounded-full ${
+                              i < currentQIdx ? 'bg-emerald-400' :
+                              i === currentQIdx ? 'bg-yellow-400' :
+                              'bg-parchment/30'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <div className="flex sm:hidden flex-1 h-1.5 bg-parchment/20 rounded-full overflow-hidden max-w-[80px]">
+                        <div
+                          className="h-full bg-emerald-400 rounded-full transition-all"
+                          style={{ width: `${((currentQIdx + 1) / questionQueue.length) * 100}%` }}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
