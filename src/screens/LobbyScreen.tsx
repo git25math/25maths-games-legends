@@ -84,8 +84,8 @@ export const LobbyScreen = ({
             </button>
             <p className="text-[10px] text-slate-400 mt-1">
               {copied
-                ? (lang === 'en' ? 'Copied!' : '已复制！')
-                : (lang === 'en' ? 'Tap to copy full ID' : '点击复制完整 ID')
+                ? (lang === 'en' ? 'Copied! Send to your friend' : '已复制！发给好友')
+                : (lang === 'en' ? 'Tap to copy & share' : '点击复制，发给好友')
               }
             </p>
           </div>

@@ -32,20 +32,9 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
   const joinRoom = async (roomId: string): Promise<boolean> => {
     if (!user || !profile) return false;
 
-    // Support both full UUID and short code (first 6 chars)
-    let actualId = roomId;
-    if (roomId.length < 36) {
-      const { data: rooms, error: searchErr } = await supabase
-        .from('gl_rooms')
-        .select('*')
-        .eq('status', 'waiting')
-        .ilike('id', `${roomId.toLowerCase()}%`)
-        .limit(1);
-      if (searchErr || !rooms?.length) {
-        return false;
-      }
-      actualId = rooms[0].id;
-    }
+    // Room IDs are UUIDs — user pastes full ID from clipboard
+    // Short codes (6 chars shown in UI) are display-only; clipboard copies the full UUID
+    const actualId = roomId;
 
     const { data: room, error: getErr } = await supabase.from('gl_rooms').select('*').eq('id', actualId).single();
     if (getErr || !room) return false;

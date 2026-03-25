@@ -35,14 +35,22 @@ export function getSample(id: SampleId): AudioBuffer | undefined {
  * Preload all samples. Call once after AudioContext is created.
  * Non-blocking: failures are silently ignored (synthesis fallback).
  */
+/**
+ * Preload all samples. Call once after AudioContext is created.
+ * Non-blocking: failures are silently ignored (synthesis fallback).
+ * Set SAMPLES_ENABLED to true once .mp3 files are added to public/audio/.
+ */
+const SAMPLES_ENABLED = false;
+
 export function preloadSamples(ctx: AudioContext): Promise<void> {
   if (loadPromise) return loadPromise;
+  if (!SAMPLES_ENABLED) { loadPromise = Promise.resolve(); return loadPromise; }
 
   loadPromise = Promise.allSettled(
     (Object.entries(SAMPLE_URLS) as [SampleId, string][]).map(async ([id, url]) => {
       try {
         const resp = await fetch(url);
-        if (!resp.ok) return; // 404 = no sample file yet, silently skip
+        if (!resp.ok) return;
         const arrayBuf = await resp.arrayBuffer();
         const audioBuf = await ctx.decodeAudioData(arrayBuf);
         cache.set(id, audioBuf);
@@ -50,7 +58,7 @@ export function preloadSamples(ctx: AudioContext): Promise<void> {
         // Network error or decode failure — silently fall back to synthesis
       }
     })
-  ).then(() => {}); // void
+  ).then(() => {});
 
   return loadPromise;
 }
