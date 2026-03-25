@@ -68,6 +68,7 @@ export const PracticeScreen = ({
   const shaking = shakeKey > 0;
   const [showBadge, setShowBadge] = useState(false);
   const [phaseToast, setPhaseToast] = useState<string | null>(null);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   // v7.0: Repair mode — count correct answers, complete after 3
   const [repairCorrect, setRepairCorrect] = useState(0);
   const REPAIR_TARGET = 3;
@@ -330,7 +331,7 @@ export const PracticeScreen = ({
               {t.practice}
             </span>
             <button
-              onClick={onCancel}
+              onClick={() => setShowExitConfirm(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-xs font-bold min-h-10"
             >
               <ChevronLeft size={16} />
@@ -541,6 +542,32 @@ export const PracticeScreen = ({
         </AnimatePresence>
       </motion.div>
     </div>
+
+    {/* Exit confirmation overlay */}
+    <AnimatePresence>
+      {showExitConfirm && (
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+        >
+          <motion.div
+            initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}
+            className="bg-slate-800 border border-white/10 rounded-2xl p-6 max-w-xs text-center"
+          >
+            <p className="text-white font-bold mb-1">{lang === 'en' ? 'Quit practice?' : '\u9000\u51fa\u7ec3\u4e60\uff1f'}</p>
+            <p className="text-white/40 text-xs mb-4">{lang === 'en' ? 'Current phase progress will be lost.' : '\u5f53\u524d\u9636\u6bb5\u8fdb\u5ea6\u5c06\u4e22\u5931\u3002'}</p>
+            <div className="flex gap-2">
+              <button onClick={() => setShowExitConfirm(false)} className="flex-1 py-2.5 bg-white/10 text-white/70 rounded-xl text-xs font-bold">
+                {lang === 'en' ? 'Continue' : '\u7ee7\u7eed\u7ec3\u4e60'}
+              </button>
+              <button onClick={onCancel} className="flex-1 py-2.5 bg-rose-500/80 text-white rounded-xl text-xs font-bold">
+                {lang === 'en' ? 'Quit' : '\u9000\u51fa'}
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
     </div>
   );
 };

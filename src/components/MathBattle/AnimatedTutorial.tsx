@@ -83,6 +83,15 @@ export function AnimatedTutorial({
         transition={{ duration: 0.35, ease: 'easeOut' }}
         className="bg-indigo-600/10 border-2 border-indigo-500/30 p-4 rounded-xl"
       >
+        {/* Step counter */}
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex gap-1">
+            {tutorialSteps.map((_, i) => (
+              <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i <= currentStep ? 'bg-indigo-400' : 'bg-white/20'}`} />
+            ))}
+          </div>
+          <span className="text-[10px] text-white/30 font-bold">{currentStep + 1}/{tutorialSteps.length}</span>
+        </div>
         {/* Top row: avatar + dialogue bubble */}
         <div className="flex items-start gap-3">
           <CharacterAvatar characterId={characterId} size={48} speaking />

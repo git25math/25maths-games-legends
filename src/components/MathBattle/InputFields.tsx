@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import type { Mission, Language, DifficultyMode } from '../../types';
 import { LatexText } from '../MathView';
@@ -31,9 +32,18 @@ export const InputFields = ({
     ? allFields.filter(f => usedFieldIds.includes(f.id))
     : allFields;
 
+  // Auto-focus first input when not in tutorial mode (e.g., after wrong answer / new question)
+  const firstInputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (!isTutorial && firstInputRef.current) {
+      const timer = setTimeout(() => firstInputRef.current?.focus(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [mission, isTutorial]);
+
   return (
     <div className="space-y-6">
-      {currentFields.map(field => {
+      {currentFields.map((field, fieldIdx) => {
         const isHighlighted = isTutorial && mission.tutorialSteps?.[tutorialStep]?.highlightField === field.id;
         return (
           <motion.div
@@ -46,6 +56,7 @@ export const InputFields = ({
               <LatexText text={field.label} />
             </label>
             <input
+              ref={fieldIdx === 0 ? firstInputRef : undefined}
               type="text"
               inputMode="decimal"
               autoComplete="off"

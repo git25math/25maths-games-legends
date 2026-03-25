@@ -271,10 +271,18 @@ export const ExpeditionScreen = ({
             )}
 
             {/* Expedition info */}
-            <div className="flex justify-center gap-4 mb-5 text-xs">
-              <span className="flex items-center gap-1 text-amber-400/70"><Package size={12} /> {expedition.startingRations} {lang === 'en' ? 'rations' : '\u519b\u7cae'}</span>
-              <span className="flex items-center gap-1 text-white/30"><Swords size={12} /> {expedition.nodes.filter(n => n.type !== 'rest').length} {lang === 'en' ? 'battles' : '\u5173'}</span>
-            </div>
+            {(() => {
+              const battleNodes = expedition.nodes.filter(n => n.type !== 'rest');
+              const totalQ = battleNodes.reduce((s, n) => s + n.questionCount, 0);
+              const estMin = Math.ceil(totalQ * 1.5);
+              return (
+                <div className="flex flex-wrap justify-center gap-3 mb-5 text-xs">
+                  <span className="flex items-center gap-1 text-amber-400/70"><Package size={12} /> {expedition.startingRations} {lang === 'en' ? 'rations' : '\u519b\u7cae'}</span>
+                  <span className="flex items-center gap-1 text-white/30"><Swords size={12} /> {battleNodes.length} {lang === 'en' ? 'battles' : '\u5173'}</span>
+                  <span className="text-white/20">{lang === 'en' ? `~${estMin} min · ${totalQ}Q` : `\u7ea6${estMin}\u5206\u949f \u00b7 ${totalQ}\u9898`}</span>
+                </div>
+              );
+            })()}
 
             {/* Records */}
             {prevRecord ? (
@@ -302,9 +310,16 @@ export const ExpeditionScreen = ({
             <button onClick={() => { playTap(); setPhase('map'); }} className="w-full py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 transition-all text-sm">
               {lang === 'en' ? 'March Out \u2192' : '\u4eca\u65e5\u51fa\u5f81 \u2192'}
             </button>
-            <button onClick={onCancel} className="w-full mt-2 py-2 text-white/30 text-sm hover:text-white/50 transition-colors">
-              {lang === 'en' ? 'Return' : '\u8fd4\u56de'}
-            </button>
+            <div className="flex gap-2 mt-2">
+              <button onClick={onCancel} className="flex-1 py-2 text-white/30 text-sm hover:text-white/50 transition-colors">
+                {lang === 'en' ? 'Return' : '\u8fd4\u56de'}
+              </button>
+              {prevRecord && (
+                <button onClick={() => { playTap(); setPhase('map'); }} className="flex-1 py-2 text-amber-400/40 text-sm hover:text-amber-400/70 transition-colors">
+                  {lang === 'en' ? 'Skip intro' : '\u8df3\u8fc7\u7b80\u62a5'}
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
