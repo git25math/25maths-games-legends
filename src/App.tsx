@@ -1,9 +1,11 @@
-import { useState, useEffect, Component } from 'react';
+import { useState, useEffect, useRef, Component } from 'react';
 import 'katex/dist/katex.min.css';
 import { AnimatePresence, motion } from 'motion/react';
 import { Languages, LogOut, XCircle } from 'lucide-react';
 
-import type { Language, Mission, GameState, DifficultyMode } from './types';
+import type { Language, Mission, GameState, DifficultyMode, KPEquipment } from './types';
+import { computeRepairBonus } from './utils/equipment';
+import { recordErrors, getMissionErrorSummary, getMistakes as getMistakesMap } from './utils/errorMemory';
 import { CHARACTERS } from './data/characters';
 import { useAuth } from './hooks/useAuth';
 import { useProfile } from './hooks/useProfile';
@@ -24,7 +26,12 @@ import { PracticeScreen } from './screens/PracticeScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { OnboardingScreen, isOnboardingDone, clearOnboardingFlag } from './screens/OnboardingScreen';
 import { cleanStalePracticeKeys, clearPracticeState } from './hooks/usePracticeState';
+import { translations } from './i18n/translations';
+import { getHotTopic } from './utils/hotTopic';
+import { LeaderboardPanel } from './components/LeaderboardPanel';
 import { getActiveSkillEffect } from './data/heroSkills';
+import { STREAK_MILESTONES, getNewlyEarnedMilestone, getNextMilestone } from './data/streakMilestones';
+import { BattleModeSelector } from './components/BattleModeSelector';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
 import { ExpeditionScreen } from './screens/ExpeditionScreen';
@@ -82,7 +89,7 @@ function loadPersistedState(): PersistedState {
 function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
     // Battle/onboarding/expedition can't be restored → save as map
-    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition') ? 'map' : gameState;
+    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition' || gameState === 'leaderboard') ? 'map' : gameState;
     const safeMission = safeState === 'practice' ? missionId : null;
     localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
@@ -104,18 +111,28 @@ export default function App() {
   const [showSecret, setShowSecret] = useState(false);
   const [selectedSkillCard, setSelectedSkillCard] = useState<string | null>(null);
   const [showSkillCards, setShowSkillCards] = useState(false);
+  const [showBattleModeSelector, setShowBattleModeSelector] = useState(false);
+  const [selectedBattleMode, setSelectedBattleMode] = useState<import('./components/BattleModeSelector').BattleMode>('classic');
   const [selectedDifficulty] = useState<DifficultyMode>('red');
   const [isGuest, setIsGuest] = useState(persisted.isGuest);
   const [lastClearedMissionId, setLastClearedMissionId] = useState<number | null>(null);
   const [isDailyBattle, setIsDailyBattle] = useState(false);
   const [isRepairMode, setIsRepairMode] = useState(false);
   const [activeExpedition, setActiveExpedition] = useState<Expedition | null>(null);
+  const [levelUpNotif, setLevelUpNotif] = useState<{ newLevel: number; rankName: string; spEarned: number } | null>(null);
+  const [repairToast, setRepairToast] = useState<{ bonus: number } | null>(null);
+  const [nearLevelToast, setNearLevelToast] = useState<{ xpNeeded: number; rankName: string } | null>(null);
+  const [loginRewardNotif, setLoginRewardNotif] = useState<{ streak: number; xp: number; sp: number } | null>(null);
+
+  // Refs to accumulate mid-battle updates that get merged into handleBattleComplete's single save
+  const pendingSeasonTasksRef = useRef<string[]>([]);
+  const pendingStreakTokensRef = useRef(0);
+  const pendingErrorsRef = useRef<import('./utils/diagnoseError').ErrorType[]>([]);
 
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
   const {
     profile, updateProfile, recordBattleComplete,
-    getCharProgression, getTotalSP, unlockSkill, equipSkill, grantSkillPoint,
-    markEquipment, repairEquipment,
+    getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
   const { missions } = useMissions();
   const { activeRoom, createRoom, toggleReady, startGame, leaveRoom } = useMultiplayer(user, profile);
@@ -139,7 +156,59 @@ export default function App() {
     }
   }, [authLoading, user, isGuest, gameState]);
 
+  // Login streak: check once when profile first loads
+  useEffect(() => {
+    if (!profile) return;
+    // Use local date (consistent with dailyChallenge and seasonTracker)
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const loginData = (profile.completed_missions as any)?._login as
+      { lastDate: string; streak: number; bestStreak: number } | undefined;
+
+    // Already checked today
+    if (loginData?.lastDate === todayStr) return;
+
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+
+    const prevStreak = loginData?.streak ?? 0;
+    const newStreak = loginData?.lastDate === yesterdayStr ? prevStreak + 1 : 1;
+    const bestStreak = Math.max(newStreak, loginData?.bestStreak ?? 0);
+
+    // XP rewards: 7-day cycle repeats (Day 8 = Day 1 rewards, Day 14 = Day 7, etc.)
+    const streakRewards: Record<number, number> = { 1: 20, 2: 20, 3: 50, 4: 50, 5: 50, 6: 50, 7: 150 };
+    const cycleDay = ((newStreak - 1) % 7) + 1;
+    let xp = streakRewards[cycleDay] ?? 50;
+    let sp = cycleDay === 7 ? 1 : 0;
+
+    const cm = { ...profile.completed_missions } as any;
+    cm._login = { lastDate: todayStr, streak: newStreak, bestStreak };
+
+    // Check streak milestones (14/21/30/60/100 days)
+    const claimed = (cm._streak_milestones ?? []) as string[];
+    const milestone = getNewlyEarnedMilestone(newStreak, claimed);
+    if (milestone) {
+      cm._streak_milestones = [...claimed, milestone.id];
+      xp += milestone.xp;
+      sp += milestone.sp;
+    }
+
+    // Merge SP into same write (avoid stale-profile race)
+    if (sp > 0) {
+      cm._total_skill_points = (cm._total_skill_points ?? 0) + sp;
+    }
+
+    (async () => {
+      await updateProfile({ completed_missions: cm, total_score: profile.total_score + xp });
+      setLoginRewardNotif({ streak: newStreak, xp, sp });
+      setTimeout(() => setLoginRewardNotif(null), milestone ? 8000 : 5000);
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile?.user_id]);
+
   const selectedChar = CHARACTERS.find(c => c.id === (selectedCharId || profile?.selected_char_id));
+  const hotTopic = getHotTopic();
 
   const handleCharSelect = (id: string) => {
     setSelectedCharId(id);
@@ -152,15 +221,21 @@ export default function App() {
     let battleMission = mission;
     if (mission.data?.generatorType) {
       battleMission = generateMission(mission);
-      // Multi-question missions: show skill card selector first
       setActiveMission(battleMission);
       setSelectedSkillCard(null);
-      setShowSkillCards(true);
+      // Show battle mode selector first, then skill cards
+      setShowBattleModeSelector(true);
     } else {
       // Single-question: go directly to ScrollOfWisdom
       setActiveMission(battleMission);
       setShowSecret(true);
     }
+  };
+
+  const handleBattleModeSelect = (mode: import('./components/BattleModeSelector').BattleMode) => {
+    setSelectedBattleMode(mode);
+    setShowBattleModeSelector(false);
+    setShowSkillCards(true);
   };
 
   const handleSkillCardSelect = (cardId: string) => {
@@ -174,12 +249,21 @@ export default function App() {
     handleMissionStart(mission);
   };
 
+  // Don't updateProfile here — it would race with handleBattleComplete.
+  // Instead, queue the increment and merge it in the single save.
   const handleStreakToken = () => {
-    if (!profile) return;
-    const currentTokens = ((profile.completed_missions as Record<string, unknown>)['_streak_tokens'] as number) || 0;
-    updateProfile({
-      completed_missions: { ...profile.completed_missions, _streak_tokens: currentTokens + 1 } as any,
-    });
+    pendingStreakTokensRef.current += 1;
+  };
+
+  // Queue error types for the current battle/practice (merged on completion)
+  const handleRecordError = (errorType: import('./utils/diagnoseError').ErrorType) => {
+    pendingErrorsRef.current.push(errorType);
+  };
+
+  // Don't updateProfile here — it would race with handleBattleComplete.
+  // Instead, queue the task ID and merge it in the single save.
+  const handleStreakMilestone3 = () => {
+    pendingSeasonTasksRef.current.push('daily_streak_3');
   };
 
   const handlePracticeStart = (mission: Mission) => {
@@ -187,10 +271,49 @@ export default function App() {
     setGameState('practice');
   };
 
+  /** Compute how many levels were gained (for merging SP into the caller's atomic write) */
+  const computeLevelsGained = (prevScore: number, gainedXP: number) => {
+    return getLevelInfo(prevScore + gainedXP).level - getLevelInfo(prevScore).level;
+  };
+
+  /** Show level-up / near-level notifications (NO writes — caller handles SP merge) */
+  const showLevelUpNotifications = (prevScore: number, gainedXP: number, levelsGained: number) => {
+    const newInfo = getLevelInfo(prevScore + gainedXP);
+    if (levelsGained > 0) {
+      const rankName = lang === 'en' ? newInfo.rank.en : lang === 'zh_TW' ? newInfo.rank.zh_TW : newInfo.rank.zh;
+      setLevelUpNotif({ newLevel: newInfo.level, rankName, spEarned: levelsGained });
+      setTimeout(() => setLevelUpNotif(null), 4000);
+    } else if (newInfo.xpForNextLevel > 0) {
+      const threshold = Math.ceil(newInfo.xpForNextLevel * 0.15);
+      const xpNeeded = newInfo.xpForNextLevel - newInfo.currentXP;
+      if (xpNeeded <= threshold && xpNeeded > 0) {
+        const nextInfo = getLevelInfo(newInfo.totalXPForLevel + newInfo.xpForNextLevel);
+        const nextRank = lang === 'en' ? nextInfo.rank.en : lang === 'zh_TW' ? nextInfo.rank.zh_TW : nextInfo.rank.zh;
+        setNearLevelToast({ xpNeeded, rankName: nextRank });
+        setTimeout(() => setNearLevelToast(null), 3500);
+      }
+    }
+  };
+
+  const handlePracticeEarnXP = async (xp: number) => {
+    if (!profile || xp <= 0) return;
+    const prevScore = profile.total_score;
+    const levelsGained = computeLevelsGained(prevScore, xp);
+    if (levelsGained > 0) {
+      // Merge SP + score into single write
+      const cm = { ...profile.completed_missions } as any;
+      cm._total_skill_points = (cm._total_skill_points ?? 0) + levelsGained;
+      await updateProfile({ total_score: prevScore + xp, completed_missions: cm });
+    } else {
+      await updateProfile({ total_score: prevScore + xp });
+    }
+    showLevelUpNotifications(prevScore, xp, levelsGained);
+  };
+
   const handleBattleComplete = async (success: boolean, score = 0, durationSecs = 0, hpRemaining = 0) => {
     if (success && activeMission && profile) {
-      // v7.0: Detect level-up for skill point grant
-      const prevLevel = getLevelInfo(profile.total_score).level;
+      const prevScore = profile.total_score;
+      const isFirstClearBattle = !profile.completed_missions[String(activeMission.id)];
 
       // If daily challenge, inject daily key into completed_missions BEFORE
       // recordBattleComplete, which spreads profile.completed_missions internally.
@@ -198,7 +321,8 @@ export default function App() {
         (profile.completed_missions as Record<string, unknown>)[getDailyKey()] = true;
       }
 
-      await recordBattleComplete(
+      // Step 1: Insert battle record to DB + compute profile data (does NOT save)
+      const battleData = await recordBattleComplete(
         activeMission.id,
         selectedDifficulty,
         success,
@@ -208,34 +332,71 @@ export default function App() {
         activeMission.topic,
         activeMission.kpId,
       );
-      setLastClearedMissionId(activeMission.id);
 
-      // v7.0: Grant skill points on level-up (batch, single update)
-      const newLevel = getLevelInfo(profile.total_score + score).level;
-      const levelsGained = newLevel - prevLevel;
-      if (levelsGained > 0) {
-        await grantSkillPoint(levelsGained);
-      }
+      if (battleData) {
+        const { completedMissions: cm, stats, newScore } = battleData;
 
-      // v7.0: Mark equipment on Red difficulty win
-      if (selectedDifficulty === 'red') {
-        await markEquipment(activeMission.id);
-      }
+        // Step 2: Merge equipment into the same completed_missions
+        if (selectedDifficulty === 'red') {
+          if (!cm._equipment) cm._equipment = {};
+          const existing = cm._equipment[String(activeMission.id)];
+          cm._equipment[String(activeMission.id)] = {
+            missionId: activeMission.id,
+            lastMasteredAt: Date.now(),
+            repairCount: existing?.repairCount ?? 0,
+          };
+        }
 
-      // v7.2: Season task tracking
-      if (profile) {
-        const cm = { ...profile.completed_missions } as any;
+        // Step 3: Merge season tasks into the same completed_missions
         let sp = getSeasonProgress(cm);
         sp = incrementTaskCount(sp, 'daily_battles_3');
         if (selectedDifficulty === 'red') {
           sp = incrementTaskCount(sp, 'weekly_red_3');
         }
-        // Evaluate milestones
+        if (isFirstClearBattle) {
+          sp = incrementTaskCount(sp, 'weekly_new_5');
+        }
+        // Drain any mid-battle season tasks (e.g., streak milestone)
+        for (const taskId of pendingSeasonTasksRef.current) {
+          sp = incrementTaskCount(sp, taskId);
+        }
         const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
         cm._season = updatedProgress;
-        await updateProfile({ completed_missions: cm });
+
+        // Drain pending streak tokens
+        if (pendingStreakTokensRef.current > 0) {
+          const cur = (cm._streak_tokens as number) || 0;
+          cm._streak_tokens = cur + pendingStreakTokensRef.current;
+        }
+
+        // Step 4: Merge level-up SP into the same write
+        const levelsGained = computeLevelsGained(prevScore, score);
+        if (levelsGained > 0) {
+          cm._total_skill_points = (cm._total_skill_points ?? 0) + levelsGained;
+        }
+
+        // Step 5: Merge pending errors into mistake memory
+        if (pendingErrorsRef.current.length > 0) {
+          cm._mistakes = recordErrors(
+            (cm._mistakes ?? {}) as any,
+            activeMission.id,
+            pendingErrorsRef.current,
+          );
+        }
+
+        // Step 6: Single atomic updateProfile call
+        await updateProfile({ total_score: newScore, completed_missions: cm, stats });
+
+        // Step 6: Notifications only (no writes)
+        showLevelUpNotifications(prevScore, score, levelsGained);
       }
+
+      setLastClearedMissionId(activeMission.id);
     }
+    // Always drain pending refs (even on failure, so stale data doesn't leak to next battle)
+    pendingSeasonTasksRef.current = [];
+    pendingStreakTokensRef.current = 0;
+    pendingErrorsRef.current = [];
     setIsDailyBattle(false);
     setGameState('map');
     setActiveMission(null);
@@ -294,6 +455,12 @@ export default function App() {
 
         {/* Overlays */}
         <AnimatePresence>
+          {showBattleModeSelector && (
+            <BattleModeSelector lang={lang} onSelect={handleBattleModeSelect} />
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
           {showSkillCards && (
             <SkillCardSelector
               lang={lang}
@@ -308,12 +475,16 @@ export default function App() {
               mission={activeMission}
               lang={lang}
               onClose={() => { setShowSecret(false); setGameState('battle'); }}
+              errorHint={profile && activeMission
+                ? getMissionErrorSummary(getMistakesMap(profile.completed_missions as Record<string, unknown>), activeMission.id)
+                : null
+              }
             />
           )}
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v7.0.0</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v7.2.0</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -401,6 +572,8 @@ export default function App() {
                       setGameState('practice');
                     }
                   }}
+                  hotTopicInfo={hotTopic}
+                  onLeaderboard={() => setGameState('leaderboard')}
                 />
               )}
 
@@ -430,7 +603,11 @@ export default function App() {
                   completedDifficulties={activeMission && profile ? profile.completed_missions[String(activeMission.id)] : {}}
                   isDailyChallenge={isDailyBattle}
                   dailyMultiplier={isDailyBattle ? DAILY_MULTIPLIER : 1}
+                  hotTopicMultiplier={activeMission.topic === hotTopic.topic ? hotTopic.multiplier : 1}
                   onStreakToken={handleStreakToken}
+                  onStreakMilestone3={handleStreakMilestone3}
+                  onRecordError={handleRecordError}
+                  battleMode={selectedBattleMode}
                   heroSkillEffect={selectedChar ? getActiveSkillEffect(getCharProgression(selectedChar.id)) : null}
                 />
               )}
@@ -440,21 +617,46 @@ export default function App() {
                   mission={activeMission}
                   character={selectedChar}
                   lang={lang}
+                  phaseCompletions={profile?.completed_missions[String(activeMission.id)] as any}
+                  onEarnXP={handlePracticeEarnXP}
+                  onRecordError={handleRecordError}
                   onComplete={async () => {
-                    // Save practice completion — all 4 phases done + award XP
+                    // Save practice completion — all 4 phases done (XP already awarded per-phase)
                     if (profile) {
                       const cm = { ...profile.completed_missions } as any;
                       const key = String(activeMission.id);
-                      const isFirstClear = !cm[key]?.red;
+                      const isFirstClearPractice = !cm[key] || !Object.values(cm[key] || {}).some(Boolean);
                       cm[key] = { ...(cm[key] || {}), green: true, amber: true, red: true };
-                      const xpReward = isFirstClear ? (activeMission.reward || 100) : Math.round((activeMission.reward || 100) * 0.2);
-                      await updateProfile({
-                        completed_missions: cm,
-                        total_score: profile.total_score + xpReward,
-                      });
+                      // Season tasks
+                      let sp = getSeasonProgress(cm);
+                      sp = incrementTaskCount(sp, 'daily_practice_1');
+                      if (isFirstClearPractice) {
+                        sp = incrementTaskCount(sp, 'weekly_new_5');
+                      }
+                      const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
+                      cm._season = updatedProgress;
+                      // Inline equipment marking (avoids a second stale-profile updateProfile call)
+                      if (!cm._equipment) cm._equipment = {};
+                      const existingEq = cm._equipment[String(activeMission.id)];
+                      cm._equipment[String(activeMission.id)] = {
+                        missionId: activeMission.id,
+                        lastMasteredAt: Date.now(),
+                        repairCount: existingEq?.repairCount ?? 0,
+                      };
+                      // Merge pending errors
+                      if (pendingErrorsRef.current.length > 0) {
+                        cm._mistakes = recordErrors(
+                          (cm._mistakes ?? {}) as any,
+                          activeMission.id,
+                          pendingErrorsRef.current,
+                        );
+                      }
+                      // Single atomic save
+                      await updateProfile({ completed_missions: cm });
                       setLastClearedMissionId(activeMission.id);
                     }
-                    // Clear persisted practice state so revisiting starts fresh
+                    // Clear persisted practice state + error refs
+                    pendingErrorsRef.current = [];
                     clearPracticeState(activeMission.id);
                     setIsRepairMode(false);
                     setGameState('map');
@@ -467,11 +669,40 @@ export default function App() {
                   }}
                   repairMode={isRepairMode}
                   onRepairComplete={async () => {
-                    const bonus = await repairEquipment(activeMission.id);
-                    setIsRepairMode(false);
-                    setGameState('map');
-                    setActiveMission(null);
-                    // TODO: show repair success toast with bonus XP on MapScreen
+                    // Inline repair + season into single updateProfile (avoids stale-profile race)
+                    if (profile) {
+                      const cm = { ...profile.completed_missions } as any;
+                      const eq = cm._equipment?.[String(activeMission.id)] as KPEquipment | undefined;
+                      const bonus = eq ? computeRepairBonus(eq.repairCount) : 0;
+                      // Update equipment
+                      if (eq) {
+                        cm._equipment[String(activeMission.id)] = {
+                          ...eq,
+                          lastMasteredAt: Date.now(),
+                          repairCount: eq.repairCount + 1,
+                        };
+                      }
+                      // Season task: weekly_repair_1
+                      let sp = getSeasonProgress(cm);
+                      sp = incrementTaskCount(sp, 'weekly_repair_1');
+                      const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
+                      cm._season = updatedProgress;
+                      await updateProfile({
+                        completed_missions: cm,
+                        total_score: profile.total_score + bonus,
+                      });
+                      setIsRepairMode(false);
+                      setGameState('map');
+                      setActiveMission(null);
+                      if (bonus > 0) {
+                        setRepairToast({ bonus });
+                        setTimeout(() => setRepairToast(null), 3000);
+                      }
+                    } else {
+                      setIsRepairMode(false);
+                      setGameState('map');
+                      setActiveMission(null);
+                    }
                   }}
                 />
               )}
@@ -512,9 +743,162 @@ export default function App() {
                   onClose={() => setGameState(isLoggedIn ? 'map' : 'welcome')}
                 />
               )}
+
+              {gameState === 'leaderboard' && profile && profile.grade && (
+                <LeaderboardPanel
+                  lang={lang}
+                  grade={profile.grade}
+                  currentUserId={profile.user_id}
+                  classTags={profile.class_tags ?? undefined}
+                  onClose={() => setGameState('map')}
+                />
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
+
+        {/* ═══ Login Streak Reward ═══ */}
+        <AnimatePresence>
+          {loginRewardNotif && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[95] pointer-events-auto text-center"
+              onClick={() => setLoginRewardNotif(null)}
+            >
+              <div className="bg-gradient-to-br from-emerald-900/95 to-teal-900/95 backdrop-blur-xl border-2 border-emerald-400/40 rounded-3xl px-10 py-7 shadow-[0_0_50px_rgba(52,211,153,0.3)] max-w-xs mx-4">
+                <div className="text-4xl mb-2">{loginRewardNotif.streak >= 30 ? '👑' : loginRewardNotif.streak >= 14 ? '🔥' : loginRewardNotif.streak >= 3 ? '⚡' : '🌅'}</div>
+                <p className="text-emerald-400 text-xs font-black tracking-widest uppercase mb-1">
+                  {lang === 'en' ? `Day ${loginRewardNotif.streak} Streak!` : `连续登录第 ${loginRewardNotif.streak} 天！`}
+                </p>
+                <p className="text-white font-black text-xl mb-3">
+                  +{loginRewardNotif.xp} XP
+                  {loginRewardNotif.sp > 0 && <span className="text-purple-300 ml-2">+{loginRewardNotif.sp} SP</span>}
+                </p>
+                {loginRewardNotif.streak % 7 === 0 && (
+                  <p className="text-yellow-300 text-xs font-bold mb-2">{lang === 'en' ? '🏆 Weekly streak bonus!' : '🏆 每周连登奖励！'}</p>
+                )}
+                {(() => {
+                  const claimed = ((profile?.completed_missions as any)?._streak_milestones ?? []) as string[];
+                  const earned = STREAK_MILESTONES.find(m => m.days === loginRewardNotif.streak);
+                  const next = getNextMilestone(loginRewardNotif.streak, claimed);
+                  return (
+                    <>
+                      {earned && claimed.includes(earned.id) && (
+                        <p className="text-amber-300 text-xs font-black mb-2 animate-pulse">
+                          🎖 {lang === 'en' ? earned.title.en : earned.title.zh}
+                        </p>
+                      )}
+                      {next && (
+                        <p className="text-white/30 text-[10px] mb-2">
+                          {lang === 'en' ? `Next milestone: Day ${next.days} — ${next.title.en}` : `下个里程碑：第 ${next.days} 天 — ${next.title.zh}`}
+                        </p>
+                      )}
+                    </>
+                  );
+                })()}
+                <p className="text-white/20 text-[10px]">{lang === 'en' ? 'Tap to dismiss' : '点击关闭'}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ═══ Near Level-Up Nudge Toast ═══ */}
+        <AnimatePresence>
+          {nearLevelToast && (
+            <motion.div
+              initial={{ opacity: 0, y: -40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -40 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="fixed top-4 left-1/2 -translate-x-1/2 z-[90] flex items-center gap-2 px-5 py-2.5 bg-yellow-500/90 backdrop-blur-md border border-yellow-400/50 rounded-2xl shadow-2xl pointer-events-none"
+            >
+              <span className="text-lg">⚡</span>
+              <p className="text-slate-900 font-black text-sm">
+                {lang === 'en'
+                  ? `Only ${nearLevelToast.xpNeeded} XP to ${nearLevelToast.rankName}!`
+                  : `再 ${nearLevelToast.xpNeeded} 分晋升${nearLevelToast.rankName}！`}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ═══ Level-Up Celebration Overlay ═══ */}
+        <AnimatePresence>
+          {levelUpNotif && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none"
+            >
+              <motion.div
+                initial={{ scale: 0.6, y: 40, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.8, y: -20, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                className="pointer-events-auto text-center bg-gradient-to-br from-amber-900/95 to-yellow-900/95 backdrop-blur-xl border-2 border-amber-400/50 rounded-3xl px-10 py-8 shadow-[0_0_60px_rgba(251,191,36,0.4)] max-w-xs mx-4"
+                onClick={() => setLevelUpNotif(null)}
+              >
+                <motion.div
+                  animate={{ rotate: [0, -8, 8, -4, 4, 0] }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="text-5xl mb-3"
+                >
+                  ⭐
+                </motion.div>
+                <p className="text-amber-400 text-xs font-black tracking-[0.2em] uppercase mb-1">
+                  {(translations[lang] as any).levelUpTitle ?? '晋升！'}
+                </p>
+                <p className="text-white font-black text-2xl mb-1">
+                  Lv.{levelUpNotif.newLevel}
+                </p>
+                <p className="text-yellow-300 font-bold text-base mb-4">
+                  {levelUpNotif.rankName}
+                </p>
+                {levelUpNotif.spEarned > 0 && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.35, type: 'spring', stiffness: 400 }}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/30 border border-purple-400/40 rounded-full"
+                  >
+                    <span className="text-purple-300 font-black text-sm">
+                      {(translations[lang] as any).levelUpSP ?? '+1 修炼点'}
+                      {levelUpNotif.spEarned > 1 ? ` ×${levelUpNotif.spEarned}` : ''}
+                    </span>
+                  </motion.div>
+                )}
+                <p className="text-white/20 text-[10px] mt-4">{lang === 'en' ? 'Tap to dismiss' : '点击关闭'}</p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ═══ Repair Success Toast ═══ */}
+        <AnimatePresence>
+          {repairToast && (
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 60 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[90] flex items-center gap-3 px-6 py-3 bg-amber-500/90 backdrop-blur-md border border-amber-400/50 rounded-2xl shadow-2xl pointer-events-none"
+            >
+              <span className="text-xl">🔧</span>
+              <div>
+                <p className="text-slate-900 font-black text-sm">
+                  {(translations[lang] as any).repairSuccessXP ?? '装备修复完成'}
+                </p>
+                <p className="text-slate-900/70 font-bold text-xs">
+                  +{repairToast.bonus} XP
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </ErrorBoundary>
   );

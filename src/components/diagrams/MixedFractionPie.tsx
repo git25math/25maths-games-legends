@@ -2,6 +2,7 @@
  * MixedFractionPie — Shows whole pies + partial pie for mixed/improper fraction conversion.
  * Covers: MIXED_IMPROPER_RANDOM (Y7/Y8 fraction conversion)
  */
+import type { FC, JSX } from 'react';
 
 type Props = {
   whole: number;
@@ -19,7 +20,7 @@ const COLORS = {
   empty: '#f4e4bc',
 };
 
-function PieSlice({ cx, cy, r, filled, total }: { cx: number; cy: number; r: number; filled: number; total: number }) {
+const PieSlice: FC<{ cx: number; cy: number; r: number; filled: number; total: number }> = ({ cx, cy, r, filled, total }) => {
   if (filled <= 0) {
     return <circle cx={cx} cy={cy} r={r} fill={COLORS.empty} stroke={COLORS.wood} strokeWidth={1.5} />;
   }
@@ -55,7 +56,7 @@ function PieSlice({ cx, cy, r, filled, total }: { cx: number; cy: number; r: num
   slices.push(<circle key="outline" cx={cx} cy={cy} r={r} fill="none" stroke={COLORS.wood} strokeWidth={1.5} />);
 
   return <>{slices}</>;
-}
+};
 
 export function MixedFractionPie({ whole, num, den, mode }: Props) {
   const pieCount = whole + (num > 0 ? 1 : 0);

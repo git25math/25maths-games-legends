@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { XCircle, BookOpen, ChevronRight, ChevronLeft, Swords, MapIcon, CheckCircle2 } from 'lucide-react';
 import type { Mission, Character, Language, DifficultyMode } from '../types';
@@ -17,6 +17,7 @@ import { CharacterAvatar } from '../components/CharacterAvatar';
 import { SkillBadgeCard } from '../components/SkillBadgeCard';
 import { CalculatorWidget } from '../components/Calculator';
 import { renderDiagram } from '../utils/renderDiagram';
+import { diagnoseError as diagnoseErrorFn } from '../utils/diagnoseError';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 import { usePracticePersistedState } from '../hooks/usePracticeState';
@@ -41,6 +42,9 @@ export const PracticeScreen = ({
   onCancel,
   repairMode = false,
   onRepairComplete,
+  phaseCompletions,
+  onEarnXP,
+  onRecordError,
 }: {
   mission: Mission;
   character: Character;
@@ -49,6 +53,12 @@ export const PracticeScreen = ({
   onCancel: () => void;
   repairMode?: boolean;
   onRepairComplete?: () => void;
+  /** Previous completion state for this mission — used to detect first-clear vs repeat */
+  phaseCompletions?: { green?: boolean; amber?: boolean; red?: boolean };
+  /** Called when a practice phase completes, with the XP earned */
+  onEarnXP?: (xp: number) => void;
+  /** Called on each wrong answer with error type for persistent memory */
+  onRecordError?: (errorType: import('../utils/diagnoseError').ErrorType) => void;
 }) => {
   const t = translations[lang];
 
@@ -85,6 +95,20 @@ export const PracticeScreen = ({
     playSuccess, playFail, playClick,
     playTierUp, playTierDown, playPhaseAdvance, playBadgeUnlock,
   } = useAudio();
+
+  // Enter key submits answer (or continues from wrong answer panel)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter') return;
+      if (wrongAnswerData) {
+        handleWrongAnswerContinue();
+      } else if (currentPhase !== 'green') {
+        handleSubmit();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
 
   const phaseIndex = PHASE_ORDER.indexOf(currentPhase);
 
@@ -161,6 +185,10 @@ export const PracticeScreen = ({
         setPhaseToast((t as any).difficultyDown ?? 'Easier numbers!');
         setTimeout(() => setPhaseToast(null), 2000);
       }
+      // Record error type for persistent memory
+      if (onRecordError) {
+        onRecordError(diagnoseErrorFn(inputs, result.expected).type);
+      }
       setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
     }
   };
@@ -171,6 +199,19 @@ export const PracticeScreen = ({
   };
 
   const advancePhase = () => {
+    // Award XP for completing the current phase (skip in repair mode)
+    let earnedXP = 0;
+    if (!repairMode && onEarnXP) {
+      const phaseRatios: Record<PracticePhase, number> = {
+        green: 0.10, amber: 0.15, red: 0.25, battle: 0.50,
+      };
+      const base = Math.max(3, Math.round((mission.reward || 50) * phaseRatios[currentPhase]));
+      // First clear: full XP; repeat (any phase ever done): 20%
+      const isRepeat = !!(phaseCompletions && Object.values(phaseCompletions).some(Boolean));
+      earnedXP = isRepeat ? Math.max(1, Math.round(base * 0.2)) : base;
+      onEarnXP(earnedXP);
+    }
+
     const nextIdx = phaseIndex + 1;
     if (nextIdx >= PHASE_ORDER.length) {
       // All phases done — show badge or complete
@@ -186,13 +227,15 @@ export const PracticeScreen = ({
     const nextPhase = PHASE_ORDER[nextIdx];
     setCurrentPhase(nextPhase);
     setPhaseCorrectCount(0);
-    const toasts: Record<string, string> = {
+    const phaseLabels: Record<string, string> = {
       amber: (t as any).phaseToAmber ?? 'Now try with hints.',
       red: (t as any).phaseToRed ?? 'No hints \u2014 independent challenge!',
       battle: lang === 'en' ? 'Final battle \u2014 10 questions!' : '\u6700\u7ec8\u95ef\u5173\u2014\u201410 \u9898\u6311\u6218\uff01',
     };
-    if (toasts[nextPhase]) {
-      setPhaseToast(toasts[nextPhase]);
+    const xpLabel = earnedXP > 0 ? ` \u2728 +${earnedXP} XP` : '';
+    const label = phaseLabels[nextPhase] ?? '';
+    if (label || xpLabel) {
+      setPhaseToast(`${label}${xpLabel}`);
       setTimeout(() => setPhaseToast(null), 2500);
     }
     regenerateQuestion();
@@ -410,8 +453,8 @@ export const PracticeScreen = ({
             </div>
 
             {/* Visual diagram — rendered by renderDiagram or fallback to VisualData */}
-            {renderDiagram(currentMission, currentPhase, tutorialStep)
-              || (currentPhase !== 'red' ? <VisualData mission={currentMission} lang={lang} /> : null)}
+            {(currentPhase !== 'battle' && renderDiagram(currentMission, currentPhase, tutorialStep))
+              || (currentPhase !== 'red' && currentPhase !== 'battle' ? <VisualData mission={currentMission} lang={lang} /> : null)}
 
             {/* Green phase: show formula in left panel as reference */}
             {currentPhase === 'green' && (

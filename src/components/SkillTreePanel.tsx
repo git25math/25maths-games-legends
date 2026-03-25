@@ -49,6 +49,9 @@ export const SkillTreePanel = ({
             <p className="text-amber-400 text-sm font-bold">
               {(t as any).skillPointsAvailable ?? '修炼点'}: {availableSP}
             </p>
+            <p className="text-white/30 text-[10px] mt-0.5">
+              {(t as any).spSourceHint ?? '每升一级 +1 修炼点'}
+            </p>
           </div>
           <button onClick={onClose} className="p-2 text-white/40 hover:text-white transition-colors">
             <X size={24} />

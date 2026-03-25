@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight } from 'lucide-react';
+import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
@@ -8,6 +8,7 @@ import { MathView, LatexText } from '../components/MathView';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { interpolate } from '../utils/interpolate';
 import { useAudio } from '../audio';
+import { supabase } from '../supabase';
 import { tapScale, hoverGlow, springIn, staggerContainer, staggerItem } from '../utils/animationPresets';
 import { EmptyState } from '../components/EmptyState';
 import { getLevelInfo } from '../utils/xpLevels';
@@ -16,8 +17,12 @@ import { MissionProgressBar } from '../components/MissionProgressBar';
 import { SkillTreePanel } from '../components/SkillTreePanel';
 import { EquipmentPanel } from '../components/EquipmentPanel';
 import { BattlePassPanel } from '../components/BattlePassPanel';
-import { getEquipmentState, countNeedsRepair } from '../utils/equipment';
+import { DailyQuestPanel } from '../components/DailyQuestPanel';
+import { getEquipmentState, countNeedsRepair, EQUIPMENT_COLORS } from '../utils/equipment';
+import type { KPEquipment, EquipmentState } from '../types';
 import { getExpeditionsForGrade, type Expedition } from '../data/expeditions';
+import { getNextMilestone } from '../data/streakMilestones';
+import { getWeakMissions, getMistakes, rankByWeakness } from '../utils/errorMemory';
 import type { CharacterProgression } from '../types';
 
 const CHAPTER_IMAGES = [
@@ -79,6 +84,8 @@ export const MapScreen = ({
   onEquipSkill,
   onRepairEquipment,
   onStartExpedition,
+  hotTopicInfo,
+  onLeaderboard,
 }: {
   lang: Language;
   profile: UserProfile;
@@ -99,6 +106,8 @@ export const MapScreen = ({
   onEquipSkill?: (charId: string, skillId: string | null) => void;
   onRepairEquipment?: (missionId: number) => void;
   onStartExpedition?: (expeditionId: string) => void;
+  hotTopicInfo?: { topic: string; label: { zh: string; zh_TW: string; en: string }; multiplier: number };
+  onLeaderboard?: () => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
@@ -114,6 +123,24 @@ export const MapScreen = ({
     const timer = setInterval(() => setCountdown(getSecondsUntilMidnight()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Class rank (lightweight query, runs once)
+  const [classRankInfo, setClassRankInfo] = useState<{ rank: number; total: number } | null>(null);
+  useEffect(() => {
+    const tags = profile.class_tags;
+    if (!tags?.length || !profile.grade) return;
+    supabase
+      .from('gl_user_progress')
+      .select('user_id, total_score')
+      .eq('grade', profile.grade)
+      .contains('class_tags', [tags[0]])
+      .order('total_score', { ascending: false })
+      .then(({ data }) => {
+        if (!data) return;
+        const rank = data.findIndex(d => d.user_id === profile.user_id) + 1;
+        setClassRankInfo(rank > 0 ? { rank, total: data.length } : null);
+      });
+  }, [profile.user_id, profile.total_score]);
 
   useEffect(() => { playBGMMap(); return () => stopBGM(); }, []);
 
@@ -156,6 +183,11 @@ export const MapScreen = ({
   ).length;
   const levelInfo = getLevelInfo(profile.total_score);
   const rankName = levelInfo.rank[lang === 'zh_TW' ? 'zh_TW' : lang === 'en' ? 'en' : 'zh'];
+  const xpToNext = levelInfo.xpForNextLevel - levelInfo.currentXP;
+  const isNearLevel = levelInfo.xpForNextLevel > 0 && xpToNext <= Math.ceil(levelInfo.xpForNextLevel * 0.20) && xpToNext > 0;
+  const nextRankName = isNearLevel
+    ? getLevelInfo(levelInfo.totalXPForLevel + levelInfo.xpForNextLevel).rank[lang === 'zh_TW' ? 'zh_TW' : lang === 'en' ? 'en' : 'zh']
+    : '';
   const dailyMission = getDailyMission(missions, profile.grade);
   const dailyDone = isDailyCompleted(profile.completed_missions);
   const streakTokens = ((profile.completed_missions as Record<string, unknown>)['_streak_tokens'] as number) || 0;
@@ -167,6 +199,24 @@ export const MapScreen = ({
   const completedUnits = unitDataList.slice(0, Math.max(0, activeUnitIdx));
   const currentUnit = unitDataList[activeUnitIdx];
   const upcomingUnits = unitDataList.slice(activeUnitIdx + 1);
+
+  // ── Equipment decay map (for repair badges on cards) ──
+  const equipmentDecayMap = (() => {
+    const raw = (profile.completed_missions as any)?._equipment as Record<string, KPEquipment> | undefined;
+    if (!raw) return new Map<number, EquipmentState>();
+    const map = new Map<number, EquipmentState>();
+    for (const [mid, eq] of Object.entries(raw)) {
+      const state = getEquipmentState(eq.lastMasteredAt);
+      if (state !== 'pristine') map.set(Number(mid), state);
+    }
+    return map;
+  })();
+
+  // ── Weak missions (high error rate) ──
+  const weakMissionSet = getWeakMissions(
+    ((profile.completed_missions as any)?._mistakes ?? {}) as any,
+    3, // threshold: 3+ errors = weak
+  );
 
   // ── Render a full mission grid for a unit ──
   const renderUnitGrid = (u: UnitData, isCurrentUnit: boolean) => (
@@ -259,6 +309,20 @@ export const MapScreen = ({
                     </div>
                   </motion.div>
                 )}
+                {!isPerfect && (() => {
+                  const eqState = equipmentDecayMap.get(mission.id);
+                  if (!eqState || !onRepairEquipment) return null;
+                  const colors = EQUIPMENT_COLORS[eqState];
+                  return (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); playTap(); onRepairEquipment(mission.id); }}
+                      className={`absolute -top-2 -right-2 w-8 h-8 rounded-full ${colors.bg} border ${colors.border} flex items-center justify-center shadow-md z-10 hover:scale-110 transition-transform`}
+                      title={lang === 'en' ? 'Needs repair' : '需要修复'}
+                    >
+                      <Wrench size={14} className={colors.text} />
+                    </button>
+                  );
+                })()}
                 <div className="flex justify-between items-start mb-6">
                   <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                     mission.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' :
@@ -277,7 +341,32 @@ export const MapScreen = ({
                 </div>
                 <h4 className="text-lg md:text-2xl font-black text-slate-800 mb-1">{lt(mission.title, lang)}</h4>
                 <p className="text-indigo-600 text-[10px] font-bold mb-3 uppercase">{t.questionTypes[mission.type]}</p>
-                <LatexText text={interpolate(lt(mission.description, lang), mission.data ?? {})} className="text-slate-500 text-sm mb-8 line-clamp-3 block" />
+                <LatexText text={interpolate(lt(mission.description, lang), mission.data ?? {})} className="text-slate-500 text-sm mb-3 line-clamp-3 block" />
+                {(() => {
+                  const pb = (profile.completed_missions as any)?._pb?.[String(mission.id)] as number | undefined;
+                  const isHot = hotTopicInfo?.topic === mission.topic;
+                  const hotLabel = hotTopicInfo ? (lang === 'en' ? hotTopicInfo.label.en : lang === 'zh_TW' ? hotTopicInfo.label.zh_TW : hotTopicInfo.label.zh) : '';
+                  const isWeak = weakMissionSet.has(mission.id);
+                  return (pb || isHot || isWeak) ? (
+                    <div className="flex items-center gap-1.5 mb-4 flex-wrap">
+                      {isWeak && (
+                        <span className="px-2 py-0.5 bg-rose-100 text-rose-700 text-[10px] font-black rounded-full border border-rose-200 flex items-center gap-0.5">
+                          <AlertTriangle size={10} /> {lang === 'en' ? 'Needs review' : '薄弱点'}
+                        </span>
+                      )}
+                      {pb && (
+                        <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-black rounded-full border border-amber-200">
+                          PB {pb}
+                        </span>
+                      )}
+                      {isHot && (
+                        <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] font-black rounded-full border border-orange-200 animate-pulse">
+                          🔥 {lang === 'en' ? `${hotLabel} ×1.5` : `本周热点 ×1.5`}
+                        </span>
+                      )}
+                    </div>
+                  ) : <div className="mb-4" />;
+                })()}
                 <motion.button
                   {...(isLocked ? {} : { ...tapScale, ...hoverGlow })}
                   disabled={!!isLocked}
@@ -334,10 +423,28 @@ export const MapScreen = ({
                   className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full"
                 />
               </div>
-              <span className="text-[10px] text-yellow-400/70 font-bold">
-                {levelInfo.xpForNextLevel > 0 ? `${levelInfo.currentXP}/${levelInfo.xpForNextLevel}` : 'MAX'}
-              </span>
+              {isNearLevel ? (
+                <motion.span
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                  className="text-[10px] text-yellow-300 font-black"
+                >
+                  {lang === 'en' ? `${xpToNext} XP to ${nextRankName}!` : `再 ${xpToNext} 分 → ${nextRankName}`}
+                </motion.span>
+              ) : (
+                <span className="text-[10px] text-yellow-400/70 font-bold">
+                  {levelInfo.xpForNextLevel > 0 ? `${levelInfo.currentXP}/${levelInfo.xpForNextLevel}` : 'MAX'}
+                </span>
+              )}
             </div>
+            {classRankInfo && (
+              <p className="text-white/30 text-[10px] font-bold mt-1">
+                {lang === 'en'
+                  ? `Class rank #${classRankInfo.rank} of ${classRankInfo.total} · Top ${Math.round((classRankInfo.rank / classRankInfo.total) * 100)}%`
+                  : `班级第 ${classRankInfo.rank} 名 · 共 ${classRankInfo.total} 人 · 超越 ${Math.round(((classRankInfo.total - classRankInfo.rank) / classRankInfo.total) * 100)}%`
+                }
+              </p>
+            )}
             <div className="flex flex-wrap items-center gap-2 mt-1">
               <p className="text-indigo-400 font-bold text-sm">{selectedChar ? lt(selectedChar.name, lang) : ''}</p>
               <span className="text-white/20">|</span>
@@ -353,6 +460,19 @@ export const MapScreen = ({
                   {streakTokens >= 3 && <> · <Crown size={10} /> {t.streakKing}</>}
                 </span>
               )}
+              {(() => {
+                const loginData = (profile.completed_missions as any)?._login as { streak: number } | undefined;
+                if (!loginData?.streak || loginData.streak < 3) return null;
+                const claimed = ((profile.completed_missions as any)?._streak_milestones ?? []) as string[];
+                const next = getNextMilestone(loginData.streak, claimed);
+                if (!next) return null;
+                const daysLeft = next.days - loginData.streak;
+                return (
+                  <span className="px-2 py-0.5 bg-emerald-600/20 border border-emerald-500/30 rounded text-[10px] text-emerald-300 font-bold">
+                    🔥 {loginData.streak}{lang === 'en' ? 'd' : '天'} · {lang === 'en' ? `${daysLeft}d to ${next.title.en}` : `${daysLeft}天→${next.title.zh}`}
+                  </span>
+                );
+              })()}
               {getCharProgression && selectedChar && (
                 <button onClick={() => setShowSkillTree(true)} className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors">
                   {(t as any).skillTree ?? 'Skills'}
@@ -369,6 +489,11 @@ export const MapScreen = ({
                   </button>
                 );
               })()}
+              {onLeaderboard && (
+                <button onClick={onLeaderboard} className="px-2 py-0.5 bg-yellow-600/20 border border-yellow-500/30 rounded text-xs text-yellow-300 hover:bg-yellow-600/40 transition-colors flex items-center gap-1">
+                  🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
+                </button>
+              )}
               <button onClick={() => setShowBattlePass(true)} className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors">
                 {(t as any).growthHandbook ?? '\u624b\u518c'}
               </button>
@@ -453,6 +578,25 @@ export const MapScreen = ({
           </div>
         </motion.div>
       )}
+
+      {/* ═══════════════════ Daily Quest Panel ═══════════════════ */}
+      <DailyQuestPanel
+        lang={lang}
+        completedMissions={profile.completed_missions as Record<string, unknown>}
+        onSmartStart={(m) => { playTap(); onPracticeStart(m); }}
+        {...(() => {
+          // Priority: weakest mission in current grade > firstPlayable
+          const mistakes = getMistakes(profile.completed_missions as Record<string, unknown>);
+          const weakRanked = rankByWeakness(mistakes);
+          const gradeMissionIds = new Set(gradeMissions.map(m => m.id));
+          const weakInGrade = weakRanked.find(id => gradeMissionIds.has(id));
+          if (weakInGrade) {
+            const m = gradeMissions.find(gm => gm.id === weakInGrade);
+            if (m) return { recommendedMission: m, isWeakRecommendation: true };
+          }
+          return { recommendedMission: currentUnit?.firstPlayable ?? null, isWeakRecommendation: false };
+        })()}
+      />
 
       {/* ═══════════════════ Mission Map ═══════════════════ */}
       <div className="relative rounded-3xl overflow-hidden bg-[#1a1a2e]">

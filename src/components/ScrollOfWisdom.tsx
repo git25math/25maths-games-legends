@@ -1,11 +1,23 @@
 import { motion } from 'motion/react';
-import { BookOpen, XCircle, Sparkles, Zap } from 'lucide-react';
+import { BookOpen, XCircle, Sparkles, Zap, AlertTriangle } from 'lucide-react';
 import type { Mission, Language } from '../types';
+import type { ErrorType } from '../utils/diagnoseError';
 import { translations } from '../i18n/translations';
 import { lt, resolveFormula } from '../i18n/resolveText';
 import { MathView, LatexText } from './MathView';
 
-export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; lang: Language; onClose: () => void }) => {
+const ERROR_TIPS: Record<ErrorType, { zh: string; en: string }> = {
+  sign: { zh: '注意正负号！上次你在这里犯了符号错误', en: 'Watch your signs! You made a sign error here before' },
+  rounding: { zh: '小心四舍五入和小数点', en: 'Be careful with rounding and decimals' },
+  magnitude: { zh: '检查量级——上次你的答案差了好几倍', en: 'Check the magnitude — your answer was off by a factor last time' },
+  method: { zh: '方法对了但计算出错——仔细算每一步', en: 'Method was right but calculation was wrong — work through each step carefully' },
+  unknown: { zh: '这道题需要多想一步，别着急', en: 'Take your time with this one — think it through' },
+};
+
+export const ScrollOfWisdom = ({ mission, lang, onClose, errorHint }: {
+  mission: Mission; lang: Language; onClose: () => void;
+  errorHint?: { count: number; dominant: ErrorType | null } | null;
+}) => {
   const t = translations[lang];
   return (
     <motion.div
@@ -71,6 +83,25 @@ export const ScrollOfWisdom = ({ mission, lang, onClose }: { mission: Mission; l
               ))}
             </ul>
           </motion.section>
+          {errorHint && errorHint.count >= 2 && errorHint.dominant && (
+            <motion.section
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 }}
+              className="bg-rose-50 border-2 border-rose-200 rounded-2xl p-4"
+            >
+              <h3 className="text-rose-700 font-bold text-xs mb-1 flex items-center gap-1.5">
+                <AlertTriangle size={14} />
+                {lang === 'en' ? 'Advisor\'s Warning' : '军师提醒'}
+              </h3>
+              <p className="text-rose-600/80 text-sm">
+                {lang === 'en' ? ERROR_TIPS[errorHint.dominant].en : ERROR_TIPS[errorHint.dominant].zh}
+              </p>
+              <p className="text-rose-400 text-[10px] mt-1">
+                {lang === 'en' ? `(${errorHint.count} errors on record)` : `(历史错误 ${errorHint.count} 次)`}
+              </p>
+            </motion.section>
+          )}
           <motion.button
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}

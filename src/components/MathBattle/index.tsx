@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Volume2, VolumeX, Flame, Heart, Zap, Eye } from 'lucide-react';
+import { XCircle, Trophy, MapIcon, Shield, Swords, ChevronRight, ChevronLeft, Volume2, VolumeX, Flame, Heart, Zap, Eye, CheckCircle2 } from 'lucide-react';
 import type { Mission, Character, Language, Room, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
 import { lt, resolveFormula } from '../../i18n/resolveText';
@@ -22,9 +22,13 @@ import { WrongAnswerPanel } from './WrongAnswerPanel';
 import { generateMission } from '../../utils/generateMission';
 import { SKILL_CARDS } from '../SkillCardSelector';
 import { CalculatorWidget } from '../Calculator';
+import { diagnoseError } from '../../utils/diagnoseError';
+
+import type { BattleMode } from '../BattleModeSelector';
 
 const DIFFICULTY_MULTIPLIER: Record<DifficultyMode, number> = { green: 1, amber: 1.5, red: 2 };
-const TOTAL_QUESTIONS = 5;
+const MODE_QUESTIONS: Record<BattleMode, number> = { classic: 5, speed: 50, marathon: 20 };
+const MODE_HP: Record<BattleMode, number> = { classic: 4, speed: 999, marathon: 999 };
 
 export const MathBattle = ({
   mission,
@@ -40,7 +44,11 @@ export const MathBattle = ({
   completedDifficulties = {},
   isDailyChallenge = false,
   dailyMultiplier = 1,
+  hotTopicMultiplier = 1,
   onStreakToken,
+  onStreakMilestone3,
+  onRecordError,
+  battleMode = 'classic',
   heroSkillEffect = null,
 }: {
   mission: Mission;
@@ -56,15 +64,21 @@ export const MathBattle = ({
   completedDifficulties?: Record<string, boolean>;
   isDailyChallenge?: boolean;
   dailyMultiplier?: number;
+  hotTopicMultiplier?: number;
   onStreakToken?: () => void;
+  onStreakMilestone3?: () => void;
+  onRecordError?: (errorType: import('../../utils/diagnoseError').ErrorType) => void;
+  battleMode?: BattleMode;
   heroSkillEffect?: { effect: 'extra_hint' | 'time_extend' | 'error_forgive'; value: number } | null;
 }) => {
   const isMultiQuestion = !!mission.data?.generatorType;
 
-  // Build question queue: 5 generated questions for multi-question, or just [mission] for single
+  const totalQuestions = isMultiQuestion ? MODE_QUESTIONS[battleMode] : 1;
+
+  // Build question queue based on battle mode
   const [questionQueue] = useState<Mission[]>(() => {
     if (!isMultiQuestion) return [mission];
-    return Array.from({ length: TOTAL_QUESTIONS }, () => generateMission(mission));
+    return Array.from({ length: totalQuestions }, () => generateMission(mission));
   });
 
   const [currentQIdx, setCurrentQIdx] = useState(0);
@@ -73,6 +87,7 @@ export const MathBattle = ({
   const [peakStreak, setPeakStreak] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [floatingScore, setFloatingScore] = useState<{ value: string; key: number } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentQuestion = questionQueue[currentQIdx];
 
@@ -84,7 +99,7 @@ export const MathBattle = ({
   const [inputs, setInputs] = useState<{ [key: string]: string }>({});
   const [showResult, setShowResult] = useState<'none' | 'success' | 'fail'>('none');
   const [wrongAnswerData, setWrongAnswerData] = useState<{ userInputs: Record<string, string>; expected: Record<string, string> } | null>(null);
-  const [hp, setHp] = useState(4);
+  const [hp, setHp] = useState(MODE_HP[battleMode]);
   // v7.0: Hero skill error_forgive charges
   const [heroForgiveCharges, setHeroForgiveCharges] = useState(
     heroSkillEffect?.effect === 'error_forgive' ? heroSkillEffect.value : 0
@@ -100,6 +115,11 @@ export const MathBattle = ({
   const [partialCreditInfo, setPartialCreditInfo] = useState<{ score: number } | null>(null);
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
+  // Speed mode: countdown timer (ms)
+  const [speedTimeLeft, setSpeedTimeLeft] = useState(battleMode === 'speed' ? 60000 : 0);
+  const speedIntervalRef = useRef<number | null>(null);
+  const totalScoreRef = useRef(0);
+  totalScoreRef.current = totalScore; // always holds latest score for timer callback
   const achievementTimerRef = useRef<number | null>(null);
   const shakeTimerRef = useRef<number | null>(null);
   const advanceTimerRef = useRef<number | null>(null);
@@ -143,8 +163,28 @@ export const MathBattle = ({
       if (advanceTimerRef.current !== null) clearTimeout(advanceTimerRef.current);
       if (milestoneTimerRef.current !== null) clearTimeout(milestoneTimerRef.current);
       if (victoryReturnTimerRef.current !== null) clearTimeout(victoryReturnTimerRef.current);
+      if (speedIntervalRef.current !== null) clearInterval(speedIntervalRef.current);
     };
   }, []);
+
+  // Speed mode: countdown tick (uses refs to avoid stale closures in setInterval)
+  useEffect(() => {
+    if (battleMode !== 'speed' || showResult !== 'none') return;
+    speedIntervalRef.current = window.setInterval(() => {
+      setSpeedTimeLeft(prev => {
+        if (prev <= 100) {
+          if (speedIntervalRef.current !== null) clearInterval(speedIntervalRef.current);
+          const duration = Math.round((Date.now() - startTime) / 1000);
+          setFinalDuration(duration);
+          setFinalScore(totalScoreRef.current); // ref avoids stale closure
+          triggerVictorySequence();
+          return 0;
+        }
+        return prev - 100;
+      });
+    }, 100);
+    return () => { if (speedIntervalRef.current !== null) clearInterval(speedIntervalRef.current); };
+  }, [battleMode, showResult]);
 
   useEffect(() => {
     if (showResult === 'fail') {
@@ -152,6 +192,20 @@ export const MathBattle = ({
       setEncouragement(randomEnc);
     }
   }, [showResult]);
+
+  // Enter key submits answer (or continues from wrong answer panel)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter') return;
+      if (wrongAnswerData) {
+        handleWrongAnswerContinue();
+      } else if (showResult === 'none' && mode === 'battle') {
+        handleSubmit();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
 
   const triggerVictorySequence = () => {
     setShowResult('success');
@@ -193,6 +247,8 @@ export const MathBattle = ({
   };
 
   const handleSubmit = () => {
+    if (isSubmitting || showResult !== 'none') return;
+    setIsSubmitting(true);
     playClick();
     const rawResult = checkAnswer(currentQuestion, inputs);
     const result = checkPartialCredit(currentQuestion, inputs, rawResult);
@@ -207,7 +263,7 @@ export const MathBattle = ({
         const streakMult = getStreakMultiplier(newStreak);
         const diffMult = DIFFICULTY_MULTIPLIER[difficultyMode];
         const doubleMult = (skillCard === 'double' && currentQIdx >= 2) ? 2 : 1;
-        const score = Math.round(currentQuestion.reward * streakMult * diffMult * doubleMult * dailyMultiplier);
+        const score = Math.round(currentQuestion.reward * streakMult * diffMult * doubleMult * dailyMultiplier * hotTopicMultiplier);
 
         setStreak(newStreak);
         setPeakStreak(prev => Math.max(prev, newStreak));
@@ -220,17 +276,22 @@ export const MathBattle = ({
           setStreakMilestone(newStreak);
           if (milestoneTimerRef.current !== null) clearTimeout(milestoneTimerRef.current);
           milestoneTimerRef.current = window.setTimeout(() => setStreakMilestone(null), 800);
-          // Award streak token at streak 5
+          // Award streak token at streak 5; season task at streak 3
+          if (newStreak === 3 && onStreakMilestone3) onStreakMilestone3();
           if (newStreak === 5 && onStreakToken) onStreakToken();
         }
 
+        // Speed mode: +5s on correct
+        if (battleMode === 'speed') setSpeedTimeLeft(prev => prev + 5000);
+
         // Floating score
         const multLabel = doubleMult > 1 ? `x${streakMult * doubleMult}` : streakMult > 1 ? `x${streakMult}` : '';
-        const label = multLabel ? `+${score} (${multLabel})` : `+${score}`;
+        const timeLabel = battleMode === 'speed' ? ' +5s' : '';
+        const label = multLabel ? `+${score} (${multLabel})${timeLabel}` : `+${score}${timeLabel}`;
         floatingKeyRef.current += 1;
         setFloatingScore({ value: label, key: floatingKeyRef.current });
 
-        // Check if this was the last question
+        // Check if this was the last question (speed mode: never runs out of questions via index)
         if (currentQIdx + 1 >= questionQueue.length) {
           const duration = Math.round((Date.now() - startTime) / 1000);
           setFinalDuration(duration);
@@ -243,6 +304,7 @@ export const MathBattle = ({
             setInputs({});
             setWrongAnswerData(null);
             setPartialCreditInfo(null);
+            setIsSubmitting(false);
             setCurrentQIdx(prev => prev + 1);
           }, BATTLE_TIMING.advance);
         }
@@ -251,7 +313,7 @@ export const MathBattle = ({
         const duration = (Date.now() - startTime) / 1000;
         const speedBonus = Math.max(0, 100 - Math.floor(duration));
         const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];
-        const score = Math.round((mission.reward + speedBonus) * multiplier * dailyMultiplier);
+        const score = Math.round((mission.reward + speedBonus) * multiplier * dailyMultiplier * hotTopicMultiplier);
         setFinalScore(score);
         setFinalDuration(Math.round(duration));
         triggerVictorySequence();
@@ -284,6 +346,11 @@ export const MathBattle = ({
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       setShakeKey(k => k + 1);
       shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), BATTLE_TIMING.shake);
+      // Record error type for persistent mistake memory
+      if (onRecordError) {
+        const diag = diagnoseError(inputs, result.expected);
+        onRecordError(diag.type);
+      }
       // Show wrong answer panel with solution before deducting HP
       setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
     }
@@ -294,6 +361,7 @@ export const MathBattle = ({
     setWrongAnswerData(null);
     setInputs({});
     setPartialCreditInfo(null);
+    setIsSubmitting(false);
 
     // Partial credit: no HP loss, no streak break — just advance
     if (wasPartial) {
@@ -349,21 +417,30 @@ export const MathBattle = ({
         return;
       }
 
-      playHpLoss();
-      const nextHp = hp - 1;
-      setHp(nextHp);
-      if (nextHp <= 0) {
-        // Show fail overlay immediately to block interaction;
-        // defeat sound plays after hpLoss fades
-        setShowResult('fail');
-        stopBGM();
-        advanceTimerRef.current = window.setTimeout(() => playDefeat(), BATTLE_TIMING.defeatSound);
+      let alive = true;
+      if (battleMode === 'speed') {
+        // Speed mode: -10s penalty instead of HP loss
+        playHpLoss();
+        setSpeedTimeLeft(prev => Math.max(0, prev - 10000));
+      } else if (battleMode === 'marathon') {
+        // Marathon mode: no HP loss, just play sound
+        playHpLoss();
+      } else {
+        // Classic mode: HP loss
+        playHpLoss();
+        const nextHp = hp - 1;
+        setHp(nextHp);
+        if (nextHp <= 0) {
+          alive = false;
+          setShowResult('fail');
+          stopBGM();
+          advanceTimerRef.current = window.setTimeout(() => playDefeat(), BATTLE_TIMING.defeatSound);
+        }
       }
 
       // Still alive — advance to next question
-      if (nextHp > 0) {
+      if (alive) {
         if (currentQIdx + 1 >= questionQueue.length) {
-          // Was last question, show success (they survived)
           const duration = Math.round((Date.now() - startTime) / 1000);
           setFinalDuration(duration);
           setFinalScore(totalScore);
@@ -444,10 +521,27 @@ export const MathBattle = ({
             <div>
               <h2 className="text-base md:text-xl font-black tracking-widest">{lt(character.name, lang)} - {lt(mission.title, lang)}</h2>
               <div className="flex gap-1 mt-1 items-center">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className={`w-4 h-4 rounded-full border border-black ${i < hp ? 'bg-red-600 shadow-[0_0_5px_rgba(220,38,38,0.8)]' : 'bg-slate-800'}`} />
-                ))}
-                <span className="text-[10px] ml-2 font-bold text-red-400 uppercase">{t.hp}</span>
+                {battleMode === 'speed' ? (
+                  <>
+                    <Zap size={14} className={speedTimeLeft < 10000 ? 'text-rose-400 animate-pulse' : 'text-amber-400'} />
+                    <span className={`text-sm font-black tabular-nums ${speedTimeLeft < 10000 ? 'text-rose-400' : 'text-amber-300'}`}>
+                      {Math.ceil(speedTimeLeft / 1000)}s
+                    </span>
+                  </>
+                ) : battleMode === 'marathon' ? (
+                  <>
+                    <span className="text-[10px] font-bold text-emerald-400">
+                      {correctCount}/{totalQuestions} ({totalQuestions > 0 ? Math.round((correctCount / Math.max(1, currentQIdx + (showResult !== 'none' ? 0 : 1))) * 100) : 0}%)
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className={`w-4 h-4 rounded-full border border-black ${i < hp ? 'bg-red-600 shadow-[0_0_5px_rgba(220,38,38,0.8)]' : 'bg-slate-800'}`} />
+                    ))}
+                    <span className="text-[10px] ml-2 font-bold text-red-400 uppercase">{t.hp}</span>
+                  </>
+                )}
 
                 {/* Streak badge */}
                 {isMultiQuestion && streak >= 2 && (
@@ -638,7 +732,7 @@ export const MathBattle = ({
               <motion.button
                 {...(wrongAnswerData ? {} : { ...tapScale, ...hoverGlow })}
                 onClick={handleSubmit}
-                disabled={!!wrongAnswerData}
+                disabled={!!wrongAnswerData || isSubmitting}
                 className={`w-full py-4 md:py-6 text-[#f4e4bc] text-lg md:text-2xl font-black rounded-lg transition-shadow flex items-center justify-center gap-4 border-2 min-h-12 ${wrongAnswerData ? 'bg-slate-500 border-slate-600 cursor-not-allowed' : 'bg-[#8b0000] shadow-[0_4px_0_#5c0000] border-[#5c0000]'}`}
               >
                 <Swords size={28} />
@@ -786,7 +880,9 @@ export const MathBattle = ({
                         {[
                           { icon: <Trophy size={20} className="text-yellow-600" />, label: lang === 'zh' ? '得分' : lang === 'zh_TW' ? '得分' : 'Score', value: finalScore, color: 'bg-yellow-100 border-yellow-300' },
                           { icon: <span className="text-xl">⏱️</span>, label: lang === 'zh' ? '用时' : lang === 'zh_TW' ? '用時' : 'Time', value: `${finalDuration}s`, color: 'bg-blue-100 border-blue-300' },
-                          { icon: <Heart size={20} className="text-red-500 fill-red-500" />, label: lang === 'zh' ? '剩余体力' : lang === 'zh_TW' ? '剩餘體力' : 'HP Left', value: hp, color: 'bg-red-100 border-red-300' },
+                          battleMode === 'marathon' || battleMode === 'speed'
+                            ? { icon: <CheckCircle2 size={20} className="text-emerald-500" />, label: lang === 'zh' ? '正确率' : lang === 'zh_TW' ? '正確率' : 'Accuracy', value: `${correctCount}/${isMultiQuestion ? currentQIdx + 1 : 1}`, color: 'bg-emerald-100 border-emerald-300' }
+                            : { icon: <Heart size={20} className="text-red-500 fill-red-500" />, label: lang === 'zh' ? '剩余体力' : lang === 'zh_TW' ? '剩餘體力' : 'HP Left', value: hp, color: 'bg-red-100 border-red-300' },
                         ].map((stat, i) => (
                           <motion.div
                             key={i}

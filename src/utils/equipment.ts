@@ -27,8 +27,12 @@ const STATE_PRIORITY: Record<EquipmentState, number> = {
   broken: 0, damaged: 1, worn: 2, pristine: 3,
 };
 
-/** Get all equipment from completed_missions JSONB, sorted by urgency */
-export function getEquipmentList(completedMissions: Record<string, unknown>): (KPEquipment & { state: EquipmentState })[] {
+/** Get all equipment from completed_missions JSONB, sorted by urgency.
+ *  If mistakes map provided, factors error count into sort (more errors = higher priority). */
+export function getEquipmentList(
+  completedMissions: Record<string, unknown>,
+  mistakes?: Record<string, { count: number }>,
+): (KPEquipment & { state: EquipmentState })[] {
   const raw = (completedMissions as any)._equipment as Record<string, KPEquipment> | undefined;
   if (!raw) return [];
   return Object.entries(raw)
@@ -37,7 +41,18 @@ export function getEquipmentList(completedMissions: Record<string, unknown>): (K
       missionId: Number(mid),
       state: getEquipmentState(eq.lastMasteredAt),
     }))
-    .sort((a, b) => STATE_PRIORITY[a.state] - STATE_PRIORITY[b.state]);
+    .sort((a, b) => {
+      const pA = STATE_PRIORITY[a.state];
+      const pB = STATE_PRIORITY[b.state];
+      if (pA !== pB) return pA - pB;
+      // Same state: sort by mistake count (more errors first)
+      if (mistakes) {
+        const mA = mistakes[String(a.missionId)]?.count ?? 0;
+        const mB = mistakes[String(b.missionId)]?.count ?? 0;
+        return mB - mA;
+      }
+      return 0;
+    });
 }
 
 /** Count non-pristine equipment (for notification badge) */

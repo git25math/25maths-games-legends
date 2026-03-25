@@ -913,12 +913,6 @@ export function generatePrimeMission(template: Mission): Mission {
    FACTOR_TREE generator: prime factorization of a single number
    ══════════════════════════════════════════════════════════ */
 
-type FactorTreeNode = {
-  value: number;
-  isPrime?: boolean;
-  children?: [FactorTreeNode, FactorTreeNode];
-};
-
 export function generateFactorTreeMission(template: Mission): Mission {
   const tier = getTier();
   const pools = {

@@ -29,7 +29,8 @@ export const EquipmentPanel = ({
 }) => {
   const t = translations[lang];
   const { playTap } = useAudio();
-  const equipment = getEquipmentList(completedMissions);
+  const mistakes = (completedMissions as any)?._mistakes as Record<string, { count: number }> | undefined;
+  const equipment = getEquipmentList(completedMissions, mistakes);
 
   const getMissionTitle = (missionId: number): string => {
     const m = missions.find(m => m.id === missionId);

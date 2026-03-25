@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../supabase';
-import type { UserProfile, CompletedMissions, DifficultyMode, BattleResult, CharacterProgression, KPEquipment } from '../types';
+import type { UserProfile, CompletedMissions, DifficultyMode, BattleResult, CharacterProgression } from '../types';
 import type { User } from '@supabase/supabase-js';
 import { handleSupabaseError } from '../utils/errors';
 import { getSkillById, defaultProgression } from '../data/heroSkills';
-import { computeRepairBonus } from '../utils/equipment';
 
 const DEFAULT_STATS = { Algebra: 0, Geometry: 0, Functions: 0, Calculus: 0, Statistics: 0 };
 const GUEST_STORAGE_KEY = 'gl_guest_profile';
@@ -98,6 +97,11 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     }
   };
 
+  /**
+   * Record a battle result. Inserts to gl_battle_results.
+   * Returns computed profile updates (completed_missions, stats, newScore) WITHOUT saving them,
+   * so the caller can merge additional changes (season, equipment) into a single updateProfile call.
+   */
   const recordBattleComplete = async (
     missionId: number,
     difficultyMode: DifficultyMode,
@@ -107,8 +111,8 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     hpRemaining: number,
     topic: string,
     kpId?: string,
-  ) => {
-    if (!profile) return;
+  ): Promise<{ completedMissions: any; stats: typeof DEFAULT_STATS; newScore: number } | null> => {
+    if (!profile) return null;
 
     // Record battle result (skip for guest)
     if (user && !isGuest) {
@@ -137,12 +141,16 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
       const key = topic as keyof typeof newStats;
       if (key in newStats) newStats[key] += 1;
 
-      await updateProfile({
-        total_score: profile.total_score + score,
-        completed_missions: newCompleted,
-        stats: newStats,
-      });
+      // Track personal best per mission
+      const cm = newCompleted as any;
+      if (!cm._pb) cm._pb = {};
+      if (score > (cm._pb[String(missionId)] ?? 0)) {
+        cm._pb[String(missionId)] = score;
+      }
+
+      return { completedMissions: cm, stats: newStats, newScore: profile.total_score + score };
     }
+    return null;
   };
 
   // --- v7.0: Skill Tree helpers ---
@@ -203,46 +211,9 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     await updateProfile({ completed_missions: cm });
   };
 
-  // --- v7.0: Equipment helpers ---
-
-  const markEquipment = async (missionId: number) => {
-    if (!profile) return;
-    const cm = { ...profile.completed_missions } as any;
-    if (!cm._equipment) cm._equipment = {};
-    const existing = cm._equipment[String(missionId)] as KPEquipment | undefined;
-    cm._equipment[String(missionId)] = {
-      missionId,
-      lastMasteredAt: Date.now(),
-      repairCount: existing?.repairCount ?? 0,
-    };
-    await updateProfile({ completed_missions: cm });
-  };
-
-  const repairEquipment = async (missionId: number): Promise<number> => {
-    if (!profile) return 0;
-    const cm = { ...profile.completed_missions } as any;
-    if (!cm._equipment?.[String(missionId)]) return 0;
-
-    const eq = cm._equipment[String(missionId)] as KPEquipment;
-    const bonus = computeRepairBonus(eq.repairCount);
-
-    cm._equipment[String(missionId)] = {
-      ...eq,
-      lastMasteredAt: Date.now(),
-      repairCount: eq.repairCount + 1,
-    };
-    await updateProfile({
-      completed_missions: cm,
-      total_score: profile.total_score + bonus,
-    });
-    return bonus;
-  };
-
   return {
     profile, updateProfile, recordBattleComplete,
     // Skill tree
     getCharProgression, getTotalSP, unlockSkill, equipSkill, grantSkillPoint,
-    // Equipment
-    markEquipment, repairEquipment,
   };
 }

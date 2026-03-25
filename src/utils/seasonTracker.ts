@@ -41,20 +41,18 @@ export function getSeasonProgress(completedMissions: Record<string, unknown>): S
   // Auto-reset daily tasks
   const todayStr = today();
   if (prog.daily_reset !== todayStr) {
-    SEASON_1_TASKS.filter(t => t.frequency === 'daily').forEach(t => {
-      delete prog.task_counts[t.id];
-      prog.completed_tasks = prog.completed_tasks.filter(id => !id.startsWith('daily_'));
-    });
+    const dailyIds = new Set(SEASON_1_TASKS.filter(t => t.frequency === 'daily').map(t => t.id));
+    dailyIds.forEach(id => delete prog.task_counts[id]);
+    prog.completed_tasks = prog.completed_tasks.filter(id => !dailyIds.has(id));
     prog.daily_reset = todayStr;
   }
 
   // Auto-reset weekly tasks
   const mondayStr = thisMonday();
   if (prog.weekly_reset !== mondayStr) {
-    SEASON_1_TASKS.filter(t => t.frequency === 'weekly').forEach(t => {
-      delete prog.task_counts[t.id];
-      prog.completed_tasks = prog.completed_tasks.filter(id => !id.startsWith('weekly_'));
-    });
+    const weeklyIds = new Set(SEASON_1_TASKS.filter(t => t.frequency === 'weekly').map(t => t.id));
+    weeklyIds.forEach(id => delete prog.task_counts[id]);
+    prog.completed_tasks = prog.completed_tasks.filter(id => !weeklyIds.has(id));
     prog.weekly_reset = mondayStr;
   }
 
