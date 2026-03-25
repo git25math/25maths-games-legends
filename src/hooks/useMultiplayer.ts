@@ -120,21 +120,6 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     setActiveRoom({ ...activeRoom, ...updates, players } as Room);
   };
 
-  /** Force-finish the room (countdown expired). Marks all unfinished players. */
-  const forceFinish = async () => {
-    if (!activeRoom) return;
-    const players = { ...activeRoom.players };
-    const now = Date.now();
-    for (const uid of Object.keys(players)) {
-      if (!players[uid].finishedAt) {
-        players[uid] = { ...players[uid], finishedAt: now };
-      }
-    }
-    const { error } = await supabase.from('gl_rooms').update({ players, status: 'finished' }).eq('id', activeRoom.id);
-    if (error) handleSupabaseError(error, 'update', 'gl_rooms');
-    setActiveRoom({ ...activeRoom, players, status: 'finished' });
-  };
-
   const leaveRoom = () => setActiveRoom(null);
 
   // Sync room state: polling every 2s + realtime attempt
@@ -160,5 +145,5 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     };
   }, [activeRoom?.id]);
 
-  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, forceFinish, leaveRoom };
+  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom };
 }

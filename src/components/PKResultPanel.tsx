@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, Swords, X, Medal } from 'lucide-react';
+import { Trophy, Swords, X } from 'lucide-react';
 import type { Language, Room, RoomPlayer } from '../types';
 import { lt } from '../i18n/resolveText';
 import { CHARACTERS } from '../data/characters';

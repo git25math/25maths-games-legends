@@ -157,13 +157,23 @@ export default function App() {
 
   // PK countdown: when any opponent finished and I haven't, tick down 30→0
   const pkAutoCompleteRef = useRef(false);
+  const pkFirstFinishRef = useRef<number | null>(null);
+
+  // Track first finish time via ref (avoids restarting interval on every poll)
   useEffect(() => {
-    const firstFinish = getFirstFinishTime(activeRoom);
-    if (gameState !== 'battle' || !firstFinish || activeRoom?.type !== 'pk') {
+    const t = getFirstFinishTime(activeRoom);
+    if (t && !pkFirstFinishRef.current) pkFirstFinishRef.current = t;
+  }, [activeRoom?.players]);
+
+  useEffect(() => {
+    if (gameState !== 'battle' || activeRoom?.type !== 'pk') {
       setPkCountdown(null);
+      pkFirstFinishRef.current = null;
       return;
     }
-    // If current user already finished, no countdown needed
+    const firstFinish = pkFirstFinishRef.current;
+    if (!firstFinish) return;
+    // If current user already finished, no countdown
     if (user && activeRoom!.players[user.id]?.finishedAt) {
       setPkCountdown(null);
       return;
@@ -174,13 +184,14 @@ export default function App() {
       setPkCountdown(Math.ceil(remaining));
       if (remaining <= 0 && !pkAutoCompleteRef.current) {
         pkAutoCompleteRef.current = true;
+        // Force submit with score 0 — gameState change in handleBattleComplete unmounts MathBattle
         handleBattleComplete(false, 0, 0, 0);
       }
     };
     tick();
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, [gameState, activeRoom?.players, user?.id]);
+  }, [gameState, pkFirstFinishRef.current]);
 
   // PK: show result when room status='finished' and all players done
   useEffect(() => {
@@ -468,14 +479,13 @@ export default function App() {
     pendingErrorsRef.current = [];
     setIsDailyBattle(false);
 
-    // PK mode: submit score and wait for all players to finish
-    // submitScore sets first_finish_at (if first) and marks room finished when all done
+    // PK mode: submit score, go to map, wait for room.status='finished' to show podium
     if (activeRoom?.type === 'pk' && user) {
       await submitScore(score);
       pkAutoCompleteRef.current = false;
       setPkCountdown(null);
-      // Don't show result yet — wait for room.status='finished' (useEffect above handles it)
-      // If all finished, the effect fires immediately; otherwise we wait for others + countdown
+      setActiveMission(null);
+      setGameState('map'); // unmount MathBattle; PKResult effect fires when room finishes
       return;
     }
 
@@ -1007,6 +1017,23 @@ export default function App() {
                 )}
                 <p className="text-white/20 text-[10px] mt-4">{lang === 'en' ? 'Tap to dismiss' : '点击关闭'}</p>
               </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ═══ PK Waiting Toast ═══ */}
+        <AnimatePresence>
+          {gameState === 'map' && activeRoom?.type === 'pk' && activeRoom.status === 'playing' && user && activeRoom.players[user.id]?.finishedAt && !showPKResult && (
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 60 }}
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[80] flex items-center gap-3 px-6 py-3 bg-indigo-600/90 backdrop-blur-md border border-indigo-400/50 rounded-2xl shadow-2xl"
+            >
+              <div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              <p className="text-white font-bold text-sm">
+                {lang === 'en' ? 'Waiting for opponents...' : '等待对手完成...'}
+              </p>
             </motion.div>
           )}
         </AnimatePresence>
