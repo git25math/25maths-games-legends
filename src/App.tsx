@@ -155,6 +155,18 @@ export default function App() {
     }
   }, [user]);
 
+  // PK: When non-host detects room status='playing' via realtime, auto-enter battle
+  useEffect(() => {
+    if (gameState === 'lobby' && activeRoom?.status === 'playing' && !activeMission) {
+      const m = LOCAL_MISSIONS.find(mi => mi.id === activeRoom.missionId);
+      if (m) {
+        const battleMission = m.data?.generatorType ? generateMission(m) : m;
+        setActiveMission(battleMission);
+        setGameState('battle');
+      }
+    }
+  }, [activeRoom?.status, gameState]);
+
   // If not logged in and stuck on a screen that requires auth, redirect to welcome
   useEffect(() => {
     if (!authLoading && !user && !isGuest && gameState !== 'welcome' && gameState !== 'dashboard') {
@@ -617,7 +629,16 @@ export default function App() {
                   room={activeRoom}
                   userId={user.id}
                   onReady={toggleReady}
-                  onStart={startGame}
+                  onStart={() => {
+                    startGame();
+                    // Set activeMission from room's missionId so MathBattle can render
+                    const m = LOCAL_MISSIONS.find(mi => mi.id === activeRoom.missionId);
+                    if (m) {
+                      const battleMission = m.data?.generatorType ? generateMission(m) : m;
+                      setActiveMission(battleMission);
+                    }
+                    setGameState('battle');
+                  }}
                   onLeave={() => { leaveRoom(); setGameState('map'); }}
                 />
               )}
@@ -811,8 +832,14 @@ export default function App() {
                     createRoom('pk', missionId);
                     setGameState('lobby');
                   }}
-                  onJoinRoom={(code) => {
-                    joinRoom(code).then(() => setGameState('lobby'));
+                  onJoinRoom={async (code) => {
+                    const ok = await joinRoom(code);
+                    if (ok) {
+                      setGameState('lobby');
+                    } else {
+                      // Show inline error — PKSetupPanel handles via onJoinError
+                      alert(lang === 'en' ? 'Room not found. Check the code and try again.' : '未找到房间，请检查代码后重试。');
+                    }
                   }}
                   onClose={() => setGameState('map')}
                 />

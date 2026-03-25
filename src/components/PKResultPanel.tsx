@@ -16,9 +16,41 @@ export const PKResultPanel = ({
   onClose: () => void;
 }) => {
   const players = Object.entries(room.players).sort(([, a], [, b]) => b.score - a.score);
-  const winnerId = players[0]?.[0];
+
+  // Edge case: opponent left mid-battle → show "Match Cancelled"
+  if (players.length < 2) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+      >
+        <motion.div
+          initial={{ scale: 0.7, y: 40 }}
+          animate={{ scale: 1, y: 0 }}
+          className="bg-slate-800/95 border border-white/10 rounded-3xl p-6 max-w-sm w-full text-center"
+        >
+          <div className="w-16 h-16 rounded-full bg-slate-500/20 mx-auto mb-4 flex items-center justify-center">
+            <X size={32} className="text-slate-400" />
+          </div>
+          <h2 className="text-xl font-black text-white mb-2">
+            {lang === 'en' ? 'Match Cancelled' : '对决取消'}
+          </h2>
+          <p className="text-white/40 text-xs mb-6">
+            {lang === 'en' ? 'Your opponent left the match.' : '对手已离开对决。'}
+          </p>
+          <button onClick={onClose} className="w-full py-3 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-colors text-sm">
+            {lang === 'en' ? 'Back to Map' : '返回地图'}
+          </button>
+        </motion.div>
+      </motion.div>
+    );
+  }
+
+  const winnerId = players[0][0];
   const isWinner = winnerId === currentUserId;
-  const isTie = players.length >= 2 && players[0][1].score === players[1][1].score;
+  const isTie = players[0][1].score === players[1][1].score;
 
   return (
     <motion.div

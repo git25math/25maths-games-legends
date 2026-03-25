@@ -28,13 +28,13 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     setActiveRoom({ ...data, id: data.id, hostId: data.host_id, missionId: data.mission_id } as Room);
   };
 
-  const joinRoom = async (roomId: string) => {
-    if (!user || !profile) return;
+  /** Join a room by full UUID or 6-char short code. Returns true on success. */
+  const joinRoom = async (roomId: string): Promise<boolean> => {
+    if (!user || !profile) return false;
 
     // Support both full UUID and short code (first 6 chars)
     let actualId = roomId;
     if (roomId.length < 36) {
-      // Search by prefix
       const { data: rooms, error: searchErr } = await supabase
         .from('gl_rooms')
         .select('*')
@@ -42,21 +42,21 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
         .ilike('id', `${roomId.toLowerCase()}%`)
         .limit(1);
       if (searchErr || !rooms?.length) {
-        handleSupabaseError(searchErr || new Error('Room not found'), 'get', 'gl_rooms');
-        return;
+        return false;
       }
       actualId = rooms[0].id;
     }
 
     const { data: room, error: getErr } = await supabase.from('gl_rooms').select('*').eq('id', actualId).single();
-    if (getErr) { handleSupabaseError(getErr, 'get', 'gl_rooms'); return; }
+    if (getErr || !room) return false;
 
-    if (room.status !== 'waiting') return; // Room already started
+    if (room.status !== 'waiting') return false;
 
     const players = { ...room.players, [user.id]: { name: profile.display_name, score: 0, isReady: false, charId: profile.selected_char_id } };
     const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', actualId);
-    if (error) { handleSupabaseError(error, 'update', 'gl_rooms'); return; }
+    if (error) return false;
     setActiveRoom({ ...room, players, id: room.id, hostId: room.host_id, missionId: room.mission_id } as Room);
+    return true;
   };
 
   const toggleReady = async () => {

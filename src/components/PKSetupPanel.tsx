@@ -113,6 +113,11 @@ export const PKSetupPanel = ({
             <p className="text-white/50 text-xs mb-3">
               {lang === 'en' ? 'Choose a mission for the duel:' : '选择对决题目：'}
             </p>
+            {gradeMissions.length === 0 && (
+              <p className="text-white/30 text-xs text-center py-8">
+                {lang === 'en' ? 'No missions available for your grade.' : '当前年级暂无可用关卡。'}
+              </p>
+            )}
             <div className="space-y-3">
               {units.map(unitTitle => {
                 const unitMissions = gradeMissions.filter(m => lt(m.unitTitle, lang) === unitTitle);
