@@ -1,13 +1,14 @@
 /**
- * Triangle — right-angle-aware with dynamic vertex layout
- * Covers KP: 4.6-05~06, 6.x (Pythagoras, Trigonometry)
+ * Triangle — proportional right-angle-aware SVG
+ * Vertex positions computed from actual side lengths for geometric accuracy.
  *
  * Side convention:
  *   sides[0] = A->B (bottom)
  *   sides[1] = B->C (diagonal / right side)
  *   sides[2] = C->A (left side)
  *
- * When rightAngle=0 (at A): bottom + left are legs, diagonal is hypotenuse.
+ * When rightAngle=0: A is bottom-left with 90°, bottom=leg, left=leg, diagonal=hypotenuse.
+ * Pass `length` on sides[0] and sides[2] so the triangle shape matches the actual ratio.
  */
 
 type Side = { length?: number | string; label?: string };
@@ -28,29 +29,52 @@ const COLORS = {
   blue: '#1a3a5c',
 };
 
-/** Compute vertex positions that form a real right angle at the specified vertex */
-function getVertices(rightAngle?: 0 | 1 | 2): [number, number][] {
+const PAD_L = 50, PAD_T = 30, BASE_Y = 210;
+const MAX_W = 190, MAX_H = 180;
+
+function num(v?: number | string): number {
+  const n = Number(v);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+/** Compute vertex positions proportional to actual side lengths */
+function getVertices(
+  rightAngle: number | undefined,
+  sides?: [Side, Side, Side],
+): [number, number][] {
   if (rightAngle === 0) {
-    // Right angle at A (bottom-left): C directly above A
-    return [[50, 200], [240, 200], [50, 40]];
+    // Right angle at A (bottom-left). Legs: sides[0]=bottom(a), sides[2]=left(b)
+    const a = num(sides?.[0]?.length);
+    const b = num(sides?.[2]?.length);
+    if (a > 0 && b > 0) {
+      const s = Math.min(MAX_W / a, MAX_H / b);
+      return [[PAD_L, BASE_Y], [PAD_L + a * s, BASE_Y], [PAD_L, BASE_Y - b * s]];
+    }
+    return [[PAD_L, BASE_Y], [PAD_L + MAX_W, BASE_Y], [PAD_L, PAD_T]];
   }
   if (rightAngle === 1) {
-    // Right angle at B (bottom-right): C directly above B
-    return [[50, 200], [240, 200], [240, 40]];
+    // Right angle at B (bottom-right). Legs: sides[0]=bottom, sides[1]=right
+    const a = num(sides?.[0]?.length);
+    const b = num(sides?.[1]?.length);
+    if (a > 0 && b > 0) {
+      const s = Math.min(MAX_W / a, MAX_H / b);
+      return [[PAD_L, BASE_Y], [PAD_L + a * s, BASE_Y], [PAD_L + a * s, BASE_Y - b * s]];
+    }
+    return [[PAD_L, BASE_Y], [PAD_L + MAX_W, BASE_Y], [PAD_L + MAX_W, PAD_T]];
   }
   if (rightAngle === 2) {
-    // Right angle at C: use Thales circle position
-    return [[50, 200], [240, 200], [145, 105]];
+    // Right angle at C (top). Use Thales circle for a reasonable shape.
+    return [[PAD_L, BASE_Y], [PAD_L + MAX_W, BASE_Y], [PAD_L + 60, BASE_Y - MAX_H + 20]];
   }
-  // General triangle (no right angle)
-  return [[50, 200], [240, 200], [140, 40]];
+  // General triangle
+  return [[PAD_L, BASE_Y], [PAD_L + MAX_W, BASE_Y], [PAD_L + 90, PAD_T]];
 }
 
 export function Triangle({ sides, angles, rightAngle, labels, color }: Props) {
   const c = color || COLORS.wood;
   const width = 280;
   const height = 240;
-  const verts = getVertices(rightAngle);
+  const verts = getVertices(rightAngle, sides);
   const sq = 12;
 
   // Centroid for pushing labels outward
@@ -62,7 +86,6 @@ export function Triangle({ sides, angles, rightAngle, labels, color }: Props) {
     (verts[i][1] + verts[j][1]) / 2,
   ];
 
-  /** Push a point away from centroid by `dist` pixels */
   const pushOut = (px: number, py: number, dist: number): [number, number] => {
     const dx = px - cx;
     const dy = py - cy;
@@ -105,7 +128,7 @@ export function Triangle({ sides, angles, rightAngle, labels, color }: Props) {
         );
       })()}
 
-      {/* Vertex labels — pushed away from centroid */}
+      {/* Vertex labels */}
       {labels && labels.map((l, i) => {
         if (!l) return null;
         const [lx, ly] = pushOut(verts[i][0], verts[i][1], 16);
@@ -115,7 +138,7 @@ export function Triangle({ sides, angles, rightAngle, labels, color }: Props) {
         );
       })}
 
-      {/* Side labels — pushed away from centroid */}
+      {/* Side labels */}
       {sides && (() => {
         const pairs: [number, number][] = [[0, 1], [1, 2], [2, 0]];
         return pairs.map(([i, j], si) => {
@@ -130,10 +153,9 @@ export function Triangle({ sides, angles, rightAngle, labels, color }: Props) {
         });
       })()}
 
-      {/* Angle labels — pushed inward from vertex */}
+      {/* Angle labels */}
       {angles && angles.map((a, i) => {
         if (!a.label && !a.value) return null;
-        // Push slightly toward centroid (inward) for angle labels
         const vx = verts[i][0], vy = verts[i][1];
         const dx = cx - vx, dy = cy - vy;
         const len = Math.sqrt(dx * dx + dy * dy);

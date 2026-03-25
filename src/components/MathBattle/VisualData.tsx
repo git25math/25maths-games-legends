@@ -242,9 +242,9 @@ export const VisualData = ({ mission, lang }: { mission: Mission; lang: Language
         <motion.div {...diagramEntrance} className="bg-white/30 p-4 rounded-lg border border-ink/10">
           <Triangle
             sides={[
-              { label: String(a) },
+              { label: String(a), length: a },
               { label: '?' },
-              { label: String(b) },
+              { label: String(b), length: b },
             ]}
             rightAngle={0}
             labels={['A', 'B', 'C']}

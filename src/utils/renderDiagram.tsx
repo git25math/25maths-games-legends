@@ -228,13 +228,26 @@ export function renderDiagram(
 
   // ── Pythagoras → Right triangle with rightAngle=0 at bottom-left ──
   // Layout: sides[0]=bottom leg (a), sides[1]=hypotenuse (c), sides[2]=left leg (b)
+  // Pass `length` so the triangle shape matches actual side ratios
   if (mission.type === 'PYTHAGORAS' && d.a !== undefined) {
+    const a = d.a as number;
+    if (d.c) {
+      // Find leg b: given a and c
+      const c = d.c as number;
+      const b = Math.round(Math.sqrt(c * c - a * a) * 100) / 100;
+      return (
+        <Triangle
+          sides={[{ label: `a = ${a}`, length: a }, { label: `c = ${c}`, length: c }, { label: 'b = ?', length: b }]}
+          rightAngle={0} labels={['', '', '']}
+        />
+      );
+    }
+    // Find hypotenuse c: given a and b
+    const b = d.b as number;
+    const c = Math.round(Math.sqrt(a * a + b * b) * 100) / 100;
     return (
       <Triangle
-        sides={d.c
-          ? [{ label: `a = ${d.a}` }, { label: `c = ${d.c}` }, { label: 'b = ?' }]
-          : [{ label: `a = ${d.a}` }, { label: 'c = ?' }, { label: `b = ${d.b}` }]
-        }
+        sides={[{ label: `a = ${a}`, length: a }, { label: 'c = ?', length: c }, { label: `b = ${b}`, length: b }]}
         rightAngle={0} labels={['', '', '']}
       />
     );
@@ -242,20 +255,37 @@ export function renderDiagram(
 
   // ── Trigonometry → Right triangle with angle at vertex 1 (bottom-right) ──
   // Layout: sides[0]=bottom (adjacent), sides[1]=diagonal (hypotenuse), sides[2]=left (opposite)
-  // Right angle marker at vertex 0 via rightAngle={0}; angle label at vertex 1
+  // Pass `length` for proportional vertex positions based on actual angle
   if (mission.type === 'TRIGONOMETRY' && d.opposite !== undefined) {
     const opp = d.opposite as number;
     const adj = d.adjacent as number | undefined;
     const func = d.func as string;
+    const angleDeg = d.angle as number | undefined;
+
+    // Compute both legs for proportional triangle
+    let legBottom: number;
+    let legLeft: number;
+    if (adj) {
+      legBottom = adj;
+      legLeft = opp;
+    } else if (angleDeg) {
+      const angleRad = (angleDeg * Math.PI) / 180;
+      legBottom = Math.round((opp / Math.tan(angleRad)) * 100) / 100;
+      legLeft = opp;
+    } else {
+      legBottom = opp; // fallback: isoceles
+      legLeft = opp;
+    }
+
     return (
       <Triangle
         sides={func === 'sin'
-          ? [{ label: '' }, { label: 'c = ?' }, { label: `opp = ${opp}` }]
-          : [{ label: `adj = ${adj}` }, { label: '' }, { label: `opp = ${opp}` }]}
+          ? [{ label: '', length: legBottom }, { label: 'c = ?' }, { label: `opp = ${opp}`, length: legLeft }]
+          : [{ label: `adj = ${adj}`, length: legBottom }, { label: '' }, { label: `opp = ${opp}`, length: legLeft }]}
         rightAngle={0}
         angles={func === 'tan_inv'
           ? [{}, { label: '?' }, {}]
-          : [{}, { label: `${d.angle}\u00b0` }, {}]}
+          : [{}, { label: `${angleDeg}\u00b0` }, {}]}
       />
     );
   }

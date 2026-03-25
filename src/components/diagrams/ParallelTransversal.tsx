@@ -1,15 +1,26 @@
 /**
- * ParallelTransversal — 平行线与截线角度关系
- * 覆盖 KP: 4.6-04
+ * ParallelTransversal — geometrically accurate parallel lines + transversal
+ * KP: 4.6-04
  *
- * 已知角标数值（第一条线处），待求角标 "x"（第二条线处）。
- * highlight 控制角度对类型：corresponding(F) / alternate(Z) / cointerior(C)
+ * The transversal crosses both parallel lines at the correct angle.
+ * ix2 is computed from the angle and line gap (not hardcoded to midX).
+ *
+ * Angle regions at each intersection (for angle=θ, rightward = 0° CW):
+ *   Region A (upper-right) = θ          Region B (upper-left) = 180°-θ
+ *   Region C (lower-left)  = θ          Region D (lower-right) = 180°-θ
+ *
+ * Interior = between the parallel lines:
+ *   At line1: below → C, D            At line2: above → A, B
+ *
+ * Corresponding (F): A@line1 ↔ A@line2 (same position, equal)
+ * Alternate interior (Z): C@line1 ↔ A@line2 (opposite sides, interior, equal)
+ * Co-interior (C): C@line1 ↔ B@line2 (same side=left, interior, sum=180°)
  */
 
 type AngleHighlight = 'corresponding' | 'alternate' | 'cointerior';
 
 type Props = {
-  angle?: number;          // the acute angle made by the transversal (default 60)
+  angle?: number;
   highlight?: AngleHighlight;
   showLabels?: boolean;
   interactive?: boolean;
@@ -23,7 +34,7 @@ const COLORS = {
   gold: '#b8860b',
 };
 
-const HIGHLIGHT_COLORS: Record<AngleHighlight, string> = {
+const HL_COLORS: Record<AngleHighlight, string> = {
   corresponding: COLORS.red,
   alternate: COLORS.blue,
   cointerior: COLORS.green,
@@ -32,127 +43,141 @@ const HIGHLIGHT_COLORS: Record<AngleHighlight, string> = {
 export function ParallelTransversal({ angle = 60, highlight, showLabels = true }: Props) {
   const width = 300;
   const height = 260;
-  const lineLen = 240;
-  const lineStartX = 30;
-  const line1Y = 80;
-  const line2Y = 180;
+  const lineStartX = 20;
+  const lineLen = 260;
+  const line1Y = 85;
+  const line2Y = 185;
   const rad = (angle * Math.PI) / 180;
+  const arcR = 24;
+  const givenColor = highlight ? HL_COLORS[highlight] : COLORS.red;
+  const unknownColor = '#d4a017';
 
-  // Transversal crosses both parallel lines
-  const midX = width / 2;
-  const transLen = 140;
-  const tx1 = midX - transLen * Math.cos(rad);
-  const ty1 = line1Y + transLen * Math.sin(rad) - 40;
-  const tx2 = midX + transLen * Math.cos(rad);
-  const ty2 = line1Y - transLen * Math.sin(rad) + 200;
+  // ── Intersection points ──
+  // Transversal goes from upper-right to lower-left at the given angle
+  const ix1 = 175;
+  const gap = line2Y - line1Y;
+  const ix2 = ix1 - gap / Math.tan(rad);
 
-  const arcR = 25;
-  const givenColor = highlight ? HIGHLIGHT_COLORS[highlight] : COLORS.red;
-  const unknownColor = '#d4a017'; // golden for x (待求角)
+  // Extend transversal beyond both intersections
+  const ext = 35;
+  const txTopX = ix1 + ext * Math.cos(rad);
+  const txTopY = line1Y - ext * Math.sin(rad);
+  const txBotX = ix2 - ext * Math.cos(rad);
+  const txBotY = line2Y + ext * Math.sin(rad);
 
-  // Intersection points
-  const ix1 = midX; // intersection with line 1
-  const ix2 = midX; // intersection with line 2
+  // ── Direction unit vectors (SVG: y-down) ──
+  const dR: [number, number] = [1, 0];                              // right →
+  const dL: [number, number] = [-1, 0];                             // left ←
+  const dUR: [number, number] = [Math.cos(rad), -Math.sin(rad)];    // up-right ↗ (along transversal)
+  const dDL: [number, number] = [-Math.cos(rad), Math.sin(rad)];    // down-left ↙
 
-  // Arc endpoints for the given angle (acute angle between transversal and horizontal, above line 1)
-  const arc1EndX = ix1 + arcR * Math.cos(-rad);
-  const arc1EndY = line1Y + arcR * Math.sin(-rad);
+  // ── Wedge helper: draws a filled angle sector ──
+  // sweep: 0=CCW on screen, 1=CW on screen
+  function wedge(
+    cx: number, cy: number, d1: [number, number], d2: [number, number],
+    sweep: 0 | 1, fill: string, opacity: number, dashed?: boolean,
+  ) {
+    const sx = cx + arcR * d1[0], sy = cy + arcR * d1[1];
+    const ex = cx + arcR * d2[0], ey = cy + arcR * d2[1];
+    return (
+      <path
+        d={`M${cx},${cy} L${sx},${sy} A${arcR},${arcR} 0 0,${sweep} ${ex},${ey} Z`}
+        fill={fill} fillOpacity={opacity}
+        stroke={fill} strokeWidth={dashed ? 2.5 : 2}
+        strokeDasharray={dashed ? '4,3' : 'none'}
+      />
+    );
+  }
 
-  // Arc endpoints for alternate (below line 2, opposite side)
-  const arc2AltEndX = ix2 - arcR * Math.cos(-rad);
-  const arc2AltEndY = line2Y - arcR * Math.sin(-rad);
-
-  // Arc endpoints for corresponding (above line 2, same side as given)
-  const arc2CorEndX = ix2 + arcR * Math.cos(-rad);
-  const arc2CorEndY = line2Y + arcR * Math.sin(-rad);
-
-  // Arc endpoints for cointerior — given angle (below line 1, same side)
-  const arc1CoEndX = ix1 + arcR * Math.cos(rad);
-  const arc1CoEndY = line1Y + arcR * Math.sin(rad);
+  // ── Label position: midpoint of arc, pushed outward ──
+  function labelPos(cx: number, cy: number, d1: [number, number], d2: [number, number], dist: number): [number, number] {
+    const mx = (d1[0] + d2[0]) / 2;
+    const my = (d1[1] + d2[1]) / 2;
+    const len = Math.sqrt(mx * mx + my * my) || 1;
+    return [cx + (mx / len) * dist, cy + (my / len) * dist];
+  }
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-sm mx-auto" role="img" aria-label="Parallel lines with transversal">
       {/* Parallel lines */}
-      <g>
-        <line x1={lineStartX} y1={line1Y} x2={lineStartX + lineLen} y2={line1Y} stroke={COLORS.wood} strokeWidth={2} />
-        <line x1={lineStartX} y1={line2Y} x2={lineStartX + lineLen} y2={line2Y} stroke={COLORS.wood} strokeWidth={2} />
-        {/* Parallel arrows */}
-        <text x={lineStartX + lineLen - 40} y={line1Y - 8} fontSize={10} fill={COLORS.wood}>▸▸</text>
-        <text x={lineStartX + lineLen - 40} y={line2Y - 8} fontSize={10} fill={COLORS.wood}>▸▸</text>
-      </g>
+      <line x1={lineStartX} y1={line1Y} x2={lineStartX + lineLen} y2={line1Y} stroke={COLORS.wood} strokeWidth={2} />
+      <line x1={lineStartX} y1={line2Y} x2={lineStartX + lineLen} y2={line2Y} stroke={COLORS.wood} strokeWidth={2} />
+      {/* Parallel arrows */}
+      <text x={lineStartX + lineLen - 40} y={line1Y - 8} fontSize={10} fill={COLORS.wood}>{'\u25b8\u25b8'}</text>
+      <text x={lineStartX + lineLen - 40} y={line2Y - 8} fontSize={10} fill={COLORS.wood}>{'\u25b8\u25b8'}</text>
 
-      {/* Transversal */}
-      <line x1={tx1} y1={ty1} x2={tx2} y2={ty2} stroke={COLORS.gold} strokeWidth={2} />
+      {/* Transversal — passes through both actual intersection points */}
+      <line x1={txTopX} y1={txTopY} x2={txBotX} y2={txBotY} stroke={COLORS.gold} strokeWidth={2} />
 
-      {/* ── Corresponding (F-shape): same side, same position ── */}
+      {/* ── CORRESPONDING (F-shape): Region A at both intersections ── */}
       {highlight === 'corresponding' && (
         <>
-          {/* Given angle arc at line 1 (above-right) */}
-          <path d={`M${ix1 + arcR},${line1Y} A${arcR},${arcR} 0 0,0 ${arc1EndX},${arc1EndY}`}
-            fill={givenColor} fillOpacity={0.2} stroke={givenColor} strokeWidth={2} />
-          {/* Unknown angle arc at line 2 (above-right, same position) */}
-          <path d={`M${ix2 + arcR},${line2Y} A${arcR},${arcR} 0 0,0 ${arc2CorEndX},${arc2CorEndY}`}
-            fill={unknownColor} fillOpacity={0.25} stroke={unknownColor} strokeWidth={2.5} strokeDasharray="4,3" />
+          {/* Given: Region A at line1 (upper-right, exterior) — dirR→dirUR CCW */}
+          {wedge(ix1, line1Y, dR, dUR, 0, givenColor, 0.2)}
+          {/* Unknown: Region A at line2 (upper-right, interior) — dirR→dirUR CCW */}
+          {wedge(ix2, line2Y, dR, dUR, 0, unknownColor, 0.25, true)}
         </>
       )}
 
-      {/* ── Alternate (Z-shape): opposite sides ── */}
+      {/* ── ALTERNATE INTERIOR (Z-shape): C@line1 ↔ A@line2 ── */}
       {highlight === 'alternate' && (
         <>
-          {/* Given angle arc at line 1 (above-right) */}
-          <path d={`M${ix1 + arcR},${line1Y} A${arcR},${arcR} 0 0,0 ${arc1EndX},${arc1EndY}`}
-            fill={givenColor} fillOpacity={0.2} stroke={givenColor} strokeWidth={2} />
-          {/* Unknown angle arc at line 2 (below-left, opposite side) */}
-          <path d={`M${ix2 - arcR},${line2Y} A${arcR},${arcR} 0 0,1 ${arc2AltEndX},${arc2AltEndY}`}
-            fill={unknownColor} fillOpacity={0.25} stroke={unknownColor} strokeWidth={2.5} strokeDasharray="4,3" />
+          {/* Given: Region C at line1 (lower-left, interior) — dirL→dirDL CCW */}
+          {wedge(ix1, line1Y, dL, dDL, 0, givenColor, 0.2)}
+          {/* Unknown: Region A at line2 (upper-right, interior) — dirR→dirUR CCW */}
+          {wedge(ix2, line2Y, dR, dUR, 0, unknownColor, 0.25, true)}
         </>
       )}
 
-      {/* ── Co-interior (C/U-shape): same side, between lines ── */}
+      {/* ── CO-INTERIOR (C/U-shape): C@line1 ↔ B@line2, both left side ── */}
       {highlight === 'cointerior' && (
         <>
-          {/* Given angle arc at line 1 (below-right, between lines) */}
-          <path d={`M${ix1 + arcR},${line1Y} A${arcR},${arcR} 0 0,1 ${arc1CoEndX},${arc1CoEndY}`}
-            fill={givenColor} fillOpacity={0.2} stroke={givenColor} strokeWidth={2} />
-          {/* Unknown angle arc at line 2 (above-right, between lines) */}
-          <path d={`M${ix2 + arcR},${line2Y} A${arcR},${arcR} 0 0,0 ${arc2CorEndX},${arc2CorEndY}`}
-            fill={unknownColor} fillOpacity={0.25} stroke={unknownColor} strokeWidth={2.5} strokeDasharray="4,3" />
+          {/* Given: Region C at line1 (lower-left, interior) — dirL→dirDL CCW */}
+          {wedge(ix1, line1Y, dL, dDL, 0, givenColor, 0.2)}
+          {/* Unknown: Region B at line2 (upper-left, interior) — dirUR→dirL CCW */}
+          {wedge(ix2, line2Y, dUR, dL, 0, unknownColor, 0.25, true)}
         </>
       )}
 
       {/* ── Labels ── */}
-      {showLabels && (
-        <>
-          {/* Given angle: always show numeric value at line 1 */}
-          {highlight === 'corresponding' && (
-            <>
-              <text x={ix1 + arcR + 8} y={line1Y - 6} fontSize={13} fontWeight="bold" fill={givenColor}>{angle}°</text>
-              <text x={ix2 + arcR + 8} y={line2Y - 6} fontSize={16} fontWeight="bold" fontStyle="italic" fill={unknownColor}>x</text>
-            </>
-          )}
-          {highlight === 'alternate' && (
-            <>
-              <text x={ix1 + arcR + 8} y={line1Y - 6} fontSize={13} fontWeight="bold" fill={givenColor}>{angle}°</text>
-              <text x={ix2 - arcR - 18} y={line2Y + 16} fontSize={16} fontWeight="bold" fontStyle="italic" fill={unknownColor}>x</text>
-            </>
-          )}
-          {highlight === 'cointerior' && (
-            <>
-              <text x={ix1 + arcR + 8} y={line1Y + 18} fontSize={13} fontWeight="bold" fill={givenColor}>{angle}°</text>
-              <text x={ix2 + arcR + 8} y={line2Y - 6} fontSize={16} fontWeight="bold" fontStyle="italic" fill={unknownColor}>x</text>
-            </>
-          )}
+      {showLabels && highlight === 'corresponding' && (() => {
+        const [gx, gy] = labelPos(ix1, line1Y, dR, dUR, arcR + 12);
+        const [ux, uy] = labelPos(ix2, line2Y, dR, dUR, arcR + 12);
+        return (
+          <>
+            <text x={gx} y={gy} fontSize={13} fontWeight="bold" fill={givenColor} textAnchor="middle" dominantBaseline="central">{angle}{'\u00b0'}</text>
+            <text x={ux} y={uy} fontSize={16} fontWeight="bold" fontStyle="italic" fill={unknownColor} textAnchor="middle" dominantBaseline="central">x</text>
+          </>
+        );
+      })()}
 
-          {/* No highlight = show both as generic */}
-          {!highlight && (
-            <>
-              <text x={ix1 + arcR + 8} y={line1Y - 6} fontSize={13} fontWeight="bold" fill={givenColor}>{angle}°</text>
-            </>
-          )}
-        </>
+      {showLabels && highlight === 'alternate' && (() => {
+        const [gx, gy] = labelPos(ix1, line1Y, dL, dDL, arcR + 12);
+        const [ux, uy] = labelPos(ix2, line2Y, dR, dUR, arcR + 12);
+        return (
+          <>
+            <text x={gx} y={gy} fontSize={13} fontWeight="bold" fill={givenColor} textAnchor="middle" dominantBaseline="central">{angle}{'\u00b0'}</text>
+            <text x={ux} y={uy} fontSize={16} fontWeight="bold" fontStyle="italic" fill={unknownColor} textAnchor="middle" dominantBaseline="central">x</text>
+          </>
+        );
+      })()}
+
+      {showLabels && highlight === 'cointerior' && (() => {
+        const [gx, gy] = labelPos(ix1, line1Y, dL, dDL, arcR + 12);
+        const [ux, uy] = labelPos(ix2, line2Y, dUR, dL, arcR + 14);
+        return (
+          <>
+            <text x={gx} y={gy} fontSize={13} fontWeight="bold" fill={givenColor} textAnchor="middle" dominantBaseline="central">{angle}{'\u00b0'}</text>
+            <text x={ux} y={uy} fontSize={16} fontWeight="bold" fontStyle="italic" fill={unknownColor} textAnchor="middle" dominantBaseline="central">x</text>
+          </>
+        );
+      })()}
+
+      {showLabels && !highlight && (
+        <text x={ix1 + arcR + 8} y={line1Y - 6} fontSize={13} fontWeight="bold" fill={givenColor}>{angle}{'\u00b0'}</text>
       )}
 
-      {/* Letter shape hint (F/Z/C) — small label in corner */}
+      {/* Letter shape hint */}
       {highlight === 'corresponding' && <text x={8} y={20} fontSize={11} fill={givenColor} opacity={0.6}>F</text>}
       {highlight === 'alternate' && <text x={8} y={20} fontSize={11} fill={givenColor} opacity={0.6}>Z</text>}
       {highlight === 'cointerior' && <text x={8} y={20} fontSize={11} fill={givenColor} opacity={0.6}>C</text>}
