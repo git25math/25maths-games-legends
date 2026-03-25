@@ -28,6 +28,7 @@ export const LobbyScreen = ({
   const roomCode = room.id.slice(0, 6).toUpperCase();
   const playerCount = Object.keys(room.players).length;
   const allReady = playerCount >= 2 && Object.values(room.players).every(p => p.isReady);
+  const maxPlayers = 6;
   const mission = MISSIONS.find(m => m.id === room.missionId);
   const isPK = room.type === 'pk';
 
@@ -130,14 +131,14 @@ export const LobbyScreen = ({
             );
           })}
 
-          {/* Empty slot */}
-          {playerCount < 2 && (
-            <div className="p-5 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center">
+          {/* Empty slots */}
+          {Array.from({ length: Math.min(maxPlayers - playerCount, 3) }).map((_, i) => (
+            <div key={`empty-${i}`} className="p-5 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center">
               <p className="text-slate-300 font-bold text-sm">
                 {lang === 'en' ? 'Waiting for player...' : '等待玩家...'}
               </p>
             </div>
-          )}
+          ))}
         </div>
 
         {/* Action buttons */}

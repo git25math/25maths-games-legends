@@ -1,8 +1,29 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabase';
-import type { Room, UserProfile } from '../types';
+import type { Room, RoomPlayer, UserProfile } from '../types';
 import type { User } from '@supabase/supabase-js';
 import { handleSupabaseError } from '../utils/errors';
+
+/** Countdown seconds after first player finishes */
+export const PK_COUNTDOWN_SECS = 30;
+
+/** Get the earliest finishedAt timestamp among all players (null if no one finished) */
+export function getFirstFinishTime(room: Room | null): number | null {
+  if (!room) return null;
+  const times = Object.values(room.players)
+    .map(p => p.finishedAt)
+    .filter((t): t is number => !!t && t > 0);
+  return times.length > 0 ? Math.min(...times) : null;
+}
+
+function parseRoom(d: any): Room {
+  return {
+    ...d,
+    id: d.id,
+    hostId: d.host_id,
+    missionId: d.mission_id,
+  } as Room;
+}
 
 export function useMultiplayer(user: User | null, profile: UserProfile | null) {
   const [activeRoom, setActiveRoom] = useState<Room | null>(null);
@@ -26,7 +47,7 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     };
     const { data, error } = await supabase.from('gl_rooms').insert(roomData).select().single();
     if (error) { handleSupabaseError(error, 'create', 'gl_rooms'); return false; }
-    setActiveRoom({ ...data, id: data.id, hostId: data.host_id, missionId: data.mission_id } as Room);
+    setActiveRoom(parseRoom(data));
     return true;
   };
 
@@ -36,8 +57,6 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
 
     let actualId = roomId;
 
-    // Short code: fetch waiting rooms and match prefix client-side
-    // (UUID columns don't support ilike in PostgREST)
     if (roomId.length < 36) {
       const code = roomId.toLowerCase();
       const { data: rooms, error: listErr } = await supabase
@@ -55,20 +74,19 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
 
     const { data: room, error: getErr } = await supabase.from('gl_rooms').select('*').eq('id', actualId).single();
     if (getErr || !room) return `room_not_found: ${getErr?.message ?? 'null'}`;
-
     if (room.status !== 'waiting') return `room_status: ${room.status}`;
 
     const players = { ...room.players, [user.id]: { name: profile.display_name, score: 0, isReady: false, charId: profile.selected_char_id } };
     const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', actualId);
     if (error) return `update_error: ${error.message}`;
-    setActiveRoom({ ...room, players, id: room.id, hostId: room.host_id, missionId: room.mission_id } as Room);
+    setActiveRoom(parseRoom({ ...room, players }));
     return '';
   };
 
   const toggleReady = async () => {
     if (!user || !activeRoom) return;
     const players = { ...activeRoom.players };
-    players[user.id].isReady = !players[user.id].isReady;
+    players[user.id] = { ...players[user.id], isReady: !players[user.id].isReady };
     const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', activeRoom.id);
     if (error) handleSupabaseError(error, 'update', 'gl_rooms');
     setActiveRoom({ ...activeRoom, players });
@@ -81,50 +99,58 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     setActiveRoom({ ...activeRoom, status: 'playing' });
   };
 
-  /** Submit score for current user (call after battle complete) */
+  /** Submit score + mark player as finished. Auto-finishes room when all done. */
   const submitScore = async (score: number) => {
     if (!user || !activeRoom) return;
+    const now = Date.now();
     const players = { ...activeRoom.players };
     if (players[user.id]) {
-      players[user.id].score = score;
+      players[user.id] = { ...players[user.id], score, finishedAt: now };
     }
-    const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', activeRoom.id);
+
+    // If all players now finished, mark room as finished
+    const allFinished = (Object.values(players) as RoomPlayer[]).every(p => p.finishedAt);
+    const updates: Record<string, unknown> = { players };
+    if (allFinished) {
+      updates.status = 'finished';
+    }
+
+    const { error } = await supabase.from('gl_rooms').update(updates).eq('id', activeRoom.id);
     if (error) handleSupabaseError(error, 'update', 'gl_rooms');
-    setActiveRoom({ ...activeRoom, players });
+    setActiveRoom({ ...activeRoom, ...updates, players } as Room);
   };
 
-  /** Mark room as finished with a winner */
-  const finishRoom = async (winnerId: string) => {
+  /** Force-finish the room (countdown expired). Marks all unfinished players. */
+  const forceFinish = async () => {
     if (!activeRoom) return;
-    const { error } = await supabase.from('gl_rooms').update({ status: 'finished', winner_id: winnerId }).eq('id', activeRoom.id);
+    const players = { ...activeRoom.players };
+    const now = Date.now();
+    for (const uid of Object.keys(players)) {
+      if (!players[uid].finishedAt) {
+        players[uid] = { ...players[uid], finishedAt: now };
+      }
+    }
+    const { error } = await supabase.from('gl_rooms').update({ players, status: 'finished' }).eq('id', activeRoom.id);
     if (error) handleSupabaseError(error, 'update', 'gl_rooms');
-    setActiveRoom({ ...activeRoom, status: 'finished', winnerId });
+    setActiveRoom({ ...activeRoom, players, status: 'finished' });
   };
 
   const leaveRoom = () => setActiveRoom(null);
 
-  // Sync room state: realtime subscription + polling fallback
+  // Sync room state: polling every 2s + realtime attempt
   useEffect(() => {
     if (!activeRoom) return;
-
     const roomId = activeRoom.id;
 
-    // Poll every 2s as reliable fallback (realtime may not be enabled)
     const poll = setInterval(async () => {
       const { data } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
-      if (data) {
-        setActiveRoom({ ...data, id: data.id, hostId: data.host_id, missionId: data.mission_id } as Room);
-      }
+      if (data) setActiveRoom(parseRoom(data));
     }, 2000);
 
-    // Also try realtime (works if publication is enabled)
     const channel = supabase
       .channel(`room-${roomId}`)
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'gl_rooms', filter: `id=eq.${roomId}` },
-        (payload) => {
-          const d = payload.new as any;
-          setActiveRoom({ ...d, id: d.id, hostId: d.host_id, missionId: d.mission_id } as Room);
-        }
+        (payload) => setActiveRoom(parseRoom(payload.new))
       )
       .subscribe();
 
@@ -134,5 +160,5 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     };
   }, [activeRoom?.id]);
 
-  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, finishRoom, leaveRoom };
+  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, forceFinish, leaveRoom };
 }

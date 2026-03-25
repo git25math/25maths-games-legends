@@ -128,12 +128,20 @@ export type UserProfile = {
   updated_at?: string;
 };
 
+export type RoomPlayer = {
+  name: string;
+  score: number;
+  isReady: boolean;
+  charId: string;
+  finishedAt?: number; // timestamp when this player finished (0 = still playing)
+};
+
 export type Room = {
   id: string;
   type: 'team' | 'pk';
   missionId: number;
   status: 'waiting' | 'playing' | 'finished';
-  players: { [uid: string]: { name: string; score: number; isReady: boolean; charId: string } };
+  players: { [uid: string]: RoomPlayer };
   hostId: string;
   winnerId?: string;
 };

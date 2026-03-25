@@ -11,7 +11,7 @@ import { CHARACTERS } from './data/characters';
 import { useAuth } from './hooks/useAuth';
 import { useProfile } from './hooks/useProfile';
 import { useMissions } from './hooks/useMissions';
-import { useMultiplayer } from './hooks/useMultiplayer';
+import { useMultiplayer, PK_COUNTDOWN_SECS, getFirstFinishTime } from './hooks/useMultiplayer';
 
 import { ScrollOfWisdom } from './components/ScrollOfWisdom';
 import { MathBattle } from './components/MathBattle';
@@ -35,7 +35,7 @@ import { STREAK_MILESTONES, getNewlyEarnedMilestone, getNextMilestone } from './
 import { BattleModeSelector } from './components/BattleModeSelector';
 import { AchievementWallPanel } from './components/AchievementWallPanel';
 import { PKSetupPanel } from './components/PKSetupPanel';
-import { PKResultPanel } from './components/PKResultPanel';
+import { PKResultPanel, getRankMultiplier } from './components/PKResultPanel';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
 import { ExpeditionScreen } from './screens/ExpeditionScreen';
@@ -128,6 +128,7 @@ export default function App() {
   const [nearLevelToast, setNearLevelToast] = useState<{ xpNeeded: number; rankName: string } | null>(null);
   const [loginRewardNotif, setLoginRewardNotif] = useState<{ streak: number; xp: number; sp: number } | null>(null);
   const [showPKResult, setShowPKResult] = useState(false);
+  const [pkCountdown, setPkCountdown] = useState<number | null>(null); // seconds remaining, null = no countdown
 
   // Refs to accumulate mid-battle updates that get merged into handleBattleComplete's single save
   const pendingSeasonTasksRef = useRef<string[]>([]);
@@ -140,7 +141,7 @@ export default function App() {
     getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
   const { missions } = useMissions();
-  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, finishRoom, leaveRoom } = useMultiplayer(user, profile);
+  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom } = useMultiplayer(user, profile);
 
   // Persist state across page refresh
   useEffect(() => {
@@ -153,6 +154,42 @@ export default function App() {
       setGameState('map');
     }
   }, [user]);
+
+  // PK countdown: when any opponent finished and I haven't, tick down 30→0
+  const pkAutoCompleteRef = useRef(false);
+  useEffect(() => {
+    const firstFinish = getFirstFinishTime(activeRoom);
+    if (gameState !== 'battle' || !firstFinish || activeRoom?.type !== 'pk') {
+      setPkCountdown(null);
+      return;
+    }
+    // If current user already finished, no countdown needed
+    if (user && activeRoom!.players[user.id]?.finishedAt) {
+      setPkCountdown(null);
+      return;
+    }
+    const tick = () => {
+      const elapsed = (Date.now() - firstFinish) / 1000;
+      const remaining = Math.max(0, PK_COUNTDOWN_SECS - elapsed);
+      setPkCountdown(Math.ceil(remaining));
+      if (remaining <= 0 && !pkAutoCompleteRef.current) {
+        pkAutoCompleteRef.current = true;
+        handleBattleComplete(false, 0, 0, 0);
+      }
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, [gameState, activeRoom?.players, user?.id]);
+
+  // PK: show result when room status='finished' and all players done
+  useEffect(() => {
+    if (activeRoom?.status === 'finished' && !showPKResult && activeRoom?.type === 'pk') {
+      setShowPKResult(true);
+      setActiveMission(null);
+      setGameState('map');
+    }
+  }, [activeRoom?.status]);
 
   // PK: When non-host detects room status='playing' via realtime, auto-enter battle
   useEffect(() => {
@@ -431,15 +468,14 @@ export default function App() {
     pendingErrorsRef.current = [];
     setIsDailyBattle(false);
 
-    // PK mode: submit score and show result overlay
-    // Keep activeRoom alive so realtime subscription can update opponent's score
+    // PK mode: submit score and wait for all players to finish
+    // submitScore sets first_finish_at (if first) and marks room finished when all done
     if (activeRoom?.type === 'pk' && user) {
       await submitScore(score);
-      // Mark room finished (fire-and-forget, non-blocking)
-      finishRoom(user.id);
-      setShowPKResult(true);
-      setActiveMission(null);
-      setGameState('map');
+      pkAutoCompleteRef.current = false;
+      setPkCountdown(null);
+      // Don't show result yet — wait for room.status='finished' (useEffect above handles it)
+      // If all finished, the effect fires immediately; otherwise we wait for others + countdown
       return;
     }
 
@@ -529,7 +565,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v7.4.0</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v7.5.0</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -975,6 +1011,34 @@ export default function App() {
           )}
         </AnimatePresence>
 
+        {/* ═══ PK Countdown Bar ═══ */}
+        <AnimatePresence>
+          {pkCountdown !== null && pkCountdown > 0 && gameState === 'battle' && (
+            <motion.div
+              initial={{ opacity: 0, y: -40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -40 }}
+              className="fixed top-14 left-1/2 -translate-x-1/2 z-[80] flex items-center gap-3 px-5 py-2.5 bg-rose-600/90 backdrop-blur-md border border-rose-400/50 rounded-2xl shadow-2xl"
+            >
+              <span className="text-lg">⚡</span>
+              <div className="flex-1">
+                <p className="text-white font-black text-sm">
+                  {lang === 'en'
+                    ? `Opponent finished! ${pkCountdown}s left`
+                    : `对手已完成！还剩 ${pkCountdown} 秒`}
+                </p>
+                <div className="h-1.5 bg-white/20 rounded-full mt-1 overflow-hidden">
+                  <motion.div
+                    className="h-full bg-white rounded-full"
+                    animate={{ width: `${(pkCountdown / PK_COUNTDOWN_SECS) * 100}%` }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* ═══ PK Result Overlay ═══ */}
         <AnimatePresence>
           {showPKResult && activeRoom && user && (
@@ -982,8 +1046,20 @@ export default function App() {
               lang={lang}
               room={activeRoom}
               currentUserId={user.id}
-              onClose={() => {
+              onClose={async () => {
+                // Apply PK rank XP bonus
+                if (profile) {
+                  const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
+                  const myRank = ranked.findIndex(([uid]) => uid === user.id);
+                  const myScore = activeRoom.players[user.id]?.score ?? 0;
+                  const multiplier = getRankMultiplier(myRank);
+                  const bonusXP = Math.round(myScore * (multiplier - 1));
+                  if (bonusXP > 0) {
+                    await updateProfile({ total_score: profile.total_score + bonusXP });
+                  }
+                }
                 setShowPKResult(false);
+                pkAutoCompleteRef.current = false;
                 leaveRoom();
               }}
             />
