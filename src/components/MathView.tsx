@@ -18,13 +18,18 @@ export const LatexText = ({ text, className = "" }: { text: string; className?: 
   return (
     <span className={className} style={{ display: 'inline' }}>
       {lines.map((line, li) => {
-        // Match $...$ but not empty $$ (which would be display math)
-        const parts = line.split(/(\$(?!\$).*?\$)/g);
+        // Match $$...$$ (display math) first, then $...$ (inline math)
+        const parts = line.split(/(\$\$[^$]+\$\$|\$(?!\$)[^$]*?\$)/g);
         // Use inline-flex wrap for each line so text + formulas auto-wrap
         return (
           <span key={li} style={{ display: 'inline-flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '0 0.15em', maxWidth: '100%' }}>
             {li > 0 && <br />}
             {parts.map((part, pi) => {
+              // Display math: $$...$$
+              if (part.startsWith('$$') && part.endsWith('$$') && part.length > 4) {
+                return <MathView key={pi} tex={part.slice(2, -2)} inline={false} />;
+              }
+              // Inline math: $...$
               if (part.startsWith('$') && part.endsWith('$') && part.length > 2) {
                 return <MathView key={pi} tex={part.slice(1, -1)} />;
               }
