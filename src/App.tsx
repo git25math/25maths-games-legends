@@ -23,7 +23,7 @@ import { LobbyScreen } from './screens/LobbyScreen';
 import { PracticeScreen } from './screens/PracticeScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { OnboardingScreen, isOnboardingDone, clearOnboardingFlag } from './screens/OnboardingScreen';
-import { cleanStalePracticeKeys } from './hooks/usePracticeState';
+import { cleanStalePracticeKeys, clearPracticeState } from './hooks/usePracticeState';
 import { getActiveSkillEffect } from './data/heroSkills';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
@@ -441,7 +441,7 @@ export default function App() {
                   character={selectedChar}
                   lang={lang}
                   onComplete={async () => {
-                    // Save practice completion — all 3 phases done + award XP
+                    // Save practice completion — all 4 phases done + award XP
                     if (profile) {
                       const cm = { ...profile.completed_missions } as any;
                       const key = String(activeMission.id);
@@ -454,6 +454,8 @@ export default function App() {
                       });
                       setLastClearedMissionId(activeMission.id);
                     }
+                    // Clear persisted practice state so revisiting starts fresh
+                    clearPracticeState(activeMission.id);
                     setIsRepairMode(false);
                     setGameState('map');
                     setActiveMission(null);

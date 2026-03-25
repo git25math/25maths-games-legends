@@ -81,9 +81,9 @@ export function cleanStalePracticeKeys(maxAgeDays = 7): void {
  * Returns the same interface as individual useStates but backed by localStorage.
  */
 export function usePracticePersistedState(missionId: number) {
-  const [phase, setPhase] = usePersisted<'green' | 'amber' | 'red'>(
+  const [phase, setPhase] = usePersisted<'green' | 'amber' | 'red' | 'battle'>(
     pk(missionId, 'phase'), 'green',
-    v => v === 'green' || v === 'amber' || v === 'red'
+    v => v === 'green' || v === 'amber' || v === 'red' || v === 'battle'
   );
   const [tutorialStep, setTutorialStep] = usePersisted<number>(pk(missionId, 'step'), 0);
   const [adaptiveTier, setAdaptiveTier] = usePersisted<1 | 2 | 3>(
