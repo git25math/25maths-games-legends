@@ -440,7 +440,14 @@ export default function App() {
                   mission={activeMission}
                   character={selectedChar}
                   lang={lang}
-                  onComplete={() => {
+                  onComplete={async () => {
+                    // Save practice completion — all 3 phases done
+                    if (profile) {
+                      const cm = { ...profile.completed_missions } as any;
+                      const key = String(activeMission.id);
+                      cm[key] = { ...(cm[key] || {}), green: true, amber: true, red: true };
+                      await updateProfile({ completed_missions: cm });
+                    }
                     setIsRepairMode(false);
                     setGameState('map');
                     setActiveMission(null);
