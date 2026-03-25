@@ -6,7 +6,7 @@
  */
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag, Download, ArrowUpDown } from 'lucide-react';
 import type { Language, Mission } from '../types';
 import { supabase } from '../supabase';
 import { SkeletonRow } from '../components/SkeletonRow';
@@ -17,6 +17,7 @@ import { AlertPanel, computeAlerts } from '../components/dashboard/AlertPanel';
 import { StudentDetailCard } from '../components/dashboard/StudentDetailCard';
 import { ClassOverview } from '../components/dashboard/ClassOverview';
 import { KPHeatmap } from '../components/dashboard/KPHeatmap';
+import { WeeklyTrend } from '../components/dashboard/WeeklyTrend';
 import type { StudentRow, UnitEntry } from '../components/dashboard/types';
 
 type Props = {
@@ -89,6 +90,8 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [showBatchAssign, setShowBatchAssign] = useState(false);
   const [batchTag, setBatchTag] = useState('');
   const [selectedStudent, setSelectedStudent] = useState<StudentRow | null>(null);
+  const [sortKey, setSortKey] = useState<'score' | 'progress' | 'kp' | 'name'>('score');
+  const [sortAsc, setSortAsc] = useState(false);
 
   const unitMap = useMemo(() => getUnitMap(grade), [grade]);
   const units: UnitEntry[] = useMemo(() => [...unitMap.entries()], [unitMap]);
@@ -223,7 +226,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
     return done;
   };
 
-  // KP mastery counts
+  // KP mastery counts (must be before sortedStudents + exportCSV which reference it)
   const [kpMasteryMap, setKpMasteryMap] = useState<Map<string, number>>(new Map());
   useEffect(() => {
     supabase.from('play_kp_progress').select('user_id, mastered_at').not('mastered_at', 'is', null)
@@ -236,6 +239,51 @@ export function DashboardScreen({ lang, onClose }: Props) {
         setKpMasteryMap(map);
       }, () => {});
   }, [students]);
+
+  // CSV export
+  const exportCSV = () => {
+    const header = ['Name', 'Class Tags', 'Score', 'Progress %', 'KP Mastered'];
+    const rows = [...students]
+      .sort((a, b) => (b.total_score || 0) - (a.total_score || 0))
+      .map(s => {
+        const overall = getStudentOverall(s);
+        const pct = totalMissions > 0 ? Math.round((overall / totalMissions) * 100) : 0;
+        return [
+          s.display_name || 'Anonymous',
+          (s.class_tags || []).join('; '),
+          String(s.total_score || 0),
+          `${pct}%`,
+          String(kpMasteryMap.get(s.user_id) ?? 0),
+        ];
+      });
+    const csv = [header, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Y${grade}${filterTag ? '-' + filterTag : ''}-progress-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Sort handler
+  const handleSort = (key: typeof sortKey) => {
+    if (sortKey === key) setSortAsc(!sortAsc);
+    else { setSortKey(key); setSortAsc(false); }
+  };
+
+  // Sorted students
+  const sortedStudents = useMemo(() => {
+    const list = [...students];
+    const dir = sortAsc ? 1 : -1;
+    return list.sort((a, b) => {
+      if (sortKey === 'name') return dir * (a.display_name || '').localeCompare(b.display_name || '');
+      if (sortKey === 'score') return dir * ((a.total_score || 0) - (b.total_score || 0));
+      if (sortKey === 'progress') return dir * (getStudentOverall(a) - getStudentOverall(b));
+      if (sortKey === 'kp') return dir * ((kpMasteryMap.get(a.user_id) ?? 0) - (kpMasteryMap.get(b.user_id) ?? 0));
+      return 0;
+    });
+  }, [students, sortKey, sortAsc, kpMasteryMap]);
 
   // Alerts
   const alerts = useMemo(() => computeAlerts(students, units, totalMissions), [students, units, totalMissions]);
@@ -292,6 +340,14 @@ export function DashboardScreen({ lang, onClose }: Props) {
             className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-indigo-50 hover:border-indigo-200 transition-colors shadow-sm"
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+          </button>
+          <button
+            onClick={exportCSV}
+            disabled={students.length === 0}
+            className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-emerald-50 hover:border-emerald-200 transition-colors shadow-sm disabled:opacity-30"
+            title={lang === 'en' ? 'Export CSV' : '导出 CSV'}
+          >
+            <Download size={14} />
           </button>
         </div>
       </div>
@@ -364,6 +420,9 @@ export function DashboardScreen({ lang, onClose }: Props) {
         )}
       </AnimatePresence>
 
+      {/* ═══ Weekly Trend (v8.2) ═══ */}
+      <WeeklyTrend lang={lang} grade={grade} filterTag={filterTag} />
+
       {/* ═══ KP Heatmap (v8.1) ═══ */}
       <KPHeatmap lang={lang} grade={grade} filterTag={filterTag} students={students} onStudentClick={(uid) => {
         const s = students.find(st => st.user_id === uid);
@@ -399,13 +458,19 @@ export function DashboardScreen({ lang, onClose }: Props) {
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
               <th className="sticky left-0 bg-slate-50 z-20 px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap w-8">#</th>
-              <th className="sticky left-8 bg-slate-50 z-20 px-3 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[140px]">{t.student}</th>
-              <th className="px-2 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[100px]">{t.tags}</th>
-              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[60px]">
-                <div className="flex items-center justify-center gap-1"><Trophy size={12} className="text-amber-500" /> {t.score}</div>
+              <th className="sticky left-8 bg-slate-50 z-20 px-3 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[140px] cursor-pointer hover:text-indigo-600 select-none" onClick={() => handleSort('name')}>
+                {t.student} {sortKey === 'name' && <ArrowUpDown size={10} className="inline ml-0.5" />}
               </th>
-              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[50px]">{t.overall}</th>
-              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[40px]">KP</th>
+              <th className="px-2 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[100px]">{t.tags}</th>
+              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[60px] cursor-pointer hover:text-indigo-600 select-none" onClick={() => handleSort('score')}>
+                <div className="flex items-center justify-center gap-1"><Trophy size={12} className="text-amber-500" /> {t.score} {sortKey === 'score' && <ArrowUpDown size={10} />}</div>
+              </th>
+              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[50px] cursor-pointer hover:text-indigo-600 select-none" onClick={() => handleSort('progress')}>
+                {t.overall} {sortKey === 'progress' && <ArrowUpDown size={10} className="inline ml-0.5" />}
+              </th>
+              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[40px] cursor-pointer hover:text-indigo-600 select-none" onClick={() => handleSort('kp')}>
+                KP {sortKey === 'kp' && <ArrowUpDown size={10} className="inline ml-0.5" />}
+              </th>
               {units.map(([uid, u]) => (
                 <th key={uid} className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap border-l border-slate-100" title={u.title}>
                   <div className="text-[10px] leading-tight max-w-[80px] mx-auto truncate">{u.title.replace(/Unit \d+:\s*/, '').split('·')[0]}</div>
@@ -426,7 +491,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                 </td>
               </tr>
             )}
-            {[...students].sort((a, b) => (b.total_score || 0) - (a.total_score || 0)).map((s, i) => {
+            {sortedStudents.map((s, i) => {
               const overall = getStudentOverall(s);
               const pct = totalMissions > 0 ? Math.round((overall / totalMissions) * 100) : 0;
               const rank = i + 1;

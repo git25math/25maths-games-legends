@@ -501,7 +501,8 @@ export default function App() {
   };
 
   const isLoggedIn = !!user || isGuest;
-  const isAdmin = user?.email === 'zhuxingda86@hotmail.com';
+  // Teacher access: original admin email OR any user with TEACHER tag in class_tags
+  const isTeacher = user?.email === 'zhuxingda86@hotmail.com' || (profile?.class_tags ?? []).some(t => t.toUpperCase() === 'TEACHER');
 
   // Loading splash while auth initializes
   if (authLoading) {
@@ -577,7 +578,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v8.1.0</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v8.2.0</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -611,7 +612,7 @@ export default function App() {
                   onSignup={signUp}
                   onLogout={signOut}
                   onGuest={handleGuest}
-                  onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
+                  onDashboard={isTeacher ? () => setGameState('dashboard') : undefined}
                 />
               )}
 
@@ -645,7 +646,7 @@ export default function App() {
                   onGradeChange={() => updateProfile({ grade: null })}
                   onCharChange={() => { setSelectedCharId(null); setGameState('welcome'); }}
                   onCreateRoom={createRoom}
-                  onDashboard={isAdmin ? () => setGameState('dashboard') : undefined}
+                  onDashboard={isTeacher ? () => setGameState('dashboard') : undefined}
                   onDailyChallenge={handleDailyChallenge}
                   lastClearedMissionId={lastClearedMissionId}
                   clearLastClearedMission={() => setLastClearedMissionId(null)}
