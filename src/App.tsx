@@ -433,11 +433,13 @@ export default function App() {
     setIsDailyBattle(false);
 
     // PK mode: submit score and show result overlay
-    if (activeRoom?.type === 'pk') {
+    if (activeRoom?.type === 'pk' && user) {
       await submitScore(score);
-      setPkBattleRoom({ ...activeRoom, players: { ...activeRoom.players, ...(user ? { [user.id]: { ...activeRoom.players[user.id], score } } : {}) } });
+      const updatedPlayers = { ...activeRoom.players, [user.id]: { ...activeRoom.players[user.id], score } };
+      setPkBattleRoom({ ...activeRoom, players: updatedPlayers });
       setShowPKResult(true);
       setActiveMission(null);
+      leaveRoom(); // Clear activeRoom immediately (PK result uses pkBattleRoom snapshot)
       setGameState('map');
       return;
     }

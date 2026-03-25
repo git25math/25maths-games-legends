@@ -236,16 +236,21 @@ export const AchievementWallPanel = ({
   const { playTap } = useAudio();
   const [activeCategory, setActiveCategory] = useState<AchievementCategory>('journey');
 
-  const stats = useMemo(() => {
+  const { stats, catCounts } = useMemo(() => {
     let total = 0;
     let unlocked = 0;
+    const counts: Record<string, { total: number; unlocked: number }> = {};
     for (const cat of CATEGORIES) {
+      let catTotal = 0;
+      let catUnlocked = 0;
       for (const ach of cat.achievements) {
         total++;
-        if (ach.check(profile).unlocked) unlocked++;
+        catTotal++;
+        if (ach.check(profile).unlocked) { unlocked++; catUnlocked++; }
       }
+      counts[cat.id] = { total: catTotal, unlocked: catUnlocked };
     }
-    return { total, unlocked };
+    return { stats: { total, unlocked }, catCounts: counts };
   }, [profile]);
 
   const activeCat = CATEGORIES.find(c => c.id === activeCategory)!;
@@ -298,7 +303,7 @@ export const AchievementWallPanel = ({
         <div className="flex gap-1.5 mb-4">
           {CATEGORIES.map(cat => {
             const Icon = cat.icon;
-            const catUnlocked = cat.achievements.filter(a => a.check(profile).unlocked).length;
+            const cc = catCounts[cat.id];
             return (
               <button
                 key={cat.id}
@@ -311,7 +316,7 @@ export const AchievementWallPanel = ({
               >
                 <Icon size={14} />
                 <span>{lt(cat.label, lang)}</span>
-                <span className="text-[9px] opacity-60">{catUnlocked}/{cat.achievements.length}</span>
+                <span className="text-[9px] opacity-60">{cc.unlocked}/{cc.total}</span>
               </button>
             );
           })}
