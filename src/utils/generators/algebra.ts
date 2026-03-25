@@ -809,6 +809,13 @@ export function generateQuadraticMission(template: Mission): Mission {
   const tutorialSteps = [
     {
       text: {
+        zh: `${narrator}：为什么要学求二次函数系数？\n想象你看到敌军投石车的石头轨迹——知道两个落点，就能推出整条抛物线，预测下一颗石头落哪！\n已知两个点 → 列两个方程 → 解出 $a$ 和 $c$，这就是"逆向工程"。`,
+        en: `${narrator}: "Why learn to find quadratic coefficients?\nImagine tracing enemy catapult stones — knowing two landing points, you can deduce the full parabola and predict the next impact!\nTwo points → two equations → solve for $a$ and $c$ — that's reverse engineering."`,
+      },
+      highlightField: 'a',
+    },
+    {
+      text: {
         zh: `${narrator}：抛物线 $y = ax^{2} + c$ 经过两个点，我们要求出系数 $a$ 和 $c$`,
         en: `${narrator}: "The parabola $y = ax^{2} + c$ passes through two points — we need to find coefficients $a$ and $c$"`,
       },
@@ -1376,6 +1383,13 @@ export function generateSequenceY7Mission(template: Mission): Mission {
     };
 
     const tutorialSteps = [
+      {
+        text: {
+          zh: `${narrator}：为什么要学等差数列？\n想象远征军每天的补给——第 1 天 ${a1} 袋，之后每天多（或少）固定的量。\n这种"匀速增减"的规律到处都是：工资涨幅、台阶高度、利息增长...\n学会通项公式，就能直接算出第 100 天的值，不用一天天数！`,
+          en: `${narrator}: "Why learn arithmetic sequences?\nImagine daily army supplies — day 1 is ${a1}, then a fixed increase (or decrease) each day.\nThis 'steady change' pattern is everywhere: salary raises, stair heights, interest growth...\nLearn the formula to instantly calculate day 100, no counting needed!"`,
+        },
+        highlightField: 'ans',
+      },
       {
         text: {
           zh: `${narrator}：远征军第 $${n}$ 天的补给量是多少？\n数列：$${termsStr}, \\ldots$\n\n逐个数到第 $${n}$ 项太慢了——我们需要一个"直达公式"！\n给出位置 $n$，直接算出值。`,

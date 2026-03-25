@@ -1277,6 +1277,13 @@ export function generateHcfMission(template: Mission): Mission {
   });
 
   const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么要学最大公因数（HCF）？\n想象两营士兵 $${a}$ 人和 $${b}$ 人，要混编成大小相同的小队。\n没人落单、不浪费名额——HCF 就是找到"最大能整除两个数"的那个数！\n分配资源、统一规格、简化分数——全靠 HCF。`,
+        en: `${narrator}: "Why learn HCF (Highest Common Factor)?\nTwo camps of $${a}$ and $${b}$ soldiers must form equal-sized squads.\nNobody left out, no waste — HCF finds the largest number that divides both!\nResource allocation, standardization, simplifying fractions — all use HCF."`,
+      },
+      highlightField: 'ans',
+    },
     // Phase 1: listing factors
     {
       text: {

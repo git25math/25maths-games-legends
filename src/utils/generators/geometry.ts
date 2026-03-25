@@ -724,6 +724,13 @@ export function generateTrigonometryMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
+          zh: `${narrator}：为什么要学三角函数？\n想象你站在江边，对岸有敌营——你不能游过去量距离，但你知道自己的位置和角度。\n三角函数就是"不用走过去就能算出距离"的测量术！\n只要有一个角 + 一条边，就能推出所有边。`,
+          en: `${narrator}: "Why learn trigonometry?\nImagine standing by a river — the enemy camp is across, but you can't swim over to measure.\nTrig lets you calculate distance without going there!\nJust one angle + one side, and you can figure out everything."`,
+        },
+        highlightField: 'c',
+      },
+      {
+        text: {
           zh: `${narrator}：三角函数——直角三角形的万能工具\nSOH-CAH-TOA 口诀：\nSin = 对边/斜边，Cos = 邻边/斜边，Tan = 对边/邻边`,
           en: `${narrator}: "Trig functions — the ultimate tool for right triangles\nSOH-CAH-TOA:\nSin = Opposite/Hypotenuse, Cos = Adjacent/Hypotenuse, Tan = Opposite/Adjacent"`,
         },
@@ -802,6 +809,13 @@ export function generateTrigonometryMission(template: Mission): Mission {
       en: `Given opposite ${chosen.opp}, adjacent ${chosen.adj}, find angle $\\theta$.`,
     };
     const tutorialSteps = [
+      {
+        text: {
+          zh: `${narrator}：为什么要学反三角函数？\n上一关我们用角度求边长。现在反过来——知道两条边，求角度！\n想象你看到敌军的瞭望塔，知道塔高和距离，就能算出仰望角度——这就是反三角函数！`,
+          en: `${narrator}: "Why learn inverse trig?\nLast time we found sides from angles. Now reverse — given two sides, find the angle!\nImagine seeing an enemy tower — knowing its height and your distance, calculate the viewing angle — that's inverse trig!"`,
+        },
+        highlightField: 'angle',
+      },
       {
         text: {
           zh: `${narrator}：三角函数——直角三角形的万能工具\nSOH-CAH-TOA 口诀：\nSin = 对边/斜边，Cos = 邻边/斜边，Tan = 对边/邻边`,
