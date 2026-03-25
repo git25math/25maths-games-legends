@@ -17,7 +17,7 @@
 
 - **根目录**: `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends`
 - **部署**: push main → GitHub Actions → play.25maths.com
-- **版本**: v7.0.5 (2026-03-24)
+- **版本**: v7.3.0 (2026-03-25)
 - **仓库**: `git25math/25maths-games-legends`
 
 ## 关联项目
@@ -36,6 +36,7 @@
 | `docs/DEVELOPMENT-PLAN.md` | 主开发计划 + 版本历程 (v0.1→v7.0) | **必读** |
 | `docs/Y8-DEVELOPMENT-PLAN.md` | Y8 接手计划（完整） | Y8 开发时必读 |
 | `docs/BUG-POSTMORTEM.md` | Bug 根因分析 + 9 条防范规则 | **开发前必读** |
+| `docs/OPTIMIZATION-HISTORY.md` | v0.1→v7.3 全量优化分析（规模/架构/质量/性能） | 参考 |
 | `Y7-tutorial-content-review.md` | Y7 教程内容规格（旧，仅参考） | 低 |
 | `README.md` | 项目简介 | 低 |
 
