@@ -29,7 +29,8 @@ function getMondayISO(): string {
   const d = new Date();
   const day = d.getDay();
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-  const mon = new Date(d.getFullYear(), d.getMonth(), diff);
+  // Use local midnight (consistent with seasonTracker's thisMonday)
+  const mon = new Date(d.getFullYear(), d.getMonth(), diff, 0, 0, 0);
   return mon.toISOString();
 }
 

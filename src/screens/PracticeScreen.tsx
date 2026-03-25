@@ -82,6 +82,7 @@ export const PracticeScreen = ({
     expected: Record<string, string>;
   } | null>(null);
   const [showCorrectFlash, setShowCorrectFlash] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
   const [showBadge, setShowBadge] = useState(false);
@@ -102,7 +103,7 @@ export const PracticeScreen = ({
       if (e.key !== 'Enter') return;
       if (wrongAnswerData) {
         handleWrongAnswerContinue();
-      } else if (currentPhase !== 'green') {
+      } else if (currentPhase !== 'green' && !isSubmitting && !showCorrectFlash) {
         handleSubmit();
       }
     };
@@ -142,6 +143,8 @@ export const PracticeScreen = ({
   }, [mission, adaptiveTier]);
 
   const handleSubmit = () => {
+    if (isSubmitting || showCorrectFlash) return;
+    setIsSubmitting(true);
     playClick();
     const result = checkAnswer(currentMission, inputs);
     if (result.correct) {
@@ -160,6 +163,7 @@ export const PracticeScreen = ({
       }
       setTimeout(() => {
         setShowCorrectFlash(false);
+        setIsSubmitting(false);
         // v7.0: Repair mode — complete after 3 correct
         if (repairMode) {
           const newRepair = repairCorrect + 1;
@@ -205,6 +209,7 @@ export const PracticeScreen = ({
 
   const handleWrongAnswerContinue = () => {
     setWrongAnswerData(null);
+    setIsSubmitting(false);
     regenerateQuestion();
   };
 

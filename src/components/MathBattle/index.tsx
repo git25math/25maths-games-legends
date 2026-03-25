@@ -75,7 +75,7 @@ export const MathBattle = ({
 
   const totalQuestions = isMultiQuestion ? MODE_QUESTIONS[battleMode] : 1;
 
-  // Build question queue with deduplication (no repeated answers)
+  // Build question queue with deduplication (no repeated questions)
   const [questionQueue] = useState<Mission[]>(() => {
     if (!isMultiQuestion) return [mission];
     const queue: Mission[] = [];
@@ -83,11 +83,10 @@ export const MathBattle = ({
     let attempts = 0;
     while (queue.length < totalQuestions && attempts < totalQuestions * 3) {
       const q = generateMission(mission);
-      // Fingerprint: answer + key data fields to detect duplicates
-      const d = q.data ?? {};
-      const fp = JSON.stringify(d.answer ?? '') + '|' + JSON.stringify(d.ans ?? '') + '|' + JSON.stringify(d.ansNum ?? '') + '|' + JSON.stringify(d.n ?? '');
+      // Fingerprint: use description text (already contains all interpolated numbers)
+      const fp = q.description.zh;
       attempts++;
-      if (seen.has(fp) && attempts < totalQuestions * 2) continue; // skip duplicate, but allow after many attempts
+      if (seen.has(fp) && attempts < totalQuestions * 2) continue;
       seen.add(fp);
       queue.push(q);
     }
@@ -323,6 +322,7 @@ export const MathBattle = ({
         }
       } else {
         // Single-question: victory replaces correct (avoid overlap)
+        setIsSubmitting(false);
         const duration = (Date.now() - startTime) / 1000;
         const speedBonus = Math.max(0, 100 - Math.floor(duration));
         const multiplier = DIFFICULTY_MULTIPLIER[difficultyMode];

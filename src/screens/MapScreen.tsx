@@ -126,7 +126,7 @@ export const MapScreen = ({
     return () => clearInterval(timer);
   }, []);
 
-  // Class rank (lightweight query, runs once)
+  // Class rank (runs once on load, not on every score change)
   const [classRankInfo, setClassRankInfo] = useState<{ rank: number; total: number } | null>(null);
   useEffect(() => {
     const tags = profile.class_tags;
@@ -137,12 +137,13 @@ export const MapScreen = ({
       .eq('grade', profile.grade)
       .contains('class_tags', [tags[0]])
       .order('total_score', { ascending: false })
+      .limit(100)
       .then(({ data }) => {
         if (!data) return;
         const rank = data.findIndex(d => d.user_id === profile.user_id) + 1;
         setClassRankInfo(rank > 0 ? { rank, total: data.length } : null);
-      });
-  }, [profile.user_id, profile.total_score]);
+      }, () => {}); // silently ignore errors
+  }, [profile.user_id]);
 
   useEffect(() => { playBGMMap(); return () => stopBGM(); }, []);
 
