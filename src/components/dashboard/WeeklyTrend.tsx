@@ -102,16 +102,15 @@ export const WeeklyTrend = ({
       const bothData = (bothRes.data as WeekStat[]) || [];
 
       // "both" includes this week + last week. Subtract this week to get last week only.
-      const thisIds = new Set(thisData.map(d => d.user_id));
       const lastOnly: WeekStat[] = [];
       for (const d of bothData) {
         const thisEntry = thisData.find(t => t.user_id === d.user_id);
         if (thisEntry) {
           lastOnly.push({
             user_id: d.user_id,
-            battles: d.battles - thisEntry.battles,
-            wins: d.wins - thisEntry.wins,
-            total_score: d.total_score - thisEntry.total_score,
+            battles: Math.max(0, d.battles - thisEntry.battles),
+            wins: Math.max(0, d.wins - thisEntry.wins),
+            total_score: Math.max(0, d.total_score - thisEntry.total_score),
           });
         } else {
           lastOnly.push(d);

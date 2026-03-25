@@ -226,19 +226,19 @@ export function DashboardScreen({ lang, onClose }: Props) {
     return done;
   };
 
-  // KP mastery counts (must be before sortedStudents + exportCSV which reference it)
+  // KP mastery counts via RPC (bypasses RLS for teacher access)
   const [kpMasteryMap, setKpMasteryMap] = useState<Map<string, number>>(new Map());
   useEffect(() => {
-    supabase.from('play_kp_progress').select('user_id, mastered_at').not('mastered_at', 'is', null)
-      .then(({ data }) => {
-        if (!data) return;
+    supabase.rpc('get_class_kp_progress', { p_grade: grade, p_class: filterTag || null })
+      .then(({ data, error }) => {
+        if (error || !data) return;
         const map = new Map<string, number>();
-        for (const r of data as { user_id: string; mastered_at: string }[]) {
-          map.set(r.user_id, (map.get(r.user_id) ?? 0) + 1);
+        for (const r of data as { user_id: string; mastered_at: string | null }[]) {
+          if (r.mastered_at) map.set(r.user_id, (map.get(r.user_id) ?? 0) + 1);
         }
         setKpMasteryMap(map);
-      }, () => {});
-  }, [students]);
+      });
+  }, [grade, filterTag, students]);
 
   // CSV export
   const exportCSV = () => {
@@ -256,7 +256,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
           String(kpMasteryMap.get(s.user_id) ?? 0),
         ];
       });
-    const csv = [header, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+    const csv = [header, ...rows].map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n');
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
