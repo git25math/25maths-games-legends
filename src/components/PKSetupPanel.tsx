@@ -172,23 +172,23 @@ export const PKSetupPanel = ({
               type="text"
               value={roomCode}
               onChange={(e) => setRoomCode(e.target.value.trim())}
-              onKeyDown={(e) => { if (e.key === 'Enter' && roomCode.length >= 8) onJoinRoom(roomCode); }}
+              onKeyDown={(e) => { if (e.key === 'Enter' && roomCode.length >= 6) onJoinRoom(roomCode); }}
               onPaste={(e) => {
-                // Auto-submit on paste (user copies full UUID from friend)
                 const pasted = e.clipboardData.getData('text').trim();
-                if (pasted.length >= 8) {
+                if (pasted.length >= 6) {
                   e.preventDefault();
                   setRoomCode(pasted);
                   setTimeout(() => onJoinRoom(pasted), 100);
                 }
               }}
-              placeholder={lang === 'en' ? 'Paste room ID from friend' : '粘贴好友发送的房间 ID'}
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-center font-mono text-sm placeholder:text-white/20 placeholder:text-sm focus:outline-none focus:border-indigo-400/50"
+              placeholder={lang === 'en' ? 'Room code or full ID' : '房间代码或完整 ID'}
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-center font-mono text-lg tracking-[0.2em] placeholder:text-white/20 placeholder:tracking-normal placeholder:text-sm focus:outline-none focus:border-indigo-400/50"
+              maxLength={36}
               autoFocus
             />
             <button
-              onClick={() => { if (roomCode.length >= 8) onJoinRoom(roomCode); }}
-              disabled={roomCode.length < 8}
+              onClick={() => { if (roomCode.length >= 6) onJoinRoom(roomCode); }}
+              disabled={roomCode.length < 6}
               className="w-full mt-4 py-3 bg-emerald-600 text-white font-black rounded-2xl hover:bg-emerald-500 transition-colors text-sm disabled:opacity-30 disabled:cursor-not-allowed"
             >
               {lang === 'en' ? 'Join Room' : '加入房间'}

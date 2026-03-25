@@ -28,13 +28,26 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     setActiveRoom({ ...data, id: data.id, hostId: data.host_id, missionId: data.mission_id } as Room);
   };
 
-  /** Join a room by full UUID or 6-char short code. Returns true on success. */
+  /** Join a room by full UUID or short code prefix. Returns true on success. */
   const joinRoom = async (roomId: string): Promise<boolean> => {
     if (!user || !profile) return false;
 
-    // Room IDs are UUIDs — user pastes full ID from clipboard
-    // Short codes (6 chars shown in UI) are display-only; clipboard copies the full UUID
-    const actualId = roomId;
+    let actualId = roomId;
+
+    // Short code: fetch waiting rooms and match prefix client-side
+    // (UUID columns don't support ilike in PostgREST)
+    if (roomId.length < 36) {
+      const code = roomId.toLowerCase();
+      const { data: rooms } = await supabase
+        .from('gl_rooms')
+        .select('*')
+        .eq('status', 'waiting')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      const match = rooms?.find(r => r.id.toLowerCase().startsWith(code));
+      if (!match) return false;
+      actualId = match.id;
+    }
 
     const { data: room, error: getErr } = await supabase.from('gl_rooms').select('*').eq('id', actualId).single();
     if (getErr || !room) return false;
