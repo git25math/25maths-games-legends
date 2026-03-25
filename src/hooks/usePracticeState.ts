@@ -39,7 +39,7 @@ function pk(missionId: number, field: string): string {
 
 /** Clear practice state for a specific mission */
 export function clearPracticeState(missionId: number): void {
-  const fields = ['phase', 'step', 'tier', 'cc', 'cw', 'ts'];
+  const fields = ['phase', 'step', 'tier', 'cc', 'cw', 'pc', 'ts'];
   fields.forEach(f => {
     try { localStorage.removeItem(pk(missionId, f)); } catch { /* ignore */ }
   });
@@ -92,6 +92,7 @@ export function usePracticePersistedState(missionId: number) {
   );
   const [consecutiveCorrect, setConsecutiveCorrect] = usePersisted<number>(pk(missionId, 'cc'), 0);
   const [consecutiveWrong, setConsecutiveWrong] = usePersisted<number>(pk(missionId, 'cw'), 0);
+  const [phaseCorrectCount, setPhaseCorrectCount] = usePersisted<number>(pk(missionId, 'pc'), 0);
 
   // Update timestamp on mount
   useEffect(() => {
@@ -104,5 +105,6 @@ export function usePracticePersistedState(missionId: number) {
     adaptiveTier, setAdaptiveTier,
     consecutiveCorrect, setConsecutiveCorrect,
     consecutiveWrong, setConsecutiveWrong,
+    phaseCorrectCount, setPhaseCorrectCount,
   };
 }

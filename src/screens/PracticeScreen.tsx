@@ -60,6 +60,7 @@ export const PracticeScreen = ({
     adaptiveTier, setAdaptiveTier,
     consecutiveCorrect, setConsecutiveCorrect,
     consecutiveWrong, setConsecutiveWrong,
+    phaseCorrectCount, setPhaseCorrectCount,
   } = usePracticePersistedState(mission.id);
 
   const currentPhase = repairMode ? 'red' as const : persistedPhase;
@@ -76,7 +77,6 @@ export const PracticeScreen = ({
   const [showBadge, setShowBadge] = useState(false);
   const [phaseToast, setPhaseToast] = useState<string | null>(null);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
-  const [phaseCorrectCount, setPhaseCorrectCount] = useState(0);
   // v7.0: Repair mode — count correct answers, complete after 3
   const [repairCorrect, setRepairCorrect] = useState(0);
   const REPAIR_TARGET = 3;
@@ -355,6 +355,29 @@ export const PracticeScreen = ({
           </div>
         </div>
 
+        {/* Overall mission progress bar */}
+        {!repairMode && (() => {
+          const totalRequired = PHASE_REQUIRED.amber + PHASE_REQUIRED.red + PHASE_REQUIRED.battle; // 1+3+10=14
+          const completedBefore = PHASE_ORDER.slice(0, phaseIndex).reduce((s, p) => s + PHASE_REQUIRED[p], 0);
+          const progress = Math.min(1, (completedBefore + (currentPhase !== 'green' ? phaseCorrectCount : 0)) / totalRequired);
+          return (
+            <div className="px-4 pb-2">
+              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-indigo-500 rounded-full"
+                  initial={false}
+                  animate={{ width: `${progress * 100}%` }}
+                  transition={{ type: 'spring', stiffness: 120 }}
+                />
+              </div>
+              <div className="flex justify-between mt-0.5 text-[8px] text-white/20 px-0.5">
+                <span>{lang === 'en' ? 'Tutorial' : '\u6559\u5b66'}</span>
+                <span>{lang === 'en' ? 'Complete!' : '\u901a\u5173\uff01'}</span>
+              </div>
+            </div>
+          );
+        })()}
+
         {/* Content */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -472,8 +495,21 @@ export const PracticeScreen = ({
                   </div>
                 )}
                 {currentPhase === 'battle' && (
-                  <div className="px-3 py-2 bg-indigo-900/40 border border-indigo-600/30 rounded-lg text-indigo-100 text-xs font-bold text-center mb-2">
-                    {lang === 'en' ? `Final battle! ${phaseCorrectCount}/${PHASE_REQUIRED.battle}` : `\u6700\u7ec8\u95ef\u5173\uff01${phaseCorrectCount}/${PHASE_REQUIRED.battle}`}
+                  <div className="px-3 py-3 bg-indigo-900/40 border border-indigo-600/30 rounded-lg mb-2">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-indigo-100 text-xs font-bold">
+                        {lang === 'en' ? 'Final Battle' : '\u6700\u7ec8\u95ef\u5173'}
+                      </span>
+                      <span className="text-indigo-300 text-xs font-black">{phaseCorrectCount}/{PHASE_REQUIRED.battle}</span>
+                    </div>
+                    <div className="h-2 bg-indigo-950 rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
+                        initial={false}
+                        animate={{ width: `${(phaseCorrectCount / PHASE_REQUIRED.battle) * 100}%` }}
+                        transition={{ type: 'spring', stiffness: 150 }}
+                      />
+                    </div>
                   </div>
                 )}
 
