@@ -1,7 +1,8 @@
 /**
- * DashboardScreen — 教师进度看板
+ * DashboardScreen — 教师进度看板 (v8.0)
  * 实时显示全班学生在每个单元的 Green/Amber/Red 完成进度
  * 支持多标签（如 7B + EA）：批量/单个添加、删除标签
+ * v8.0: 预警面板 + 学生详情卡（7 维雷达图）
  */
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -12,17 +13,9 @@ import { SkeletonRow } from '../components/SkeletonRow';
 import { INPUT_FOCUS_CLASS } from '../utils/animationPresets';
 import { MISSIONS } from '../data/missions';
 import { lt } from '../i18n/resolveText';
-
-type StudentRow = {
-  user_id: string;
-  display_name: string;
-  class_name: string | null;
-  class_tags: string[];
-  total_score: number;
-  completed_missions: CompletedMissions;
-  updated_at: string;
-  grade?: number;
-};
+import { AlertPanel, computeAlerts } from '../components/dashboard/AlertPanel';
+import { StudentDetailCard } from '../components/dashboard/StudentDetailCard';
+import type { StudentRow, UnitEntry } from '../components/dashboard/types';
 
 type Props = {
   lang: Language;
@@ -69,7 +62,6 @@ function getTagColor(tag: string): string {
   return 'bg-indigo-50 text-indigo-700 border-indigo-200';
 }
 
-// Tag badge component
 function TagBadge({ tag, onRemove }: { key?: string | number; tag: string; onRemove?: () => void }) {
   return (
     <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold border ${getTagColor(tag)}`}>
@@ -94,9 +86,10 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [newTagValue, setNewTagValue] = useState('');
   const [showBatchAssign, setShowBatchAssign] = useState(false);
   const [batchTag, setBatchTag] = useState('');
+  const [selectedStudent, setSelectedStudent] = useState<StudentRow | null>(null);
 
   const unitMap = useMemo(() => getUnitMap(grade), [grade]);
-  const units = useMemo(() => [...unitMap.entries()], [unitMap]);
+  const units: UnitEntry[] = useMemo(() => [...unitMap.entries()], [unitMap]);
 
   // Collect all unique tags for quick-filter chips
   const allTags = useMemo(() => {
@@ -122,7 +115,6 @@ export function DashboardScreen({ lang, onClose }: Props) {
           class_tags: s.class_tags || [],
         })));
       } else {
-        console.warn('RPC failed, trying fallback:', rpcErr?.message);
         let query = supabase.from('gl_user_progress').select('*').eq('grade', grade);
         if (filterTag) query = query.contains('class_tags', [filterTag]);
         const { data: fallback, error: fbErr } = await query.order('display_name');
@@ -142,14 +134,10 @@ export function DashboardScreen({ lang, onClose }: Props) {
     setLastRefresh(new Date());
   };
 
-  // Add a tag to a single student
   const addStudentTag = async (userId: string, tag: string) => {
     if (!tag.trim()) return;
     const cleanTag = tag.trim().toUpperCase();
-    const { error: err } = await supabase.rpc('assign_student_class', {
-      p_user_id: userId,
-      p_class: cleanTag,
-    });
+    const { error: err } = await supabase.rpc('assign_student_class', { p_user_id: userId, p_class: cleanTag });
     if (!err) {
       setStudents(prev => prev.map(s =>
         s.user_id === userId
@@ -161,52 +149,34 @@ export function DashboardScreen({ lang, onClose }: Props) {
     setNewTagValue('');
   };
 
-  // Remove a tag from a single student
   const removeStudentTag = async (userId: string, tag: string) => {
-    const { error: err } = await supabase.rpc('remove_student_tag', {
-      p_user_id: userId,
-      p_tag: tag,
-    });
+    const { error: err } = await supabase.rpc('remove_student_tag', { p_user_id: userId, p_tag: tag });
     if (!err) {
       setStudents(prev => prev.map(s =>
-        s.user_id === userId
-          ? { ...s, class_tags: s.class_tags.filter(t => t !== tag) }
-          : s
+        s.user_id === userId ? { ...s, class_tags: s.class_tags.filter(t => t !== tag) } : s
       ));
     }
   };
 
-  // Batch add tag to all students in current grade
   const batchAddTag = async () => {
     if (!batchTag.trim()) return;
     const cleanTag = batchTag.trim().toUpperCase();
-    const { data } = await supabase.rpc('assign_class', {
-      p_grade: grade,
-      p_class: cleanTag,
-    });
+    const { data } = await supabase.rpc('assign_class', { p_grade: grade, p_class: cleanTag });
     setShowBatchAssign(false);
     setBatchTag('');
-    if (typeof data === 'number' && data > 0) {
-      fetchStudents();
-    }
+    if (typeof data === 'number' && data > 0) fetchStudents();
   };
 
-  // Initial fetch + refetch on grade/tag change
   useEffect(() => { fetchStudents(); }, [grade, filterTag]);
 
   // Realtime subscription
   useEffect(() => {
     const channel = supabase
       .channel('dashboard-progress')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'gl_user_progress',
-      }, (payload) => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'gl_user_progress' }, (payload) => {
         const updated = payload.new as StudentRow;
         if (!updated || updated.grade !== grade) return;
         if (filterTag && !(updated.class_tags || []).includes(filterTag)) return;
-
         setStudents(prev => {
           const idx = prev.findIndex(s => s.user_id === updated.user_id);
           const row = { ...updated, class_tags: updated.class_tags || [] };
@@ -215,18 +185,15 @@ export function DashboardScreen({ lang, onClose }: Props) {
             next[idx] = row;
             return next;
           }
-          return [...prev, row].sort((a, b) =>
-            (a.display_name || '').localeCompare(b.display_name || '')
-          );
+          return [...prev, row].sort((a, b) => (a.display_name || '').localeCompare(b.display_name || ''));
         });
         setLastRefresh(new Date());
       })
       .subscribe();
-
     return () => { supabase.removeChannel(channel); };
   }, [grade, filterTag]);
 
-  // Calculate stats
+  // Stats
   const totalMissions = useMemo(() => {
     let count = 0;
     for (const [, u] of units) count += u.missions.length;
@@ -248,20 +215,16 @@ export function DashboardScreen({ lang, onClose }: Props) {
     let done = 0;
     for (const [, u] of units) {
       for (const m of u.missions) {
-        const c = student.completed_missions?.[String(m.id)];
-        if (c?.green) done++;
+        if (student.completed_missions?.[String(m.id)]?.green) done++;
       }
     }
     return done;
   };
 
-  // KP mastery counts per student (from bridge table)
+  // KP mastery counts
   const [kpMasteryMap, setKpMasteryMap] = useState<Map<string, number>>(new Map());
   useEffect(() => {
-    supabase
-      .from('play_kp_progress')
-      .select('user_id, mastered_at')
-      .not('mastered_at', 'is', null)
+    supabase.from('play_kp_progress').select('user_id, mastered_at').not('mastered_at', 'is', null)
       .then(({ data }) => {
         if (!data) return;
         const map = new Map<string, number>();
@@ -272,28 +235,28 @@ export function DashboardScreen({ lang, onClose }: Props) {
       }, () => {});
   }, [students]);
 
+  // Alerts
+  const alerts = useMemo(() => computeAlerts(students, units, totalMissions), [students, units, totalMissions]);
+
   const LABELS = {
     zh: {
-      title: '班级进度看板', placeholder: '筛选标签',
-      student: '学生', score: '分数', overall: '总进度',
+      title: '班级进度看板', student: '学生', score: '分数', overall: '总进度',
       green: '手把手', amber: '练习', red: '闯关', noStudents: '暂无数据',
-      liveHint: '实时更新', tags: '标签', addTag: '添加标签',
+      liveHint: '实时更新', tags: '标签',
       batchAssign: '批量添加标签', assignAll: '为全部 Y{g} 学生添加:',
       confirm: '确认', cancel: '取消', all: '全部',
     },
     zh_TW: {
-      title: '班級進度看板', placeholder: '篩選標籤',
-      student: '學生', score: '分數', overall: '總進度',
+      title: '班級進度看板', student: '學生', score: '分數', overall: '總進度',
       green: '手把手', amber: '練習', red: '闖關', noStudents: '暫無數據',
-      liveHint: '實時更新', tags: '標籤', addTag: '添加標籤',
+      liveHint: '實時更新', tags: '標籤',
       batchAssign: '批量添加標籤', assignAll: '為全部 Y{g} 學生添加:',
       confirm: '確認', cancel: '取消', all: '全部',
     },
     en: {
-      title: 'Class Progress Dashboard', placeholder: 'Filter tag',
-      student: 'Student', score: 'Score', overall: 'Overall',
+      title: 'Class Progress Dashboard', student: 'Student', score: 'Score', overall: 'Overall',
       green: 'Tutorial', amber: 'Practice', red: 'Challenge', noStudents: 'No data yet',
-      liveHint: 'Live', tags: 'Tags', addTag: 'Add tag',
+      liveHint: 'Live', tags: 'Tags',
       batchAssign: 'Batch Add Tag', assignAll: 'Add tag to all Y{g} students:',
       confirm: 'OK', cancel: 'Cancel', all: 'All',
     },
@@ -320,11 +283,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
             onChange={e => setGrade(Number(e.target.value))}
             className={`bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-900 shadow-sm transition-shadow ${INPUT_FOCUS_CLASS}`}
           >
-            <option value={7}>Y7</option>
-            <option value={8}>Y8</option>
-            <option value={9}>Y9</option>
-            <option value={10}>Y10</option>
-            <option value={11}>Y11</option>
+            {[7, 8, 9, 10, 11].map(g => <option key={g} value={g}>Y{g}</option>)}
           </select>
           <button
             onClick={fetchStudents}
@@ -335,12 +294,16 @@ export function DashboardScreen({ lang, onClose }: Props) {
         </div>
       </div>
 
-      {/* Error banner */}
+      {/* Error */}
       {error && (
-        <div className="mb-3 px-4 py-2 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs font-bold">
-          {error}
-        </div>
+        <div className="mb-3 px-4 py-2 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs font-bold">{error}</div>
       )}
+
+      {/* ═══ Alert Panel (v8.0) ═══ */}
+      <AlertPanel lang={lang} alerts={alerts} onStudentClick={(uid) => {
+        const s = students.find(st => st.user_id === uid);
+        if (s) setSelectedStudent(s);
+      }} />
 
       {/* Tag filter chips */}
       <div className="flex items-center gap-2 mb-4 px-1 flex-wrap">
@@ -348,9 +311,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
         <button
           onClick={() => setFilterTag('')}
           className={`px-3 py-1 rounded-full text-xs font-bold border transition-all ${
-            !filterTag
-              ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+            !filterTag ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
           }`}
         >
           {t.all}
@@ -360,9 +321,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
             key={tag}
             onClick={() => setFilterTag(filterTag === tag ? '' : tag)}
             className={`px-3 py-1 rounded-full text-xs font-bold border transition-all ${
-              filterTag === tag
-                ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                : 'bg-white text-indigo-700 border-indigo-200 hover:bg-indigo-50'
+              filterTag === tag ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' : 'bg-white text-indigo-700 border-indigo-200 hover:bg-indigo-50'
             }`}
           >
             {tag}
@@ -380,34 +339,21 @@ export function DashboardScreen({ lang, onClose }: Props) {
       {/* Batch assign panel */}
       <AnimatePresence>
         {showBatchAssign && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="mb-4 overflow-hidden"
-          >
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-4 overflow-hidden">
             <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-5 py-3 flex items-center gap-3 flex-wrap">
               <UserPlus size={16} className="text-indigo-600" />
-              <span className="text-sm font-bold text-indigo-900">
-                {t.assignAll.replace('{g}', String(grade))}
-              </span>
+              <span className="text-sm font-bold text-indigo-900">{t.assignAll.replace('{g}', String(grade))}</span>
               <select
                 value={batchTag}
                 onChange={e => setBatchTag(e.target.value)}
-                className={`bg-white border border-indigo-200 rounded-lg px-3 py-1.5 text-sm text-indigo-900 font-bold transition-shadow ${INPUT_FOCUS_CLASS}`}
+                className={`bg-white border border-indigo-200 rounded-lg px-3 py-1.5 text-sm text-indigo-900 font-bold ${INPUT_FOCUS_CLASS}`}
                 autoFocus
               >
                 <option value="">选择...</option>
-                {ALL_CLASSES.map(c => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
+                {ALL_CLASSES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
-              <button onClick={batchAddTag} className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors">
-                {t.confirm}
-              </button>
-              <button onClick={() => setShowBatchAssign(false)} className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-600 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors">
-                {t.cancel}
-              </button>
+              <button onClick={batchAddTag} className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors">{t.confirm}</button>
+              <button onClick={() => setShowBatchAssign(false)} className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-600 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors">{t.cancel}</button>
             </div>
           </motion.div>
         )}
@@ -441,31 +387,16 @@ export function DashboardScreen({ lang, onClose }: Props) {
         <table className="w-full text-xs">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="sticky left-0 bg-slate-50 z-20 px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap w-8">
-                #
-              </th>
-              <th className="sticky left-8 bg-slate-50 z-20 px-3 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[140px]">
-                {t.student}
-              </th>
-              <th className="px-2 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[100px]">
-                {t.tags}
-              </th>
+              <th className="sticky left-0 bg-slate-50 z-20 px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap w-8">#</th>
+              <th className="sticky left-8 bg-slate-50 z-20 px-3 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[140px]">{t.student}</th>
+              <th className="px-2 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[100px]">{t.tags}</th>
               <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[60px]">
                 <div className="flex items-center justify-center gap-1"><Trophy size={12} className="text-amber-500" /> {t.score}</div>
               </th>
-              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[50px]">
-                {t.overall}
-              </th>
-              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[40px]">
-                KP
-              </th>
+              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[50px]">{t.overall}</th>
+              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[40px]">KP</th>
               {units.map(([uid, u]) => (
-                <th
-                  key={uid}
-                  colSpan={1}
-                  className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap border-l border-slate-100"
-                  title={u.title}
-                >
+                <th key={uid} className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap border-l border-slate-100" title={u.title}>
                   <div className="text-[10px] leading-tight max-w-[80px] mx-auto truncate">{u.title.replace(/Unit \d+:\s*/, '').split('·')[0]}</div>
                   <div className="text-[8px] text-slate-400 mt-0.5">{u.missions.length} 关</div>
                 </th>
@@ -495,16 +426,15 @@ export function DashboardScreen({ lang, onClose }: Props) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.25, delay: Math.min(i * 0.03, 0.3) }}
-                  className={`border-b border-slate-100 hover:bg-indigo-50/50 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}
+                  className={`border-b border-slate-100 hover:bg-indigo-50/50 transition-colors cursor-pointer ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}
+                  onClick={() => setSelectedStudent(s)}
                 >
-                  {/* Rank */}
                   <td className="sticky left-0 bg-inherit z-10 px-2 py-2 text-center whitespace-nowrap">
                     {rank === 1 ? <span className="text-base">🥇</span> :
                      rank === 2 ? <span className="text-base">🥈</span> :
                      rank === 3 ? <span className="text-base">🥉</span> :
                      <span className="text-xs font-bold text-slate-400">{rank}</span>}
                   </td>
-                  {/* Student name */}
                   <td className="sticky left-8 bg-inherit z-10 px-3 py-2 font-bold text-slate-800 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-[11px] font-black text-white shadow-sm">
@@ -513,25 +443,17 @@ export function DashboardScreen({ lang, onClose }: Props) {
                       <span className="text-xs">{s.display_name || 'Anonymous'}</span>
                     </div>
                   </td>
-                  {/* Tags */}
-                  <td className="px-2 py-2">
+                  <td className="px-2 py-2" onClick={e => e.stopPropagation()}>
                     <div className="flex items-center gap-1 flex-wrap">
                       {(s.class_tags || []).map(tag => (
-                        <TagBadge
-                          key={tag}
-                          tag={tag}
-                          onRemove={() => removeStudentTag(s.user_id, tag)}
-                        />
+                        <TagBadge key={tag} tag={tag} onRemove={() => removeStudentTag(s.user_id, tag)} />
                       ))}
                       {addingTagFor === s.user_id ? (
                         <span className="inline-flex items-center gap-0.5">
                           <select
                             value={newTagValue}
-                            onChange={e => {
-                              const v = e.target.value;
-                              if (v) addStudentTag(s.user_id, v);
-                            }}
-                            className={`text-[9px] bg-white border border-indigo-300 rounded px-1 py-0.5 font-bold text-indigo-900 transition-shadow ${INPUT_FOCUS_CLASS}`}
+                            onChange={e => { if (e.target.value) addStudentTag(s.user_id, e.target.value); }}
+                            className={`text-[9px] bg-white border border-indigo-300 rounded px-1 py-0.5 font-bold text-indigo-900 ${INPUT_FOCUS_CLASS}`}
                             autoFocus
                           >
                             <option value="">选择班级...</option>
@@ -551,29 +473,22 @@ export function DashboardScreen({ lang, onClose }: Props) {
                       )}
                     </div>
                   </td>
-                  {/* Score */}
                   <td className="px-2 py-2 text-center">
                     <span className="text-sm font-black text-indigo-600">{s.total_score || 0}</span>
                   </td>
-                  {/* Overall progress */}
                   <td className="px-2 py-2 text-center">
                     <div className="flex flex-col items-center gap-0.5">
                       <div className="w-full max-w-[44px] h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-500"
-                          style={{ width: `${pct}%` }}
-                        />
+                        <div className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
                       </div>
                       <span className="text-[9px] font-bold text-slate-500">{pct}%</span>
                     </div>
                   </td>
-                  {/* KP mastery count */}
                   <td className="px-2 py-2 text-center">
                     <span className={`text-xs font-black ${(kpMasteryMap.get(s.user_id) ?? 0) > 0 ? 'text-emerald-600' : 'text-slate-300'}`}>
                       {kpMasteryMap.get(s.user_id) ?? 0}
                     </span>
                   </td>
-                  {/* Per-unit progress */}
                   {units.map(([uid, u]) => {
                     const p = getStudentUnitProgress(s, u.missions);
                     return (
@@ -583,9 +498,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                           <Dot done={p.amber === p.total} color="text-amber-400" />
                           <Dot done={p.red === p.total} color="text-rose-500" />
                         </div>
-                        <div className="text-[8px] text-center text-slate-400 mt-0.5">
-                          {p.green}/{p.total}
-                        </div>
+                        <div className="text-[8px] text-center text-slate-400 mt-0.5">{p.green}/{p.total}</div>
                       </td>
                     );
                   })}
@@ -595,6 +508,19 @@ export function DashboardScreen({ lang, onClose }: Props) {
           </tbody>
         </table>
       </div>
+
+      {/* ═══ Student Detail Card (v8.0) ═══ */}
+      <AnimatePresence>
+        {selectedStudent && (
+          <StudentDetailCard
+            lang={lang}
+            student={selectedStudent}
+            units={units}
+            totalMissions={totalMissions}
+            onClose={() => setSelectedStudent(null)}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
