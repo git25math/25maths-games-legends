@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { AlertTriangle, Clock, TrendingDown } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, StudentAlert, UnitEntry } from './types';
+import { countGreenMissions } from './types';
 
 /** Compute alerts for all students */
 export function computeAlerts(
@@ -13,16 +14,8 @@ export function computeAlerts(
   const alerts: StudentAlert[] = [];
 
   // Class average progress
-  const avgProgress = students.length > 0
-    ? students.reduce((sum, s) => {
-        let done = 0;
-        for (const [, u] of units) {
-          for (const m of u.missions) {
-            if ((s.completed_missions as any)?.[String(m.id)]?.green) done++;
-          }
-        }
-        return sum + (totalMissions > 0 ? done / totalMissions : 0);
-      }, 0) / students.length
+  const avgProgress = students.length > 0 && totalMissions > 0
+    ? students.reduce((sum, s) => sum + countGreenMissions(s.completed_missions, units) / totalMissions, 0) / students.length
     : 0;
 
   for (const s of students) {
@@ -44,12 +37,7 @@ export function computeAlerts(
     }
 
     // 2. Progress check (behind class average by >20%)
-    let done = 0;
-    for (const [, u] of units) {
-      for (const m of u.missions) {
-        if ((s.completed_missions as any)?.[String(m.id)]?.green) done++;
-      }
-    }
+    const done = countGreenMissions(s.completed_missions, units);
     const myProgress = totalMissions > 0 ? done / totalMissions : 0;
     if (avgProgress > 0.1 && myProgress < avgProgress - 0.2) {
       const pct = Math.round(myProgress * 100);

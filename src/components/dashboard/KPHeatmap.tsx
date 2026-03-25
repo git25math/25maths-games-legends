@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from 'react';
-import { motion } from 'motion/react';
 import { Grid3X3, ChevronDown, ChevronUp } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow } from './types';
@@ -56,11 +55,12 @@ export const KPHeatmap = ({
 
   useEffect(() => {
     setLoading(true);
+    setExpanded(false);
     supabase.rpc('get_class_kp_progress', {
       p_grade: grade,
       p_class: filterTag || null,
-    }).then(({ data }) => {
-      setKpData((data as KPProgressRow[]) || []);
+    }).then(({ data, error }) => {
+      if (!error) setKpData((data as KPProgressRow[]) || []);
       setLoading(false);
     });
   }, [grade, filterTag]);

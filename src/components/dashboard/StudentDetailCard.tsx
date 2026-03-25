@@ -94,18 +94,17 @@ export const StudentDetailCard = ({
   const [kpRecords, setKpRecords] = useState<KPRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch battle history + KP records via SECURITY DEFINER RPCs (bypasses RLS for teacher access)
+  // Fetch via SECURITY DEFINER RPCs (bypasses RLS for teacher access)
   useEffect(() => {
     setLoading(true);
     Promise.all([
       supabase.rpc('get_student_battles', { p_user_id: student.user_id }),
-      supabase
-        .from('play_kp_progress')
-        .select('kp_id, wins, attempts, mastered_at')
-        .eq('user_id', student.user_id),
+      supabase.rpc('get_class_kp_progress', { p_grade: student.grade ?? 7, p_class: null }),
     ]).then(([battleRes, kpRes]) => {
       setBattles((battleRes.data as BattleRecord[]) || []);
-      setKpRecords((kpRes.data as KPRecord[]) || []);
+      // Filter class-level KP data for this student
+      const allKP = (kpRes.data || []) as (KPRecord & { user_id: string })[];
+      setKpRecords(allKP.filter(r => r.user_id === student.user_id));
       setLoading(false);
     });
   }, [student.user_id]);

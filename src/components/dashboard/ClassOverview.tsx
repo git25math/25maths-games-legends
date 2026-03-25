@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Users, Zap, Target, TrendingUp } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, UnitEntry } from './types';
+import { countGreenMissions } from './types';
 import { supabase } from '../../supabase';
 
 type BattleStat = {
@@ -35,8 +36,8 @@ export const ClassOverview = ({
     supabase.rpc('get_class_battle_stats', {
       p_grade: grade,
       p_class: filterTag || null,
-    }).then(({ data }) => {
-      if (data) setBattleStats(data as BattleStat[]);
+    }).then(({ data, error }) => {
+      if (!error && data) setBattleStats(data as BattleStat[]);
     });
   }, [grade, filterTag]);
 
@@ -47,16 +48,7 @@ export const ClassOverview = ({
 
   const avgProgress = useMemo(() => {
     if (students.length === 0 || totalMissions === 0) return 0;
-    let total = 0;
-    for (const s of students) {
-      let done = 0;
-      for (const [, u] of units) {
-        for (const m of u.missions) {
-          if ((s.completed_missions as any)?.[String(m.id)]?.green) done++;
-        }
-      }
-      total += done / totalMissions;
-    }
+    const total = students.reduce((sum, s) => sum + countGreenMissions(s.completed_missions, units) / totalMissions, 0);
     return Math.round((total / students.length) * 100);
   }, [students, units, totalMissions]);
 
