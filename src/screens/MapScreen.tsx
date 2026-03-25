@@ -145,6 +145,24 @@ export const MapScreen = ({
       }, () => {}); // silently ignore errors
   }, [profile.user_id]);
 
+  // KP progress from shared bridge table (for badges on mission cards)
+  const [kpProgress, setKpProgress] = useState<Map<string, { wins: number; mastered: boolean }>>(new Map());
+  useEffect(() => {
+    if (profile.user_id === 'guest') return;
+    supabase
+      .from('play_kp_progress')
+      .select('kp_id, wins, mastered_at')
+      .eq('user_id', profile.user_id)
+      .then(({ data }) => {
+        if (!data) return;
+        const map = new Map<string, { wins: number; mastered: boolean }>();
+        for (const r of data as { kp_id: string; wins: number; mastered_at: string | null }[]) {
+          map.set(r.kp_id, { wins: r.wins, mastered: !!r.mastered_at });
+        }
+        setKpProgress(map);
+      }, () => {});
+  }, [profile.user_id]);
+
   useEffect(() => { playBGMMap(); return () => stopBGM(); }, []);
 
   useEffect(() => {
@@ -354,8 +372,19 @@ export const MapScreen = ({
                   const isHot = hotTopicInfo?.topic === mission.topic;
                   const hotLabel = hotTopicInfo ? (lang === 'en' ? hotTopicInfo.label.en : lang === 'zh_TW' ? hotTopicInfo.label.zh_TW : hotTopicInfo.label.zh) : '';
                   const isWeak = weakMissionSet.has(mission.id);
-                  return (pb || isHot || isWeak) ? (
+                  const kpProg = mission.kpId ? kpProgress.get(mission.kpId) : undefined;
+                  return (pb || isHot || isWeak || kpProg) ? (
                     <div className="flex items-center gap-1.5 mb-4 flex-wrap">
+                      {kpProg?.mastered && (
+                        <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full border border-emerald-200 flex items-center gap-0.5">
+                          <CheckCircle2 size={10} /> {lang === 'en' ? 'Mastered' : '已掌握'}
+                        </span>
+                      )}
+                      {kpProg && !kpProg.mastered && kpProg.wins > 0 && (
+                        <span className="px-2 py-0.5 bg-sky-100 text-sky-700 text-[10px] font-black rounded-full border border-sky-200">
+                          {lang === 'en' ? `${kpProg.wins} wins` : `${kpProg.wins} 胜`}
+                        </span>
+                      )}
                       {isWeak && (
                         <span className="px-2 py-0.5 bg-rose-100 text-rose-700 text-[10px] font-black rounded-full border border-rose-200 flex items-center gap-0.5">
                           <AlertTriangle size={10} /> {lang === 'en' ? 'Needs review' : '薄弱点'}

@@ -5,6 +5,7 @@ import { Languages, LogOut, XCircle } from 'lucide-react';
 
 import type { Language, Mission, GameState, DifficultyMode, KPEquipment } from './types';
 import { computeRepairBonus } from './utils/equipment';
+import { supabase } from './supabase';
 import { recordErrors, getMissionErrorSummary, getMistakes as getMistakesMap } from './utils/errorMemory';
 import { CHARACTERS } from './data/characters';
 import { useAuth } from './hooks/useAuth';
@@ -389,9 +390,24 @@ export default function App() {
 
         // Step 6: Notifications only (no writes)
         showLevelUpNotifications(prevScore, score, levelsGained);
+
+        // Step 7: Bridge to shared play_kp_progress table (fire-and-forget)
+        if (activeMission.kpId && user) {
+          supabase.rpc('upsert_play_kp', {
+            p_user_id: user.id, p_kp_id: activeMission.kpId,
+            p_success: true, p_score: score,
+          });
+        }
       }
 
       setLastClearedMissionId(activeMission.id);
+    }
+    // Bridge failed attempts too (tracks attempts without incrementing wins)
+    if (!success && activeMission?.kpId && user) {
+      supabase.rpc('upsert_play_kp', {
+        p_user_id: user.id, p_kp_id: activeMission.kpId,
+        p_success: false, p_score: score,
+      });
     }
     // Always drain pending refs (even on failure, so stale data doesn't leak to next battle)
     pendingSeasonTasksRef.current = [];
@@ -654,6 +670,13 @@ export default function App() {
                       // Single atomic save
                       await updateProfile({ completed_missions: cm });
                       setLastClearedMissionId(activeMission.id);
+                      // Bridge to shared play_kp_progress
+                      if (activeMission.kpId && user) {
+                        supabase.rpc('upsert_play_kp', {
+                          p_user_id: user.id, p_kp_id: activeMission.kpId,
+                          p_success: true, p_score: 0,
+                        });
+                      }
                     }
                     // Clear persisted practice state + error refs
                     pendingErrorsRef.current = [];

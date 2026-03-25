@@ -255,6 +255,23 @@ export function DashboardScreen({ lang, onClose }: Props) {
     return done;
   };
 
+  // KP mastery counts per student (from bridge table)
+  const [kpMasteryMap, setKpMasteryMap] = useState<Map<string, number>>(new Map());
+  useEffect(() => {
+    supabase
+      .from('play_kp_progress')
+      .select('user_id, mastered_at')
+      .not('mastered_at', 'is', null)
+      .then(({ data }) => {
+        if (!data) return;
+        const map = new Map<string, number>();
+        for (const r of data as { user_id: string; mastered_at: string }[]) {
+          map.set(r.user_id, (map.get(r.user_id) ?? 0) + 1);
+        }
+        setKpMasteryMap(map);
+      }, () => {});
+  }, [students]);
+
   const LABELS = {
     zh: {
       title: '班级进度看板', placeholder: '筛选标签',
@@ -439,6 +456,9 @@ export function DashboardScreen({ lang, onClose }: Props) {
               <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[50px]">
                 {t.overall}
               </th>
+              <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[40px]">
+                KP
+              </th>
               {units.map(([uid, u]) => (
                 <th
                   key={uid}
@@ -455,7 +475,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
           <tbody>
             {students.length === 0 && (
               <tr>
-                <td colSpan={5 + units.length} className="text-center py-8 text-slate-400 text-sm">
+                <td colSpan={6 + units.length} className="text-center py-8 text-slate-400 text-sm">
                   {loading ? (
                     <div className="flex flex-col gap-2 p-4">
                       {Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} columns={5 + units.length} />)}
@@ -546,6 +566,12 @@ export function DashboardScreen({ lang, onClose }: Props) {
                       </div>
                       <span className="text-[9px] font-bold text-slate-500">{pct}%</span>
                     </div>
+                  </td>
+                  {/* KP mastery count */}
+                  <td className="px-2 py-2 text-center">
+                    <span className={`text-xs font-black ${(kpMasteryMap.get(s.user_id) ?? 0) > 0 ? 'text-emerald-600' : 'text-slate-300'}`}>
+                      {kpMasteryMap.get(s.user_id) ?? 0}
+                    </span>
                   </td>
                   {/* Per-unit progress */}
                   {units.map(([uid, u]) => {
