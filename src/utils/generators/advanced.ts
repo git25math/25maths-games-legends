@@ -259,7 +259,7 @@ export function generateVectorAddMission(template: Mission): Mission {
   return {
     ...template,
     description,
-    data: { ...template.data, targetX: ansX, targetY: ansY, a1, a2, b1, b2, generatorType: 'VECTOR_ADD_RANDOM' },
+    data: { targetX: ansX, targetY: ansY, a1, a2, b1, b2, generatorType: 'VECTOR_ADD_RANDOM' },
     tutorialSteps,
   };
 }

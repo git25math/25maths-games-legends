@@ -4073,7 +4073,7 @@ export const MISSIONS: Mission[] = [
     skillSummary: { zh: 'a + b = (a₁+b₁, a₂+b₂)', en: 'a + b = (a₁+b₁, a₂+b₂)' },
     story: { zh: '八阵图中，两支部队分别沿向量 $\\vec{a}$ 和 $\\vec{b}$ 移动。合力方向是什么？向量加法！', en: 'In the Eight Formations, two units move along vectors $\\vec{a}$ and $\\vec{b}$. What\'s the combined direction? Vector addition!' },
     description: { zh: '求两个向量的和。', en: 'Find the sum of two vectors.' },
-    data: { a: [3, 4], b: [1, -2], generatorType: 'VECTOR_ADD_RANDOM' }, difficulty: 'Medium', reward: 500,
+    data: { a1: 3, a2: 4, b1: 1, b2: -2, targetX: 4, targetY: 2, generatorType: 'VECTOR_ADD_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-7.4-01', sectionId: 'geometry',
     tutorialSteps: [
       { text: { zh: '诸葛亮：向量 = 有方向的数\n普通数只有大小（如"5公里"）。\n向量有方向+大小（如"向东北走5公里"）。\n在坐标系里，向量 = $(x, y)$。', en: 'Zhuge Liang: "Vectors = numbers with direction\nOrdinary numbers have only magnitude (\'5 km\').\nVectors have direction + magnitude (\'5 km northeast\').\nIn coordinates, vector = $(x, y)$."' }, highlightField: 'x' },
