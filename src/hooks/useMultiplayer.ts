@@ -103,19 +103,35 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
 
   const leaveRoom = () => setActiveRoom(null);
 
-  // Subscribe to room changes
+  // Sync room state: realtime subscription + polling fallback
   useEffect(() => {
     if (!activeRoom) return;
+
+    const roomId = activeRoom.id;
+
+    // Poll every 2s as reliable fallback (realtime may not be enabled)
+    const poll = setInterval(async () => {
+      const { data } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
+      if (data) {
+        setActiveRoom({ ...data, id: data.id, hostId: data.host_id, missionId: data.mission_id } as Room);
+      }
+    }, 2000);
+
+    // Also try realtime (works if publication is enabled)
     const channel = supabase
-      .channel(`room-${activeRoom.id}`)
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'gl_rooms', filter: `id=eq.${activeRoom.id}` },
+      .channel(`room-${roomId}`)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'gl_rooms', filter: `id=eq.${roomId}` },
         (payload) => {
           const d = payload.new as any;
           setActiveRoom({ ...d, id: d.id, hostId: d.host_id, missionId: d.mission_id } as Room);
         }
       )
       .subscribe();
-    return () => { supabase.removeChannel(channel); };
+
+    return () => {
+      clearInterval(poll);
+      supabase.removeChannel(channel);
+    };
   }, [activeRoom?.id]);
 
   return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, finishRoom, leaveRoom };
