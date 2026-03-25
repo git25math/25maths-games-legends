@@ -75,10 +75,23 @@ export const MathBattle = ({
 
   const totalQuestions = isMultiQuestion ? MODE_QUESTIONS[battleMode] : 1;
 
-  // Build question queue based on battle mode
+  // Build question queue with deduplication (no repeated answers)
   const [questionQueue] = useState<Mission[]>(() => {
     if (!isMultiQuestion) return [mission];
-    return Array.from({ length: totalQuestions }, () => generateMission(mission));
+    const queue: Mission[] = [];
+    const seen = new Set<string>();
+    let attempts = 0;
+    while (queue.length < totalQuestions && attempts < totalQuestions * 3) {
+      const q = generateMission(mission);
+      // Fingerprint: answer + key data fields to detect duplicates
+      const d = q.data ?? {};
+      const fp = JSON.stringify(d.answer ?? '') + '|' + JSON.stringify(d.ans ?? '') + '|' + JSON.stringify(d.ansNum ?? '') + '|' + JSON.stringify(d.n ?? '');
+      attempts++;
+      if (seen.has(fp) && attempts < totalQuestions * 2) continue; // skip duplicate, but allow after many attempts
+      seen.add(fp);
+      queue.push(q);
+    }
+    return queue;
   });
 
   const [currentQIdx, setCurrentQIdx] = useState(0);

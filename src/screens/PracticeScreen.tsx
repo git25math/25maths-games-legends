@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { XCircle, BookOpen, ChevronRight, ChevronLeft, Swords, MapIcon, CheckCircle2 } from 'lucide-react';
 import type { Mission, Character, Language, DifficultyMode } from '../types';
@@ -124,8 +124,18 @@ export const PracticeScreen = ({
     ...(step.hint ? { hint: { zh: interpolate(step.hint.zh, p), en: interpolate(step.hint.en, p) } } : {}),
   }));
 
+  const lastAnswerRef = useRef<string>('');
   const regenerateQuestion = useCallback(() => {
-    setCurrentMission(generateMission(mission, adaptiveTier));
+    // Avoid generating the same question twice in a row
+    let q = generateMission(mission, adaptiveTier);
+    const fp = (d: any) => JSON.stringify(d?.answer ?? '') + '|' + JSON.stringify(d?.n ?? '');
+    let attempts = 0;
+    while (fp(q.data) === lastAnswerRef.current && attempts < 5) {
+      q = generateMission(mission, adaptiveTier);
+      attempts++;
+    }
+    lastAnswerRef.current = fp(q.data);
+    setCurrentMission(q);
     setInputs({});
     setWrongAnswerData(null);
     setTutorialStep(0);
