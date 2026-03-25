@@ -21,9 +21,17 @@ import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 import { usePracticePersistedState } from '../hooks/usePracticeState';
 
-type PracticePhase = 'green' | 'amber' | 'red';
+type PracticePhase = 'green' | 'amber' | 'red' | 'battle';
 
-const PHASE_ORDER: PracticePhase[] = ['green', 'amber', 'red'];
+const PHASE_ORDER: PracticePhase[] = ['green', 'amber', 'red', 'battle'];
+
+/** Correct answers required to advance from each phase */
+const PHASE_REQUIRED: Record<PracticePhase, number> = {
+  green: 0,    // manual advance after tutorial
+  amber: 1,    // 1 guided question
+  red: 3,      // 3 independent questions
+  battle: 10,  // 10 battle questions
+};
 
 export const PracticeScreen = ({
   mission,
@@ -31,7 +39,6 @@ export const PracticeScreen = ({
   lang,
   onComplete,
   onCancel,
-  onEnterBattle,
   repairMode = false,
   onRepairComplete,
 }: {
@@ -40,7 +47,6 @@ export const PracticeScreen = ({
   lang: Language;
   onComplete: () => void;
   onCancel: () => void;
-  onEnterBattle?: () => void;
   repairMode?: boolean;
   onRepairComplete?: () => void;
 }) => {
@@ -70,6 +76,7 @@ export const PracticeScreen = ({
   const [showBadge, setShowBadge] = useState(false);
   const [phaseToast, setPhaseToast] = useState<string | null>(null);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [phaseCorrectCount, setPhaseCorrectCount] = useState(0);
   // v7.0: Repair mode — count correct answers, complete after 3
   const [repairCorrect, setRepairCorrect] = useState(0);
   const REPAIR_TARGET = 3;
@@ -128,6 +135,15 @@ export const PracticeScreen = ({
             return;
           }
         }
+        // Auto-advance when phase goal reached (green uses manual advance)
+        if (currentPhase !== 'green' && PHASE_REQUIRED[currentPhase] > 0) {
+          const newCount = phaseCorrectCount + 1;
+          setPhaseCorrectCount(newCount);
+          if (newCount >= PHASE_REQUIRED[currentPhase]) {
+            advancePhase();
+            return;
+          }
+        }
         regenerateQuestion();
       }, DURATION.entrance * 1000);
     } else {
@@ -154,35 +170,41 @@ export const PracticeScreen = ({
     regenerateQuestion();
   };
 
-  const handlePhaseForward = () => {
-    if (currentPhase === 'red') {
+  const advancePhase = () => {
+    const nextIdx = phaseIndex + 1;
+    if (nextIdx >= PHASE_ORDER.length) {
+      // All phases done — show badge or complete
       if (mission.skillName && mission.skillSummary) {
         playBadgeUnlock();
         setShowBadge(true);
-      } else if (onEnterBattle) {
-        onEnterBattle();
       } else {
         onComplete();
       }
       return;
     }
     playPhaseAdvance();
-    const nextPhase = PHASE_ORDER[phaseIndex + 1];
+    const nextPhase = PHASE_ORDER[nextIdx];
     setCurrentPhase(nextPhase);
-    // Show phase transition toast
-    const toastMsg = nextPhase === 'amber' ? ((t as any).phaseToAmber ?? 'Now try with hints.')
-      : ((t as any).phaseToRed ?? 'No hints — independent challenge!');
-    setPhaseToast(toastMsg);
-    setTimeout(() => setPhaseToast(null), 2500);
+    setPhaseCorrectCount(0);
+    const toasts: Record<string, string> = {
+      amber: (t as any).phaseToAmber ?? 'Now try with hints.',
+      red: (t as any).phaseToRed ?? 'No hints \u2014 independent challenge!',
+      battle: lang === 'en' ? 'Final battle \u2014 10 questions!' : '\u6700\u7ec8\u95ef\u5173\u2014\u201410 \u9898\u6311\u6218\uff01',
+    };
+    if (toasts[nextPhase]) {
+      setPhaseToast(toasts[nextPhase]);
+      setTimeout(() => setPhaseToast(null), 2500);
+    }
     regenerateQuestion();
   };
 
-  const handlePhaseBack = () => {
-    if (phaseIndex === 0) return;
-    const prevPhase = PHASE_ORDER[phaseIndex - 1];
-    setCurrentPhase(prevPhase);
-    regenerateQuestion();
+  /** Green phase only: manual advance after tutorial */
+  const handleGreenAdvance = () => {
+    if (currentPhase !== 'green') return;
+    advancePhase();
   };
+
+  // handlePhaseBack removed — phases auto-advance, no going back
 
   // Skill badge takes over the entire screen
   if (showBadge && mission.skillName && mission.skillSummary) {
@@ -194,7 +216,7 @@ export const PracticeScreen = ({
         formula={resolveFormula(mission.secret.formula, lang)}
         missionTitle={mission.title}
         lang={lang}
-        onClose={onEnterBattle || onComplete}
+        onClose={onComplete}
       />
     );
   }
@@ -278,19 +300,21 @@ export const PracticeScreen = ({
                   </div>
                 </div>
               ) : (
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex flex-wrap items-center gap-2 mt-1">
                 {PHASE_ORDER.map((phase, i) => {
                   const isCurrent = phase === currentPhase;
                   const isCompleted = i < phaseIndex;
                   const colors: Record<PracticePhase, string> = {
-                    green: 'bg-emerald-500',
-                    amber: 'bg-amber-500',
-                    red: 'bg-rose-500',
+                    green: 'bg-emerald-500', amber: 'bg-amber-500', red: 'bg-rose-500', battle: 'bg-indigo-500',
                   };
                   const dimColors: Record<PracticePhase, string> = {
-                    green: 'bg-emerald-900',
-                    amber: 'bg-amber-900',
-                    red: 'bg-rose-900',
+                    green: 'bg-emerald-900', amber: 'bg-amber-900', red: 'bg-rose-900', battle: 'bg-indigo-900',
+                  };
+                  const phaseLabels: Record<PracticePhase, Record<string, string>> = {
+                    green: { zh: '\u6559\u5b66', en: 'Tutorial' },
+                    amber: { zh: '\u8ddf\u7ec3', en: 'Guided' },
+                    red: { zh: '\u72ec\u7acb', en: 'Solo' },
+                    battle: { zh: '\u95ef\u5173', en: 'Battle' },
                   };
                   return (
                     <div key={phase} className="flex items-center gap-1">
@@ -302,27 +326,16 @@ export const PracticeScreen = ({
                         } ${isCurrent ? 'ring-2 ring-white/50' : ''}`}
                       />
                       <span className={`text-[9px] font-bold uppercase ${isCurrent ? 'text-white' : 'text-white/40'}`}>
-                        {t.practicePhase[phase]}
+                        {phaseLabels[phase][lang === 'en' ? 'en' : 'zh']}
                       </span>
                     </div>
                   );
                 })}
-              {/* Adaptive difficulty tier indicator (Amber/Red only) */}
-              {currentPhase !== 'green' && (
-                <div className="flex items-center gap-1 ml-2">
-                  {[1, 2, 3].map(star => (
-                    <span key={star} className={`text-[10px] ${star <= adaptiveTier ? 'text-yellow-400' : 'text-white/20'}`}>★</span>
-                  ))}
-                </div>
-              )}
-              {/* Consecutive correct streak mini-bar */}
-              {currentPhase !== 'green' && consecutiveCorrect > 0 && (
-                <div className="flex items-center gap-1 ml-2">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className={`w-1.5 h-3 rounded-sm ${i <= consecutiveCorrect ? 'bg-emerald-400' : 'bg-white/15'}`} />
-                  ))}
-                  <span className="text-[8px] text-emerald-400/70 font-bold ml-0.5">{consecutiveCorrect}/3</span>
-                </div>
+              {/* Phase progress counter (amber/red/battle) */}
+              {currentPhase !== 'green' && PHASE_REQUIRED[currentPhase] > 0 && (
+                <span className="text-[10px] text-amber-400 font-bold ml-1">
+                  {phaseCorrectCount}/{PHASE_REQUIRED[currentPhase]}
+                </span>
               )}
               </div>
               )}
@@ -455,7 +468,12 @@ export const PracticeScreen = ({
                 )}
                 {currentPhase === 'red' && (
                   <div className="px-3 py-2 bg-amber-900/40 border border-amber-600/30 rounded-lg text-amber-100 text-xs font-bold text-center mb-2">
-                    {(t as any).redPhaseHint ?? 'No hints — you can do it!'}
+                    {(t as any).redPhaseHint ?? 'No hints \u2014 you can do it!'} ({phaseCorrectCount}/{PHASE_REQUIRED.red})
+                  </div>
+                )}
+                {currentPhase === 'battle' && (
+                  <div className="px-3 py-2 bg-indigo-900/40 border border-indigo-600/30 rounded-lg text-indigo-100 text-xs font-bold text-center mb-2">
+                    {lang === 'en' ? `Final battle! ${phaseCorrectCount}/${PHASE_REQUIRED.battle}` : `\u6700\u7ec8\u95ef\u5173\uff01${phaseCorrectCount}/${PHASE_REQUIRED.battle}`}
                   </div>
                 )}
 
@@ -463,7 +481,7 @@ export const PracticeScreen = ({
                   mission={currentMission}
                   inputs={inputs}
                   setInputs={setInputs}
-                  difficultyMode={currentPhase as DifficultyMode}
+                  difficultyMode={(currentPhase === 'battle' ? 'red' : currentPhase) as DifficultyMode}
                   tutorialStep={0}
                   isTutorial={false}
                   lang={lang}
@@ -499,36 +517,19 @@ export const PracticeScreen = ({
               </>
             )}
 
-            {/* Phase navigation */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25 }}
-              className="flex gap-3"
-            >
-              {phaseIndex > 0 && (
+            {/* Green phase: manual advance after tutorial */}
+            {currentPhase === 'green' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
                 <motion.button
                   {...buttonBase}
-                  onClick={handlePhaseBack}
-                  className="flex-1 py-3 bg-white/50 border-2 border-ink/20 text-ink font-bold rounded-lg hover:bg-white/70 transition-colors flex items-center justify-center gap-2 text-sm min-h-12"
+                  onClick={handleGreenAdvance}
+                  className="w-full py-3 font-bold rounded-lg transition-colors flex items-center justify-center gap-2 text-sm border-2 min-h-12 bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-500"
                 >
-                  <ChevronLeft size={16} />
-                  {t.goBack}
+                  {t.startPractice}
+                  <ChevronRight size={16} />
                 </motion.button>
-              )}
-              <motion.button
-                {...buttonBase}
-                onClick={handlePhaseForward}
-                className={`flex-1 py-3 font-bold rounded-lg transition-colors flex items-center justify-center gap-2 text-sm border-2 min-h-12 ${
-                  currentPhase === 'red'
-                    ? 'bg-rose-600 text-white border-rose-700 hover:bg-rose-500'
-                    : 'bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-500'
-                }`}
-              >
-                {currentPhase === 'green' ? t.startPractice : currentPhase === 'amber' ? t.removeHints : t.enterChallenge}
-                <ChevronRight size={16} />
-              </motion.button>
-            </motion.div>
+              </motion.div>
+            )}
 
             {/* Back to map */}
             <motion.button
