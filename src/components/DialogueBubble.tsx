@@ -14,8 +14,8 @@ export const DialogueBubble = memo(function DialogueBubble({
   speaker: string;
   onComplete?: () => void;
 }) {
-  // Split by KaTeX blocks to avoid typing out LaTeX code character by character
-  const tokens = text.split(/(\$[^$]+\$)/g);
+  // Split by KaTeX blocks: $$...$$ (display) first, then $...$ (inline)
+  const tokens = text.split(/(\$\$[^$]+\$\$|\$[^$]+\$)/g);
   let charCount = 0;
 
   return (
@@ -47,7 +47,7 @@ export const DialogueBubble = memo(function DialogueBubble({
       {/* Text with LaTeX rendering */}
       <div className="text-sm leading-relaxed text-ink">
         {tokens.map((token, index) => {
-          if (token.startsWith('$') && token.endsWith('$')) {
+          if ((token.startsWith('$$') || token.startsWith('$')) && token.endsWith('$') && token.length > 1) {
             const delay = charCount * 0.03;
             charCount += 1;
             return (
