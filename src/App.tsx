@@ -157,41 +157,39 @@ export default function App() {
 
   // PK countdown: when any opponent finished and I haven't, tick down 30→0
   const pkAutoCompleteRef = useRef(false);
-  const pkFirstFinishRef = useRef<number | null>(null);
+  const [pkFirstFinish, setPkFirstFinish] = useState<number | null>(null);
 
-  // Track first finish time via ref (avoids restarting interval on every poll)
+  // Detect when first opponent finishes (latches — only set once per battle)
   useEffect(() => {
+    if (!activeRoom || activeRoom.type !== 'pk') { setPkFirstFinish(null); return; }
     const t = getFirstFinishTime(activeRoom);
-    if (t && !pkFirstFinishRef.current) pkFirstFinishRef.current = t;
+    if (t) setPkFirstFinish(prev => prev ?? t); // latch: don't overwrite
   }, [activeRoom?.players]);
 
+  // Run countdown timer based on pkFirstFinish
   useEffect(() => {
-    if (gameState !== 'battle' || activeRoom?.type !== 'pk') {
+    if (gameState !== 'battle' || !pkFirstFinish) {
       setPkCountdown(null);
-      pkFirstFinishRef.current = null;
       return;
     }
-    const firstFinish = pkFirstFinishRef.current;
-    if (!firstFinish) return;
     // If current user already finished, no countdown
-    if (user && activeRoom!.players[user.id]?.finishedAt) {
+    if (user && activeRoom?.players[user.id]?.finishedAt) {
       setPkCountdown(null);
       return;
     }
     const tick = () => {
-      const elapsed = (Date.now() - firstFinish) / 1000;
+      const elapsed = (Date.now() - pkFirstFinish) / 1000;
       const remaining = Math.max(0, PK_COUNTDOWN_SECS - elapsed);
       setPkCountdown(Math.ceil(remaining));
       if (remaining <= 0 && !pkAutoCompleteRef.current) {
         pkAutoCompleteRef.current = true;
-        // Force submit with score 0 — gameState change in handleBattleComplete unmounts MathBattle
         handleBattleComplete(false, 0, 0, 0);
       }
     };
     tick();
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, [gameState, pkFirstFinishRef.current]);
+  }, [gameState, pkFirstFinish]);
 
   // PK: show result when room status='finished' and all players done
   useEffect(() => {
@@ -484,6 +482,7 @@ export default function App() {
       await submitScore(score);
       pkAutoCompleteRef.current = false;
       setPkCountdown(null);
+      setPkFirstFinish(null);
       setActiveMission(null);
       setGameState('map'); // unmount MathBattle; PKResult effect fires when room finishes
       return;
