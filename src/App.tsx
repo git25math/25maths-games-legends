@@ -441,12 +441,18 @@ export default function App() {
                   character={selectedChar}
                   lang={lang}
                   onComplete={async () => {
-                    // Save practice completion — all 3 phases done
+                    // Save practice completion — all 3 phases done + award XP
                     if (profile) {
                       const cm = { ...profile.completed_missions } as any;
                       const key = String(activeMission.id);
+                      const isFirstClear = !cm[key]?.red;
                       cm[key] = { ...(cm[key] || {}), green: true, amber: true, red: true };
-                      await updateProfile({ completed_missions: cm });
+                      const xpReward = isFirstClear ? (activeMission.reward || 100) : Math.round((activeMission.reward || 100) * 0.2);
+                      await updateProfile({
+                        completed_missions: cm,
+                        total_score: profile.total_score + xpReward,
+                      });
+                      setLastClearedMissionId(activeMission.id);
                     }
                     setIsRepairMode(false);
                     setGameState('map');
@@ -456,9 +462,6 @@ export default function App() {
                     setIsRepairMode(false);
                     setGameState('map');
                     setActiveMission(null);
-                  }}
-                  onEnterBattle={() => {
-                    handleMissionStart(activeMission);
                   }}
                   repairMode={isRepairMode}
                   onRepairComplete={async () => {
