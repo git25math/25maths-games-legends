@@ -1,6 +1,5 @@
-import { useMemo } from 'react';
 import { motion } from 'motion/react';
-import { AlertTriangle, Clock, TrendingDown, Target } from 'lucide-react';
+import { AlertTriangle, Clock, TrendingDown } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, StudentAlert, UnitEntry } from './types';
 
@@ -89,7 +88,6 @@ export const AlertPanel = ({
   if (alerts.length === 0) return null;
 
   const critical = alerts.filter(a => a.level === 'critical');
-  const warning = alerts.filter(a => a.level === 'warning');
 
   return (
     <motion.div

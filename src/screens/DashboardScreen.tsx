@@ -7,7 +7,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag } from 'lucide-react';
-import type { Language, Mission, CompletedMissions } from '../types';
+import type { Language, Mission } from '../types';
 import { supabase } from '../supabase';
 import { SkeletonRow } from '../components/SkeletonRow';
 import { INPUT_FOCUS_CLASS } from '../utils/animationPresets';

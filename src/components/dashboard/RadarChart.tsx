@@ -28,7 +28,6 @@ export const RadarChart = ({ values, labels, size = 200, color = '#6366f1' }: Ra
 
   // Data polygon
   const dataPoints = values.map((v, i) => point(i, Math.min(v, 1)));
-  const dataPath = dataPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + 'Z';
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="mx-auto">

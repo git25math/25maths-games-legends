@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { X, Flame, Target, BookOpen, AlertTriangle, BarChart3 } from 'lucide-react';
+import { X, AlertTriangle, BarChart3 } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, UnitEntry } from './types';
 import { RadarChart } from './RadarChart';
@@ -59,14 +59,13 @@ function compute7Dimensions(
   const streak = Math.min((login?.bestStreak ?? 0) / 30, 1); // 30 days = 100%
 
   // 6. Subject balance
+  let balance = 0;
   const stats = (student as any).stats as Record<string, number> | undefined;
   if (stats) {
     const vals = Object.values(stats).filter(v => typeof v === 'number');
     const mean = vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
     const stddev = vals.length > 0 ? Math.sqrt(vals.reduce((sum, v) => sum + (v - mean) ** 2, 0) / vals.length) : 0;
-    var balance = mean > 0 ? Math.max(0, 1 - stddev / mean) : 0;
-  } else {
-    var balance = 0;
+    balance = mean > 0 ? Math.max(0, 1 - stddev / mean) : 0;
   }
 
   // 7. Growth speed (this week XP vs capacity)
@@ -96,6 +95,9 @@ export const StudentDetailCard = ({
   const [loading, setLoading] = useState(true);
 
   // Fetch battle history + KP records
+  // NOTE: gl_battle_results RLS policy only allows user to see own data.
+  // Teacher sees empty battles unless RLS is updated or an RPC with SECURITY DEFINER is added.
+  // play_kp_progress has the same limitation. Radar degrades gracefully with zeros.
   useEffect(() => {
     setLoading(true);
     Promise.all([
