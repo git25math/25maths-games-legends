@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, Swords, X } from 'lucide-react';
+import { Trophy, X } from 'lucide-react';
 import type { Language, Room, RoomPlayer } from '../types';
 import { lt } from '../i18n/resolveText';
 import { CHARACTERS } from '../data/characters';
@@ -9,6 +9,7 @@ import { Confetti } from './Confetti';
 /** XP multiplier by rank (1st, 2nd, 3rd, rest) */
 export const RANK_MULTIPLIERS = [2.0, 1.5, 1.2, 1.0];
 export function getRankMultiplier(rank: number): number {
+  if (rank < 0) return 1.0;
   return RANK_MULTIPLIERS[Math.min(rank, RANK_MULTIPLIERS.length - 1)];
 }
 
@@ -84,11 +85,13 @@ export const PKResultPanel = ({
   }
 
   const myRank = players.findIndex(([uid]) => uid === currentUserId);
-  const isTie = players[0][1].score === players[1][1].score;
+  const myScore = myRank >= 0 ? players[myRank][1].score : 0;
+  const topScore = players[0][1].score;
+  const isTiedForFirst = myScore === topScore && myScore > 0;
 
   // Title text
   const getTitle = () => {
-    if (isTie && myRank <= 1) return lang === 'en' ? 'Draw!' : '平局！';
+    if (isTiedForFirst) return lang === 'en' ? 'Draw!' : '平局！';
     if (myRank === 0) return lang === 'en' ? 'Victory!' : '胜利！';
     if (myRank === 1 && totalPlayers > 2) return lang === 'en' ? 'Runner Up!' : '亚军！';
     if (myRank === 2) return lang === 'en' ? 'Third Place!' : '季军！';

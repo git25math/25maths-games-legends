@@ -479,6 +479,8 @@ export default function App() {
 
     // PK mode: submit score, go to map, wait for room.status='finished' to show podium
     if (activeRoom?.type === 'pk' && user) {
+      // Guard: skip if already submitted (race between countdown auto-complete and manual answer)
+      if (activeRoom.players[user.id]?.finishedAt) return;
       await submitScore(score);
       pkAutoCompleteRef.current = false;
       setPkCountdown(null);
