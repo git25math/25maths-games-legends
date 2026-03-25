@@ -211,6 +211,8 @@ export const MapScreen = ({
           const isLocked = mission.order > 1 && prevMission && !(prevComp && Object.values(prevComp).some(Boolean));
           const isPlayable = !isLocked && !isCompleted;
           const isPerfect = comp?.green && comp?.amber && comp?.red;
+          const hasPracticed = !!(comp?.green && comp?.amber && comp?.red);
+          const battleLocked = !isLocked && !hasPracticed;
           const isLastCleared = lastClearedMissionId === mission.id;
           const cardVariants = isLocked ? { initial: { opacity: 0.5, y: 0 }, animate: { opacity: 0.5, y: 0 } } : staggerItem;
 
@@ -291,19 +293,26 @@ export const MapScreen = ({
                     {isLocked ? t.locked : t.practice}
                   </motion.button>
                   <motion.button
-                    {...(isLocked ? {} : { ...tapScale, ...hoverGlow })}
-                    disabled={!!isLocked}
+                    {...(isLocked || battleLocked ? {} : { ...tapScale, ...hoverGlow })}
+                    disabled={!!isLocked || battleLocked}
                     onClick={() => { playTap(); onMissionStart(mission); }}
                     className={`flex-1 py-3 rounded-2xl font-black flex items-center justify-center gap-1.5 text-xs md:text-sm min-h-12 ${
-                      isLocked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
+                      isLocked ? 'bg-slate-100 text-slate-400'
+                        : battleLocked ? 'bg-slate-200 text-slate-400'
+                        : 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
                     }`}
                   >
                     <Swords size={16} />
-                    {isLocked ? t.locked : t.challenge}
+                    {isLocked ? t.locked : battleLocked ? (lang === 'en' ? 'Practice first' : '\u5148\u7ec3\u4e60') : t.challenge}
                   </motion.button>
                 </div>
                 {isLocked && (
                   <p className="mt-2 text-[10px] text-rose-500 font-bold text-center">{t.lockedByOrder}</p>
+                )}
+                {battleLocked && !isLocked && (
+                  <p className="mt-2 text-[10px] text-indigo-500 font-bold text-center">
+                    {lang === 'en' ? 'Complete practice to unlock challenge' : '\u5b8c\u6210\u7ec3\u4e60\u540e\u89e3\u9501\u95ef\u5173'}
+                  </p>
                 )}
               </motion.div>
             </motion.div>
