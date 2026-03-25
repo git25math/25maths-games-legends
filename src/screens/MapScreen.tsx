@@ -18,6 +18,8 @@ import { SkillTreePanel } from '../components/SkillTreePanel';
 import { EquipmentPanel } from '../components/EquipmentPanel';
 import { BattlePassPanel } from '../components/BattlePassPanel';
 import { DailyQuestPanel } from '../components/DailyQuestPanel';
+import { getSeasonLevel, getSeasonBorder, getSeasonTitle } from '../data/seasons/season1';
+import { getSeasonProgress } from '../utils/seasonTracker';
 import { getEquipmentState, countNeedsRepair, EQUIPMENT_COLORS } from '../utils/equipment';
 import type { KPEquipment, EquipmentState } from '../types';
 import { getExpeditionsForGrade, type Expedition } from '../data/expeditions';
@@ -183,6 +185,10 @@ export const MapScreen = ({
   ).length;
   const levelInfo = getLevelInfo(profile.total_score);
   const rankName = levelInfo.rank[lang === 'zh_TW' ? 'zh_TW' : lang === 'en' ? 'en' : 'zh'];
+  const seasonProgress = getSeasonProgress(profile.completed_missions as Record<string, unknown>);
+  const seasonLevelInfo = getSeasonLevel(seasonProgress.season_xp);
+  const seasonBorder = getSeasonBorder(seasonLevelInfo.level);
+  const seasonTitle = getSeasonTitle(seasonLevelInfo.level);
   const xpToNext = levelInfo.xpForNextLevel - levelInfo.currentXP;
   const isNearLevel = levelInfo.xpForNextLevel > 0 && xpToNext <= Math.ceil(levelInfo.xpForNextLevel * 0.20) && xpToNext > 0;
   const nextRankName = isNearLevel
@@ -399,7 +405,7 @@ export const MapScreen = ({
       <div className="flex flex-wrap items-center justify-between gap-6 bg-white/5 backdrop-blur-xl p-4 md:p-8 rounded-[2rem] border border-white/10">
         <div className="flex items-center gap-4 md:gap-6">
           <button onClick={onCharChange} className="relative group">
-            <div className="border-4 border-white/20 shadow-2xl rounded-full group-hover:border-indigo-400 transition-colors">
+            <div className={`border-4 shadow-2xl rounded-full transition-colors ${seasonBorder ? seasonBorder.color : 'border-white/20'} group-hover:border-indigo-400`}>
               <CharacterAvatar characterId={selectedChar?.id || ''} size={72} />
             </div>
             <div className="absolute -bottom-2 -right-2 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-full w-8 h-8 flex items-center justify-center text-white font-black text-xs border-2 border-white/30 shadow-lg">
@@ -407,11 +413,16 @@ export const MapScreen = ({
             </div>
           </button>
           <div>
-            <h3 className="text-white font-black text-lg md:text-2xl flex items-center gap-2">
+            <h3 className="text-white font-black text-lg md:text-2xl flex items-center gap-2 flex-wrap">
               {profile.display_name}
               <span className="text-xs font-bold px-2 py-0.5 bg-amber-500/20 border border-amber-400/30 rounded-full text-amber-300">
                 {rankName}
               </span>
+              {seasonTitle && (
+                <span className="text-[10px] font-bold px-2 py-0.5 bg-indigo-500/20 border border-indigo-400/30 rounded-full text-indigo-300">
+                  {lt(seasonTitle, lang)}
+                </span>
+              )}
             </h3>
             <div className="flex items-center gap-2 mt-1.5">
               <Star size={12} className="text-yellow-400" />

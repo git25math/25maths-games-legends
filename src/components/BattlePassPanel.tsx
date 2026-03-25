@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { X, Star, Check, Lock, Gift, Flame, Swords, Shield } from 'lucide-react';
+import { X, Star, Check, Lock, Gift, Flame, Swords, Shield, Palette } from 'lucide-react';
 import type { Language } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
@@ -143,6 +143,7 @@ export const BattlePassPanel = ({
                     {r.reward.type === 'skill_point' && <Shield size={14} className="text-purple-400" />}
                     {r.reward.type === 'xp_boost' && <Star size={14} className="text-yellow-400" />}
                     {r.reward.type === 'title' && <Gift size={14} className="text-indigo-400" />}
+                    {r.reward.type === 'border' && <Palette size={14} className="text-pink-400" />}
                   </div>
                 </div>
               );
