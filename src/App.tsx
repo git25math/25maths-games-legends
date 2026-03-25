@@ -128,7 +128,6 @@ export default function App() {
   const [nearLevelToast, setNearLevelToast] = useState<{ xpNeeded: number; rankName: string } | null>(null);
   const [loginRewardNotif, setLoginRewardNotif] = useState<{ streak: number; xp: number; sp: number } | null>(null);
   const [showPKResult, setShowPKResult] = useState(false);
-  const [pkBattleRoom, setPkBattleRoom] = useState<import('./types').Room | null>(null);
 
   // Refs to accumulate mid-battle updates that get merged into handleBattleComplete's single save
   const pendingSeasonTasksRef = useRef<string[]>([]);
@@ -433,13 +432,13 @@ export default function App() {
     setIsDailyBattle(false);
 
     // PK mode: submit score and show result overlay
+    // Keep activeRoom alive so realtime subscription can update opponent's score
     if (activeRoom?.type === 'pk' && user) {
       await submitScore(score);
-      const updatedPlayers = { ...activeRoom.players, [user.id]: { ...activeRoom.players[user.id], score } };
-      setPkBattleRoom({ ...activeRoom, players: updatedPlayers });
+      // Mark room finished (fire-and-forget, non-blocking)
+      finishRoom(user.id);
       setShowPKResult(true);
       setActiveMission(null);
-      leaveRoom(); // Clear activeRoom immediately (PK result uses pkBattleRoom snapshot)
       setGameState('map');
       return;
     }
@@ -631,8 +630,8 @@ export default function App() {
                   room={activeRoom}
                   userId={user.id}
                   onReady={toggleReady}
-                  onStart={() => {
-                    startGame();
+                  onStart={async () => {
+                    await startGame();
                     // Set activeMission from room's missionId so MathBattle can render
                     const m = LOCAL_MISSIONS.find(mi => mi.id === activeRoom.missionId);
                     if (m) {
@@ -830,8 +829,8 @@ export default function App() {
                 <PKSetupPanel
                   lang={lang}
                   grade={profile.grade}
-                  onCreateRoom={(missionId) => {
-                    createRoom('pk', missionId);
+                  onCreateRoom={async (missionId) => {
+                    await createRoom('pk', missionId);
                     setGameState('lobby');
                   }}
                   onJoinRoom={async (code) => {
@@ -839,7 +838,6 @@ export default function App() {
                     if (ok) {
                       setGameState('lobby');
                     } else {
-                      // Show inline error — PKSetupPanel handles via onJoinError
                       alert(lang === 'en' ? 'Room not found. Check the code and try again.' : '未找到房间，请检查代码后重试。');
                     }
                   }}
@@ -972,14 +970,13 @@ export default function App() {
 
         {/* ═══ PK Result Overlay ═══ */}
         <AnimatePresence>
-          {showPKResult && pkBattleRoom && user && (
+          {showPKResult && activeRoom && user && (
             <PKResultPanel
               lang={lang}
-              room={pkBattleRoom}
+              room={activeRoom}
               currentUserId={user.id}
               onClose={() => {
                 setShowPKResult(false);
-                setPkBattleRoom(null);
                 leaveRoom();
               }}
             />

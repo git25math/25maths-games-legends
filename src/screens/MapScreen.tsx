@@ -558,7 +558,7 @@ export const MapScreen = ({
                 </button>
               )}
               {onFriendPK && (
-                <button onClick={onFriendPK} className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors">
+                <button onClick={onFriendPK} className="px-2 py-0.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-xs text-cyan-300 hover:bg-cyan-600/40 transition-colors">
                   {lang === 'en' ? 'Friend PK' : '好友对决'}
                 </button>
               )}

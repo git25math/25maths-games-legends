@@ -5,7 +5,7 @@ import type { Language, UserProfile } from '../types';
 import { lt } from '../i18n/resolveText';
 import { getLevelInfo } from '../utils/xpLevels';
 import { STREAK_MILESTONES } from '../data/streakMilestones';
-import { SEASON_BORDERS, getSeasonLevel, getSeasonBorder } from '../data/seasons/season1';
+import { SEASON_BORDERS, getSeasonLevel } from '../data/seasons/season1';
 import { getSeasonProgress } from '../utils/seasonTracker';
 import { useAudio } from '../audio';
 
