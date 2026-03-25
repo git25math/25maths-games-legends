@@ -33,6 +33,9 @@ import { LeaderboardPanel } from './components/LeaderboardPanel';
 import { getActiveSkillEffect } from './data/heroSkills';
 import { STREAK_MILESTONES, getNewlyEarnedMilestone, getNextMilestone } from './data/streakMilestones';
 import { BattleModeSelector } from './components/BattleModeSelector';
+import { AchievementWallPanel } from './components/AchievementWallPanel';
+import { PKSetupPanel } from './components/PKSetupPanel';
+import { PKResultPanel } from './components/PKResultPanel';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
 import { ExpeditionScreen } from './screens/ExpeditionScreen';
@@ -90,7 +93,7 @@ function loadPersistedState(): PersistedState {
 function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
     // Battle/onboarding/expedition can't be restored → save as map
-    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition' || gameState === 'leaderboard') ? 'map' : gameState;
+    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition' || gameState === 'leaderboard' || gameState === 'achievements' || gameState === 'pk_setup') ? 'map' : gameState;
     const safeMission = safeState === 'practice' ? missionId : null;
     localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
@@ -124,6 +127,8 @@ export default function App() {
   const [repairToast, setRepairToast] = useState<{ bonus: number } | null>(null);
   const [nearLevelToast, setNearLevelToast] = useState<{ xpNeeded: number; rankName: string } | null>(null);
   const [loginRewardNotif, setLoginRewardNotif] = useState<{ streak: number; xp: number; sp: number } | null>(null);
+  const [showPKResult, setShowPKResult] = useState(false);
+  const [pkBattleRoom, setPkBattleRoom] = useState<import('./types').Room | null>(null);
 
   // Refs to accumulate mid-battle updates that get merged into handleBattleComplete's single save
   const pendingSeasonTasksRef = useRef<string[]>([]);
@@ -136,7 +141,7 @@ export default function App() {
     getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
   const { missions } = useMissions();
-  const { activeRoom, createRoom, toggleReady, startGame, leaveRoom } = useMultiplayer(user, profile);
+  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, finishRoom, leaveRoom } = useMultiplayer(user, profile);
 
   // Persist state across page refresh
   useEffect(() => {
@@ -414,6 +419,17 @@ export default function App() {
     pendingStreakTokensRef.current = 0;
     pendingErrorsRef.current = [];
     setIsDailyBattle(false);
+
+    // PK mode: submit score and show result overlay
+    if (activeRoom?.type === 'pk') {
+      await submitScore(score);
+      setPkBattleRoom({ ...activeRoom, players: { ...activeRoom.players, ...(user ? { [user.id]: { ...activeRoom.players[user.id], score } } : {}) } });
+      setShowPKResult(true);
+      setActiveMission(null);
+      setGameState('map');
+      return;
+    }
+
     setGameState('map');
     setActiveMission(null);
   };
@@ -500,7 +516,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v7.2.0</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v7.4.0</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -590,6 +606,8 @@ export default function App() {
                   }}
                   hotTopicInfo={hotTopic}
                   onLeaderboard={() => setGameState('leaderboard')}
+                  onAchievements={() => setGameState('achievements')}
+                  onFriendPK={user ? () => setGameState('pk_setup') : undefined}
                 />
               )}
 
@@ -776,6 +794,29 @@ export default function App() {
                   onClose={() => setGameState('map')}
                 />
               )}
+
+              {gameState === 'achievements' && profile && (
+                <AchievementWallPanel
+                  lang={lang}
+                  profile={profile}
+                  onClose={() => setGameState('map')}
+                />
+              )}
+
+              {gameState === 'pk_setup' && profile && profile.grade && user && (
+                <PKSetupPanel
+                  lang={lang}
+                  grade={profile.grade}
+                  onCreateRoom={(missionId) => {
+                    createRoom('pk', missionId);
+                    setGameState('lobby');
+                  }}
+                  onJoinRoom={(code) => {
+                    joinRoom(code).then(() => setGameState('lobby'));
+                  }}
+                  onClose={() => setGameState('map')}
+                />
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -897,6 +938,22 @@ export default function App() {
                 <p className="text-white/20 text-[10px] mt-4">{lang === 'en' ? 'Tap to dismiss' : '点击关闭'}</p>
               </motion.div>
             </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ═══ PK Result Overlay ═══ */}
+        <AnimatePresence>
+          {showPKResult && pkBattleRoom && user && (
+            <PKResultPanel
+              lang={lang}
+              room={pkBattleRoom}
+              currentUserId={user.id}
+              onClose={() => {
+                setShowPKResult(false);
+                setPkBattleRoom(null);
+                leaveRoom();
+              }}
+            />
           )}
         </AnimatePresence>
 

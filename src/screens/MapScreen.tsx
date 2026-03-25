@@ -88,6 +88,8 @@ export const MapScreen = ({
   onStartExpedition,
   hotTopicInfo,
   onLeaderboard,
+  onAchievements,
+  onFriendPK,
 }: {
   lang: Language;
   profile: UserProfile;
@@ -110,6 +112,8 @@ export const MapScreen = ({
   onStartExpedition?: (expeditionId: string) => void;
   hotTopicInfo?: { topic: string; label: { zh: string; zh_TW: string; en: string }; multiplier: number };
   onLeaderboard?: () => void;
+  onAchievements?: () => void;
+  onFriendPK?: () => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
@@ -546,6 +550,16 @@ export const MapScreen = ({
               {onLeaderboard && (
                 <button onClick={onLeaderboard} className="px-2 py-0.5 bg-yellow-600/20 border border-yellow-500/30 rounded text-xs text-yellow-300 hover:bg-yellow-600/40 transition-colors flex items-center gap-1">
                   🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
+                </button>
+              )}
+              {onAchievements && (
+                <button onClick={onAchievements} className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors">
+                  {lang === 'en' ? 'Achievements' : '成就墙'}
+                </button>
+              )}
+              {onFriendPK && (
+                <button onClick={onFriendPK} className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors">
+                  {lang === 'en' ? 'Friend PK' : '好友对决'}
                 </button>
               )}
               <button onClick={() => setShowBattlePass(true)} className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors">

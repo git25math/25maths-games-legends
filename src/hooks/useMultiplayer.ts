@@ -30,11 +30,31 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
 
   const joinRoom = async (roomId: string) => {
     if (!user || !profile) return;
-    const { data: room, error: getErr } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
+
+    // Support both full UUID and short code (first 6 chars)
+    let actualId = roomId;
+    if (roomId.length < 36) {
+      // Search by prefix
+      const { data: rooms, error: searchErr } = await supabase
+        .from('gl_rooms')
+        .select('*')
+        .eq('status', 'waiting')
+        .ilike('id', `${roomId.toLowerCase()}%`)
+        .limit(1);
+      if (searchErr || !rooms?.length) {
+        handleSupabaseError(searchErr || new Error('Room not found'), 'get', 'gl_rooms');
+        return;
+      }
+      actualId = rooms[0].id;
+    }
+
+    const { data: room, error: getErr } = await supabase.from('gl_rooms').select('*').eq('id', actualId).single();
     if (getErr) { handleSupabaseError(getErr, 'get', 'gl_rooms'); return; }
 
+    if (room.status !== 'waiting') return; // Room already started
+
     const players = { ...room.players, [user.id]: { name: profile.display_name, score: 0, isReady: false, charId: profile.selected_char_id } };
-    const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', roomId);
+    const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', actualId);
     if (error) { handleSupabaseError(error, 'update', 'gl_rooms'); return; }
     setActiveRoom({ ...room, players, id: room.id, hostId: room.host_id, missionId: room.mission_id } as Room);
   };
@@ -55,6 +75,26 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     setActiveRoom({ ...activeRoom, status: 'playing' });
   };
 
+  /** Submit score for current user (call after battle complete) */
+  const submitScore = async (score: number) => {
+    if (!user || !activeRoom) return;
+    const players = { ...activeRoom.players };
+    if (players[user.id]) {
+      players[user.id].score = score;
+    }
+    const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', activeRoom.id);
+    if (error) handleSupabaseError(error, 'update', 'gl_rooms');
+    setActiveRoom({ ...activeRoom, players });
+  };
+
+  /** Mark room as finished with a winner */
+  const finishRoom = async (winnerId: string) => {
+    if (!activeRoom) return;
+    const { error } = await supabase.from('gl_rooms').update({ status: 'finished', winner_id: winnerId }).eq('id', activeRoom.id);
+    if (error) handleSupabaseError(error, 'update', 'gl_rooms');
+    setActiveRoom({ ...activeRoom, status: 'finished', winnerId });
+  };
+
   const leaveRoom = () => setActiveRoom(null);
 
   // Subscribe to room changes
@@ -72,5 +112,5 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     return () => { supabase.removeChannel(channel); };
   }, [activeRoom?.id]);
 
-  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, leaveRoom };
+  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, finishRoom, leaveRoom };
 }
