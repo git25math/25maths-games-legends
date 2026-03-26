@@ -1235,7 +1235,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '曹操统计各营战斗力，用平均数来评估整体水平。', en: 'Cao Cao evaluates battalion strength using the mean (average).' },
     description: { zh: '求平均数。', en: 'Find the mean.' },
     data: { values: [8, 12, 15, 10, 5], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Easy', reward: 45,
-    kpId: 'kp-6.1-01', sectionId: 'statistics',
+    kpId: 'kp-9.3-01', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '曹操：平均数 = 加起来 ÷ 个数', en: 'Cao Cao: "Mean = add them up ÷ how many"' }, highlightField: 'ans' },
     ],
@@ -1252,7 +1252,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '诸葛亮要找出"中间水平"的士兵——先排序，再取中间值。', en: 'Zhuge Liang finds the "middle level" soldier — sort first, then pick the middle.' },
     description: { zh: '求中位数。', en: 'Find the median.' },
     data: { values: [3, 7, 8, 12, 15], mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' }, difficulty: 'Easy', reward: 45,
-    kpId: 'kp-6.1-02', sectionId: 'statistics',
+    kpId: 'kp-9.3-02', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '诸葛亮：先排序，再找中间', en: 'Zhuge Liang: "Sort first, then find the middle"' }, highlightField: 'ans' },
     ],
@@ -1269,7 +1269,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '张飞要看各营战力差距有多大——用极差（Range）来衡量！', en: 'Zhang Fei measures the gap between battalions using the range!' },
     description: { zh: '求极差（Range）。', en: 'Find the range.' },
     data: { values: [5, 8, 12, 15, 20], mode: 'range', generatorType: 'STATISTICS_RANGE_RANDOM' }, difficulty: 'Easy', reward: 40,
-    kpId: 'kp-9.1-02', sectionId: 'statistics',
+    kpId: 'kp-9.3-03', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '张飞：极差 = 最大的 - 最小的', en: 'Zhang Fei: "Range = biggest − smallest"' }, highlightField: 'ans' },
     ],
@@ -3118,7 +3118,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '清点各营剩余物资，找出"中间水平"——中位数不受极端值影响！', en: 'Tally remaining supplies per camp, find the \'middle level\' — median isn\'t affected by extremes!' },
     description: { zh: '计算一组数据的中位数。', en: 'Calculate the median of a dataset.' },
     data: { values: [45, 23, 67, 12, 56, 34, 89], generatorType: 'STATISTICS_MEDIAN_RANDOM' }, difficulty: 'Medium', reward: 160,
-    kpId: 'kp-9.1-02', sectionId: 'statistics',
+    kpId: 'kp-9.3-02', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '司马懿：为什么中位数比平均数好？\n如果一个营物资 $1000$，其他都只有 $20$，平均数就会被拉高——不准！\n中位数 = "排好队站中间的那个人"，不受极端值影响。', en: 'Sima Yi: "Why is median better than mean?\nIf one camp has 1000 supplies and others have 20, the mean gets inflated — misleading!\nMedian = \'the person standing in the middle of a line\' — not affected by extremes."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：步骤\n1. 把数据从小到大排列\n2. 找中间的那个值\n（偶数个数据：取中间两个的平均）', en: 'Sima Yi: "Steps\n1. Sort data from smallest to largest\n2. Find the middle value\n(Even count: average the two middle values)"' }, highlightField: 'ans' },
@@ -3298,7 +3298,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '赤壁之战，诸葛亮借东风。风向是向量 $\\vec{a} = (3, 2)$，水流是向量 $\\vec{b} = (1, -1)$。火船的实际移动方向 = 风 + 水流。', en: 'At Red Cliffs, Zhuge Liang summons the east wind. Wind vector $\\vec{a} = (3, 2)$, current $\\vec{b} = (1, -1)$. The fire ship\'s actual movement = wind + current.' },
     description: { zh: '求合向量 $\\vec{a} + \\vec{b}$ 的坐标。', en: 'Find the resultant vector $\\vec{a} + \\vec{b}$.' },
     data: { targetX: 4, targetY: 1, a1: 3, a2: 2, b1: 1, b2: -1, generatorType: 'VECTOR_ADD_RANDOM' }, difficulty: 'Medium', reward: 220,
-    kpId: 'kp-3.1-01', sectionId: 'algebra',
+    kpId: 'kp-7.2-01', sectionId: 'algebra',
     tutorialSteps: [
       { text: { zh: '诸葛亮："为什么要学向量？因为火船同时受风和水流两股力——方向不同、大小不同。向量把「方向+大小」打包成一个数学对象，加在一起就是合力。"', en: 'Zhuge Liang: "Why vectors? The fire ship faces two forces — wind and current, different directions and strengths. Vectors pack \'direction + magnitude\' into one math object; adding them gives the net force."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮："向量加法超级简单：对应分量直接相加。$x$ 加 $x$，$y$ 加 $y$。"', en: 'Zhuge Liang: "Vector addition is simple: add corresponding components. $x$ plus $x$, $y$ plus $y$."' }, highlightField: 'x' },
@@ -4197,7 +4197,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '各州郡粮产差异有多大？极差告诉你"最好和最差之间的距离"。', en: 'How much do provinces differ in grain output? The range tells you "the gap between best and worst".' },
     description: { zh: '计算一组数据的极差。', en: 'Calculate the range of a dataset.' },
     data: { values: [34, 67, 23, 89, 45, 12, 78], generatorType: 'STATISTICS_RANGE_RANDOM' }, difficulty: 'Easy', reward: 400,
-    kpId: 'kp-9.1-02', sectionId: 'statistics',
+    kpId: 'kp-9.3-03', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '司马懿：为什么要算极差？\n知道平均值还不够——两支部队平均战力相同，但一支稳定、另一支忽高忽低。\n极差告诉你数据的波动范围！', en: 'Sima Yi: "Why calculate range?\nThe average alone isn\'t enough — two armies with the same average, but one stable, one volatile.\nRange tells you the spread!"' }, highlightField: 'ans' },
       { text: { zh: '司马懿：公式\n$$\\text{极差} = \\text{最大值} - \\text{最小值}$$\n就这么简单——找最大、找最小、相减。', en: 'Sima Yi: "Formula\n$$\\text{Range} = \\text{max} - \\text{min}$$\nThat simple — find max, find min, subtract."' }, highlightField: 'ans' },
