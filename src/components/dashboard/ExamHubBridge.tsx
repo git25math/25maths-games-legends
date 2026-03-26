@@ -150,7 +150,8 @@ export function ExamHubBridge({ lang, students }: Props) {
       {/* Per-student list */}
       <div className="max-h-48 overflow-y-auto">
         {sorted.map(s => {
-          const v = vocabData.get(s.user_id)!;
+          const v = vocabData.get(s.user_id);
+          if (!v) return null;
           const masteryColor = v.mastery_pct >= 80 ? 'text-emerald-600' : v.mastery_pct >= 50 ? 'text-amber-600' : 'text-rose-600';
           const barColor = v.mastery_pct >= 80 ? 'bg-emerald-500' : v.mastery_pct >= 50 ? 'bg-amber-400' : 'bg-rose-400';
 

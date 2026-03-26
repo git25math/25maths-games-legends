@@ -123,11 +123,11 @@ export function AssignmentBanner({ lang, userId, completedMissions, onMissionSta
                       <circle cx="18" cy="18" r="15" fill="none"
                         stroke={allDone ? '#10b981' : '#818cf8'}
                         strokeWidth="3" strokeLinecap="round"
-                        strokeDasharray={`${(completedCount / a.mission_ids.length) * 94.25} 94.25`}
+                        strokeDasharray={`${(a.mission_ids.length > 0 ? (completedCount / a.mission_ids.length) : 0) * 94.25} 94.25`}
                       />
                     </svg>
                     <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black text-white/70">
-                      {Math.round((completedCount / a.mission_ids.length) * 100)}%
+                      {a.mission_ids.length > 0 ? Math.round((completedCount / a.mission_ids.length) * 100) : 0}%
                     </span>
                   </div>
                   {expanded ? <ChevronDown size={14} className="text-white/30" /> : <ChevronRight size={14} className="text-white/30" />}
