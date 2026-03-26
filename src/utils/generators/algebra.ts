@@ -16,11 +16,14 @@ export function generateSimpleEqMission(template: Mission): Mission {
     { tex: `${a} \\times ${x} = ${result}`, annotation: { zh: `验算：代回原式 ✓`, en: `Verify: substitute back ✓` } },
   ];
 
+  const description = {
+    zh: `解方程 $${a}x = ${result}$，求 $x$。`,
+    en: `Solve $${a}x = ${result}$, find $x$.`,
+  };
+
   return {
     ...template,
-    // title: preserved (never replaced)
-    // story: preserved (template with {a}, {result} — interpolated at render)
-    // description: preserved (template — interpolated at render)
+    description,
     data: { ...template.data, x, a, result, left: `${a}x`, right: `${result}`, generatorType: 'SIMPLE_EQ_RANDOM', tutorialEquationSteps },
   };
 }
@@ -46,8 +49,14 @@ export function generateAddEqMission(template: Mission): Mission {
     { tex: `${x} + ${a} = ${result}`, annotation: { zh: `验算：代回原式 ✓`, en: `Verify: substitute back ✓` } },
   ];
 
+  const description = {
+    zh: `解方程 $x + ${a} = ${result}$，求 $x$。`,
+    en: `Solve $x + ${a} = ${result}$, find $x$.`,
+  };
+
   return {
     ...template,
+    description,
     data: { ...template.data, x, a, result, left: `x+${a}`, right: `${result}`, generatorType: 'SIMPLE_EQ_ADD_RANDOM', tutorialEquationSteps },
   };
 }
@@ -139,6 +148,7 @@ export function generateTwoStepEqMission(template: Mission): Mission {
 
   return {
     ...template,
+    description,
     data: { ...template.data, x, a, b, result, left: `${a}x + ${b}`, right: `${result}`, generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM', tutorialEquationSteps },
     tutorialSteps,
   };
