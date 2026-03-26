@@ -147,6 +147,13 @@ export default function App() {
 
   // Must be after profile declaration
   if (profile) latestScoreRef.current = profile.total_score;
+  // Snapshot players from finished round (before reset clears scores to 0)
+  const lastRoundPlayersRef = useRef<Record<string, any> | null>(null);
+  useEffect(() => {
+    if (activeRoom?.status === 'finished' && activeRoom.type === 'pk') {
+      lastRoundPlayersRef.current = { ...activeRoom.players };
+    }
+  }, [activeRoom?.status]);
 
   // Persist state across page refresh
   useEffect(() => {
@@ -214,17 +221,19 @@ export default function App() {
   // PK: When room resets to 'waiting' (host picked next round), settle XP + navigate to lobby
   useEffect(() => {
     if (activeRoom?.status === 'waiting' && showPKResult && user && activeRoom.type === 'pk') {
-      // Non-host: settle XP here since onClose won't fire
-      if (activeRoom.hostId !== user.id && profile) {
-        const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
+      // Non-host: settle XP using snapshotted players (current players have score=0 after reset)
+      if (activeRoom.hostId !== user.id && profile && lastRoundPlayersRef.current) {
+        const snap = lastRoundPlayersRef.current;
+        const ranked = Object.entries(snap).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
         const myRank = ranked.findIndex(([uid]) => uid === user.id);
-        const myScore = activeRoom.players[user.id]?.score ?? 0;
+        const myScore = (snap[user.id] as any)?.score ?? 0;
         const multiplier = getRankMultiplier(myRank);
         const bonusXP = Math.round(myScore * (multiplier - 1));
         if (bonusXP > 0) {
           updateProfile({ total_score: profile.total_score + bonusXP });
         }
       }
+      lastRoundPlayersRef.current = null;
       setShowPKResult(false);
       pkAutoCompleteRef.current = false;
       setGameState('lobby');
@@ -724,7 +733,7 @@ export default function App() {
                     }
                     setGameState('battle');
                   }}
-                  onLeave={() => { leaveRoom(); setGameState('map'); }}
+                  onLeave={async () => { await leaveRoomClean(); setGameState('map'); }}
                 />
               )}
 
