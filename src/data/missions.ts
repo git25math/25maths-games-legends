@@ -473,7 +473,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '诸葛亮：最终考核！随机出题，可能是方阵求边长（√），也可能是粮仓求边长（∛）。', en: 'Zhuge Liang: "Final assessment! Random questions — find the side of a square formation (√) or a warehouse (∛)."' },
     description: { zh: '计算平方根或立方根。', en: 'Calculate the square or cube root.' },
     data: { n: 64, answer: 8, mode: 'mixed', op: 'sqrt', generatorType: 'SQUARE_ROOT_RANDOM' }, difficulty: 'Medium', reward: 55,
-    kpId: 'kp-1.3-04', sectionId: 'number',
+    kpId: 'kp-1.3-03', sectionId: 'number',
     tutorialSteps: [
       { text: { zh: '诸葛亮：平方根——"谁的平方等于这个数？"', en: 'Zhuge Liang: "Square root — whose square equals this number?"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：立方根——"谁的立方等于这个数？"', en: 'Zhuge Liang: "Cube root — whose cube equals this number?"' }, highlightField: 'ans' },
@@ -1162,7 +1162,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '赵云要制作三角军旗。三角形面积 = 底 × 高 ÷ 2——是长方形的一半！', en: 'Zhao Yun makes triangular banners. Triangle area = base × height ÷ 2 — half a rectangle!' },
     description: { zh: '计算三角形面积。', en: 'Calculate the triangle area.' },
     data: { base: 10, height: 6, answer: 30, generatorType: 'AREA_TRIANGLE_RANDOM' }, difficulty: 'Easy', reward: 50,
-    kpId: 'kp-4.5-03', sectionId: 'geometry',
+    kpId: 'kp-4.5-02', sectionId: 'geometry',
     tutorialSteps: [
       { text: { zh: '赵云：三角形面积 = 底 × 高 ÷ 2', en: 'Zhao Yun: "Triangle area = base × height ÷ 2"' }, highlightField: 'area' },
     ],
@@ -1269,7 +1269,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '张飞要看各营战力差距有多大——用极差（Range）来衡量！', en: 'Zhang Fei measures the gap between battalions using the range!' },
     description: { zh: '求极差（Range）。', en: 'Find the range.' },
     data: { values: [5, 8, 12, 15, 20], mode: 'range', generatorType: 'STATISTICS_RANGE_RANDOM' }, difficulty: 'Easy', reward: 40,
-    kpId: 'kp-6.1-03', sectionId: 'statistics',
+    kpId: 'kp-9.1-02', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '张飞：极差 = 最大的 - 最小的', en: 'Zhang Fei: "Range = biggest − smallest"' }, highlightField: 'ans' },
     ],
@@ -2792,7 +2792,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '庞统献连环计，锁链从甲板到水面形成一个角度。用正切可以算出锁链长度！', en: 'Pang Tong suggests chaining ships together. The chain from deck to water forms an angle. Tangent reveals the chain length!' },
     description: { zh: '用 tan 求三角形的未知边。', en: 'Use tan to find an unknown side of a triangle.' },
     data: { angle: 35, adj: 12, generatorType: 'TRIGONOMETRY_RANDOM', func: 'tan' }, difficulty: 'Hard', reward: 200,
-    kpId: 'kp-6.1-03', sectionId: 'geometry',
+    kpId: 'kp-6.1-02', sectionId: 'geometry',
     tutorialSteps: [
       { text: { zh: '庞统：为什么需要正切？\n锁链从甲板垂下来（对边），甲板到水面的水平距离（邻边）已知。\n$\\tan$ 就是"垂直 ÷ 水平"——最直接的角度关系。', en: 'Pang Tong: "Why tangent?\nThe chain hangs from the deck (opposite), horizontal distance to water (adjacent) is known.\n$\\tan$ is \'vertical ÷ horizontal\' — the most direct angle relationship."' }, highlightField: 'ans' },
       { text: { zh: '庞统：公式\n$\\tan \\theta = \\frac{\\text{对边}}{\\text{邻边}}$\n对边 = 邻边 × tan θ。', en: 'Pang Tong: "Formula\n$\\tan \\theta = \\frac{\\text{opposite}}{\\text{adjacent}}$\nOpposite = adjacent × tan θ."' }, highlightField: 'ans' },
@@ -3066,18 +3066,12 @@ export const MISSIONS: Mission[] = [
     data: { p1: [0, 0], p2: [5, 25], generatorType: 'QUADRATIC_RANDOM' }, difficulty: 'Easy', reward: 300,
     kpId: 'kp-2.10-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '周瑜："诸葛亮草船借箭，箭矢轨迹是抛物线 $h = -x^2 + 10x$。我们要找最高点。"', en: 'Zhou Yu: "Zhuge Liang borrows arrows. The trajectory $h = -x^2 + 10x$ is a parabola. Find the peak."' },
-        highlightField: 'a'
-      },
-      {
-        text: { zh: '周瑜："二次函数 $y = ax^2 + bx$ 的顶点在 $x = -b/(2a)$。这里 $a=-1, b=10$。"', en: 'Zhou Yu: "For $y = ax^2 + bx$, vertex is at $x = -b/(2a)$. Here $a=-1, b=10$."' },
-        highlightField: 'a'
-      },
-      {
-        text: { zh: '周瑜："$x = 5$，代入得 $h = -25+50 = 25$。最高点在 $(5, 25)$！妙计成功！"', en: 'Zhou Yu: "$x = 5$, so $h = -25+50 = 25$. Peak at $(5, 25)$! Brilliant strategy!"' },
-        highlightField: 'c'
-      }
+      { text: { zh: '周瑜：为什么要找抛物线的最高点？\n草船借箭，箭矢在空中划出弧线。最高点决定了箭能飞多远——\n算错了，箭就落进江里；算对了，万箭齐收！', en: 'Zhou Yu: "Why find the peak of a parabola?\nArrows trace an arc through the air. The peak determines how far they fly —\nGet it wrong and arrows fall into the river; get it right and we collect them all!"' }, highlightField: 'a' },
+      { text: { zh: '周瑜：抛物线顶点公式\n二次函数 $y = ax^2 + bx$ 的最高/低点在\n$$x = \\frac{-b}{2a}$$\n就像天平的支点——左右对称，中间最高！', en: 'Zhou Yu: "Vertex formula\nFor $y = ax^2 + bx$, the peak/trough is at\n$$x = \\frac{-b}{2a}$$\nLike the fulcrum of a balance — symmetric left and right, highest in the middle!"' }, highlightField: 'a' },
+      { text: { zh: '周瑜：代入数据\n$h = -x^2 + 10x$，所以 $a = -1$，$b = 10$\n$x = \\frac{-10}{2 \\times (-1)}$', en: 'Zhou Yu: "Substitute\n$h = -x^2 + 10x$, so $a = -1$, $b = 10$\n$x = \\frac{-10}{2 \\times (-1)}$"' }, highlightField: 'a' },
+      { text: { zh: '周瑜：计算\n$x = \\frac{-10}{-2} = 5$\n再代入求高度：$h = -(5)^2 + 10(5) = -25 + 50 = 25$', en: 'Zhou Yu: "Calculate\n$x = \\frac{-10}{-2} = 5$\nSubstitute for height: $h = -(5)^2 + 10(5) = -25 + 50 = 25$"' }, highlightField: 'a' },
+      { text: { zh: '周瑜：答案\n最高点在 $(5, 25)$！箭矢在 $x=5$ 时飞到 25 丈高。\n草船借箭，妙计成功！', en: 'Zhou Yu: "Answer\nPeak at $(5, 25)$! Arrows reach 25 units high at $x=5$.\nStraw boats borrow arrows — brilliant strategy!"' }, highlightField: 'c' },
+      { text: { zh: '周瑜：验算\n把 $x=5$ 代回原式：$h = -(5)^2 + 10(5) = -25 + 50 = 25$ ✓\n再试 $x=4$：$h = -16 + 40 = 24 < 25$，确认 $x=5$ 才是最高点 ✓', en: 'Zhou Yu: "Verify\nSubstitute $x=5$ back: $h = -(5)^2 + 10(5) = -25 + 50 = 25$ ✓\nTry $x=4$: $h = -16 + 40 = 24 < 25$, confirming $x=5$ is the peak ✓"' }, highlightField: 'c' },
     ],
     secret: { concept: { zh: '二次函数顶点公式：$x = -b/(2a)$。', en: 'Vertex formula: $x = -b/(2a)$.' }, formula: '$x = -b/(2a)$', tips: [{ zh: '周瑜提示：草船借箭，妙在算准轨迹。', en: 'Zhou Yu Tip: Borrowing arrows with straw boats — the key is calculating the trajectory.' }] },
     storyConsequence: { correct: { zh: '草船借箭——二次方程迎刃而解！做得漂亮！', en: 'Straw Boats Borrow Arrows — Well done!' }, wrong: { zh: '二次方程算岔了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3094,18 +3088,12 @@ export const MISSIONS: Mission[] = [
     data: { a: -1, b: 0, c: 16, generatorType: 'ROOTS_RANDOM' }, difficulty: 'Medium', reward: 350,
     kpId: 'kp-2.10-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '周瑜："火势范围 $y = -x^2 + 16$。令 $y=0$，求 $x$ 的根。"', en: 'Zhou Yu: "Fire range $y = -x^2 + 16$. Set $y=0$, find roots of $x$."' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '周瑜："$-x^2 + 16 = 0 \\Rightarrow x^2 = 16 \\Rightarrow x = \\pm 4$"', en: 'Zhou Yu: "$-x^2 + 16 = 0 \\Rightarrow x^2 = 16 \\Rightarrow x = \\pm 4$"' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '周瑜："宽度为 8！火借风势，风助火威！"', en: 'Zhou Yu: "Width is 8! Fire relies on the wind, and wind aids the fire!"' },
-        highlightField: 'x'
-      }
+      { text: { zh: '周瑜：为什么要求二次方程的根？\n火船冲向曹营，火势覆盖范围取决于方程的根——\n根就是火焰触地的两端！知道了根，就知道火能烧多宽。', en: 'Zhou Yu: "Why find roots of a quadratic?\nFire ships charge the camp, the fire coverage depends on the roots —\nRoots are where the flames touch the ground! Knowing the roots tells us how wide the fire burns."' }, highlightField: 'x' },
+      { text: { zh: '周瑜：什么是"根"？\n根就是让 $y = 0$ 的 $x$ 值。想象抛物线和地面（$x$ 轴）的交点——\n那就是火焰从哪里开始、到哪里结束！', en: 'Zhou Yu: "What are roots?\nRoots are the $x$ values that make $y = 0$. Imagine where the parabola meets the ground ($x$-axis) —\nThat\'s where the flames start and end!"' }, highlightField: 'x' },
+      { text: { zh: '周瑜：列方程\n$-x^2 + 16 = 0$\n移项：$x^2 = 16$', en: 'Zhou Yu: "Set up equation\n$-x^2 + 16 = 0$\nRearrange: $x^2 = 16$"' }, highlightField: 'x' },
+      { text: { zh: '周瑜：开平方\n$x = \\pm \\sqrt{16} = \\pm 4$\n两个根：$x = 4$ 和 $x = -4$', en: 'Zhou Yu: "Take square root\n$x = \\pm \\sqrt{16} = \\pm 4$\nTwo roots: $x = 4$ and $x = -4$"' }, highlightField: 'x' },
+      { text: { zh: '周瑜：答案\n宽度 = $4 - (-4) = 8$！\n火借风势，风助火威——八丈火海，曹营尽焚！', en: 'Zhou Yu: "Answer\nWidth = $4 - (-4) = 8$!\nFire relies on wind, wind fuels fire — eight units of inferno, the camp burns!"' }, highlightField: 'x' },
+      { text: { zh: '周瑜：验算\n把 $x=4$ 代回：$y = -(4)^2 + 16 = -16 + 16 = 0$ ✓\n把 $x=-4$ 代回：$y = -(-4)^2 + 16 = -16 + 16 = 0$ ✓ 两个根都正确！', en: 'Zhou Yu: "Verify\nSubstitute $x=4$: $y = -(4)^2 + 16 = -16 + 16 = 0$ ✓\nSubstitute $x=-4$: $y = -(-4)^2 + 16 = -16 + 16 = 0$ ✓ Both roots correct!"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '求根公式：$x = \\pm \\sqrt{-c/a}$。', en: 'Quadratic roots: $x = \\pm \\sqrt{-c/a}$.' }, formula: '$x = \\pm 4$', tips: [{ zh: '周瑜提示：火借风势，风助火威。', en: 'Zhou Yu Tip: Fire relies on the wind, and wind aids the fire.' }] },
     storyConsequence: { correct: { zh: '火烧赤壁——根找到了！做得漂亮！', en: 'Burning Red Cliffs — Well done!' }, wrong: { zh: '方程的根没找对…再试一次！', en: 'Not quite... Try again!' } }
@@ -3122,18 +3110,12 @@ export const MISSIONS: Mission[] = [
     data: { a: -1, b: 0, c: 100, generatorType: 'ROOTS_RANDOM' }, difficulty: 'Hard', reward: 480,
     kpId: 'kp-2.10-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '曹仁："石块轨迹 $y = -x^2 + 100$，求落地位置（$y=0$, $x>0$）。"', en: 'Cao Ren: "Stone trajectory $y = -x^2 + 100$, find landing position ($y=0$, $x>0$)."' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '曹仁："$-x^2 + 100 = 0 \\Rightarrow x^2 = 100$"', en: 'Cao Ren: "$-x^2 + 100 = 0 \\Rightarrow x^2 = 100$"' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '曹仁："$x = 10$！射程之内，皆为魏土！"', en: 'Cao Ren: "$x = 10$! Everything within range belongs to Wei!"' },
-        highlightField: 'x'
-      }
+      { text: { zh: '曹仁：为什么要算投石射程？\n投石机架好了，但石块能飞多远？射程不够打不到敌人，射程太远浪费弹药——\n求出落地点，才能精准打击！', en: 'Cao Ren: "Why calculate catapult range?\nThe catapult is ready, but how far can the stone fly? Too short and we miss; too far and we waste ammo —\nFind the landing point for precise strikes!"' }, highlightField: 'x' },
+      { text: { zh: '曹仁：落地点就是方程的根\n石块落地时高度为零，所以令 $y = 0$：\n$-x^2 + 100 = 0$\n$x > 0$（石块往前飞，不往后飞！）', en: 'Cao Ren: "Landing point = root of the equation\nWhen the stone lands, height is zero, so set $y = 0$:\n$-x^2 + 100 = 0$\n$x > 0$ (stones fly forward, not backward!)"' }, highlightField: 'x' },
+      { text: { zh: '曹仁：移项\n$x^2 = 100$', en: 'Cao Ren: "Rearrange\n$x^2 = 100$"' }, highlightField: 'x' },
+      { text: { zh: '曹仁：开平方\n$x = \\pm \\sqrt{100} = \\pm 10$\n取正值：$x = 10$', en: 'Cao Ren: "Take square root\n$x = \\pm \\sqrt{100} = \\pm 10$\nTake positive: $x = 10$"' }, highlightField: 'x' },
+      { text: { zh: '曹仁：答案\n石块在 $x = 10$ 处落地。射程十丈！\n射程之内，皆为魏土！', en: 'Cao Ren: "Answer\nStone lands at $x = 10$. Range: ten units!\nEverything within range belongs to Wei!"' }, highlightField: 'x' },
+      { text: { zh: '曹仁：验算\n代回原式：$y = -(10)^2 + 100 = -100 + 100 = 0$ ✓\n高度确实为零，石块确实在此落地！', en: 'Cao Ren: "Verify\nSubstitute back: $y = -(10)^2 + 100 = -100 + 100 = 0$ ✓\nHeight is indeed zero — stone lands right here!"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '二次方程的根即为函数与x轴的交点。', en: 'Roots of a quadratic are where the function meets the x-axis.' }, formula: '$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$', tips: [{ zh: '曹仁提示：射程之内，皆为魏土！', en: 'Cao Ren Tip: Everything within range belongs to Wei!' }] },
     storyConsequence: { correct: { zh: '投石射程——根找到了！做得漂亮！', en: 'Catapult Range — Well done!' }, wrong: { zh: '方程的根没找对…再试一次！', en: 'Not quite... Try again!' } }
@@ -3150,18 +3132,12 @@ export const MISSIONS: Mission[] = [
     data: { x: 5000, y: 5000, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Easy', reward: 320,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '鲁肃："赤壁之战在即，孙刘联盟合围曹操！$x + y = 10000$，$2x - y = 5000$。用加减消元法。"', en: 'Lu Su: "The Battle of Red Cliffs is imminent! Sun-Liu alliance encircles Cao! $x + y = 10000$, $2x - y = 5000$. Use elimination."' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '鲁肃："两式相加：$(x+y)+(2x-y) = 15000 \\Rightarrow 3x = 15000$"', en: 'Lu Su: "Add both: $(x+y)+(2x-y) = 15000 \\Rightarrow 3x = 15000$"' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '鲁肃："$x = 5000$，代入得 $y = 5000$。联军同心，其利断金！赤壁必胜！"', en: 'Lu Su: "$x = 5000$, substitute to get $y = 5000$. United coalition cuts through gold! Victory at Red Cliffs!"' },
-        highlightField: 'y'
-      }
+      { text: { zh: '鲁肃：为什么要用联立方程？\n赤壁之战，孙刘两军联合作战。但各出多少兵？一个条件不够——\n总兵力和兵力差是两个条件，两个未知数需要两个方程才能解！', en: 'Lu Su: "Why use simultaneous equations?\nAt Red Cliffs, Sun and Liu fight together. But how many troops from each? One condition isn\'t enough —\nTotal and difference are two conditions. Two unknowns need two equations to solve!"' }, highlightField: 'x' },
+      { text: { zh: '鲁肃：消元法的核心思想\n两个方程两个未知数——如果能消掉一个，就变成一元方程！\n$x + y = 10000$ ①\n$2x - y = 5000$ ②\n注意：① 有 $+y$，② 有 $-y$，相加正好消掉 $y$！', en: 'Lu Su: "The core idea of elimination\nTwo equations, two unknowns — eliminate one and it becomes a simple equation!\n$x + y = 10000$ ①\n$2x - y = 5000$ ②\nNotice: ① has $+y$, ② has $-y$, adding cancels $y$!"' }, highlightField: 'x' },
+      { text: { zh: '鲁肃：① + ② 消元\n$(x + y) + (2x - y) = 10000 + 5000$\n$3x = 15000$', en: 'Lu Su: "① + ② eliminate\n$(x + y) + (2x - y) = 10000 + 5000$\n$3x = 15000$"' }, highlightField: 'x' },
+      { text: { zh: '鲁肃：求解\n$x = 15000 \\div 3 = 5000$\n代入 ①：$5000 + y = 10000$，所以 $y = 5000$', en: 'Lu Su: "Solve\n$x = 15000 \\div 3 = 5000$\nSubstitute into ①: $5000 + y = 10000$, so $y = 5000$"' }, highlightField: 'y' },
+      { text: { zh: '鲁肃：答案\n孙军 $x = 5000$，刘军 $y = 5000$。\n联军同心，其利断金！赤壁必胜！', en: 'Lu Su: "Answer\nSun army $x = 5000$, Liu army $y = 5000$.\nUnited they cut through gold! Victory at Red Cliffs!"' }, highlightField: 'y' },
+      { text: { zh: '鲁肃：验算\n代入 ①：$5000 + 5000 = 10000$ ✓\n代入 ②：$2(5000) - 5000 = 5000$ ✓ 两个方程都满足！', en: 'Lu Su: "Verify\nCheck ①: $5000 + 5000 = 10000$ ✓\nCheck ②: $2(5000) - 5000 = 5000$ ✓ Both equations satisfied!"' }, highlightField: 'y' },
     ],
     secret: { concept: { zh: '加减消元法。', en: 'Elimination method.' }, formula: '$3x = 15000 \\Rightarrow x = 5000$', tips: [{ zh: '鲁肃提示：联军同心，其利断金。', en: 'Lu Su Tip: When the coalition is of one mind, they can cut through gold.' }] },
     storyConsequence: { correct: { zh: '兵力合围——联立方程求解成功！做得漂亮！', en: 'Troop Encirclement — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3178,18 +3154,12 @@ export const MISSIONS: Mission[] = [
     data: { eq1: [3, 2, 12], eq2: [2, 3, 13], generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Medium', reward: 550,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '鲁肃："$3x+2y=12$，$2x+3y=13$。系数对称，可用加减消元。"', en: 'Lu Su: "$3x+2y=12$, $2x+3y=13$. Symmetric coefficients, use elimination."' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '鲁肃："两式相加：$5x+5y=25 \\Rightarrow x+y=5$；相减：$x-y=-1$"', en: 'Lu Su: "Add: $5x+5y=25 \\Rightarrow x+y=5$; Subtract: $x-y=-1$"' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '鲁肃："$x=2$, $y=3$！互通有无，方能持久。"', en: 'Lu Su: "$x=2$, $y=3$! Mutual exchange is the key to endurance."' },
-        highlightField: 'y'
-      }
+      { text: { zh: '鲁肃：为什么这题也要用联立方程？\n三车粮和两车草的总价知道了，两车粮和三车草的总价也知道了——\n但单价是多少？两笔交易，两个价格，必须同时满足才能算出来！', en: 'Lu Su: "Why simultaneous equations again?\nWe know the total for 3 grain + 2 grass, and the total for 2 grain + 3 grass —\nBut what\'s each unit price? Two deals, two prices, both must be satisfied to solve!"' }, highlightField: 'x' },
+      { text: { zh: '鲁肃：巧妙的对称消元\n$3x + 2y = 12$ ①\n$2x + 3y = 13$ ②\n系数是对称的！① + ② 和 ① - ② 都能简化！', en: 'Lu Su: "Clever symmetric elimination\n$3x + 2y = 12$ ①\n$2x + 3y = 13$ ②\nCoefficients are symmetric! Both ① + ② and ① - ② simplify nicely!"' }, highlightField: 'x' },
+      { text: { zh: '鲁肃：① + ②\n$5x + 5y = 25 \\Rightarrow x + y = 5$ ③\n① - ②\n$x - y = -1$ ④', en: 'Lu Su: "① + ②\n$5x + 5y = 25 \\Rightarrow x + y = 5$ ③\n① - ②\n$x - y = -1$ ④"' }, highlightField: 'x' },
+      { text: { zh: '鲁肃：③ + ④ 再消元\n$(x+y) + (x-y) = 5 + (-1)$\n$2x = 4 \\Rightarrow x = 2$\n代入 ③：$y = 5 - 2 = 3$', en: 'Lu Su: "③ + ④ eliminate again\n$(x+y) + (x-y) = 5 + (-1)$\n$2x = 4 \\Rightarrow x = 2$\nSubstitute into ③: $y = 5 - 2 = 3$"' }, highlightField: 'y' },
+      { text: { zh: '鲁肃：答案\n一车粮 $x = 2$ 金，一车草 $y = 3$ 金。\n互通有无，方能持久！', en: 'Lu Su: "Answer\nOne grain cart $x = 2$ gold, one grass cart $y = 3$ gold.\nMutual exchange is the key to endurance!"' }, highlightField: 'y' },
+      { text: { zh: '鲁肃：验算\n代入 ①：$3(2) + 2(3) = 6 + 6 = 12$ ✓\n代入 ②：$2(2) + 3(3) = 4 + 9 = 13$ ✓ 完美！', en: 'Lu Su: "Verify\nCheck ①: $3(2) + 2(3) = 6 + 6 = 12$ ✓\nCheck ②: $2(2) + 3(3) = 4 + 9 = 13$ ✓ Perfect!"' }, highlightField: 'y' },
     ],
     secret: { concept: { zh: '加减消元法可以快速解系数对称的方程组。', en: 'Addition/subtraction elimination works well for symmetric coefficients.' }, formula: '$\\begin{cases} 3x + 2y = 12 \\\\ 2x + 3y = 13 \\end{cases}$', tips: [{ zh: '鲁肃提示：互通有无，方能持久。', en: 'Lu Su Tip: Mutual exchange is the key to endurance.' }] },
     storyConsequence: { correct: { zh: '粮草互换——联立方程求解成功！做得漂亮！', en: 'Resource Exchange — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3206,18 +3176,12 @@ export const MISSIONS: Mission[] = [
     data: { x: 10, y: 10, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Hard', reward: 400,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '周瑜："$x+y=20$，$10x+5y=150$。用代入消元法。"', en: 'Zhou Yu: "$x+y=20$, $10x+5y=150$. Use substitution method."' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '周瑜："由第一式 $y=20-x$，代入第二式：$10x+5(20-x)=150$"', en: 'Zhou Yu: "From first equation $y=20-x$, substitute: $10x+5(20-x)=150$"' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '周瑜："$x=10$ 大船，$y=10$ 小船。兵贵神速，调度有方！"', en: 'Zhou Yu: "$x=10$ large, $y=10$ small. Speed is precious, deployment must be orderly!"' },
-        highlightField: 'y'
-      }
+      { text: { zh: '周瑜：为什么需要代入法？\n大船载兵多但慢，小船快但载兵少。船数和总兵力——两个条件必须同时满足。\n当一个方程能直接表示 $y$，代入法比消元法更快！', en: 'Zhou Yu: "Why use substitution?\nLarge ships carry more but are slow; small ships are fast but carry fewer. Ship count and total troops — both conditions must be met.\nWhen one equation directly expresses $y$, substitution is faster than elimination!"' }, highlightField: 'x' },
+      { text: { zh: '周瑜：代入法的思路\n$x + y = 20$ ① → 可以直接得到 $y = 20 - x$\n$10x + 5y = 150$ ②\n把 ① 变形后的 $y$ 塞进 ②，就只剩 $x$ 一个未知数了！', en: 'Zhou Yu: "Substitution strategy\n$x + y = 20$ ① → directly gives $y = 20 - x$\n$10x + 5y = 150$ ②\nPlug the transformed $y$ from ① into ②, leaving only $x$!"' }, highlightField: 'x' },
+      { text: { zh: '周瑜：代入\n$10x + 5(20 - x) = 150$\n展开：$10x + 100 - 5x = 150$\n合并：$5x + 100 = 150$', en: 'Zhou Yu: "Substitute\n$10x + 5(20 - x) = 150$\nExpand: $10x + 100 - 5x = 150$\nSimplify: $5x + 100 = 150$"' }, highlightField: 'x' },
+      { text: { zh: '周瑜：求解\n$5x = 50 \\Rightarrow x = 10$\n代回 ①：$y = 20 - 10 = 10$', en: 'Zhou Yu: "Solve\n$5x = 50 \\Rightarrow x = 10$\nBack to ①: $y = 20 - 10 = 10$"' }, highlightField: 'y' },
+      { text: { zh: '周瑜：答案\n大船 $x = 10$ 艘，小船 $y = 10$ 艘。\n兵贵神速，调度有方！', en: 'Zhou Yu: "Answer\nLarge ships $x = 10$, small ships $y = 10$.\nSpeed is precious, deployment must be orderly!"' }, highlightField: 'y' },
+      { text: { zh: '周瑜：验算\n代入 ①：$10 + 10 = 20$ ✓\n代入 ②：$10(10) + 5(10) = 100 + 50 = 150$ ✓ 调度完毕！', en: 'Zhou Yu: "Verify\nCheck ①: $10 + 10 = 20$ ✓\nCheck ②: $10(10) + 5(10) = 100 + 50 = 150$ ✓ Deployment complete!"' }, highlightField: 'y' },
     ],
     secret: { concept: { zh: '代入消元法。', en: 'Substitution method.' }, formula: '$5x = 50 \\Rightarrow x = 10$', tips: [{ zh: '周瑜提示：兵贵神速，调度有方。', en: 'Zhou Yu Tip: Speed is precious in war, deployment must be orderly.' }] },
     storyConsequence: { correct: { zh: '战船调度——联立方程求解成功！做得漂亮！', en: 'Ship Deployment — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3238,18 +3202,12 @@ export const MISSIONS: Mission[] = [
     },
     kpId: 'kp-8.1-01', sectionId: 'statistics',
     tutorialSteps: [
-      {
-        text: { zh: '庞统："52 张卦牌中有 4 张东风。概率 = 目标数 / 总数。"', en: 'Pang Tong: "4 East Wind cards out of 52. Probability = target / total."' },
-        highlightField: 'p'
-      },
-      {
-        text: { zh: '庞统："$P = 4/52 = 1/13$"', en: 'Pang Tong: "$P = 4/52 = 1/13$"' },
-        highlightField: 'p'
-      },
-      {
-        text: { zh: '庞统："概率为 $1/13$！万事俱备，只欠东风。"', en: 'Pang Tong: "Probability is $1/13$! Everything is ready, except the wind."' },
-        highlightField: 'p'
-      }
+      { text: { zh: '庞统：为什么要算概率？\n诸葛亮设坛借东风，但东风真的会来吗？\n概率就是衡量一件事发生的可能性有多大——帮你在不确定中做出最好的决策！', en: 'Pang Tong: "Why calculate probability?\nZhuge Liang prays for the East Wind, but will it really come?\nProbability measures how likely something is — helping you make the best decision amid uncertainty!"' }, highlightField: 'p' },
+      { text: { zh: '庞统：概率的核心公式\n$$P = \\frac{\\text{目标结果数}}{\\text{总结果数}}$$\n就像抽签——52 张牌里有 4 张东风，抽到东风的机会是 4 出 52。', en: 'Pang Tong: "The core formula\n$$P = \\frac{\\text{favorable outcomes}}{\\text{total outcomes}}$$\nLike drawing lots — 4 East Wind cards out of 52, the chance is 4 out of 52."' }, highlightField: 'p' },
+      { text: { zh: '庞统：代入数据\n目标数 = 4（东风牌）\n总数 = 52（全部卦牌）\n$P = \\frac{4}{52}$', en: 'Pang Tong: "Substitute\nFavorable = 4 (East Wind cards)\nTotal = 52 (all cards)\n$P = \\frac{4}{52}$"' }, highlightField: 'p' },
+      { text: { zh: '庞统：化简分数\n$\\frac{4}{52}$，分子分母同除 4：\n$P = \\frac{1}{13}$', en: 'Pang Tong: "Simplify the fraction\n$\\frac{4}{52}$, divide top and bottom by 4:\n$P = \\frac{1}{13}$"' }, highlightField: 'p' },
+      { text: { zh: '庞统：答案\n概率为 $\\frac{1}{13} \\approx 0.077$（约 7.7%）。\n万事俱备，只欠东风——概率虽小，天命所归！', en: 'Pang Tong: "Answer\nProbability is $\\frac{1}{13} \\approx 0.077$ (about 7.7%).\nEverything is ready, only the East Wind is needed — small odds, but destiny favors the bold!"' }, highlightField: 'p' },
+      { text: { zh: '庞统：验算\n概率必须在 0 到 1 之间：$0 < \\frac{1}{13} < 1$ ✓\n反过来：$\\frac{1}{13} \\times 52 = 4$ 张东风牌 ✓ 符合题意！', en: 'Pang Tong: "Verify\nProbability must be between 0 and 1: $0 < \\frac{1}{13} < 1$ ✓\nReverse check: $\\frac{1}{13} \\times 52 = 4$ East Wind cards ✓ Matches the problem!"' }, highlightField: 'p' },
     ],
     secret: { concept: { zh: '概率等于目标事件数除以总事件数。', en: 'Probability is target events divided by total events.' }, formula: '$P(A) = n(A) / n(S)$', tips: [{ zh: '庞统提示：万事俱备，只欠东风。', en: 'Pang Tong Tip: Everything is ready, except the wind.' }] }
   },
@@ -3265,18 +3223,12 @@ export const MISSIONS: Mission[] = [
     data: { p1: 0.6, p2: 0.6, generatorType: 'PROBABILITY_IND_RANDOM' }, difficulty: 'Medium', reward: 350,
     kpId: 'kp-8.3-02', sectionId: 'statistics',
     tutorialSteps: [
-      {
-        text: { zh: '庞统："每艘船着火概率 0.6。两船独立，联合概率用乘法。"', en: 'Pang Tong: "Each ship burns with probability 0.6. They are independent, use multiplication."' },
-        highlightField: 'p'
-      },
-      {
-        text: { zh: '庞统："$P(A \\cap B) = P(A) \\times P(B) = 0.6 \\times 0.6$"', en: 'Pang Tong: "$P(A \\cap B) = P(A) \\times P(B) = 0.6 \\times 0.6$"' },
-        highlightField: 'p'
-      },
-      {
-        text: { zh: '庞统："$P = 0.36$！铁索连舟后，概率直接变为 1。连环计，妙哉！"', en: 'Pang Tong: "$P = 0.36$! With chains linking ships, probability becomes 1. Chain strategy, brilliant!"' },
-        highlightField: 'p'
-      }
+      { text: { zh: '庞统：为什么独立事件要用乘法？\n两艘分开的战船，一艘着火不影响另一艘——这就是"独立"。\n但铁索连舟之后呢？一烧全烧！连环计的妙处就在这里。', en: 'Pang Tong: "Why multiply for independent events?\nTwo separate ships — one catching fire doesn\'t affect the other. That\'s independence.\nBut chain them together? One burns, all burn! That\'s the brilliance of the chain strategy."' }, highlightField: 'p' },
+      { text: { zh: '庞统：独立事件的联合概率\n$$P(A \\text{ 且 } B) = P(A) \\times P(B)$$\n就像掷两次骰子——第一次的结果不影响第二次。\n每次的概率独立相乘！', en: 'Pang Tong: "Joint probability of independent events\n$$P(A \\text{ and } B) = P(A) \\times P(B)$$\nLike rolling dice twice — the first roll doesn\'t affect the second.\nMultiply each probability independently!"' }, highlightField: 'p' },
+      { text: { zh: '庞统：代入数据\n$P(A) = 0.6$（第一艘着火）\n$P(B) = 0.6$（第二艘着火）\n$P(A \\cap B) = 0.6 \\times 0.6$', en: 'Pang Tong: "Substitute\n$P(A) = 0.6$ (first ship burns)\n$P(B) = 0.6$ (second ship burns)\n$P(A \\cap B) = 0.6 \\times 0.6$"' }, highlightField: 'p' },
+      { text: { zh: '庞统：计算\n$0.6 \\times 0.6 = 0.36$', en: 'Pang Tong: "Calculate\n$0.6 \\times 0.6 = 0.36$"' }, highlightField: 'p' },
+      { text: { zh: '庞统：答案\n$P = 0.36$（36%）——分开的船同时着火概率只有三成多。\n但铁索连舟之后？概率直接变 1！连环计，妙哉！', en: 'Pang Tong: "Answer\n$P = 0.36$ (36%) — only about a third chance both separate ships burn.\nBut chain them together? Probability becomes 1! Chain strategy, brilliant!"' }, highlightField: 'p' },
+      { text: { zh: '庞统：验算\n$P = 0.36$，介于 0 和 1 之间 ✓\n$P(A \\cap B) < P(A)$？$0.36 < 0.6$ ✓ 两件事同时发生应该更难！', en: 'Pang Tong: "Verify\n$P = 0.36$, between 0 and 1 ✓\n$P(A \\cap B) < P(A)$? $0.36 < 0.6$ ✓ Two things happening together should be less likely!"' }, highlightField: 'p' },
     ],
     secret: { concept: { zh: '独立事件的联合概率是各自概率的乘积。', en: 'Joint probability of independent events is the product of their probabilities.' }, formula: '$P(A \\text{ and } B) = P(A) \\cdot P(B)$', tips: [{ zh: '庞统提示：铁索连舟，火势一发不可收拾。', en: 'Pang Tong Tip: Chain the boats, and the fire will be unstoppable.' }] },
     storyConsequence: { correct: { zh: '连环计——概率算准！做得漂亮！', en: 'Chain Link Strategy — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3985,7 +3937,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '分析三国军力——各国兵力不同，不能简单平均。要按人口加权！', en: 'Analyzing Three Kingdoms military power — armies differ in size, can\'t just average. Must weight by population!' },
     description: { zh: '计算一组数据的平均数。', en: 'Calculate the mean of a dataset.' },
     data: { values: [80, 60, 45, 90, 70], generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Medium', reward: 450,
-    kpId: 'kp-9.1-03', sectionId: 'statistics',
+    kpId: 'kp-9.1-01', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '司马懿：为什么简单平均不够？\n曹操 80 万大军，刘备 5 万——两人战力"平均"是 42.5 万？当然不对！\n加权平均：人多的国家占更大比重。', en: 'Sima Yi: "Why isn\'t simple average enough?\nCao Cao has 800k troops, Liu Bei 50k — average is 425k? Clearly wrong!\nWeighted mean: larger armies count more."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：公式\n$$\\bar{x} = \\frac{\\sum x}{n}$$\n先求总和，再除以个数。', en: 'Sima Yi: "Formula\n$$\\bar{x} = \\frac{\\sum x}{n}$$\nSum all values, then divide by count."' }, highlightField: 'ans' },
@@ -4007,7 +3959,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '各州郡粮产差异有多大？极差告诉你"最好和最差之间的距离"。', en: 'How much do provinces differ in grain output? The range tells you "the gap between best and worst".' },
     description: { zh: '计算一组数据的极差。', en: 'Calculate the range of a dataset.' },
     data: { values: [34, 67, 23, 89, 45, 12, 78], generatorType: 'STATISTICS_RANGE_RANDOM' }, difficulty: 'Easy', reward: 400,
-    kpId: 'kp-9.1-04', sectionId: 'statistics',
+    kpId: 'kp-9.1-02', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '司马懿：极差 = 数据的"跨度"\n一组数据里，最大值和最小值之间差多少？\n极差越大，数据越分散。极差越小，越集中。', en: 'Sima Yi: "Range = the \'spread\' of data\nIn a dataset, how far apart are max and min?\nBig range = scattered data. Small range = clustered data."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：公式\n$$\\text{极差} = \\text{最大值} - \\text{最小值}$$\n就这么简单——找最大、找最小、相减。', en: 'Sima Yi: "Formula\n$$\\text{Range} = \\text{max} - \\text{min}$$\nThat simple — find max, find min, subtract."' }, highlightField: 'ans' },
@@ -4029,7 +3981,7 @@ export const MISSIONS: Mission[] = [
     story: { zh: '统计各营上报的敌军估计人数——出现最多的那个数字最可信！那就是众数。', en: 'Tally enemy estimates from each camp — the most reported number is most reliable! That\'s the mode.' },
     description: { zh: '找出一组数据的众数。', en: 'Find the mode of a dataset.' },
     data: { values: [5, 3, 7, 3, 8, 3, 6, 7, 3], generatorType: 'STATISTICS_MODE_RANDOM' }, difficulty: 'Easy', reward: 400,
-    kpId: 'kp-9.1-05', sectionId: 'statistics',
+    kpId: 'kp-9.1-01', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '司马懿：众数就是"人气王"\n一组数据里，哪个值出现得最频繁？\n就像投票——得票最多的就是"民意"。', en: 'Sima Yi: "Mode is the \'most popular\'\nWhich value appears most often in the data?\nLike voting — the most votes = \'public opinion\'."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：方法\n1. 数每个值出现几次\n2. 出现最多的就是众数\n（可能有多个众数，也可能没有——如果每个值只出现一次）', en: 'Sima Yi: "Method\n1. Count how often each value appears\n2. The most frequent is the mode\n(There can be multiple modes, or none if every value appears once)"' }, highlightField: 'ans' },
