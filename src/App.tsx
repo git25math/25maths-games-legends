@@ -11,7 +11,7 @@ import { CHARACTERS } from './data/characters';
 import { useAuth } from './hooks/useAuth';
 import { useProfile } from './hooks/useProfile';
 import { useMissions } from './hooks/useMissions';
-import { useMultiplayer, PK_COUNTDOWN_SECS, getFirstFinishTime } from './hooks/useMultiplayer';
+import { useMultiplayer, PK_COUNTDOWN_SECS, getFirstFinishTime, getFirstOpponentFinishTime } from './hooks/useMultiplayer';
 
 import { ScrollOfWisdom } from './components/ScrollOfWisdom';
 import { MathBattle } from './components/MathBattle';
@@ -162,21 +162,25 @@ export default function App() {
   const pkAutoCompleteRef = useRef(false);
   const [pkFirstFinish, setPkFirstFinish] = useState<number | null>(null);
 
-  // Detect when first opponent finishes (latches — only set once per battle)
+  // Detect when first OPPONENT finishes (latches — only set once per battle)
+  // Critical: must exclude current user's own finishedAt to avoid self-triggering countdown
   useEffect(() => {
     if (!activeRoom || activeRoom.type !== 'pk') { setPkFirstFinish(null); return; }
-    const t = getFirstFinishTime(activeRoom);
+    if (gameState !== 'battle') return; // only detect during active battle
+    const t = getFirstOpponentFinishTime(activeRoom, user?.id);
     if (t) setPkFirstFinish(prev => prev ?? t); // latch: don't overwrite
-  }, [activeRoom?.players]);
+  }, [activeRoom?.players, gameState]);
 
   // Run countdown timer based on pkFirstFinish
   useEffect(() => {
     if (gameState !== 'battle' || !pkFirstFinish) {
       setPkCountdown(null);
-      pkAutoCompleteRef.current = false; // reset on any non-battle state
+      pkAutoCompleteRef.current = false;
+      // Also clear the latch when leaving battle to prevent stale data on next PK
+      if (gameState !== 'battle') setPkFirstFinish(null);
       return;
     }
-    // If current user already finished, no countdown
+    // If current user already finished, no countdown needed
     if (user && activeRoom?.players[user.id]?.finishedAt) {
       setPkCountdown(null);
       return;

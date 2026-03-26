@@ -16,6 +16,17 @@ export function getFirstFinishTime(room: Room | null): number | null {
   return times.length > 0 ? Math.min(...times) : null;
 }
 
+/** Get the earliest finishedAt among OTHER players (excludes currentUserId).
+ *  Returns null if no opponent has finished yet. */
+export function getFirstOpponentFinishTime(room: Room | null, currentUserId: string | undefined): number | null {
+  if (!room || !currentUserId) return null;
+  const times = Object.entries(room.players)
+    .filter(([id]) => id !== currentUserId)
+    .map(([, p]) => p.finishedAt)
+    .filter((t): t is number => !!t && t > 0);
+  return times.length > 0 ? Math.min(...times) : null;
+}
+
 function parseRoom(d: any): Room {
   return {
     ...d,
