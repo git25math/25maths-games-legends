@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle } from 'lucide-react';
+import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle, ClipboardList } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
@@ -25,6 +25,7 @@ import type { KPEquipment, EquipmentState } from '../types';
 import { getExpeditionsForGrade, type Expedition } from '../data/expeditions';
 import { getNextMilestone } from '../data/streakMilestones';
 import { getWeakMissions, getMistakes, rankByWeakness } from '../utils/errorMemory';
+import { AssignmentBanner, useAssignedMissionIds } from '../components/AssignmentBanner';
 import type { CharacterProgression } from '../types';
 
 const CHAPTER_IMAGES = [
@@ -229,6 +230,9 @@ export const MapScreen = ({
   const currentUnit = unitDataList[activeUnitIdx];
   const upcomingUnits = unitDataList.slice(activeUnitIdx + 1);
 
+  // ── Assigned mission IDs (from teacher assignments) ──
+  const assignedMissionIds = useAssignedMissionIds(profile.user_id);
+
   // ── Equipment decay map (for repair badges on cards) ──
   const equipmentDecayMap = (() => {
     const raw = (profile.completed_missions as any)?._equipment as Record<string, KPEquipment> | undefined;
@@ -377,8 +381,14 @@ export const MapScreen = ({
                   const hotLabel = hotTopicInfo ? (lang === 'en' ? hotTopicInfo.label.en : lang === 'zh_TW' ? hotTopicInfo.label.zh_TW : hotTopicInfo.label.zh) : '';
                   const isWeak = weakMissionSet.has(mission.id);
                   const kpProg = mission.kpId ? kpProgress.get(mission.kpId) : undefined;
-                  return (pb || isHot || isWeak || kpProg) ? (
+                  const isAssigned = assignedMissionIds.has(mission.id);
+                  return (pb || isHot || isWeak || kpProg || isAssigned) ? (
                     <div className="flex items-center gap-1.5 mb-4 flex-wrap">
+                      {isAssigned && !isCompleted && (
+                        <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-black rounded-full border border-purple-200 flex items-center gap-0.5">
+                          <ClipboardList size={10} /> {lang === 'en' ? 'Assigned' : '老师布置'}
+                        </span>
+                      )}
                       {kpProg?.mastered && (
                         <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full border border-emerald-200 flex items-center gap-0.5">
                           <CheckCircle2 size={10} /> {lang === 'en' ? 'Mastered' : '已掌握'}
@@ -653,6 +663,14 @@ export const MapScreen = ({
         completedMissions={profile.completed_missions as Record<string, unknown>}
         onSmartStart={(m) => { playTap(); onPracticeStart(m); }}
         {...smartRecommendation}
+      />
+
+      {/* ═══════════════════ Teacher Assignments (v8.3) ═══════════════════ */}
+      <AssignmentBanner
+        lang={lang}
+        userId={profile.user_id}
+        completedMissions={profile.completed_missions}
+        onMissionStart={onPracticeStart}
       />
 
       {/* ═══════════════════ Mission Map ═══════════════════ */}

@@ -18,6 +18,8 @@ import { StudentDetailCard } from '../components/dashboard/StudentDetailCard';
 import { ClassOverview } from '../components/dashboard/ClassOverview';
 import { KPHeatmap } from '../components/dashboard/KPHeatmap';
 import { WeeklyTrend } from '../components/dashboard/WeeklyTrend';
+import { AssignmentPanel } from '../components/dashboard/AssignmentPanel';
+import { ExamHubBridge } from '../components/dashboard/ExamHubBridge';
 import type { StudentRow, UnitEntry } from '../components/dashboard/types';
 
 type Props = {
@@ -422,6 +424,12 @@ export function DashboardScreen({ lang, onClose }: Props) {
 
       {/* ═══ Weekly Trend (v8.2) ═══ */}
       <WeeklyTrend lang={lang} grade={grade} filterTag={filterTag} />
+
+      {/* ═══ Assignments (v8.3) ═══ */}
+      <AssignmentPanel lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} />
+
+      {/* ═══ ExamHub Cross-Platform (v8.3) ═══ */}
+      <ExamHubBridge lang={lang} students={students} />
 
       {/* ═══ KP Heatmap (v8.1) ═══ */}
       <KPHeatmap lang={lang} grade={grade} filterTag={filterTag} students={students} onStudentClick={(uid) => {
