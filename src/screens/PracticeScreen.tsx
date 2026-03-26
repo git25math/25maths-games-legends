@@ -396,9 +396,19 @@ export const PracticeScreen = ({
                 })}
               {/* Phase progress counter (amber/red/battle) */}
               {currentPhase !== 'green' && PHASE_REQUIRED[currentPhase] > 0 && (
-                <span className="text-[10px] text-amber-400 font-bold ml-1">
-                  {phaseCorrectCount}/{PHASE_REQUIRED[currentPhase]}
-                </span>
+                <div className="flex items-center gap-1.5 ml-2">
+                  <div className="h-1.5 w-16 bg-white/10 rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full bg-amber-400 rounded-full"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(phaseCorrectCount / PHASE_REQUIRED[currentPhase]) * 100}%` }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </div>
+                  <span className="text-xs text-amber-300 font-black tabular-nums">
+                    {phaseCorrectCount}/{PHASE_REQUIRED[currentPhase]}
+                  </span>
+                </div>
               )}
               </div>
               )}

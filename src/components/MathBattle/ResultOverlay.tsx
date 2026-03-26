@@ -175,6 +175,19 @@ export function ResultOverlay({
               )}
             </AnimatePresence>
 
+            {/* Skip button: appears after badge drop (phase 2-4) before return button */}
+            {victoryPhase >= 2 && victoryPhase < 5 && (
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.6 }}
+                whileHover={{ opacity: 1 }}
+                onClick={onAchievementClose}
+                className="absolute bottom-8 px-6 py-2.5 bg-white/10 text-white/60 text-sm font-bold rounded-xl hover:bg-white/20 transition-colors z-30 backdrop-blur-sm"
+              >
+                {lang === 'en' ? 'Skip →' : '跳过 →'}
+              </motion.button>
+            )}
+
             {/* Phase E: Return Button */}
             {victoryPhase >= 5 && (
               <motion.button

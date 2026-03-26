@@ -134,9 +134,11 @@ export const MapScreen = ({
 
   // Class rank (runs once on load, not on every score change)
   const [classRankInfo, setClassRankInfo] = useState<{ rank: number; total: number } | null>(null);
+  const [classRankLoading, setClassRankLoading] = useState(true);
   useEffect(() => {
     const tags = profile.class_tags;
-    if (!tags?.length || !profile.grade) return;
+    if (!tags?.length || !profile.grade) { setClassRankLoading(false); return; }
+    setClassRankLoading(true);
     supabase
       .from('gl_user_progress')
       .select('user_id, total_score')
@@ -145,10 +147,11 @@ export const MapScreen = ({
       .order('total_score', { ascending: false })
       .limit(100)
       .then(({ data }) => {
-        if (!data) return;
+        if (!data) { setClassRankLoading(false); return; }
         const rank = data.findIndex(d => d.user_id === profile.user_id) + 1;
         setClassRankInfo(rank > 0 ? { rank, total: data.length } : null);
-      }, () => {}); // silently ignore errors
+        setClassRankLoading(false);
+      }, () => { setClassRankLoading(false); });
   }, [profile.user_id]);
 
   // KP progress from shared bridge table (for badges on mission cards)
@@ -506,7 +509,9 @@ export const MapScreen = ({
                 </span>
               )}
             </div>
-            {classRankInfo && (
+            {classRankLoading ? (
+              <div className="h-3 w-36 bg-white/10 rounded-full animate-pulse mt-1" />
+            ) : classRankInfo && (
               <p className="text-white/30 text-[10px] font-bold mt-1">
                 {lang === 'en'
                   ? `Class rank #${classRankInfo.rank} of ${classRankInfo.total} · Top ${Math.round((classRankInfo.rank / classRankInfo.total) * 100)}%`
