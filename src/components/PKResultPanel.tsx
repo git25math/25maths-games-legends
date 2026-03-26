@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Trophy, X, RefreshCw } from 'lucide-react';
-import type { Language, Room, RoomPlayer, Mission } from '../types';
+import type { Language, Room, RoomPlayer } from '../types';
 import { lt } from '../i18n/resolveText';
 import { CHARACTERS } from '../data/characters';
 import { MISSIONS } from '../data/missions';
@@ -225,6 +225,13 @@ export const PKResultPanel = ({
               transition={{ delay: 0.5 }}
               className="space-y-2"
             >
+              {/* Non-host hint */}
+              {!isHost && onNextRound && (
+                <p className="text-white/30 text-[11px] mb-1">
+                  {lang === 'en' ? 'Host can pick next topic — or leave anytime' : '房主可以选择下一题——你也可以随时离开'}
+                </p>
+              )}
+
               {/* Host: next round button */}
               {isHost && onNextRound && !showPicker && (
                 <button

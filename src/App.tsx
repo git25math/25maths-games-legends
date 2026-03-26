@@ -1143,7 +1143,7 @@ export default function App() {
                 }
                 setShowPKResult(false);
                 pkAutoCompleteRef.current = false;
-                leaveRoom();
+                await leaveRoomClean();
               }}
             />
           )}
