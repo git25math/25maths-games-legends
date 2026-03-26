@@ -114,8 +114,8 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     en: [{ id: 'ans', label: 'Prime factor count', placeholder: 'How many prime factors?' }],
   },
   PRIME: {
-    zh: [{ id: 'ans', label: '是质数吗？', placeholder: '1=是, 0=否' }],
-    en: [{ id: 'ans', label: 'Is it prime?', placeholder: '1=yes, 0=no' }],
+    zh: [{ id: 'ans', label: '是质数吗？', placeholder: '1=是, 2=否' }],
+    en: [{ id: 'ans', label: 'Is it prime?', placeholder: '1=yes, 2=no' }],
   },
   INTEGER_ADD: {
     zh: [{ id: 'ans', label: '结果', placeholder: '= ?' }],
