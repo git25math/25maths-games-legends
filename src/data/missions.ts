@@ -18,7 +18,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '刘备：因数成对出现——$1 \\times 24 = 24$，$2 \\times 12 = 24$，$3 \\times 8 = 24$，$4 \\times 6 = 24$', en: 'Liu Bei: "Factors come in pairs: $1 \\times 24$, $2 \\times 12$, $3 \\times 8$, $4 \\times 6$"' }, highlightField: 'ans' },
       { text: { zh: '刘备：所以 24 的全部因数是 $1, 2, 3, 4, 6, 8, 12, 24$——共 8 个', en: 'Liu Bei: "All factors of 24: $1, 2, 3, 4, 6, 8, 12, 24$ — total 8"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '因数是能整除一个数的数。因数成对出现，一对乘起来等于原数。', en: 'Factors divide a number evenly. They come in pairs whose product is the original number.' }, formula: { zh: '$n = a \\times b \\Rightarrow a, b \\text{ 都是 } n \\text{ 的因数}$', en: '$n = a \\times b \\Rightarrow a, b \\text{ are factors of } n$' }, tips: [{ zh: '刘备提示：编队方式越多，战术越灵活！', en: 'Liu Bei Tip: More ways to divide = more tactical flexibility!' }] }
+    secret: { concept: { zh: '因数是能整除一个数的数。因数成对出现，一对乘起来等于原数。', en: 'Factors divide a number evenly. They come in pairs whose product is the original number.' }, formula: { zh: '$n = a \\times b \\Rightarrow a, b \\text{ 都是 } n \\text{ 的因数}$', en: '$n = a \\times b \\Rightarrow a, b \\text{ are factors of } n$' }, tips: [{ zh: '刘备提示：编队方式越多，战术越灵活！', en: 'Liu Bei Tip: More ways to divide = more tactical flexibility!' }] },
+    storyConsequence: { correct: { zh: '点兵编队——因数全部找齐！做得漂亮！', en: 'Troop Formation Count — Well done!' }, wrong: { zh: '因数漏了几个…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 699, grade: 7, unitId: 0, order: -1,
@@ -37,7 +38,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：注意——1 不是质数，2 是唯一的偶数质数', en: 'Zhuge Liang: "Note: 1 is NOT prime. 2 is the only even prime"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：前 10 个质数：$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$', en: 'Zhuge Liang: "First 10 primes: $2, 3, 5, 7, 11, 13, 17, 19, 23, 29$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: { zh: '$\\text{质数 = 只被 1 和自己整除}$', en: '$\\text{Prime = only divisible by 1 and itself}$' }, tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorize.' }] }
+    secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: { zh: '$\\text{质数 = 只被 1 和自己整除}$', en: '$\\text{Prime = only divisible by 1 and itself}$' }, tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorize.' }] },
+    storyConsequence: { correct: { zh: '选拔亲卫——质数一个不漏！做得漂亮！', en: 'Selecting Elite Guards — Well done!' }, wrong: { zh: '混进了合数…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 700, grade: 7, unitId: 0, order: 0,
@@ -56,7 +58,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：12÷2=6，记下 2。6÷2=3，记下 2。3 是质数，停！', en: 'Zhuge Liang: "12÷2=6, note 2. 6÷2=3, note 2. 3 is prime, stop!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：$24 = 2 \\times 2 \\times 2 \\times 3 = 2^3 \\times 3$，共 4 个质因数', en: 'Zhuge Liang: "$24 = 2 \\times 2 \\times 2 \\times 3 = 2^3 \\times 3$, 4 prime factors total"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '任何大于 1 的整数都能唯一地分解为质数的乘积。', en: 'Every integer greater than 1 can be uniquely expressed as a product of primes.' }, formula: { zh: '$\\text{因数树：从上往下拆到全是质数}$', en: '$\\text{Factor tree: split top-down until all primes}$' }, tips: [{ zh: '诸葛亮提示：知己知彼，先把自己的兵力拆解清楚。', en: 'Zhuge Liang Tip: Know yourself — first break down your own forces clearly.' }] }
+    secret: { concept: { zh: '任何大于 1 的整数都能唯一地分解为质数的乘积。', en: 'Every integer greater than 1 can be uniquely expressed as a product of primes.' }, formula: { zh: '$\\text{因数树：从上往下拆到全是质数}$', en: '$\\text{Factor tree: split top-down until all primes}$' }, tips: [{ zh: '诸葛亮提示：知己知彼，先把自己的兵力拆解清楚。', en: 'Zhuge Liang Tip: Know yourself — first break down your own forces clearly.' }] },
+    storyConsequence: { correct: { zh: '拆解兵力——因数树完美拆解！做得漂亮！', en: 'Breaking Down Forces — Well done!' }, wrong: { zh: '分解不到底…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 701, grade: 7, unitId: 0, order: 1,
@@ -91,7 +94,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: { zh: '$\\text{HCF = 短除法左边全乘}$', en: '$\\text{HCF = multiply all left-side divisors}$' }, tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] }
+    secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: { zh: '$\\text{HCF = 短除法左边全乘}$', en: '$\\text{HCF = multiply all left-side divisors}$' }, tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] },
+    storyConsequence: { correct: { zh: '整编队伍——最大公因数精准！做得漂亮！', en: 'Organizing Troops — Well done!' }, wrong: { zh: '公因数没找到最大的…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 702, grade: 7, unitId: 0, order: 2,
@@ -126,7 +130,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: { zh: '$\\text{LCM = 左边×底部全乘}$', en: '$\\text{LCM = multiply left side × bottom}$' }, tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] }
+    secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: { zh: '$\\text{LCM = 左边×底部全乘}$', en: '$\\text{LCM = multiply left side × bottom}$' }, tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] },
+    storyConsequence: { correct: { zh: '巡营排班——最小公倍数正确！做得漂亮！', en: 'Patrol Schedule — Well done!' }, wrong: { zh: '公倍数算岔了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 703, grade: 7, unitId: 0, order: 3,
@@ -161,7 +166,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: { zh: '$\\text{HCF} = \\text{最大均分数}$', en: '$\\text{HCF} = \\text{largest equal share}$' }, tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] }
+    secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: { zh: '$\\text{HCF} = \\text{最大均分数}$', en: '$\\text{HCF} = \\text{largest equal share}$' }, tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] },
+    storyConsequence: { correct: { zh: '平分军粮——最大公因数精准！做得漂亮！', en: 'Dividing Grain Equally — Well done!' }, wrong: { zh: '公因数没找到最大的…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 0A: 行军算账·正负数篇 ---
   {
@@ -180,7 +186,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮："加一个负数 = 减去它的绝对值。$50 + (-30) = 50 - 30$"', en: 'Zhuge Liang: "Adding a negative = subtracting its absolute value. $50 + (-30) = 50 - 30$"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮："$50 - 30 = 20$！还剩 20 袋粮草。"', en: 'Zhuge Liang: "$50 - 30 = 20$! 20 bags remaining."' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '加一个负数就是减去它；结果的正负取决于谁的数字更大。', en: 'Adding a negative = subtracting it; the sign depends on which number is larger.' }, formula: '$a + (-b) = a - b$', tips: [{ zh: '诸葛亮提示：知彼知己，粮草先行。', en: 'Zhuge Liang Tip: Know your supplies before you march.' }] }
+    secret: { concept: { zh: '加一个负数就是减去它；结果的正负取决于谁的数字更大。', en: 'Adding a negative = subtracting it; the sign depends on which number is larger.' }, formula: '$a + (-b) = a - b$', tips: [{ zh: '诸葛亮提示：知彼知己，粮草先行。', en: 'Zhuge Liang Tip: Know your supplies before you march.' }] },
+    storyConsequence: { correct: { zh: '粮草盈亏——正负运算无误！做得漂亮！', en: 'Grain Surplus & Loss — Well done!' }, wrong: { zh: '正负号搞混了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 705, grade: 7, unitId: 0, order: 5,
@@ -198,7 +205,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '曹操："两个负数相加，绝对值相加，结果还是负数"', en: 'Cao Cao: "Two negatives added: add absolute values, result stays negative"' }, highlightField: 'ans' },
       { text: { zh: '曹操："$(-20) + (-15) = -35$！共损失 35 人，必须补充兵力。"', en: 'Cao Cao: "$(-20) + (-15) = -35$! 35 soldiers lost, must recruit more."' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '负数加负数，绝对值相加，符号取负。', en: 'Negative plus negative: add absolute values, keep negative sign.' }, formula: '$(-a) + (-b) = -(a+b)$', tips: [{ zh: '曹操提示：胜败乃兵家常事，关键是算清损失。', en: 'Cao Cao Tip: Victory and defeat are normal — the key is counting your losses.' }] }
+    secret: { concept: { zh: '负数加负数，绝对值相加，符号取负。', en: 'Negative plus negative: add absolute values, keep negative sign.' }, formula: '$(-a) + (-b) = -(a+b)$', tips: [{ zh: '曹操提示：胜败乃兵家常事，关键是算清损失。', en: 'Cao Cao Tip: Victory and defeat are normal — the key is counting your losses.' }] },
+    storyConsequence: { correct: { zh: '连续损失——正负运算无误！做得漂亮！', en: 'Consecutive Losses — Well done!' }, wrong: { zh: '正负号搞混了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 706, grade: 7, unitId: 0, order: 6,
@@ -216,7 +224,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '关羽："减去的数比原来大，结果就变成负数了"', en: 'Guan Yu: "Subtracting more than you have gives a negative result"' }, highlightField: 'ans' },
       { text: { zh: '关羽："$40 - 60 = -20$！净减少 20 人。"', en: 'Guan Yu: "$40 - 60 = -20$! Net loss of 20."' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '减去比自己大的数，结果为负。', en: 'Subtracting more than you have gives a negative.' }, formula: '$a - b = -(b - a)$ when $b > a$', tips: [{ zh: '关羽提示：胜败之间，一算便知。', en: 'Guan Yu Tip: Between victory and defeat, the numbers tell all.' }] }
+    secret: { concept: { zh: '减去比自己大的数，结果为负。', en: 'Subtracting more than you have gives a negative.' }, formula: '$a - b = -(b - a)$ when $b > a$', tips: [{ zh: '关羽提示：胜败之间，一算便知。', en: 'Guan Yu Tip: Between victory and defeat, the numbers tell all.' }] },
+    storyConsequence: { correct: { zh: '攻守得失——正负运算无误！做得漂亮！', en: 'Gains and Losses — Well done!' }, wrong: { zh: '正负号搞混了…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 0A 续: 整数乘除 ---
   {
@@ -233,7 +242,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '张飞：正负数乘除——口诀：同号得正，异号得负', en: 'Zhang Fei: "Rule: same signs → positive, different signs → negative"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '同号相乘得正，异号相乘得负。除法规则相同。', en: 'Same signs multiply to positive, different signs to negative. Same rule for division.' }, formula: '$(-a) \\times (-b) = ab,\\quad (-a) \\times b = -(ab)$', tips: [{ zh: '张飞提示：负负得正——敌人的敌人就是朋友！', en: 'Zhang Fei Tip: Neg × Neg = Pos — the enemy of my enemy is my friend!' }] }
+    secret: { concept: { zh: '同号相乘得正，异号相乘得负。除法规则相同。', en: 'Same signs multiply to positive, different signs to negative. Same rule for division.' }, formula: '$(-a) \\times (-b) = ab,\\quad (-a) \\times b = -(ab)$', tips: [{ zh: '张飞提示：负负得正——敌人的敌人就是朋友！', en: 'Zhang Fei Tip: Neg × Neg = Pos — the enemy of my enemy is my friend!' }] },
+    storyConsequence: { correct: { zh: '敌退我进——乘除精准！做得漂亮！', en: 'Enemy Retreats, We Advance — Well done!' }, wrong: { zh: '符号判断有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 0B: 军粮分配·分数篇 ---
   {
@@ -276,7 +286,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '关羽："$\\frac{1}{3} = \\frac{4}{12}$，$\\frac{1}{4} = \\frac{3}{12}$"', en: 'Guan Yu: "$\\frac{1}{3} = \\frac{4}{12}$, $\\frac{1}{4} = \\frac{3}{12}$"' }, highlightField: 'ans' },
       { text: { zh: '关羽："$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"', en: 'Guan Yu: "$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '异分母分数相加：先通分（找 LCD），再加分子，最后约分。', en: 'Adding fractions with different denominators: find LCD, add numerators, then simplify.' }, formula: '$\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd}$', tips: [{ zh: '关羽提示：合兵一处，粮草先算。', en: 'Guan Yu Tip: Before merging troops, count the grain.' }] }
+    secret: { concept: { zh: '异分母分数相加：先通分（找 LCD），再加分子，最后约分。', en: 'Adding fractions with different denominators: find LCD, add numerators, then simplify.' }, formula: '$\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd}$', tips: [{ zh: '关羽提示：合兵一处，粮草先算。', en: 'Guan Yu Tip: Before merging troops, count the grain.' }] },
+    storyConsequence: { correct: { zh: '合并粮草——分数加减完美！做得漂亮！', en: 'Combining Grain — Well done!' }, wrong: { zh: '通分出了问题…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 708, grade: 7, unitId: 0, order: 8,
@@ -295,7 +306,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮："$\\frac{3}{4} = \\frac{9}{12}$，$\\frac{1}{6} = \\frac{2}{12}$"', en: 'Zhuge Liang: "$\\frac{3}{4} = \\frac{9}{12}$, $\\frac{1}{6} = \\frac{2}{12}$"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮："$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"', en: 'Zhuge Liang: "$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '异分母分数相减：通分后减分子，最后约分。', en: 'Subtracting fractions: find LCD, subtract numerators, then simplify.' }, formula: '$\\frac{a}{b} - \\frac{c}{d} = \\frac{ad - bc}{bd}$', tips: [{ zh: '诸葛亮提示：粮草不可不算，算清方能持久。', en: 'Zhuge Liang Tip: Always track your supplies — accurate counts sustain campaigns.' }] }
+    secret: { concept: { zh: '异分母分数相减：通分后减分子，最后约分。', en: 'Subtracting fractions: find LCD, subtract numerators, then simplify.' }, formula: '$\\frac{a}{b} - \\frac{c}{d} = \\frac{ad - bc}{bd}$', tips: [{ zh: '诸葛亮提示：粮草不可不算，算清方能持久。', en: 'Zhuge Liang Tip: Always track your supplies — accurate counts sustain campaigns.' }] },
+    storyConsequence: { correct: { zh: '消耗军粮——分数加减完美！做得漂亮！', en: 'Consuming Grain — Well done!' }, wrong: { zh: '通分出了问题…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 0B 续: 带分数↔假分数互转 ---
   {
@@ -312,7 +324,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：$2\\frac{3}{5}$——2 整箱加零散的 $\\frac{3}{5}$ 箱', en: 'Zhuge Liang: "$2\\frac{3}{5}$ — 2 full crates plus $\\frac{3}{5}$ loose"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '带分数化假分数：整数×分母+分子=新分子，分母不变。', en: 'Mixed to improper: whole × denominator + numerator = new numerator.' }, formula: '$a\\frac{b}{c} = \\frac{ac + b}{c}$', tips: [{ zh: '诸葛亮提示：整箱拆零，方便过秤！', en: 'Zhuge Liang Tip: Unpack crates for easy weighing!' }] }
+    secret: { concept: { zh: '带分数化假分数：整数×分母+分子=新分子，分母不变。', en: 'Mixed to improper: whole × denominator + numerator = new numerator.' }, formula: '$a\\frac{b}{c} = \\frac{ac + b}{c}$', tips: [{ zh: '诸葛亮提示：整箱拆零，方便过秤！', en: 'Zhuge Liang Tip: Unpack crates for easy weighing!' }] },
+    storyConsequence: { correct: { zh: '整箱拆零——转换成功！做得漂亮！', en: 'Unpacking Crates — Well done!' }, wrong: { zh: '整数和分数没对上…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 690, grade: 7, unitId: 0, order: 8.6,
@@ -350,7 +363,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '张飞："分数乘法：分子乘分子，分母乘分母"', en: 'Zhang Fei: "Fraction multiplication: multiply tops, multiply bottoms"' }, highlightField: 'ans' },
       { text: { zh: '张飞："$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$，约分得 $\\frac{2}{5}$"', en: 'Zhang Fei: "$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$, simplify to $\\frac{2}{5}$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '分数乘法：分子×分子，分母×分母，最后约分。', en: 'Fraction multiplication: numerator×numerator, denominator×denominator, then simplify.' }, formula: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{ac}{bd}$', tips: [{ zh: '张飞提示：俺虽粗人，乘法还是会的！', en: 'Zhang Fei Tip: I may be rough, but I can multiply!' }] }
+    secret: { concept: { zh: '分数乘法：分子×分子，分母×分母，最后约分。', en: 'Fraction multiplication: numerator×numerator, denominator×denominator, then simplify.' }, formula: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{ac}{bd}$', tips: [{ zh: '张飞提示：俺虽粗人，乘法还是会的！', en: 'Zhang Fei Tip: I may be rough, but I can multiply!' }] },
+    storyConsequence: { correct: { zh: '粮草翻倍——分数乘除过关！做得漂亮！', en: 'Grain Multiplication — Well done!' }, wrong: { zh: '分数运算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 710, grade: 7, unitId: 0, order: 10,
@@ -370,7 +384,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '关羽："分子乘分子，分母乘分母：$\\frac{2 \\times 5}{3 \\times 3} = \\frac{10}{9}$"', en: 'Guan Yu: "Multiply tops, multiply bottoms: $\\frac{2 \\times 5}{3 \\times 3} = \\frac{10}{9}$"' }, highlightField: 'ans' },
       { text: { zh: '关羽："$\\frac{10}{9}$ 已经是最简分数，所以答案是 $\\frac{10}{9}$"', en: 'Guan Yu: "$\\frac{10}{9}$ is already in simplest form, so the answer is $\\frac{10}{9}$"' }, highlightField: 'ans' }
     ],
-    secret: { concept: { zh: '分数除法：除以一个分数 = 乘以它的倒数。', en: 'Fraction division: dividing by a fraction = multiplying by its reciprocal.' }, formula: '$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c} = \\frac{ad}{bc}$', tips: [{ zh: '关羽提示：翻转乾坤，化除为乘！', en: 'Guan Yu Tip: Flip and multiply — turn division into multiplication!' }] }
+    secret: { concept: { zh: '分数除法：除以一个分数 = 乘以它的倒数。', en: 'Fraction division: dividing by a fraction = multiplying by its reciprocal.' }, formula: '$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c} = \\frac{ad}{bc}$', tips: [{ zh: '关羽提示：翻转乾坤，化除为乘！', en: 'Guan Yu Tip: Flip and multiply — turn division into multiplication!' }] },
+    storyConsequence: { correct: { zh: '分粮入户——分数乘除过关！做得漂亮！', en: 'Grain Division — Well done!' }, wrong: { zh: '分数运算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 0B 续: 分数↔小数↔百分比 桥梁 ---
   {
@@ -387,7 +402,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：$\\frac{1}{4} = 0.25 = 25\\%$——三种写法，同一个数', en: 'Zhuge Liang: "$\\frac{1}{4} = 0.25 = 25\\%$ — three forms, same value"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '分数、小数、百分比是同一个数的三种写法。关键转换：分子÷分母=小数，小数×100=百分比。', en: 'Fractions, decimals, and percentages are three representations of the same number.' }, formula: '$\\frac{a}{b} = a \\div b = \\text{decimal} \\times 100\\%$', tips: [{ zh: '诸葛亮提示：情报统一格式，才能准确决策！', en: 'Zhuge Liang Tip: Unified format means accurate decisions!' }] }
+    secret: { concept: { zh: '分数、小数、百分比是同一个数的三种写法。关键转换：分子÷分母=小数，小数×100=百分比。', en: 'Fractions, decimals, and percentages are three representations of the same number.' }, formula: '$\\frac{a}{b} = a \\div b = \\text{decimal} \\times 100\\%$', tips: [{ zh: '诸葛亮提示：情报统一格式，才能准确决策！', en: 'Zhuge Liang Tip: Unified format means accurate decisions!' }] },
+    storyConsequence: { correct: { zh: '情报三译——转换一气呵成！做得漂亮！', en: 'Intelligence in Three Formats — Well done!' }, wrong: { zh: '转换出了差错…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 0C: 排兵布阵·幂与根篇 (Powers & Roots) ---
   {
@@ -406,7 +422,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '刘备：$7^2 = 7 \\times 7 = 49$，7 行 7 列共 49 人', en: 'Liu Bei: "$7^2 = 7 \\times 7 = 49$, 7 rows × 7 columns = 49 soldiers"' }, highlightField: 'ans' },
       { text: { zh: '刘备：记住前 10 个平方数：$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$', en: 'Liu Bei: "Remember the first 10 squares: $1, 4, 9, 16, 25, 36, 49, 64, 81, 100$"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '平方就是一个数乘以自己，写作 $n^2$。来源于正方形面积公式。', en: 'Squaring means multiplying a number by itself, written $n^2$. Named after the area of a square.' }, formula: '$n^2 = n \\times n$', tips: [{ zh: '刘备提示：方阵排兵，行列相同，总数就是边长的平方！', en: 'Liu Bei Tip: In a square formation, rows equal columns — total is the side length squared!' }] }
+    secret: { concept: { zh: '平方就是一个数乘以自己，写作 $n^2$。来源于正方形面积公式。', en: 'Squaring means multiplying a number by itself, written $n^2$. Named after the area of a square.' }, formula: '$n^2 = n \\times n$', tips: [{ zh: '刘备提示：方阵排兵，行列相同，总数就是边长的平方！', en: 'Liu Bei Tip: In a square formation, rows equal columns — total is the side length squared!' }] },
+    storyConsequence: { correct: { zh: '方阵操练——幂次全对！做得漂亮！', en: 'Square Formation Drill — Well done!' }, wrong: { zh: '幂次算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 714, grade: 7, unitId: 0, order: 12,
@@ -424,7 +441,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '张飞：先算 $3 \\times 3 = 9$，再乘 3：$9 \\times 3 = 27$', en: 'Zhang Fei: "First $3 \\times 3 = 9$, then × 3: $9 \\times 3 = 27$"' }, highlightField: 'ans' },
       { text: { zh: '张飞：前 5 个立方数：$1, 8, 27, 64, 125$', en: 'Zhang Fei: "First 5 cubes: $1, 8, 27, 64, 125$"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '立方就是一个数乘三次，写作 $n^3$。来源于正方体体积公式。', en: 'Cubing means multiplying a number by itself three times, written $n^3$. Named after the volume of a cube.' }, formula: '$n^3 = n \\times n \\times n$', tips: [{ zh: '张飞提示：码粮箱，三个方向都一样长，总数就是边长的立方！', en: 'Zhang Fei Tip: Stacking crates — same length in all three directions, total is the side cubed!' }] }
+    secret: { concept: { zh: '立方就是一个数乘三次，写作 $n^3$。来源于正方体体积公式。', en: 'Cubing means multiplying a number by itself three times, written $n^3$. Named after the volume of a cube.' }, formula: '$n^3 = n \\times n \\times n$', tips: [{ zh: '张飞提示：码粮箱，三个方向都一样长，总数就是边长的立方！', en: 'Zhang Fei Tip: Stacking crates — same length in all three directions, total is the side cubed!' }] },
+    storyConsequence: { correct: { zh: '粮箱码垛——幂次全对！做得漂亮！', en: 'Stacking Supply Crates — Well done!' }, wrong: { zh: '幂次算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 715, grade: 7, unitId: 0, order: 13,
@@ -442,7 +460,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '关羽：看到 49 人方阵 → 每行 $\\sqrt{49} = 7$ 人', en: 'Guan Yu: "49-soldier square formation → $\\sqrt{49} = 7$ per row"' }, highlightField: 'ans' },
       { text: { zh: '关羽：常见平方根速查表', en: 'Guan Yu: "Common square roots reference"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '平方根 $\\sqrt{n}$ 就是"谁的平方等于 n"。它是平方运算的逆运算。', en: 'Square root $\\sqrt{n}$ means "whose square equals n". It\'s the inverse of squaring.' }, formula: '$\\sqrt{n^2} = n$', tips: [{ zh: '关羽提示：知道方阵总人数，开方就能算出每行几人！', en: 'Guan Yu Tip: Know the total in a square formation — take the square root to find soldiers per row!' }] }
+    secret: { concept: { zh: '平方根 $\\sqrt{n}$ 就是"谁的平方等于 n"。它是平方运算的逆运算。', en: 'Square root $\\sqrt{n}$ means "whose square equals n". It\'s the inverse of squaring.' }, formula: '$\\sqrt{n^2} = n$', tips: [{ zh: '关羽提示：知道方阵总人数，开方就能算出每行几人！', en: 'Guan Yu Tip: Know the total in a square formation — take the square root to find soldiers per row!' }] },
+    storyConsequence: { correct: { zh: '侦察敌阵——开方准确！做得漂亮！', en: 'Scouting Enemy Formation — Well done!' }, wrong: { zh: '开方结果不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 716, grade: 7, unitId: 0, order: 14,
@@ -478,7 +497,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：$2 + 3 \\times 4 = ?$——你觉得答案是 20 还是 14？', en: 'Zhuge Liang: "$2 + 3 \\times 4 = ?$ — do you think it\'s 20 or 14?"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '运算顺序：括号最先，然后幂，再乘除，最后加减。不是从左到右！', en: 'Order of operations: Brackets first, then powers, then multiply/divide, finally add/subtract. NOT left to right!' }, formula: '$\\text{B → O → DM → AS}$', tips: [{ zh: '诸葛亮提示：军令如山，顺序错了全盘皆输！', en: 'Zhuge Liang Tip: Like military orders — wrong sequence means total defeat!' }] }
+    secret: { concept: { zh: '运算顺序：括号最先，然后幂，再乘除，最后加减。不是从左到右！', en: 'Order of operations: Brackets first, then powers, then multiply/divide, finally add/subtract. NOT left to right!' }, formula: '$\\text{B → O → DM → AS}$', tips: [{ zh: '诸葛亮提示：军令如山，顺序错了全盘皆输！', en: 'Zhuge Liang Tip: Like military orders — wrong sequence means total defeat!' }] },
+    storyConsequence: { correct: { zh: '军令如山——运算顺序完全正确！做得漂亮！', en: 'Orders of Command — Well done!' }, wrong: { zh: '运算顺序搞错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 691, grade: 7, unitId: 1, order: 0.5,
@@ -494,7 +514,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：有括号？括号最大！先算括号里面', en: 'Zhuge Liang: "Brackets? They\'re the boss! Calculate inside first"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '括号改变运算顺序——括号内的永远最先算。有括号先算括号，没括号先算乘除。', en: 'Brackets change the order — inside brackets is always first. With brackets: brackets first. Without: multiply/divide first.' }, formula: '$\\text{B → O → DM → AS}$', tips: [{ zh: '诸葛亮提示：括号就像军令状——盖了印的优先执行！', en: 'Zhuge Liang Tip: Brackets are like sealed orders — they take priority!' }] }
+    secret: { concept: { zh: '括号改变运算顺序——括号内的永远最先算。有括号先算括号，没括号先算乘除。', en: 'Brackets change the order — inside brackets is always first. With brackets: brackets first. Without: multiply/divide first.' }, formula: '$\\text{B → O → DM → AS}$', tips: [{ zh: '诸葛亮提示：括号就像军令状——盖了印的优先执行！', en: 'Zhuge Liang Tip: Brackets are like sealed orders — they take priority!' }] },
+    storyConsequence: { correct: { zh: '括号将令——运算顺序完全正确！做得漂亮！', en: 'Brackets Override — Well done!' }, wrong: { zh: '运算顺序搞错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7: The Peach Garden Oath (Foundations) ---
   {
@@ -534,7 +555,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '等式两边同时加减同一个数，等式依然成立。', en: 'Adding or subtracting the same number from both sides keeps the equation balanced.' }, formula: '$x + a = b \\Rightarrow x = b - a$', tips: [{ zh: '刘备提示：兄弟同心，其利断金。', en: 'Liu Tip: Unity is strength.' }] }
+    secret: { concept: { zh: '等式两边同时加减同一个数，等式依然成立。', en: 'Adding or subtracting the same number from both sides keeps the equation balanced.' }, formula: '$x + a = b \\Rightarrow x = b - a$', tips: [{ zh: '刘备提示：兄弟同心，其利断金。', en: 'Liu Tip: Unity is strength.' }] },
+    storyConsequence: { correct: { zh: '桃园结义——方程完美求解！做得漂亮！', en: 'Oath in the Garden — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 712, grade: 7, unitId: 1, order: 2,
@@ -573,7 +595,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '等式两边同时乘除同一个非零数，等式依然成立。', en: 'Multiplying or dividing both sides by the same non-zero number keeps the equation balanced.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '关羽提示：买东西一定要算清楚！', en: 'Guan Yu Tip: Always count correctly when shopping!' }] }
+    secret: { concept: { zh: '等式两边同时乘除同一个非零数，等式依然成立。', en: 'Multiplying or dividing both sides by the same non-zero number keeps the equation balanced.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '关羽提示：买东西一定要算清楚！', en: 'Guan Yu Tip: Always count correctly when shopping!' }] },
+    storyConsequence: { correct: { zh: '招兵买马——方程完美求解！做得漂亮！', en: 'Recruiting Soldiers — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 1 续: 两步方程 ---
   {
@@ -591,7 +614,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：$3x + 4 = 19$——$x$ 被两层包裹，先拆外层', en: 'Zhuge Liang: "$3x + 4 = 19$ — $x$ is double-wrapped, remove outer layer first"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：内层是 $\\times 3$，用反操作 $\\div 3$ 消除', en: 'Zhuge Liang: "Inner layer: $\\times 3$, reverse: $\\div 3$"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '两步方程：先去掉加减（外层），再去掉乘除（内层）。顺序不能反！', en: 'Two-step equations: remove add/sub (outer) first, then mul/div (inner). Order matters!' }, formula: '$ax + b = c \\Rightarrow x = \\frac{c - b}{a}$', tips: [{ zh: '诸葛亮提示：攻城先破外门，解方程先去外层！', en: 'Zhuge Liang Tip: Siege the outer gate first, solve outer operations first!' }] }
+    secret: { concept: { zh: '两步方程：先去掉加减（外层），再去掉乘除（内层）。顺序不能反！', en: 'Two-step equations: remove add/sub (outer) first, then mul/div (inner). Order matters!' }, formula: '$ax + b = c \\Rightarrow x = \\frac{c - b}{a}$', tips: [{ zh: '诸葛亮提示：攻城先破外门，解方程先去外层！', en: 'Zhuge Liang Tip: Siege the outer gate first, solve outer operations first!' }] },
+    storyConsequence: { correct: { zh: '攻城双关——方程完美求解！做得漂亮！', en: 'Two-Gate Siege — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 1 续: 代入求值 ---
   {
@@ -608,7 +632,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：代入就是——把字母换成数字', en: 'Zhuge Liang: "Substitution means replacing the letter with a number"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '代入就是用具体数值替换变量，然后按运算顺序计算。', en: 'Substitution means replacing variables with values, then computing step by step.' }, formula: { zh: '$\\text{代入 } x \\text{ 的值，按顺序计算}$', en: '$\\text{Substitute } x \\text{, then compute in order}$' }, tips: [{ zh: '诸葛亮提示：先乘除，后加减！', en: 'Zhuge Liang Tip: Multiply/divide first, then add/subtract!' }] }
+    secret: { concept: { zh: '代入就是用具体数值替换变量，然后按运算顺序计算。', en: 'Substitution means replacing variables with values, then computing step by step.' }, formula: { zh: '$\\text{代入 } x \\text{ 的值，按顺序计算}$', en: '$\\text{Substitute } x \\text{, then compute in order}$' }, tips: [{ zh: '诸葛亮提示：先乘除，后加减！', en: 'Zhuge Liang Tip: Multiply/divide first, then add/subtract!' }] },
+    storyConsequence: { correct: { zh: '军情密码——代入精准！做得漂亮！', en: 'Military Code — Well done!' }, wrong: { zh: '代入算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 718, grade: 7, unitId: 1, order: 4,
@@ -624,7 +649,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '赵云：含 $x^2$ 的式子——先算平方，再算乘法', en: 'Zhao Yun: "Expression with $x^2$ — square first, then multiply"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '运算顺序：幂 → 乘除 → 加减。代入后要严格按顺序计算。', en: 'Order of operations: Powers → Multiply/Divide → Add/Subtract.' }, formula: '$\\text{Powers} \\rightarrow \\times\\div \\rightarrow +\\,-$', tips: [{ zh: '赵云提示：先算指数，才能射得准！', en: 'Zhao Yun Tip: Powers first for accurate aim!' }] }
+    secret: { concept: { zh: '运算顺序：幂 → 乘除 → 加减。代入后要严格按顺序计算。', en: 'Order of operations: Powers → Multiply/Divide → Add/Subtract.' }, formula: '$\\text{Powers} \\rightarrow \\times\\div \\rightarrow +\\,-$', tips: [{ zh: '赵云提示：先算指数，才能射得准！', en: 'Zhao Yun Tip: Powers first for accurate aim!' }] },
+    storyConsequence: { correct: { zh: '投石车射程——代入精准！做得漂亮！', en: 'Catapult Range — Well done!' }, wrong: { zh: '代入算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 1 续: 化简同类项 ---
   {
@@ -681,7 +707,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '比例关系建模：总量 = 份数 x 每份，再用除法求每份。', en: 'Proportional modeling: total = parts x each, use division to find each part.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '曹操提示：公平分配，方能稳定军心。', en: 'Cao Cao Tip: Fair distribution keeps the army stable.' }] }
+    secret: { concept: { zh: '比例关系建模：总量 = 份数 x 每份，再用除法求每份。', en: 'Proportional modeling: total = parts x each, use division to find each part.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '曹操提示：公平分配，方能稳定军心。', en: 'Cao Cao Tip: Fair distribution keeps the army stable.' }] },
+    storyConsequence: { correct: { zh: '分配军粮——方程完美求解！做得漂亮！', en: 'Distributing Grain — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 722, grade: 7, unitId: 2, order: 2,
@@ -720,7 +747,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '除法是乘法的逆运算：知道总量和份数，就能求每份。', en: 'Division is the inverse of multiplication: knowing total and parts, find each part.' }, formula: '$x = \\frac{b}{a}$', tips: [{ zh: '张飞提示：算清楚，才公平！', en: 'Zhang Fei Tip: Count right, keep it fair!' }] }
+    secret: { concept: { zh: '除法是乘法的逆运算：知道总量和份数，就能求每份。', en: 'Division is the inverse of multiplication: knowing total and parts, find each part.' }, formula: '$x = \\frac{b}{a}$', tips: [{ zh: '张飞提示：算清楚，才公平！', en: 'Zhang Fei Tip: Count right, keep it fair!' }] },
+    storyConsequence: { correct: { zh: '征调民夫——方程完美求解！做得漂亮！', en: 'Drafting Laborers — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 2 续: 百分比 ---
   {
@@ -737,7 +765,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '曹操：百分比就是"每一百份里取几份"', en: 'Cao Cao: "Percentage means out of every 100"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '百分比就是"每百份中的份数"。求 p% of n，用 n × p ÷ 100。', en: 'Percentage means "parts per hundred". To find p% of n, use n × p ÷ 100.' }, formula: '$p\\% \\text{ of } n = n \\times \\frac{p}{100}$', tips: [{ zh: '曹操提示：百分比是商业和军事的通用语言！', en: 'Cao Cao Tip: Percentages are the universal language of business and warfare!' }] }
+    secret: { concept: { zh: '百分比就是"每百份中的份数"。求 p% of n，用 n × p ÷ 100。', en: 'Percentage means "parts per hundred". To find p% of n, use n × p ÷ 100.' }, formula: '$p\\% \\text{ of } n = n \\times \\frac{p}{100}$', tips: [{ zh: '曹操提示：百分比是商业和军事的通用语言！', en: 'Cao Cao Tip: Percentages are the universal language of business and warfare!' }] },
+    storyConsequence: { correct: { zh: '军饷提成——百分比算得好！做得漂亮！', en: 'Military Stipend — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 724, grade: 7, unitId: 2, order: 4,
@@ -774,7 +803,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '荀彧：化简比跟约分一样——找最大公因数', en: 'Xun Yu: "Simplifying ratios is like simplifying fractions — find the HCF"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '化简比 = 两项同除以最大公因数。和约分原理完全相同！', en: 'Simplify ratio = divide both by HCF. Exact same principle as simplifying fractions!' }, formula: '$a:b = \\frac{a}{\\text{HCF}}:\\frac{b}{\\text{HCF}}$', tips: [{ zh: '荀彧提示：化简比和约分是一回事——Unit 0 学的 HCF 在这里又用上了！', en: 'Xun Yu Tip: Simplifying ratios IS simplifying fractions — the HCF from Unit 0 comes back!' }] }
+    secret: { concept: { zh: '化简比 = 两项同除以最大公因数。和约分原理完全相同！', en: 'Simplify ratio = divide both by HCF. Exact same principle as simplifying fractions!' }, formula: '$a:b = \\frac{a}{\\text{HCF}}:\\frac{b}{\\text{HCF}}$', tips: [{ zh: '荀彧提示：化简比和约分是一回事——Unit 0 学的 HCF 在这里又用上了！', en: 'Xun Yu Tip: Simplifying ratios IS simplifying fractions — the HCF from Unit 0 comes back!' }] },
+    storyConsequence: { correct: { zh: '精简军令——比例搞定！做得漂亮！', en: 'Simplify Orders — Well done!' }, wrong: { zh: '比例没算对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 726, grade: 7, unitId: 2, order: 6,
@@ -876,7 +906,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '余角之和为 $90^\\circ$。', en: 'Complementary angles sum to $90^\\circ$.' }, formula: '$x + y = 90^\\circ$', tips: [{ zh: '高顺提示：陷阵营，角度必争！', en: 'Gao Shun Tip: For the Camp Crushers, every angle counts!' }] }
+    secret: { concept: { zh: '余角之和为 $90^\\circ$。', en: 'Complementary angles sum to $90^\\circ$.' }, formula: '$x + y = 90^\\circ$', tips: [{ zh: '高顺提示：陷阵营，角度必争！', en: 'Gao Shun Tip: For the Camp Crushers, every angle counts!' }] },
+    storyConsequence: { correct: { zh: '交叉火力——角度完美！做得漂亮！', en: 'Crossfire — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 733, grade: 7, unitId: 3, order: 3,
@@ -915,7 +946,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '补角的实际应用：方向角合成一条直线，互为补角。', en: 'Practical use of supplementary angles: direction angles forming a straight line are supplementary.' }, formula: '$x = 180° - y$', tips: [{ zh: '诸葛亮提示：阵法变幻，皆在术数。', en: 'Zhuge Tip: The changes in the formation are all in the numbers.' }] }
+    secret: { concept: { zh: '补角的实际应用：方向角合成一条直线，互为补角。', en: 'Practical use of supplementary angles: direction angles forming a straight line are supplementary.' }, formula: '$x = 180° - y$', tips: [{ zh: '诸葛亮提示：阵法变幻，皆在术数。', en: 'Zhuge Tip: The changes in the formation are all in the numbers.' }] },
+    storyConsequence: { correct: { zh: '八卦阵位——角度完美！做得漂亮！', en: 'Eight Trigrams Position — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 3 续: 三角形内角 & 周角 ---
   {
@@ -933,7 +965,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '关羽：三角形内角和 = $180°$', en: 'Guan Yu: "Angles in a triangle sum to $180°$"' }, highlightField: 'x' },
       { text: { zh: '关羽：第三个角 = $180° - 60° - 50° = 70°$', en: 'Guan Yu: "Third angle = $180° - 60° - 50° = 70°$"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '三角形内角和定理：任何三角形的三个内角之和 = 180°。', en: 'Triangle angle sum theorem: the three interior angles of any triangle sum to 180°.' }, formula: '$a + b + c = 180°$', tips: [{ zh: '关羽提示：三角旗阵，角度精准才能列阵如山！', en: 'Guan Yu Tip: Precise angles make an immovable formation!' }] }
+    secret: { concept: { zh: '三角形内角和定理：任何三角形的三个内角之和 = 180°。', en: 'Triangle angle sum theorem: the three interior angles of any triangle sum to 180°.' }, formula: '$a + b + c = 180°$', tips: [{ zh: '关羽提示：三角旗阵，角度精准才能列阵如山！', en: 'Guan Yu Tip: Precise angles make an immovable formation!' }] },
+    storyConsequence: { correct: { zh: '三角旗阵——角度完美！做得漂亮！', en: 'Triangular Banner — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 735, grade: 7, unitId: 3, order: 5,
@@ -973,7 +1006,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：坐标就是地图上的"地址"——用两个数字定位', en: 'Zhuge Liang: "Coordinates are the address on a map — two numbers pin a location"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：$x$ 往右为正，往左为负；$y$ 往上为正，往下为负', en: 'Zhuge Liang: "$x$: right = positive, left = negative; $y$: up = positive, down = negative"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '坐标系用 (x,y) 两个数字标记位置。x 是左右，y 是上下。原点 (0,0) 是起点。', en: 'The coordinate system uses (x,y) to mark positions. x = left/right, y = up/down. Origin (0,0) is the start.' }, formula: '$(x, y)$：先横后竖', tips: [{ zh: '诸葛亮提示：读图如读兵法——坐标不准，全盘皆输！', en: 'Zhuge Liang Tip: Reading maps is like reading strategy — wrong coordinates mean total defeat!' }] }
+    secret: { concept: { zh: '坐标系用 (x,y) 两个数字标记位置。x 是左右，y 是上下。原点 (0,0) 是起点。', en: 'The coordinate system uses (x,y) to mark positions. x = left/right, y = up/down. Origin (0,0) is the start.' }, formula: '$(x, y)$：先横后竖', tips: [{ zh: '诸葛亮提示：读图如读兵法——坐标不准，全盘皆输！', en: 'Zhuge Liang Tip: Reading maps is like reading strategy — wrong coordinates mean total defeat!' }] },
+    storyConsequence: { correct: { zh: '读图定位——坐标精准！做得漂亮！', en: 'Map Reading — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 746, grade: 7, unitId: 3, order: 7,
@@ -1010,7 +1044,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '刘备：每天比前天多招 4 人——这就是"公差"', en: 'Liu Bei: "4 more each day — that\'s the common difference"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '等差数列：每项与前一项的差（公差）恒定。下一项 = 最后一项 + 公差。', en: 'Arithmetic sequence: the difference between consecutive terms is constant. Next = last + common difference.' }, formula: { zh: '$\\text{下一项} = \\text{末项} + d$', en: '$\\text{Next term} = \\text{Last term} + d$' }, tips: [{ zh: '刘备提示：找到规律，就能预见未来！', en: 'Liu Bei Tip: Find the pattern, predict the future!' }] }
+    secret: { concept: { zh: '等差数列：每项与前一项的差（公差）恒定。下一项 = 最后一项 + 公差。', en: 'Arithmetic sequence: the difference between consecutive terms is constant. Next = last + common difference.' }, formula: { zh: '$\\text{下一项} = \\text{末项} + d$', en: '$\\text{Next term} = \\text{Last term} + d$' }, tips: [{ zh: '刘备提示：找到规律，就能预见未来！', en: 'Liu Bei Tip: Find the pattern, predict the future!' }] },
+    storyConsequence: { correct: { zh: '增兵步伐——数列过关！做得漂亮！', en: 'Troop Buildup Pattern — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 742, grade: 7, unitId: 4, order: 2,
@@ -1026,7 +1061,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '赵云：通项公式 $a_n = a_1 + (n-1) \\times d$', en: 'Zhao Yun: "nth term formula: $a_n = a_1 + (n-1) \\times d$"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '通项公式让你不必逐项数，直接跳到第 n 项。', en: 'The nth term formula lets you jump directly to any term without counting one by one.' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '赵云提示：兵贵神速，公式比逐个数快！', en: 'Zhao Yun Tip: Speed matters — formulas beat counting one by one!' }] }
+    secret: { concept: { zh: '通项公式让你不必逐项数，直接跳到第 n 项。', en: 'The nth term formula lets you jump directly to any term without counting one by one.' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '赵云提示：兵贵神速，公式比逐个数快！', en: 'Zhao Yun Tip: Speed matters — formulas beat counting one by one!' }] },
+    storyConsequence: { correct: { zh: '远征推算——数列过关！做得漂亮！', en: 'Expedition Projection — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 4 续: 递减数列（跨单元：负数+数列）---
   {
@@ -1061,7 +1097,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：四舍五入——看要舍去的那一位', en: 'Zhuge Liang: "Rounding — look at the digit being removed"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '四舍五入：看要去掉的那一位，0-4 不变，5-9 前一位加 1。', en: 'Rounding: look at the digit being removed. 0-4 stays, 5-9 rounds up.' }, formula: { zh: '$\\text{看下一位：} < 5 \\text{ 舍，} \\geq 5 \\text{ 入}$', en: '$\\text{Check next digit: } < 5 \\text{ round down, } \\geq 5 \\text{ round up}$' }, tips: [{ zh: '诸葛亮提示：战场上要的是大局观，不纠结零头！', en: 'Zhuge Liang Tip: On the battlefield, focus on the big picture!' }] }
+    secret: { concept: { zh: '四舍五入：看要去掉的那一位，0-4 不变，5-9 前一位加 1。', en: 'Rounding: look at the digit being removed. 0-4 stays, 5-9 rounds up.' }, formula: { zh: '$\\text{看下一位：} < 5 \\text{ 舍，} \\geq 5 \\text{ 入}$', en: '$\\text{Check next digit: } < 5 \\text{ round down, } \\geq 5 \\text{ round up}$' }, tips: [{ zh: '诸葛亮提示：战场上要的是大局观，不纠结零头！', en: 'Zhuge Liang Tip: On the battlefield, focus on the big picture!' }] },
+    storyConsequence: { correct: { zh: '斥候报数——估算精准！做得漂亮！', en: 'Scout Headcount — Well done!' }, wrong: { zh: '估算偏差太大…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 752, grade: 7, unitId: 5, order: 2,
@@ -1095,7 +1132,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '刘备：周长就是绕一圈的总长度', en: 'Liu Bei: "Perimeter is the total distance around"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '周长是图形一圈的总长度。长方形：P = 2(l+w)。', en: 'Perimeter is the total distance around a shape. Rectangle: P = 2(l+w).' }, formula: '$P = 2(l + w)$', tips: [{ zh: '刘备提示：围栅不够长，敌人就攻进来了！', en: 'Liu Bei Tip: If the fence is too short, the enemy gets in!' }] }
+    secret: { concept: { zh: '周长是图形一圈的总长度。长方形：P = 2(l+w)。', en: 'Perimeter is the total distance around a shape. Rectangle: P = 2(l+w).' }, formula: '$P = 2(l + w)$', tips: [{ zh: '刘备提示：围栅不够长，敌人就攻进来了！', en: 'Liu Bei Tip: If the fence is too short, the enemy gets in!' }] },
+    storyConsequence: { correct: { zh: '围栅建营——周长无误！做得漂亮！', en: 'Building the Camp Fence — Well done!' }, wrong: { zh: '周长算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 762, grade: 7, unitId: 6, order: 2,
@@ -1111,7 +1149,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '张飞：面积就是形状里面有多大', en: 'Zhang Fei: "Area is how much space is inside the shape"' }, highlightField: 'area' },
     ],
-    secret: { concept: { zh: '面积是图形内部的大小。长方形面积 = 长 × 宽。', en: 'Area is the space inside a shape. Rectangle area = length × width.' }, formula: '$A = l \\times w$', tips: [{ zh: '张飞提示：营地够大，才能屯兵万千！', en: 'Zhang Fei Tip: A big camp holds a big army!' }] }
+    secret: { concept: { zh: '面积是图形内部的大小。长方形面积 = 长 × 宽。', en: 'Area is the space inside a shape. Rectangle area = length × width.' }, formula: '$A = l \\times w$', tips: [{ zh: '张飞提示：营地够大，才能屯兵万千！', en: 'Zhang Fei Tip: A big camp holds a big army!' }] },
+    storyConsequence: { correct: { zh: '营地面积——面积正确！做得漂亮！', en: 'Camp Ground Area — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 763, grade: 7, unitId: 6, order: 3,
@@ -1127,7 +1166,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '赵云：三角形面积 = 底 × 高 ÷ 2', en: 'Zhao Yun: "Triangle area = base × height ÷ 2"' }, highlightField: 'area' },
     ],
-    secret: { concept: { zh: '三角形面积 = 底 × 高 ÷ 2。可以理解为长方形面积的一半。', en: 'Triangle area = base × height ÷ 2. It\'s half the area of a rectangle.' }, formula: '$A = \\frac{b \\times h}{2}$', tips: [{ zh: '赵云提示：旗帜虽小，面积公式却大有用处！', en: 'Zhao Yun Tip: Small banner, big formula!' }] }
+    secret: { concept: { zh: '三角形面积 = 底 × 高 ÷ 2。可以理解为长方形面积的一半。', en: 'Triangle area = base × height ÷ 2. It\'s half the area of a rectangle.' }, formula: '$A = \\frac{b \\times h}{2}$', tips: [{ zh: '赵云提示：旗帜虽小，面积公式却大有用处！', en: 'Zhao Yun Tip: Small banner, big formula!' }] },
+    storyConsequence: { correct: { zh: '三角旗帜——面积正确！做得漂亮！', en: 'Triangular Banner — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 6 续: 跨单元应用（方程+周长，代入+面积）---
   {
@@ -1182,7 +1222,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '张飞：众数就是出现次数最多的数——数据里的"人气王"', en: 'Zhang Fei: "Mode = the value appearing most — the \'most popular\' in the data"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '众数是出现频率最高的值。一组数据可以有多个众数，也可以没有众数。', en: 'Mode is the most frequent value. Data can have multiple modes or no mode.' }, formula: { zh: '$\\text{众数 = 频率最高的值}$', en: '$\\text{Mode = most frequent value}$' }, tips: [{ zh: '张飞提示：哪种兵器最多，就知道敌军的战术偏好！', en: 'Zhang Fei Tip: The most common weapon reveals the enemy\'s tactics!' }] }
+    secret: { concept: { zh: '众数是出现频率最高的值。一组数据可以有多个众数，也可以没有众数。', en: 'Mode is the most frequent value. Data can have multiple modes or no mode.' }, formula: { zh: '$\\text{众数 = 频率最高的值}$', en: '$\\text{Mode = most frequent value}$' }, tips: [{ zh: '张飞提示：哪种兵器最多，就知道敌军的战术偏好！', en: 'Zhang Fei Tip: The most common weapon reveals the enemy\'s tactics!' }] },
+    storyConsequence: { correct: { zh: '兵器清点——数据分析到位！做得漂亮！', en: 'Weapon Inventory — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 771, grade: 7, unitId: 7, order: 1,
@@ -1198,7 +1239,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '曹操：平均数 = 加起来 ÷ 个数', en: 'Cao Cao: "Mean = add them up ÷ how many"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '平均数把总量平均分给每个数据。它代表数据的"中心水平"。', en: 'The mean shares the total equally. It represents the "center" of the data.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '曹操提示：知道全军平均水平，才能精准调度！', en: 'Cao Cao Tip: Know the average to optimize deployment!' }] }
+    secret: { concept: { zh: '平均数把总量平均分给每个数据。它代表数据的"中心水平"。', en: 'The mean shares the total equally. It represents the "center" of the data.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '曹操提示：知道全军平均水平，才能精准调度！', en: 'Cao Cao Tip: Know the average to optimize deployment!' }] },
+    storyConsequence: { correct: { zh: '平均战力——数据分析到位！做得漂亮！', en: 'Average Strength — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 772, grade: 7, unitId: 7, order: 2,
@@ -1214,7 +1256,8 @@ export const MISSIONS: Mission[] = [
     tutorialSteps: [
       { text: { zh: '诸葛亮：先排序，再找中间', en: 'Zhuge Liang: "Sort first, then find the middle"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '中位数是排序后正中间的值。它不受极端值影响。', en: 'Median is the middle value after sorting. It\'s not affected by outliers.' }, formula: { zh: '$\\text{排序后取中间值}$', en: '$\\text{Middle value after sorting}$' }, tips: [{ zh: '诸葛亮提示：中位数比平均数更稳定——一个极端值不会带偏它！', en: 'Zhuge Liang Tip: Median is more stable than mean — one outlier won\'t skew it!' }] }
+    secret: { concept: { zh: '中位数是排序后正中间的值。它不受极端值影响。', en: 'Median is the middle value after sorting. It\'s not affected by outliers.' }, formula: { zh: '$\\text{排序后取中间值}$', en: '$\\text{Middle value after sorting}$' }, tips: [{ zh: '诸葛亮提示：中位数比平均数更稳定——一个极端值不会带偏它！', en: 'Zhuge Liang Tip: Median is more stable than mean — one outlier won\'t skew it!' }] },
+    storyConsequence: { correct: { zh: '中位排名——数据分析到位！做得漂亮！', en: 'Median Rank — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 773, grade: 7, unitId: 7, order: 3,
@@ -1266,6 +1309,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 160, kpId: 'kp-2.2-01', sectionId: 'functions',
     tutorialSteps: [],
     secret: { concept: { zh: '函数就像一台机器：输入 $x$，输出 $y$。', en: 'A function is like a machine: input $x$, output $y$.' }, formula: '$y = mx + b$', tips: [{ zh: '张飞提示：代入就是把数字塞进去算！', en: 'Zhang Fei Tip: Substitution means plugging in the number!' }] },
+    storyConsequence: { correct: { zh: '追击哨兵——函数值正确！做得漂亮！', en: 'Intercepting Scouts — Well done!' }, wrong: { zh: '函数值代入有误…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 813, grade: 8, unitId: 1, order: 3,
@@ -1280,6 +1324,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 170, kpId: 'kp-2.5-01', sectionId: 'functions',
     tutorialSteps: [],
     secret: { concept: { zh: '斜率越大，路线越陡。', en: 'Steeper route means larger slope.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}$', tips: [{ zh: '关羽提示：斜率就是行军的陡峭程度。', en: 'Guan Yu Tip: Slope is the steepness of the march.' }] },
+    storyConsequence: { correct: { zh: '合围之势——直线方程搞定！做得漂亮！', en: 'Encirclement — Well done!' }, wrong: { zh: '直线方程有误…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 814, grade: 8, unitId: 1, order: 4,
@@ -1311,6 +1356,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Easy', reward: 140, kpId: 'kp-4.6-03', sectionId: 'geometry',
     tutorialSteps: [],
     secret: { concept: { zh: '两条平行线被截线切过，产生同位角(F)、内错角(Z)、同旁内角(C)。', en: 'A transversal cutting parallel lines creates corresponding(F), alternate(Z), co-interior(C) angles.' }, formula: '$\\text{Alternate} = \\text{equal}, \\quad \\text{Co-interior} + \\text{given} = 180°$', tips: [{ zh: '关羽提示：记住 F、Z、C 三个字母形状！', en: 'Guan Yu Tip: Remember the F, Z, C letter shapes!' }] },
+    storyConsequence: { correct: { zh: '城墙角度——角度完美！做得漂亮！', en: 'Wall Angles — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 822, grade: 8, unitId: 2, order: 2,
@@ -1325,6 +1371,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 160, kpId: 'kp-4.6-03', sectionId: 'geometry',
     tutorialSteps: [],
     secret: { concept: { zh: '同位角在截线同侧、平行线同方向，一定相等。', en: 'Corresponding angles: same side of transversal, same direction — always equal.' }, formula: '$\\text{Corresponding angles are equal}$', tips: [{ zh: '关羽提示：F字形一看就知道是同位角！', en: 'Guan Yu Tip: F-shape = corresponding angles!' }] },
+    storyConsequence: { correct: { zh: '箭塔射角——角度完美！做得漂亮！', en: 'Arrow Tower Angle — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 823, grade: 8, unitId: 2, order: 3,
@@ -1371,6 +1418,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Easy', reward: 100, kpId: 'kp-5.2-01', sectionId: 'geometry',
     tutorialSteps: [],
     secret: { concept: { zh: '矩形面积 = 长 × 宽，单位是"平方"。', en: 'Rectangle area = length × width, in "square" units.' }, formula: '$A = l \\times w$', tips: [{ zh: '曹操提示：营地规划是战争的基础。', en: 'Cao Cao Tip: Camp planning is the foundation of war.' }] },
+    storyConsequence: { correct: { zh: '安营扎寨——面积正确！做得漂亮！', en: 'Setting Camp — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 832, grade: 8, unitId: 3, order: 2,
@@ -1385,6 +1433,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 140, kpId: 'kp-5.2-01', sectionId: 'geometry',
     tutorialSteps: [],
     secret: { concept: { zh: '梯形可以看成"两个三角形"或"一个平行四边形的一半"。', en: 'A trapezoid can be seen as two triangles or half a parallelogram.' }, formula: '$A = \\frac{(a+b) \\times h}{2}$', tips: [{ zh: '袁绍提示：点将台要宏伟壮观！', en: 'Yuan Shao Tip: The platform must be magnificent!' }] },
+    storyConsequence: { correct: { zh: '点将台——面积正确！做得漂亮！', en: 'Command Platform — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 833, grade: 8, unitId: 3, order: 3,
@@ -1399,6 +1448,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 170, kpId: 'kp-5.3-01', sectionId: 'geometry',
     tutorialSteps: [],
     secret: { concept: { zh: '$\\pi$ 是周长与直径的比值，约 3.14。圆越大，$\\pi$ 不变。', en: '$\\pi$ is the ratio of circumference to diameter, ≈3.14. Same for all circles.' }, formula: '$C = 2\\pi r, \\quad A = \\pi r^2$', tips: [{ zh: '曹操提示：圆形结构最稳固！', en: 'Cao Cao Tip: Circular structures are the most stable!' }] },
+    storyConsequence: { correct: { zh: '圆形瞭望塔——圆的计算完美！做得漂亮！', en: 'Circular Watchtower — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 834, grade: 8, unitId: 3, order: 4,
@@ -1413,6 +1463,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 175, kpId: 'kp-5.3-01', sectionId: 'geometry',
     tutorialSteps: [],
     secret: { concept: { zh: '周长 = 绕一圈的总长度。直径 × $\\pi$ 就是周长。', en: 'Circumference = distance around once. Diameter × $\\pi$ = circumference.' }, formula: '$C = 2\\pi r = \\pi d$', tips: [{ zh: '曹操提示：围栏不够长，马就跑了！', en: 'Cao Cao Tip: Not enough fence and the horses escape!' }] },
+    storyConsequence: { correct: { zh: '围栏长度——圆的计算完美！做得漂亮！', en: 'Fence Length — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 835, grade: 8, unitId: 3, order: 5,
@@ -1444,6 +1495,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Easy', reward: 150, kpId: 'kp-1.13-01', sectionId: 'number',
     tutorialSteps: [],
     secret: { concept: { zh: '"百分之"就是"每一百份中"。$40\\% = \\frac{40}{100} = 0.4$', en: '"Percent" means "per hundred". $40\\% = \\frac{40}{100} = 0.4$' }, formula: '$\\text{Total} = P \\times (1 + r)$', tips: [{ zh: '荀彧提示：屯田之策，乃强兵之本。', en: 'Xun Yu Tip: The tuntian policy is the foundation of a strong army.' }] },
+    storyConsequence: { correct: { zh: '征收粮税——百分比算得好！做得漂亮！', en: 'Collecting Grain Tax — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 842, grade: 8, unitId: 4, order: 2,
@@ -1458,6 +1510,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 180, kpId: 'kp-1.13-01', sectionId: 'number',
     tutorialSteps: [],
     secret: { concept: { zh: '折扣是"减少"的百分比。打八五折 = 减15% = × 0.85。', en: 'Discount is the percentage "off". 15% off = ×0.85.' }, formula: '$\\text{Sale price} = P \\times (1 - r)$', tips: [{ zh: '曹操提示：精打细算，方能持久作战。', en: 'Cao Cao Tip: Careful budgeting supports prolonged campaigns.' }] },
+    storyConsequence: { correct: { zh: '军备折扣——百分比算得好！做得漂亮！', en: 'Armament Discount — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 843, grade: 8, unitId: 4, order: 3,
@@ -1489,6 +1542,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Easy', reward: 150, kpId: 'kp-9.3-01', sectionId: 'statistics',
     tutorialSteps: [],
     secret: { concept: { zh: '平均数 = 把所有数加起来，再平均分。', en: 'Mean = add all values, then share equally.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '曹操提示：知己知彼，百战不殆。', en: 'Cao Cao Tip: Know your enemy and yourself, win every battle.' }] },
+    storyConsequence: { correct: { zh: '敌军平均兵力——数据分析到位！做得漂亮！', en: 'Enemy Average Strength — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 852, grade: 8, unitId: 5, order: 2,
@@ -1503,6 +1557,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 170, kpId: 'kp-9.3-01', sectionId: 'statistics',
     tutorialSteps: [],
     secret: { concept: { zh: '中位数不受极端值影响，比平均数更"稳定"。', en: 'Median is not affected by outliers — more "stable" than mean.' }, formula: '$\\text{Median} = \\text{middle value after sorting}$', tips: [{ zh: '荀彧提示：极端数据会骗人，中位数更可靠！', en: 'Xun Yu Tip: Extreme data deceives — median is more reliable!' }] },
+    storyConsequence: { correct: { zh: '中位情报——数据分析到位！做得漂亮！', en: 'Median Intelligence — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 853, grade: 8, unitId: 5, order: 3,
@@ -1549,6 +1604,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Easy', reward: 150, kpId: 'kp-2.2-03', sectionId: 'algebra',
     tutorialSteps: [],
     secret: { concept: { zh: '展开就是"分配"——外面的数要分给括号里的每一项。', en: 'Expanding = "distributing" — the outside number is given to each term inside.' }, formula: '$a(b + c) = ab + ac$', tips: [{ zh: '诸葛亮提示：分配律是代数的基石！', en: 'Zhuge Liang Tip: Distributive law is the cornerstone of algebra!' }] },
+    storyConsequence: { correct: { zh: '兵力展开——展开无误！做得漂亮！', en: 'Force Deployment — Well done!' }, wrong: { zh: '展开出错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 862, grade: 8, unitId: 6, order: 2,
@@ -1563,6 +1619,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 170, kpId: 'kp-2.2-03', sectionId: 'algebra',
     tutorialSteps: [],
     secret: { concept: { zh: '展开后检查：代入一个数，左右两边应该相等。', en: 'After expanding, check: substitute a number, both sides should match.' }, formula: '$a(bx+c) = abx + ac$', tips: [{ zh: '诸葛亮提示：代入 $x=1$ 是最快的验算方法。', en: 'Zhuge Liang Tip: Substituting $x=1$ is the fastest way to verify.' }] },
+    storyConsequence: { correct: { zh: '粮草分配——展开无误！做得漂亮！', en: 'Supply Distribution — Well done!' }, wrong: { zh: '展开出错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 863, grade: 8, unitId: 6, order: 3,
@@ -1577,6 +1634,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 180, kpId: 'kp-2.2-05', sectionId: 'algebra',
     tutorialSteps: [],
     secret: { concept: { zh: '因式分解是展开的反操作：$ab + ac = a(b+c)$', en: 'Factorising reverses expanding: $ab + ac = a(b+c)$' }, formula: '$ab + ac = a(b+c)$', tips: [{ zh: '诸葛亮提示：归纳就是找出共同规律！', en: 'Zhuge Liang Tip: Summarising means finding the common pattern!' }] },
+    storyConsequence: { correct: { zh: '情报归纳——因式分解完成！做得漂亮！', en: 'Intelligence Summary — Well done!' }, wrong: { zh: '因式分解不完全…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 864, grade: 8, unitId: 6, order: 4,
@@ -1638,6 +1696,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Easy', reward: 140, kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [],
     secret: { concept: { zh: '速度、距离、时间三者互相关联。知道两个就能算第三个。', en: 'Speed, distance, time are linked. Know any two, find the third.' }, formula: '$S = \\frac{D}{T}, \\quad D = S \\times T, \\quad T = \\frac{D}{S}$', tips: [{ zh: '诸葛亮提示：兵贵神速，速度决定战局！', en: 'Zhuge Liang Tip: Speed is everything in war!' }] },
+    storyConsequence: { correct: { zh: '急行军速度——方程完美求解！做得漂亮！', en: 'March Speed — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 872, grade: 8, unitId: 7, order: 2,
@@ -1652,6 +1711,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 160, kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [],
     secret: { concept: { zh: '距离 = 速度 × 时间，单位要统一！', en: 'Distance = Speed × Time. Keep units consistent!' }, formula: '$D = S \\times T$', tips: [{ zh: '赵云提示：一骑当千，速度就是力量！', en: 'Zhao Yun Tip: One rider worth a thousand — speed is power!' }] },
+    storyConsequence: { correct: { zh: '追击距离——方程完美求解！做得漂亮！', en: 'Pursuit Distance — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 873, grade: 8, unitId: 7, order: 3,
@@ -1666,6 +1726,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 180, kpId: 'kp-1.8-01', sectionId: 'number',
     tutorialSteps: [],
     secret: { concept: { zh: '标准式让大数字变得简洁易比较。$1 \\leq a < 10$，$n$ 是整数。', en: 'Standard form makes big numbers concise and comparable. $1 \\leq a < 10$, $n$ is integer.' }, formula: '$a \\times 10^n$', tips: [{ zh: '诸葛亮提示：大数字用标准式，一目了然！', en: 'Zhuge Liang Tip: Standard form makes big numbers clear at a glance!' }] },
+    storyConsequence: { correct: { zh: '天下兵力——标准形式正确！做得漂亮！', en: 'Realm Forces — Well done!' }, wrong: { zh: '标准形式转换失误…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 874, grade: 8, unitId: 7, order: 4,
@@ -1697,6 +1758,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 180, kpId: 'kp-2.5-01', sectionId: 'functions',
     tutorialSteps: [],
     secret: { concept: { zh: '线性增长 = 每期增加固定量。斜率就是增长速度。', en: 'Linear growth = fixed increase per period. Slope = rate of growth.' }, formula: '$y = mx + c$', tips: [{ zh: '刘备提示：以德服人，荆州大治！', en: 'Liu Bei Tip: Lead with virtue — Jingzhou prospers!' }] },
+    storyConsequence: { correct: { zh: '税收路线——直线方程搞定！做得漂亮！', en: 'Tax Revenue Route — Well done!' }, wrong: { zh: '直线方程有误…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 882, grade: 8, unitId: 8, order: 2,
@@ -1728,6 +1790,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 180, kpId: 'kp-2.2-01', sectionId: 'algebra',
     tutorialSteps: [],
     secret: { concept: { zh: '代入法：把一个方程"塞进"另一个，化为一元方程。', en: 'Substitution: "plug" one equation into the other to get a single-variable equation.' }, formula: '$y = ax + b \\to cx + dy = e$', tips: [{ zh: '曹操提示：兵分两路，合而为一——代入法的精髓！', en: 'Cao Cao Tip: Divide forces, then unite — the essence of substitution!' }] },
+    storyConsequence: { correct: { zh: '粮草与兵力——联立方程求解成功！做得漂亮！', en: 'Supplies & Forces — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 886, grade: 8, unitId: 5, order: 6,
@@ -1759,6 +1822,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 180, kpId: 'kp-4.5-01', sectionId: 'geometry',
     tutorialSteps: [],
     secret: { concept: { zh: '线对称：图形沿对称轴翻折后完全重合。坐标轴反射有简单规则。', en: 'Line symmetry: a shape folds exactly onto itself along the line of symmetry. Axis reflections have simple rules.' }, formula: '$(x,y) \\to (-x,y)$ / $(x,-y)$', tips: [{ zh: '诸葛亮提示：左右对称，阵法无懈可击！', en: 'Zhuge Liang Tip: Symmetrical formations are unbreakable!' }] },
+    storyConsequence: { correct: { zh: '阵法镜像——对称正确！做得漂亮！', en: 'Formation Mirror — Well done!' }, wrong: { zh: '对称变换搞错了…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 888, grade: 8, unitId: 6, order: 8,
@@ -1790,6 +1854,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 180, kpId: 'kp-1.11-01', sectionId: 'number',
     tutorialSteps: [],
     secret: { concept: { zh: '正比例：一个量变大，另一个也等比例变大。比值 $\\frac{y}{x} = k$ 恒定。', en: 'Direct proportion: as one quantity increases, the other increases at the same rate. The ratio $\\frac{y}{x} = k$ stays constant.' }, formula: '$y = kx$', tips: [{ zh: '刘备提示：人多则税丰，治国之基！', en: 'Liu Bei Tip: More people, more revenue — the foundation of governance!' }] },
+    storyConsequence: { correct: { zh: '粮草正比例——比例搞定！做得漂亮！', en: 'Direct Proportion of Supplies — Well done!' }, wrong: { zh: '比例没算对…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 892, grade: 8, unitId: 7, order: 6,
@@ -1821,6 +1886,7 @@ export const MISSIONS: Mission[] = [
     difficulty: 'Medium', reward: 180, kpId: 'kp-1.11-01', sectionId: 'number',
     tutorialSteps: [],
     secret: { concept: { zh: '比例分配：先算总份数，再用每份的值乘以对应份数。', en: 'Ratio sharing: find total parts first, then multiply each part\'s value.' }, formula: '$\\text{share} = \\frac{a}{a+b} \\times \\text{total}$', tips: [{ zh: '刘备提示：军民并重，荆州方能长治久安！', en: 'Liu Bei Tip: Balance military and civilian — Jingzhou will thrive!' }] },
+    storyConsequence: { correct: { zh: '税收分配——比例搞定！做得漂亮！', en: 'Tax Distribution — Well done!' }, wrong: { zh: '比例没算对…再试一次！', en: 'Not quite... Try again!' } },
   },
   {
     id: 896, grade: 8, unitId: 8, order: 4,
@@ -1876,7 +1942,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '同底数幂相乘，指数相加。', en: 'Multiply powers with same base: add exponents.' }, formula: '$a^m \\times a^n = a^{m+n}$', tips: [{ zh: '郭嘉提示：算清粮草，方能决战官渡。', en: 'Guo Jia Tip: Count the grain to win at Guandu.' }] }
+    secret: { concept: { zh: '同底数幂相乘，指数相加。', en: 'Multiply powers with same base: add exponents.' }, formula: '$a^m \\times a^n = a^{m+n}$', tips: [{ zh: '郭嘉提示：算清粮草，方能决战官渡。', en: 'Guo Jia Tip: Count the grain to win at Guandu.' }] },
+    storyConsequence: { correct: { zh: '官渡积粮——指数运算过关！做得漂亮！', en: 'Guandu Supplies — Well done!' }, wrong: { zh: '指数运算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 912, grade: 9, unitId: 1, order: 2,
@@ -1915,7 +1982,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '同底数幂相乘，底数不变，指数相加。', en: 'Multiply same-base powers: base stays, add exponents.' }, formula: '$a^m \\times a^n = a^{m+n}$', tips: [{ zh: '程昱提示：空间利用要最大化。', en: 'Cheng Yu Tip: Maximize space utilization.' }] }
+    secret: { concept: { zh: '同底数幂相乘，底数不变，指数相加。', en: 'Multiply same-base powers: base stays, add exponents.' }, formula: '$a^m \\times a^n = a^{m+n}$', tips: [{ zh: '程昱提示：空间利用要最大化。', en: 'Cheng Yu Tip: Maximize space utilization.' }] },
+    storyConsequence: { correct: { zh: '粮仓扩建——指数运算过关！做得漂亮！', en: 'Granary Expansion — Well done!' }, wrong: { zh: '指数运算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 913, grade: 9, unitId: 1, order: 3,
@@ -1954,7 +2022,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '同底数幂相除，指数相减。', en: 'Divide powers with same base: subtract exponents.' }, formula: '$a^m / a^n = a^{m-n}$', tips: [{ zh: '曹操提示：乌巢一火，袁绍必败！', en: 'Cao Tip: Once Wuchao burns, Yuan Shao is finished!' }] }
+    secret: { concept: { zh: '同底数幂相除，指数相减。', en: 'Divide powers with same base: subtract exponents.' }, formula: '$a^m / a^n = a^{m-n}$', tips: [{ zh: '曹操提示：乌巢一火，袁绍必败！', en: 'Cao Tip: Once Wuchao burns, Yuan Shao is finished!' }] },
+    storyConsequence: { correct: { zh: '火烧乌巢——指数运算过关！做得漂亮！', en: 'Burning Wuchao — Well done!' }, wrong: { zh: '指数运算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 921, grade: 9, unitId: 2, order: 1,
@@ -2036,7 +2105,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'tan'
       }
     ],
-    secret: { concept: { zh: '正切值是直角三角形对边与邻边的比。', en: 'Tangent is the ratio of opposite to adjacent side.' }, formula: '$\\tan(\\theta) = a / b$', tips: [{ zh: '乐进提示：看清距离，方能百步穿杨。', en: 'Yue Jin Tip: See the distance clearly to hit the mark.' }] }
+    secret: { concept: { zh: '正切值是直角三角形对边与邻边的比。', en: 'Tangent is the ratio of opposite to adjacent side.' }, formula: '$\\tan(\\theta) = a / b$', tips: [{ zh: '乐进提示：看清距离，方能百步穿杨。', en: 'Yue Jin Tip: See the distance clearly to hit the mark.' }] },
+    storyConsequence: { correct: { zh: '望楼侦察——三角精准！做得漂亮！', en: 'Scouting from the Tower — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 923, grade: 9, unitId: 2, order: 3,
@@ -2075,7 +2145,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'c'
       }
     ],
-    secret: { concept: { zh: '勾股定理变形：$b = \\sqrt{c^2 - a^2}$。', en: 'Pythagorean variant: $b = \\sqrt{c^2 - a^2}$.' }, formula: '$b^2 = c^2 - a^2$', tips: [{ zh: "曹洪提示：地道要挖深，别被发现了！", en: "Cao Hong Tip: Dig deep, don't get spotted!" }] }
+    secret: { concept: { zh: '勾股定理变形：$b = \\sqrt{c^2 - a^2}$。', en: 'Pythagorean variant: $b = \\sqrt{c^2 - a^2}$.' }, formula: '$b^2 = c^2 - a^2$', tips: [{ zh: "曹洪提示：地道要挖深，别被发现了！", en: "Cao Hong Tip: Dig deep, don't get spotted!" }] },
+    storyConsequence: { correct: { zh: '地道突袭——勾股定理用对了！做得漂亮！', en: 'Tunnel Raid — Well done!' }, wrong: { zh: '勾股定理用错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 931, grade: 9, unitId: 3, order: 1,
@@ -2114,7 +2185,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '相似图形对应边成比例。', en: 'Similar figures have proportional corresponding sides.' }, formula: '$a/b = x/c$', tips: [{ zh: '于禁提示：军旗要统一，威严不可废。', en: 'Yu Jin Tip: Flags must be uniform, dignity must be maintained.' }] }
+    secret: { concept: { zh: '相似图形对应边成比例。', en: 'Similar figures have proportional corresponding sides.' }, formula: '$a/b = x/c$', tips: [{ zh: '于禁提示：军旗要统一，威严不可废。', en: 'Yu Jin Tip: Flags must be uniform, dignity must be maintained.' }] },
+    storyConsequence: { correct: { zh: '旗帜缩放——相似比完美！做得漂亮！', en: 'Flag Scaling — Well done!' }, wrong: { zh: '相似比算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 932, grade: 9, unitId: 3, order: 2,
@@ -2153,7 +2225,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '比例尺是图上距离与实际距离的比。', en: 'Scale is the ratio of map distance to actual distance.' }, formula: '$Scale = Map / Actual$', tips: [{ zh: '董昭提示：差之毫厘，谬以千里。', en: 'Dong Zhao Tip: A tiny error leads to a huge mistake.' }] }
+    secret: { concept: { zh: '比例尺是图上距离与实际距离的比。', en: 'Scale is the ratio of map distance to actual distance.' }, formula: '$Scale = Map / Actual$', tips: [{ zh: '董昭提示：差之毫厘，谬以千里。', en: 'Dong Zhao Tip: A tiny error leads to a huge mistake.' }] },
+    storyConsequence: { correct: { zh: '地图测绘——相似比完美！做得漂亮！', en: 'Map Surveying — Well done!' }, wrong: { zh: '相似比算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 941, grade: 9, unitId: 4, order: 1,
@@ -2192,7 +2265,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'y'
       }
     ],
-    secret: { concept: { zh: '比例式中，内项之积等于外项之积。', en: 'In a proportion, the product of means equals the product of extremes.' }, formula: '$2y = 5000 \\Rightarrow y = 2500$', tips: [{ zh: '李典提示：后勤保障，重中之重。', en: 'Li Dian Tip: Logistics is the top priority.' }] }
+    secret: { concept: { zh: '比例式中，内项之积等于外项之积。', en: 'In a proportion, the product of means equals the product of extremes.' }, formula: '$2y = 5000 \\Rightarrow y = 2500$', tips: [{ zh: '李典提示：后勤保障，重中之重。', en: 'Li Dian Tip: Logistics is the top priority.' }] },
+    storyConsequence: { correct: { zh: '兵粮配给——比例搞定！做得漂亮！', en: 'Rationing — Well done!' }, wrong: { zh: '比例没算对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 942, grade: 9, unitId: 4, order: 2,
@@ -2231,7 +2305,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'y'
       }
     ],
-    secret: { concept: { zh: '比例的基本性质。', en: 'Basic properties of ratios.' }, formula: '$3:1 = 900:y$', tips: [{ zh: "曹纯提示：虎豹骑出击，势不可挡！", en: "Cao Chun Tip: When the Tiger and Leopard Cavalry strikes, it's unstoppable!" }] }
+    secret: { concept: { zh: '比例的基本性质。', en: 'Basic properties of ratios.' }, formula: '$3:1 = 900:y$', tips: [{ zh: "曹纯提示：虎豹骑出击，势不可挡！", en: "Cao Chun Tip: When the Tiger and Leopard Cavalry strikes, it's unstoppable!" }] },
+    storyConsequence: { correct: { zh: '混合阵法——比例搞定！做得漂亮！', en: 'Mixed Formation — Well done!' }, wrong: { zh: '比例没算对…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 9 Unit 5-6: Guandu Espionage — Coordinate Geometry ---
@@ -2254,7 +2329,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '贾诩：答案\n$x = {targetX}$，$y = {targetY}$\n暗桩就位，情报网启动！', en: 'Jia Xu: "Answer\n$x = {targetX}$, $y = {targetY}$\nSpy in position — intelligence network activated!"' }, highlightField: 'y' },
       { text: { zh: '贾诩：验算\n从原点出发：右走 ${targetX}$ → 上走 ${targetY}$ → 到达 $({targetX}, {targetY})$ ✓\n反过来：从 $({targetX}, {targetY})$ 左走 ${targetX}$、下走 ${targetY}$ 回到原点 ✓ 定位精准！', en: 'Jia Xu: "Verify\nFrom origin: right ${targetX}$ → up ${targetY}$ → reach $({targetX}, {targetY})$ ✓\nReverse: from $({targetX}, {targetY})$ left ${targetX}$, down ${targetY}$ back to origin ✓ Pinpoint accuracy!"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '坐标系中每个点由 $(x, y)$ 唯一确定。$x$ 是水平位置，$y$ 是垂直位置。', en: 'Every point in the coordinate system is uniquely determined by $(x, y)$. $x$ is horizontal, $y$ is vertical.' }, formula: '$(x, y)$', tips: [{ zh: '贾诩提示：坐标就是战场上的门牌号，精确到每一格。', en: 'Jia Xu Tip: Coordinates are the addresses on the battlefield — precise to every grid square.' }] }
+    secret: { concept: { zh: '坐标系中每个点由 $(x, y)$ 唯一确定。$x$ 是水平位置，$y$ 是垂直位置。', en: 'Every point in the coordinate system is uniquely determined by $(x, y)$. $x$ is horizontal, $y$ is vertical.' }, formula: '$(x, y)$', tips: [{ zh: '贾诩提示：坐标就是战场上的门牌号，精确到每一格。', en: 'Jia Xu Tip: Coordinates are the addresses on the battlefield — precise to every grid square.' }] },
+    storyConsequence: { correct: { zh: '官渡暗桩——坐标精准！做得漂亮！', en: 'Guandu Spy Posts — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 952, grade: 9, unitId: 5, order: 2,
@@ -2275,7 +2351,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '贾诩：再求截距 $c$\n把 $m$ 和任一点代入 $y = mx + c$，解出 $c$。', en: 'Jia Xu: "Now find intercept $c$\nSubstitute $m$ and any point into $y = mx + c$, solve for $c$."' }, highlightField: 'c' },
       { text: { zh: '贾诩：验算\n把两个哨所坐标分别代入 $y = mx + c$，看是否成立。\n密道坡度确认，物资运送畅通！', en: 'Jia Xu: "Verify\nSubstitute both outpost coordinates into $y = mx + c$ to check.\nTunnel gradient confirmed — supplies flow smoothly!"' }, highlightField: 'm' },
     ],
-    secret: { concept: { zh: '斜率 = 垂直变化 ÷ 水平变化。正斜率上升，负斜率下降，零斜率水平。', en: 'Gradient = rise ÷ run. Positive = uphill, negative = downhill, zero = flat.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}$', tips: [{ zh: '贾诩提示：密道的坡度，决定了运送的成败。', en: 'Jia Xu Tip: The tunnel\'s slope determines the success of the supply run.' }] }
+    secret: { concept: { zh: '斜率 = 垂直变化 ÷ 水平变化。正斜率上升，负斜率下降，零斜率水平。', en: 'Gradient = rise ÷ run. Positive = uphill, negative = downhill, zero = flat.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}$', tips: [{ zh: '贾诩提示：密道的坡度，决定了运送的成败。', en: 'Jia Xu Tip: The tunnel\'s slope determines the success of the supply run.' }] },
+    storyConsequence: { correct: { zh: '密道斜率——直线方程搞定！做得漂亮！', en: 'Secret Tunnel Gradient — Well done!' }, wrong: { zh: '直线方程有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 953, grade: 9, unitId: 5, order: 3,
@@ -2296,7 +2373,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '贾诩：答案\n撤退路线方程：$y = mx + c$\n有了这个方程，路线上任何位置都可以精确定位！', en: 'Jia Xu: "Answer\nEscape route equation: $y = mx + c$\nWith this equation, every position on the route can be precisely located!"' }, highlightField: 'm' },
       { text: { zh: '贾诩：验算\n把两个安全点都代入方程，看 $y$ 值是否匹配。\n两点都在线上 ✓ 撤退路线确认！密探安全撤离！', en: 'Jia Xu: "Verify\nSubstitute both safe points — check if $y$ values match.\nBoth points on the line ✓ Escape route confirmed! Spy safely extracted!"' }, highlightField: 'm' },
     ],
-    secret: { concept: { zh: '直线方程 $y = mx + c$：$m$ 是斜率（多陡），$c$ 是截距（起点高度）。两个点就能确定唯一一条直线。', en: 'Line equation $y = mx + c$: $m$ = gradient (steepness), $c$ = intercept (starting height). Two points determine a unique line.' }, formula: '$y = mx + c$', tips: [{ zh: '贾诩提示：两个点定一条线，密探的生命线。', en: 'Jia Xu Tip: Two points define a line — the spy\'s lifeline.' }] }
+    secret: { concept: { zh: '直线方程 $y = mx + c$：$m$ 是斜率（多陡），$c$ 是截距（起点高度）。两个点就能确定唯一一条直线。', en: 'Line equation $y = mx + c$: $m$ = gradient (steepness), $c$ = intercept (starting height). Two points determine a unique line.' }, formula: '$y = mx + c$', tips: [{ zh: '贾诩提示：两个点定一条线，密探的生命线。', en: 'Jia Xu Tip: Two points define a line — the spy\'s lifeline.' }] },
+    storyConsequence: { correct: { zh: '撤退路线——直线方程搞定！做得漂亮！', en: 'Escape Route Equation — Well done!' }, wrong: { zh: '直线方程有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 961, grade: 9, unitId: 6, order: 1,
@@ -2317,7 +2395,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '贾诩：答案\n$m$ 和 $c$ 的值确认。如果另一条通道的斜率也等于 $m$，它们就平行！', en: 'Jia Xu: "Answer\n$m$ and $c$ values confirmed. If the other tunnel has the same gradient $m$, they\'re parallel!"' }, highlightField: 'm' },
       { text: { zh: '贾诩：验算\n代入两个坐标点检查方程是否成立 ✓\n平行判定完成——渗透路线安全！', en: 'Jia Xu: "Verify\nSubstitute both points to check the equation ✓\nParallel check complete — infiltration route is safe!"' }, highlightField: 'm' },
     ],
-    secret: { concept: { zh: '平行线斜率相等：$m_1 = m_2$ 则平行。这是判断平行的充要条件。', en: 'Parallel lines have equal gradients: $m_1 = m_2$ means parallel. This is both necessary and sufficient.' }, formula: '$m_1 = m_2 \\Leftrightarrow \\text{parallel}$', tips: [{ zh: '贾诩提示：斜率相同就是平行——运粮通道的生命保障。', en: 'Jia Xu Tip: Equal gradient means parallel — the lifeline of supply tunnels.' }] }
+    secret: { concept: { zh: '平行线斜率相等：$m_1 = m_2$ 则平行。这是判断平行的充要条件。', en: 'Parallel lines have equal gradients: $m_1 = m_2$ means parallel. This is both necessary and sufficient.' }, formula: '$m_1 = m_2 \\Leftrightarrow \\text{parallel}$', tips: [{ zh: '贾诩提示：斜率相同就是平行——运粮通道的生命保障。', en: 'Jia Xu Tip: Equal gradient means parallel — the lifeline of supply tunnels.' }] },
+    storyConsequence: { correct: { zh: '平行密道——直线方程搞定！做得漂亮！', en: 'Parallel Tunnels — Well done!' }, wrong: { zh: '直线方程有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 962, grade: 9, unitId: 6, order: 2,
@@ -2338,7 +2417,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '贾诩：答案\n$m$ 和 $c$ 确认。\n$c$ 就是渡口位置——补给线的起点！', en: 'Jia Xu: "Answer\n$m$ and $c$ confirmed.\n$c$ is the ferry position — the supply line\'s starting point!"' }, highlightField: 'c' },
       { text: { zh: '贾诩：验算\n两个驿站坐标代入 $y = mx + c$，等式成立 ✓\n补给线确认，渡口位置精准！', en: 'Jia Xu: "Verify\nBoth relay station coordinates satisfy $y = mx + c$ ✓\nSupply line confirmed, ferry position exact!"' }, highlightField: 'c' },
     ],
-    secret: { concept: { zh: '$y$ 截距是直线穿过 $y$ 轴的点，即 $x = 0$ 时 $y$ 的值。$y = mx + c$ 中的 $c$ 就是截距。', en: 'The y-intercept is where the line crosses the y-axis (when $x = 0$). In $y = mx + c$, $c$ is the intercept.' }, formula: '$c = y - mx$', tips: [{ zh: '贾诩提示：截距是起点，斜率是方向——两个定了，路线就定了。', en: 'Jia Xu Tip: Intercept is the start, gradient is the direction — fix both and the route is set.' }] }
+    secret: { concept: { zh: '$y$ 截距是直线穿过 $y$ 轴的点，即 $x = 0$ 时 $y$ 的值。$y = mx + c$ 中的 $c$ 就是截距。', en: 'The y-intercept is where the line crosses the y-axis (when $x = 0$). In $y = mx + c$, $c$ is the intercept.' }, formula: '$c = y - mx$', tips: [{ zh: '贾诩提示：截距是起点，斜率是方向——两个定了，路线就定了。', en: 'Jia Xu Tip: Intercept is the start, gradient is the direction — fix both and the route is set.' }] },
+    storyConsequence: { correct: { zh: '补给起点——直线方程搞定！做得漂亮！', en: 'Supply Origin — Well done!' }, wrong: { zh: '直线方程有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 963, grade: 9, unitId: 6, order: 3,
@@ -2359,7 +2439,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '贾诩：答案\n会合点坐标 = $({targetX}, {targetY})$\n两队在此会合！', en: 'Jia Xu: "Answer\nRendezvous coordinates = $({targetX}, {targetY})$\nBoth squads meet here!"' }, highlightField: 'x' },
       { text: { zh: '贾诩：验算\n中点到两个据点的距离应该相等。\n从中点到 A 的距离 = 从中点到 B 的距离 ✓ 位置精准！', en: 'Jia Xu: "Verify\nThe midpoint should be equidistant from both bases.\nDistance from midpoint to A = distance to B ✓ Precise positioning!"' }, highlightField: 'y' },
     ],
-    secret: { concept: { zh: '中点 = 两点坐标分别取平均值。这是坐标几何中最基础的距离分割方法。', en: 'Midpoint = average of the two coordinates. This is the most fundamental distance-splitting method in coordinate geometry.' }, formula: '$M = \\left(\\frac{x_1+x_2}{2}, \\frac{y_1+y_2}{2}\\right)$', tips: [{ zh: '贾诩提示：取平均就是找中间，会合点从此确定。', en: 'Jia Xu Tip: Averaging finds the middle — the rendezvous point is set.' }] }
+    secret: { concept: { zh: '中点 = 两点坐标分别取平均值。这是坐标几何中最基础的距离分割方法。', en: 'Midpoint = average of the two coordinates. This is the most fundamental distance-splitting method in coordinate geometry.' }, formula: '$M = \\left(\\frac{x_1+x_2}{2}, \\frac{y_1+y_2}{2}\\right)$', tips: [{ zh: '贾诩提示：取平均就是找中间，会合点从此确定。', en: 'Jia Xu Tip: Averaging finds the middle — the rendezvous point is set.' }] },
+    storyConsequence: { correct: { zh: '会合点——坐标精准！做得漂亮！', en: 'Rendezvous Point — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 9 Unit 7: Guandu Preparations — Algebra Deepening ---
@@ -2382,7 +2463,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '荀彧：答案\n$x$ 的系数 = $a \\times b$\n军需发放完毕！', en: 'Xun Yu: "Answer\nCoefficient of $x$ = $a \\times b$\nSupplies distributed!"' }, highlightField: 'ans' },
       { text: { zh: '荀彧：验算\n代入 $x = 1$ 检查两边是否相等 ✓', en: 'Xun Yu: "Verify\nSubstitute $x = 1$ and check both sides match ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '展开括号：外面的数和里面的每一项相乘。', en: 'Expand: multiply the outside by every term inside.' }, formula: '$a(bx+c) = abx + ac$', tips: [{ zh: '荀彧提示：展开就是"拆包裹"——每种物资都要点到。', en: 'Xun Yu Tip: Expanding is \'unpacking\' — count every item.' }] }
+    secret: { concept: { zh: '展开括号：外面的数和里面的每一项相乘。', en: 'Expand: multiply the outside by every term inside.' }, formula: '$a(bx+c) = abx + ac$', tips: [{ zh: '荀彧提示：展开就是"拆包裹"——每种物资都要点到。', en: 'Xun Yu Tip: Expanding is \'unpacking\' — count every item.' }] },
+    storyConsequence: { correct: { zh: '批量锻兵——展开无误！做得漂亮！', en: 'Mass Forging — Well done!' }, wrong: { zh: '展开出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 972, grade: 9, unitId: 7, order: 2,
@@ -2403,7 +2485,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '荀彧：答案\n最大公因数确认！军需打包零失误！', en: 'Xun Yu: "Answer\nHCF confirmed! Zero packing errors!"' }, highlightField: 'ans' },
       { text: { zh: '荀彧：验算\n展开检查——打包再拆开，必须跟原来一样 ✓', en: 'Xun Yu: "Verify\nExpand to check — unpack and it must match the original ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '因式分解 = 展开的逆操作，提取公因子。', en: 'Factorising = reverse of expanding, extract common factor.' }, formula: '$ax + ay = a(x + y)$', tips: [{ zh: '荀彧提示：因式分解就是"重新打包"。', en: 'Xun Yu Tip: Factorising is \'rebundling\'.' }] }
+    secret: { concept: { zh: '因式分解 = 展开的逆操作，提取公因子。', en: 'Factorising = reverse of expanding, extract common factor.' }, formula: '$ax + ay = a(x + y)$', tips: [{ zh: '荀彧提示：因式分解就是"重新打包"。', en: 'Xun Yu Tip: Factorising is \'rebundling\'.' }] },
+    storyConsequence: { correct: { zh: '军需打包——因式分解完成！做得漂亮！', en: 'Supply Bundling — Well done!' }, wrong: { zh: '因式分解不完全…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 973, grade: 9, unitId: 7, order: 3,
@@ -2424,7 +2507,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '荀彧：答案\n临界值确认——粮草底线已设定！', en: 'Xun Yu: "Answer\nCritical value confirmed — supply minimum is set!"' }, highlightField: 'ans' },
       { text: { zh: '荀彧：验算\n代回原不等式检查是否成立 ✓\n粮草保障到位，可以出征！', en: 'Xun Yu: "Verify\nSubstitute back into original inequality ✓\nSupplies secured — ready to march!"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '不等式的解法和方程相同，只是答案是范围。注意：乘除负数要变号！', en: 'Solve inequalities like equations, but the answer is a range. Warning: multiply/divide by negative → flip the sign!' }, formula: '$ax + b > c \\Rightarrow x > \\frac{c-b}{a}$', tips: [{ zh: '荀彧提示：粮草底线，不可逾越。', en: 'Xun Yu Tip: The supply minimum must not be breached.' }] }
+    secret: { concept: { zh: '不等式的解法和方程相同，只是答案是范围。注意：乘除负数要变号！', en: 'Solve inequalities like equations, but the answer is a range. Warning: multiply/divide by negative → flip the sign!' }, formula: '$ax + b > c \\Rightarrow x > \\frac{c-b}{a}$', tips: [{ zh: '荀彧提示：粮草底线，不可逾越。', en: 'Xun Yu Tip: The supply minimum must not be breached.' }] },
+    storyConsequence: { correct: { zh: '粮草底线——不等式范围找对！做得漂亮！', en: 'Supply Minimum — Well done!' }, wrong: { zh: '不等式范围搞错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 974, grade: 9, unitId: 7, order: 4,
@@ -2445,7 +2529,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '荀彧：答案\n$a$ 和 $n$ 确认。百万雄师，一式概之！', en: 'Xun Yu: "Answer\n$a$ and $n$ confirmed. A million troops, expressed in one formula!"' }, highlightField: 'a' },
       { text: { zh: '荀彧：验算\n$a \\times 10^n$ 展开应该等于原数 ✓', en: 'Xun Yu: "Verify\n$a \\times 10^n$ expanded should equal the original number ✓"' }, highlightField: 'a' },
     ],
-    secret: { concept: { zh: '标准式 = a × 10^n，其中 1 ≤ a < 10。用于简洁表达极大或极小的数。', en: 'Standard form = a × 10^n where 1 ≤ a < 10. Used to express very large or small numbers concisely.' }, formula: '$a \\times 10^n$', tips: [{ zh: '荀彧提示：百万雄师，标准式一目了然。', en: 'Xun Yu Tip: A million troops — standard form says it all.' }] }
+    secret: { concept: { zh: '标准式 = a × 10^n，其中 1 ≤ a < 10。用于简洁表达极大或极小的数。', en: 'Standard form = a × 10^n where 1 ≤ a < 10. Used to express very large or small numbers concisely.' }, formula: '$a \\times 10^n$', tips: [{ zh: '荀彧提示：百万雄师，标准式一目了然。', en: 'Xun Yu Tip: A million troops — standard form says it all.' }] },
+    storyConsequence: { correct: { zh: '百万雄师——标准形式正确！做得漂亮！', en: 'Million-Strong Army — Well done!' }, wrong: { zh: '标准形式转换失误…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 9 Unit 8: Battle Angles & Parallel Lines ---
@@ -2468,7 +2553,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '赵云：答案\n$x$ 确认！阵型角度精准！', en: 'Zhao Yun: "Answer\n$x$ confirmed! Formation angles precise!"' }, highlightField: 'x' },
       { text: { zh: '赵云：验算\n${angle}° + x° = 180°$ ✓ 完美！', en: 'Zhao Yun: "Verify\n${angle}° + x° = 180°$ ✓ Perfect!"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '直线上的角之和 = 180°。这是最基础的角度关系。', en: 'Angles on a straight line sum to 180°. The most basic angle relationship.' }, formula: '$a + b = 180°$', tips: [{ zh: '赵云提示：直线半圈，180度不多不少。', en: 'Zhao Yun Tip: A straight line is half a turn — exactly 180°.' }] }
+    secret: { concept: { zh: '直线上的角之和 = 180°。这是最基础的角度关系。', en: 'Angles on a straight line sum to 180°. The most basic angle relationship.' }, formula: '$a + b = 180°$', tips: [{ zh: '赵云提示：直线半圈，180度不多不少。', en: 'Zhao Yun Tip: A straight line is half a turn — exactly 180°.' }] },
+    storyConsequence: { correct: { zh: '阵前角度——角度完美！做得漂亮！', en: 'Formation Angles — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 982, grade: 9, unitId: 8, order: 2,
@@ -2489,7 +2575,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '关羽：答案\n壕沟角度确认！防线固若金汤！', en: 'Guan Yu: "Answer\nTrench angles confirmed! Defense line is impenetrable!"' }, highlightField: 'x' },
       { text: { zh: '关羽：验算\n检查角度关系是否符合平行线性质 ✓', en: 'Guan Yu: "Verify\nCheck angle relationships match parallel line properties ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '平行线截角：同位角=，内错角=，同旁内角互补。', en: 'Parallel line angles: corresponding = equal, alternate = equal, co-interior = supplementary.' }, formula: '$\\text{F} = \\text{F}, \\text{Z} = \\text{Z}, \\text{C} + \\text{C} = 180°$', tips: [{ zh: '关羽提示：F相等、Z相等、C互补——三字真言。', en: 'Guan Yu Tip: F equal, Z equal, C supplementary — three golden rules.' }] }
+    secret: { concept: { zh: '平行线截角：同位角=，内错角=，同旁内角互补。', en: 'Parallel line angles: corresponding = equal, alternate = equal, co-interior = supplementary.' }, formula: '$\\text{F} = \\text{F}, \\text{Z} = \\text{Z}, \\text{C} + \\text{C} = 180°$', tips: [{ zh: '关羽提示：F相等、Z相等、C互补——三字真言。', en: 'Guan Yu Tip: F equal, Z equal, C supplementary — three golden rules.' }] },
+    storyConsequence: { correct: { zh: '壕沟截角——角度完美！做得漂亮！', en: 'Trench Angles — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 983, grade: 9, unitId: 8, order: 3,
@@ -2510,7 +2597,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '赵云：答案\n堡垒每个角都精确！施工开始！', en: 'Zhao Yun: "Answer\nEvery fortress angle is precise! Construction begins!"' }, highlightField: 'x' },
       { text: { zh: '赵云：验算\n所有角加起来应该等于内角和 $(n-2) \\times 180°$ ✓', en: 'Zhao Yun: "Verify\nAll angles should sum to $(n-2) \\times 180°$ ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '多边形内角和 = (n-2) × 180°。分三角形法推导。', en: 'Polygon interior angle sum = (n-2) × 180°. Derived by triangle decomposition.' }, formula: '$(n-2) \\times 180°$', tips: [{ zh: '赵云提示：从一个顶点画对角线，数三角形个数。', en: 'Zhao Yun Tip: Draw diagonals from one vertex, count the triangles.' }] }
+    secret: { concept: { zh: '多边形内角和 = (n-2) × 180°。分三角形法推导。', en: 'Polygon interior angle sum = (n-2) × 180°. Derived by triangle decomposition.' }, formula: '$(n-2) \\times 180°$', tips: [{ zh: '赵云提示：从一个顶点画对角线，数三角形个数。', en: 'Zhao Yun Tip: Draw diagonals from one vertex, count the triangles.' }] },
+    storyConsequence: { correct: { zh: '堡垒内角——角度完美！做得漂亮！', en: 'Fortress Interior Angles — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 9 Unit 9: March Speed & Percentages ---
@@ -2533,7 +2621,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '赵云：答案\n行军速度确认！驰援及时！', en: 'Zhao Yun: "Answer\nMarch speed confirmed! Reinforcements arrive in time!"' }, highlightField: 'x' },
       { text: { zh: '赵云：验算\n$速度 \\times 时间 = 距离$ ✓', en: 'Zhao Yun: "Verify\n$\\text{Speed} \\times \\text{Time} = \\text{Distance}$ ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '速度 = 距离 ÷ 时间。三个量知二求一。', en: 'Speed = distance ÷ time. Know two, find the third.' }, formula: '$S = \\frac{D}{T}$', tips: [{ zh: '赵云提示：急行军，算准速度才能准时到达！', en: 'Zhao Yun Tip: Forced march — calculate speed to arrive on time!' }] }
+    secret: { concept: { zh: '速度 = 距离 ÷ 时间。三个量知二求一。', en: 'Speed = distance ÷ time. Know two, find the third.' }, formula: '$S = \\frac{D}{T}$', tips: [{ zh: '赵云提示：急行军，算准速度才能准时到达！', en: 'Zhao Yun Tip: Forced march — calculate speed to arrive on time!' }] },
+    storyConsequence: { correct: { zh: '行军速度——方程完美求解！做得漂亮！', en: 'March Speed — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 992, grade: 9, unitId: 9, order: 2,
@@ -2554,7 +2643,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '曹操：答案\n兵力变化确认！', en: 'Cao Cao: "Answer\nArmy change confirmed!"' }, highlightField: 'ans' },
       { text: { zh: '曹操：验算\n新值 - 原值 应等于 原值 × 百分比 ✓', en: 'Cao Cao: "Verify\nNew - original should equal original × percentage ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '百分比增减：新值 = 原值 × (1 + 变化率)。', en: 'Percentage change: new = original × (1 + rate).' }, formula: '$\\text{New} = \\text{Original} \\times (1+r)$', tips: [{ zh: '曹操提示：兵马未动，数字先行。', en: 'Cao Cao Tip: Before troops move, numbers go first.' }] }
+    secret: { concept: { zh: '百分比增减：新值 = 原值 × (1 + 变化率)。', en: 'Percentage change: new = original × (1 + rate).' }, formula: '$\\text{New} = \\text{Original} \\times (1+r)$', tips: [{ zh: '曹操提示：兵马未动，数字先行。', en: 'Cao Cao Tip: Before troops move, numbers go first.' }] },
+    storyConsequence: { correct: { zh: '兵力增长——百分比算得好！做得漂亮！', en: 'Army Growth — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 993, grade: 9, unitId: 9, order: 3,
@@ -2575,7 +2665,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '曹操：答案\n原价反推完成！', en: 'Cao Cao: "Answer\nOriginal value found!"' }, highlightField: 'ans' },
       { text: { zh: '曹操：验算\n原值 × $(1 + r)$ 应等于新值 ✓', en: 'Cao Cao: "Verify\nOriginal × $(1 + r)$ should equal new value ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '反向百分比：原值 = 新值 ÷ (1 + 变化率)。', en: 'Reverse percentage: original = new ÷ (1 + rate).' }, formula: '$\\text{Original} = \\frac{\\text{New}}{1+r}$', tips: [{ zh: '曹操提示：反推原价——除以 $(1+r)$ 就行了。', en: 'Cao Cao Tip: Reverse — just divide by $(1+r)$.' }] }
+    secret: { concept: { zh: '反向百分比：原值 = 新值 ÷ (1 + 变化率)。', en: 'Reverse percentage: original = new ÷ (1 + rate).' }, formula: '$\\text{Original} = \\frac{\\text{New}}{1+r}$', tips: [{ zh: '曹操提示：反推原价——除以 $(1+r)$ 就行了。', en: 'Cao Cao Tip: Reverse — just divide by $(1+r)$.' }] },
+    storyConsequence: { correct: { zh: '军饷原价——百分比算得好！做得漂亮！', en: 'Original Stipend — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y9 Unit 10: 度量篇 · 荆州屯田 (Mensuration) ---
@@ -2598,7 +2689,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n面积 = {answer} 平方单位。\n这块屯田可以养活不少将士！', en: 'Zhuge Liang: "Answer\nArea = {answer} square units.\nThis field can feed many soldiers!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n换一种方法：把梯形分成一个长方形 + 一个三角形。\n长方形 = {a} × {h} = {rect_area}，三角形 = ½ × ({b}-{a}) × {h} = {tri_area}。\n{rect_area} + {tri_area} = {answer} ✓', en: 'Zhuge Liang: "Verify\nSplit into rectangle + triangle.\nRect = {a}×{h} = {rect_area}, Triangle = ½×({b}-{a})×{h} = {tri_area}.\n{rect_area} + {tri_area} = {answer} ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '梯形面积 = ½(上底+下底)×高。把两条平行边"取平均"再乘以高。', en: 'Trapezium area = ½(a+b)×h. Average the parallel sides, then multiply by height.' }, formula: '$A = \\frac{1}{2}(a+b)h$', tips: [{ zh: '诸葛亮提示：上下取平均，再乘高。', en: 'Zhuge Liang Tip: Average top and bottom, then multiply by height.' }] }
+    secret: { concept: { zh: '梯形面积 = ½(上底+下底)×高。把两条平行边"取平均"再乘以高。', en: 'Trapezium area = ½(a+b)×h. Average the parallel sides, then multiply by height.' }, formula: '$A = \\frac{1}{2}(a+b)h$', tips: [{ zh: '诸葛亮提示：上下取平均，再乘高。', en: 'Zhuge Liang Tip: Average top and bottom, then multiply by height.' }] },
+    storyConsequence: { correct: { zh: '梯形田亩——面积正确！做得漂亮！', en: 'Trapezium Fields — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9102, grade: 9, unitId: 10, order: 2,
@@ -2619,7 +2711,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n粮仓底面积 ≈ {answer} 平方单位。', en: 'Zhuge Liang: "Answer\nGranary base area ≈ {answer} square units."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n用 $A \\div \\pi$ 应该等于 $r^2 = {r_sq}$ ✓', en: 'Zhuge Liang: "Verify\n$A \\div \\pi$ should equal $r^2 = {r_sq}$ ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '圆面积 = πr²。半径的平方乘以π。', en: 'Circle area = πr². Radius squared times π.' }, formula: '$A = \\pi r^2$', tips: [{ zh: '诸葛亮提示：半径平方，再乘π。', en: 'Zhuge Liang Tip: Square the radius, multiply by π.' }] }
+    secret: { concept: { zh: '圆面积 = πr²。半径的平方乘以π。', en: 'Circle area = πr². Radius squared times π.' }, formula: '$A = \\pi r^2$', tips: [{ zh: '诸葛亮提示：半径平方，再乘π。', en: 'Zhuge Liang Tip: Square the radius, multiply by π.' }] },
+    storyConsequence: { correct: { zh: '圆形粮仓——圆的计算完美！做得漂亮！', en: 'Circular Granary — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9103, grade: 9, unitId: 10, order: 3,
@@ -2640,7 +2733,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n粮仓容量 = {answer} 立方单位。', en: 'Zhuge Liang: "Answer\nGranary volume = {answer} cubic units."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n$V \\div h = {baseArea}$（底面积）✓\n$V \\div A = {height}$（高度）✓', en: 'Zhuge Liang: "Verify\n$V \\div h = {baseArea}$ (base area) ✓\n$V \\div A = {height}$ (height) ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '柱体体积 = 底面积 × 高。适用于所有棱柱和圆柱。', en: 'Prism volume = base area × height. Works for all prisms and cylinders.' }, formula: '$V = A \\times h$', tips: [{ zh: '诸葛亮提示：底面积乘高——万能柱体公式。', en: 'Zhuge Liang Tip: Base area × height — universal prism formula.' }] }
+    secret: { concept: { zh: '柱体体积 = 底面积 × 高。适用于所有棱柱和圆柱。', en: 'Prism volume = base area × height. Works for all prisms and cylinders.' }, formula: '$V = A \\times h$', tips: [{ zh: '诸葛亮提示：底面积乘高——万能柱体公式。', en: 'Zhuge Liang Tip: Base area × height — universal prism formula.' }] },
+    storyConsequence: { correct: { zh: '粮仓容量——体积正确！做得漂亮！', en: 'Granary Volume — Well done!' }, wrong: { zh: '体积算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y9 Unit 11: 三角篇 · 赤壁前夜 (Trigonometry Extension) ---
@@ -2663,7 +2757,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜：答案\n敌船距离 = {answer}。\n火攻射程够了！', en: 'Zhou Yu: "Answer\nEnemy distance = {answer}.\nFire attack range confirmed!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：验算\n$\\frac{{answer}}{{hyp}} = {sin_val} = \\sin {angle}°$ ✓', en: 'Zhou Yu: "Verify\n$\\frac{{answer}}{{hyp}} = {sin_val} = \\sin {angle}°$ ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: 'sin θ = 对边/斜边。已知角和斜边，可求对边。', en: 'sin θ = opp/hyp. Given angle and hypotenuse, find opposite.' }, formula: '$\\sin\\theta = \\frac{\\text{opp}}{\\text{hyp}}$', tips: [{ zh: '周瑜提示：SOH — sin = 对/斜。', en: 'Zhou Yu Tip: SOH — sin = opposite/hypotenuse.' }] }
+    secret: { concept: { zh: 'sin θ = 对边/斜边。已知角和斜边，可求对边。', en: 'sin θ = opp/hyp. Given angle and hypotenuse, find opposite.' }, formula: '$\\sin\\theta = \\frac{\\text{opp}}{\\text{hyp}}$', tips: [{ zh: '周瑜提示：SOH — sin = 对/斜。', en: 'Zhou Yu Tip: SOH — sin = opposite/hypotenuse.' }] },
+    storyConsequence: { correct: { zh: '瞭望测距——三角精准！做得漂亮！', en: 'Watchtower Range — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9112, grade: 9, unitId: 11, order: 2,
@@ -2684,7 +2779,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '黄盖：答案\n水平距离 = {answer}。\n火攻方位确认！', en: 'Huang Gai: "Answer\nHorizontal distance = {answer}.\nFire attack bearing confirmed!"' }, highlightField: 'ans' },
       { text: { zh: '黄盖：验算\n$\\frac{{answer}}{{hyp}} = {cos_val} = \\cos {angle}°$ ✓', en: 'Huang Gai: "Verify\n$\\frac{{answer}}{{hyp}} = {cos_val} = \\cos {angle}°$ ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: 'cos θ = 邻边/斜边。已知角和斜边，可求邻边。', en: 'cos θ = adj/hyp. Given angle and hypotenuse, find adjacent.' }, formula: '$\\cos\\theta = \\frac{\\text{adj}}{\\text{hyp}}$', tips: [{ zh: '黄盖提示：CAH — cos = 邻/斜。', en: 'Huang Gai Tip: CAH — cos = adjacent/hypotenuse.' }] }
+    secret: { concept: { zh: 'cos θ = 邻边/斜边。已知角和斜边，可求邻边。', en: 'cos θ = adj/hyp. Given angle and hypotenuse, find adjacent.' }, formula: '$\\cos\\theta = \\frac{\\text{adj}}{\\text{hyp}}$', tips: [{ zh: '黄盖提示：CAH — cos = 邻/斜。', en: 'Huang Gai Tip: CAH — cos = adjacent/hypotenuse.' }] },
+    storyConsequence: { correct: { zh: '火箭射角——三角精准！做得漂亮！', en: 'Fire Arrow Angle — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9113, grade: 9, unitId: 11, order: 3,
@@ -2705,7 +2801,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '庞统：答案\n锁链长度 = {answer}。\n连环计成功——曹军战船全部锁住！', en: 'Pang Tong: "Answer\nChain length = {answer}.\nThe chaining strategy works — Cao Cao\'s fleet is locked together!"' }, highlightField: 'ans' },
       { text: { zh: '庞统：验算\n$\\frac{{answer}}{{adj}} = {tan_val} = \\tan {angle}°$ ✓', en: 'Pang Tong: "Verify\n$\\frac{{answer}}{{adj}} = {tan_val} = \\tan {angle}°$ ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: 'tan θ = 对边/邻边。已知角和邻边，可求对边。', en: 'tan θ = opp/adj. Given angle and adjacent, find opposite.' }, formula: '$\\tan\\theta = \\frac{\\text{opp}}{\\text{adj}}$', tips: [{ zh: '庞统提示：TOA — tan = 对/邻。SOH-CAH-TOA 三兄弟！', en: 'Pang Tong Tip: TOA — tan = opposite/adjacent. SOH-CAH-TOA trio!' }] }
+    secret: { concept: { zh: 'tan θ = 对边/邻边。已知角和邻边，可求对边。', en: 'tan θ = opp/adj. Given angle and adjacent, find opposite.' }, formula: '$\\tan\\theta = \\frac{\\text{opp}}{\\text{adj}}$', tips: [{ zh: '庞统提示：TOA — tan = 对/邻。SOH-CAH-TOA 三兄弟！', en: 'Pang Tong Tip: TOA — tan = opposite/adjacent. SOH-CAH-TOA trio!' }] },
+    storyConsequence: { correct: { zh: '连环船锁链——三角精准！做得漂亮！', en: 'Chain Link Angle — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y9 Unit 12: 统计篇 · 战后清点 (Statistics) ---
@@ -2728,7 +2825,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马懿：答案\n平均伤亡 = {answer} 人。', en: 'Sima Yi: "Answer\nMean casualties = {answer}."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：验算\n$\\bar{x} \\times {count} = {sum}$（等于总和）✓', en: 'Sima Yi: "Verify\n$\\bar{x} \\times {count} = {sum}$ (equals sum) ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '平均数 = 总和 ÷ 个数。一个数字代表整体水平。', en: 'Mean = sum ÷ count. One number represents the whole.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '司马懿提示：先加后除——平均数就这么简单。', en: 'Sima Yi Tip: Add then divide — mean is that simple.' }] }
+    secret: { concept: { zh: '平均数 = 总和 ÷ 个数。一个数字代表整体水平。', en: 'Mean = sum ÷ count. One number represents the whole.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '司马懿提示：先加后除——平均数就这么简单。', en: 'Sima Yi Tip: Add then divide — mean is that simple.' }] },
+    storyConsequence: { correct: { zh: '伤亡均值——数据分析到位！做得漂亮！', en: 'Casualty Mean — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9122, grade: 9, unitId: 12, order: 2,
@@ -2749,7 +2847,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马懿：答案\n中位数 = {answer}。', en: 'Sima Yi: "Answer\nMedian = {answer}."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：验算\n中位数左右两边的数据个数应该相等 ✓', en: 'Sima Yi: "Verify\nEqual count of values on both sides of the median ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '中位数 = 排序后中间的值。不受极端值影响。', en: 'Median = middle value after sorting. Not affected by outliers.' }, formula: 'Sort → middle value', tips: [{ zh: '司马懿提示：先排队，再找中间人。', en: 'Sima Yi Tip: Line up first, then find the middle person.' }] }
+    secret: { concept: { zh: '中位数 = 排序后中间的值。不受极端值影响。', en: 'Median = middle value after sorting. Not affected by outliers.' }, formula: 'Sort → middle value', tips: [{ zh: '司马懿提示：先排队，再找中间人。', en: 'Sima Yi Tip: Line up first, then find the middle person.' }] },
+    storyConsequence: { correct: { zh: '物资中位数——数据分析到位！做得漂亮！', en: 'Supply Median — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9123, grade: 9, unitId: 12, order: 3,
@@ -2770,7 +2869,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马懿：答案\n援军到达概率 = {answer}。\n四成把握——值得一赌！', en: 'Sima Yi: "Answer\nReinforcement probability = {answer}.\n40% chance — worth the gamble!"' }, highlightField: 'ans' },
       { text: { zh: '司马懿：验算\n概率在 0 和 1 之间 ✓\n$P(\\text{到}) + P(\\text{不到}) = 1$ ✓', en: 'Sima Yi: "Verify\nProbability is between 0 and 1 ✓\n$P(\\text{arrive}) + P(\\text{not}) = 1$ ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '概率 = 有利结果 ÷ 总结果。0 到 1 之间，越大越可能。', en: 'Probability = favorable ÷ total. Between 0 and 1, higher = more likely.' }, formula: '$P = \\frac{\\text{favorable}}{\\text{total}}$', tips: [{ zh: '司马懿提示：好的 ÷ 全部 = 概率。', en: 'Sima Yi Tip: Good ÷ all = probability.' }] }
+    secret: { concept: { zh: '概率 = 有利结果 ÷ 总结果。0 到 1 之间，越大越可能。', en: 'Probability = favorable ÷ total. Between 0 and 1, higher = more likely.' }, formula: '$P = \\frac{\\text{favorable}}{\\text{total}}$', tips: [{ zh: '司马懿提示：好的 ÷ 全部 = 概率。', en: 'Sima Yi Tip: Good ÷ all = probability.' }] },
+    storyConsequence: { correct: { zh: '援军概率——概率算准！做得漂亮！', en: 'Reinforcement Probability — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 9 Unit 13: 赤壁前奏·高等代数 (Simultaneous & Quadratic) ---
@@ -2793,7 +2893,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '鲁肃："答案：$x = 5$，$y = 3$。"', en: 'Lu Su: "Answer: $x = 5$, $y = 3$."' }, highlightField: 'x' },
       { text: { zh: '鲁肃："验算：$5 + 3 = 8$ ✓，$5 - 3 = 2$ ✓。两个条件都满足——密约达成！联军同心，其利断金。"', en: 'Lu Su: "Check: $5 + 3 = 8$ ✓, $5 - 3 = 2$ ✓. Both conditions met — pact sealed! United, they cut through gold."' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '联立方程：两个等式两个未知数，消元法让一个未知数消失。', en: 'Simultaneous equations: two equations, two unknowns — elimination removes one.' }, formula: '$x + y = 8,\\; x - y = 2$', tips: [{ zh: '鲁肃提示：联军同心，其利断金。', en: 'Lu Su Tip: United, they cut through gold.' }] }
+    secret: { concept: { zh: '联立方程：两个等式两个未知数，消元法让一个未知数消失。', en: 'Simultaneous equations: two equations, two unknowns — elimination removes one.' }, formula: '$x + y = 8,\\; x - y = 2$', tips: [{ zh: '鲁肃提示：联军同心，其利断金。', en: 'Lu Su Tip: United, they cut through gold.' }] },
+    storyConsequence: { correct: { zh: '粮草密约——联立方程求解成功！做得漂亮！', en: 'Secret Supply Pact — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9132, grade: 9, unitId: 13, order: 2,
@@ -2814,7 +2915,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜："答案：$x = 3$。"', en: 'Zhou Yu: "Answer: $x = 3$."' }, highlightField: 'x' },
       { text: { zh: '周瑜："验算：$h(3) = -(3)^2 + 6(3) = -9 + 18 = 9$。试旁边：$h(2) = -4+12 = 8 < 9$。✓ 确实是最高点！石块精准砸中敌船。"', en: 'Zhou Yu: "Check: $h(3) = -9 + 18 = 9$. Try nearby: $h(2) = -4+12 = 8 < 9$. ✓ It is the peak! Stone hits the enemy ship."' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '二次函数顶点在对称轴 $x = -b/(2a)$ 处。', en: 'Quadratic vertex is at axis of symmetry $x = -b/(2a)$.' }, formula: '$x = -\\frac{b}{2a}$', tips: [{ zh: '周瑜提示：找到最高点，才能精准打击。', en: 'Zhou Yu Tip: Find the peak to strike precisely.' }] }
+    secret: { concept: { zh: '二次函数顶点在对称轴 $x = -b/(2a)$ 处。', en: 'Quadratic vertex is at axis of symmetry $x = -b/(2a)$.' }, formula: '$x = -\\frac{b}{2a}$', tips: [{ zh: '周瑜提示：找到最高点，才能精准打击。', en: 'Zhou Yu Tip: Find the peak to strike precisely.' }] },
+    storyConsequence: { correct: { zh: '投石轨迹——二次方程迎刃而解！做得漂亮！', en: 'Catapult Trajectory — Well done!' }, wrong: { zh: '二次方程算岔了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 9 Unit 14: 赤壁前奏·数据与变换 (Venn, CumFreq, Sector, Transformations, Vectors) ---
@@ -2837,7 +2939,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮："答案：双方都知道 10 人。"', en: 'Zhuge Liang: "Answer: both know 10 generals."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮："验算：只孙 15 + 双方 10 + 只刘 10 + 都不知道 15 = 50。✓ 总数对上！情报汇总，知己知彼。"', en: 'Zhuge Liang: "Check: Sun-only 15 + both 10 + Liu-only 10 + neither 15 = 50. ✓ Total matches! Intelligence gathered — know your enemy."' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '韦恩图：$|A \\cap B| = |A| - |A \\text{ only}|$。', en: 'Venn: $|A \\cap B| = |A| - |A \\text{ only}|$.' }, formula: '$|A \\cup B| = |A| + |B| - |A \\cap B|$', tips: [{ zh: '诸葛亮提示：知己知彼，百战不殆。', en: 'Zhuge Liang Tip: Know yourself and your enemy, and you\'ll never lose.' }] }
+    secret: { concept: { zh: '韦恩图：$|A \\cap B| = |A| - |A \\text{ only}|$。', en: 'Venn: $|A \\cap B| = |A| - |A \\text{ only}|$.' }, formula: '$|A \\cup B| = |A| + |B| - |A \\cap B|$', tips: [{ zh: '诸葛亮提示：知己知彼，百战不殆。', en: 'Zhuge Liang Tip: Know yourself and your enemy, and you\'ll never lose.' }] },
+    storyConsequence: { correct: { zh: '谍报交集——集合理清！做得漂亮！', en: 'Intelligence Overlap — Well done!' }, wrong: { zh: '集合关系理错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9142, grade: 9, unitId: 14, order: 2,
@@ -2858,7 +2961,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜："答案：弧长 = 15.7 里。"', en: 'Zhou Yu: "Answer: arc length = 15.7 li."' }, highlightField: 'ans' },
       { text: { zh: '周瑜："验算：$15.7 \\times 4 = 62.8$，正好是整圈周长。✓ 90° 确实是四分之一圈！"', en: 'Zhou Yu: "Check: $15.7 \\times 4 = 62.8$, exactly the full circumference. ✓ 90° is indeed one-quarter!"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '弧长 = 角度/360 × 圆周长。', en: 'Arc length = angle/360 × circumference.' }, formula: '$l = \\frac{\\theta}{360} \\times 2\\pi r$', tips: [{ zh: '周瑜提示：弧线比直线长，计算不能偷懒。', en: 'Zhou Yu Tip: Curves are longer than lines — no shortcuts in calculation.' }] }
+    secret: { concept: { zh: '弧长 = 角度/360 × 圆周长。', en: 'Arc length = angle/360 × circumference.' }, formula: '$l = \\frac{\\theta}{360} \\times 2\\pi r$', tips: [{ zh: '周瑜提示：弧线比直线长，计算不能偷懒。', en: 'Zhou Yu Tip: Curves are longer than lines — no shortcuts in calculation.' }] },
+    storyConsequence: { correct: { zh: '烽火扇面——圆的计算完美！做得漂亮！', en: 'Beacon Arc — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9143, grade: 9, unitId: 14, order: 3,
@@ -2879,7 +2983,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮："答案：旋转后坐标 $(3, 7)$。"', en: 'Zhuge Liang: "Answer: rotated coordinates $(3, 7)$."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮："验算：原点距 = $\\sqrt{3^2+0^2} = 3$，新点距 = $\\sqrt{0^2+3^2} = 3$。✓ 半径不变——旋转只改方向不改距离！"', en: 'Zhuge Liang: "Check: original distance = $\\sqrt{3^2+0^2} = 3$, new distance = $\\sqrt{0^2+3^2} = 3$. ✓ Radius unchanged — rotation changes direction, not distance!"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '旋转：先平移到原点，应用旋转公式，再平移回来。', en: 'Rotation: translate to origin, apply rotation formula, translate back.' }, formula: '$(x,y) \\xrightarrow{90°\\text{CCW}} (-y, x)$', tips: [{ zh: '诸葛亮提示：八阵图变幻莫测，全靠旋转之妙。', en: 'Zhuge Liang Tip: The Eight Formations shift unpredictably, all through rotation.' }] }
+    secret: { concept: { zh: '旋转：先平移到原点，应用旋转公式，再平移回来。', en: 'Rotation: translate to origin, apply rotation formula, translate back.' }, formula: '$(x,y) \\xrightarrow{90°\\text{CCW}} (-y, x)$', tips: [{ zh: '诸葛亮提示：八阵图变幻莫测，全靠旋转之妙。', en: 'Zhuge Liang Tip: The Eight Formations shift unpredictably, all through rotation.' }] },
+    storyConsequence: { correct: { zh: '阵型旋转——角度完美！做得漂亮！', en: 'Formation Rotation — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9144, grade: 9, unitId: 14, order: 4,
@@ -2900,7 +3005,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜："答案：放大后坐标 $(3, 6)$。"', en: 'Zhou Yu: "Answer: enlarged coordinates $(3, 6)$."' }, highlightField: 'x' },
       { text: { zh: '周瑜："验算：原点到原点距 = $\\sqrt{1^2+2^2} = \\sqrt{5}$，到新点距 = $\\sqrt{9+36} = \\sqrt{45} = 3\\sqrt{5}$。正好是 3 倍。✓"', en: 'Zhou Yu: "Check: distance from origin = $\\sqrt{1+4} = \\sqrt{5}$, to new point = $\\sqrt{9+36} = 3\\sqrt{5}$. Exactly 3 times. ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '以原点为中心放大 k 倍：$(x, y) \\to (kx, ky)$。', en: 'Enlarge by k from origin: $(x, y) \\to (kx, ky)$.' }, formula: '$(x\', y\') = (kx, ky)$', tips: [{ zh: '周瑜提示：放大不走样，比例是关键。', en: 'Zhou Yu Tip: Scale without distortion — ratio is key.' }] }
+    secret: { concept: { zh: '以原点为中心放大 k 倍：$(x, y) \\to (kx, ky)$。', en: 'Enlarge by k from origin: $(x, y) \\to (kx, ky)$.' }, formula: '$(x\', y\') = (kx, ky)$', tips: [{ zh: '周瑜提示：放大不走样，比例是关键。', en: 'Zhou Yu Tip: Scale without distortion — ratio is key.' }] },
+    storyConsequence: { correct: { zh: '战旗放大——坐标精准！做得漂亮！', en: 'Banner Enlargement — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9145, grade: 9, unitId: 14, order: 5,
@@ -2921,7 +3027,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮："答案：合向量 = $(4, 1)$。"', en: 'Zhuge Liang: "Answer: resultant = $(4, 1)$."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮："验算：画图检查——从原点画 $(3,2)$，再从终点画 $(1,-1)$，到达 $(4,1)$。✓ 东风一起，火烧连营！"', en: 'Zhuge Liang: "Check: draw $(3,2)$ from origin, then $(1,-1)$ from its tip — arrives at $(4,1)$. ✓ East wind rises, fire engulfs the fleet!"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '向量加法：对应分量相加。', en: 'Vector addition: add corresponding components.' }, formula: '$\\vec{a} + \\vec{b} = (a_1+b_1, a_2+b_2)$', tips: [{ zh: '诸葛亮提示：万事俱备，只欠东风。', en: 'Zhuge Liang Tip: Everything is ready, we just need the east wind.' }] }
+    secret: { concept: { zh: '向量加法：对应分量相加。', en: 'Vector addition: add corresponding components.' }, formula: '$\\vec{a} + \\vec{b} = (a_1+b_1, a_2+b_2)$', tips: [{ zh: '诸葛亮提示：万事俱备，只欠东风。', en: 'Zhuge Liang Tip: Everything is ready, we just need the east wind.' }] },
+    storyConsequence: { correct: { zh: '东风向量——坐标精准！做得漂亮！', en: 'East Wind Vector — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 9146, grade: 9, unitId: 14, order: 6,
@@ -2942,7 +3049,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马懿："答案：20 个部队伤亡不超过 20 人。"', en: 'Sima Yi: "Answer: 20 units had casualties ≤ 20."' }, highlightField: 'ans' },
       { text: { zh: '司马懿："验算：最终累积 = $8+12+15+10+5 = 50$，等于总部队数。✓ 数据核对无误。"', en: 'Sima Yi: "Check: final cumulative = $8+12+15+10+5 = 50$, equals total units. ✓ Data verified."' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '累积频率 = 逐组频率的连续求和。', en: 'Cumulative frequency = running sum of group frequencies.' }, formula: '$CF_n = \\sum_{i=1}^{n} f_i$', tips: [{ zh: '司马懿提示：数据是冷酷的，但它不会骗人。', en: 'Sima Yi Tip: Data is cold, but it never lies.' }] }
+    secret: { concept: { zh: '累积频率 = 逐组频率的连续求和。', en: 'Cumulative frequency = running sum of group frequencies.' }, formula: '$CF_n = \\sum_{i=1}^{n} f_i$', tips: [{ zh: '司马懿提示：数据是冷酷的，但它不会骗人。', en: 'Sima Yi Tip: Data is cold, but it never lies.' }] },
+    storyConsequence: { correct: { zh: '伤亡频率——数据分析到位！做得漂亮！', en: 'Casualty Frequency — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 10: The Battle of Red Cliffs (Complexity) ---
@@ -2971,7 +3079,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'c'
       }
     ],
-    secret: { concept: { zh: '二次函数顶点公式：$x = -b/(2a)$。', en: 'Vertex formula: $x = -b/(2a)$.' }, formula: '$x = -b/(2a)$', tips: [{ zh: '周瑜提示：草船借箭，妙在算准轨迹。', en: 'Zhou Yu Tip: Borrowing arrows with straw boats — the key is calculating the trajectory.' }] }
+    secret: { concept: { zh: '二次函数顶点公式：$x = -b/(2a)$。', en: 'Vertex formula: $x = -b/(2a)$.' }, formula: '$x = -b/(2a)$', tips: [{ zh: '周瑜提示：草船借箭，妙在算准轨迹。', en: 'Zhou Yu Tip: Borrowing arrows with straw boats — the key is calculating the trajectory.' }] },
+    storyConsequence: { correct: { zh: '草船借箭——二次方程迎刃而解！做得漂亮！', en: 'Straw Boats Borrow Arrows — Well done!' }, wrong: { zh: '二次方程算岔了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1012, grade: 10, unitId: 1, order: 2,
@@ -2998,7 +3107,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '求根公式：$x = \\pm \\sqrt{-c/a}$。', en: 'Quadratic roots: $x = \\pm \\sqrt{-c/a}$.' }, formula: '$x = \\pm 4$', tips: [{ zh: '周瑜提示：火借风势，风助火威。', en: 'Zhou Yu Tip: Fire relies on the wind, and wind aids the fire.' }] }
+    secret: { concept: { zh: '求根公式：$x = \\pm \\sqrt{-c/a}$。', en: 'Quadratic roots: $x = \\pm \\sqrt{-c/a}$.' }, formula: '$x = \\pm 4$', tips: [{ zh: '周瑜提示：火借风势，风助火威。', en: 'Zhou Yu Tip: Fire relies on the wind, and wind aids the fire.' }] },
+    storyConsequence: { correct: { zh: '火烧赤壁——根找到了！做得漂亮！', en: 'Burning Red Cliffs — Well done!' }, wrong: { zh: '方程的根没找对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1013, grade: 10, unitId: 1, order: 3,
@@ -3025,7 +3135,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '二次方程的根即为函数与x轴的交点。', en: 'Roots of a quadratic are where the function meets the x-axis.' }, formula: '$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$', tips: [{ zh: '曹仁提示：射程之内，皆为魏土！', en: 'Cao Ren Tip: Everything within range belongs to Wei!' }] }
+    secret: { concept: { zh: '二次方程的根即为函数与x轴的交点。', en: 'Roots of a quadratic are where the function meets the x-axis.' }, formula: '$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$', tips: [{ zh: '曹仁提示：射程之内，皆为魏土！', en: 'Cao Ren Tip: Everything within range belongs to Wei!' }] },
+    storyConsequence: { correct: { zh: '投石射程——根找到了！做得漂亮！', en: 'Catapult Range — Well done!' }, wrong: { zh: '方程的根没找对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1021, grade: 10, unitId: 2, order: 1,
@@ -3052,7 +3163,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'y'
       }
     ],
-    secret: { concept: { zh: '加减消元法。', en: 'Elimination method.' }, formula: '$3x = 15000 \\Rightarrow x = 5000$', tips: [{ zh: '鲁肃提示：联军同心，其利断金。', en: 'Lu Su Tip: When the coalition is of one mind, they can cut through gold.' }] }
+    secret: { concept: { zh: '加减消元法。', en: 'Elimination method.' }, formula: '$3x = 15000 \\Rightarrow x = 5000$', tips: [{ zh: '鲁肃提示：联军同心，其利断金。', en: 'Lu Su Tip: When the coalition is of one mind, they can cut through gold.' }] },
+    storyConsequence: { correct: { zh: '兵力合围——联立方程求解成功！做得漂亮！', en: 'Troop Encirclement — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1022, grade: 10, unitId: 2, order: 2,
@@ -3079,7 +3191,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'y'
       }
     ],
-    secret: { concept: { zh: '加减消元法可以快速解系数对称的方程组。', en: 'Addition/subtraction elimination works well for symmetric coefficients.' }, formula: '$\\begin{cases} 3x + 2y = 12 \\\\ 2x + 3y = 13 \\end{cases}$', tips: [{ zh: '鲁肃提示：互通有无，方能持久。', en: 'Lu Su Tip: Mutual exchange is the key to endurance.' }] }
+    secret: { concept: { zh: '加减消元法可以快速解系数对称的方程组。', en: 'Addition/subtraction elimination works well for symmetric coefficients.' }, formula: '$\\begin{cases} 3x + 2y = 12 \\\\ 2x + 3y = 13 \\end{cases}$', tips: [{ zh: '鲁肃提示：互通有无，方能持久。', en: 'Lu Su Tip: Mutual exchange is the key to endurance.' }] },
+    storyConsequence: { correct: { zh: '粮草互换——联立方程求解成功！做得漂亮！', en: 'Resource Exchange — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1023, grade: 10, unitId: 2, order: 3,
@@ -3106,7 +3219,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'y'
       }
     ],
-    secret: { concept: { zh: '代入消元法。', en: 'Substitution method.' }, formula: '$5x = 50 \\Rightarrow x = 10$', tips: [{ zh: '周瑜提示：兵贵神速，调度有方。', en: 'Zhou Yu Tip: Speed is precious in war, deployment must be orderly.' }] }
+    secret: { concept: { zh: '代入消元法。', en: 'Substitution method.' }, formula: '$5x = 50 \\Rightarrow x = 10$', tips: [{ zh: '周瑜提示：兵贵神速，调度有方。', en: 'Zhou Yu Tip: Speed is precious in war, deployment must be orderly.' }] },
+    storyConsequence: { correct: { zh: '战船调度——联立方程求解成功！做得漂亮！', en: 'Ship Deployment — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1031, grade: 10, unitId: 3, order: 1,
@@ -3164,7 +3278,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'p'
       }
     ],
-    secret: { concept: { zh: '独立事件的联合概率是各自概率的乘积。', en: 'Joint probability of independent events is the product of their probabilities.' }, formula: '$P(A \\text{ and } B) = P(A) \\cdot P(B)$', tips: [{ zh: '庞统提示：铁索连舟，火势一发不可收拾。', en: 'Pang Tong Tip: Chain the boats, and the fire will be unstoppable.' }] }
+    secret: { concept: { zh: '独立事件的联合概率是各自概率的乘积。', en: 'Joint probability of independent events is the product of their probabilities.' }, formula: '$P(A \\text{ and } B) = P(A) \\cdot P(B)$', tips: [{ zh: '庞统提示：铁索连舟，火势一发不可收拾。', en: 'Pang Tong Tip: Chain the boats, and the fire will be unstoppable.' }] },
+    storyConsequence: { correct: { zh: '连环计——概率算准！做得漂亮！', en: 'Chain Link Strategy — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1033, grade: 10, unitId: 3, order: 3,
@@ -3191,7 +3306,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'p'
       }
     ],
-    secret: { concept: { zh: '简单概率：$P = \\frac{\\text{目标数}}{\\text{总数}}$。', en: 'Simple probability: $P = \\frac{\\text{target}}{\\text{total}}$.' }, formula: '$P = 19/27$', tips: [{ zh: '关羽提示：义薄云天，放他一马。', en: 'Guan Yu Tip: Loyalty as high as the sky, let him pass.' }] }
+    secret: { concept: { zh: '简单概率：$P = \\frac{\\text{目标数}}{\\text{总数}}$。', en: 'Simple probability: $P = \\frac{\\text{target}}{\\text{total}}$.' }, formula: '$P = 19/27$', tips: [{ zh: '关羽提示：义薄云天，放他一马。', en: 'Guan Yu Tip: Loyalty as high as the sky, let him pass.' }] },
+    storyConsequence: { correct: { zh: '华容道伏兵——概率算准！做得漂亮！', en: 'Huarong Pass Ambush — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1041, grade: 10, unitId: 4, order: 1,
@@ -3218,7 +3334,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'c'
       }
     ],
-    secret: { concept: { zh: '正弦值是对边与斜边的比。', en: 'Sine is the ratio of opposite to hypotenuse.' }, formula: '$\\sin(\\theta) = \\text{opp} / \\text{hyp}$', tips: [{ zh: '甘宁提示：水战之中，距离就是生命！', en: 'Gan Ning Tip: In naval battle, distance is life!' }] }
+    secret: { concept: { zh: '正弦值是对边与斜边的比。', en: 'Sine is the ratio of opposite to hypotenuse.' }, formula: '$\\sin(\\theta) = \\text{opp} / \\text{hyp}$', tips: [{ zh: '甘宁提示：水战之中，距离就是生命！', en: 'Gan Ning Tip: In naval battle, distance is life!' }] },
+    storyConsequence: { correct: { zh: '战船间距——三角精准！做得漂亮！', en: 'Ship Distance — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1042, grade: 10, unitId: 4, order: 2,
@@ -3245,7 +3362,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'angle'
       }
     ],
-    secret: { concept: { zh: '正切值为1时，角度为 45 度。', en: 'When tangent is 1, the angle is 45 degrees.' }, formula: '$\\theta = \\arctan(a/b)$', tips: [{ zh: '甘宁提示：火攻之势，在于风向与角度的完美契合。', en: 'Gan Ning Tip: The power of fire lies in the perfect match of wind and angle.' }] }
+    secret: { concept: { zh: '正切值为1时，角度为 45 度。', en: 'When tangent is 1, the angle is 45 degrees.' }, formula: '$\\theta = \\arctan(a/b)$', tips: [{ zh: '甘宁提示：火攻之势，在于风向与角度的完美契合。', en: 'Gan Ning Tip: The power of fire lies in the perfect match of wind and angle.' }] },
+    storyConsequence: { correct: { zh: '旗舰夹角——三角精准！做得漂亮！', en: 'Flagship Angle — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1043, grade: 10, unitId: 4, order: 3,
@@ -3272,7 +3390,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'angle'
       }
     ],
-    secret: { concept: { zh: '正切值等于对边除以邻边。', en: 'Tangent equals opposite divided by adjacent.' }, formula: '$\\tan(\\theta) = 1 \\Rightarrow \\theta = 45^\\circ$', tips: [{ zh: '甘宁提示：百骑劫营，出奇制胜。', en: 'Gan Ning Tip: A hundred riders raid the camp, winning by surprise.' }] }
+    secret: { concept: { zh: '正切值等于对边除以邻边。', en: 'Tangent equals opposite divided by adjacent.' }, formula: '$\\tan(\\theta) = 1 \\Rightarrow \\theta = 45^\\circ$', tips: [{ zh: '甘宁提示：百骑劫营，出奇制胜。', en: 'Gan Ning Tip: A hundred riders raid the camp, winning by surprise.' }] },
+    storyConsequence: { correct: { zh: '火攻仰角——三角精准！做得漂亮！', en: 'Fire Attack Angle — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1051, grade: 10, unitId: 5, order: 1,
@@ -3299,7 +3418,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: '等差数列通项公式：$a_n = a_1 + (n-1)d$', en: 'Arithmetic sequence: $a_n = a_1 + (n-1)d$' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '鲁肃提示：兵马未动，粮草先行。', en: 'Lu Su Tip: Before troops move, supplies go first.' }] }
+    secret: { concept: { zh: '等差数列通项公式：$a_n = a_1 + (n-1)d$', en: 'Arithmetic sequence: $a_n = a_1 + (n-1)d$' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '鲁肃提示：兵马未动，粮草先行。', en: 'Lu Su Tip: Before troops move, supplies go first.' }] },
+    storyConsequence: { correct: { zh: '赤壁增兵——数列过关！做得漂亮！', en: 'Red Cliffs Reinforcements — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1052, grade: 10, unitId: 5, order: 2,
@@ -3326,7 +3446,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: '等差数列应用：排兵布阵。', en: 'Arithmetic sequences in formation planning.' }, formula: '$a_{12} = 10 + 11 \\times 6 = 76$', tips: [{ zh: '诸葛亮提示：连弩之威，在于密集。', en: 'Zhuge Tip: The power of crossbows is in their density.' }] }
+    secret: { concept: { zh: '等差数列应用：排兵布阵。', en: 'Arithmetic sequences in formation planning.' }, formula: '$a_{12} = 10 + 11 \\times 6 = 76$', tips: [{ zh: '诸葛亮提示：连弩之威，在于密集。', en: 'Zhuge Tip: The power of crossbows is in their density.' }] },
+    storyConsequence: { correct: { zh: '连弩齐射——数列过关！做得漂亮！', en: 'Crossbow Volley — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1053, grade: 10, unitId: 5, order: 3,
@@ -3353,7 +3474,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: '等差数列在实际问题中的应用。', en: 'Arithmetic sequences in real-world problems.' }, formula: '$a_{15} = 300 + 14 \\times 20 = 580$', tips: [{ zh: '张昭提示：内政之要，在于精算。', en: 'Zhang Zhao Tip: The key to governance is precise calculation.' }] }
+    secret: { concept: { zh: '等差数列在实际问题中的应用。', en: 'Arithmetic sequences in real-world problems.' }, formula: '$a_{15} = 300 + 14 \\times 20 = 580$', tips: [{ zh: '张昭提示：内政之要，在于精算。', en: 'Zhang Zhao Tip: The key to governance is precise calculation.' }] },
+    storyConsequence: { correct: { zh: '粮草消耗——数列过关！做得漂亮！', en: 'Supply Depletion — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 10 Unit 6-7: Jingzhou Governance — Mensuration ---
@@ -3376,7 +3498,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n田亩面积已登记入册。荆州百姓安居乐业！', en: 'Zhuge Liang: "Answer\nFarmland area registered. The people of Jingzhou live in peace!"' }, highlightField: 'area' },
       { text: { zh: '诸葛亮：验算\n$面积 \\div 长 = 宽$，$面积 \\div 宽 = 长$ ✓\n田亩清册无误！', en: 'Zhuge Liang: "Verify\n$\\text{Area} \\div \\text{length} = \\text{width}$, $\\text{Area} \\div \\text{width} = \\text{length}$ ✓\nLand registry is correct!"' }, highlightField: 'area' },
     ],
-    secret: { concept: { zh: '长方形面积 = 长 × 宽。最基础的面积公式。', en: 'Rectangle area = length × width. The most fundamental area formula.' }, formula: '$A = l \\times w$', tips: [{ zh: '诸葛亮提示：治荆州，先丈田。', en: 'Zhuge Liang Tip: To govern Jingzhou, first survey the land.' }] }
+    secret: { concept: { zh: '长方形面积 = 长 × 宽。最基础的面积公式。', en: 'Rectangle area = length × width. The most fundamental area formula.' }, formula: '$A = l \\times w$', tips: [{ zh: '诸葛亮提示：治荆州，先丈田。', en: 'Zhuge Liang Tip: To govern Jingzhou, first survey the land.' }] },
+    storyConsequence: { correct: { zh: '田亩丈量——面积正确！做得漂亮！', en: 'Farmland Survey — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1062, grade: 10, unitId: 6, order: 2,
@@ -3397,7 +3520,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '庞统：答案\n堤坝截面积确认。用料充足，河堤稳固！', en: 'Pang Tong: "Answer\nEmbankment cross-section confirmed. Materials sufficient, levee secure!"' }, highlightField: 'area' },
       { text: { zh: '庞统：验算\n$面积 \\times 2 = 底 \\times 高$\n检查乘回去是否等于底乘高 ✓ 工程无误！', en: 'Pang Tong: "Verify\n$\\text{Area} \\times 2 = \\text{base} \\times \\text{height}$\nMultiply back to check ✓ Engineering correct!"' }, highlightField: 'area' },
     ],
-    secret: { concept: { zh: '三角形面积 = 底 × 高 ÷ 2。因为三角形是长方形的一半。', en: 'Triangle area = base × height ÷ 2. Because a triangle is half a rectangle.' }, formula: '$A = \\frac{1}{2}bh$', tips: [{ zh: '庞统提示：两个三角形拼成长方形——记住除以 2。', en: 'Pang Tong Tip: Two triangles make a rectangle — remember to halve.' }] }
+    secret: { concept: { zh: '三角形面积 = 底 × 高 ÷ 2。因为三角形是长方形的一半。', en: 'Triangle area = base × height ÷ 2. Because a triangle is half a rectangle.' }, formula: '$A = \\frac{1}{2}bh$', tips: [{ zh: '庞统提示：两个三角形拼成长方形——记住除以 2。', en: 'Pang Tong Tip: Two triangles make a rectangle — remember to halve.' }] },
+    storyConsequence: { correct: { zh: '堤坝截面——面积正确！做得漂亮！', en: 'Embankment Cross-Section — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1063, grade: 10, unitId: 6, order: 3,
@@ -3418,7 +3542,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '马良：答案\n城墙截面积确认，用砖量精准！荆州城防固若金汤！', en: 'Ma Liang: "Answer\nWall cross-section confirmed, brick count precise! Jingzhou defense is ironclad!"' }, highlightField: 'area' },
       { text: { zh: '马良：验算\n梯形面积应该介于"全用上底算"和"全用下底算"之间：\n$上底 \\times 高 < 面积 \\times 2 < 下底 \\times 高$ ✓', en: 'Ma Liang: "Verify\nTrapezoid area should be between \'all top\' and \'all bottom\':\n$a \\times h < \\text{Area} \\times 2 < b \\times h$ ✓"' }, highlightField: 'area' },
     ],
-    secret: { concept: { zh: '梯形面积 = (上底 + 下底) × 高 ÷ 2。本质是取平均宽度。', en: 'Trapezoid area = (top + bottom) × height ÷ 2. Essentially the average width.' }, formula: '$A = \\frac{(a+b)h}{2}$', tips: [{ zh: '马良提示：上下取平均，再乘以高——城墙用砖不浪费。', en: 'Ma Liang Tip: Average the top and bottom, multiply by height — no brick waste.' }] }
+    secret: { concept: { zh: '梯形面积 = (上底 + 下底) × 高 ÷ 2。本质是取平均宽度。', en: 'Trapezoid area = (top + bottom) × height ÷ 2. Essentially the average width.' }, formula: '$A = \\frac{(a+b)h}{2}$', tips: [{ zh: '马良提示：上下取平均，再乘以高——城墙用砖不浪费。', en: 'Ma Liang Tip: Average the top and bottom, multiply by height — no brick waste.' }] },
+    storyConsequence: { correct: { zh: '城墙截面——面积正确！做得漂亮！', en: 'City Wall Cross-Section — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1064, grade: 10, unitId: 6, order: 4,
@@ -3439,7 +3564,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '马良：答案\n瞭望塔占地面积确认！塔基建造开始！', en: 'Ma Liang: "Answer\nWatchtower footprint confirmed! Construction begins!"' }, highlightField: 'area' },
       { text: { zh: '马良：验算\n$A \\div \\pi$ 应该等于 $r^2$\n$r^2$ 开方应该等于 $r = {r}$ ✓ 计算无误！', en: 'Ma Liang: "Verify\n$A \\div \\pi$ should equal $r^2$\n$\\sqrt{r^2}$ should equal $r = {r}$ ✓ Calculation correct!"' }, highlightField: 'area' },
     ],
-    secret: { concept: { zh: '圆面积 = πr²，圆周长 = 2πr。π ≈ 3.14 是周长与直径的比值。', en: 'Circle area = πr², circumference = 2πr. π ≈ 3.14 is the ratio of circumference to diameter.' }, formula: '$A = \\pi r^2$', tips: [{ zh: '马良提示：圆形最节省围栏——古人的智慧。', en: 'Ma Liang Tip: Circles save fencing — ancient wisdom.' }] }
+    secret: { concept: { zh: '圆面积 = πr²，圆周长 = 2πr。π ≈ 3.14 是周长与直径的比值。', en: 'Circle area = πr², circumference = 2πr. π ≈ 3.14 is the ratio of circumference to diameter.' }, formula: '$A = \\pi r^2$', tips: [{ zh: '马良提示：圆形最节省围栏——古人的智慧。', en: 'Ma Liang Tip: Circles save fencing — ancient wisdom.' }] },
+    storyConsequence: { correct: { zh: '瞭望塔占地——圆的计算完美！做得漂亮！', en: 'Watchtower Footprint — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1071, grade: 10, unitId: 7, order: 1,
@@ -3460,7 +3586,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n粮仓容积确认！荆州粮草充足，百姓无忧！', en: 'Zhuge Liang: "Answer\nGranary capacity confirmed! Jingzhou has ample grain — the people are at ease!"' }, highlightField: 'v' },
       { text: { zh: '诸葛亮：验算\n$V \\div h$ = 底面积，底面积 $\\div \\pi$ = $r^2$，$\\sqrt{r^2} = r$ ✓', en: 'Zhuge Liang: "Verify\n$V \\div h$ = base area, base area $\\div \\pi$ = $r^2$, $\\sqrt{r^2} = r$ ✓"' }, highlightField: 'v' },
     ],
-    secret: { concept: { zh: '体积 = 底面积 × 高。圆柱底面积 = πr²，所以 V = πr²h。', en: 'Volume = base area × height. Cylinder base = πr², so V = πr²h.' }, formula: '$V = \\pi r^2 h$', tips: [{ zh: '诸葛亮提示：粮仓满，军心安。', en: 'Zhuge Liang Tip: Full granaries, steady army.' }] }
+    secret: { concept: { zh: '体积 = 底面积 × 高。圆柱底面积 = πr²，所以 V = πr²h。', en: 'Volume = base area × height. Cylinder base = πr², so V = πr²h.' }, formula: '$V = \\pi r^2 h$', tips: [{ zh: '诸葛亮提示：粮仓满，军心安。', en: 'Zhuge Liang Tip: Full granaries, steady army.' }] },
+    storyConsequence: { correct: { zh: '粮仓容积——体积正确！做得漂亮！', en: 'Granary Capacity — Well done!' }, wrong: { zh: '体积算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1072, grade: 10, unitId: 7, order: 2,
@@ -3481,7 +3608,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '马良：答案\n水井蓄水量确认！荆州军民饮水有保障！', en: 'Ma Liang: "Answer\nWell capacity confirmed! Jingzhou has reliable water supply!"' }, highlightField: 'v' },
       { text: { zh: '马良：验算\n$V \\div h$ 应该等于底面积 $\\pi r^2$ ✓\n水井工程完工！', en: 'Ma Liang: "Verify\n$V \\div h$ should equal base area $\\pi r^2$ ✓\nWell construction complete!"' }, highlightField: 'v' },
     ],
-    secret: { concept: { zh: '圆柱体积 = πr²h。底面积乘以高度。', en: 'Cylinder volume = πr²h. Base area times height.' }, formula: '$V = \\pi r^2 h$', tips: [{ zh: '马良提示：水井是救命的，每一滴水都不能浪费。', en: 'Ma Liang Tip: Wells save lives — every drop counts.' }] }
+    secret: { concept: { zh: '圆柱体积 = πr²h。底面积乘以高度。', en: 'Cylinder volume = πr²h. Base area times height.' }, formula: '$V = \\pi r^2 h$', tips: [{ zh: '马良提示：水井是救命的，每一滴水都不能浪费。', en: 'Ma Liang Tip: Wells save lives — every drop counts.' }] },
+    storyConsequence: { correct: { zh: '水井深度——体积正确！做得漂亮！', en: 'Well Depth — Well done!' }, wrong: { zh: '体积算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1073, grade: 10, unitId: 7, order: 3,
@@ -3502,7 +3630,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n烽火台石料量确认！边防烽火线就位！', en: 'Zhuge Liang: "Answer\nBeacon tower stone requirements confirmed! Border signal line established!"' }, highlightField: 'v' },
       { text: { zh: '诸葛亮：验算\n锥体体积 $\\times 3$ 应该等于同底同高圆柱体积 $\\pi r^2 h$ ✓\n烽火连三月，家书抵万金。', en: 'Zhuge Liang: "Verify\nCone volume $\\times 3$ should equal cylinder volume $\\pi r^2 h$ ✓\nBeacon fires for three months — a letter home is worth ten thousand gold."' }, highlightField: 'v' },
     ],
-    secret: { concept: { zh: '锥体体积 = ⅓ × 底面积 × 高。锥体是同底同高柱体的三分之一。', en: 'Cone volume = ⅓ × base area × height. A cone is one-third of the same cylinder.' }, formula: '$V = \\frac{1}{3}\\pi r^2 h$', tips: [{ zh: '诸葛亮提示：三个锥拼一个柱——记住除以3。', en: 'Zhuge Liang Tip: Three cones make one cylinder — remember to divide by 3.' }] }
+    secret: { concept: { zh: '锥体体积 = ⅓ × 底面积 × 高。锥体是同底同高柱体的三分之一。', en: 'Cone volume = ⅓ × base area × height. A cone is one-third of the same cylinder.' }, formula: '$V = \\frac{1}{3}\\pi r^2 h$', tips: [{ zh: '诸葛亮提示：三个锥拼一个柱——记住除以3。', en: 'Zhuge Liang Tip: Three cones make one cylinder — remember to divide by 3.' }] },
+    storyConsequence: { correct: { zh: '烽火台——体积正确！做得漂亮！', en: 'Beacon Tower — Well done!' }, wrong: { zh: '体积算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 10 Unit 8: Functions & Percentages ---
@@ -3525,7 +3654,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n连弩射程计算完毕！', en: 'Zhuge Liang: "Answer\nCrossbow range calculated!"' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：验算\n把答案和 $x$ 代回原方程检查 ✓', en: 'Zhuge Liang: "Verify\nSubstitute answer and $x$ back into the equation ✓"' }, highlightField: 'y' },
     ],
-    secret: { concept: { zh: '函数求值 = 代入 x 的值，按运算顺序计算 y。', en: 'Function evaluation = substitute x, calculate y following order of operations.' }, formula: '$y = f(x)$', tips: [{ zh: '诸葛亮提示：代入就是"喂机器"——进一个数，出一个数。', en: 'Zhuge Liang Tip: Substituting is \'feeding the machine\' — number in, number out.' }] }
+    secret: { concept: { zh: '函数求值 = 代入 x 的值，按运算顺序计算 y。', en: 'Function evaluation = substitute x, calculate y following order of operations.' }, formula: '$y = f(x)$', tips: [{ zh: '诸葛亮提示：代入就是"喂机器"——进一个数，出一个数。', en: 'Zhuge Liang Tip: Substituting is \'feeding the machine\' — number in, number out.' }] },
+    storyConsequence: { correct: { zh: '连弩射程——函数值正确！做得漂亮！', en: 'Crossbow Range — Well done!' }, wrong: { zh: '函数值代入有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1082, grade: 10, unitId: 8, order: 2,
@@ -3546,7 +3676,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '张昭：答案\n战损评估完成。主公，需精打细算方能长久。', en: 'Zhang Zhao: "Answer\nDamage assessment complete. My lord, careful budgeting ensures longevity."' }, highlightField: 'ans' },
       { text: { zh: '张昭：验算\n$\\text{损失} + \\text{剩余} = \\text{原始}$ ✓', en: 'Zhang Zhao: "Verify\n$\\text{Lost} + \\text{Remaining} = \\text{Original}$ ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '百分比变化：最终值 = 初始值 × (1 + 变化率)。减少用负率。', en: 'Percentage change: Final = Initial × (1 + rate). Decrease uses negative rate.' }, formula: '$\\text{Final} = \\text{Initial} \\times (1 + r)$', tips: [{ zh: '张昭提示：内政之要，在于精算。', en: 'Zhang Zhao Tip: Governance demands precise calculation.' }] }
+    secret: { concept: { zh: '百分比变化：最终值 = 初始值 × (1 + 变化率)。减少用负率。', en: 'Percentage change: Final = Initial × (1 + rate). Decrease uses negative rate.' }, formula: '$\\text{Final} = \\text{Initial} \\times (1 + r)$', tips: [{ zh: '张昭提示：内政之要，在于精算。', en: 'Zhang Zhao Tip: Governance demands precise calculation.' }] },
+    storyConsequence: { correct: { zh: '战损评估——百分比算得好！做得漂亮！', en: 'Battle Casualties — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1083, grade: 10, unitId: 8, order: 3,
@@ -3567,7 +3698,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n粮仓存量预测完成！治国理政，在于长远规划。', en: 'Zhuge Liang: "Answer\nGrain stock forecast complete! Governance requires long-term planning."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n逐年计算：$P \\times (1+r) \\times (1+r) \\times ...$，应该得到同样的结果 ✓', en: 'Zhuge Liang: "Verify\nYear by year: $P \\times (1+r) \\times (1+r) \\times ...$, should give the same result ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '复利 = 利滚利。公式 A = P(1+r)^n。增长速度比单利快得多。', en: 'Compound interest = interest on interest. A = P(1+r)^n. Grows much faster than simple interest.' }, formula: '$A = P(1+r)^n$', tips: [{ zh: '诸葛亮提示：鞠躬尽瘁，未雨绸缪。', en: 'Zhuge Liang Tip: Plan ahead with devotion.' }] }
+    secret: { concept: { zh: '复利 = 利滚利。公式 A = P(1+r)^n。增长速度比单利快得多。', en: 'Compound interest = interest on interest. A = P(1+r)^n. Grows much faster than simple interest.' }, formula: '$A = P(1+r)^n$', tips: [{ zh: '诸葛亮提示：鞠躬尽瘁，未雨绸缪。', en: 'Zhuge Liang Tip: Plan ahead with devotion.' }] },
+    storyConsequence: { correct: { zh: '粮仓复利——百分比算得好！做得漂亮！', en: 'Grain Compound Growth — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 10 Unit 9: Formation Transforms — Eight Trigram Array ---
@@ -3590,7 +3722,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n反射完成！阵型虚实难辨，敌军必乱！', en: 'Zhuge Liang: "Answer\nReflection complete! Formation now deceptive — the enemy will be confused!"' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：验算\n原点和新点到 $y$ 轴的距离应该相等：$|3| = |-3| = 3$ ✓', en: 'Zhuge Liang: "Verify\nOriginal and new point should be equidistant from $y$-axis: $|3| = |-3| = 3$ ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '反射：沿轴翻转。垂直于轴的坐标变号，平行于轴的不变。', en: 'Reflection: flip across axis. Coordinate perpendicular to axis changes sign, parallel stays.' }, formula: '$y\\text{-axis}: (x,y) \\to (-x,y)$', tips: [{ zh: '诸葛亮提示：八卦阵变幻莫测，反射只是第一招。', en: 'Zhuge Liang Tip: The Eight Trigrams shift endlessly — reflection is just the first move.' }] }
+    secret: { concept: { zh: '反射：沿轴翻转。垂直于轴的坐标变号，平行于轴的不变。', en: 'Reflection: flip across axis. Coordinate perpendicular to axis changes sign, parallel stays.' }, formula: '$y\\text{-axis}: (x,y) \\to (-x,y)$', tips: [{ zh: '诸葛亮提示：八卦阵变幻莫测，反射只是第一招。', en: 'Zhuge Liang Tip: The Eight Trigrams shift endlessly — reflection is just the first move.' }] },
+    storyConsequence: { correct: { zh: '沿河反射——对称正确！做得漂亮！', en: 'River Reflection — Well done!' }, wrong: { zh: '对称变换搞错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1092, grade: 10, unitId: 9, order: 2,
@@ -3611,7 +3744,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n阵型推进完成！前军就位！', en: 'Zhuge Liang: "Answer\nFormation advance complete! Vanguard in position!"' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：验算\n新坐标减去向量应该等于原坐标 ✓', en: 'Zhuge Liang: "Verify\nNew coordinates minus vector should equal original ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '平移 = 每个点加同一个向量。形状和大小不变，只改变位置。', en: 'Translation = add the same vector to every point. Shape and size unchanged, only position shifts.' }, formula: '$(x,y) \\to (x+a, y+b)$', tips: [{ zh: '诸葛亮提示：平移如行军——方向一致，步调统一。', en: 'Zhuge Liang Tip: Translation is like marching — same direction, same pace.' }] }
+    secret: { concept: { zh: '平移 = 每个点加同一个向量。形状和大小不变，只改变位置。', en: 'Translation = add the same vector to every point. Shape and size unchanged, only position shifts.' }, formula: '$(x,y) \\to (x+a, y+b)$', tips: [{ zh: '诸葛亮提示：平移如行军——方向一致，步调统一。', en: 'Zhuge Liang Tip: Translation is like marching — same direction, same pace.' }] },
+    storyConsequence: { correct: { zh: '阵型平移——坐标精准！做得漂亮！', en: 'Formation Translation — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1093, grade: 10, unitId: 9, order: 3,
@@ -3632,7 +3766,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n阵型旋转完成！八卦变阵，敌军晕头转向！', en: 'Zhuge Liang: "Answer\nFormation rotation complete! Eight Trigrams shift — the enemy is disoriented!"' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：验算\n到原点的距离不变 ✓ 旋转保持距离不变是铁律！', en: 'Zhuge Liang: "Verify\nDistance to origin unchanged ✓ Rotation preserves distance — an iron rule!"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '旋转保持形状和大小不变，只改变方向。绕原点有固定的坐标变换规则。', en: 'Rotation preserves shape and size, only changes direction. Fixed coordinate rules for rotation about origin.' }, formula: '$90°: (x,y) \\to (-y,x)$', tips: [{ zh: '诸葛亮提示：八卦阵变幻无穷，旋转是核心。', en: 'Zhuge Liang Tip: The Eight Trigrams are infinitely variable — rotation is the core.' }] }
+    secret: { concept: { zh: '旋转保持形状和大小不变，只改变方向。绕原点有固定的坐标变换规则。', en: 'Rotation preserves shape and size, only changes direction. Fixed coordinate rules for rotation about origin.' }, formula: '$90°: (x,y) \\to (-y,x)$', tips: [{ zh: '诸葛亮提示：八卦阵变幻无穷，旋转是核心。', en: 'Zhuge Liang Tip: The Eight Trigrams are infinitely variable — rotation is the core.' }] },
+    storyConsequence: { correct: { zh: '旋转阵型——坐标精准！做得漂亮！', en: 'Rotate Formation — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1094, grade: 10, unitId: 9, order: 4,
@@ -3653,7 +3788,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n阵型放大完成！防御范围扩大，固若金汤！', en: 'Zhuge Liang: "Answer\nFormation enlarged! Defense range expanded — ironclad!"' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：验算\n新坐标 ÷ $k$ 应等于原坐标 ✓', en: 'Zhuge Liang: "Verify\nNew coordinates ÷ $k$ should equal original ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '放大/缩放：从中心出发，距离乘以 k。形状不变，大小改变。', en: 'Enlargement: from center, distances multiply by k. Shape unchanged, size changes.' }, formula: '$(x,y) \\to (kx, ky)$', tips: [{ zh: '诸葛亮提示：阵型可大可小，关键在比例不变。', en: 'Zhuge Liang Tip: Formations can grow or shrink — the key is proportions stay the same.' }] }
+    secret: { concept: { zh: '放大/缩放：从中心出发，距离乘以 k。形状不变，大小改变。', en: 'Enlargement: from center, distances multiply by k. Shape unchanged, size changes.' }, formula: '$(x,y) \\to (kx, ky)$', tips: [{ zh: '诸葛亮提示：阵型可大可小，关键在比例不变。', en: 'Zhuge Liang Tip: Formations can grow or shrink — the key is proportions stay the same.' }] },
+    storyConsequence: { correct: { zh: '阵型放大——坐标精准！做得漂亮！', en: 'Formation Enlargement — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 10 Unit 10: Advanced Mensuration ---
@@ -3676,7 +3812,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '马良：答案\n弧形城墙长度确认！建材准备就绪。', en: 'Ma Liang: "Answer\nCurved wall length confirmed! Materials ready."' }, highlightField: 'c' },
       { text: { zh: '马良：验算\n弧长 × $\\frac{360}{\\theta}$ 应等于整圆周长 ✓', en: 'Ma Liang: "Verify\nArc length × $\\frac{360}{\\theta}$ should equal full circumference ✓"' }, highlightField: 'c' },
     ],
-    secret: { concept: { zh: '弧长 = 圆周长的一部分。比例 = θ/360。', en: 'Arc length = fraction of circumference. Fraction = θ/360.' }, formula: '$l = \\frac{\\theta}{360} \\times 2\\pi r$', tips: [{ zh: '马良提示：弧长是圆周的"切片"。', en: 'Ma Liang Tip: Arc length is a \'slice\' of the circumference.' }] }
+    secret: { concept: { zh: '弧长 = 圆周长的一部分。比例 = θ/360。', en: 'Arc length = fraction of circumference. Fraction = θ/360.' }, formula: '$l = \\frac{\\theta}{360} \\times 2\\pi r$', tips: [{ zh: '马良提示：弧长是圆周的"切片"。', en: 'Ma Liang Tip: Arc length is a \'slice\' of the circumference.' }] },
+    storyConsequence: { correct: { zh: '弧形城墙——圆的计算完美！做得漂亮！', en: 'Curved Wall — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1102, grade: 10, unitId: 10, order: 2,
@@ -3697,7 +3834,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n烽火覆盖面积确认！边防无死角！', en: 'Zhuge Liang: "Answer\nBeacon coverage area confirmed! No blind spots on the border!"' }, highlightField: 'area' },
       { text: { zh: '诸葛亮：验算\n扇形面积 × $\\frac{360}{\\theta}$ 应等于整圆面积 ✓', en: 'Zhuge Liang: "Verify\nSector area × $\\frac{360}{\\theta}$ should equal full circle area ✓"' }, highlightField: 'area' },
     ],
-    secret: { concept: { zh: '扇形面积 = 圆面积的一部分。占比 = θ/360。', en: 'Sector area = fraction of circle area. Fraction = θ/360.' }, formula: '$A = \\frac{\\theta}{360} \\times \\pi r^2$', tips: [{ zh: '诸葛亮提示：扇形面积 = 圆面积 × 占比。', en: 'Zhuge Liang Tip: Sector area = circle area × fraction.' }] }
+    secret: { concept: { zh: '扇形面积 = 圆面积的一部分。占比 = θ/360。', en: 'Sector area = fraction of circle area. Fraction = θ/360.' }, formula: '$A = \\frac{\\theta}{360} \\times \\pi r^2$', tips: [{ zh: '诸葛亮提示：扇形面积 = 圆面积 × 占比。', en: 'Zhuge Liang Tip: Sector area = circle area × fraction.' }] },
+    storyConsequence: { correct: { zh: '烽火覆盖——圆的计算完美！做得漂亮！', en: 'Beacon Coverage — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1103, grade: 10, unitId: 10, order: 3,
@@ -3718,7 +3856,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n两阵距离确认！', en: 'Zhuge Liang: "Answer\nCamp distance confirmed!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：验算\n$d^2$ 应等于 $(\\Delta x)^2 + (\\Delta y)^2$ ✓', en: 'Zhuge Liang: "Verify\n$d^2$ should equal $(\\Delta x)^2 + (\\Delta y)^2$ ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '两点间距离 = √((x差)² + (y差)²)。本质是坐标系上的勾股定理。', en: 'Distance = √((Δx)² + (Δy)²). Essentially Pythagoras on the coordinate plane.' }, formula: '$d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$', tips: [{ zh: '诸葛亮提示：距离公式 = 勾股定理的坐标版。', en: 'Zhuge Liang Tip: Distance formula = Pythagoras in coordinates.' }] }
+    secret: { concept: { zh: '两点间距离 = √((x差)² + (y差)²)。本质是坐标系上的勾股定理。', en: 'Distance = √((Δx)² + (Δy)²). Essentially Pythagoras on the coordinate plane.' }, formula: '$d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$', tips: [{ zh: '诸葛亮提示：距离公式 = 勾股定理的坐标版。', en: 'Zhuge Liang Tip: Distance formula = Pythagoras in coordinates.' }] },
+    storyConsequence: { correct: { zh: '两阵距离——坐标精准！做得漂亮！', en: 'Camp Distance — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y10 Unit 11: 代数篇 · 赤壁运筹 (Algebra Operations) ---
@@ -3741,7 +3880,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜：答案\n展开结果确认！', en: 'Zhou Yu: "Answer\nExpansion complete!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：验算\n代入 $x = 1$，原式和展开后应该相等 ✓', en: 'Zhou Yu: "Verify\nSubstitute $x = 1$, original and expanded should be equal ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '展开括号：括号外的数乘以括号内的每一项。', en: 'Expand: multiply the outside by every term inside.' }, formula: '$a(b+c) = ab + ac$', tips: [{ zh: '周瑜提示：外面的数，里面每项都要乘到。', en: 'Zhou Yu Tip: Outside number multiplies every inside term.' }] }
+    secret: { concept: { zh: '展开括号：括号外的数乘以括号内的每一项。', en: 'Expand: multiply the outside by every term inside.' }, formula: '$a(b+c) = ab + ac$', tips: [{ zh: '周瑜提示：外面的数，里面每项都要乘到。', en: 'Zhou Yu Tip: Outside number multiplies every inside term.' }] },
+    storyConsequence: { correct: { zh: '火攻展开——展开无误！做得漂亮！', en: 'Fire Strategy Expansion — Well done!' }, wrong: { zh: '展开出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 10112, grade: 10, unitId: 11, order: 2,
@@ -3762,7 +3902,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜：答案\n因式分解完成！', en: 'Zhou Yu: "Answer\nFactorisation complete!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：验算\n展开你的答案，应该得到原式 ✓', en: 'Zhou Yu: "Verify\nExpand your answer — should give the original ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '因式分解：找公因式，提到括号外面。展开的逆操作。', en: 'Factorise: find common factor, put outside brackets. Reverse of expanding.' }, formula: '$ab + ac = a(b+c)$', tips: [{ zh: '周瑜提示：散兵→方阵，找共同点提出来。', en: 'Zhou Yu Tip: Scattered→formation, find what\'s common and extract.' }] }
+    secret: { concept: { zh: '因式分解：找公因式，提到括号外面。展开的逆操作。', en: 'Factorise: find common factor, put outside brackets. Reverse of expanding.' }, formula: '$ab + ac = a(b+c)$', tips: [{ zh: '周瑜提示：散兵→方阵，找共同点提出来。', en: 'Zhou Yu Tip: Scattered→formation, find what\'s common and extract.' }] },
+    storyConsequence: { correct: { zh: '战后整编——因式分解完成！做得漂亮！', en: 'Post-battle Regrouping — Well done!' }, wrong: { zh: '因式分解不完全…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 10113, grade: 10, unitId: 11, order: 3,
@@ -3783,7 +3924,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n$x > {answer}$\n至少要 {answer_plus1} 车粮草！', en: 'Zhuge Liang: "Answer\n$x > {answer}$\nAt least {answer_plus1} carts of supplies needed!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n代入 $x = {answer}$：$3 \\times {answer} + 5 = {check_val}$，应该刚好等于 $20$（边界）✓\n代入 $x = {answer_plus1}$：大于 $20$ ✓', en: 'Zhuge Liang: "Verify\nSub $x = {answer}$: $3 \\times {answer} + 5 = {check_val}$, should equal 20 (boundary) ✓\nSub $x = {answer_plus1}$: greater than 20 ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '不等式解法和方程一样，但除以负数要翻转符号。答案是范围不是点。', en: 'Solve like equations, but flip sign when dividing by negative. Answer is a range, not a point.' }, formula: '$ax + b > c \\Rightarrow x > \\frac{c-b}{a}$', tips: [{ zh: '诸葛亮提示：和方程一样解，注意负数翻转。', en: 'Zhuge Liang Tip: Solve like equations, watch for negative flips.' }] }
+    secret: { concept: { zh: '不等式解法和方程一样，但除以负数要翻转符号。答案是范围不是点。', en: 'Solve like equations, but flip sign when dividing by negative. Answer is a range, not a point.' }, formula: '$ax + b > c \\Rightarrow x > \\frac{c-b}{a}$', tips: [{ zh: '诸葛亮提示：和方程一样解，注意负数翻转。', en: 'Zhuge Liang Tip: Solve like equations, watch for negative flips.' }] },
+    storyConsequence: { correct: { zh: '粮草底线——不等式范围找对！做得漂亮！', en: 'Supply Threshold — Well done!' }, wrong: { zh: '不等式范围搞错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y10 Unit 12: 扇形与弧 · 赤壁水寨 (Sectors & Arcs) ---
@@ -3806,7 +3948,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜：答案\n水寨扇形面积 ≈ {answer} 平方单位。', en: 'Zhou Yu: "Answer\nHarbor sector area ≈ {answer} square units."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：验算\n如果角度是 $360°$，应该等于整个圆面积 $\\pi r^2 = {full_area}$ ✓\n我们的扇形 = $\\frac{{angle}}{360}$ 倍 ✓', en: 'Zhou Yu: "Verify\nIf angle were 360°, should equal full circle $\\pi r^2 = {full_area}$ ✓\nOur sector = $\\frac{{angle}}{360}$ of that ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '扇形面积 = (角度/360) × πr²。角度越大，扇形越大。', en: 'Sector area = (θ/360) × πr². Bigger angle, bigger sector.' }, formula: '$A = \\frac{\\theta}{360}\\pi r^2$', tips: [{ zh: '周瑜提示：扇形就是圆的"一块披萨"。', en: 'Zhou Yu Tip: A sector is a "pizza slice" of a circle.' }] }
+    secret: { concept: { zh: '扇形面积 = (角度/360) × πr²。角度越大，扇形越大。', en: 'Sector area = (θ/360) × πr². Bigger angle, bigger sector.' }, formula: '$A = \\frac{\\theta}{360}\\pi r^2$', tips: [{ zh: '周瑜提示：扇形就是圆的"一块披萨"。', en: 'Zhou Yu Tip: A sector is a "pizza slice" of a circle.' }] },
+    storyConsequence: { correct: { zh: '水寨扇面——圆的计算完美！做得漂亮！', en: 'Harbor Sector — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 10122, grade: 10, unitId: 12, order: 2,
@@ -3827,7 +3970,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜：答案\n防线弧长 ≈ {answer} 单位。', en: 'Zhou Yu: "Answer\nDefense arc length ≈ {answer} units."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：验算\n弧长 ÷ 圆周长 = $\\frac{{angle}}{360}$ ✓', en: 'Zhou Yu: "Verify\nArc length ÷ circumference = $\\frac{{angle}}{360}$ ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '弧长 = (角度/360) × 2πr。圆周的一段。', en: 'Arc length = (θ/360) × 2πr. A piece of the circumference.' }, formula: '$L = \\frac{\\theta}{360} \\times 2\\pi r$', tips: [{ zh: '周瑜提示：弧长 = 圆周长 × 角度占比。', en: 'Zhou Yu Tip: Arc = circumference × angle fraction.' }] }
+    secret: { concept: { zh: '弧长 = (角度/360) × 2πr。圆周的一段。', en: 'Arc length = (θ/360) × 2πr. A piece of the circumference.' }, formula: '$L = \\frac{\\theta}{360} \\times 2\\pi r$', tips: [{ zh: '周瑜提示：弧长 = 圆周长 × 角度占比。', en: 'Zhou Yu Tip: Arc = circumference × angle fraction.' }] },
+    storyConsequence: { correct: { zh: '弧长测量——圆的计算完美！做得漂亮！', en: 'Arc Length Measure — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y10 Unit 13: 统计篇 · 天下形势分析 (Statistics Extension) ---
@@ -3850,7 +3994,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马懿：答案\n平均军力 = {answer}。', en: 'Sima Yi: "Answer\nMean military strength = {answer}."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：验算\n{answer} × {count} = {sum} ✓', en: 'Sima Yi: "Verify\n{answer} × {count} = {sum} ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '平均数 = 总和 ÷ 个数。代表整体水平。', en: 'Mean = sum ÷ count. Represents overall level.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '司马懿提示：加起来除以个数。', en: 'Sima Yi Tip: Add them up, divide by count.' }] }
+    secret: { concept: { zh: '平均数 = 总和 ÷ 个数。代表整体水平。', en: 'Mean = sum ÷ count. Represents overall level.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '司马懿提示：加起来除以个数。', en: 'Sima Yi Tip: Add them up, divide by count.' }] },
+    storyConsequence: { correct: { zh: '军力均值——数据分析到位！做得漂亮！', en: 'Military Mean — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 10132, grade: 10, unitId: 13, order: 2,
@@ -3871,7 +4016,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马懿：答案\n极差 = {answer}。', en: 'Sima Yi: "Answer\nRange = {answer}."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：验算\n最小值 + 极差 = 最大值 ✓', en: 'Sima Yi: "Verify\nMin + range = max ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '极差 = 最大值 - 最小值。衡量数据分散程度。', en: 'Range = max - min. Measures data spread.' }, formula: 'Range = max − min', tips: [{ zh: '司马懿提示：最大减最小——就是极差。', en: 'Sima Yi Tip: Max minus min — that\'s the range.' }] }
+    secret: { concept: { zh: '极差 = 最大值 - 最小值。衡量数据分散程度。', en: 'Range = max - min. Measures data spread.' }, formula: 'Range = max − min', tips: [{ zh: '司马懿提示：最大减最小——就是极差。', en: 'Sima Yi Tip: Max minus min — that\'s the range.' }] },
+    storyConsequence: { correct: { zh: '极差分析——数据分析到位！做得漂亮！', en: 'Range Analysis — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 10133, grade: 10, unitId: 13, order: 3,
@@ -3892,7 +4038,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马懿：答案\n众数 = {answer}。', en: 'Sima Yi: "Answer\nMode = {answer}."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：验算\n数一下 {answer} 出现了几次，确认比其他值都多 ✓', en: 'Sima Yi: "Verify\nCount how many times {answer} appears — confirm it\'s more than any other ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '众数 = 出现次数最多的值。反映数据中"最常见的情况"。', en: 'Mode = most frequent value. Reflects the "most common case" in data.' }, formula: 'Mode = most frequent value', tips: [{ zh: '司马懿提示：数一数，最多的就是众数。', en: 'Sima Yi Tip: Count them — the most common is the mode.' }] }
+    secret: { concept: { zh: '众数 = 出现次数最多的值。反映数据中"最常见的情况"。', en: 'Mode = most frequent value. Reflects the "most common case" in data.' }, formula: 'Mode = most frequent value', tips: [{ zh: '司马懿提示：数一数，最多的就是众数。', en: 'Sima Yi Tip: Count them — the most common is the mode.' }] },
+    storyConsequence: { correct: { zh: '众数决策——数据分析到位！做得漂亮！', en: 'Mode Decision — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 11: Northern Expedition (Advanced) ---
@@ -3921,7 +4068,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '导数为零的点可能是函数的极值点。', en: 'Points where derivative is zero can be extrema.' }, formula: "$f'(x) = 0$", tips: [{ zh: '诸葛亮提示：鞠躬尽瘁，死而后已。运输之利，在于精微。', en: 'Zhuge Tip: Devoted to the end. The key to transport is precision.' }] }
+    secret: { concept: { zh: '导数为零的点可能是函数的极值点。', en: 'Points where derivative is zero can be extrema.' }, formula: "$f'(x) = 0$", tips: [{ zh: '诸葛亮提示：鞠躬尽瘁，死而后已。运输之利，在于精微。', en: 'Zhuge Tip: Devoted to the end. The key to transport is precision.' }] },
+    storyConsequence: { correct: { zh: '出师北伐——二次方程迎刃而解！做得漂亮！', en: 'Northern Expedition — Well done!' }, wrong: { zh: '二次方程算岔了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1112, grade: 11, unitId: 1, order: 2,
@@ -3948,7 +4096,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'k'
       }
     ],
-    secret: { concept: { zh: '导数代表曲线在某一点的切线斜率。', en: 'Derivative is the slope of the tangent at a point.' }, formula: "$(x^n)' = nx^{n-1}$", tips: [{ zh: '姜维提示：栈道险峻，支架必须稳固。', en: 'Jiang Wei Tip: The plank road is steep, the support must be stable.' }] }
+    secret: { concept: { zh: '导数代表曲线在某一点的切线斜率。', en: 'Derivative is the slope of the tangent at a point.' }, formula: "$(x^n)' = nx^{n-1}$", tips: [{ zh: '姜维提示：栈道险峻，支架必须稳固。', en: 'Jiang Wei Tip: The plank road is steep, the support must be stable.' }] },
+    storyConsequence: { correct: { zh: '剑阁栈道——导数精准！做得漂亮！', en: 'Jiange Pass — Well done!' }, wrong: { zh: '导数计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1121, grade: 11, unitId: 2, order: 1,
@@ -3975,7 +4124,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'area'
       }
     ],
-    secret: { concept: { zh: '定积分可以计算曲线下的面积。', en: 'Definite integral calculates the area under a curve.' }, formula: '$\\int x dx = \\frac{1}{2}x^2$', tips: [{ zh: '邓艾提示：屯田之计，在于地利。', en: "Deng Ai Tip: The plan for farming lies in the advantage of the land." }] }
+    secret: { concept: { zh: '定积分可以计算曲线下的面积。', en: 'Definite integral calculates the area under a curve.' }, formula: '$\\int x dx = \\frac{1}{2}x^2$', tips: [{ zh: '邓艾提示：屯田之计，在于地利。', en: "Deng Ai Tip: The plan for farming lies in the advantage of the land." }] },
+    storyConsequence: { correct: { zh: '测量农田——积分完成！做得漂亮！', en: 'Surveying Farmland — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1122, grade: 11, unitId: 2, order: 2,
@@ -4002,7 +4152,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'area'
       }
     ],
-    secret: { concept: { zh: '积分是导数的逆运算。', en: 'Integration is the inverse of differentiation.' }, formula: '$\\int x^2 dx = \\frac{1}{3}x^3$', tips: [{ zh: '钟会提示：水流湍急，需精确计算。', en: 'Zhong Hui Tip: The water is swift, precise calculation is needed.' }] }
+    secret: { concept: { zh: '积分是导数的逆运算。', en: 'Integration is the inverse of differentiation.' }, formula: '$\\int x^2 dx = \\frac{1}{3}x^3$', tips: [{ zh: '钟会提示：水流湍急，需精确计算。', en: 'Zhong Hui Tip: The water is swift, precise calculation is needed.' }] },
+    storyConsequence: { correct: { zh: '河道流量——积分完成！做得漂亮！', en: 'River Flow — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1131, grade: 11, unitId: 3, order: 1,
@@ -4029,7 +4180,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'ans'
       }
     ],
-    secret: { concept: { zh: '等差数列通项公式：$a_n = a_1 + (n-1)d$。', en: 'Arithmetic sequence formula: $a_n = a_1 + (n-1)d$.' }, formula: '$a_{10} = 100 + 9 \\times 50$', tips: [{ zh: '费祎提示：粮草充足，军心方稳。', en: "Fei Yi Tip: With sufficient supplies, the army's morale is stable." }] }
+    secret: { concept: { zh: '等差数列通项公式：$a_n = a_1 + (n-1)d$。', en: 'Arithmetic sequence formula: $a_n = a_1 + (n-1)d$.' }, formula: '$a_{10} = 100 + 9 \\times 50$', tips: [{ zh: '费祎提示：粮草充足，军心方稳。', en: "Fei Yi Tip: With sufficient supplies, the army's morale is stable." }] },
+    storyConsequence: { correct: { zh: '运粮序列——数列过关！做得漂亮！', en: 'Supply Line — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 11 Units 4-5: Jin Unification — Statistics & Probability ---
@@ -4052,7 +4204,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：答案\n全国平均粮产确认！天下大势，分久必合。', en: 'Sima Yan: "Answer\nNational average yield confirmed! The realm united at last."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：验算\n平均数 × 个数 应该等于总和 ✓', en: 'Sima Yan: "Verify\nMean × count should equal the sum ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '平均数 = 总和 ÷ 个数。反映数据的"中心水平"。', en: 'Mean = sum ÷ count. Reflects the "central level" of the data.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '司马炎提示：天下大势，分久必合，合久必分。', en: 'Sima Yan Tip: The world\'s trend — unite after long division, divide after long union.' }] }
+    secret: { concept: { zh: '平均数 = 总和 ÷ 个数。反映数据的"中心水平"。', en: 'Mean = sum ÷ count. Reflects the "central level" of the data.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '司马炎提示：天下大势，分久必合，合久必分。', en: 'Sima Yan Tip: The world\'s trend — unite after long division, divide after long union.' }] },
+    storyConsequence: { correct: { zh: '各郡粮产——数据分析到位！做得漂亮！', en: 'Prefecture Grain Yield — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1142, grade: 11, unitId: 4, order: 2,
@@ -4073,7 +4226,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '杜预：答案\n典型驻军规模确认！兵力部署参考基准已定。', en: 'Du Yu: "Answer\nTypical garrison size confirmed! Deployment benchmark established."' }, highlightField: 'ans' },
       { text: { zh: '杜预：验算\n中位数左边和右边的数据个数应该相等 ✓', en: 'Du Yu: "Verify\nEqual number of values on each side of the median ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '中位数 = 排序后中间的值。不受极端值影响，反映"典型水平"。', en: 'Median = middle value after sorting. Not affected by extremes, reflects "typical level".' }, formula: '$\\text{排序后取中间}$', tips: [{ zh: '杜预提示：中位数比平均数更"稳"。', en: 'Du Yu Tip: The median is more "stable" than the mean.' }] }
+    secret: { concept: { zh: '中位数 = 排序后中间的值。不受极端值影响，反映"典型水平"。', en: 'Median = middle value after sorting. Not affected by extremes, reflects "typical level".' }, formula: '$\\text{排序后取中间}$', tips: [{ zh: '杜预提示：中位数比平均数更"稳"。', en: 'Du Yu Tip: The median is more "stable" than the mean.' }] },
+    storyConsequence: { correct: { zh: '驻军兵力——数据分析到位！做得漂亮！', en: 'Garrison Strength — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1143, grade: 11, unitId: 4, order: 3,
@@ -4094,7 +4248,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '杜预：答案\n最常用的兵器类型确认！军械库清单完成。', en: 'Du Yu: "Answer\nMost common weapon type confirmed! Arsenal inventory complete."' }, highlightField: 'ans' },
       { text: { zh: '杜预：验算\n确认众数的出现次数确实比其他值多 ✓', en: 'Du Yu: "Verify\nConfirm the mode\'s frequency is indeed the highest ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '众数 = 出现次数最多的值。一组数据可以有多个众数，也可以没有。', en: 'Mode = most frequently occurring value. A dataset can have multiple modes or none.' }, formula: '$\\text{频率最高} = \\text{众数}$', tips: [{ zh: '杜预提示：众数就是"人气王"——出现最多次的那个。', en: 'Du Yu Tip: The mode is the \'crowd favorite\' — appears most often.' }] }
+    secret: { concept: { zh: '众数 = 出现次数最多的值。一组数据可以有多个众数，也可以没有。', en: 'Mode = most frequently occurring value. A dataset can have multiple modes or none.' }, formula: '$\\text{频率最高} = \\text{众数}$', tips: [{ zh: '杜预提示：众数就是"人气王"——出现最多次的那个。', en: 'Du Yu Tip: The mode is the \'crowd favorite\' — appears most often.' }] },
+    storyConsequence: { correct: { zh: '常用兵器——数据分析到位！做得漂亮！', en: 'Most Common Weapon — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1144, grade: 11, unitId: 4, order: 4,
@@ -4115,7 +4270,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：答案\n极差 = 最大值 - 最小值。战损评估完成！', en: 'Sima Yan: "Answer\nRange = max - min. Casualty assessment complete!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：验算\n最小值 + 极差 = 最大值 ✓', en: 'Sima Yan: "Verify\nMin + range = max ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '极差 = 最大值 - 最小值。衡量数据的离散程度，越大越分散。', en: 'Range = max - min. Measures data spread — larger range means more dispersed.' }, formula: '$R = x_{\\max} - x_{\\min}$', tips: [{ zh: '司马炎提示：极差大说明天下未稳，极差小说明太平盛世。', en: 'Sima Yan Tip: Large range = unstable realm, small range = peaceful times.' }] }
+    secret: { concept: { zh: '极差 = 最大值 - 最小值。衡量数据的离散程度，越大越分散。', en: 'Range = max - min. Measures data spread — larger range means more dispersed.' }, formula: '$R = x_{\\max} - x_{\\min}$', tips: [{ zh: '司马炎提示：极差大说明天下未稳，极差小说明太平盛世。', en: 'Sima Yan Tip: Large range = unstable realm, small range = peaceful times.' }] },
+    storyConsequence: { correct: { zh: '战损极差——数据分析到位！做得漂亮！', en: 'Casualty Range — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1151, grade: 11, unitId: 5, order: 1,
@@ -4136,7 +4292,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '杜预：答案\n攻城胜率确认！知己知彼，百战不殆。', en: 'Du Yu: "Answer\nSiege success rate confirmed! Know yourself and your enemy — never lose."' }, highlightField: 'p' },
       { text: { zh: '杜预：验算\n概率 × 总次数 应该等于有利事件数 ✓', en: 'Du Yu: "Verify\nProbability × total should equal favorable count ✓"' }, highlightField: 'p' },
     ],
-    secret: { concept: { zh: '概率 = 有利事件 ÷ 总事件。基于历史数据的频率估计。', en: 'Probability = favorable ÷ total. Frequency-based estimation from historical data.' }, formula: '$P = \\frac{f}{n}$', tips: [{ zh: '杜预提示：知己知彼，百战不殆。', en: 'Du Yu Tip: Know yourself and your enemy — never lose.' }] }
+    secret: { concept: { zh: '概率 = 有利事件 ÷ 总事件。基于历史数据的频率估计。', en: 'Probability = favorable ÷ total. Frequency-based estimation from historical data.' }, formula: '$P = \\frac{f}{n}$', tips: [{ zh: '杜预提示：知己知彼，百战不殆。', en: 'Du Yu Tip: Know yourself and your enemy — never lose.' }] },
+    storyConsequence: { correct: { zh: '攻城胜算——概率算准！做得漂亮！', en: 'Siege Probability — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1152, grade: 11, unitId: 5, order: 2,
@@ -4157,7 +4314,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：答案\n双路同时获胜的概率确认！', en: 'Sima Yan: "Answer\nProbability of both armies winning confirmed!"' }, highlightField: 'p' },
       { text: { zh: '司马炎：验算\n结果应该小于两个概率中较小的那个 ✓\n（两件事同时发生肯定比只发生一件更难）', en: 'Sima Yan: "Verify\nResult should be less than the smaller of the two probabilities ✓\n(Both happening is harder than just one)"' }, highlightField: 'p' },
     ],
-    secret: { concept: { zh: '独立事件：P(A且B) = P(A) × P(B)。互不影响的事件概率相乘。', en: 'Independent events: P(A and B) = P(A) × P(B). Multiply probabilities of events that don\'t affect each other.' }, formula: '$P(A \\cap B) = P(A) \\cdot P(B)$', tips: [{ zh: '司马炎提示：天下归一，每一步都要算准概率。', en: 'Sima Yan Tip: To unify the realm, calculate every probability.' }] }
+    secret: { concept: { zh: '独立事件：P(A且B) = P(A) × P(B)。互不影响的事件概率相乘。', en: 'Independent events: P(A and B) = P(A) × P(B). Multiply probabilities of events that don\'t affect each other.' }, formula: '$P(A \\cap B) = P(A) \\cdot P(B)$', tips: [{ zh: '司马炎提示：天下归一，每一步都要算准概率。', en: 'Sima Yan Tip: To unify the realm, calculate every probability.' }] },
+    storyConsequence: { correct: { zh: '双路夹击——概率算准！做得漂亮！', en: 'Two-Pronged Attack — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1153, grade: 11, unitId: 5, order: 3,
@@ -4178,7 +4336,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：答案\n将领分类完成！', en: 'Sima Yan: "Answer\nGenerals classified!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：验算\n四个区域之和 = 总人数 ✓ 无人遗漏！', en: 'Sima Yan: "Verify\nSum of four regions = total ✓ No one missed!"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '韦恩图：两个圆圈的交叠表示交集，合在一起表示并集，圈外表示补集。', en: 'Venn diagram: overlap = intersection, combined = union, outside = complement.' }, formula: '$|A \\cup B| = |A| + |B| - |A \\cap B|$', tips: [{ zh: '司马炎提示：四个区域加起来等于总数——这是验算的金标准。', en: 'Sima Yan Tip: Four regions sum to total — the gold standard for verification.' }] }
+    secret: { concept: { zh: '韦恩图：两个圆圈的交叠表示交集，合在一起表示并集，圈外表示补集。', en: 'Venn diagram: overlap = intersection, combined = union, outside = complement.' }, formula: '$|A \\cup B| = |A| + |B| - |A \\cap B|$', tips: [{ zh: '司马炎提示：四个区域加起来等于总数——这是验算的金标准。', en: 'Sima Yan Tip: Four regions sum to total — the gold standard for verification.' }] },
+    storyConsequence: { correct: { zh: '将领履历——集合理清！做得漂亮！', en: 'Generals\' Records — Well done!' }, wrong: { zh: '集合关系理错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 11 Unit 6: March Vectors ---
@@ -4201,7 +4360,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '姜维：答案\n总位移向量确认！北伐路线明确！', en: 'Jiang Wei: "Answer\nTotal displacement confirmed! Northern expedition route is clear!"' }, highlightField: 'x' },
       { text: { zh: '姜维：验算\n总向量减去第二段应等于第一段 ✓', en: 'Jiang Wei: "Verify\nTotal minus second segment should equal first ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '向量加法：分量分别相加。几何上是首尾相接。', en: 'Vector addition: add components separately. Geometrically, end-to-end.' }, formula: '$\\vec{a}+\\vec{b} = \\binom{a_1+b_1}{a_2+b_2}$', tips: [{ zh: '姜维提示：两段路合一段——向量加法就这么直白。', en: 'Jiang Wei Tip: Two paths become one — vector addition is that straightforward.' }] }
+    secret: { concept: { zh: '向量加法：分量分别相加。几何上是首尾相接。', en: 'Vector addition: add components separately. Geometrically, end-to-end.' }, formula: '$\\vec{a}+\\vec{b} = \\binom{a_1+b_1}{a_2+b_2}$', tips: [{ zh: '姜维提示：两段路合一段——向量加法就这么直白。', en: 'Jiang Wei Tip: Two paths become one — vector addition is that straightforward.' }] },
+    storyConsequence: { correct: { zh: '两段行军——坐标精准！做得漂亮！', en: 'Two-Stage March — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1162, grade: 11, unitId: 6, order: 2,
@@ -4222,7 +4382,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '姜维：答案\n补给路线延长完毕！', en: 'Jiang Wei: "Answer\nSupply route extended!"' }, highlightField: 'y' },
       { text: { zh: '姜维：验算\n新向量 ÷ $k$ 应等于原向量 ✓', en: 'Jiang Wei: "Verify\nNew vector ÷ $k$ should equal original ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '标量乘法：向量每个分量乘以标量。方向不变，长度缩放。', en: 'Scalar multiplication: multiply each component by the scalar. Direction unchanged, length scales.' }, formula: '$k\\vec{v} = \\binom{kv_1}{kv_2}$', tips: [{ zh: '姜维提示：标量乘法 = 方向不变，走远走近。', en: 'Jiang Wei Tip: Scalar multiplication = same direction, different distance.' }] }
+    secret: { concept: { zh: '标量乘法：向量每个分量乘以标量。方向不变，长度缩放。', en: 'Scalar multiplication: multiply each component by the scalar. Direction unchanged, length scales.' }, formula: '$k\\vec{v} = \\binom{kv_1}{kv_2}$', tips: [{ zh: '姜维提示：标量乘法 = 方向不变，走远走近。', en: 'Jiang Wei Tip: Scalar multiplication = same direction, different distance.' }] },
+    storyConsequence: { correct: { zh: '补给倍增——坐标精准！做得漂亮！', en: 'Supply Route Scaling — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1163, grade: 11, unitId: 6, order: 3,
@@ -4243,7 +4404,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '姜维：答案\n行军总距离确认！六出祁山，每一步都算数。', en: 'Jiang Wei: "Answer\nTotal march distance confirmed! Every step of the six campaigns counts."' }, highlightField: 'x' },
       { text: { zh: '姜维：验算\n$|\\vec{v}|^2$ 应等于 $v_1^2 + v_2^2$ ✓', en: 'Jiang Wei: "Verify\n$|\\vec{v}|^2$ should equal $v_1^2 + v_2^2$ ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '向量模 = √(x² + y²)，本质就是勾股定理。', en: 'Vector magnitude = √(x² + y²), essentially Pythagoras.' }, formula: '$|\\vec{v}| = \\sqrt{v_1^2 + v_2^2}$', tips: [{ zh: '姜维提示：向量模 = 勾股定理的又一次登场。', en: 'Jiang Wei Tip: Vector magnitude = Pythagoras strikes again.' }] }
+    secret: { concept: { zh: '向量模 = √(x² + y²)，本质就是勾股定理。', en: 'Vector magnitude = √(x² + y²), essentially Pythagoras.' }, formula: '$|\\vec{v}| = \\sqrt{v_1^2 + v_2^2}$', tips: [{ zh: '姜维提示：向量模 = 勾股定理的又一次登场。', en: 'Jiang Wei Tip: Vector magnitude = Pythagoras strikes again.' }] },
+    storyConsequence: { correct: { zh: '行军总距离——坐标精准！做得漂亮！', en: 'Total March Distance — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 11 Unit 7: Advanced Statistics — Charts & Cumulative Frequency ---
@@ -4266,7 +4428,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：答案\n估计均值确认！注意这是估计值，不是精确值。', en: 'Sima Yan: "Answer\nEstimated mean confirmed! Note: this is an estimate, not exact."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：验算\n估计均值应该在最小组中值和最大组中值之间 ✓', en: 'Sima Yan: "Verify\nEstimated mean should be between smallest and largest midpoints ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '分组数据估计均值：用组中值代替每个数据，再算加权平均。', en: 'Estimated mean from grouped data: replace each value with class midpoint, then weighted average.' }, formula: '$\\bar{x} \\approx \\frac{\\sum f \\cdot x_m}{\\sum f}$', tips: [{ zh: '司马炎提示：分组数据只能"估计"——精确值已经丢失了。', en: 'Sima Yan Tip: Grouped data can only be \'estimated\' — exact values are lost.' }] }
+    secret: { concept: { zh: '分组数据估计均值：用组中值代替每个数据，再算加权平均。', en: 'Estimated mean from grouped data: replace each value with class midpoint, then weighted average.' }, formula: '$\\bar{x} \\approx \\frac{\\sum f \\cdot x_m}{\\sum f}$', tips: [{ zh: '司马炎提示：分组数据只能"估计"——精确值已经丢失了。', en: 'Sima Yan Tip: Grouped data can only be \'estimated\' — exact values are lost.' }] },
+    storyConsequence: { correct: { zh: '分组均值——数据分析到位！做得漂亮！', en: 'Grouped Mean — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1172, grade: 11, unitId: 7, order: 2,
@@ -4287,7 +4450,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '杜预：答案\n估计中位数确认！', en: 'Du Yu: "Answer\nEstimated median confirmed!"' }, highlightField: 'ans' },
       { text: { zh: '杜预：验算\n中位数应该在中位数所在组的范围内 ✓', en: 'Du Yu: "Verify\nMedian should fall within the median class range ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '累积频率 = 逐组累加。中位数在累积频率 = 总数/2 的位置。', en: 'Cumulative frequency = running total. Median at cumulative = total/2.' }, formula: '$\\text{中位数位置} = \\frac{n}{2}$', tips: [{ zh: '杜预提示：累积频率是"跑步记分牌"——看什么时候过半。', en: 'Du Yu Tip: Cumulative frequency is a \'running scoreboard\' — see when it passes halfway.' }] }
+    secret: { concept: { zh: '累积频率 = 逐组累加。中位数在累积频率 = 总数/2 的位置。', en: 'Cumulative frequency = running total. Median at cumulative = total/2.' }, formula: '$\\text{中位数位置} = \\frac{n}{2}$', tips: [{ zh: '杜预提示：累积频率是"跑步记分牌"——看什么时候过半。', en: 'Du Yu Tip: Cumulative frequency is a \'running scoreboard\' — see when it passes halfway.' }] },
+    storyConsequence: { correct: { zh: '战损累积——数据分析到位！做得漂亮！', en: 'Cumulative Casualties — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1173, grade: 11, unitId: 7, order: 3,
@@ -4308,7 +4472,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：答案\n中位数确认！', en: 'Sima Yan: "Answer\nMedian confirmed!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：验算\n中位数左边和右边的数据个数应该相等 ✓', en: 'Sima Yan: "Verify\nEqual count of values on each side of median ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '四分位数将数据分为四等份。IQR = Q3 - Q1 衡量中间 50% 的离散度。', en: 'Quartiles divide data into four equal parts. IQR = Q3 - Q1 measures spread of middle 50%.' }, formula: '$IQR = Q3 - Q1$', tips: [{ zh: '司马炎提示：四分位——把天下分为四份来分析。', en: 'Sima Yan Tip: Quartiles — analyze the realm in four parts.' }] }
+    secret: { concept: { zh: '四分位数将数据分为四等份。IQR = Q3 - Q1 衡量中间 50% 的离散度。', en: 'Quartiles divide data into four equal parts. IQR = Q3 - Q1 measures spread of middle 50%.' }, formula: '$IQR = Q3 - Q1$', tips: [{ zh: '司马炎提示：四分位——把天下分为四份来分析。', en: 'Sima Yan Tip: Quartiles — analyze the realm in four parts.' }] },
+    storyConsequence: { correct: { zh: '四分位分析——数据分析到位！做得漂亮！', en: 'Quartile Analysis — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y11 Unit 8: 微积分深化 · 六出祁山 (Calculus Extension) ---
@@ -4331,7 +4496,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n速度函数已求出！', en: 'Zhuge Liang: "Answer\nSpeed function found!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n对导数再积分，应该回到原函数（加常数）✓', en: 'Zhuge Liang: "Verify\nIntegrate the derivative back — should return to original (plus constant) ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '微分 = 求变化率。幂规则：指数下来乘，指数减1。', en: 'Differentiation = rate of change. Power rule: bring down power, reduce by 1.' }, formula: '$\\frac{d}{dx}(ax^n) = nax^{n-1}$', tips: [{ zh: '诸葛亮提示：指数搬下来，再减1。', en: 'Zhuge Liang Tip: Bring the power down, reduce by 1.' }] }
+    secret: { concept: { zh: '微分 = 求变化率。幂规则：指数下来乘，指数减1。', en: 'Differentiation = rate of change. Power rule: bring down power, reduce by 1.' }, formula: '$\\frac{d}{dx}(ax^n) = nax^{n-1}$', tips: [{ zh: '诸葛亮提示：指数搬下来，再减1。', en: 'Zhuge Liang Tip: Bring the power down, reduce by 1.' }] },
+    storyConsequence: { correct: { zh: '行军速率——导数精准！做得漂亮！', en: 'March Rate — Well done!' }, wrong: { zh: '导数计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1182, grade: 11, unitId: 8, order: 2,
@@ -4352,7 +4518,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n积分完成！', en: 'Zhuge Liang: "Answer\nIntegration complete!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n对结果求导，应该得到原函数 ✓', en: 'Zhuge Liang: "Verify\nDifferentiate the result — should give back the original ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '积分 = 微分的逆操作。幂规则：指数加1，除以新指数。', en: 'Integration = reverse of differentiation. Power rule: add 1 to power, divide by new power.' }, formula: '$\\int ax^n dx = \\frac{a}{n+1}x^{n+1} + C$', tips: [{ zh: '诸葛亮提示：指数加1再除——积分口诀。', en: 'Zhuge Liang Tip: Add 1 then divide — integration mantra.' }] }
+    secret: { concept: { zh: '积分 = 微分的逆操作。幂规则：指数加1，除以新指数。', en: 'Integration = reverse of differentiation. Power rule: add 1 to power, divide by new power.' }, formula: '$\\int ax^n dx = \\frac{a}{n+1}x^{n+1} + C$', tips: [{ zh: '诸葛亮提示：指数加1再除——积分口诀。', en: 'Zhuge Liang Tip: Add 1 then divide — integration mantra.' }] },
+    storyConsequence: { correct: { zh: '粮草总量——积分完成！做得漂亮！', en: 'Total Supplies — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y11 Unit 9: 向量运算 · 八阵图 (Vector Operations) ---
@@ -4375,7 +4542,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n合力向量 = $({sum_x}, {sum_y})$。', en: 'Zhuge Liang: "Answer\nResultant vector = $({sum_x}, {sum_y})$."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：验算\n$(\\vec{a}+\\vec{b}) - \\vec{b}$ 应等于 $\\vec{a}$ ✓', en: 'Zhuge Liang: "Verify\n$(\\vec{a}+\\vec{b}) - \\vec{b}$ should equal $\\vec{a}$ ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '向量加法：分量分别相加。合力方向 = 各分力之和。', en: 'Vector addition: add components separately. Resultant = sum of individual vectors.' }, formula: '$\\vec{a}+\\vec{b} = (a_1+b_1, a_2+b_2)$', tips: [{ zh: '诸葛亮提示：x加x，y加y——向量加法就这样。', en: 'Zhuge Liang Tip: x plus x, y plus y — that\'s vector addition.' }] }
+    secret: { concept: { zh: '向量加法：分量分别相加。合力方向 = 各分力之和。', en: 'Vector addition: add components separately. Resultant = sum of individual vectors.' }, formula: '$\\vec{a}+\\vec{b} = (a_1+b_1, a_2+b_2)$', tips: [{ zh: '诸葛亮提示：x加x，y加y——向量加法就这样。', en: 'Zhuge Liang Tip: x plus x, y plus y — that\'s vector addition.' }] },
+    storyConsequence: { correct: { zh: '阵法向量——坐标精准！做得漂亮！', en: 'Formation Vectors — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y11 Unit 10: 高级三角 · 赤壁遗策 (Advanced Trigonometry) ---
@@ -4398,7 +4566,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜：答案\n斜岸距离测出来了！', en: 'Zhou Yu: "Answer\nOblique shore distance measured!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：验算\n三角形三角之和 = $180°$ ✓\n结果代回正弦定理，等式两边应该相等 ✓', en: 'Zhou Yu: "Verify\nAngles sum to 180° ✓\nSubstitute back into sine rule — both sides should be equal ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '正弦定理：a/sinA = b/sinB = c/sinC。适用于所有三角形。', en: 'Sine rule: a/sinA = b/sinB = c/sinC. Works for ALL triangles.' }, formula: '$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$', tips: [{ zh: '周瑜提示：边配角，角配边——正弦定理万能。', en: 'Zhou Yu Tip: Side pairs with angle — sine rule is universal.' }] }
+    secret: { concept: { zh: '正弦定理：a/sinA = b/sinB = c/sinC。适用于所有三角形。', en: 'Sine rule: a/sinA = b/sinB = c/sinC. Works for ALL triangles.' }, formula: '$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$', tips: [{ zh: '周瑜提示：边配角，角配边——正弦定理万能。', en: 'Zhou Yu Tip: Side pairs with angle — sine rule is universal.' }] },
+    storyConsequence: { correct: { zh: '斜岸测量——三角精准！做得漂亮！', en: 'Oblique Shore Survey — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 11102, grade: 11, unitId: 10, order: 2,
@@ -4419,7 +4588,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '周瑜：答案\n对面距离确认！', en: 'Zhou Yu: "Answer\nOpposite distance confirmed!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：验算\n当角度 = $90°$ 时，$\\cos 90° = 0$，公式变回勾股定理 ✓', en: 'Zhou Yu: "Verify\nWhen angle = 90°, $\\cos 90° = 0$, formula becomes Pythagoras ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '余弦定理：a² = b² + c² - 2bc·cosA。勾股定理的通用版。', en: 'Cosine rule: a² = b² + c² - 2bc·cosA. Generalized Pythagoras.' }, formula: '$a^2 = b^2 + c^2 - 2bc\\cos A$', tips: [{ zh: '周瑜提示：两边夹角→余弦定理。三边→也是余弦定理。', en: 'Zhou Yu Tip: Two sides + angle → cosine rule. Three sides → also cosine rule.' }] }
+    secret: { concept: { zh: '余弦定理：a² = b² + c² - 2bc·cosA。勾股定理的通用版。', en: 'Cosine rule: a² = b² + c² - 2bc·cosA. Generalized Pythagoras.' }, formula: '$a^2 = b^2 + c^2 - 2bc\\cos A$', tips: [{ zh: '周瑜提示：两边夹角→余弦定理。三边→也是余弦定理。', en: 'Zhou Yu Tip: Two sides + angle → cosine rule. Three sides → also cosine rule.' }] },
+    storyConsequence: { correct: { zh: '夹角攻防——三角精准！做得漂亮！', en: 'Included Angle Battle — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y11 Unit 11: 函数图像 · 隆中对策 (Function Graphs) ---
@@ -4442,7 +4612,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n顶点 = $({vertex_x}, {vertex_y})$。最大射高确认！', en: 'Zhuge Liang: "Answer\nVertex = $({vertex_x}, {vertex_y})$. Maximum range confirmed!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n顶点左右各代一个 $x$，$y$ 值应该更小（因为 $a < 0$）✓', en: 'Zhuge Liang: "Verify\nSub one $x$ to the left and right of vertex — $y$ should be smaller (since $a < 0$) ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '顶点公式：x = -b/(2a)，再代回求 y。是抛物线的最高/低点。', en: 'Vertex: x = -b/(2a), sub back for y. It\'s the max/min of the parabola.' }, formula: '$x = -\\frac{b}{2a}$', tips: [{ zh: '诸葛亮提示：-b/2a 一步到位，不用配方。', en: 'Zhuge Liang Tip: -b/2a gives x directly, no completing the square needed.' }] }
+    secret: { concept: { zh: '顶点公式：x = -b/(2a)，再代回求 y。是抛物线的最高/低点。', en: 'Vertex: x = -b/(2a), sub back for y. It\'s the max/min of the parabola.' }, formula: '$x = -\\frac{b}{2a}$', tips: [{ zh: '诸葛亮提示：-b/2a 一步到位，不用配方。', en: 'Zhuge Liang Tip: -b/2a gives x directly, no completing the square needed.' }] },
+    storyConsequence: { correct: { zh: '抛物线顶点——二次方程迎刃而解！做得漂亮！', en: 'Parabola Vertex — Well done!' }, wrong: { zh: '二次方程算岔了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 11112, grade: 11, unitId: 11, order: 2,
@@ -4463,7 +4634,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '诸葛亮：答案\n两个落点确认！', en: 'Zhuge Liang: "Answer\nTwo landing points confirmed!"' }, highlightField: 'x1' },
       { text: { zh: '诸葛亮：验算\n把每个根代回原式，结果应为 $0$ ✓', en: 'Zhuge Liang: "Verify\nSub each root back — result should be 0 ✓"' }, highlightField: 'x1' },
     ],
-    secret: { concept: { zh: '求根公式：x = (-b±√(b²-4ac))/2a。判别式决定根的个数。', en: 'Quadratic formula: x = (-b±√(b²-4ac))/2a. Discriminant determines number of roots.' }, formula: '$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$', tips: [{ zh: '诸葛亮提示：记住公式，判别式先算。', en: 'Zhuge Liang Tip: Memorize the formula, calculate discriminant first.' }] }
+    secret: { concept: { zh: '求根公式：x = (-b±√(b²-4ac))/2a。判别式决定根的个数。', en: 'Quadratic formula: x = (-b±√(b²-4ac))/2a. Discriminant determines number of roots.' }, formula: '$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$', tips: [{ zh: '诸葛亮提示：记住公式，判别式先算。', en: 'Zhuge Liang Tip: Memorize the formula, calculate discriminant first.' }] },
+    storyConsequence: { correct: { zh: '函数零点——根找到了！做得漂亮！', en: 'Function Zeros — Well done!' }, wrong: { zh: '方程的根没找对…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 12: The Final Stand (Grand Unification) ---
@@ -4492,7 +4664,8 @@ export const MISSIONS: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '二阶导数大于零的点为极小值点。', en: 'Points where the second derivative is positive are local minima.' }, formula: "$f'(x) = 3x^2 - 3 = 0 \\Rightarrow x = 1$", tips: [{ zh: "刘禅提示：此间乐，不思蜀。但防线还是要守的。", en: "Liu Shan Tip: I am happy here and don't miss Shu. But the defense must be held." }] }
+    secret: { concept: { zh: '二阶导数大于零的点为极小值点。', en: 'Points where the second derivative is positive are local minima.' }, formula: "$f'(x) = 3x^2 - 3 = 0 \\Rightarrow x = 1$", tips: [{ zh: "刘禅提示：此间乐，不思蜀。但防线还是要守的。", en: "Liu Shan Tip: I am happy here and don't miss Shu. But the defense must be held." }] },
+    storyConsequence: { correct: { zh: '最后的防线——导数精准！做得漂亮！', en: 'The Final Stand — Well done!' }, wrong: { zh: '导数计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1221, grade: 12, unitId: 2, order: 1,
@@ -4513,7 +4686,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：答案\n$P = {answer}$\n天下大势，合久必分，分久必合。', en: 'Sima Yan: "Answer\n$P = {answer}$\nThe world unites after division, divides after union."' }, highlightField: 'p' },
       { text: { zh: '司马炎：验算\n$P(全胜)$ 应该小于单场胜率（$0.49 < 0.7$）✓\n$P(全败) = 0.3 \\times 0.3 = 0.09$\n$P(全胜) + P(至少一败) = 1$ ✓', en: 'Sima Yan: "Verify\n$P(\\text{win all})$ should be less than single win rate ($0.49 < 0.7$) ✓\n$P(\\text{lose all}) = 0.3 \\times 0.3 = 0.09$\n$P(\\text{win all}) + P(\\text{at least one loss}) = 1$ ✓"' }, highlightField: 'p' },
     ],
-    secret: { concept: { zh: '独立事件联合概率 = 各自概率相乘。P(A且B) = P(A)×P(B)。', en: 'Joint probability of independent events = multiply individual probabilities.' }, formula: '$P(A \\cap B) = P(A) \\times P(B)$', tips: [{ zh: '司马炎提示：独立相乘——天下大势的数学。', en: 'Sima Yan Tip: Independent events multiply — the mathematics of destiny.' }] }
+    secret: { concept: { zh: '独立事件联合概率 = 各自概率相乘。P(A且B) = P(A)×P(B)。', en: 'Joint probability of independent events = multiply individual probabilities.' }, formula: '$P(A \\cap B) = P(A) \\times P(B)$', tips: [{ zh: '司马炎提示：独立相乘——天下大势的数学。', en: 'Sima Yan Tip: Independent events multiply — the mathematics of destiny.' }] },
+    storyConsequence: { correct: { zh: '胜率评估——概率算准！做得漂亮！', en: 'Win Rate Assessment — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Y12 Unit 3: 综合应用 · 三分归晋 (Synthesis) ---
@@ -4536,7 +4710,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：第三步——回代\n把已求出的值代回任一方程，求另一个未知数。', en: 'Sima Yan: "Step 3 — back-substitute\nPlug the found value into either equation to find the other."' }, highlightField: 'y' },
       { text: { zh: '司马炎：验算\n两个值代入两个方程，两个方程都要满足 ✓', en: 'Sima Yan: "Verify\nSubstitute both values into BOTH equations — both must be satisfied ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '联立方程：两个方程两个未知数。消元法：配平→相减→回代。', en: 'Simultaneous: 2 equations, 2 unknowns. Elimination: balance → subtract → back-substitute.' }, formula: '$\\begin{cases} 2x+y=100 \\\\ x+3y=110 \\end{cases}$', tips: [{ zh: '司马炎提示：消元 = 让一个未知数消失。', en: 'Sima Yan Tip: Elimination = make one unknown vanish.' }] }
+    secret: { concept: { zh: '联立方程：两个方程两个未知数。消元法：配平→相减→回代。', en: 'Simultaneous: 2 equations, 2 unknowns. Elimination: balance → subtract → back-substitute.' }, formula: '$\\begin{cases} 2x+y=100 \\\\ x+3y=110 \\end{cases}$', tips: [{ zh: '司马炎提示：消元 = 让一个未知数消失。', en: 'Sima Yan Tip: Elimination = make one unknown vanish.' }] },
+    storyConsequence: { correct: { zh: '三国均势——联立方程求解成功！做得漂亮！', en: 'Balance of Power — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1232, grade: 12, unitId: 3, order: 2,
@@ -4557,7 +4732,8 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：答案\n$f(5) = {answer}$\n第五年魏国国力值！', en: 'Sima Yan: "Answer\n$f(5) = {answer}$\nWei\'s power in year 5!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：验算\n用计算器验证：$2 \\times 25 = 50$，$50 - 15 = 35$，$35 + 1 = 36$ ✓', en: 'Sima Yan: "Verify\nCalculator check: $2 \\times 25 = 50$, $50 - 15 = 35$, $35 + 1 = 36$ ✓"' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '函数求值：把 x 的值代入每一项，按运算顺序计算。', en: 'Function evaluation: substitute x into each term, follow order of operations.' }, formula: '$f(x) = ax^2 + bx + c$', tips: [{ zh: '司马炎提示：x 换数字，一项一项算。', en: 'Sima Yan Tip: Replace x with the number, calculate term by term.' }] }
+    secret: { concept: { zh: '函数求值：把 x 的值代入每一项，按运算顺序计算。', en: 'Function evaluation: substitute x into each term, follow order of operations.' }, formula: '$f(x) = ax^2 + bx + c$', tips: [{ zh: '司马炎提示：x 换数字，一项一项算。', en: 'Sima Yan Tip: Replace x with the number, calculate term by term.' }] },
+    storyConsequence: { correct: { zh: '国力函数——函数值正确！做得漂亮！', en: 'National Power Function — Well done!' }, wrong: { zh: '函数值代入有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1233, grade: 12, unitId: 3, order: 3,
@@ -4578,6 +4754,7 @@ export const MISSIONS: Mission[] = [
       { text: { zh: '司马炎：答案\n$x = {answer}$\n天下归一。三国故事到此终章。', en: 'Sima Yan: "Answer\n$x = {answer}$\nThe realm is reunited. The Three Kingdoms saga ends here."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：验算\n$\\frac{{answer}}{{adj}} = \\tan {angle}°$ ✓\n\n"天下大势，合久必分，分久必合。"\n—— 你的数学之旅，才刚刚开始。', en: 'Sima Yan: "Verify\n$\\frac{{answer}}{{adj}} = \\tan {angle}°$ ✓\n\n"The world unites after division, divides after union."\n— Your math journey has just begun."' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: 'tan θ = 对边/邻边。三国故事结束，数学旅途永远在路上。', en: 'tan θ = opp/adj. The Three Kingdoms end, but the math journey continues forever.' }, formula: '$\\tan\\theta = \\frac{\\text{opp}}{\\text{adj}}$', tips: [{ zh: '司马炎提示：天下大势，合久必分，分久必合。你的数学之路，永远不会结束。', en: 'Sima Yan Tip: The world unites and divides. Your math journey never ends.' }] }
+    secret: { concept: { zh: 'tan θ = 对边/邻边。三国故事结束，数学旅途永远在路上。', en: 'tan θ = opp/adj. The Three Kingdoms end, but the math journey continues forever.' }, formula: '$\\tan\\theta = \\frac{\\text{opp}}{\\text{adj}}$', tips: [{ zh: '司马炎提示：天下大势，合久必分，分久必合。你的数学之路，永远不会结束。', en: 'Sima Yan Tip: The world unites and divides. Your math journey never ends.' }] },
+    storyConsequence: { correct: { zh: '最终防线——三角精准！做得漂亮！', en: 'The Final Defense — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   }
 ];
