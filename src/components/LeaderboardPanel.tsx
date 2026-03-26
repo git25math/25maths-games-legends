@@ -194,7 +194,7 @@ export const LeaderboardPanel = ({
             <Trophy size={20} className="text-yellow-400" />
             <h2 className="text-lg font-black text-white">{title}</h2>
           </div>
-          <button onClick={onClose} className="p-2 text-white/40 hover:text-white transition-colors">
+          <button onClick={onClose} className="p-2 min-w-10 min-h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors">
             <X size={22} />
           </button>
         </div>

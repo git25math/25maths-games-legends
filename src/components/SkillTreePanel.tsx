@@ -5,6 +5,7 @@ import { getCharSkills, getSkillById } from '../data/heroSkills';
 import { lt } from '../i18n/resolveText';
 import { translations } from '../i18n/translations';
 import { useAudio } from '../audio';
+import { useEscapeKey } from '../hooks/useEscapeKey';
 
 export const SkillTreePanel = ({
   lang,
@@ -28,6 +29,7 @@ export const SkillTreePanel = ({
   const t = translations[lang];
   const skills = getCharSkills(charId);
   const { playTap, playBadgeUnlock } = useAudio();
+  useEscapeKey(onClose);
 
   return (
     <motion.div
@@ -53,7 +55,7 @@ export const SkillTreePanel = ({
               {(t as any).spSourceHint ?? '每升一级 +1 修炼点'}
             </p>
           </div>
-          <button onClick={onClose} className="p-2 text-white/40 hover:text-white transition-colors">
+          <button onClick={onClose} className="p-2 min-w-10 min-h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors">
             <X size={24} />
           </button>
         </div>

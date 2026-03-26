@@ -101,7 +101,11 @@ function saveAppState(gameState: GameState, charId: string | null, isGuest: bool
 
 export default function App() {
   const persisted = loadPersistedState();
-  const [lang, setLang] = useState<Language>('zh');
+  const [lang, setLangState] = useState<Language>(() => {
+    try { const s = localStorage.getItem('gl_lang'); if (s === 'zh' || s === 'zh_TW' || s === 'en') return s; } catch {}
+    return 'zh';
+  });
+  const setLang = (l: Language) => { setLangState(l); try { localStorage.setItem('gl_lang', l); } catch {} };
   const [gameState, setGameState] = useState<GameState>(persisted.gameState);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(persisted.charId);
   const [activeMission, setActiveMission] = useState<Mission | null>(() => {

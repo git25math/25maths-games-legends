@@ -6,6 +6,7 @@ import { lt } from '../i18n/resolveText';
 import { getEquipmentList, computeRepairBonus, EQUIPMENT_COLORS } from '../utils/equipment';
 import { EquipmentBadge } from './EquipmentBadge';
 import { useAudio } from '../audio';
+import { useEscapeKey } from '../hooks/useEscapeKey';
 
 const STATE_LABELS: Record<EquipmentState, { zh: string; en: string }> = {
   pristine: { zh: '崭新', en: 'Pristine' },
@@ -29,6 +30,7 @@ export const EquipmentPanel = ({
 }) => {
   const t = translations[lang];
   const { playTap } = useAudio();
+  useEscapeKey(onClose);
   const mistakes = (completedMissions as any)?._mistakes as Record<string, { count: number }> | undefined;
   const equipment = getEquipmentList(completedMissions, mistakes);
 
@@ -55,7 +57,7 @@ export const EquipmentPanel = ({
           <h2 className="text-xl font-black text-white">
             {(t as any).equipmentArsenal ?? '装备库'}
           </h2>
-          <button onClick={onClose} className="p-2 text-white/40 hover:text-white transition-colors">
+          <button onClick={onClose} className="p-2 min-w-10 min-h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors">
             <X size={24} />
           </button>
         </div>
