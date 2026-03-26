@@ -3245,18 +3245,12 @@ export const MISSIONS: Mission[] = [
     data: { total: 27, target: 19, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Hard', reward: 450,
     kpId: 'kp-8.1-02', sectionId: 'statistics',
     tutorialSteps: [
-      {
-        text: { zh: '关羽："华容道共 27 条路，其中 19 条有伏兵。"', en: 'Guan Yu: "Huarong Pass has 27 paths, 19 of which have ambushes."' },
-        highlightField: 'p'
-      },
-      {
-        text: { zh: '关羽："概率 $P = \\frac{\\text{伏兵路数}}{\\text{总路数}} = \\frac{19}{27}$"', en: 'Guan Yu: "Probability $P = \\frac{\\text{ambush paths}}{\\text{total paths}} = \\frac{19}{27}$"' },
-        highlightField: 'p'
-      },
-      {
-        text: { zh: '关羽："$P ≈ 0.70$。义释曹操，天意如此！"', en: 'Guan Yu: "$P ≈ 0.70$. Releasing Cao Cao was fate!"' },
-        highlightField: 'p'
-      }
+      { text: { zh: '关羽：为什么曹操逃不掉？\n华容道 27 条路，19 条有伏兵——\n曹操随便选一条路，遇到伏兵的概率有多大？', en: 'Guan Yu: "Why can\'t Cao Cao escape?\n27 paths, 19 have ambushes —\nHow likely is an ambush on a random path?"' }, highlightField: 'p' },
+      { text: { zh: '关羽：简单概率公式\n$$P = \\frac{\\text{目标结果数}}{\\text{总结果数}}$$\n目标 = 有伏兵的路，总数 = 所有路。', en: 'Guan Yu: "Simple probability\n$$P = \\frac{\\text{favorable}}{\\text{total}}$$\nFavorable = ambush paths, total = all paths."' }, highlightField: 'p' },
+      { text: { zh: '关羽：代入数据\n伏兵路数 = 19，总路数 = 27\n$P = \\frac{19}{27}$', en: 'Guan Yu: "Substitute\nAmbush = 19, total = 27\n$P = \\frac{19}{27}$"' }, highlightField: 'p' },
+      { text: { zh: '关羽：化为小数\n$P = 19 \\div 27 \\approx 0.70$\n约 70% 的概率遇到伏兵！', en: 'Guan Yu: "Convert\n$P = 19 \\div 27 \\approx 0.70$\nAbout 70% chance of ambush!"' }, highlightField: 'p' },
+      { text: { zh: '关羽：答案\n$P \\approx 0.70$——七成概率，曹操凶多吉少。\n义释曹操，天意如此！', en: 'Guan Yu: "Answer\n$P \\approx 0.70$ — 70% chance.\nReleasing Cao was fate!"' }, highlightField: 'p' },
+      { text: { zh: '关羽：验算\n$0 < 0.70 < 1$ ✓\n$0.70 \\times 27 \\approx 19$ 条伏兵路 ✓', en: 'Guan Yu: "Verify\n$0 < 0.70 < 1$ ✓\n$0.70 \\times 27 \\approx 19$ ✓"' }, highlightField: 'p' },
     ],
     secret: { concept: { zh: '简单概率：$P = \\frac{\\text{目标数}}{\\text{总数}}$。', en: 'Simple probability: $P = \\frac{\\text{target}}{\\text{total}}$.' }, formula: '$P = 19/27$', tips: [{ zh: '关羽提示：义薄云天，放他一马。', en: 'Guan Yu Tip: Loyalty as high as the sky, let him pass.' }] },
     storyConsequence: { correct: { zh: '华容道伏兵——概率算准！做得漂亮！', en: 'Huarong Pass Ambush — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3273,18 +3267,12 @@ export const MISSIONS: Mission[] = [
     data: { angle: 30, opposite: 50, func: 'sin', generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Easy', reward: 400,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
-      {
-        text: { zh: '甘宁："赤壁江面烟雾弥漫，旗舰与敌舰连线成 $30^\\circ$，对边 50 丈。$\\sin$ 联系对边和斜边。"', en: 'Gan Ning: "Mist covers Red Cliffs. Line at $30^\\circ$, opposite is 50. $\\sin$ connects opposite and hypotenuse."' },
-        highlightField: 'c'
-      },
-      {
-        text: { zh: '甘宁："$\\sin(30^\\circ) = \\text{对边}/\\text{斜边} = 50/c$，即 $0.5 = 50/c$"', en: 'Gan Ning: "$\\sin(30^\\circ) = \\text{opp}/\\text{hyp} = 50/c$, so $0.5 = 50/c$"' },
-        highlightField: 'c'
-      },
-      {
-        text: { zh: '甘宁："$c = 100$ 丈！水战之中，距离就是生命！"', en: 'Gan Ning: "$c = 100$ units! In naval battle, distance is life!"' },
-        highlightField: 'c'
-      }
+      { text: { zh: '甘宁：为什么要用三角函数？\n江面烟雾弥漫，无法直接测量敌舰距离。但我们知道角度和一条边——\n三角函数就是用角度和一条边算出另一条边的神器！', en: 'Gan Ning: "Why use trigonometry?\nMist covers the river, can\'t measure directly. But we know an angle and one side —\nTrig functions calculate unknown sides from an angle and one known side!"' }, highlightField: 'c' },
+      { text: { zh: '甘宁：SOH-CAH-TOA 口诀\n$\\sin$ = 对边/斜边 (SOH)\n$\\cos$ = 邻边/斜边 (CAH)\n$\\tan$ = 对边/邻边 (TOA)\n已知对边和角度，要求斜边——用 $\\sin$！', en: 'Gan Ning: "SOH-CAH-TOA\n$\\sin$ = Opp/Hyp (SOH)\n$\\cos$ = Adj/Hyp (CAH)\n$\\tan$ = Opp/Adj (TOA)\nKnown: opposite + angle. Want: hypotenuse — use $\\sin$!"' }, highlightField: 'c' },
+      { text: { zh: '甘宁：列方程\n$\\sin(30^\\circ) = \\frac{50}{c}$\n$0.5 = \\frac{50}{c}$', en: 'Gan Ning: "Set up\n$\\sin(30^\\circ) = \\frac{50}{c}$\n$0.5 = \\frac{50}{c}$"' }, highlightField: 'c' },
+      { text: { zh: '甘宁：求解\n$c = \\frac{50}{0.5} = 100$', en: 'Gan Ning: "Solve\n$c = \\frac{50}{0.5} = 100$"' }, highlightField: 'c' },
+      { text: { zh: '甘宁：答案\n斜边距离 $c = 100$ 丈！\n水战之中，距离就是生命！', en: 'Gan Ning: "Answer\nHypotenuse $c = 100$!\nIn naval battle, distance is life!"' }, highlightField: 'c' },
+      { text: { zh: '甘宁：验算\n$\\sin(30^\\circ) = \\frac{50}{100} = 0.5$ ✓ 测距完成！', en: 'Gan Ning: "Verify\n$\\sin(30^\\circ) = \\frac{50}{100} = 0.5$ ✓"' }, highlightField: 'c' },
     ],
     secret: { concept: { zh: '正弦值是对边与斜边的比。', en: 'Sine is the ratio of opposite to hypotenuse.' }, formula: '$\\sin(\\theta) = \\text{opp} / \\text{hyp}$', tips: [{ zh: '甘宁提示：水战之中，距离就是生命！', en: 'Gan Ning Tip: In naval battle, distance is life!' }] },
     storyConsequence: { correct: { zh: '战船间距——三角精准！做得漂亮！', en: 'Ship Distance — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3301,18 +3289,12 @@ export const MISSIONS: Mission[] = [
     data: { opposite: 30, adjacent: 30, func: 'tan_inv', generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Medium', reward: 650,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
-      {
-        text: { zh: '甘宁："旗舰与护卫舰的位置关系——对边 30，邻边 30。先求正切值。"', en: 'Gan Ning: "Position between flagship and escort — opposite 30, adjacent 30. First find the tangent."' },
-        highlightField: 'angle'
-      },
-      {
-        text: { zh: '甘宁："$\\tan(\\theta) = 30/30 = 1$。什么角度的正切值等于 1？"', en: 'Gan Ning: "$\\tan(\\theta) = 30/30 = 1$. What angle has tangent equal to 1?"' },
-        highlightField: 'angle'
-      },
-      {
-        text: { zh: '甘宁："$\\theta = 45^\\circ$！火攻之势，在于风向与角度的完美契合。"', en: 'Gan Ning: "$\\theta = 45^\\circ$! The power of fire lies in the perfect match of wind and angle."' },
-        highlightField: 'angle'
-      }
+      { text: { zh: '甘宁：为什么需要反三角函数？\n这次不是求边长——是求角度！知道两条边，反过来推角度。\n$\\tan$ 的逆运算就是 $\\arctan$。', en: 'Gan Ning: "Why inverse trig?\nNot finding a side — finding an angle! Given two sides, work backwards.\nThe inverse of $\\tan$ is $\\arctan$."' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：选哪个三角函数？\n已知对边 = 30，邻边 = 30。\n对边和邻边 → 用 $\\tan$（TOA）\n$\\tan(\\theta) = \\frac{\\text{对边}}{\\text{邻边}}$', en: 'Gan Ning: "Which trig function?\nOpposite = 30, adjacent = 30.\nOpp and adj → use $\\tan$ (TOA)\n$\\tan(\\theta) = \\frac{\\text{opp}}{\\text{adj}}$"' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：代入数据\n$\\tan(\\theta) = \\frac{30}{30} = 1$', en: 'Gan Ning: "Substitute\n$\\tan(\\theta) = \\frac{30}{30} = 1$"' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：反正切求角\n$\\theta = \\arctan(1) = 45^\\circ$\n对边 = 邻边时，角度一定是 $45^\\circ$！', en: 'Gan Ning: "Inverse tangent\n$\\theta = \\arctan(1) = 45^\\circ$\nWhen opp = adj, angle must be $45^\\circ$!"' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：答案\n$\\theta = 45^\\circ$！\n火攻之势，在于风向与角度的完美契合。', en: 'Gan Ning: "Answer\n$\\theta = 45^\\circ$!\nFire\'s power lies in the perfect match of wind and angle."' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：验算\n$\\tan(45^\\circ) = 1$，$\\frac{30}{30} = 1$ ✓ 角度正确！', en: 'Gan Ning: "Verify\n$\\tan(45^\\circ) = 1$, $\\frac{30}{30} = 1$ ✓"' }, highlightField: 'angle' },
     ],
     secret: { concept: { zh: '正切值为1时，角度为 45 度。', en: 'When tangent is 1, the angle is 45 degrees.' }, formula: '$\\theta = \\arctan(a/b)$', tips: [{ zh: '甘宁提示：火攻之势，在于风向与角度的完美契合。', en: 'Gan Ning Tip: The power of fire lies in the perfect match of wind and angle.' }] },
     storyConsequence: { correct: { zh: '旗舰夹角——三角精准！做得漂亮！', en: 'Flagship Angle — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3329,18 +3311,12 @@ export const MISSIONS: Mission[] = [
     data: { opposite: 100, adjacent: 100, func: 'tan_inv', generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Hard', reward: 700,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
-      {
-        text: { zh: '甘宁："火船冲向曹营！水平距 100 丈，高度差 100 丈。求仰角。"', en: 'Gan Ning: "Fire ships charge Cao\'s camp! Horizontal distance 100, height difference 100. Find elevation angle."' },
-        highlightField: 'angle'
-      },
-      {
-        text: { zh: '甘宁："$\\tan(\\theta) = \\text{对边}/\\text{邻边} = 100/100 = 1$"', en: 'Gan Ning: "$\\tan(\\theta) = \\text{opposite}/\\text{adjacent} = 100/100 = 1$"' },
-        highlightField: 'angle'
-      },
-      {
-        text: { zh: '甘宁："$\\theta = 45^\\circ$！百骑劫营，出奇制胜！"', en: 'Gan Ning: "$\\theta = 45^\\circ$! A hundred riders raid the camp, winning by surprise!"' },
-        highlightField: 'angle'
-      }
+      { text: { zh: '甘宁：为什么要算仰角？\n火船要冲向曹营高台——仰角太小火势不够猛，太大船会减速。\n精准计算仰角，才能让火攻威力最大！', en: 'Gan Ning: "Why calculate elevation angle?\nFire ships charge the elevated camp — too shallow means weak fire, too steep slows the ships.\nPrecise angle maximizes the attack!"' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：仰角问题结构\n水平距离（邻边）= 100 丈\n高度差（对边）= 100 丈\n对边和邻边 → 用 $\\tan$！', en: 'Gan Ning: "Elevation angle structure\nHorizontal (adjacent) = 100\nHeight (opposite) = 100\nOpp and adj → use $\\tan$!"' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：代入\n$\\tan(\\theta) = \\frac{100}{100} = 1$', en: 'Gan Ning: "Substitute\n$\\tan(\\theta) = \\frac{100}{100} = 1$"' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：反正切\n$\\theta = \\arctan(1) = 45^\\circ$\n等腰直角三角形 → 一定是 $45^\\circ$！', en: 'Gan Ning: "Inverse tangent\n$\\theta = \\arctan(1) = 45^\\circ$\nIsosceles right triangle → always $45^\\circ$!"' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：答案\n仰角 $\\theta = 45^\\circ$！百骑劫营，出奇制胜！', en: 'Gan Ning: "Answer\nElevation $\\theta = 45^\\circ$! Raid the camp, win by surprise!"' }, highlightField: 'angle' },
+      { text: { zh: '甘宁：验算\n$\\tan(45^\\circ) = 1$，$\\frac{100}{100} = 1$ ✓ 仰角精准！', en: 'Gan Ning: "Verify\n$\\tan(45^\\circ) = 1$, $\\frac{100}{100} = 1$ ✓"' }, highlightField: 'angle' },
     ],
     secret: { concept: { zh: '正切值等于对边除以邻边。', en: 'Tangent equals opposite divided by adjacent.' }, formula: '$\\tan(\\theta) = 1 \\Rightarrow \\theta = 45^\\circ$', tips: [{ zh: '甘宁提示：百骑劫营，出奇制胜。', en: 'Gan Ning Tip: A hundred riders raid the camp, winning by surprise.' }] },
     storyConsequence: { correct: { zh: '火攻仰角——三角精准！做得漂亮！', en: 'Fire Attack Angle — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3357,18 +3333,12 @@ export const MISSIONS: Mission[] = [
     data: { a1: 200, d: 150, n: 8, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Easy', reward: 300,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '鲁肃："联军增兵有序，首日 200，日增 150。这是等差数列！"', en: 'Lu Su: "Reinforcements follow a pattern. Day 1: 200, +150 daily. An arithmetic sequence!"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '鲁肃："通项公式 $a_n = a_1 + (n-1)d = 200 + 7 \\times 150$"', en: 'Lu Su: "General term: $a_n = a_1 + (n-1)d = 200 + 7 \\times 150$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '鲁肃："第 8 日增兵 1250 人！兵力充沛，可以开战了！"', en: 'Lu Su: "Day 8: 1250 troops! Forces are sufficient, time to fight!"' },
-        highlightField: 'ans'
-      }
+      { text: { zh: '鲁肃：为什么要学等差数列？\n联军每天增兵，增加人数固定不变——这种等距增长的规律叫等差数列。\n掌握规律，就能预测第 8 天有多少兵！', en: 'Lu Su: "Why learn arithmetic sequences?\nDaily reinforcements with constant increase — this constant-step pattern is an arithmetic sequence.\nMaster the pattern to predict Day 8!"' }, highlightField: 'ans' },
+      { text: { zh: '鲁肃：通项公式\n$$a_n = a_1 + (n-1) \\times d$$\n$a_1$ = 首项，$d$ = 公差，$n$ = 第几项\n就像爬楼梯——起点 + 走了几步 × 每步高度！', en: 'Lu Su: "Formula\n$$a_n = a_1 + (n-1) \\times d$$\n$a_1$ = first term, $d$ = common difference, $n$ = term number\nLike climbing stairs!"' }, highlightField: 'ans' },
+      { text: { zh: '鲁肃：代入\n$a_1 = 200$，$d = 150$，$n = 8$\n$a_8 = 200 + (8 - 1) \\times 150$', en: 'Lu Su: "Substitute\n$a_1 = 200$, $d = 150$, $n = 8$\n$a_8 = 200 + (8 - 1) \\times 150$"' }, highlightField: 'ans' },
+      { text: { zh: '鲁肃：计算\n$7 \\times 150 = 1050$\n$200 + 1050 = 1250$', en: 'Lu Su: "Calculate\n$7 \\times 150 = 1050$\n$200 + 1050 = 1250$"' }, highlightField: 'ans' },
+      { text: { zh: '鲁肃：答案\n第 8 日增兵 $1250$ 人！兵马未动，粮草先行。', en: 'Lu Su: "Answer\nDay 8: $1250$ troops! Before troops move, supplies go first."' }, highlightField: 'ans' },
+      { text: { zh: '鲁肃：验算\n200, 350, 500, 650, 800, 950, 1100, 1250 ✓\n每天增 150，第 8 天确实是 1250！', en: 'Lu Su: "Verify\n200, 350, 500, 650, 800, 950, 1100, 1250 ✓\n+150 daily, Day 8 is indeed 1250!"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '等差数列通项公式：$a_n = a_1 + (n-1)d$', en: 'Arithmetic sequence: $a_n = a_1 + (n-1)d$' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '鲁肃提示：兵马未动，粮草先行。', en: 'Lu Su Tip: Before troops move, supplies go first.' }] },
     storyConsequence: { correct: { zh: '赤壁增兵——数列过关！做得漂亮！', en: 'Red Cliffs Reinforcements — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3385,18 +3355,12 @@ export const MISSIONS: Mission[] = [
     data: { a1: 10, d: 6, n: 12, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '诸葛亮："连弩阵法，首排 10 架，逐排增 6。求第 12 排。"', en: 'Zhuge Liang: "Crossbow formation. Row 1: 10, +6 per row. Find Row 12."' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '诸葛亮："$a_{12} = 10 + (12-1) \\times 6 = 10 + 66$"', en: 'Zhuge Liang: "$a_{12} = 10 + (12-1) \\times 6 = 10 + 66$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '诸葛亮："76 架连弩齐射，万箭齐发！"', en: 'Zhuge Liang: "76 crossbows fire in unison, a storm of arrows!"' },
-        highlightField: 'ans'
-      }
+      { text: { zh: '诸葛亮：为什么连弩要按等差排列？\n首排少、后排多——前排挡视线，后排火力递增。\n等差数列让弩机数量有规律增长，便于快速部署！', en: 'Zhuge Liang: "Why arrange crossbows arithmetically?\nFewer in front, more behind — front blocks view, rear increases firepower.\nArithmetic growth enables rapid deployment!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：套公式\n$a_n = a_1 + (n-1) \\times d$\n$a_1 = 10$，$d = 6$，$n = 12$', en: 'Zhuge Liang: "Apply formula\n$a_n = a_1 + (n-1) \\times d$\n$a_1 = 10$, $d = 6$, $n = 12$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：代入\n$a_{12} = 10 + 11 \\times 6$', en: 'Zhuge Liang: "Substitute\n$a_{12} = 10 + 11 \\times 6$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：计算\n$11 \\times 6 = 66$\n$10 + 66 = 76$', en: 'Zhuge Liang: "Calculate\n$11 \\times 6 = 66$\n$10 + 66 = 76$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：答案\n第 12 排 $76$ 架连弩！万箭齐发！', en: 'Zhuge Liang: "Answer\nRow 12: $76$ crossbows! Storm of arrows!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n$a_{11} = 10 + 10 \\times 6 = 70$\n$76 - 70 = 6 = d$ ✓ 公差正确！', en: 'Zhuge Liang: "Verify\n$a_{11} = 10 + 10 \\times 6 = 70$\n$76 - 70 = 6 = d$ ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '等差数列应用：排兵布阵。', en: 'Arithmetic sequences in formation planning.' }, formula: '$a_{12} = 10 + 11 \\times 6 = 76$', tips: [{ zh: '诸葛亮提示：连弩之威，在于密集。', en: 'Zhuge Tip: The power of crossbows is in their density.' }] },
     storyConsequence: { correct: { zh: '连弩齐射——数列过关！做得漂亮！', en: 'Crossbow Volley — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3413,18 +3377,12 @@ export const MISSIONS: Mission[] = [
     data: { a1: 300, d: 20, n: 15, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '张昭："赤壁大捷，但粮草消耗惊人。首日 300 石，日增 20 石。"', en: 'Zhang Zhao: "Great victory at Red Cliffs, but supply costs are alarming. Day 1: 300, +20 daily."' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '张昭："第 15 日：$a_{15} = 300 + 14 \\times 20 = 300 + 280$"', en: 'Zhang Zhao: "Day 15: $a_{15} = 300 + 14 \\times 20 = 300 + 280$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '张昭："580 石！主公，必须精打细算，方能长久。"', en: 'Zhang Zhao: "580 units! My lord, we must budget carefully to sustain."' },
-        highlightField: 'ans'
-      }
+      { text: { zh: '张昭：为什么要预测粮草消耗？\n赤壁大捷，但战争消耗巨大。粮草日增 20 石——\n不提前算好，打到一半断粮前功尽弃！', en: 'Zhang Zhao: "Why predict supply consumption?\nGreat victory, but war costs are huge. +20 daily —\nWithout planning, running out mid-campaign means all is lost!"' }, highlightField: 'ans' },
+      { text: { zh: '张昭：三要素\n$a_1 = 300$（首日），$d = 20$（日增），$n = 15$\n$a_n = a_1 + (n-1) \\times d$', en: 'Zhang Zhao: "Three elements\n$a_1 = 300$ (Day 1), $d = 20$ (increase), $n = 15$\n$a_n = a_1 + (n-1) \\times d$"' }, highlightField: 'ans' },
+      { text: { zh: '张昭：代入\n$a_{15} = 300 + 14 \\times 20$', en: 'Zhang Zhao: "Substitute\n$a_{15} = 300 + 14 \\times 20$"' }, highlightField: 'ans' },
+      { text: { zh: '张昭：计算\n$14 \\times 20 = 280$\n$300 + 280 = 580$', en: 'Zhang Zhao: "Calculate\n$14 \\times 20 = 280$\n$300 + 280 = 580$"' }, highlightField: 'ans' },
+      { text: { zh: '张昭：答案\n第 15 日消耗 $580$ 石！精打细算，方能长久。', en: 'Zhang Zhao: "Answer\nDay 15: $580$ units! Budget carefully to sustain."' }, highlightField: 'ans' },
+      { text: { zh: '张昭：验算\n$a_{14} = 300 + 13 \\times 20 = 560$\n$580 - 560 = 20 = d$ ✓', en: 'Zhang Zhao: "Verify\n$a_{14} = 300 + 13 \\times 20 = 560$\n$580 - 560 = 20 = d$ ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '等差数列在实际问题中的应用。', en: 'Arithmetic sequences in real-world problems.' }, formula: '$a_{15} = 300 + 14 \\times 20 = 580$', tips: [{ zh: '张昭提示：内政之要，在于精算。', en: 'Zhang Zhao Tip: The key to governance is precise calculation.' }] },
     storyConsequence: { correct: { zh: '粮草消耗——数列过关！做得漂亮！', en: 'Supply Depletion — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -3553,7 +3511,7 @@ export const MISSIONS: Mission[] = [
     data: { radius: 4, height: 12, pi: 3.14, answer: 602.88, generatorType: 'VOLUME_Y8_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-5.4-02', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '马良：这口井是圆柱形的\n圆柱体积 = 底面积 × 高\n底面积 = $\\pi r^2$\n\n所以 $V = \\pi r^2 h$', en: 'Ma Liang: "This well is cylindrical\nCylinder volume = base area × height\nBase area = $\\pi r^2$\n\nSo $V = \\pi r^2 h$"' }, highlightField: 'v' },
+      { text: { zh: '马良：为什么要算圆柱体积？\n荆州百姓需要打井取水。这口井是圆柱形的——\n知道了体积，才能算出能蓄多少水、需要挖多深！', en: 'Ma Liang: "Why calculate cylinder volume?\nThe people of Jingzhou need wells. This well is cylindrical —\nKnowing the volume tells us how much water it holds and how deep to dig!"' }, highlightField: 'v' },
       { text: { zh: '马良：为什么水井是圆形？\n跟瞭望塔一样的道理——圆形挖最少的土，蓄最多的水！\n再说，圆形井壁受力均匀，不容易塌。', en: 'Ma Liang: "Why are wells circular?\nSame reason as watchtowers — circles dig less earth, store more water!\nPlus, circular walls distribute pressure evenly — less likely to collapse."' }, highlightField: 'v' },
       { text: { zh: '马良：代入数据\n$r = {radius}$，$h = {height}$\n$V = {pi} \\times {radius}^2 \\times {height}$', en: 'Ma Liang: "Substitute\n$r = {radius}$, $h = {height}$\n$V = {pi} \\times {radius}^2 \\times {height}$"' }, highlightField: 'v' },
       { text: { zh: '马良：计算\n$r^2 = {radius} \\times {radius}$\n$\\pi r^2 \\times h$ = 总蓄水量', en: 'Ma Liang: "Calculate\n$r^2 = {radius} \\times {radius}$\n$\\pi r^2 \\times h$ = total water capacity"' }, highlightField: 'v' },
@@ -3599,7 +3557,7 @@ export const MISSIONS: Mission[] = [
     data: { m: 3, b: 5, x: 4, generatorType: 'FUNC_VAL_RANDOM' }, difficulty: 'Easy', reward: 350,
     kpId: 'kp-2.13-01', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：函数是什么？\n你可以把函数想象成一台机器——丢一个数进去，吐一个数出来。\n每次丢同一个数，结果一定相同。今天的机器规则是这条直线方程。', en: 'Zhuge Liang: "What is a function?\nThink of it as a machine — feed in a number, get a number out.\nSame input always gives same output. Today\'s machine rule is this linear equation."' }, highlightField: 'y' },
+      { text: { zh: '诸葛亮：为什么要学函数？\n战场上一切皆有规律——兵力与粮草的关系、距离与时间的关系。\n函数就是描述这种对应关系的数学工具：输入一个值，必然得到唯一的输出。', en: 'Zhuge Liang: "Why learn functions?\nOn the battlefield, everything follows patterns — troops and supplies, distance and time.\nA function describes these relationships: input one value, always get one unique output."' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：题目要什么？\n当 $x$ 等于给定值时，$y$ 是多少？\n就是把数字"丢进机器"。', en: 'Zhuge Liang: "What does the problem ask?\nWhen $x$ equals the given value, what is $y$?\nJust \'feed the number into the machine\'."' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：代入\n把 $x$ 换成给定的值，其他保持不动。', en: 'Zhuge Liang: "Substitute\nReplace $x$ with the given value, keep everything else."' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：计算\n先算乘法，再算加减。', en: 'Zhuge Liang: "Calculate\nMultiply first, then add/subtract."' }, highlightField: 'y' },
@@ -3621,7 +3579,7 @@ export const MISSIONS: Mission[] = [
     data: { initial: 800, rate: -0.35, years: 1, answer: 520, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-1.13-01', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '张昭：什么是百分比？\n"百分之"就是"每一百个里面有几个"。\n35% 损失 = 每 100 人损失 35 人。简单又精确！', en: 'Zhang Zhao: "What is a percentage?\n\'Percent\' means \'per hundred\'.\n35% loss = 35 out of every 100. Simple and precise!"' }, highlightField: 'ans' },
+      { text: { zh: '张昭：为什么要用百分比？\n损失 100 人——是多还是少？如果全军 200 人，那是灾难；如果全军 10000 人，那是小事。\n百分比让你公平比较不同规模的数据，这就是它的威力！', en: 'Zhang Zhao: "Why use percentages?\nLosing 100 soldiers — is that a lot? With 200 total, a disaster; with 10,000, minor.\nPercentages let you fairly compare data of different scales — that\'s their power!"' }, highlightField: 'ans' },
       { text: { zh: '张昭：百分比变化公式\n$\\text{最终} = \\text{初始} \\times (1 + \\text{变化率})$\n减少用负数：$-35\\% = -0.35$\n所以乘以 $(1 - 0.35) = 0.65$', en: 'Zhang Zhao: "Percentage change formula\n$\\text{Final} = \\text{Initial} \\times (1 + \\text{rate})$\nDecrease uses negative: $-35\\% = -0.35$\nSo multiply by $(1 - 0.35) = 0.65$"' }, highlightField: 'ans' },
       { text: { zh: '张昭：代入数据\n初始兵力和变化率代入公式。', en: 'Zhang Zhao: "Substitute\nInitial troops and rate into the formula."' }, highlightField: 'ans' },
       { text: { zh: '张昭：计算\n一步乘法得出结果。', en: 'Zhang Zhao: "Calculate\nOne multiplication gives the result."' }, highlightField: 'ans' },
@@ -3643,7 +3601,7 @@ export const MISSIONS: Mission[] = [
     data: { principal: 1000, rate: 10, years: 3, mode: 'compound', generatorType: 'PERCENTAGE_INTEREST_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-1.13-03', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：什么是复利？\n单利：每年只对本金算利息。\n复利：每年对"本金 + 已有利息"都算利息——利滚利！\n这就是粮食繁殖的数学模型。', en: 'Zhuge Liang: "What is compound interest?\nSimple: interest on principal only each year.\nCompound: interest on principal AND accumulated interest — interest on interest!\nThis is the math model for grain reproduction."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么要学复利？\n简单利息只算本金的增长，但现实中，收益会再投入产生更多收益——利滚利！\n理解复利，才能预测粮食繁殖等越长越快的现象。', en: 'Zhuge Liang: "Why learn compound interest?\nSimple interest only grows the principal, but in reality, gains reinvest to produce more gains — interest on interest!\nUnderstanding compound interest lets you predict accelerating growth patterns."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：复利公式\n$$A = P(1 + r)^n$$\n$P$ = 本金，$r$ = 年利率（小数），$n$ = 年数\n\n每年乘以 $(1 + r)$，连乘 $n$ 次。', en: 'Zhuge Liang: "Compound formula\n$$A = P(1 + r)^n$$\n$P$ = principal, $r$ = annual rate (decimal), $n$ = years\n\nMultiply by $(1 + r)$ each year, $n$ times."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：代入数据\n本金、利率和年数代入公式。', en: 'Zhuge Liang: "Substitute\nPrincipal, rate, and years into the formula."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：分步计算\n先算 $(1 + r)$，再算 $(1 + r)^n$（连乘），最后乘以 $P$。', en: 'Zhuge Liang: "Step by step\nFirst $(1 + r)$, then $(1 + r)^n$ (repeated multiply), finally times $P$."' }, highlightField: 'ans' },
@@ -3667,7 +3625,7 @@ export const MISSIONS: Mission[] = [
     data: { px: 3, py: 4, axis: 'y', ansX: -3, ansY: 4, generatorType: 'SYMMETRY_RANDOM' }, difficulty: 'Easy', reward: 350,
     kpId: 'kp-7.1-01', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：什么是反射？\n就像照镜子——镜子里的你和真实的你左右对称。\n在坐标系中，沿 $y$ 轴反射就是"左右翻转"：$x$ 变号，$y$ 不变。', en: 'Zhuge Liang: "What is reflection?\nLike looking in a mirror — your reflection is left-right symmetric.\nIn coordinates, reflecting across $y$-axis means \'flip left-right\': $x$ changes sign, $y$ stays."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：为什么要学反射变换？\n八卦阵的玄妙在于对称——入阵者看到的路和实际的路是镜像。\n掌握反射规则，才能设计出让敌人迷失方向的完美阵法！', en: 'Zhuge Liang: "Why learn reflections?\nThe Eight Trigrams Formation\'s power lies in symmetry — paths inside mirror the real paths.\nMaster reflection rules to design formations that disorient the enemy!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：反射规则\n沿 $y$ 轴：$(x, y) \\to (-x, y)$\n沿 $x$ 轴：$(x, y) \\to (x, -y)$\n\n只有垂直于镜面那个坐标变号！', en: 'Zhuge Liang: "Reflection rules\nAcross $y$-axis: $(x, y) \\to (-x, y)$\nAcross $x$-axis: $(x, y) \\to (x, -y)$\n\nOnly the coordinate perpendicular to the mirror changes sign!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：代入\n原点 $(3, 4)$，沿 $y$ 轴反射\n$x$ 变号：$3 \\to -3$\n$y$ 不变：$4 \\to 4$', en: 'Zhuge Liang: "Substitute\nOriginal $(3, 4)$, reflect across $y$-axis\n$x$ changes sign: $3 \\to -3$\n$y$ stays: $4 \\to 4$"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：新坐标\n$(-3, 4)$', en: 'Zhuge Liang: "New coordinates\n$(-3, 4)$"' }, highlightField: 'x' },
@@ -3689,7 +3647,7 @@ export const MISSIONS: Mission[] = [
     data: { targetX: 7, targetY: 3, generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-7.1-03', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：什么是平移？\n整支部队朝同一方向、走同样的距离。\n每个点的 $x$ 加同一个数，$y$ 加同一个数。形状不变，只是位置变了。', en: 'Zhuge Liang: "What is translation?\nThe entire army moves in the same direction, same distance.\nAdd the same number to every $x$, same to every $y$. Shape unchanged, only position shifts."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：为什么要学平移？\n行军就是平移——整支部队朝同一方向移动相同距离。\n坐标上的平移规则，就是行军调度的数学基础！', en: 'Zhuge Liang: "Why learn translations?\nMarching is translation — the entire army moves the same direction and distance.\nTranslation rules on coordinates are the mathematical basis of troop deployment!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：平移规则\n$$（x, y) \\to (x + a, y + b)$$\n平移向量 $\\binom{a}{b}$：$a$ 控制左右，$b$ 控制上下。', en: 'Zhuge Liang: "Translation rule\n$$(x, y) \\to (x + a, y + b)$$\nTranslation vector $\\binom{a}{b}$: $a$ controls left/right, $b$ controls up/down."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：代入计算\n原坐标加上平移向量的各分量。', en: 'Zhuge Liang: "Substitute\nOriginal coordinates plus each component of the translation vector."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：计算 $x$ 和 $y$\n两次加法，分别算。', en: 'Zhuge Liang: "Calculate $x$ and $y$\nTwo additions, one for each."' }, highlightField: 'x' },
@@ -3711,7 +3669,7 @@ export const MISSIONS: Mission[] = [
     data: { targetX: -4, targetY: 3, px: 3, py: 4, angle: 90, generatorType: 'ROTATION_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-7.1-05', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：旋转——八卦阵最玄妙的变化\n绕一个中心点转动，距离不变，只改变方向。\n$90°$、$180°$、$270°$ 各有对应的坐标变换规则。', en: 'Zhuge Liang: "Rotation — the most mysterious transformation of the Eight Trigrams\nSpin around a center point. Distance unchanged, only direction changes.\n$90°$, $180°$, $270°$ each have specific coordinate rules."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：为什么要学旋转？\n八卦阵最玄妙的变化就是旋转——整个阵型绕中心旋转，敌人瞬间找不到出口。\n掌握旋转坐标变换，就掌握了阵法的核心！', en: 'Zhuge Liang: "Why learn rotations?\nThe formation\'s most mysterious move is rotation — the entire formation spins, enemies lose their way.\nMaster rotation coordinate transforms to master the formation\'s core!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：旋转规则\n$90°$ 逆时针：$(x,y) \\to (-y, x)$\n$180°$：$(x,y) \\to (-x, -y)$\n$270°$ 逆时针：$(x,y) \\to (y, -x)$', en: 'Zhuge Liang: "Rotation rules\n$90°$ anticlockwise: $(x,y) \\to (-y, x)$\n$180°$: $(x,y) \\to (-x, -y)$\n$270°$ anticlockwise: $(x,y) \\to (y, -x)$"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：代入坐标\n按对应角度的规则变换。', en: 'Zhuge Liang: "Substitute\nApply the rule for the given angle."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：计算新坐标\n变换后得到 $(x\', y\')$。', en: 'Zhuge Liang: "Calculate new coordinates\nAfter transformation: $(x\', y\')$."' }, highlightField: 'x' },
@@ -3733,7 +3691,7 @@ export const MISSIONS: Mission[] = [
     data: { targetX: 6, targetY: 8, px: 3, py: 4, k: 2, generatorType: 'ENLARGEMENT_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-7.1-07', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：放大（缩放）——保持形状，改变大小\n以中心为基准，每个点到中心的距离乘以倍数 $k$。\n$k > 1$ 放大，$0 < k < 1$ 缩小，$k < 0$ 翻转！', en: 'Zhuge Liang: "Enlargement — shape stays, size changes\nFrom a center, multiply every distance by factor $k$.\n$k > 1$ enlarge, $0 < k < 1$ shrink, $k < 0$ flip!"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：为什么要学放大（缩放）？\n把军营的小地图放大成实际建造图——形状不变，尺寸按比例放大。\n缩放变换就是比例尺的数学原理！', en: 'Zhuge Liang: "Why learn enlargement (scaling)?\nScaling a small camp map to actual construction size — shape stays the same, dimensions scale proportionally.\nEnlargement transforms are the math behind map scales!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：从原点放大的规则\n$$(x, y) \\to (kx, ky)$$\n每个坐标都乘以 $k$。', en: 'Zhuge Liang: "Enlargement from origin\n$$(x, y) \\to (kx, ky)$$\nMultiply each coordinate by $k$."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：代入\n原点和倍数代入公式。', en: 'Zhuge Liang: "Substitute\nOriginal point and scale factor into the formula."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：计算\n$x$ 和 $y$ 分别乘以 $k$。', en: 'Zhuge Liang: "Calculate\nMultiply $x$ and $y$ each by $k$."' }, highlightField: 'x' },
@@ -3757,7 +3715,7 @@ export const MISSIONS: Mission[] = [
     data: { r: 10, pi: 3.14, angle: 90, mode: 'circumference', answer: 15.7, generatorType: 'SECTOR_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-5.3-03', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '马良：弧长是什么？\n弧 = 圆周上的一段曲线。弧长就是这段曲线有多长。\n整个圆周 = $2\\pi r$，弧只是其中一部分。', en: 'Ma Liang: "What is arc length?\nAn arc is a curved section of a circle. Arc length is how long that section is.\nFull circumference = $2\\pi r$, an arc is just a fraction of it."' }, highlightField: 'c' },
+      { text: { zh: '马良：为什么要算弧长？\n护城河沿着城墙弯曲——这段弯曲的距离就是弧长。\n修墙、挖河、布置防线，都需要精确知道弧有多长！', en: 'Ma Liang: "Why calculate arc length?\nThe moat curves along the city wall — this curved distance is the arc length.\nBuilding walls, digging moats, laying defense lines — all need the precise arc length!"' }, highlightField: 'c' },
       { text: { zh: '马良：弧长公式\n$$l = \\frac{\\theta}{360} \\times 2\\pi r$$\n$\\frac{\\theta}{360}$ = 占整个圆的比例。', en: 'Ma Liang: "Arc length formula\n$$l = \\frac{\\theta}{360} \\times 2\\pi r$$\n$\\frac{\\theta}{360}$ = fraction of the full circle."' }, highlightField: 'c' },
       { text: { zh: '马良：代入\n$\\theta$、$r$、$\\pi$ 代入公式。', en: 'Ma Liang: "Substitute\n$\\theta$, $r$, $\\pi$ into the formula."' }, highlightField: 'c' },
       { text: { zh: '马良：计算\n先算整圆周长 $2\\pi r$，再乘以 $\\frac{\\theta}{360}$。', en: 'Ma Liang: "Calculate\nFirst full circumference $2\\pi r$, then multiply by $\\frac{\\theta}{360}$."' }, highlightField: 'c' },
@@ -3779,7 +3737,7 @@ export const MISSIONS: Mission[] = [
     data: { r: 8, pi: 3.14, angle: 90, mode: 'area', answer: 50.24, generatorType: 'SECTOR_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-5.3-04', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：扇形面积\n扇形 = 圆面积的一部分。\n$$A = \\frac{\\theta}{360} \\times \\pi r^2$$\n跟弧长公式一样的思路——乘以占比。', en: 'Zhuge Liang: "Sector area\nA sector is a fraction of the circle\'s area.\n$$A = \\frac{\\theta}{360} \\times \\pi r^2$$\nSame idea as arc length — multiply by the fraction."' }, highlightField: 'area' },
+      { text: { zh: '诸葛亮：为什么要算扇形面积？\n扇形是圆的一部分——就像切蛋糕。烽火台的照射范围就是一个扇形。\n知道扇形面积，才能算出火光能覆盖多大区域！', en: 'Zhuge Liang: "Why calculate sector area?\nA sector is part of a circle — like slicing a cake. A beacon\'s light range is a sector.\nKnowing the sector area tells you how much area the light covers!"' }, highlightField: 'area' },
       { text: { zh: '诸葛亮：$\\frac{\\theta}{360}$ 就是"这块扇形占了整个圆的几分之几"。\n$90° = \\frac{1}{4}$，$180° = \\frac{1}{2}$，$60° = \\frac{1}{6}$。', en: 'Zhuge Liang: "$\\frac{\\theta}{360}$ tells us \'what fraction of the full circle this sector is\'.\n$90° = \\frac{1}{4}$, $180° = \\frac{1}{2}$, $60° = \\frac{1}{6}$."' }, highlightField: 'area' },
       { text: { zh: '诸葛亮：代入\n$\\theta$、$r$、$\\pi$ 代入公式。', en: 'Zhuge Liang: "Substitute\n$\\theta$, $r$, $\\pi$ into the formula."' }, highlightField: 'area' },
       { text: { zh: '诸葛亮：计算\n先算 $\\pi r^2$（整圆面积），再乘以 $\\frac{\\theta}{360}$。', en: 'Zhuge Liang: "Calculate\nFirst $\\pi r^2$ (full area), then multiply by $\\frac{\\theta}{360}$."' }, highlightField: 'area' },
@@ -3801,7 +3759,7 @@ export const MISSIONS: Mission[] = [
     data: { targetX: 5, targetY: 0, generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-3.4-02', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：两点间距离\n两个营寨之间有多远？画一条直线量就行——但坐标系里怎么算？\n用勾股定理！水平差和垂直差构成直角三角形的两条直角边。', en: 'Zhuge Liang: "Distance between two points\nHow far between two camps? Draw a straight line — but how to calculate in coordinates?\nUse Pythagoras! Horizontal and vertical differences form the two legs of a right triangle."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：为什么要算两点距离？\n两个营寨之间隔着山河——不能直接丈量。\n但知道了坐标，用勾股定理就能精确算出直线距离！', en: 'Zhuge Liang: "Why calculate distance between two points?\nTwo camps separated by mountains and rivers — can\'t measure directly.\nBut with coordinates, the Pythagorean theorem gives the exact straight-line distance!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：距离公式\n$$d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$\n这就是勾股定理 $c = \\sqrt{a^2 + b^2}$ 的坐标版本！', en: 'Zhuge Liang: "Distance formula\n$$d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$\nThis is Pythagoras $c = \\sqrt{a^2 + b^2}$ in coordinate form!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：第 1 步——求差\n$\\Delta x = x_2 - x_1$，$\\Delta y = y_2 - y_1$', en: 'Zhuge Liang: "Step 1 — find differences\n$\\Delta x = x_2 - x_1$, $\\Delta y = y_2 - y_1$"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：第 2 步——平方、求和、开方\n$(\\Delta x)^2 + (\\Delta y)^2$，再 $\\sqrt{...}$', en: 'Zhuge Liang: "Step 2 — square, sum, root\n$(\\Delta x)^2 + (\\Delta y)^2$, then $\\sqrt{...}$"' }, highlightField: 'x' },
@@ -3847,7 +3805,7 @@ export const MISSIONS: Mission[] = [
     data: { a: 4, b: 8, generatorType: 'FACTORISE_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-2.3-03', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '周瑜：因式分解是展开的逆操作\n展开：$3(x+2) = 3x + 6$\n分解：$3x + 6 = 3(x+2)$\n就像"把散兵收拢成整齐的方阵"。', en: 'Zhou Yu: "Factorising is the reverse of expanding\nExpand: $3(x+2) = 3x+6$\nFactorise: $3x+6 = 3(x+2)$\nLike gathering scattered soldiers into a neat formation."' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：为什么要学因式分解？\n方程太复杂解不出来？把它拆成几个简单因式的乘积——\n化繁为简是解方程的核心技巧！', en: 'Zhou Yu: "Why learn factorisation?\nEquation too complex? Break it into simpler factors —\nSimplification is the core technique for solving equations!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：找公因式\n看每一项都有什么共同的因子（数字和字母都要看）。\n公因式就是"每个士兵都配备的装备"。', en: 'Zhou Yu: "Find common factor\nLook at what every term shares (check both numbers and letters).\nThe common factor is \'equipment every soldier carries\'."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：提取公因式\n把公因式写在括号外面，括号里写"除掉公因式后剩下的"。', en: 'Zhou Yu: "Extract\nWrite the common factor outside brackets, inside write what\'s left after dividing."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：计算', en: 'Zhou Yu: "Calculate"' }, highlightField: 'ans' },
@@ -3869,7 +3827,7 @@ export const MISSIONS: Mission[] = [
     data: { a: 3, b: 5, c: 20, generatorType: 'INEQUALITY_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：不等式和方程有什么不同？\n方程：$3x + 5 = 20$ → 答案是一个精确的数。\n不等式：$3x + 5 > 20$ → 答案是一个范围！\n"至少带多少"就是不等式问题。', en: 'Zhuge Liang: "How is an inequality different from an equation?\nEquation: $3x + 5 = 20$ → answer is one exact number.\nInequality: $3x + 5 > 20$ → answer is a range!\n\'At least how many\' is an inequality problem."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么要学不等式？\n方程告诉你恰好是多少，但现实中更多的是至少需要多少、最多能承受多少——\n不等式就是描述范围和限制条件的数学语言！', en: 'Zhuge Liang: "Why learn inequalities?\nEquations tell you exactly how much, but reality is about at least or at most —\nInequalities are the math language for ranges and constraints!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：解法和方程一样\n两边同时减 $5$，再同时除以 $3$。\n⚠️ 唯一区别：除以负数时，不等号要翻转！', en: 'Zhuge Liang: "Solving is the same as equations\nSubtract 5 from both sides, then divide by 3.\n⚠️ Only difference: dividing by a negative FLIPS the inequality sign!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：第一步\n$3x + 5 > 20$\n$3x > 15$', en: 'Zhuge Liang: "Step 1\n$3x + 5 > 20$\n$3x > 15$"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：第二步\n$x > 5$', en: 'Zhuge Liang: "Step 2\n$x > 5$"' }, highlightField: 'ans' },
@@ -3893,7 +3851,7 @@ export const MISSIONS: Mission[] = [
     data: { r: 10, angle: 90, generatorType: 'SECTOR_RANDOM', mode: 'sector_area' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-5.3-03', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '周瑜：扇形是什么？\n把一个圆"切一刀"——切出来的那块就是扇形。\n就像切披萨！角度决定你切了多大一块。', en: 'Zhou Yu: "What\'s a sector?\nCut a circle — the slice you get is a sector.\nLike cutting pizza! The angle decides how big your slice is."' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：为什么要了解扇形？\n圆形城楼上的弓箭手，射程覆盖的范围就是一个扇形——\n角度决定你能守多宽的防线！', en: 'Zhou Yu: "Why understand sectors?\nArchers atop a circular tower — their range covers a sector —\nThe angle determines how wide a defense line you can hold!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：扇形面积 = 圆面积的一部分\n$$A = \\frac{\\theta}{360} \\times \\pi r^2$$\n角度占 $360°$ 的几分之几，面积就是圆面积的几分之几。', en: 'Zhou Yu: "Sector area = fraction of circle area\n$$A = \\frac{\\theta}{360} \\times \\pi r^2$$\nThe angle as a fraction of 360° gives the area as a fraction of the full circle."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：代入\n$A = \\frac{{angle}}{360} \\times \\pi \\times {r}^2$', en: 'Zhou Yu: "Substitute\n$A = \\frac{{angle}}{360} \\times \\pi \\times {r}^2$"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：计算\n$= \\frac{{angle}}{360} \\times {r_sq}\\pi$', en: 'Zhou Yu: "Calculate\n$= \\frac{{angle}}{360} \\times {r_sq}\\pi$"' }, highlightField: 'ans' },
@@ -3915,7 +3873,7 @@ export const MISSIONS: Mission[] = [
     data: { r: 8, angle: 120, generatorType: 'SECTOR_RANDOM', mode: 'arc' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-5.3-04', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '周瑜：弧长就是"圆周的一段"\n圆周长 = $2\\pi r$。弧长就是圆周长的一部分——占多少取决于角度。', en: 'Zhou Yu: "Arc length is a piece of circumference\nCircumference = $2\\pi r$. Arc length is a fraction — determined by the angle."' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：为什么要算弧长？\n城墙是弯的——要在弧形城墙上布置多少守军，得先知道这段弧有多长！\n弧长 = 圆周长的一部分。', en: 'Zhou Yu: "Why calculate arc length?\nCity walls curve — to deploy guards along a curved wall, first know how long the arc is!\nArc length = part of the circumference."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：公式\n$$L = \\frac{\\theta}{360} \\times 2\\pi r$$\n和扇形面积同样的思路——角度的比例！', en: 'Zhou Yu: "Formula\n$$L = \\frac{\\theta}{360} \\times 2\\pi r$$\nSame logic as sector area — the angle ratio!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：代入\n$L = \\frac{{angle}}{360} \\times 2\\pi \\times {r}$', en: 'Zhou Yu: "Substitute\n$L = \\frac{{angle}}{360} \\times 2\\pi \\times {r}$"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：计算\n$= \\frac{{angle}}{360} \\times {circumference}\\pi$', en: 'Zhou Yu: "Calculate\n$= \\frac{{angle}}{360} \\times {circumference}\\pi$"' }, highlightField: 'ans' },
@@ -3961,7 +3919,7 @@ export const MISSIONS: Mission[] = [
     data: { values: [34, 67, 23, 89, 45, 12, 78], generatorType: 'STATISTICS_RANGE_RANDOM' }, difficulty: 'Easy', reward: 400,
     kpId: 'kp-9.1-02', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '司马懿：极差 = 数据的"跨度"\n一组数据里，最大值和最小值之间差多少？\n极差越大，数据越分散。极差越小，越集中。', en: 'Sima Yi: "Range = the \'spread\' of data\nIn a dataset, how far apart are max and min?\nBig range = scattered data. Small range = clustered data."' }, highlightField: 'ans' },
+      { text: { zh: '司马懿：为什么要算极差？\n知道平均值还不够——两支部队平均战力相同，但一支稳定、另一支忽高忽低。\n极差告诉你数据的波动范围！', en: 'Sima Yi: "Why calculate range?\nThe average alone isn\'t enough — two armies with the same average, but one stable, one volatile.\nRange tells you the spread!"' }, highlightField: 'ans' },
       { text: { zh: '司马懿：公式\n$$\\text{极差} = \\text{最大值} - \\text{最小值}$$\n就这么简单——找最大、找最小、相减。', en: 'Sima Yi: "Formula\n$$\\text{Range} = \\text{max} - \\text{min}$$\nThat simple — find max, find min, subtract."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：找最大最小\n数据中找出两个极端值。', en: 'Sima Yi: "Find max and min\nLocate the two extreme values."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：计算\n最大 - 最小 = 极差', en: 'Sima Yi: "Calculate\nMax - min = range"' }, highlightField: 'ans' },
@@ -3983,7 +3941,7 @@ export const MISSIONS: Mission[] = [
     data: { values: [5, 3, 7, 3, 8, 3, 6, 7, 3], generatorType: 'STATISTICS_MODE_RANDOM' }, difficulty: 'Easy', reward: 400,
     kpId: 'kp-9.1-01', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '司马懿：众数就是"人气王"\n一组数据里，哪个值出现得最频繁？\n就像投票——得票最多的就是"民意"。', en: 'Sima Yi: "Mode is the \'most popular\'\nWhich value appears most often in the data?\nLike voting — the most votes = \'public opinion\'."' }, highlightField: 'ans' },
+      { text: { zh: '司马懿：为什么要找众数？\n调查敌军最常用的战术——出现最多次的就是主力战术。\n众数帮你快速识别最常见的情况！', en: 'Sima Yi: "Why find the mode?\nInvestigate the enemy\'s most common tactics — the most frequent is the main strategy.\nThe mode identifies the most common case!"' }, highlightField: 'ans' },
       { text: { zh: '司马懿：方法\n1. 数每个值出现几次\n2. 出现最多的就是众数\n（可能有多个众数，也可能没有——如果每个值只出现一次）', en: 'Sima Yi: "Method\n1. Count how often each value appears\n2. The most frequent is the mode\n(There can be multiple modes, or none if every value appears once)"' }, highlightField: 'ans' },
       { text: { zh: '司马懿：统计频率\n数每个值出现了几次。', en: 'Sima Yi: "Count frequencies\nTally each value."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：找最高频率\n哪个值出现次数最多？', en: 'Sima Yi: "Find highest frequency\nWhich value appears most?"' }, highlightField: 'ans' },
@@ -4007,18 +3965,12 @@ export const MISSIONS: Mission[] = [
     data: { p1: [0, 0], p2: [4, 16], generatorType: 'QUADRATIC_RANDOM' }, difficulty: 'Hard', reward: 800,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '诸葛亮："路径损耗 $f(x) = -x^2 + 8x$，这是二次函数，$a=-1$, $b=8$。"', en: 'Zhuge Liang: "Path loss $f(x) = -x^2 + 8x$, a quadratic with $a=-1$, $b=8$."' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '诸葛亮："顶点处取最大值：$x = -b/(2a) = -8/(2 \\times -1) = 4$"', en: 'Zhuge Liang: "Maximum at vertex: $x = -b/(2a) = -8/(2 \\times -1) = 4$"' },
-        highlightField: 'x'
-      },
-      {
-        text: { zh: '诸葛亮："$x = 4$！鞠躬尽瘁，死而后已。运输之利，在于精微。"', en: 'Zhuge Liang: "$x = 4$! Devoted to the end. The key to transport is precision."' },
-        highlightField: 'x'
-      }
+      { text: { zh: '诸葛亮：为什么要找最优解？\n六出祁山，粮草运输是生命线。路径太短补给不足，太长损耗太大——\n必须找到效率最高的最优点！', en: 'Zhuge Liang: "Why find the optimal solution?\nSix expeditions — supply routes are lifelines. Too short = insufficient, too long = excessive loss —\nMust find the peak efficiency point!"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：二次函数最值\n$f(x) = -x^2 + 8x$，$a < 0$，开口朝下——有最大值！\n最大值在顶点：$x = \\frac{-b}{2a}$', en: 'Zhuge Liang: "Quadratic maximum\n$f(x) = -x^2 + 8x$, $a < 0$, opens down — has maximum!\nMax at vertex: $x = \\frac{-b}{2a}$"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：代入\n$a = -1$，$b = 8$\n$x = \\frac{-8}{2(-1)} = \\frac{-8}{-2}$', en: 'Zhuge Liang: "Substitute\n$a = -1$, $b = 8$\n$x = \\frac{-8}{2(-1)} = \\frac{-8}{-2}$"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：计算\n$x = 4$\n$f(4) = -16 + 32 = 16$', en: 'Zhuge Liang: "Calculate\n$x = 4$\n$f(4) = -16 + 32 = 16$"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：答案\n$x = 4$ 时效率最大值 16。鞠躬尽瘁，运输之利在于精微。', en: 'Zhuge Liang: "Answer\nPeak efficiency 16 at $x = 4$. Devoted to the end."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：验算\n$f(3) = -9 + 24 = 15 < 16$ ✓\n$f(5) = -25 + 40 = 15 < 16$ ✓ 两侧都小，确认最大值！', en: 'Zhuge Liang: "Verify\n$f(3) = 15 < 16$ ✓\n$f(5) = 15 < 16$ ✓ Both sides less, confirmed max!"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '导数为零的点可能是函数的极值点。', en: 'Points where derivative is zero can be extrema.' }, formula: "$f'(x) = 0$", tips: [{ zh: '诸葛亮提示：鞠躬尽瘁，死而后已。运输之利，在于精微。', en: 'Zhuge Tip: Devoted to the end. The key to transport is precision.' }] },
     storyConsequence: { correct: { zh: '出师北伐——二次方程迎刃而解！做得漂亮！', en: 'Northern Expedition — Well done!' }, wrong: { zh: '二次方程算岔了…再试一次！', en: 'Not quite... Try again!' } }
@@ -4035,18 +3987,12 @@ export const MISSIONS: Mission[] = [
     data: { x: 2, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Hard', reward: 850,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '姜维："山坡曲线 $y = x^2$，在 $(2,4)$ 处求切线斜率。先求导数。"', en: 'Jiang Wei: "Slope curve $y = x^2$, find tangent slope at $(2,4)$. First differentiate."' },
-        highlightField: 'k'
-      },
-      {
-        text: { zh: '姜维："$y\' = 2x$。在 $x=2$ 处：$k = 2 \\times 2$"', en: 'Jiang Wei: "$y\' = 2x$. At $x=2$: $k = 2 \\times 2$"' },
-        highlightField: 'k'
-      },
-      {
-        text: { zh: '姜维："$k = 4$！栈道险峻，支架必须稳固。"', en: 'Jiang Wei: "$k = 4$! The plank road is steep, the support must be stable."' },
-        highlightField: 'k'
-      }
+      { text: { zh: '姜维：为什么要求导数？\n蜀道崎岖，每段山坡陡峭不同。导数就是测量此刻有多陡的工具——\n栈道支架角度必须和坡度一致，否则会塌！', en: 'Jiang Wei: "Why find derivatives?\nShu roads are rugged, slopes vary. The derivative measures steepness right now —\nSupports must match the slope angle, or they collapse!"' }, highlightField: 'k' },
+      { text: { zh: '姜维：求导法则\n$y = x^n \\Rightarrow y\' = n \\cdot x^{n-1}$\n指数变系数，指数减一！\n$y = x^2 \\Rightarrow y\' = 2x$', en: 'Jiang Wei: "Differentiation rule\n$y = x^n \\Rightarrow y\' = n \\cdot x^{n-1}$\nExponent becomes coefficient, decreases by 1!\n$y = x^2 \\Rightarrow y\' = 2x$"' }, highlightField: 'k' },
+      { text: { zh: '姜维：代入 $x = 2$\n$y\' = 2x$\n$k = 2 \\times 2$', en: 'Jiang Wei: "Substitute $x = 2$\n$y\' = 2x$\n$k = 2 \\times 2$"' }, highlightField: 'k' },
+      { text: { zh: '姜维：计算\n$k = 4$\n在 $(2,4)$ 处 $x$ 每增 1，$y$ 增 4。', en: 'Jiang Wei: "Calculate\n$k = 4$\nAt $(2,4)$, $y$ increases by 4 per unit of $x$."' }, highlightField: 'k' },
+      { text: { zh: '姜维：答案\n切线斜率 $k = 4$！栈道险峻，支架须稳固。', en: 'Jiang Wei: "Answer\nTangent slope $k = 4$! Steep road, supports must be stable."' }, highlightField: 'k' },
+      { text: { zh: '姜维：验算\n切线 $y = 4x - 4$，代入 $(2,4)$：$4(2)-4 = 4$ ✓', en: 'Jiang Wei: "Verify\nTangent $y = 4x - 4$, at $(2,4)$: $4(2)-4 = 4$ ✓"' }, highlightField: 'k' },
     ],
     secret: { concept: { zh: '导数代表曲线在某一点的切线斜率。', en: 'Derivative is the slope of the tangent at a point.' }, formula: "$(x^n)' = nx^{n-1}$", tips: [{ zh: '姜维提示：栈道险峻，支架必须稳固。', en: 'Jiang Wei Tip: The plank road is steep, the support must be stable.' }] },
     storyConsequence: { correct: { zh: '剑阁栈道——导数精准！做得漂亮！', en: 'Jiange Pass — Well done!' }, wrong: { zh: '导数计算有误…再试一次！', en: 'Not quite... Try again!' } }
@@ -4063,18 +4009,12 @@ export const MISSIONS: Mission[] = [
     data: { lower: 0, upper: 4, func: 'x', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 900,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '邓艾："农田由 $y=x$、$x$ 轴和 $x=4$ 围成。用积分求面积。"', en: 'Deng Ai: "Field bounded by $y=x$, x-axis, and $x=4$. Use integration for area."' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '邓艾："$\\int_0^4 x\\,dx = [\\frac{1}{2}x^2]_0^4 = \\frac{1}{2}(4^2) - \\frac{1}{2}(0^2)$"', en: 'Deng Ai: "$\\int_0^4 x\\,dx = [\\frac{1}{2}x^2]_0^4 = \\frac{1}{2}(4^2) - \\frac{1}{2}(0^2)$"' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '邓艾："面积为 8！屯田之计，在于地利。"', en: 'Deng Ai: "Area is 8! The plan for farming lies in the advantage of the land."' },
-        highlightField: 'area'
-      }
+      { text: { zh: '邓艾：为什么要用积分？\n这块农田边界是斜线 $y = x$，不是规则长方形。\n积分把不规则形状切成无穷多薄条，加起来求面积！', en: 'Deng Ai: "Why use integration?\nThis field\'s boundary is $y = x$, not a regular rectangle.\nIntegration slices the shape into infinitely thin strips and adds them up!"' }, highlightField: 'area' },
+      { text: { zh: '邓艾：积分法则\n$\\int x\\,dx = \\frac{1}{2}x^2 + C$\n幂次加 1，除以新幂次——求导的逆运算！', en: 'Deng Ai: "Integration rule\n$\\int x\\,dx = \\frac{1}{2}x^2 + C$\nAdd 1 to power, divide by new power — reverse of differentiation!"' }, highlightField: 'area' },
+      { text: { zh: '邓艾：代入上下限\n$\\int_0^4 x\\,dx = [\\frac{1}{2}x^2]_0^4$\n$= \\frac{1}{2}(4)^2 - \\frac{1}{2}(0)^2$', en: 'Deng Ai: "Apply limits\n$\\int_0^4 x\\,dx = [\\frac{1}{2}x^2]_0^4$\n$= \\frac{1}{2}(4)^2 - \\frac{1}{2}(0)^2$"' }, highlightField: 'area' },
+      { text: { zh: '邓艾：计算\n$= \\frac{1}{2}(16) - 0 = 8$', en: 'Deng Ai: "Calculate\n$= \\frac{1}{2}(16) - 0 = 8$"' }, highlightField: 'area' },
+      { text: { zh: '邓艾：答案\n面积为 $8$！屯田之计，在于地利。', en: 'Deng Ai: "Answer\nArea is $8$! Farming\'s advantage lies in the land."' }, highlightField: 'area' },
+      { text: { zh: '邓艾：验算\n三角形底 4 高 4，$\\frac{1}{2} \\times 4 \\times 4 = 8$ ✓ 积分与几何一致！', en: 'Deng Ai: "Verify\nTriangle base 4, height 4: $\\frac{1}{2} \\times 4 \\times 4 = 8$ ✓ Matches geometry!"' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '定积分可以计算曲线下的面积。', en: 'Definite integral calculates the area under a curve.' }, formula: '$\\int x dx = \\frac{1}{2}x^2$', tips: [{ zh: '邓艾提示：屯田之计，在于地利。', en: "Deng Ai Tip: The plan for farming lies in the advantage of the land." }] },
     storyConsequence: { correct: { zh: '测量农田——积分完成！做得漂亮！', en: 'Surveying Farmland — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
@@ -4091,18 +4031,12 @@ export const MISSIONS: Mission[] = [
     data: { lower: 0, upper: 2, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 950,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '钟会："流速函数 $v(t) = 3t^2$。积分求总流量。"', en: 'Zhong Hui: "Velocity function $v(t) = 3t^2$. Integrate to find total flow."' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '钟会："$\\int_0^2 3t^2\\,dt = [t^3]_0^2 = 2^3 - 0^3$"', en: 'Zhong Hui: "$\\int_0^2 3t^2\\,dt = [t^3]_0^2 = 2^3 - 0^3$"' },
-        highlightField: 'area'
-      },
-      {
-        text: { zh: '钟会："总流量为 8！水流湍急，需精确计算。"', en: 'Zhong Hui: "Total flow is 8! The water is swift, precise calculation is needed."' },
-        highlightField: 'area'
-      }
+      { text: { zh: '钟会：为什么流量要用积分？\n河道流速不恒定——$v(t) = 3t^2$ 意味着越来越快。\n速度在变，只有积分才能精确算出总流量！', en: 'Zhong Hui: "Why integration for flow?\nVelocity isn\'t constant — $v(t) = 3t^2$ means it accelerates.\nWith changing speed, only integration gives exact total flow!"' }, highlightField: 'area' },
+      { text: { zh: '钟会：积分 $3t^2$\n$\\int 3t^2\\,dt = 3 \\cdot \\frac{t^3}{3} = t^3$', en: 'Zhong Hui: "Integrate $3t^2$\n$\\int 3t^2\\,dt = 3 \\cdot \\frac{t^3}{3} = t^3$"' }, highlightField: 'area' },
+      { text: { zh: '钟会：代入上下限\n$[t^3]_0^2 = (2)^3 - (0)^3$', en: 'Zhong Hui: "Apply limits\n$[t^3]_0^2 = (2)^3 - (0)^3$"' }, highlightField: 'area' },
+      { text: { zh: '钟会：计算\n$= 8 - 0 = 8$', en: 'Zhong Hui: "Calculate\n$= 8 - 0 = 8$"' }, highlightField: 'area' },
+      { text: { zh: '钟会：答案\n总流量 $8$！水流湍急，精确计算掌控一切。', en: 'Zhong Hui: "Answer\nTotal flow $8$! Swift water, precise calculation gives control."' }, highlightField: 'area' },
+      { text: { zh: '钟会：验算\n$(t^3)\' = 3t^2 = v(t)$ ✓ 导回去得原函数！', en: 'Zhong Hui: "Verify\n$(t^3)\' = 3t^2 = v(t)$ ✓ Differentiating back gives original!"' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '积分是导数的逆运算。', en: 'Integration is the inverse of differentiation.' }, formula: '$\\int x^2 dx = \\frac{1}{3}x^3$', tips: [{ zh: '钟会提示：水流湍急，需精确计算。', en: 'Zhong Hui Tip: The water is swift, precise calculation is needed.' }] },
     storyConsequence: { correct: { zh: '河道流量——积分完成！做得漂亮！', en: 'River Flow — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
@@ -4119,18 +4053,12 @@ export const MISSIONS: Mission[] = [
     data: { a1: 100, d: 50, n: 10, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
-      {
-        text: { zh: '费祎："运粮队每日增加 50 担，第一日 100 担。等差数列问题！"', en: 'Fei Yi: "Daily increase of 50 units, Day 1 is 100. Arithmetic sequence!"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '费祎："$a_n = a_1 + (n-1)d = 100 + (10-1) \\times 50$"', en: 'Fei Yi: "$a_n = a_1 + (n-1)d = 100 + (10-1) \\times 50$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '费祎："$a_{10} = 550$ 担！粮草充足，军心方稳。"', en: 'Fei Yi: "$a_{10} = 550$ units! With sufficient supplies, the army\'s morale is stable."' },
-        highlightField: 'ans'
-      }
+      { text: { zh: '费祎：为什么要预测运粮量？\n蜀军远征，粮草是生命线。运粮队每天多运 50 担——\n提前算出第 10 天的量，才能安排足够人手！', en: 'Fei Yi: "Why predict supply amounts?\nThe army campaigns far — supplies are lifelines. Team carries 50 more daily —\nCalculating Day 10 lets us arrange enough hands!"' }, highlightField: 'ans' },
+      { text: { zh: '费祎：套用公式\n$a_n = a_1 + (n-1) \\times d$\n$a_1 = 100$，$d = 50$，$n = 10$', en: 'Fei Yi: "Apply formula\n$a_n = a_1 + (n-1) \\times d$\n$a_1 = 100$, $d = 50$, $n = 10$"' }, highlightField: 'ans' },
+      { text: { zh: '费祎：代入\n$a_{10} = 100 + 9 \\times 50$', en: 'Fei Yi: "Substitute\n$a_{10} = 100 + 9 \\times 50$"' }, highlightField: 'ans' },
+      { text: { zh: '费祎：计算\n$9 \\times 50 = 450$\n$100 + 450 = 550$', en: 'Fei Yi: "Calculate\n$9 \\times 50 = 450$\n$100 + 450 = 550$"' }, highlightField: 'ans' },
+      { text: { zh: '费祎：答案\n第 10 日 $550$ 担！粮草充足，军心方稳。', en: 'Fei Yi: "Answer\nDay 10: $550$ units! Sufficient supplies, stable morale."' }, highlightField: 'ans' },
+      { text: { zh: '费祎：验算\n$a_9 = 100 + 8 \\times 50 = 500$\n$550 - 500 = 50 = d$ ✓', en: 'Fei Yi: "Verify\n$a_9 = 100 + 8 \\times 50 = 500$\n$550 - 500 = 50 = d$ ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '等差数列通项公式：$a_n = a_1 + (n-1)d$。', en: 'Arithmetic sequence formula: $a_n = a_1 + (n-1)d$.' }, formula: '$a_{10} = 100 + 9 \\times 50$', tips: [{ zh: '费祎提示：粮草充足，军心方稳。', en: "Fei Yi Tip: With sufficient supplies, the army's morale is stable." }] },
     storyConsequence: { correct: { zh: '运粮序列——数列过关！做得漂亮！', en: 'Supply Line — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -4171,7 +4099,7 @@ export const MISSIONS: Mission[] = [
     data: { values: [300, 150, 500, 200, 400, 250, 350], mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' }, difficulty: 'Easy', reward: 420,
     kpId: 'kp-9.3-02', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '杜预：什么是中位数？\n把所有数从小到大排好——正中间那个就是中位数。\n跟平均数不同，中位数**不受极端值影响**。\n一支超大驻军不会扭曲中位数！', en: 'Du Yu: "What is the median?\nSort all numbers from small to large — the one in the exact middle is the median.\nUnlike the mean, the median is NOT affected by extreme values.\nOne super-large garrison won\'t distort it!"' }, highlightField: 'ans' },
+      { text: { zh: '杜预：为什么要用中位数？\n如果一座超大城市有 10 万人而其他都是小镇，平均值会被严重拉高——\n中位数不受极端值影响，给你更真实的中间水平！', en: 'Du Yu: "Why use the median?\nIf one mega-city has 100,000 people while the rest are small towns, the mean gets skewed —\nThe median isn\'t affected by extremes, giving a more realistic middle level!"' }, highlightField: 'ans' },
       { text: { zh: '杜预：怎么找中位数？\n第 1 步：从小到大排列\n第 2 步：找中间位置\n奇数个数据 → 正中间那个\n偶数个数据 → 中间两个的平均', en: 'Du Yu: "How to find the median?\nStep 1: Sort from small to large\nStep 2: Find the middle\nOdd count → the exact middle\nEven count → average of the two middle values"' }, highlightField: 'ans' },
       { text: { zh: '杜预：第 1 步——排序\n把所有驻军兵力从小到大排好。', en: 'Du Yu: "Step 1 — sort\nArrange all garrison sizes from smallest to largest."' }, highlightField: 'ans' },
       { text: { zh: '杜预：第 2 步——找中间\n数据个数确认后，找到正中间的位置。', en: 'Du Yu: "Step 2 — find middle\nConfirm the count, locate the exact middle position."' }, highlightField: 'ans' },
@@ -4193,7 +4121,7 @@ export const MISSIONS: Mission[] = [
     data: { values: [5, 3, 7, 3, 8, 3, 6, 5, 3], mode: 'mode', modeValue: 3, generatorType: 'STATISTICS_MODE_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-9.3-03', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '杜预：什么是众数？\n出现次数最多的那个值——"人气最高"的数据。\n跟选举一样，得票最多的当选！', en: 'Du Yu: "What is the mode?\nThe value that appears most often — the most \'popular\' data point.\nLike an election — most votes wins!"' }, highlightField: 'ans' },
+      { text: { zh: '杜预：为什么要找众数？\n统一大业，要了解哪种军制最常见。出现次数最多的就是主流——\n众数帮你快速抓住数据中的多数派！', en: 'Du Yu: "Why find the mode?\nFor unification, know the most common military system. The most frequent is mainstream —\nThe mode helps you quickly identify the majority in data!"' }, highlightField: 'ans' },
       { text: { zh: '杜预：怎么找众数？\n数每个值出现了几次，出现最多的就是众数。\n可以画频率表或直接数。', en: 'Du Yu: "How to find the mode?\nCount how many times each value appears. The most frequent is the mode.\nUse a tally chart or just count."' }, highlightField: 'ans' },
       { text: { zh: '杜预：统计每个值的出现次数\n逐个清点，找出"冠军"。', en: 'Du Yu: "Count occurrences of each value\nTally each one, find the \'champion\'."' }, highlightField: 'ans' },
       { text: { zh: '杜预：比较频率\n哪个值出现得最多？', en: 'Du Yu: "Compare frequencies\nWhich value appears most often?"' }, highlightField: 'ans' },
@@ -4215,7 +4143,7 @@ export const MISSIONS: Mission[] = [
     data: { values: [120, 450, 80, 300, 600, 200], mode: 'range', generatorType: 'STATISTICS_RANGE_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-9.3-04', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '司马炎：什么是极差？\n极差 = 最大值 - 最小值。\n它告诉你数据的"跨度"有多大——最高的和最低的差多少。', en: 'Sima Yan: "What is the range?\nRange = maximum - minimum.\nIt tells you the \'spread\' — the gap between highest and lowest."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：为什么要算极差？\n各州郡损失差异有多大？极差 = 最大值 - 最小值——\n它是衡量数据分散程度最简单的指标！', en: 'Sima Yan: "Why calculate the range?\nHow much do losses vary across provinces? Range = max - min —\nIt\'s the simplest measure of how spread out data is!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：为什么极差重要？\n如果各战役伤亡极差很大，说明战况波动剧烈——有的大胜有的惨败。\n极差小说明比较稳定。', en: 'Sima Yan: "Why does range matter?\nIf casualty range is large, battles varied wildly — some great victories, some disasters.\nSmall range means more consistency."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：第 1 步——找最大值\n扫描所有数据，找到最大的那个。', en: 'Sima Yan: "Step 1 — find maximum\nScan all data for the largest value."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：第 2 步——找最小值\n再找最小的那个。', en: 'Sima Yan: "Step 2 — find minimum\nFind the smallest value."' }, highlightField: 'ans' },
@@ -4237,7 +4165,7 @@ export const MISSIONS: Mission[] = [
     data: { total: 50, target: 30, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-8.2-01', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '杜预：什么是概率？\n概率就是"某件事发生的可能性"。\n50 次攻城赢了 30 次 → 下一次赢的概率约 $\\frac{30}{50}$。', en: 'Du Yu: "What is probability?\nProbability is \'how likely something is to happen\'.\n30 wins in 50 sieges → next win probability ≈ $\\frac{30}{50}$."' }, highlightField: 'p' },
+      { text: { zh: '杜预：为什么要学概率？\n攻城之前，胜算几何？过去 50 次攻城赢了 30 次——\n概率让你用数据量化运气，做出更理性的决策！', en: 'Du Yu: "Why learn probability?\nBefore attacking a city, what are the odds? Won 30 out of 50 past sieges —\nProbability lets you quantify luck with data and make more rational decisions!"' }, highlightField: 'p' },
       { text: { zh: '杜预：概率公式\n$$P = \\frac{\\text{有利事件数}}{\\text{总事件数}}$$\n结果一定在 0 到 1 之间（或写成分数/百分比）。', en: 'Du Yu: "Probability formula\n$$P = \\frac{\\text{favorable outcomes}}{\\text{total outcomes}}$$\nResult is always between 0 and 1 (or as fraction/percentage)."' }, highlightField: 'p' },
       { text: { zh: '杜预：代入数据\n有利事件 = 攻城成功次数\n总事件 = 总攻城次数', en: 'Du Yu: "Substitute\nFavorable = successful sieges\nTotal = total siege attempts"' }, highlightField: 'p' },
       { text: { zh: '杜预：计算\n做一道除法即可。可以化简成最简分数。', en: 'Du Yu: "Calculate\nOne division. Simplify to lowest terms if possible."' }, highlightField: 'p' },
@@ -4259,7 +4187,7 @@ export const MISSIONS: Mission[] = [
     data: { p1: 0.7, p2: 0.8, generatorType: 'PROBABILITY_IND_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-8.3-03', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '司马炎：什么是独立事件？\n两件事互不影响——东路军的胜负不影响西路军。\n这时候用**乘法**！', en: 'Sima Yan: "What are independent events?\nTwo events that don\'t affect each other — east army\'s outcome doesn\'t affect west army.\nUse MULTIPLICATION!"' }, highlightField: 'p' },
+      { text: { zh: '司马炎：为什么独立事件要用乘法？\n东路军的胜负不影响西路军——这就是独立。\n两件独立的事同时发生的概率 = 各自概率相乘。', en: 'Sima Yan: "Why multiply for independent events?\nThe eastern army\'s outcome doesn\'t affect the western — that\'s independence.\nProbability of two independent events together = multiply their individual probabilities."' }, highlightField: 'p' },
       { text: { zh: '司马炎：独立事件乘法法则\n$$P(A \\text{且} B) = P(A) \\times P(B)$$\n两个都要发生 → 两个概率相乘。', en: 'Sima Yan: "Multiplication rule for independent events\n$$P(A \\text{ and } B) = P(A) \\times P(B)$$\nBoth must happen → multiply the probabilities."' }, highlightField: 'p' },
       { text: { zh: '司马炎：代入数据\n东路胜率和西路胜率分别代入。', en: 'Sima Yan: "Substitute\nEast army win rate and west army win rate."' }, highlightField: 'p' },
       { text: { zh: '司马炎：计算\n两个小数相乘。', en: 'Sima Yan: "Calculate\nMultiply the two decimals."' }, highlightField: 'p' },
@@ -4281,7 +4209,7 @@ export const MISSIONS: Mission[] = [
     data: { total: 50, setA: 25, setB: 20, aOnly: 15, both: 10, bOnly: 10, neither: 15, union: 35, answer: 10, mode: 'intersection', generatorType: 'VENN_RANDOM' }, difficulty: 'Hard', reward: 600,
     kpId: 'kp-1.2-02', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '司马炎：什么是韦恩图？\n两个圆圈有一部分重叠。\n左圈 = 打过官渡的，右圈 = 打过赤壁的，重叠 = 两场都打过的。\n圈外 = 哪场都没参加的。', en: 'Sima Yan: "What is a Venn diagram?\nTwo circles that partially overlap.\nLeft = fought at Guandu, right = fought at Red Cliffs, overlap = fought at both.\nOutside = fought at neither."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：为什么要用韦恩图？\n战将们的经历互相交叉——有人打过官渡，有人打过赤壁，有人两个都打过。\n韦恩图用圆圈的重叠关系，让复杂的分类一目了然！', en: 'Sima Yan: "Why use Venn diagrams?\nGenerals\'  experiences overlap — some fought at Guandu, some at Red Cliffs, some at both.\nVenn diagrams use overlapping circles to make complex classifications crystal clear!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：四个区域\n① 只打过官渡（A 独有）\n② 两场都打过（交集）\n③ 只打过赤壁（B 独有）\n④ 哪场都没打（圈外）\n\n四个区域加起来 = 总人数！', en: 'Sima Yan: "Four regions\n① Guandu only (A only)\n② Both battles (intersection)\n③ Red Cliffs only (B only)\n④ Neither (outside)\n\nAll four add up to the total!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：核心关系\n$|A| = A独有 + 交集$\n$|B| = B独有 + 交集$\n$|A \\cup B| = A独有 + 交集 + B独有$', en: 'Sima Yan: "Core relationships\n$|A| = A\\text{ only} + \\text{both}$\n$|B| = B\\text{ only} + \\text{both}$\n$|A \\cup B| = A\\text{ only} + \\text{both} + B\\text{ only}$"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：解题\n从韦恩图中读出对应区域的数值。', en: 'Sima Yan: "Solve\nRead the corresponding region from the Venn diagram."' }, highlightField: 'ans' },
@@ -4305,7 +4233,7 @@ export const MISSIONS: Mission[] = [
     data: { targetX: 5, targetY: 3, a1: 3, a2: 5, b1: 2, b2: -2, generatorType: 'VECTOR_ADD_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-7.2-01', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '姜维：什么是向量加法？\n两段路首尾相接——终点就是总位移。\n$x$ 分量加 $x$ 分量，$y$ 分量加 $y$ 分量。\n就像先往东走 3 步再往东走 2 步 = 总共往东 5 步！', en: 'Jiang Wei: "What is vector addition?\nTwo paths end-to-end — the endpoint is the total displacement.\nAdd $x$ to $x$, $y$ to $y$.\nLike walking 3 east then 2 east = 5 east total!"' }, highlightField: 'x' },
+      { text: { zh: '姜维：为什么要学向量加法？\n行军不是走直线——先向东、再向北，最终位移是两段路的合成。\n向量加法就是计算多段位移的总效果！', en: 'Jiang Wei: "Why learn vector addition?\nMarching isn\'t always straight — first east, then north. The final displacement is the sum of both legs.\nVector addition calculates the total effect of multiple displacements!"' }, highlightField: 'x' },
       { text: { zh: '姜维：向量加法公式\n$$\\vec{a} + \\vec{b} = \\binom{a_1 + b_1}{a_2 + b_2}$$\n上下分别相加——就是这么简单。', en: 'Jiang Wei: "Vector addition formula\n$$\\vec{a} + \\vec{b} = \\binom{a_1 + b_1}{a_2 + b_2}$$\nAdd top to top, bottom to bottom — that simple."' }, highlightField: 'x' },
       { text: { zh: '姜维：计算 $x$ 分量\n$a_1 + b_1$', en: 'Jiang Wei: "Calculate $x$ component\n$a_1 + b_1$"' }, highlightField: 'x' },
       { text: { zh: '姜维：计算 $y$ 分量\n$a_2 + b_2$', en: 'Jiang Wei: "Calculate $y$ component\n$a_2 + b_2$"' }, highlightField: 'y' },
@@ -4327,7 +4255,7 @@ export const MISSIONS: Mission[] = [
     data: { targetX: 9, targetY: 6, generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-7.2-02', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '姜维：什么是标量乘法？\n标量就是普通数字（没有方向）。\n向量乘以标量 = 方向不变，长度变为 $k$ 倍。\n$k > 0$ 同向放大，$k < 0$ 反向。', en: 'Jiang Wei: "What is scalar multiplication?\nA scalar is just a regular number (no direction).\nVector × scalar = same direction, length multiplied by $k$.\n$k > 0$ same direction, $k < 0$ reverses."' }, highlightField: 'x' },
+      { text: { zh: '姜维：为什么要学标量乘法？\n三倍兵力沿同一方向推进——方向不变，距离变三倍。\n标量乘法就是放大或缩小向量，保持方向！', en: 'Jiang Wei: "Why learn scalar multiplication?\nTriple forces advance in the same direction — direction unchanged, distance tripled.\nScalar multiplication scales a vector while keeping its direction!"' }, highlightField: 'x' },
       { text: { zh: '姜维：标量乘法公式\n$$k\\vec{v} = k\\binom{v_1}{v_2} = \\binom{kv_1}{kv_2}$$\n每个分量都乘以 $k$。跟放大变换一样！', en: 'Jiang Wei: "Scalar multiplication formula\n$$k\\vec{v} = k\\binom{v_1}{v_2} = \\binom{kv_1}{kv_2}$$\nMultiply each component by $k$. Same as enlargement!"' }, highlightField: 'x' },
       { text: { zh: '姜维：代入计算\n向量的每个分量乘以标量。', en: 'Jiang Wei: "Substitute and calculate\nMultiply each vector component by the scalar."' }, highlightField: 'x' },
       { text: { zh: '姜维：得到新坐标\n$(kv_1, kv_2)$', en: 'Jiang Wei: "New coordinates\n$(kv_1, kv_2)$"' }, highlightField: 'x' },
@@ -4349,7 +4277,7 @@ export const MISSIONS: Mission[] = [
     data: { targetX: 5, targetY: 0, generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Hard', reward: 600,
     kpId: 'kp-7.3-01', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '姜维：向量的"长度"叫做"模"\n向量 $\\binom{a}{b}$ 的模 = $\\sqrt{a^2 + b^2}$\n其实就是勾股定理！$a$ 是横边，$b$ 是竖边，模是斜边。', en: 'Jiang Wei: "A vector\'s \'length\' is called its \'magnitude\'\nMagnitude of $\\binom{a}{b}$ = $\\sqrt{a^2 + b^2}$\nIt\'s just Pythagoras! $a$ is horizontal, $b$ is vertical, magnitude is the hypotenuse."' }, highlightField: 'x' },
+      { text: { zh: '姜维：为什么要求向量的模？\n知道了向量的分量 $(a, b)$，但实际距离是多少？\n模就是向量的真实长度——用勾股定理算出来！', en: 'Jiang Wei: "Why find the magnitude of a vector?\nYou know the components $(a, b)$, but what\'s the actual distance?\nMagnitude is the vector\'s true length — calculated using the Pythagorean theorem!"' }, highlightField: 'x' },
       { text: { zh: '姜维：公式\n$$|\\vec{v}| = \\sqrt{v_1^2 + v_2^2}$$\n先平方，再求和，最后开方。', en: 'Jiang Wei: "Formula\n$$|\\vec{v}| = \\sqrt{v_1^2 + v_2^2}$$\nSquare each, add them, then square root."' }, highlightField: 'x' },
       { text: { zh: '姜维：第 1 步——平方\n$v_1^2$ 和 $v_2^2$', en: 'Jiang Wei: "Step 1 — square\n$v_1^2$ and $v_2^2$"' }, highlightField: 'x' },
       { text: { zh: '姜维：第 2 步——求和再开方\n$v_1^2 + v_2^2$，然后 $\\sqrt{...}$', en: 'Jiang Wei: "Step 2 — sum then square root\n$v_1^2 + v_2^2$, then $\\sqrt{...}$"' }, highlightField: 'x' },
@@ -4373,7 +4301,7 @@ export const MISSIONS: Mission[] = [
     data: { values: [25, 35, 45, 55, 65], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-9.3-05', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '司马炎：分组数据的估计均值\n数据被分成了组（如 0-10, 10-20...），无法精确知道每个值。\n**用组中值代替**：每组的中间值 × 该组频率，再求平均。', en: 'Sima Yan: "Estimated mean from grouped data\nData is in groups (0-10, 10-20...), exact values unknown.\n**Use midpoints**: each group\'s middle value × frequency, then average."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：为什么要学分组数据的均值？\n户籍数据太多，不可能逐个记录——只知道每个范围有多少个州。\n用组中值估算，是处理大规模分组数据的唯一方法！', en: 'Sima Yan: "Why learn grouped data mean?\nCensus data is too vast to record individually — we only know how many provinces fall in each range.\nUsing mid-interval values is the only way to estimate averages from large-scale grouped data!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：公式\n$$\\bar{x} \\approx \\frac{\\sum (\\text{组中值} \\times \\text{频率})}{\\text{总频率}}$$\n先"中值×频率"每组算一次，全加起来，再除以总数。', en: 'Sima Yan: "Formula\n$$\\bar{x} \\approx \\frac{\\sum (\\text{midpoint} \\times \\text{frequency})}{\\text{total frequency}}$$\nMultiply midpoint × frequency for each group, sum all, divide by total."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：第 1 步——求各组的"中值 × 频率"\n每组中值 = (上界 + 下界) ÷ 2', en: 'Sima Yan: "Step 1 — find midpoint × frequency for each group\nMidpoint = (upper + lower) ÷ 2"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：第 2 步——全部加起来除以总频率', en: 'Sima Yan: "Step 2 — sum all and divide by total frequency"' }, highlightField: 'ans' },
@@ -4395,7 +4323,7 @@ export const MISSIONS: Mission[] = [
     data: { values: [30], mode: 'mean', answer: 30, groups: [{lower:0,upper:10,freq:8},{lower:10,upper:20,freq:12},{lower:20,upper:30,freq:15},{lower:30,upper:40,freq:10},{lower:40,upper:50,freq:5}], cumFreqs: [8,20,35,45,50], totalFreq: 50, generatorType: 'CUMFREQ_RANDOM' }, difficulty: 'Hard', reward: 600,
     kpId: 'kp-9.6-01', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '杜预：什么是累积频率？\n把频率一组一组地累加上去：\n第 1 组的频率，前 2 组的总频率，前 3 组的总频率...\n最后累加到总数。', en: 'Du Yu: "What is cumulative frequency?\nAdd frequencies group by group:\nGroup 1 frequency, groups 1-2 total, groups 1-3 total...\nFinal cumulative = grand total."' }, highlightField: 'ans' },
+      { text: { zh: '杜预：为什么要算累积频率？\n有多少州人口不超过 50 万？这需要把频率一组组累加上去。\n累积频率让你回答不超过某值的问题！', en: 'Du Yu: "Why calculate cumulative frequency?\nHow many provinces have population under 500k? — add up frequencies group by group.\nCumulative frequency lets you answer up-to-a-certain-value questions!"' }, highlightField: 'ans' },
       { text: { zh: '杜预：累积频率的用途\n从累积频率可以读出中位数、四分位数等关键统计量。\n中位数位置 = 总数 ÷ 2。', en: 'Du Yu: "What cumulative frequency tells us\nFrom it we can read median, quartiles, and other key statistics.\nMedian position = total ÷ 2."' }, highlightField: 'ans' },
       { text: { zh: '杜预：找中位数位置\n总数 ÷ 2 = 中位数在第几个数据处。\n看哪个组的累积频率首次达到或超过这个位置。', en: 'Du Yu: "Find median position\nTotal ÷ 2 = which data point is the median.\nFind which group\'s cumulative frequency first reaches or exceeds this position."' }, highlightField: 'ans' },
       { text: { zh: '杜预：插值估计\n中位数在该组内的精确位置用线性插值。', en: 'Du Yu: "Interpolation estimate\nThe median\'s exact position within that group uses linear interpolation."' }, highlightField: 'ans' },
@@ -4417,7 +4345,7 @@ export const MISSIONS: Mission[] = [
     data: { values: [15, 22, 28, 35, 42, 48, 55, 62, 70, 80, 95], mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' }, difficulty: 'Hard', reward: 600,
     kpId: 'kp-9.6-02', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '司马炎：什么是四分位数？\n把数据分成四等份：\nQ1 = 第 25% 位置（下四分位数）\nQ2 = 第 50% = 中位数\nQ3 = 第 75% 位置（上四分位数）', en: 'Sima Yan: "What are quartiles?\nDivide data into four equal parts:\nQ1 = 25th percentile (lower quartile)\nQ2 = 50th percentile = median\nQ3 = 75th percentile (upper quartile)"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：为什么要学四分位数？\n平均值和中位数只给你一个数——但数据的分布呢？\n四分位数把数据切成四等份，让你看到中间 50% 在哪个范围！', en: 'Sima Yan: "Why learn quartiles?\nMean and median give just one number — but what about the distribution?\nQuartiles split data into four equal parts, showing where the middle 50% falls!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：四分位距 IQR\n$IQR = Q3 - Q1$\n这衡量了"中间 50% 的数据有多分散"。\nIQR 越大，数据越分散。', en: 'Sima Yan: "Interquartile Range IQR\n$IQR = Q3 - Q1$\nThis measures \'how spread out the middle 50% is\'.\nLarger IQR = more spread."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：第 1 步——排序数据\n从小到大排列所有数据。', en: 'Sima Yan: "Step 1 — sort data\nArrange all values from smallest to largest."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：第 2 步——找中位数 Q2\n正中间的值。', en: 'Sima Yan: "Step 2 — find median Q2\nThe exact middle value."' }, highlightField: 'ans' },
@@ -4463,7 +4391,7 @@ export const MISSIONS: Mission[] = [
     data: { coeffA: 2, coeffB: 3, powerA: 2, powerB: 1, constant: 0, generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-2.12-02', sectionId: 'calculus',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：积分是微分的逆操作\n微分：位置→速度（变化率）\n积分：速度→位置（累积量）\n"知道每时每刻的速度，算出总路程"就是积分。', en: 'Zhuge Liang: "Integration is the reverse of differentiation\nDiff: position→speed (rate)\nIntegration: speed→position (cumulative)\n\'Know speed at every moment, find total distance\' = integration."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么要学积分？\n速度在变、加速度在变——怎么算总距离？\n积分就是把无穷多个微小片段累加起来，是处理连续变化量的终极工具！', en: 'Zhuge Liang: "Why learn integration?\nSpeed is changing, acceleration is changing — how to find total distance?\nIntegration adds up infinitely many tiny pieces — the ultimate tool for continuous change!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：幂规则（反向）\n$$\\int ax^n dx = \\frac{a}{n+1}x^{n+1} + C$$\n指数加 1，再除以新指数。和微分完全相反！', en: 'Zhuge Liang: "Power rule (reversed)\n$$\\int ax^n dx = \\frac{a}{n+1}x^{n+1} + C$$\nAdd 1 to power, divide by new power. Exact reverse of differentiation!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：逐项积分', en: 'Zhuge Liang: "Integrate term by term"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：化简', en: 'Zhuge Liang: "Simplify"' }, highlightField: 'ans' },
@@ -4487,7 +4415,7 @@ export const MISSIONS: Mission[] = [
     data: { a1: 3, a2: 4, b1: 1, b2: -2, targetX: 4, targetY: 2, generatorType: 'VECTOR_ADD_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-7.4-01', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：向量 = 有方向的数\n普通数只有大小（如"5公里"）。\n向量有方向+大小（如"向东北走5公里"）。\n在坐标系里，向量 = $(x, y)$。', en: 'Zhuge Liang: "Vectors = numbers with direction\nOrdinary numbers have only magnitude (\'5 km\').\nVectors have direction + magnitude (\'5 km northeast\').\nIn coordinates, vector = $(x, y)$."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：为什么要学向量？\n普通数只有大小，但行军必须知道方向。\n向量 = 大小 + 方向，是描述位移、力、速度的数学语言！', en: 'Zhuge Liang: "Why learn vectors?\nOrdinary numbers only have magnitude, but marching needs direction too.\nVectors = magnitude + direction — the math language for displacement, force, and velocity!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：向量加法 = 分量分别相加\n$$\\vec{a} + \\vec{b} = (a_1 + b_1, \\; a_2 + b_2)$$\n$x$ 分量加 $x$，$y$ 分量加 $y$。就像合兵——东西方向各算各的。', en: 'Zhuge Liang: "Vector addition = add components\n$$\\vec{a} + \\vec{b} = (a_1 + b_1, \\; a_2 + b_2)$$\nAdd $x$\'s together, add $y$\'s together. Like combining forces — each direction independently."' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：代入\n$\\vec{a} = ({a[0]}, {a[1]})$，$\\vec{b} = ({b[0]}, {b[1]})$\n$\\vec{a} + \\vec{b} = ({a[0]}+{b[0]}, \\; {a[1]}+{b[1]})$', en: 'Zhuge Liang: "Substitute\n$\\vec{a} = ({a[0]}, {a[1]})$, $\\vec{b} = ({b[0]}, {b[1]})$\n$\\vec{a}+\\vec{b} = ({a[0]}+{b[0]}, \\; {a[1]}+{b[1]})$"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：计算\n$= ({sum_x}, {sum_y})$', en: 'Zhuge Liang: "Calculate\n$= ({sum_x}, {sum_y})$"' }, highlightField: 'x' },
@@ -4533,7 +4461,7 @@ export const MISSIONS: Mission[] = [
     data: { angle: 60, hyp: 10, generatorType: 'TRIGONOMETRY_RANDOM', func: 'cos' }, difficulty: 'Hard', reward: 600,
     kpId: 'kp-6.4-01', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '周瑜：余弦定理 = 勾股定理 Plus\n勾股定理：$c^2 = a^2 + b^2$（只限直角三角形）\n余弦定理：$c^2 = a^2 + b^2 - 2ab\\cos C$（所有三角形）\n多了一个"修正项" $-2ab\\cos C$。', en: 'Zhou Yu: "Cosine rule = Pythagoras Plus\nPythagoras: $c^2 = a^2 + b^2$ (right triangles only)\nCosine rule: $c^2 = a^2 + b^2 - 2ab\\cos C$ (ALL triangles)\nAdds a correction term $-2ab\\cos C$."' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：为什么需要余弦定理？\n勾股定理只能算直角三角形——但战场上的三角形往往不是直角！\n余弦定理是勾股定理的升级版，适用于任意三角形。', en: 'Zhou Yu: "Why do we need the cosine rule?\nPythagoras only works for right triangles — but battlefield triangles are rarely right-angled!\nThe cosine rule is an upgrade, working for ANY triangle."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：什么时候用？\n知道两边 + 夹角 → 求第三边。\n知道三边 → 求某个角。\n"两边夹角"或"三边"就用余弦定理！', en: 'Zhou Yu: "When to use?\nKnow 2 sides + included angle → find 3rd side.\nKnow 3 sides → find an angle.\n\'Two sides + included angle\' or \'three sides\' = cosine rule!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：代入公式', en: 'Zhou Yu: "Substitute into formula"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：计算', en: 'Zhou Yu: "Calculate"' }, highlightField: 'ans' },
@@ -4557,7 +4485,7 @@ export const MISSIONS: Mission[] = [
     data: { a: -1, b: 6, c: -5, generatorType: 'QUADRATIC_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-2.10-01', sectionId: 'functions',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：抛物线的顶点就是"转折点"\n$y = ax^2 + bx + c$ 的图像是一条抛物线。\n$a > 0$：开口朝上（最低点）。\n$a < 0$：开口朝下（最高点）。\n顶点就是那个转折的地方。', en: 'Zhuge Liang: "The vertex is the turning point\n$y = ax^2 + bx + c$ graphs as a parabola.\n$a > 0$: opens up (minimum).\n$a < 0$: opens down (maximum).\nThe vertex is where it turns."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么要找抛物线的顶点？\n投石机的石块轨迹是抛物线——顶点就是转折点。\n找到顶点，才能知道石块飞多高、在哪里开始下落！', en: 'Zhuge Liang: "Why find the vertex of a parabola?\nCatapult stones trace a parabola — the vertex is the turning point.\nFinding the vertex tells you how high the stone flies and where it starts falling!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：顶点公式\n$$x = -\\frac{b}{2a}$$\n然后代回原式求 $y$。\n不需要配方法，这个公式直接给出 $x$ 坐标！', en: 'Zhuge Liang: "Vertex formula\n$$x = -\\frac{b}{2a}$$\nThen substitute back to find $y$.\nNo completing the square needed — this formula gives $x$ directly!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：求 x 坐标\n$x = -\\frac{{b}}{2 \\times ({a})} = {vertex_x}$', en: 'Zhuge Liang: "Find x\n$x = -\\frac{{b}}{2 \\times ({a})} = {vertex_x}$"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：求 y 坐标\n代入 $x = {vertex_x}$：$y = {a}({vertex_x})^2 + {b}({vertex_x}) + ({c})$', en: 'Zhuge Liang: "Find y\nSub $x = {vertex_x}$: $y = {a}({vertex_x})^2 + {b}({vertex_x}) + ({c})$"' }, highlightField: 'ans' },
@@ -4579,7 +4507,7 @@ export const MISSIONS: Mission[] = [
     data: { a: 1, b: -5, c: 6, generatorType: 'ROOTS_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-2.10-02', sectionId: 'functions',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：什么是"根"？\n$ax^2 + bx + c = 0$ 的解叫做"根"。\n几何意义：抛物线和 x 轴交叉的地方。\n投石落地点 = 轨迹方程的根。', en: 'Zhuge Liang: "What are \'roots\'?\nSolutions of $ax^2 + bx + c = 0$ are called roots.\nGeometric meaning: where the parabola crosses the x-axis.\nLanding points = roots of the trajectory equation."' }, highlightField: 'x1' },
+      { text: { zh: '诸葛亮：为什么要求抛物线的根？\n投石的轨迹方程告诉你石块的路径——但石块在哪里落地？\n根就是抛物线和地面的交点，也就是石块着陆的位置！', en: 'Zhuge Liang: "Why find the roots of a parabola?\nThe trajectory equation describes the path — but where does the stone land?\nRoots are where the parabola meets the ground — the landing points!"' }, highlightField: 'x1' },
       { text: { zh: '诸葛亮：求根公式\n$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$\n$b^2 - 4ac$ 叫"判别式"：\n$> 0$：两个实根（两个落点）\n$= 0$：一个重根（刚好触地）\n$< 0$：无实根（飞过去了）', en: 'Zhuge Liang: "Quadratic formula\n$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$\n$b^2 - 4ac$ is the discriminant:\n$> 0$: two real roots\n$= 0$: one repeated root\n$< 0$: no real roots"' }, highlightField: 'x1' },
       { text: { zh: '诸葛亮：代入 $a={a}, b={b}, c={c}$', en: 'Zhuge Liang: "Sub $a={a}, b={b}, c={c}$"' }, highlightField: 'x1' },
       { text: { zh: '诸葛亮：计算判别式和根', en: 'Zhuge Liang: "Calculate discriminant and roots"' }, highlightField: 'x1' },
