@@ -1133,10 +1133,13 @@ export default function App() {
                     await updateProfile({ total_score: profile.total_score + bonusXP });
                   }
                 }
-                setShowPKResult(false);
-                pkAutoCompleteRef.current = false;
-                await startNextRound(missionId);
-                setGameState('lobby');
+                // Start next round first — only close panel + transition if successful
+                const ok = await startNextRound(missionId);
+                if (ok) {
+                  setShowPKResult(false);
+                  pkAutoCompleteRef.current = false;
+                  setGameState('lobby');
+                }
               }}
               onClose={async () => {
                 // Apply PK rank XP bonus
