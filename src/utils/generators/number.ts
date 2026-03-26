@@ -845,8 +845,8 @@ export function generatePrimeMission(template: Mission): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '\u8bf8\u845b\u4eae';
 
   const description: BilingualText = {
-    zh: `$${n}$ \u662f\u8d28\u6570\u5417\uff1f\uff08\u662f = 1\uff0c\u5426 = 0\uff09`,
-    en: `Is $${n}$ prime? (yes = 1, no = 0)`,
+    zh: `$${n}$ \u662f\u8d28\u6570\u5417\uff1f\uff08\u662f = 1\uff0c\u5426 = 2\uff09`,
+    en: `Is $${n}$ prime? (yes = 1, no = 2)`,
   };
 
   // Compute stop point for "when to stop" explanation
@@ -941,8 +941,8 @@ export function generatePrimeMission(template: Mission): Mission {
     ]),
     {
       text: {
-        zh: `${narrator}：答案\n$${n}$ ${result ? '是质数 → 答 $1$' : '不是质数 → 答 $0$'}`,
-        en: `${narrator}: "Answer\n$${n}$ ${result ? 'IS prime → answer $1$' : 'is NOT prime → answer $0$'}"`,
+        zh: `${narrator}：答案\n$${n}$ ${result ? '是质数 → 答 $1$' : '不是质数 → 答 $2$'}`,
+        en: `${narrator}: "Answer\n$${n}$ ${result ? 'IS prime → answer $1$' : 'is NOT prime → answer $2$'}"`,
       },
       highlightField: 'ans',
     },
