@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle, ClipboardList } from 'lucide-react';
+import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle, ClipboardList, MoreHorizontal, X } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
@@ -122,6 +122,7 @@ export const MapScreen = ({
   const [showSkillTree, setShowSkillTree] = useState(false);
   const [showEquipmentPanel, setShowEquipmentPanel] = useState(false);
   const [showBattlePass, setShowBattlePass] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [expandedCompletedUnit, setExpandedCompletedUnit] = useState<string | null>(null);
 
   // Daily challenge countdown
@@ -513,6 +514,7 @@ export const MapScreen = ({
                 }
               </p>
             )}
+            {/* ── Core buttons (always visible) ── */}
             <div className="flex flex-wrap items-center gap-2 mt-1">
               <p className="text-indigo-400 font-bold text-sm">{selectedChar ? lt(selectedChar.name, lang) : ''}</p>
               <span className="text-white/20">|</span>
@@ -541,60 +543,137 @@ export const MapScreen = ({
                   </span>
                 );
               })()}
-              {getCharProgression && selectedChar && (
-                <button onClick={() => setShowSkillTree(true)} className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors">
-                  {(t as any).skillTree ?? 'Skills'}
-                </button>
-              )}
-              {onRepairEquipment && (() => {
-                const repairCount = countNeedsRepair(profile.completed_missions as Record<string, unknown>);
-                return (
-                  <button onClick={() => setShowEquipmentPanel(true)} className="relative px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors">
-                    {(t as any).equipmentArsenal ?? 'Arsenal'}
-                    {repairCount > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">{repairCount}</span>
-                    )}
+
+              {/* ── Secondary buttons: visible on md+, collapsed on mobile ── */}
+              {/* Desktop: inline buttons */}
+              <div className="hidden md:contents">
+                {getCharProgression && selectedChar && (
+                  <button onClick={() => setShowSkillTree(true)} className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors">
+                    {(t as any).skillTree ?? 'Skills'}
                   </button>
-                );
-              })()}
-              {onLeaderboard && (
-                <button onClick={onLeaderboard} className="px-2 py-0.5 bg-yellow-600/20 border border-yellow-500/30 rounded text-xs text-yellow-300 hover:bg-yellow-600/40 transition-colors flex items-center gap-1">
-                  🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
+                )}
+                {onRepairEquipment && (() => {
+                  const repairCount = countNeedsRepair(profile.completed_missions as Record<string, unknown>);
+                  return (
+                    <button onClick={() => setShowEquipmentPanel(true)} className="relative px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors">
+                      {(t as any).equipmentArsenal ?? 'Arsenal'}
+                      {repairCount > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">{repairCount}</span>
+                      )}
+                    </button>
+                  );
+                })()}
+                {onLeaderboard && (
+                  <button onClick={onLeaderboard} className="px-2 py-0.5 bg-yellow-600/20 border border-yellow-500/30 rounded text-xs text-yellow-300 hover:bg-yellow-600/40 transition-colors flex items-center gap-1">
+                    🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
+                  </button>
+                )}
+                {onAchievements && (
+                  <button onClick={onAchievements} className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors">
+                    {lang === 'en' ? 'Achievements' : '成就墙'}
+                  </button>
+                )}
+                {onFriendPK && (
+                  <button onClick={onFriendPK} className="px-2 py-0.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-xs text-cyan-300 hover:bg-cyan-600/40 transition-colors">
+                    {lang === 'en' ? 'Friend PK' : '好友对决'}
+                  </button>
+                )}
+                <button onClick={() => setShowBattlePass(true)} className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors">
+                  {(t as any).growthHandbook ?? '\u624b\u518c'}
                 </button>
-              )}
-              {onAchievements && (
-                <button onClick={onAchievements} className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors">
-                  {lang === 'en' ? 'Achievements' : '成就墙'}
-                </button>
-              )}
-              {onFriendPK && (
-                <button onClick={onFriendPK} className="px-2 py-0.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-xs text-cyan-300 hover:bg-cyan-600/40 transition-colors">
-                  {lang === 'en' ? 'Friend PK' : '好友对决'}
-                </button>
-              )}
-              <button onClick={() => setShowBattlePass(true)} className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors">
-                {(t as any).growthHandbook ?? '\u624b\u518c'}
+                {onStartExpedition && (() => {
+                  const exps = getExpeditionsForGrade(profile.grade!);
+                  if (exps.length === 0) return null;
+                  if (exps.length === 1) return (
+                    <button onClick={() => onStartExpedition(exps[0].id)} className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors animate-pulse">
+                      {(t as any).expedition ?? '\u8fdc\u5f81'}
+                    </button>
+                  );
+                  return exps.map(exp => (
+                    <button key={exp.id} onClick={() => onStartExpedition(exp.id)} className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors">
+                      {lt(exp.name, lang)}
+                    </button>
+                  ));
+                })()}
+                {onDashboard && (
+                  <button onClick={onDashboard} className="px-2 py-0.5 bg-emerald-600/20 border border-emerald-500/30 rounded text-xs text-emerald-300 hover:bg-emerald-600/40 transition-colors">
+                    {t.dashboard}
+                  </button>
+                )}
+              </div>
+
+              {/* Mobile: "More" toggle */}
+              <button
+                onClick={() => setShowMoreMenu(!showMoreMenu)}
+                className="md:hidden px-2 py-0.5 bg-white/10 border border-white/20 rounded text-xs text-white/70 hover:bg-white/20 transition-colors relative"
+              >
+                {showMoreMenu ? <X size={14} /> : <MoreHorizontal size={14} />}
+                {onRepairEquipment && countNeedsRepair(profile.completed_missions as Record<string, unknown>) > 0 && !showMoreMenu && (
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full" />
+                )}
               </button>
-              {onStartExpedition && (() => {
-                const exps = getExpeditionsForGrade(profile.grade!);
-                if (exps.length === 0) return null;
-                if (exps.length === 1) return (
-                  <button onClick={() => onStartExpedition(exps[0].id)} className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors animate-pulse">
-                    {(t as any).expedition ?? '\u8fdc\u5f81'}
-                  </button>
-                );
-                return exps.map(exp => (
-                  <button key={exp.id} onClick={() => onStartExpedition(exp.id)} className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors">
-                    {lt(exp.name, lang)}
-                  </button>
-                ));
-              })()}
-              {onDashboard && (
-                <button onClick={onDashboard} className="px-2 py-0.5 bg-emerald-600/20 border border-emerald-500/30 rounded text-xs text-emerald-300 hover:bg-emerald-600/40 transition-colors">
-                  {t.dashboard}
-                </button>
-              )}
             </div>
+
+            {/* Mobile expanded menu */}
+            <AnimatePresence>
+              {showMoreMenu && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="md:hidden overflow-hidden mt-2"
+                >
+                  <div className="flex flex-wrap gap-2 p-2 bg-white/5 rounded-xl border border-white/10">
+                    {getCharProgression && selectedChar && (
+                      <button onClick={() => { setShowSkillTree(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300">
+                        {(t as any).skillTree ?? 'Skills'}
+                      </button>
+                    )}
+                    {onRepairEquipment && (
+                      <button onClick={() => { setShowEquipmentPanel(true); setShowMoreMenu(false); }} className="relative px-3 py-1.5 bg-amber-600/20 border border-amber-500/30 rounded-lg text-xs text-amber-300">
+                        {(t as any).equipmentArsenal ?? 'Arsenal'}
+                        {countNeedsRepair(profile.completed_missions as Record<string, unknown>) > 0 && (
+                          <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">{countNeedsRepair(profile.completed_missions as Record<string, unknown>)}</span>
+                        )}
+                      </button>
+                    )}
+                    {onLeaderboard && (
+                      <button onClick={() => { onLeaderboard(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-yellow-600/20 border border-yellow-500/30 rounded-lg text-xs text-yellow-300">
+                        🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
+                      </button>
+                    )}
+                    {onAchievements && (
+                      <button onClick={() => { onAchievements(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300">
+                        {lang === 'en' ? 'Achievements' : '成就墙'}
+                      </button>
+                    )}
+                    {onFriendPK && (
+                      <button onClick={() => { onFriendPK(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded-lg text-xs text-cyan-300">
+                        {lang === 'en' ? 'Friend PK' : '好友对决'}
+                      </button>
+                    )}
+                    <button onClick={() => { setShowBattlePass(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-rose-600/20 border border-rose-500/30 rounded-lg text-xs text-rose-300">
+                      {(t as any).growthHandbook ?? '\u624b\u518c'}
+                    </button>
+                    {onStartExpedition && (() => {
+                      const exps = getExpeditionsForGrade(profile.grade!);
+                      if (exps.length === 0) return null;
+                      return exps.map(exp => (
+                        <button key={exp.id} onClick={() => { onStartExpedition(exp.id); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-orange-600/20 border border-orange-500/30 rounded-lg text-xs text-orange-300">
+                          {lt(exp.name, lang)}
+                        </button>
+                      ));
+                    })()}
+                    {onDashboard && (
+                      <button onClick={() => { onDashboard(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-emerald-600/20 border border-emerald-500/30 rounded-lg text-xs text-emerald-300">
+                        {t.dashboard}
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
         <div className="flex gap-8 md:gap-12">

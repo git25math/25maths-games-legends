@@ -461,7 +461,10 @@ export function DashboardScreen({ lang, onClose }: Props) {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-lg">
+      <div className="relative">
+        {/* Scroll hint gradient (right edge) */}
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none rounded-r-2xl md:hidden" />
+      <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-lg -webkit-overflow-scrolling-touch">
         <table className="w-full text-xs">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
@@ -591,6 +594,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
             })}
           </tbody>
         </table>
+      </div>
       </div>
 
       {/* ═══ Student Detail Card (v8.0) ═══ */}
