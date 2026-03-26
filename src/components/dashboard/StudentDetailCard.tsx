@@ -102,11 +102,10 @@ export const StudentDetailCard = ({
       supabase.rpc('get_class_kp_progress', { p_grade: student.grade ?? 7, p_class: null }),
     ]).then(([battleRes, kpRes]) => {
       setBattles((battleRes.data as BattleRecord[]) || []);
-      // Filter class-level KP data for this student
       const allKP = (kpRes.data || []) as (KPRecord & { user_id: string })[];
       setKpRecords(allKP.filter(r => r.user_id === student.user_id));
       setLoading(false);
-    });
+    }).catch(() => setLoading(false));
   }, [student.user_id]);
 
   const dims = compute7Dimensions(student, units, totalMissions, battles, kpRecords);

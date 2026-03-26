@@ -52,6 +52,9 @@ export function ExamHubBridge({ lang, students }: Props) {
         }
         setVocabData(map);
         setLoading(false);
+      }, () => {
+        setError(true);
+        setLoading(false);
       });
   }, [students]);
 

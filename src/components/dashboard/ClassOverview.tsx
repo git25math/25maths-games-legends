@@ -38,7 +38,7 @@ export const ClassOverview = ({
       p_class: filterTag || null,
     }).then(({ data, error }) => {
       if (!error && data) setBattleStats(data as BattleStat[]);
-    });
+    }, () => {});
   }, [grade, filterTag]);
 
   // Compute stats

@@ -120,7 +120,7 @@ export const WeeklyTrend = ({
       setThisWeek(summarize(thisData));
       setLastWeek(summarize(lastOnly));
       setLoading(false);
-    });
+    }).catch(() => setLoading(false));
   }, [grade, filterTag]);
 
   if (loading) return null;

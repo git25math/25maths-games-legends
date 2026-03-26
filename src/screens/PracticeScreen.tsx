@@ -97,19 +97,8 @@ export const PracticeScreen = ({
     playTierUp, playTierDown, playPhaseAdvance, playBadgeUnlock,
   } = useAudio();
 
-  // Enter key submits answer (or continues from wrong answer panel)
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Enter') return;
-      if (wrongAnswerData) {
-        handleWrongAnswerContinue();
-      } else if (currentPhase !== 'green' && !isSubmitting && !showCorrectFlash) {
-        handleSubmit();
-      }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  });
+  // Enter key refs (declared here, updated after function definitions below)
+  const enterKeyStateRef = useRef({ wrongAnswerData, currentPhase, isSubmitting, showCorrectFlash, handleSubmit: () => {}, handleWrongAnswerContinue: () => {} });
 
   const phaseIndex = PHASE_ORDER.indexOf(currentPhase);
 
@@ -212,6 +201,22 @@ export const PracticeScreen = ({
     setIsSubmitting(false);
     regenerateQuestion();
   };
+
+  // Keep Enter key ref in sync (must be after handleSubmit/handleWrongAnswerContinue definitions)
+  enterKeyStateRef.current = { wrongAnswerData, currentPhase, isSubmitting, showCorrectFlash, handleSubmit, handleWrongAnswerContinue };
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter') return;
+      const s = enterKeyStateRef.current;
+      if (s.wrongAnswerData) {
+        s.handleWrongAnswerContinue();
+      } else if (s.currentPhase !== 'green' && !s.isSubmitting && !s.showCorrectFlash) {
+        s.handleSubmit();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   const advancePhase = () => {
     // Award XP for completing the current phase (skip in repair mode)

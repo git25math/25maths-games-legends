@@ -239,7 +239,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
           if (r.mastered_at) map.set(r.user_id, (map.get(r.user_id) ?? 0) + 1);
         }
         setKpMasteryMap(map);
-      });
+      }, () => {});
   }, [grade, filterTag, students]);
 
   // CSV export

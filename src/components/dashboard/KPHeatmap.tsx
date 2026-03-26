@@ -61,8 +61,9 @@ export const KPHeatmap = ({
       p_class: filterTag || null,
     }).then(({ data, error }) => {
       if (!error) setKpData((data as KPProgressRow[]) || []);
+      else setKpData([]);
       setLoading(false);
-    });
+    }, () => { setKpData([]); setLoading(false); });
   }, [grade, filterTag]);
 
   // Build matrix: studentId → kpId → { wins, attempts, mastered }
