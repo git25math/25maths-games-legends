@@ -8,7 +8,7 @@
 每次新对话开始时，按此顺序执行：
 
 1. **读取开发规范**: `docs/CONTRIBUTING.md` → 金标准、叙事原则、审查标准、Bug 防范规则
-2. **读取项目状态**: `memory/project_play25maths_v5.md` → 当前版本、关卡数、架构
+2. **读取项目状态**: `memory/project_play25maths_v6.md` → 当前版本、关卡数、架构
 3. **读取开发计划**: `docs/DEVELOPMENT-PLAN.md` → 版本历程、下一步
 4. **如果做 Y8**: `docs/Y8-DEVELOPMENT-PLAN.md` → 完整接手计划
 5. **构建确认**: `npm run build` → 必须零错误才能开始
@@ -17,7 +17,7 @@
 
 - **根目录**: `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends`
 - **部署**: push main → GitHub Actions → play.25maths.com
-- **版本**: v8.3.0 (2026-03-26)
+- **版本**: v8.5.0 (2026-03-26)
 - **仓库**: `git25math/25maths-games-legends`
 
 ## 关联项目
@@ -43,7 +43,7 @@
 ### Memory 文件 (自动加载)
 | 文件 | 用途 | 优先级 |
 |------|------|--------|
-| `project_play25maths_v5.md` | 项目状态快照（关卡/架构/遗留问题） | **必读** |
+| `project_play25maths_v6.md` | 项目状态快照（关卡/架构/遗留问题） | **必读** |
 | `feedback_play25maths_pedagogy.md` | 教学质量标准 + 用户共识 | **必读** |
 | `feedback_play25maths_workflow.md` | "继续"指令的 8 步流程 | 高 |
 | `feedback_education_first_question.md` | 教育产品首要问题 | 高 |
