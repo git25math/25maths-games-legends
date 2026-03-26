@@ -1852,15 +1852,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '郭嘉："官渡之战前，粮草为 $3^2 \\times 3^3$。同底数幂相乘，指数相加。"', en: 'Guo Jia: "Before Guandu, grain is $3^2 \\times 3^3$. Same base powers multiply: add exponents."' },
+        text: { zh: '郭嘉："官渡决战在即，我们要合并两年的粮草。为什么不能直接把指数加起来？因为 $3^2$ 不是 $3 \\times 2$——它是 $3 \\times 3 = 9$。"', en: 'Guo Jia: "Guandu is coming — we need to combine two years of grain. Why can\'t we just add exponents? Because $3^2$ isn\'t $3 \\times 2$ — it\'s $3 \\times 3 = 9$."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '郭嘉："$3^2 \\times 3^3 = 3^{2+3} = 3^x$，所以 $x = 2 + 3$"', en: 'Guo Jia: "$3^2 \\times 3^3 = 3^{2+3} = 3^x$, so $x = 2 + 3$"' },
+        text: { zh: '郭嘉："想象叠砖块：$3^2$ 是叠 2 层（每层 3 块），$3^3$ 是叠 3 层。合并就是总共叠了 $2+3=5$ 层——底数不变，层数相加。"', en: 'Guo Jia: "Think of stacking bricks: $3^2$ is 2 layers (3 per layer), $3^3$ is 3 layers. Combining means $2+3=5$ layers total — base stays, layers add."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '郭嘉："$x = 5$！算清粮草，方能决战官渡！"', en: 'Guo Jia: "$x = 5$! Count the grain to win at Guandu!"' },
+        text: { zh: '郭嘉："写出公式：$3^2 \\times 3^3 = 3^{2+3}$——底数相同，指数相加。"', en: 'Guo Jia: "Write the rule: $3^2 \\times 3^3 = 3^{2+3}$ — same base, add exponents."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '郭嘉："计算指数：$2 + 3 = 5$，所以 $3^2 \\times 3^3 = 3^5$。"', en: 'Guo Jia: "Calculate the exponent: $2 + 3 = 5$, so $3^2 \\times 3^3 = 3^5$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '郭嘉："答案：$x = 5$。"', en: 'Guo Jia: "Answer: $x = 5$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '郭嘉："验算：$3^2 = 9$，$3^3 = 27$，$9 \\times 27 = 243$。而 $3^5 = 243$。✓ 完全吻合！粮草充足，可以决战官渡。"', en: 'Guo Jia: "Check: $3^2 = 9$, $3^3 = 27$, $9 \\times 27 = 243$. And $3^5 = 243$. ✓ Perfect match! Grain secured for Guandu."' },
         highlightField: 'x'
       }
     ],
@@ -1879,15 +1891,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '程昱："粮仓扩建：$2^3 \\times 2^2$。同底数幂相乘，底数不变，指数相加。"', en: 'Cheng Yu: "Granary expansion: $2^3 \\times 2^2$. Same base powers multiply: base stays, add exponents."' },
+        text: { zh: '程昱："粮仓要扩建——为什么要学指数？因为粮食产量每年翻倍，$2^3$ 意味着连续翻了 3 次，不是简单的 $2 \\times 3$。"', en: 'Cheng Yu: "Why learn indices? Because grain doubles each year. $2^3$ means 3 doublings, not simply $2 \\times 3$."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '程昱："$2^3 \\times 2^2 = 2^{3+2} = 2^x$，所以 $x = 3 + 2$"', en: 'Cheng Yu: "$2^3 \\times 2^2 = 2^{3+2} = 2^x$, so $x = 3 + 2$"' },
+        text: { zh: '程昱："翻倍的翻倍还是翻倍：$2^3$ 翻了 3 次，再翻 $2^2$ 次——总共翻了 $3+2$ 次。底数（翻倍率）不变，次数叠加。"', en: 'Cheng Yu: "Doubling a doubling is still doubling: $2^3$ is 3 times, then $2^2$ more — total $3+2$ times. The base (rate) stays, counts stack."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '程昱："$x = 5$！空间利用要最大化。"', en: 'Cheng Yu: "$x = 5$! Maximize space utilization."' },
+        text: { zh: '程昱："代入公式：$2^3 \\times 2^2 = 2^{3+2}$。"', en: 'Cheng Yu: "Apply the rule: $2^3 \\times 2^2 = 2^{3+2}$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '程昱："加指数：$3 + 2 = 5$。"', en: 'Cheng Yu: "Add exponents: $3 + 2 = 5$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '程昱："答案 $x = 5$。"', en: 'Cheng Yu: "Answer: $x = 5$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '程昱："验算：$2^3 = 8$，$2^2 = 4$，$8 \\times 4 = 32$。而 $2^5 = 32$。✓ 空间利用最大化！"', en: 'Cheng Yu: "Check: $2^3 = 8$, $2^2 = 4$, $8 \\times 4 = 32$. And $2^5 = 32$. ✓ Space maximized!"' },
         highlightField: 'x'
       }
     ],
@@ -1906,15 +1930,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.3-02', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '曹操："乌巢粮仓 $2^8$ 座，一把火烧 $2^5$ 座。同底数幂相除，指数相减。"', en: 'Cao Cao: "$2^8$ granaries at Wuchao, fire destroys $2^5$. Same base division: subtract exponents."' },
+        text: { zh: '曹操："乌巢一火定乾坤——为什么除法要减指数？因为除法是乘法的反操作：乘法加层，除法就是拆层。"', en: 'Cao Cao: "One fire at Wuchao changes everything — why subtract exponents for division? Because division reverses multiplication: if multiply adds layers, divide removes them."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '曹操："$2^8 / 2^5 = 2^{8-5} = 2^x$，所以 $x = 8 - 5$"', en: 'Cao Cao: "$2^8 / 2^5 = 2^{8-5} = 2^x$, so $x = 8 - 5$"' },
+        text: { zh: '曹操："想象 $2^8$ 是 8 层砖，烧掉 $2^5$ 相当于拆走 5 层——剩下 $8-5 = 3$ 层，即 $2^3$。"', en: 'Cao Cao: "Imagine $2^8$ is 8 layers of bricks. Burning $2^5$ removes 5 layers — leaving $8-5 = 3$ layers, i.e., $2^3$."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '曹操："$x = 3$！乌巢一火，袁绍必败！"', en: 'Cao Cao: "$x = 3$! Once Wuchao burns, Yuan Shao is finished!"' },
+        text: { zh: '曹操："写出公式：$2^8 \\div 2^5 = 2^{8-5}$——底数不变，指数相减。"', en: 'Cao Cao: "Write the rule: $2^8 \\div 2^5 = 2^{8-5}$ — base unchanged, subtract exponents."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '曹操："算指数：$8 - 5 = 3$。"', en: 'Cao Cao: "Calculate: $8 - 5 = 3$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '曹操："答案 $x = 3$。"', en: 'Cao Cao: "Answer: $x = 3$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '曹操："验算：$2^8 = 256$，$2^5 = 32$，$256 \\div 32 = 8$。而 $2^3 = 8$。✓ 乌巢一火，袁绍必败！"', en: 'Cao Cao: "Check: $2^8 = 256$, $2^5 = 32$, $256 \\div 32 = 8$. And $2^3 = 8$. ✓ Wuchao burns, Yuan Shao falls!"' },
         highlightField: 'x'
       }
     ],
@@ -1937,15 +1973,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-6.1-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '许褚："城墙高 8 丈，护城河宽 6 丈。云梯是直角三角形的斜边！"', en: 'Xu Chu: "Wall height 8, moat width 6. The ladder is the hypotenuse of a right triangle!"' },
+        text: { zh: '许褚："为什么攻城需要数学？因为梯子短一寸就够不着城头——你不可能先爬上去再量。这道题事关性命！"', en: 'Xu Chu: "Why does siege need math? A ladder one inch too short means you can\'t reach the top — you can\'t measure while climbing. This is life or death!"' },
         highlightField: 'c'
       },
       {
-        text: { zh: '许褚："勾股定理：$c^2 = a^2 + b^2 = 6^2 + 8^2 = 36 + 64 = 100$"', en: 'Xu Chu: "Pythagoras: $c^2 = a^2 + b^2 = 6^2 + 8^2 = 36 + 64 = 100$"' },
+        text: { zh: '许褚："城墙和地面构成一个直角——像一个 L 形。梯子斜靠上去，就是直角三角形的斜边。勾股定理专门解决这种问题。"', en: 'Xu Chu: "The wall and ground form a right angle — like an L shape. The ladder leaning against it is the hypotenuse. The Pythagorean theorem solves exactly this."' },
         highlightField: 'c'
       },
       {
-        text: { zh: '许褚："$c = 10$ 丈！梯子够长了，俺先上！"', en: 'Xu Chu: "$c = 10$ units! The ladder is long enough, I\'ll go first!"' },
+        text: { zh: '许褚："先算两条直角边的平方：$6^2 = 36$，$8^2 = 64$。"', en: 'Xu Chu: "Square both legs: $6^2 = 36$, $8^2 = 64$."' },
+        highlightField: 'c'
+      },
+      {
+        text: { zh: '许褚："加起来：$36 + 64 = 100$，所以 $c^2 = 100$。"', en: 'Xu Chu: "Add them: $36 + 64 = 100$, so $c^2 = 100$."' },
+        highlightField: 'c'
+      },
+      {
+        text: { zh: '许褚："开方：$c = \\sqrt{100} = 10$ 丈。"', en: 'Xu Chu: "Square root: $c = \\sqrt{100} = 10$ units."' },
+        highlightField: 'c'
+      },
+      {
+        text: { zh: '许褚："验算：$10^2 = 100$，$6^2 + 8^2 = 36 + 64 = 100$。✓ 对上了！梯子够长了，俺先上！"', en: 'Xu Chu: "Check: $10^2 = 100$, $6^2 + 8^2 = 36 + 64 = 100$. ✓ It works! Ladder is long enough, I\'ll go first!"' },
         highlightField: 'c'
       }
     ],
@@ -1964,15 +2012,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '乐进："望楼高 12 丈，敌营水平距离 16 丈。需求正切值。"', en: 'Yue Jin: "Tower height 12, horizontal distance 16. Find the tangent value."' },
+        text: { zh: '乐进："为什么侦察兵要懂三角？因为你站在望楼上，不可能拿绳子量到敌营——但你知道楼高和角度，数学就能算出距离。"', en: 'Yue Jin: "Why do scouts need trigonometry? You can\'t stretch a rope to the enemy camp from a tower — but with height and angle, math gives you the distance."' },
         highlightField: 'tan'
       },
       {
-        text: { zh: '乐进："$\\tan(\\theta) = \\text{对边} / \\text{邻边} = 12 / 16$"', en: 'Yue Jin: "$\\tan(\\theta) = \\text{opposite} / \\text{adjacent} = 12 / 16$"' },
+        text: { zh: '乐进："望楼、地面、视线构成直角三角形。楼高是「对边」（竖着的），地面距离是「邻边」（横着的）。正切就是竖÷横。"', en: 'Yue Jin: "The tower, ground, and line of sight form a right triangle. Tower height is the \'opposite\' (vertical), ground distance is the \'adjacent\' (horizontal). Tangent = vertical ÷ horizontal."' },
         highlightField: 'tan'
       },
       {
-        text: { zh: '乐进："$\\tan(\\theta) = 0.75$！看清距离，方能百步穿杨。"', en: 'Yue Jin: "$\\tan(\\theta) = 0.75$! See the distance clearly to hit the mark."' },
+        text: { zh: '乐进："代入：$\\tan(\\theta) = \\text{对边} / \\text{邻边} = 12 / 16$。"', en: 'Yue Jin: "Substitute: $\\tan(\\theta) = \\text{opposite} / \\text{adjacent} = 12 / 16$."' },
+        highlightField: 'tan'
+      },
+      {
+        text: { zh: '乐进："化简分数：$12 / 16 = 3 / 4 = 0.75$。"', en: 'Yue Jin: "Simplify: $12 / 16 = 3 / 4 = 0.75$."' },
+        highlightField: 'tan'
+      },
+      {
+        text: { zh: '乐进："答案：$\\tan(\\theta) = 0.75$。"', en: 'Yue Jin: "Answer: $\\tan(\\theta) = 0.75$."' },
+        highlightField: 'tan'
+      },
+      {
+        text: { zh: '乐进："验算：$0.75 \\times 16 = 12$，正好等于楼高。✓ 看清距离，方能百步穿杨。"', en: 'Yue Jin: "Check: $0.75 \\times 16 = 12$, exactly the tower height. ✓ See the distance, hit the mark."' },
         highlightField: 'tan'
       }
     ],
@@ -1991,15 +2051,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-6.1-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '曹洪："地道斜长 25 丈，水平距离 24 丈。用勾股定理求深度。"', en: 'Cao Hong: "Tunnel slant length 25, horizontal distance 24. Use Pythagoras to find depth."' },
+        text: { zh: '曹洪："为什么地道要用数学？你知道从入口到出口的斜距（25 丈）和水平距离（24 丈），但你不知道要挖多深——挖浅了会被敌人发现！"', en: 'Cao Hong: "Why does tunneling need math? You know the slant distance (25) and horizontal distance (24), but not the depth — too shallow and the enemy finds you!"' },
         highlightField: 'c'
       },
       {
-        text: { zh: '曹洪："$b^2 = c^2 - a^2 = 25^2 - 24^2 = 625 - 576 = 49$"', en: 'Cao Hong: "$b^2 = c^2 - a^2 = 25^2 - 24^2 = 625 - 576 = 49$"' },
+        text: { zh: '曹洪："地道的截面是直角三角形：水平距离是一条直角边 $a$，深度是另一条直角边 $b$，斜距是斜边 $c$。这次我们知道斜边，要反过来求。"', en: 'Cao Hong: "The tunnel cross-section is a right triangle: horizontal = leg $a$, depth = leg $b$, slant = hypotenuse $c$. This time we know $c$ and need to find $b$."' },
         highlightField: 'c'
       },
       {
-        text: { zh: '曹洪："$b = 7$ 丈！地道要挖深，别被发现了！"', en: 'Cao Hong: "$b = 7$ units! Dig deep, don\'t get spotted!"' },
+        text: { zh: '曹洪："变形勾股定理：$b^2 = c^2 - a^2 = 25^2 - 24^2$。"', en: 'Cao Hong: "Rearrange Pythagoras: $b^2 = c^2 - a^2 = 25^2 - 24^2$."' },
+        highlightField: 'c'
+      },
+      {
+        text: { zh: '曹洪："分别算：$625 - 576 = 49$。"', en: 'Cao Hong: "Calculate: $625 - 576 = 49$."' },
+        highlightField: 'c'
+      },
+      {
+        text: { zh: '曹洪："开方：$b = \\sqrt{49} = 7$ 丈。"', en: 'Cao Hong: "Square root: $b = \\sqrt{49} = 7$ units."' },
+        highlightField: 'c'
+      },
+      {
+        text: { zh: '曹洪："验算：$7^2 + 24^2 = 49 + 576 = 625 = 25^2$。✓ 完美！地道够深，神不知鬼不觉。"', en: 'Cao Hong: "Check: $7^2 + 24^2 = 49 + 576 = 625 = 25^2$. ✓ Perfect! Deep enough to stay hidden."' },
         highlightField: 'c'
       }
     ],
@@ -2018,15 +2090,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.4-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '于禁："小旗长 2 宽 3，大旗长 6。相似图形对应边成比例。"', en: 'Yu Jin: "Small flag: length 2, width 3. Large flag: length 6. Similar figures have proportional sides."' },
+        text: { zh: '赵云："为什么放大旗帜要按比例？如果你随意拉伸，图案就变形了——战旗必须形状完全一致，只是尺寸变大。这就是「相似」。"', en: 'Zhao Yun: "Why scale proportionally? If you stretch randomly, the design distorts — battle flags must keep the exact same shape, just bigger. That\'s \'similarity\'."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '于禁："比例尺 = $6/2 = 3$，所以大旗宽 = $3 \\times 3 = x$"', en: 'Yu Jin: "Scale factor = $6/2 = 3$, so large flag width = $3 \\times 3 = x$"' },
+        text: { zh: '赵云："相似的关键：对应边的比值相同。小旗长 2 宽 3，大旗长 6——先找放大了几倍。"', en: 'Zhao Yun: "The key to similarity: corresponding sides have equal ratios. Small flag 2×3, large flag length 6 — first find the scale factor."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '于禁："$x = 9$ 尺！军旗要统一，威严不可废。"', en: 'Yu Jin: "$x = 9$ feet! Flags must be uniform, dignity must be maintained."' },
+        text: { zh: '赵云："比例尺 = 大旗长 ÷ 小旗长 = $6 \\div 2 = 3$ 倍。"', en: 'Zhao Yun: "Scale factor = large ÷ small = $6 \\div 2 = 3$ times."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '赵云："宽也要放大同样倍数：$x = 3 \\times 3 = 9$。"', en: 'Zhao Yun: "Width scales by the same factor: $x = 3 \\times 3 = 9$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '赵云："答案：$x = 9$ 尺。"', en: 'Zhao Yun: "Answer: $x = 9$ feet."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '赵云："验算：小旗长宽比 = $2:3$，大旗长宽比 = $6:9 = 2:3$。✓ 比值一致——形状完美保持！"', en: 'Zhao Yun: "Check: small flag ratio = $2:3$, large flag ratio = $6:9 = 2:3$. ✓ Ratios match — shape perfectly preserved!"' },
         highlightField: 'x'
       }
     ],
@@ -2045,15 +2129,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-4.4-01', sectionId: 'geometry',
     tutorialSteps: [
       {
-        text: { zh: '董昭："地图比例尺 1:1000，图上距离 5 厘米。相似比例关系！"', en: 'Dong Zhao: "Map scale 1:1000, map distance 5cm. Similar proportional relationship!"' },
+        text: { zh: '诸葛亮："为什么地图要有比例尺？因为你不可能把真实世界直接画到沙盘上——1 寸代表 1000 步，这就是缩小版的现实。"', en: 'Zhuge Liang: "Why do maps need a scale? You can\'t draw the real world at actual size — 1 inch represents 1000 paces, a miniature version of reality."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '董昭："$1:1000 = 5:x$，所以 $x = 5 \\times 1000$"', en: 'Dong Zhao: "$1:1000 = 5:x$, so $x = 5 \\times 1000$"' },
+        text: { zh: '诸葛亮："比例尺就是相似比：图上 1 厘米 = 实际 1000 厘米。图上量出来多少，乘以比例尺就是实际距离。"', en: 'Zhuge Liang: "The scale is the similarity ratio: 1cm on map = 1000cm in reality. Multiply the map measurement by the scale to get real distance."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '董昭："$x = 5000$ 厘米！差之毫厘，谬以千里。"', en: 'Dong Zhao: "$x = 5000$ cm! A tiny error leads to a huge mistake."' },
+        text: { zh: '诸葛亮："列等式：$1:1000 = 5:x$，即 $x = 5 \\times 1000$。"', en: 'Zhuge Liang: "Set up: $1:1000 = 5:x$, so $x = 5 \\times 1000$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮："计算：$5 \\times 1000 = 5000$。"', en: 'Zhuge Liang: "Calculate: $5 \\times 1000 = 5000$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮："答案：实际距离 $x = 5000$ 厘米。"', en: 'Zhuge Liang: "Answer: actual distance $x = 5000$ cm."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '诸葛亮："验算：$5000 \\div 1000 = 5$，正好是图上距离。✓ 差之毫厘，谬以千里——但我们算得分毫不差！"', en: 'Zhuge Liang: "Check: $5000 \\div 1000 = 5$, exactly the map distance. ✓ A tiny error leads to a huge mistake — but our math is spot on!"' },
         highlightField: 'x'
       }
     ],
@@ -2072,15 +2168,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '李典："士兵与粮草比例 2:5，现有 1000 名士兵。先求比例因子。"', en: 'Li Dian: "Soldiers to grain ratio 2:5, with 1000 soldiers. First find the scale factor."' },
+        text: { zh: '李典："为什么粮草不能随便分？分少了后勤罢工，分多了前锋挨饿——比例就是确保公平的数学工具。2:5 意味着前锋每领 2 份，后勤就要领 5 份。"', en: 'Li Dian: "Why can\'t we split grain randomly? Too little and logistics revolts, too much and the vanguard starves — ratio is the math tool for fairness. 2:5 means for every 2 shares the vanguard gets, logistics gets 5."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '李典："$1000 \\div 2 = 500$（比例因子），所以粮草 $y = 5 \\times 500$"', en: 'Li Dian: "$1000 \\div 2 = 500$ (scale factor), so grain $y = 5 \\times 500$"' },
+        text: { zh: '李典："比例像个放大器：2:5 可以放大成 4:10、6:15、1000:?——关键是找到放大了多少倍。"', en: 'Li Dian: "A ratio is like a multiplier: 2:5 can become 4:10, 6:15, 1000:? — the key is finding how many times it was scaled up."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '李典："求倍数：前锋的 2 份变成了 1000，放大了 $1000 \\div 2 = 500$ 倍。"', en: 'Li Dian: "Find the multiplier: vanguard\'s 2 became 1000, scaled by $1000 \\div 2 = 500$ times."' },
         highlightField: 'y'
       },
       {
-        text: { zh: '李典："$y = 2500$！后勤保障，重中之重。"', en: 'Li Dian: "$y = 2500$! Logistics is the top priority."' },
+        text: { zh: '李典："后勤也要放大同样倍数：$y = 5 \\times 500 = 2500$。"', en: 'Li Dian: "Logistics scales the same way: $y = 5 \\times 500 = 2500$."' },
+        highlightField: 'y'
+      },
+      {
+        text: { zh: '李典："答案：$y = 2500$ 石。"', en: 'Li Dian: "Answer: $y = 2500$ units."' },
+        highlightField: 'y'
+      },
+      {
+        text: { zh: '李典："验算：$1000:2500$，两边同除 500 得 $2:5$。✓ 比例一致！后勤保障，重中之重。"', en: 'Li Dian: "Check: $1000:2500$, divide both by 500 to get $2:5$. ✓ Ratio matches! Logistics secured."' },
         highlightField: 'y'
       }
     ],
@@ -2099,15 +2207,27 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
       {
-        text: { zh: '曹纯："步兵与骑兵比例 3:1，步兵 900 人。求骑兵数。"', en: 'Cao Chun: "Infantry to cavalry ratio 3:1, 900 infantry. Find cavalry count."' },
+        text: { zh: '曹纯："为什么阵法要讲比例？骑兵太多浪费战马，太少突击力不足——3 名步兵配 1 名骑兵，是虎豹骑经过百战验证的黄金比例。"', en: 'Cao Chun: "Why does formation need ratios? Too many cavalry wastes horses, too few lacks punch — 3 infantry to 1 cavalry is the Tiger Cavalry\'s battle-tested golden ratio."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '曹纯："$900 \\div 3 = 300$（比例因子），骑兵 $y = 1 \\times 300$"', en: 'Cao Chun: "$900 \\div 3 = 300$ (scale factor), cavalry $y = 1 \\times 300$"' },
+        text: { zh: '曹纯："比例 3:1 是一个「小队模型」：每 3 个步兵搭配 1 个骑兵。现在要把这个模型放大到 900 名步兵的规模。"', en: 'Cao Chun: "Ratio 3:1 is a \'squad model\': every 3 infantry paired with 1 cavalry. Now we scale this model up to 900 infantry."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '曹纯："求有多少个小队：$900 \\div 3 = 300$ 个小队。"', en: 'Cao Chun: "Find the number of squads: $900 \\div 3 = 300$ squads."' },
         highlightField: 'y'
       },
       {
-        text: { zh: '曹纯："$y = 300$ 骑兵！虎豹骑出击，势不可挡！"', en: 'Cao Chun: "$y = 300$ cavalry! Tiger and Leopard Cavalry strikes, unstoppable!"' },
+        text: { zh: '曹纯："每个小队配 1 名骑兵：$y = 1 \\times 300 = 300$。"', en: 'Cao Chun: "Each squad gets 1 cavalry: $y = 1 \\times 300 = 300$."' },
+        highlightField: 'y'
+      },
+      {
+        text: { zh: '曹纯："答案：$y = 300$ 名骑兵。"', en: 'Cao Chun: "Answer: $y = 300$ cavalry."' },
+        highlightField: 'y'
+      },
+      {
+        text: { zh: '曹纯："验算：$900:300$，两边同除 300 得 $3:1$。✓ 比例一致！虎豹骑出击，势不可挡！"', en: 'Cao Chun: "Check: $900:300$, divide both by 300 to get $3:1$. ✓ Ratio matches! Tiger Cavalry strikes, unstoppable!"' },
         highlightField: 'y'
       }
     ],
