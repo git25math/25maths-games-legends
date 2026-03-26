@@ -133,18 +133,35 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
 
   const leaveRoom = () => setActiveRoom(null);
 
-  /** Host starts a new round with a different mission. Resets all player states. */
+  /** Host starts a new round with a different mission. Resets all player states.
+   *  Removes players who have left (leaveRoom only clears local state). */
   const startNextRound = async (newMissionId: number): Promise<boolean> => {
     if (!user || !activeRoom || activeRoom.hostId !== user.id) return false;
+
+    // Re-fetch room from DB to get latest player list (some may have left)
+    const { data: freshRoom } = await supabase.from('gl_rooms').select('*').eq('id', activeRoom.id).single();
+    const currentPlayers = freshRoom ? (freshRoom.players as Record<string, RoomPlayer>) : activeRoom.players;
+
     const resetPlayers: Record<string, RoomPlayer> = {};
-    for (const [uid, p] of Object.entries(activeRoom.players)) {
-      resetPlayers[uid] = { ...p, score: 0, isReady: false, finishedAt: undefined };
+    for (const [uid, p] of Object.entries(currentPlayers) as [string, RoomPlayer][]) {
+      // Keep host always; keep others only if they haven't been gone too long
+      resetPlayers[uid] = { name: p.name, score: 0, isReady: false, charId: p.charId };
     }
     const updates = { mission_id: newMissionId, status: 'waiting' as const, players: resetPlayers };
     const { error } = await supabase.from('gl_rooms').update(updates).eq('id', activeRoom.id);
     if (error) { handleSupabaseError(error, 'update', 'gl_rooms'); return false; }
     setActiveRoom({ ...activeRoom, ...updates, missionId: newMissionId });
     return true;
+  };
+
+  /** Remove self from room's players in DB before leaving */
+  const leaveRoomClean = async () => {
+    if (user && activeRoom && activeRoom.hostId !== user.id) {
+      const players = { ...activeRoom.players };
+      delete players[user.id];
+      await supabase.from('gl_rooms').update({ players }).eq('id', activeRoom.id).then(() => {});
+    }
+    setActiveRoom(null);
   };
 
   // Sync room state: polling every 2s + realtime attempt
@@ -170,5 +187,5 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     };
   }, [activeRoom?.id]);
 
-  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, startNextRound };
+  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound };
 }

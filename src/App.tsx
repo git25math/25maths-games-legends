@@ -143,7 +143,7 @@ export default function App() {
     getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
   const { missions } = useMissions();
-  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, startNextRound } = useMultiplayer(user, profile);
+  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
 
   // Must be after profile declaration
   if (profile) latestScoreRef.current = profile.total_score;
@@ -162,6 +162,7 @@ export default function App() {
 
   // PK countdown: when any opponent finished and I haven't, tick down 30→0
   const pkAutoCompleteRef = useRef(false);
+  const handleBattleCompleteRef = useRef<(s: boolean, sc: number, d: number, hp: number) => void>(() => {});
   const [pkFirstFinish, setPkFirstFinish] = useState<number | null>(null);
 
   // Detect when first OPPONENT finishes (latches — only set once per battle)
@@ -171,7 +172,7 @@ export default function App() {
     if (gameState !== 'battle') return; // only detect during active battle
     const t = getFirstOpponentFinishTime(activeRoom, user?.id);
     if (t) setPkFirstFinish(prev => prev ?? t); // latch: don't overwrite
-  }, [activeRoom?.players, gameState]);
+  }, [activeRoom?.players, gameState, user?.id]);
 
   // Run countdown timer based on pkFirstFinish
   useEffect(() => {
@@ -193,7 +194,7 @@ export default function App() {
       setPkCountdown(Math.ceil(remaining));
       if (remaining <= 0 && !pkAutoCompleteRef.current) {
         pkAutoCompleteRef.current = true;
-        handleBattleComplete(false, 0, 0, 0);
+        handleBattleCompleteRef.current(false, 0, 0, 0);
       }
     };
     tick();
@@ -210,9 +211,20 @@ export default function App() {
     }
   }, [activeRoom?.status]);
 
-  // PK: When room resets to 'waiting' (host picked next round), navigate back to lobby
+  // PK: When room resets to 'waiting' (host picked next round), settle XP + navigate to lobby
   useEffect(() => {
-    if (activeRoom?.status === 'waiting' && showPKResult) {
+    if (activeRoom?.status === 'waiting' && showPKResult && user && activeRoom.type === 'pk') {
+      // Non-host: settle XP here since onClose won't fire
+      if (activeRoom.hostId !== user.id && profile) {
+        const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
+        const myRank = ranked.findIndex(([uid]) => uid === user.id);
+        const myScore = activeRoom.players[user.id]?.score ?? 0;
+        const multiplier = getRankMultiplier(myRank);
+        const bonusXP = Math.round(myScore * (multiplier - 1));
+        if (bonusXP > 0) {
+          updateProfile({ total_score: profile.total_score + bonusXP });
+        }
+      }
       setShowPKResult(false);
       pkAutoCompleteRef.current = false;
       setGameState('lobby');
@@ -516,6 +528,7 @@ export default function App() {
     setGameState('map');
     setActiveMission(null);
   };
+  handleBattleCompleteRef.current = handleBattleComplete;
 
   const handleGuest = () => {
     setIsGuest(true);
@@ -1114,8 +1127,7 @@ export default function App() {
                 setShowPKResult(false);
                 pkAutoCompleteRef.current = false;
                 await startNextRound(missionId);
-                // Room resets to 'waiting' — lobby will show via activeRoom.status === 'waiting'
-                setGameState('map');
+                setGameState('lobby');
               }}
               onClose={async () => {
                 // Apply PK rank XP bonus

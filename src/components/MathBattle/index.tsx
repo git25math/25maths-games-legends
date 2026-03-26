@@ -97,7 +97,7 @@ export const MathBattle = ({
   const [floatingScore, setFloatingScore] = useState<{ value: string; key: number } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const currentQuestion = questionQueue[currentQIdx];
+  const currentQuestion = questionQueue[currentQIdx] ?? mission;
 
   // Tutorial only for single-question green mode
   const showTutorial = !isMultiQuestion && difficultyMode === 'green' && mission.tutorialSteps && !isMultiplayer;
