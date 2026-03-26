@@ -646,7 +646,7 @@ export function generateRatioMission(template: Mission): Mission {
   return {
     ...template,
     description,
-    data: { a, b, generatorType: 'RATIO_RANDOM' },
+    data: { a, b, answer: answerValue, generatorType: 'RATIO_RANDOM' },
     tutorialSteps,
   };
 }

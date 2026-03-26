@@ -69,6 +69,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
       const val = m * x + b;
       return { correct: Math.abs(parse(inputs.y || '') - val) < 0.01, expected: { y: round(val) } };
     }
+    if (!a) return { correct: false, expected: { t: 'undefined' } };
     const val = -data.b / (2 * a);
     return { correct: Math.abs(parse(inputs.t || '') - val) < 0.01, expected: { t: round(val) } };
   }
@@ -152,6 +153,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   if (type === 'TRIGONOMETRY') {
     if (data.func === 'sin') {
       const sinVal = data.angle === 30 ? 0.5 : Math.sin(data.angle * Math.PI / 180);
+      if (sinVal === 0) return { correct: false, expected: { c: 'undefined' } };
       const val = data.opposite / sinVal;
       return { correct: Math.abs(parse(inputs.c || '') - val) < 0.01, expected: { c: round(val) } };
     }
@@ -168,6 +170,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
       const val = data.p1 * data.p2;
       return { correct: Math.abs(parse(inputs.p || '') - val) < 0.01, expected: { p: toFraction(val) } };
     }
+    if (!data.total) return { correct: false, expected: { p: '0' } };
     const val = data.target / data.total;
     return { correct: Math.abs(parse(inputs.p || '') - val) < 0.01, expected: { p: probFraction(data.target, data.total) } };
   }
@@ -187,6 +190,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   }
   if (type === 'ROOTS') {
     const { a, b, c } = data;
+    if (!a) return { correct: false, expected: { x: 'undefined' } };
     const disc = b * b - 4 * a * c;
     const x1 = (-b + Math.sqrt(disc)) / (2 * a);
     const x2 = (-b - Math.sqrt(disc)) / (2 * a);
@@ -273,7 +277,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const g = gcd(Math.abs(data.ansNum), Math.abs(data.ansDen));
     const simpNum = data.ansNum / g;
     const simpDen = data.ansDen / g;
-    const correct = Math.abs(userVal - expected) < 0.001;
+    const correct = Math.abs(userVal - expected) < 0.01;
     const expectedStr = simpDen === 1 ? String(simpNum) : `${simpNum}/${simpDen}`;
     return { correct, expected: { ans: expectedStr } };
   }
