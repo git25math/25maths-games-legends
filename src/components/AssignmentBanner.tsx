@@ -37,7 +37,7 @@ export function AssignmentBanner({ lang, userId, completedMissions, onMissionSta
     if (userId === 'guest') return;
     supabase.rpc('get_my_assignments').then(({ data, error }) => {
       if (!error && data) setAssignments(data as StudentAssignment[]);
-    });
+    }, () => {});
   }, [userId]);
 
   if (assignments.length === 0) return null;
@@ -202,7 +202,7 @@ export function useAssignedMissionIds(userId: string): Set<number> {
         }
         setIds(set);
       }
-    });
+    }, () => {});
   }, [userId]);
 
   return ids;

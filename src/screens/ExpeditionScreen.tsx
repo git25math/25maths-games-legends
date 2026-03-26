@@ -689,7 +689,7 @@ export const ExpeditionScreen = ({
                 onClick={async () => {
                   // Save XP from this run before replaying
                   if (xpEarned > 0 && onSaveRun) {
-                    await onSaveRun(xpEarned, nodesCleared);
+                    try { await onSaveRun(xpEarned, nodesCleared); } catch { /* save failed, continue */ }
                   }
                   // Update prevRecord so briefing shows latest
                   setPrevRecord(savedRecord);

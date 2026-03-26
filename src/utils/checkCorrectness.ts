@@ -57,6 +57,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   if (type === 'LINEAR') {
     if (!data.points) return { correct: false, expected: {} };
     const [[x1, y1], [x2, y2]] = data.points;
+    if (x2 === x1) return { correct: false, expected: { m: 'undefined', c: 'undefined' } };
     const m = (y2 - y1) / (x2 - x1);
     const c = y1 - m * x1;
     const ok = Math.abs(parse(inputs.m || '') - m) < 0.01 && Math.abs(parse(inputs.c || '') - c) < 0.01;
@@ -121,6 +122,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
       const [a1, b1, c1] = data.eq1;
       const [a2, b2, c2] = data.eq2;
       const det = a1 * b2 - a2 * b1;
+      if (det === 0) return { correct: false, expected: { x: 'no solution', y: 'no solution' } };
       const xVal = (c1 * b2 - c2 * b1) / det;
       const yVal = (a1 * c2 - a2 * c1) / det;
       const ok = Math.abs(parse(inputs.x || '') - xVal) < 0.01 && Math.abs(parse(inputs.y || '') - yVal) < 0.01;
@@ -157,6 +159,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
       const val = Math.atan2(data.opposite, data.adjacent) * 180 / Math.PI;
       return { correct: Math.abs(parse(inputs.angle || '') - val) < 0.01, expected: { angle: round(val) } };
     }
+    if (!data.adjacent) return { correct: false, expected: { tan: 'undefined' } };
     const val = data.opposite / data.adjacent;
     return { correct: Math.abs(parse(inputs.tan || '') - val) < 0.01, expected: { tan: round(val) } };
   }
@@ -206,6 +209,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   }
   if (type === 'STATISTICS') {
     const { values, mode } = data;
+    if (!values || values.length === 0) return { correct: false, expected: { ans: '0' } };
     if (mode === 'mean') {
       const val = values.reduce((a: number, b: number) => a + b, 0) / values.length;
       return { correct: Math.abs(parse(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
@@ -237,12 +241,13 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: Math.abs(x / y - a / b) < 0.01, expected: { x: String(a), y: String(b) } };
   }
   if (type === 'SIMILARITY') {
+    if (!data.b) return { correct: false, expected: { x: '0' } };
     const val = (data.a / data.b) * data.c;
     return { correct: Math.abs(parse(inputs.x || '') - val) < 0.01, expected: { x: round(val) } };
   }
   if (type === 'HCF') {
-    // Compute HCF from data.numbers array
     const nums = data.numbers as number[];
+    if (!nums || nums.length === 0) return { correct: false, expected: { ans: '0' } };
     let result = nums[0];
     for (let i = 1; i < nums.length; i++) {
       result = gcd(result, nums[i]);
@@ -250,8 +255,8 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: parse(inputs.ans || '') === result, expected: { ans: String(result) } };
   }
   if (type === 'LCM') {
-    // Compute LCM from data.numbers array
     const nums = data.numbers as number[];
+    if (!nums || nums.length === 0) return { correct: false, expected: { ans: '0' } };
     let result = nums[0];
     for (let i = 1; i < nums.length; i++) {
       result = (result * nums[i]) / gcd(result, nums[i]);
@@ -262,8 +267,8 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
   }
   if (type === 'FRAC_ADD' || type === 'FRAC_MUL') {
-    // data.ansNum and data.ansDen store the simplified fraction answer
     const userVal = parse(inputs.ans || '');
+    if (!data.ansDen) return { correct: false, expected: { ans: '0' } };
     const expected = data.ansNum / data.ansDen;
     const g = gcd(Math.abs(data.ansNum), Math.abs(data.ansDen));
     const simpNum = data.ansNum / g;
