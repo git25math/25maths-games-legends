@@ -9,7 +9,7 @@ import { setTier, type DifficultyTier, type GeneratorFn } from './shared';
 export { type DifficultyTier } from './shared';
 
 // Import all generators from chapter modules
-import { generateIntegerAddMission, generateIntegerMulMission, generateFracAddMission, generateFracMulMission, generateMixedImproperMission, generatePrimeMission, generateFactorTreeMission, generateFactorsListMission, generateHcfMission, generateLcmMission, generateSquareCubeMission, generateSquareRootMission, generateIndicesMission, generateFdpConvertMission, generateBodmasMission, generatePercentageOfMission, generatePercentageMission, generatePercentageInterestMission, generateEstimationRoundMission, generateStdFormMission, generateSpeedMission, generateVennMission } from './number';
+import { generateIntegerAddMission, generateIntegerMulMission, generateFracAddSameDenMission, generateFracAddMission, generateFracMulMission, generateMixedImproperMission, generatePrimeMission, generateFactorTreeMission, generateFactorsListMission, generateHcfMission, generateLcmMission, generateSquareCubeMission, generateSquareRootMission, generateIndicesMission, generateFdpConvertMission, generateBodmasMission, generatePercentageOfMission, generatePercentageMission, generatePercentageInterestMission, generateEstimationRoundMission, generateStdFormMission, generateSpeedMission, generateVennMission } from './number';
 
 import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission } from './algebra';
 
@@ -31,7 +31,7 @@ export type GeneratorType =
   | 'ROOTS_RANDOM' | 'DERIVATIVE_RANDOM' | 'INTEGRATION_RANDOM'
   | 'VOLUME_RANDOM' | 'FUNC_VAL_RANDOM' | 'STATISTICS_MEDIAN_RANDOM'
   | 'HCF_RANDOM' | 'LCM_RANDOM' | 'INTEGER_ADD_RANDOM'
-  | 'FRAC_ADD_RANDOM' | 'FRAC_MUL_RANDOM' | 'FACTOR_TREE_RANDOM'
+  | 'FRAC_ADD_SAME_DEN_RANDOM' | 'FRAC_ADD_RANDOM' | 'FRAC_MUL_RANDOM' | 'FACTOR_TREE_RANDOM'
   | 'PRIME_RANDOM' | 'SQUARE_CUBE_RANDOM' | 'SQUARE_ROOT_RANDOM'
   | 'SUBSTITUTION_RANDOM' | 'PERIMETER_RECT_RANDOM' | 'PERCENTAGE_OF_RANDOM'
   | 'ESTIMATION_ROUND_RANDOM' | 'ANGLES_TRIANGLE_RANDOM' | 'ANGLES_POINT_RANDOM'
@@ -52,6 +52,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   // Number (CH1)
   INTEGER_ADD_RANDOM: generateIntegerAddMission,
   INTEGER_MUL_RANDOM: generateIntegerMulMission,
+  FRAC_ADD_SAME_DEN_RANDOM: generateFracAddSameDenMission,
   FRAC_ADD_RANDOM: generateFracAddMission,
   FRAC_MUL_RANDOM: generateFracMulMission,
   MIXED_IMPROPER_RANDOM: generateMixedImproperMission,

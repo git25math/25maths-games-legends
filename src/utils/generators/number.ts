@@ -311,6 +311,55 @@ export function generateIntegerMulMission(template: Mission): Mission {
    FDP_CONVERT generator: fraction ↔ decimal ↔ percentage
    ══════════════════════════════════════════════════════════ */
 
+/* ══════════════════════════════════════════════════════════
+   FRAC_ADD_SAME_DEN generator: same-denominator fraction addition (intro)
+   ══════════════════════════════════════════════════════════ */
+
+export function generateFracAddSameDenMission(template: Mission): Mission {
+  const denPool = [3, 4, 5, 6, 8];
+  const den = pickRandom(denPool);
+  const n1 = pickRandom(Array.from({ length: den - 1 }, (_, i) => i + 1));
+  let n2 = pickRandom(Array.from({ length: den - 1 }, (_, i) => i + 1));
+  // Ensure sum doesn't exceed denominator (keep it proper or exactly 1)
+  while (n1 + n2 > den) n2 = pickRandom(Array.from({ length: den - 1 }, (_, i) => i + 1));
+
+  const rawNum = n1 + n2;
+  const g = gcdCalc(rawNum, den);
+  const ansNum = rawNum / g;
+  const ansDen = den / g;
+
+  const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[：:]/)?.[0]) || '刘备';
+  const description: BilingualText = {
+    zh: `计算 $\\frac{${n1}}{${den}} + \\frac{${n2}}{${den}}$`,
+    en: `Calculate $\\frac{${n1}}{${den}} + \\frac{${n2}}{${den}}$`,
+  };
+
+  const needsSimplify = ansNum !== rawNum || ansDen !== den;
+  const simplifyStep = needsSimplify
+    ? `\n\n$\\frac{${rawNum}}{${den}}$ 化简：$${rawNum}$ 和 $${den}$ 都能被 $${g}$ 整除 → $\\frac{${ansNum}}{${ansDen}}$`
+    : '';
+  const simplifyStepEn = needsSimplify
+    ? `\n\n$\\frac{${rawNum}}{${den}}$ simplifies: both ${rawNum} and ${den} divide by ${g} → $\\frac{${ansNum}}{${ansDen}}$`
+    : '';
+  const ansDisplay = ansDen === 1 ? `${ansNum}` : `\\frac{${ansNum}}{${ansDen}}`;
+
+  const tutorialSteps = [
+    { text: { zh: `${narrator}：为什么要学分数？——分东西！\n打仗也好，吃饭也好，都要公平地分。分数就是"切成几份，拿几份"。`, en: `${narrator}: "Why fractions? — sharing!\nWhether in battle or at dinner, things must be shared fairly. A fraction means 'cut into pieces, take some'."` }, highlightField: 'ans' as const },
+    { text: { zh: `${narrator}：看这道题\n$\\frac{${n1}}{${den}} + \\frac{${n2}}{${den}}$\n\n两个分数的分母都是 $${den}$——说明切法一样！\n切法一样（同分母），直接加分子就行。`, en: `${narrator}: "Look at this\n$\\frac{${n1}}{${den}} + \\frac{${n2}}{${den}}$\n\nBoth denominators are ${den} — same slicing!\nSame slicing (same denominator), just add numerators."` }, highlightField: 'ans' as const },
+    { text: { zh: `${narrator}：计算\n分母不变：$${den}$\n分子相加：$${n1} + ${n2} = ${rawNum}$\n\n$\\frac{${n1}}{${den}} + \\frac{${n2}}{${den}} = \\frac{${rawNum}}{${den}}$${simplifyStep}`, en: `${narrator}: "Calculate\nDenominator stays: ${den}\nAdd numerators: ${n1} + ${n2} = ${rawNum}\n\n$\\frac{${n1}}{${den}} + \\frac{${n2}}{${den}} = \\frac{${rawNum}}{${den}}$${simplifyStepEn}"` }, highlightField: 'ans' as const },
+    { text: { zh: `${narrator}：答案是 $${ansDisplay}$`, en: `${narrator}: "Answer is $${ansDisplay}$"` }, highlightField: 'ans' as const },
+    { text: { zh: `${narrator}：验算——${den} 份里拿了 ${rawNum} 份 = $\\frac{${rawNum}}{${den}}$${needsSimplify ? ` = $${ansDisplay}$` : ''} ✓\n\n口诀：同分母加法 = 分母不变，分子相加！`, en: `${narrator}: "Verify — ${rawNum} out of ${den} pieces = $\\frac{${rawNum}}{${den}}$${needsSimplify ? ` = $${ansDisplay}$` : ''} ✓\n\nRule: same denominator = keep denominator, add numerators!"` }, highlightField: 'ans' as const },
+    { text: { zh: `${narrator}：做得好！记住：分母是"切法"，分子是"拿法"。\n切法一样才能直接加！`, en: `${narrator}: "Well done! Remember: denominator = how you cut, numerator = how much you take.\nSame cut means just add!"` }, highlightField: 'ans' as const },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { n1, d1: den, n2, d2: den, op: '+', ansNum, ansDen, generatorType: 'FRAC_ADD_SAME_DEN_RANDOM' as any },
+    tutorialSteps,
+  };
+}
+
 export function generateFracAddMission(template: Mission): Mission {
   const tier = getTier();
   const denPools = { 1: [2, 3, 4, 5, 6], 2: [3, 4, 5, 6, 8, 10], 3: [4, 5, 6, 7, 8, 9, 10, 12] };

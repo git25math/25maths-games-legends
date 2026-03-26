@@ -134,6 +134,9 @@ export default function App() {
   const pendingSeasonTasksRef = useRef<string[]>([]);
   const pendingStreakTokensRef = useRef(0);
   const pendingErrorsRef = useRef<import('./utils/diagnoseError').ErrorType[]>([]);
+  // Track latest score to avoid stale closure in per-phase XP awards
+  const latestScoreRef = useRef(0);
+  if (profile) latestScoreRef.current = profile.total_score;
 
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
   const {
@@ -361,7 +364,9 @@ export default function App() {
 
   const handlePracticeEarnXP = async (xp: number) => {
     if (!profile || xp <= 0) return;
-    const prevScore = profile.total_score;
+    // Use ref to get latest score (avoids stale closure across phases)
+    const prevScore = latestScoreRef.current;
+    latestScoreRef.current = prevScore + xp; // optimistic update for next phase
     const levelsGained = computeLevelsGained(prevScore, xp);
     if (levelsGained > 0) {
       // Merge SP + score into single write

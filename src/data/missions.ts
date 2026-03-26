@@ -245,7 +245,7 @@ export const MISSIONS: Mission[] = [
     skillSummary: { zh: '分数 = 把整体切成等份后取几份', en: 'Fraction = equal parts of a whole, take some' },
     story: { zh: '桃园结义后第一顿饭！一块大饼切成 4 等份。刘备拿了 $\\frac{1}{4}$，关羽也拿了 $\\frac{1}{4}$。一共拿了多少？', en: 'First meal after the Peach Garden Oath! A flatbread cut into 4 equal pieces. Liu Bei takes $\\frac{1}{4}$, Guan Yu takes $\\frac{1}{4}$. How much in total?' },
     description: { zh: '$\\frac{1}{4} + \\frac{1}{4} = ?$', en: '$\\frac{1}{4} + \\frac{1}{4} = ?$' },
-    data: { n1: 1, d1: 4, n2: 1, d2: 4, op: '+', ansNum: 1, ansDen: 2 },
+    data: { n1: 1, d1: 4, n2: 1, d2: 4, op: '+', ansNum: 1, ansDen: 2, generatorType: 'FRAC_ADD_SAME_DEN_RANDOM' },
     difficulty: 'Easy', reward: 30,
     kpId: 'kp-1.4-01', sectionId: 'number',
     tutorialSteps: [
