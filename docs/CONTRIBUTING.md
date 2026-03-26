@@ -12,7 +12,7 @@
 - **仓库**: `git25math/25maths-games-legends`
 - **部署**: push main → GitHub Actions → https://play.25maths.com
 - **技术栈**: React + TypeScript + Vite + Tailwind + KaTeX + Supabase
-- **当前版本**: v7.5.0 (2026-03-26)
+- **当前版本**: v8.9.0 (2026-03-26)
 
 ---
 
@@ -108,10 +108,11 @@
 4. src/utils/checkCorrectness.ts
    → if (type === 'NEW_TYPE') { return { correct, expected } }
 
-5. src/utils/generateMission.ts
-   → GeneratorType 加 | 'NEW_TYPE_RANDOM'
-   → GENERATOR_MAP 加 NEW_TYPE_RANDOM: generateNewTypeMission
-   → 文件末尾写 export function generateNewTypeMission(...)
+5. src/utils/generators/index.ts + 对应章节文件
+   → `GeneratorType` 加 | 'NEW_TYPE_RANDOM'
+   → `GENERATOR_MAP` 加 NEW_TYPE_RANDOM: generateNewTypeMission
+   → 在对应章节文件（如 `number.ts` / `algebra.ts` / `geometry.ts` / `advanced.ts` / `statistics.ts`）中写 `export function generateNewTypeMission(...)`
+   → `src/utils/generateMission.ts` 仅作兼容导出，不再承载生成器实现
    → 教程必须 ≥6 步（金标准）
 
 6. src/data/missions.ts

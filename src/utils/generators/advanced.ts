@@ -285,43 +285,50 @@ export function generateDerivativeMission(template: Mission): Mission {
     const tutorialSteps = [
       {
         text: {
-          zh: `${narrator}：导数等于零的点就是函数的极值点 -- 最高或最低点`,
-          en: `${narrator}: "Points where the derivative equals zero are extrema — the highest or lowest points"`,
+          zh: `${narrator}：为什么要找“最稳的防线”？\n城墙受力不会处处一样——有的地方压力大，有的地方压力最小。\n补强材料要先送到“压力最低的转折点”，才能用最少兵力守住成都。\n导数就是帮我们找到这个关键位置的工具。`,
+          en: `${narrator}: "Why find the most stable part of the wall?\nThe stress on the wall is not the same everywhere — some spots take more pressure, some take the least.\nReinforcements must go to the turning point with the LOWEST stress, so Chengdu can be defended with the least cost.\nDerivatives are the tool that helps us find that key position."`,
         },
         highlightField: 'x',
       },
       {
         text: {
-          zh: `${narrator}：我们要解 $f'(x) = 3x^{2} - 3 = 0$`,
-          en: `${narrator}: "We need to solve $f'(x) = 3x^{2} - 3 = 0$"`,
+          zh: `${narrator}：把图像想成一条山路\n走向谷底时，坡度会从负数慢慢变成 $0$；过了谷底，又从 $0$ 变回正数。\n所以“最低点”那一瞬间，切线会暂时变平，也就是导数 = $0$。\n先找导数为 $0$ 的位置，再确认它是不是极小值点。`,
+          en: `${narrator}: "Think of the graph as a mountain path\nAs you walk down into a valley, the slope goes from negative to $0$; after the valley, it changes from $0$ to positive.\nSo at the LOWEST point, the tangent briefly becomes flat, which means derivative = $0$.\nFirst find where the derivative is $0$, then confirm it is really a minimum."`,
         },
         highlightField: 'x',
       },
       {
         text: {
-          zh: `${narrator}：移项：$3x^{2} = 3$`,
-          en: `${narrator}: "Rearrange: $3x^{2} = 3$"`,
+          zh: `${narrator}：先写出极小值的条件\n极值点先满足 $f'(x) = 0$。\n题目已经给出 $f'(x) = 3x^2 - 3$，所以我们解：\n$3x^2 - 3 = 0$`,
+          en: `${narrator}: "Write the condition for an extremum first\nAn extremum must first satisfy $f'(x) = 0$.\nThe problem already gives $f'(x) = 3x^2 - 3$, so we solve:\n$3x^2 - 3 = 0$"`,
         },
         highlightField: 'x',
       },
       {
         text: {
-          zh: `${narrator}：两边除以 3：$x^{2} = 1$，开方得 $x = 1$（取正值）`,
-          en: `${narrator}: "Divide both sides by 3: $x^{2} = 1$, take the square root: $x = 1$ (positive value)"`,
+          zh: `${narrator}：移项\n把常数 $-3$ 移到右边：\n$3x^2 = 3$`,
+          en: `${narrator}: "Rearrange\nMove the constant $-3$ to the right-hand side:\n$3x^2 = 3$"`,
         },
         highlightField: 'x',
       },
       {
         text: {
-          zh: `${narrator}：答案 $x = ${x}$! 这就是函数的极值点`,
-          en: `${narrator}: "Answer: $x = ${x}$! This is the extremum of the function"`,
+          zh: `${narrator}：再除以 $3$，并开方\n$x^2 = 1$\n所以 $x = \\pm 1$。\n但题目要求 $x > 0$，只取正根：$x = ${x}$。`,
+          en: `${narrator}: "Divide by $3$, then take the square root\n$x^2 = 1$\nSo $x = \\pm 1$.\nBut the problem requires $x > 0$, so we keep only the positive root: $x = ${x}$."`,
         },
         highlightField: 'x',
       },
       {
         text: {
-          zh: `${narrator}：验算\n代入 $x = ${x}$：$3 \\times ${x}^{2} - 3 = 3 \\times ${x * x} - 3 = ${3 * x * x - 3}$ ✓\n结果确实等于 $0$，验证成功！`,
-          en: `${narrator}: "Verify\nSubstitute $x = ${x}$: $3 \\times ${x}^{2} - 3 = 3 \\times ${x * x} - 3 = ${3 * x * x - 3}$ ✓\nResult is indeed $0$, verified!"`,
+          zh: `${narrator}：答案\n极小值点在 $x = ${x}$。\n最该加固的，就是城墙上的这个位置。`,
+          en: `${narrator}: "Answer\nThe local minimum point is at $x = ${x}$.\nThis is the part of the wall that should be reinforced first."`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算\n只满足 $f'(x)=0$ 还不够，还要确认它真的是“最小”不是“最大”。\n$f''(x) = 6x$，代入 $x = ${x}$：$f''(${x}) = 6 > 0$ ✓\n二阶导数为正，说明这里确实是极小值点。`,
+          en: `${narrator}: "Verify\nIt is not enough for $f'(x)=0$ — we must also confirm this point is a MINIMUM, not a maximum.\n$f''(x) = 6x$, and at $x = ${x}$ we get $f''(${x}) = 6 > 0$ ✓\nA positive second derivative confirms this point is truly a local minimum."`,
         },
         highlightField: 'x',
       },
@@ -959,4 +966,3 @@ export function generateRatioY8Mission(template: Mission): Mission {
    VENN generator: two-set Venn diagram problems
    Asks for intersection, union, complement, or set-only count
    ══════════════════════════════════════════════════════════ */
-

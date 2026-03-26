@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v8.8.0 (2026-03-26)
+> **最后更新**: v8.9.0 (2026-03-26)
 
 ---
 
@@ -25,21 +25,21 @@ Step 5: npm test -- --run     → 1776 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v8.8.0 (2026-03-26) |
-| **技术栈** | React 18 + TypeScript + Vite + KaTeX + Supabase |
+| **当前版本** | v8.9.0 (2026-03-26) |
+| **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (1776 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v8.8.0, 2026-03-26）
+## 三、当前状态快照（v8.9.0, 2026-03-26）
 
 ### 规模
 - **210 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(40) + Y11(25) + Y12(5)
-- **77 生成器类型**，100% 覆盖（所有关卡均有动态生成器）
-- **1,776 自动化测试**（77 生成器 × 20 次随机）
+- **71 个活跃 generatorType**，100% 覆盖（所有关卡均有动态生成器）
+- **1,776 个 Vitest 用例**（当前 `src/__tests__/generators.test.ts` 全绿）
 
-### 教程质量覆盖率（截至 v8.8.0）
+### 教程质量覆盖率（截至 v8.9.0）
 
 | 年级 | 关卡数 | 6步金标准 | WHY开场 | 验算结尾 | 状态 |
 |------|--------|-----------|---------|---------|------|
@@ -48,11 +48,11 @@ Step 5: npm test -- --run     → 1776 测试必须全通过
 | Y9 | 43 | ✅ 全达标 | ✅ 全达标 | ✅ 全达标 | **金标准** |
 | Y10 | 40 | ✅ 全达标 | ✅ 全达标 | ✅ 全达标 | **金标准** |
 | Y11 | 25 | ✅ 全达标 | ✅ 全达标 | ✅ 全达标 | **金标准** |
-| Y12 | 5 | ⚠️ 基础3步 | ❌ | ❌ | 遗留 |
+| Y12 | 5 | ✅ 全达标 | ✅ 全达标 | ✅ 全达标 | **金标准** ← v8.9.0 新完成 |
 
-**结论**: Y7-Y11 全部 215 关卡均达金标准。Y12 5关仍需升级（低优先级）。
+**结论**: Y7-Y12 全部 210 关卡均达金标准。
 
-### 本轮完成（v8.5→v8.8, 2026-03-26）
+### 本轮完成（v8.5→v8.9, 2026-03-26）
 
 #### v8.6.0 — 全项目严格质量审计 + BUG修复
 - `checkCorrectness.ts`: FUNC_VAL/ROOTS/PROBABILITY/TRIGONOMETRY 加除零守卫
@@ -70,12 +70,16 @@ Step 5: npm test -- --run     → 1776 测试必须全通过
   复利、均值/中位/众数、概率、联立方程、展开/因式分解、不等式、对称性、
   速度、标准形式、比例
 
+#### v8.9.0 — Y12 金标准收尾
+- `DERIVATIVE_RANDOM` 的 `func === '3x^2-3'` 分支重写为 7 步教程
+- mission `1211` 模板同步补齐为 WHY→脚手架→微操作→答案→验算
+- Y12 5 关全部完成金标准教程升级
+
 ### 已知遗留问题
 
 | 优先级 | 问题 | 位置 | 建议 |
 |--------|------|------|------|
-| LOW | Y12 5关教程仍是3步，无WHY无验算 | missions.ts id:1211-1215 | 按金标准7条铁律升级 |
-| LOW | `generateMission.ts` 中部分旧生成器无 `hint` 清零 | generateMission.ts | 搜 `hint:` 字段逐一清除 |
+| MEDIUM | 构建仍有 >500 kB chunk 警告 | Vite build output | 继续拆 `missions` / `index` 入口，增加延迟加载 |
 | INFO | missions.ts 体量 ~4700 行，未来可拆分 | missions.ts | 可按年级拆成 y7.ts/y8.ts 等 |
 
 ---
@@ -86,7 +90,7 @@ Step 5: npm test -- --run     → 1776 测试必须全通过
 | 文件 | 用途 | 优先级 |
 |------|------|--------|
 | `docs/CONTRIBUTING.md` | **唯一权威规范**（金标准/反模式/审查/新关卡流程） | **必读** |
-| `docs/DEVELOPMENT-PLAN.md` | 版本历程 v0.1→v8.8 + 下一步计划 | **必读** |
+| `docs/DEVELOPMENT-PLAN.md` | 版本历程 v0.1→v8.9 + 下一步计划 | **必读** |
 | `docs/BUG-POSTMORTEM.md` | Bug 根因分析 + 9 条防范规则 | **开发前必读** |
 | `docs/Y8-DEVELOPMENT-PLAN.md` | Y8 课纲接手计划（Y8 开发时读） | Y8 专用 |
 | `docs/OPTIMIZATION-HISTORY.md` | v0.1→v7.3 全量优化历史 | 参考 |
@@ -94,16 +98,17 @@ Step 5: npm test -- --run     → 1776 测试必须全通过
 ### 核心源文件
 | 文件 | 当前行数 | 说明 |
 |------|---------|------|
-| `src/data/missions.ts` | ~4700 | 全部关卡定义（Y7:id 690-773, Y8:811-896, Y9:901-993, Y10:1011-1053, Y11:1111-1131, Y12:1211-1215） |
-| `src/utils/generateMission.ts` | ~6650 | 全部生成器（77个类型） |
-| `src/utils/checkCorrectness.ts` | ~350 | 答案校验（含除零守卫） |
+| `src/data/missions.ts` | ~4920 | 全部关卡定义（Y7:id 690-773, Y8:811-896, Y9:901-993, Y10:1011-1053, Y11:1111-1131, Y12:1211/1221/1231-1233） |
+| `src/utils/generateMission.ts` | ~5 | 向后兼容的 barrel export |
+| `src/utils/generators/` | 7 文件 | 按章节拆分的生成器实现（71 个活跃类型） |
+| `src/utils/checkCorrectness.ts` | ~410 | 答案校验（含除零守卫） |
 | `src/utils/generators/advanced.ts` | ~500 | 高级生成器（RATIO_RANDOM/SECTOR/ROTATION等） |
-| `src/types.ts` | ~140 | Language / QuestionType / Mission 类型定义 |
-| `src/i18n/translations.ts` | ~490 | 三语 UI 翻译 (zh/zh_TW/en) |
-| `src/data/curriculum/kp-registry.ts` | ~800 | CIE 0580 的 294 个知识点注册表 |
-| `src/screens/PracticeScreen.tsx` | ~580 | 练习模式主屏幕 |
+| `src/types.ts` | ~193 | Language / QuestionType / Mission 类型定义 |
+| `src/i18n/translations.ts` | ~741 | 三语 UI 翻译 (zh/zh_TW/en) |
+| `src/data/curriculum/kp-registry.ts` | ~296 | CIE 0580 的 294 个知识点注册表 |
+| `src/screens/PracticeScreen.tsx` | ~685 | 练习模式主屏幕 |
 | `src/components/MathBattle/index.tsx` | ~523 | 闯关模式主组件（v8.4拆分后） |
-| `src/components/MathBattle/inputConfig.ts` | ~170 | 每个题型的输入字段配置 |
+| `src/components/MathBattle/inputConfig.ts` | ~196 | 每个题型的输入字段配置 |
 
 ---
 
@@ -144,7 +149,7 @@ if m:
 2. src/i18n/translations.ts → 添加 zh + zh_TW + en 三语翻译
 3. src/components/MathBattle/inputConfig.ts → 配置输入字段
 4. src/utils/checkCorrectness.ts → 添加 case 分支 + 除零守卫
-5. src/utils/generateMission.ts  → 注册生成器 + 编写生成函数
+5. src/utils/generators/index.ts + 对应章节文件 → 注册生成器 + 编写生成函数
 6. src/data/missions.ts          → 添加 mission 定义 + 6步教程
 7. src/screens/PracticeScreen.tsx → （可选）注册 SVG 图表
 ```
@@ -248,11 +253,11 @@ for mid, steps_raw in missions:
 
 | 优先级 | 任务 | 说明 |
 |--------|------|------|
-| HIGH | **Y12 5关升级** | id:1211-1215，从3步升级到6步金标准 |
-| MEDIUM | **Y7 Tutorial Refresh** | 部分Y7教程叙事老旧，按现代三国风格重写 |
+| HIGH | **CI 质量门禁** | GitHub Actions 补上 `npm run lint` + `npm test -- --run` |
+| MEDIUM | **Y7 Tutorial Refresh** | 部分 Y7 教程叙事老旧，按现代三国风格重写 |
 | MEDIUM | **新题型 SIMILAR_TRIANGLES** | Y9 相似三角形，有生成器需求 |
 | LOW | **missions.ts 拆分** | 按年级拆成 y7-missions.ts 等，降低文件体积 |
-| LOW | **generateMission.ts 清理** | 删除旧 `hint:` 字段残留 |
+| LOW | **Bundle 拆分** | 减少 `missions` / `index` chunk 体积 |
 | FUTURE | **v9.0.0 三币经济** | 金/银/铜三种货币系统 |
 | FUTURE | **班级远征** | 多人协作通关 |
 

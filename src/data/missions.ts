@@ -4812,19 +4812,35 @@ export const MISSIONS: Mission[] = [
     kpId: 'kp-2.12-01', sectionId: 'algebra',
     tutorialSteps: [
       {
-        text: { zh: '刘禅："城墙受力 $f(x) = x^3 - 3x$。求导数 $f\'(x)$，令其为零。"', en: 'Liu Shan: "Wall stress $f(x) = x^3 - 3x$. Find $f\'(x)$ and set it to zero."' },
+        text: { zh: '刘禅：为什么要找“最稳的防线”？\n城墙受力不会处处一样——有的地方压力大，有的地方压力最小。\n补强材料要先送到“压力最低的转折点”，才能用最少兵力守住成都。\n导数就是帮我们找到这个关键位置的工具。', en: 'Liu Shan: "Why find the most stable part of the wall?\nThe stress on the wall is not the same everywhere — some spots take more pressure, some take the least.\nReinforcements must go to the turning point with the LOWEST stress, so Chengdu can be defended with the least cost.\nDerivatives help us find that key position."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '刘禅："$f\'(x) = 3x^2 - 3 = 0 \\Rightarrow x^2 = 1$"', en: 'Liu Shan: "$f\'(x) = 3x^2 - 3 = 0 \\Rightarrow x^2 = 1$"' },
+        text: { zh: '刘禅：把图像想成一条山路\n走向谷底时，坡度会从负数慢慢变成 $0$；过了谷底，又从 $0$ 变回正数。\n所以“最低点”那一瞬间，切线会暂时变平，也就是导数 = $0$。\n先找导数为 $0$ 的位置，再确认它是不是极小值点。', en: 'Liu Shan: "Think of the graph as a mountain path\nAs you walk down into a valley, the slope goes from negative to $0$; after the valley, it changes from $0$ to positive.\nSo at the LOWEST point, the tangent briefly becomes flat, which means derivative = $0$.\nFirst find where the derivative is $0$, then confirm it is really a minimum."' },
         highlightField: 'x'
       },
       {
-        text: { zh: '刘禅："$x = 1$！此间乐，不思蜀。但防线还是要守的。"', en: 'Liu Shan: "$x = 1$! I am happy here. But the defense must be held."' },
+        text: { zh: '刘禅：先写出极小值的条件\n极值点先满足 $f\'(x) = 0$。\n题目已经给出 $f\'(x) = 3x^2 - 3$，所以我们解：\n$3x^2 - 3 = 0$', en: 'Liu Shan: "Write the condition for an extremum first\nAn extremum must first satisfy $f\'(x) = 0$.\nThe problem already gives $f\'(x) = 3x^2 - 3$, so we solve:\n$3x^2 - 3 = 0$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '刘禅：移项\n把常数 $-3$ 移到右边：\n$3x^2 = 3$', en: 'Liu Shan: "Rearrange\nMove the constant $-3$ to the right-hand side:\n$3x^2 = 3$"' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '刘禅：再除以 $3$，并开方\n$x^2 = 1$\n所以 $x = \\pm 1$。\n但题目要求 $x > 0$，只取正根：$x = 1$。', en: 'Liu Shan: "Divide by $3$, then take the square root\n$x^2 = 1$\nSo $x = \\pm 1$.\nBut the problem requires $x > 0$, so we keep only the positive root: $x = 1$."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '刘禅：答案\n极小值点在 $x = 1$。\n最该加固的，就是城墙上的这个位置。', en: 'Liu Shan: "Answer\nThe local minimum point is at $x = 1$.\nThis is the part of the wall that should be reinforced first."' },
+        highlightField: 'x'
+      },
+      {
+        text: { zh: '刘禅：验算\n只满足 $f\'(x)=0$ 还不够，还要确认它真的是“最小”不是“最大”。\n$f\'\'(x) = 6x$，代入 $x = 1$：$f\'\'(1) = 6 > 0$ ✓\n二阶导数为正，说明这里确实是极小值点。', en: 'Liu Shan: "Verify\nIt is not enough for $f\'(x)=0$ — we must also confirm this point is a MINIMUM, not a maximum.\n$f\'\'(x) = 6x$, and at $x = 1$ we get $f\'\'(1) = 6 > 0$ ✓\nA positive second derivative confirms this point is truly a local minimum."' },
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '二阶导数大于零的点为极小值点。', en: 'Points where the second derivative is positive are local minima.' }, formula: "$f'(x) = 3x^2 - 3 = 0 \\Rightarrow x = 1$", tips: [{ zh: "刘禅提示：此间乐，不思蜀。但防线还是要守的。", en: "Liu Shan Tip: I am happy here and don't miss Shu. But the defense must be held." }] },
+    secret: { concept: { zh: '先令一阶导数等于 0 找候选点，再用二阶导数判断是极大还是极小。', en: 'First set the first derivative to 0 to find candidate points, then use the second derivative to decide maximum or minimum.' }, formula: "$f'(x) = 3x^2 - 3 = 0 \\Rightarrow x = 1,\\quad f''(1) = 6 > 0$", tips: [{ zh: "刘禅提示：导数先找转折点，二阶导数再确认是不是最低点。", en: "Liu Shan Tip: Use the first derivative to find the turning point, then the second derivative to confirm it is the lowest point." }] },
     storyConsequence: { correct: { zh: '最后的防线——导数精准！做得漂亮！', en: 'The Final Stand — Well done!' }, wrong: { zh: '导数计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
