@@ -136,7 +136,6 @@ export default function App() {
   const pendingErrorsRef = useRef<import('./utils/diagnoseError').ErrorType[]>([]);
   // Track latest score to avoid stale closure in per-phase XP awards
   const latestScoreRef = useRef(0);
-  if (profile) latestScoreRef.current = profile.total_score;
 
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
   const {
@@ -145,6 +144,9 @@ export default function App() {
   } = useProfile(user, isGuest);
   const { missions } = useMissions();
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom } = useMultiplayer(user, profile);
+
+  // Must be after profile declaration
+  if (profile) latestScoreRef.current = profile.total_score;
 
   // Persist state across page refresh
   useEffect(() => {
