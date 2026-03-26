@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, X } from 'lucide-react';
-import type { Language, Room, RoomPlayer } from '../types';
+import { Trophy, X, RefreshCw } from 'lucide-react';
+import type { Language, Room, RoomPlayer, Mission } from '../types';
 import { lt } from '../i18n/resolveText';
 import { CHARACTERS } from '../data/characters';
+import { MISSIONS } from '../data/missions';
 import { Confetti } from './Confetti';
 
 /** XP multiplier by rank (1st, 2nd, 3rd, rest) */
@@ -22,13 +23,19 @@ export const PKResultPanel = ({
   lang,
   room,
   currentUserId,
+  grade,
   onClose,
+  onNextRound,
 }: {
   lang: Language;
   room: Room;
   currentUserId: string;
+  grade?: number;
   onClose: () => void;
+  onNextRound?: (missionId: number) => void;
 }) => {
+  const isHost = room.hostId === currentUserId;
+  const [showPicker, setShowPicker] = useState(false);
   const players = Object.entries(room.players)
     .sort(([, a], [, b]) => b.score - a.score);
 
@@ -209,18 +216,57 @@ export const PKResultPanel = ({
           })}
         </div>
 
-        {/* Close button — only after all revealed */}
+        {/* Action buttons — only after all revealed */}
         <AnimatePresence>
           {revealStep >= totalPlayers && (
-            <motion.button
+            <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              onClick={onClose}
-              className="w-full py-3 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-colors text-sm"
+              className="space-y-2"
             >
-              {lang === 'en' ? 'Back to Map' : '返回地图'}
-            </motion.button>
+              {/* Host: next round button */}
+              {isHost && onNextRound && !showPicker && (
+                <button
+                  onClick={() => setShowPicker(true)}
+                  className="w-full py-3 bg-amber-500 text-slate-900 font-black rounded-2xl hover:bg-amber-400 transition-colors text-sm flex items-center justify-center gap-2"
+                >
+                  <RefreshCw size={16} />
+                  {lang === 'en' ? 'Next Round — Pick New Topic' : '换题再战'}
+                </button>
+              )}
+
+              {/* Mission picker (host only) */}
+              {showPicker && onNextRound && (
+                <div className="max-h-48 overflow-y-auto rounded-xl border border-white/10 bg-slate-700/50 p-2 space-y-1">
+                  {MISSIONS.filter(m => m.grade === (grade ?? 7)).map(m => (
+                    <button
+                      key={m.id}
+                      onClick={() => { onNextRound(m.id); setShowPicker(false); }}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
+                        m.id === room.missionId
+                          ? 'bg-indigo-500/30 text-indigo-300'
+                          : 'text-white/70 hover:bg-white/10'
+                      }`}
+                    >
+                      {lt(m.title, lang)}
+                      {m.id === room.missionId && <span className="ml-1 text-[10px] text-indigo-400">({lang === 'en' ? 'current' : '当前'})</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <button
+                onClick={onClose}
+                className={`w-full py-3 font-black rounded-2xl transition-colors text-sm ${
+                  isHost && onNextRound
+                    ? 'bg-slate-600 text-white/70 hover:bg-slate-500'
+                    : 'bg-indigo-600 text-white hover:bg-indigo-500'
+                }`}
+              >
+                {lang === 'en' ? 'Leave Room' : '离开房间'}
+              </button>
+            </motion.div>
           )}
         </AnimatePresence>
       </motion.div>

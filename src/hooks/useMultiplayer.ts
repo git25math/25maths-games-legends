@@ -133,6 +133,20 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
 
   const leaveRoom = () => setActiveRoom(null);
 
+  /** Host starts a new round with a different mission. Resets all player states. */
+  const startNextRound = async (newMissionId: number): Promise<boolean> => {
+    if (!user || !activeRoom || activeRoom.hostId !== user.id) return false;
+    const resetPlayers: Record<string, RoomPlayer> = {};
+    for (const [uid, p] of Object.entries(activeRoom.players)) {
+      resetPlayers[uid] = { ...p, score: 0, isReady: false, finishedAt: undefined };
+    }
+    const updates = { mission_id: newMissionId, status: 'waiting' as const, players: resetPlayers };
+    const { error } = await supabase.from('gl_rooms').update(updates).eq('id', activeRoom.id);
+    if (error) { handleSupabaseError(error, 'update', 'gl_rooms'); return false; }
+    setActiveRoom({ ...activeRoom, ...updates, missionId: newMissionId });
+    return true;
+  };
+
   // Sync room state: polling every 2s + realtime attempt
   useEffect(() => {
     if (!activeRoom) return;
@@ -156,5 +170,5 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     };
   }, [activeRoom?.id]);
 
-  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom };
+  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, startNextRound };
 }

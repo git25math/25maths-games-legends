@@ -143,7 +143,7 @@ export default function App() {
     getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
   const { missions } = useMissions();
-  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom } = useMultiplayer(user, profile);
+  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, startNextRound } = useMultiplayer(user, profile);
 
   // Must be after profile declaration
   if (profile) latestScoreRef.current = profile.total_score;
@@ -209,6 +209,17 @@ export default function App() {
       setGameState('map');
     }
   }, [activeRoom?.status]);
+
+  // PK: When room resets to 'waiting' (host picked next round), navigate back to lobby
+  useEffect(() => {
+    if (activeRoom?.status === 'waiting' && showPKResult) {
+      setShowPKResult(false);
+      pkAutoCompleteRef.current = false;
+      setGameState('lobby');
+    } else if (activeRoom?.status === 'waiting' && gameState === 'map' && activeRoom.type === 'pk') {
+      setGameState('lobby');
+    }
+  }, [activeRoom?.status, activeRoom?.missionId]);
 
   // PK: When non-host detects room status='playing' via realtime, auto-enter battle
   useEffect(() => {
@@ -1087,6 +1098,25 @@ export default function App() {
               lang={lang}
               room={activeRoom}
               currentUserId={user.id}
+              grade={profile?.grade ?? 7}
+              onNextRound={async (missionId: number) => {
+                // Apply XP bonus first, then start next round
+                if (profile) {
+                  const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
+                  const myRank = ranked.findIndex(([uid]) => uid === user.id);
+                  const myScore = activeRoom.players[user.id]?.score ?? 0;
+                  const multiplier = getRankMultiplier(myRank);
+                  const bonusXP = Math.round(myScore * (multiplier - 1));
+                  if (bonusXP > 0) {
+                    await updateProfile({ total_score: profile.total_score + bonusXP });
+                  }
+                }
+                setShowPKResult(false);
+                pkAutoCompleteRef.current = false;
+                await startNextRound(missionId);
+                // Room resets to 'waiting' — lobby will show via activeRoom.status === 'waiting'
+                setGameState('map');
+              }}
               onClose={async () => {
                 // Apply PK rank XP bonus
                 if (profile) {
