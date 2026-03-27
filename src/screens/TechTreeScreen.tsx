@@ -306,6 +306,32 @@ export const TechTreeScreen = ({
                     ? 'border-white/10 bg-white/5'
                     : 'border-amber-500/30 bg-amber-950/30'
                 }`}>
+                  {/* Health Score bar — always show when health < 100 */}
+                  {selectedTopicData.nodeState.healthScore < 100 && selectedTopicData.nodeState.status !== 'locked' && (
+                    <div className="mb-3">
+                      <div className="flex items-center justify-between text-[10px] mb-1">
+                        <span className="text-white/40 font-bold">{lang === 'en' ? 'Skill Health' : '技能健康度'}</span>
+                        <span className={`font-black ${
+                          selectedTopicData.nodeState.healthScore >= 75 ? 'text-emerald-400' :
+                          selectedTopicData.nodeState.healthScore >= 50 ? 'text-amber-400' :
+                          selectedTopicData.nodeState.healthScore >= 25 ? 'text-orange-400' :
+                          'text-rose-400'
+                        }`}>{selectedTopicData.nodeState.healthScore}%</span>
+                      </div>
+                      <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all ${
+                            selectedTopicData.nodeState.healthScore >= 75 ? 'bg-emerald-400' :
+                            selectedTopicData.nodeState.healthScore >= 50 ? 'bg-amber-400' :
+                            selectedTopicData.nodeState.healthScore >= 25 ? 'bg-orange-400' :
+                            'bg-rose-500'
+                          }`}
+                          style={{ width: `${selectedTopicData.nodeState.healthScore}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   {selectedTopicData.nodeState.status === 'corrupted' && (
                     <div>
                       <div className="flex items-center gap-2 text-rose-400 text-xs font-bold mb-2">

@@ -9,6 +9,7 @@ import { INPUT_FIELDS } from './inputConfig';
 import { staggerContainer, staggerItem } from '../../utils/animationPresets';
 import { parseAnswer } from '../../utils/parseAnswer';
 import { diagnoseError } from '../../utils/diagnoseError';
+import { getPattern } from '../../utils/errorPatterns';
 
 const LABELS = {
   zh: {
@@ -112,14 +113,29 @@ export function WrongAnswerPanel({
       </div>
 
       {/* Error diagnosis — the soul of the panel */}
-      <div className={`rounded-lg p-3 text-sm font-bold leading-relaxed ${
-        diagnosis.type === 'method' ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' :
-        diagnosis.type === 'sign' || diagnosis.type === 'rounding' ? 'bg-blue-50 text-blue-800 border border-blue-200' :
-        diagnosis.type === 'magnitude' ? 'bg-orange-50 text-orange-800 border border-orange-200' :
-        'bg-slate-100 text-slate-700 border border-slate-200'
-      }`}>
-        {diagnosis.message[lang]}
-      </div>
+      {(() => {
+        // Map legacy type to pattern for enhanced display
+        const patternMap: Record<string, string> = { sign: 'sign_distribution', method: 'generic_algebra', rounding: 'generic_number', magnitude: 'generic_number' };
+        const pattern = getPattern(patternMap[diagnosis.type] ?? '');
+        return (
+          <div className={`rounded-lg p-3 text-sm font-bold leading-relaxed ${
+            diagnosis.type === 'method' ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' :
+            diagnosis.type === 'sign' || diagnosis.type === 'rounding' ? 'bg-blue-50 text-blue-800 border border-blue-200' :
+            diagnosis.type === 'magnitude' ? 'bg-orange-50 text-orange-800 border border-orange-200' :
+            'bg-slate-100 text-slate-700 border border-slate-200'
+          }`}>
+            {pattern && (
+              <div className="flex items-center gap-1.5 mb-1.5 opacity-70">
+                <span className="text-base">{pattern.icon}</span>
+                <span className="text-[10px] font-black uppercase tracking-wider">
+                  {lang === 'en' ? pattern.label.en : pattern.label.zh}
+                </span>
+              </div>
+            )}
+            {diagnosis.message[lang]}
+          </div>
+        );
+      })()}
 
       {/* Answer comparison */}
       <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-2">
