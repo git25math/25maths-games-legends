@@ -25,14 +25,14 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v8.10.1 (2026-03-27) |
+| **当前版本** | v9.0.0 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (1783 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v8.10.1, 2026-03-27）
+## 三、当前状态快照（v9.0.0, 2026-03-27）
 
 ### 规模
 - **210 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(40) + Y11(25) + Y12(5)
@@ -95,6 +95,17 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 - `App.tsx`: `Map/Lobby/Battle/Practice/Dashboard/PK/Expedition` 切到 `Suspense` 懒加载
 - 构建主入口 `563.39 kB → 323.83 kB`，地图页单独拆出 `45.90 kB` chunk
 
+#### v9.0.0 — 背包系统 + 道具修复 + 科技树完整上线
+
+- `InventoryPanel.tsx`: 🎒 背包面板上线 — MapScreen 新增"背包"按钮（桌面端 + 移动端 More 菜单），显示持有道具清单
+- `RepairDialog.tsx`: 道具修复弹窗上线 — EquipmentPanel 内每件受损装备新增"🔨 使用道具"按钮，消耗库存修复装备耐久
+- `EquipmentPanel.tsx`: 新增 `onRepairWithItem?` prop，在练习修复按钮旁增加道具修复入口
+- `MapScreen.tsx`: 添加 `showInventory` + `repairDialogTarget` 状态，完整 RepairDialog 渲染逻辑（含 health/dominantError 计算）
+- `TechTreeScreen.tsx`: 任务卡片改为 Practice + Battle 双按钮（BookOpen/Swords）
+- `TechNode.tsx`: 修复 zh_TW 受損标签（繁体正确显示）
+- `gameBalance.ts`: 新建游戏平衡常量集中管理（Stamina/Decay/Rewards/RepairPower/TechTree 阈值）
+- `equipment.ts` / `repairItems.ts` / `stamina.ts`: 所有魔术数字替换为 `gameBalance` 导入
+
 #### v8.10.1 — Bug 修复 + missions 按年级拆包
 - `checkCorrectness.ts`: ROOTS 负判别式守卫（`disc < 0` → 防 NaN）+ QUADRATIC x2=0 守卫
 - `BugReportButton.tsx`: 移到左下角，避免与 Calculator 右侧叠放过近
@@ -112,7 +123,8 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 
 | 优先级 | 问题 | 位置 | 建议 |
 |--------|------|------|------|
-| INFO | WIP TechTree/Inventory/Stamina 文件已提交但未集成 | src/components/ src/utils/ | v9.0 需要继续开发这些模块（三币经济框架雏形） |
+| LOW | 道具修复 `applyRepair` 用 lastMasteredAt 反向计算，忽略 error penalty 项，health 略估高 | App.tsx `onRepairWithItem` | 可接受，完整修复需在 KPEquipment 加 `healthBonus` 字段 |
+| LOW | RepairDialog onRepair 关闭前无动画等待（1.2s success toast 后直接关闭 dialog） | MapScreen repairDialogTarget | 后续可改为监听 RepairDialog success 状态 |
 
 ---
 
