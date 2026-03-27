@@ -37,6 +37,8 @@ import { getRankMultiplier } from './utils/pkRank';
 import { getStamina, getRemainingAttempts, consumeAttempt, grantBonusAttempt } from './utils/stamina';
 import { getInventory, addItem, useItem } from './utils/inventory';
 import { awardBattleItems, computeRecoveryReward } from './utils/repairItems';
+import { buildRecoveryPath, advanceRecoveryStep, isRecoveryComplete, getCurrentStep, getRecoverySession } from './utils/recoveryPath';
+import type { RecoverySession } from './utils/recoveryPath';
 
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
 const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
@@ -158,6 +160,7 @@ export default function App() {
   const [repairCompleteInfo, setRepairCompleteInfo] = useState<{ missionId: number; bonus: number; scrollAwarded: boolean } | null>(null);
   const [pendingBattleMission, setPendingBattleMission] = useState<Mission | null>(null);
   const [itemRewardToast, setItemRewardToast] = useState<{ items: { itemId: string; reason: string }[] } | null>(null);
+  const [recoverySession, setRecoverySession] = useState<RecoverySession | null>(null);
 
   // Refs to accumulate mid-battle updates that get merged into handleBattleComplete's single save
   const pendingSeasonTasksRef = useRef<string[]>([]);
@@ -201,6 +204,14 @@ export default function App() {
       setActiveMission(found);
     }
   }, [missions, missionsLoading]);
+
+  // Restore recovery session from profile on load
+  useEffect(() => {
+    if (profile && !recoverySession) {
+      const saved = getRecoverySession(profile.completed_missions as any);
+      if (saved) setRecoverySession(saved);
+    }
+  }, [profile?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // If Supabase auth restored a session, jump to map
   useEffect(() => {
@@ -945,6 +956,7 @@ export default function App() {
 
               {!isMissionShellLoading && gameState === 'practice' && activeMission && selectedChar && (
                 <PracticeScreen
+                  key={`practice-${activeMission.id}-${isRepairMode}`}
                   mission={activeMission}
                   character={selectedChar}
                   lang={lang}
@@ -957,12 +969,8 @@ export default function App() {
                     return rec ? getDominantPattern(rec) : null;
                   })() : null}
                   onRepairIntercept={() => {
-                    // v5.0: Switch to repair mode for the same mission (don't return to map)
+                    // v5.0: Switch to repair mode — key prop forces remount
                     setIsRepairMode(true);
-                    // Force PracticeScreen to re-mount in repair mode by briefly clearing activeMission
-                    const m = activeMission;
-                    setActiveMission(null);
-                    setTimeout(() => setActiveMission(m), 0);
                   }}
                   onComplete={async () => {
                     // Save practice completion — all 4 phases done (XP already awarded per-phase)
@@ -1068,19 +1076,40 @@ export default function App() {
                       sp = incrementTaskCount(sp, 'weekly_repair_1');
                       const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
                       cm._season = updatedProgress;
+                      // Recovery session: advance step if active
+                      if (recoverySession) {
+                        const advanced = advanceRecoveryStep(recoverySession);
+                        if (isRecoveryComplete(advanced)) {
+                          // All steps done — clear recovery session
+                          delete cm._recovery;
+                          setRecoverySession(null);
+                        } else {
+                          // Save advanced session state
+                          cm._recovery = advanced;
+                          setRecoverySession(advanced);
+                        }
+                      }
+
                       await updateProfile({
                         completed_missions: cm,
                         total_score: profile.total_score + bonus,
                       });
                       setIsRepairMode(false);
-                      // v5.0 Step 5+6: Show "Skill Stabilised" closure with retry option
-                      setRepairCompleteInfo({
-                        missionId: activeMission.id,
-                        bonus,
-                        scrollAwarded: !!scrollAwarded,
-                      });
-                      setGameState('map');
-                      // Don't clear activeMission yet — needed for retry
+
+                      if (recoverySession) {
+                        // In recovery mode: go back to tech tree to show next step
+                        setGameState('tech_tree');
+                        setActiveMission(null);
+                      } else {
+                        // Normal repair: show "Skill Stabilised" closure
+                        setRepairCompleteInfo({
+                          missionId: activeMission.id,
+                          bonus,
+                          scrollAwarded: !!scrollAwarded,
+                        });
+                        setGameState('map');
+                      }
+                      // Don't clear activeMission yet — needed for retry (non-recovery)
                       if (bonus > 0) {
                         setRepairToast({ bonus });
                         setTimeout(() => setRepairToast(null), 3000);
@@ -1170,6 +1199,54 @@ export default function App() {
                       setIsRepairMode(true);
                       setGameState('practice');
                     }
+                  }}
+                  onStartRecovery={(topicId) => {
+                    if (!profile) return;
+                    const cm = profile.completed_missions as any;
+                    const mistakesMap = (cm?._mistakes ?? {}) as Record<string, import('./utils/errorMemory').MistakeRecord>;
+                    // Find dominant error for this topic
+                    const topicMissions = missions.filter(m => m.kpId?.match(new RegExp(`^kp-${topicId.replace('.', '\\.')}`)));
+                    let dominant: import('./utils/diagnoseError').ErrorType = 'method';
+                    let maxErr = 0;
+                    for (const m of topicMissions) {
+                      const rec = mistakesMap[String(m.id)];
+                      if (rec && rec.count > maxErr) {
+                        maxErr = rec.count;
+                        const d = getDominantPattern(rec);
+                        if (d) dominant = d;
+                      }
+                    }
+                    const session = buildRecoveryPath(topicId, dominant, mistakesMap, missions);
+                    if (session) {
+                      const newCm = { ...cm, _recovery: session };
+                      updateProfile({ completed_missions: newCm });
+                      setRecoverySession(session);
+                    } else {
+                      // No weak prereqs — fall back to direct repair
+                      const m = topicMissions[0];
+                      if (m) {
+                        setActiveMission(m);
+                        setIsRepairMode(true);
+                        setGameState('practice');
+                      }
+                    }
+                  }}
+                  recoverySession={recoverySession}
+                  onRecoveryStepStart={(missionId) => {
+                    const m = missions.find(m => m.id === missionId);
+                    if (m) {
+                      setActiveMission(m);
+                      setIsRepairMode(true);
+                      setGameState('practice');
+                    }
+                  }}
+                  onRecoveryCancelled={async () => {
+                    if (profile) {
+                      const cm = { ...(profile.completed_missions as any) };
+                      delete cm._recovery;
+                      await updateProfile({ completed_missions: cm });
+                    }
+                    setRecoverySession(null);
                   }}
                 />
               )}
@@ -1438,8 +1515,8 @@ export default function App() {
                 <p className="text-white/70 font-bold text-xs">
                   {itemRewardToast.items.map(i =>
                     i.itemId === 'crystal' ? (lang === 'en' ? 'Master Crystal' : '精通水晶') :
-                    i.itemId === 'hammer' ? (lang === 'en' ? 'Repair Hammer' : '修复锤') :
-                    (lang === 'en' ? 'Purify Scroll' : '净化卷轴')
+                    i.itemId === 'hammer' ? (lang === 'en' ? 'Repair Hammer' : lang === 'zh_TW' ? '修復錘' : '修复锤') :
+                    (lang === 'en' ? 'Purify Scroll' : lang === 'zh_TW' ? '淨化卷軸' : '净化卷轴')
                   ).join(' + ')}
                 </p>
               </div>

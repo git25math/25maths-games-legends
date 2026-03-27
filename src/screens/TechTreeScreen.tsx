@@ -11,6 +11,8 @@ import { lt } from '../i18n/resolveText';
 import { toTraditional } from '../i18n/zhHantMap';
 import { hasAnyPracticeCompletion } from '../utils/completionState';
 import { useAudio } from '../audio';
+import type { RecoverySession } from '../utils/recoveryPath';
+import { RecoveryPathPanel } from '../components/RecoveryPathPanel';
 
 const LABELS = {
   zh: {
@@ -65,6 +67,10 @@ export const TechTreeScreen = ({
   onMissionStart,
   onPracticeStart,
   onRepairMission,
+  onStartRecovery,
+  recoverySession,
+  onRecoveryStepStart,
+  onRecoveryCancelled,
 }: {
   lang: Language;
   profile: UserProfile;
@@ -73,6 +79,10 @@ export const TechTreeScreen = ({
   onMissionStart: (mission: Mission) => void;
   onPracticeStart: (mission: Mission) => void;
   onRepairMission?: (missionId: number) => void;
+  onStartRecovery?: (topicId: string) => void;
+  recoverySession?: RecoverySession | null;
+  onRecoveryStepStart?: (missionId: number) => void;
+  onRecoveryCancelled?: () => void;
 }) => {
   const l = LABELS[lang];
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
@@ -254,21 +264,38 @@ export const TechTreeScreen = ({
                         <Wrench size={12} />
                         {l.corrupted}
                       </div>
-                      {onRepairMission && selectedTopicData.topicMissions.length > 0 && (
-                        <button
-                          onClick={() => {
-                            // Find the most-errored mission in this topic to repair
-                            const missionToRepair = selectedTopicData.topicMissions[0];
-                            if (missionToRepair) {
-                              setSelectedTopicId(null);
-                              onRepairMission(missionToRepair.id);
-                            }
-                          }}
-                          className="w-full py-2 rounded-lg bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold hover:bg-rose-500/30 transition-colors flex items-center justify-center gap-1.5"
-                        >
-                          <Wrench size={12} />
-                          {lang === 'en' ? 'Repair Skill' : lang === 'zh_TW' ? '修復技能' : '修复技能'}
-                        </button>
+                      {selectedTopicData.topicMissions.length > 0 && (
+                        <div className="space-y-2">
+                          {/* Recovery Path: deep recursive healing journey */}
+                          {onStartRecovery && (
+                            <button
+                              onClick={() => {
+                                setSelectedTopicId(null);
+                                onStartRecovery(selectedTopicData.topicId);
+                              }}
+                              className="w-full py-2 rounded-lg bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-bold hover:bg-amber-500/30 transition-colors flex items-center justify-center gap-1.5"
+                            >
+                              <Flame size={12} />
+                              {lang === 'en' ? 'Recovery Path' : lang === 'zh_TW' ? '修復路徑' : '修复路径'}
+                            </button>
+                          )}
+                          {/* Fallback: direct single-mission repair */}
+                          {onRepairMission && (
+                            <button
+                              onClick={() => {
+                                const missionToRepair = selectedTopicData.topicMissions[0];
+                                if (missionToRepair) {
+                                  setSelectedTopicId(null);
+                                  onRepairMission(missionToRepair.id);
+                                }
+                              }}
+                              className="w-full py-2 rounded-lg bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold hover:bg-rose-500/30 transition-colors flex items-center justify-center gap-1.5"
+                            >
+                              <Wrench size={12} />
+                              {lang === 'en' ? 'Quick Repair' : lang === 'zh_TW' ? '快速修復' : '快速修复'}
+                            </button>
+                          )}
+                        </div>
                       )}
                     </div>
                   )}
@@ -411,6 +438,22 @@ export const TechTreeScreen = ({
               <p className="text-white/70 font-bold text-xs">{unlockToast}</p>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Recovery Path Panel — shown when an active recovery session exists */}
+      <AnimatePresence>
+        {recoverySession && onRecoveryStepStart && onRecoveryCancelled && (
+          <RecoveryPathPanel
+            lang={lang}
+            session={recoverySession}
+            missions={missions}
+            onStartStep={(missionId) => {
+              setSelectedTopicId(null);
+              onRecoveryStepStart(missionId);
+            }}
+            onCancel={onRecoveryCancelled}
+          />
         )}
       </AnimatePresence>
     </div>

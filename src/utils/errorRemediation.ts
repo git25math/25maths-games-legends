@@ -750,3 +750,53 @@ export function getAllRemediations(topicId: string): Record<ErrorType, Remediati
   }
   return result;
 }
+
+/**
+ * Deep recursive trace: follow remediation links all the way to ch1 roots.
+ * Unlike getRemediationChain (max 4 levels, collects all branches),
+ * this function:
+ *   - Goes up to maxDepth=8
+ *   - Only collects nodes that are actually WEAK (errors ≥ weakThreshold)
+ *   - Deduplicates by topicId (first occurrence wins)
+ *   - Returns nodes in DFS order (immediate prereq → deepest root)
+ *
+ * The caller should REVERSE the result for a "start from deepest" path.
+ */
+export function getDeepRemediationPath(
+  topicId: string,
+  errorType: ErrorType,
+  mistakes: Record<string, MistakeRecord>,
+  missionTopicMap: Map<string, number[]>,
+  weakThreshold = 3,
+  maxDepth = 8,
+): RemediationEntry[] {
+  const visited = new Set<string>();
+  const path: RemediationEntry[] = [];
+
+  function recurse(tid: string, etype: ErrorType, depth: number) {
+    if (depth > maxDepth || visited.has(tid)) return;
+    visited.add(tid);
+
+    const targets = getRemediationTopics(tid, etype);
+    for (const target of targets) {
+      // Only include nodes that are actually weak
+      const missionIds = missionTopicMap.get(target.topicId) ?? [];
+      const isWeak = missionIds.some(mid => {
+        const rec = mistakes[String(mid)];
+        return rec && rec.count >= weakThreshold;
+      });
+
+      if (isWeak) {
+        path.push(target);
+        // Continue tracing through this weak node
+        const topicDominant = getTopicDominantError(missionIds, mistakes);
+        if (topicDominant) {
+          recurse(target.topicId, topicDominant, depth + 1);
+        }
+      }
+    }
+  }
+
+  recurse(topicId, errorType, 0);
+  return path;
+}

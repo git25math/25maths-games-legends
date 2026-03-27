@@ -163,7 +163,7 @@ function getTopicPrereqs(chapter: Chapter, topicIndex: number, topicId: string):
 // ── Core computation ──
 
 /** Build mission-to-topic mapping from missions array */
-function buildMissionTopicMap(missions: Mission[]): Map<string, number[]> {
+export function buildMissionTopicMap(missions: Mission[]): Map<string, number[]> {
   const map = new Map<string, number[]>();
 
   for (const m of missions) {
