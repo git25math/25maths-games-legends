@@ -80,16 +80,19 @@ export const ShopPanel = ({
         </div>
         <p className="text-xs text-white/40 mb-4">{l.subtitle}</p>
 
-        {/* Currency balance */}
-        <div className="flex gap-2 mb-5 flex-wrap">
-          {(['merit', 'wisdom', 'rations'] as const).map(type => {
-            const cl = CURRENCY_LABELS[type];
-            return (
-              <span key={type} className="px-2 py-1 bg-white/5 border border-white/10 rounded-lg text-xs text-white/70 font-bold flex items-center gap-1">
-                {cl.icon} {cl[lang]} <span className="text-white font-black">{balance[type]}</span>
-              </span>
-            );
-          })}
+        {/* Currency balance + earn hint */}
+        <div className="mb-4 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10">
+          <div className="flex gap-2 flex-wrap mb-1.5">
+            {(['merit', 'wisdom', 'rations'] as const).map(type => {
+              const cl = CURRENCY_LABELS[type];
+              return (
+                <span key={type} className="px-2 py-1 bg-white/5 border border-white/10 rounded-lg text-xs text-white/80 font-bold flex items-center gap-1">
+                  {cl.icon} {cl[lang]} <span className="text-white font-black">{balance[type]}</span>
+                </span>
+              );
+            })}
+          </div>
+          <p className="text-[9px] text-white/30">{l.howToEarn}</p>
         </div>
 
         {/* Shop items */}
@@ -112,8 +115,13 @@ export const ShopPanel = ({
                 <div className="flex-1 min-w-0">
                   <p className={`text-sm font-bold truncate ${colors.text}`}>{lt(item.name, lang)}</p>
                   <p className="text-[10px] text-white/40 truncate">{lt(item.description, lang)}</p>
-                  <p className="text-[10px] mt-0.5 font-bold text-white/60">
+                  <p className={`text-[10px] mt-0.5 font-bold ${canAfford ? 'text-white/60' : 'text-rose-400/70'}`}>
                     {currLabel.icon} {currLabel[lang]} × {price.amount}
+                    {!canAfford && (
+                      <span className="ml-1 text-white/30">
+                        ({lang === 'en' ? 'have' : '当前'} {balance[price.type]})
+                      </span>
+                    )}
                   </p>
                 </div>
                 <button
@@ -139,9 +147,9 @@ export const ShopPanel = ({
           })}
         </div>
 
-        {/* How to earn hint */}
-        <div className="mt-4 px-3 py-2 rounded-xl bg-white/5 text-[10px] text-white/30">
-          {l.howToEarn}
+        {/* Rations earn hint */}
+        <div className="mt-3 px-3 py-2 rounded-xl bg-white/5 text-[10px] text-white/25">
+          🍚 {lang === 'en' ? 'Rations: complete daily tasks' : lang === 'zh_TW' ? '軍糧：完成每日軍令' : '军粮：完成每日军令'}
         </div>
       </motion.div>
     </motion.div>

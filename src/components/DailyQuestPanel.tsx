@@ -2,7 +2,8 @@ import { motion } from 'motion/react';
 import { Scroll, CheckCircle2, ChevronRight, Flame } from 'lucide-react';
 import type { Language, Mission } from '../types';
 import { SEASON_1_TASKS } from '../data/seasons/season1';
-import { getSeasonProgress, getTaskStatus } from '../utils/seasonTracker';
+import { getSeasonProgress, getTaskStatus, isDailyTask } from '../utils/seasonTracker';
+import { CURRENCY_REWARDS } from '../utils/currency';
 import { lt } from '../i18n/resolveText';
 
 const LABELS = {
@@ -88,20 +89,30 @@ export const DailyQuestPanel = ({
                 )}
               </div>
               {canQuickStart ? (
-                <button
-                  onClick={() => isBattleTask ? onBattleStart!(recommendedMission!) : onSmartStart(recommendedMission!)}
-                  className={`shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-black transition-colors ${
-                    isBattleTask
-                      ? 'bg-rose-600/30 border border-rose-500/30 text-rose-300 hover:bg-rose-600/50'
-                      : 'bg-indigo-600/30 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600/50'
-                  }`}
-                >
-                  {isBattleTask ? l.battle : l.practice} →
-                </button>
+                <div className="flex flex-col items-end gap-0.5 shrink-0">
+                  <button
+                    onClick={() => isBattleTask ? onBattleStart!(recommendedMission!) : onSmartStart(recommendedMission!)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-black transition-colors ${
+                      isBattleTask
+                        ? 'bg-rose-600/30 border border-rose-500/30 text-rose-300 hover:bg-rose-600/50'
+                        : 'bg-indigo-600/30 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600/50'
+                    }`}
+                  >
+                    {isBattleTask ? l.battle : l.practice} →
+                  </button>
+                  {isDailyTask(task.id) && (
+                    <span className="text-[9px] text-emerald-400/60">🍚 +{CURRENCY_REWARDS.DAILY_TASK}</span>
+                  )}
+                </div>
               ) : (
-                <span className={`text-[10px] font-black shrink-0 ${s.completed ? 'text-emerald-400' : 'text-amber-400/50'}`}>
-                  +{task.seasonXP} {l.xp}
-                </span>
+                <div className="flex flex-col items-end gap-0.5 shrink-0">
+                  <span className={`text-[10px] font-black ${s.completed ? 'text-emerald-400' : 'text-amber-400/50'}`}>
+                    +{task.seasonXP} {l.xp}
+                  </span>
+                  {isDailyTask(task.id) && (
+                    <span className={`text-[9px] ${s.completed ? 'text-emerald-400/50 line-through' : 'text-emerald-400/60'}`}>🍚 +{CURRENCY_REWARDS.DAILY_TASK}</span>
+                  )}
+                </div>
               )}
             </div>
           );

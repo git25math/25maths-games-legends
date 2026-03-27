@@ -49,5 +49,5 @@ export const SHOP_PRICES: Record<string, { type: 'merit' | 'wisdom' | 'rations';
   scroll_rounding: { type: 'wisdom', amount: 50  },
   scroll_magnitude:{ type: 'wisdom', amount: 50  },
   scroll_method:   { type: 'wisdom', amount: 50  },
-  crystal:         { type: 'merit',  amount: 100 },
+  crystal:         { type: 'merit',  amount: 80  },
 } as const;

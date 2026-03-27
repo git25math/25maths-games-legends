@@ -672,17 +672,16 @@ export const MapScreen = ({
                 }
               </p>
             )}
-            {/* ── Three-currency display ── */}
+            {/* ── Three-currency display (always visible; zero = muted) ── */}
             {(() => {
               const bal = getCurrency(profile.completed_missions as Record<string, unknown>);
-              const nonZero = (['merit', 'wisdom', 'rations'] as const).filter(k => bal[k] > 0);
-              if (nonZero.length === 0) return null;
               return (
                 <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                  {nonZero.map(type => {
+                  {(['merit', 'wisdom', 'rations'] as const).map(type => {
                     const lbl = CURRENCY_LABELS[type];
-                    const color = type === 'merit' ? 'text-amber-400' : type === 'wisdom' ? 'text-purple-400' : 'text-emerald-400';
-                    const bg = type === 'merit' ? 'bg-amber-500/10 border-amber-500/20' : type === 'wisdom' ? 'bg-purple-500/10 border-purple-500/20' : 'bg-emerald-500/10 border-emerald-500/20';
+                    const isZero = bal[type] === 0;
+                    const color = isZero ? 'text-white/25' : type === 'merit' ? 'text-amber-400' : type === 'wisdom' ? 'text-purple-400' : 'text-emerald-400';
+                    const bg = isZero ? 'bg-white/5 border-white/10' : type === 'merit' ? 'bg-amber-500/10 border-amber-500/20' : type === 'wisdom' ? 'bg-purple-500/10 border-purple-500/20' : 'bg-emerald-500/10 border-emerald-500/20';
                     return (
                       <span key={type} className={`flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-black ${bg} ${color}`}>
                         {lbl.icon} {bal[type]} {lang === 'en' ? lbl.en : lang === 'zh_TW' ? lbl.zh_TW : lbl.zh}
