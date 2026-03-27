@@ -1210,3 +1210,153 @@ export function generateSectorMission(template: Mission, tier: DifficultyTier = 
   };
 }
 
+/* ══════════════════════════════════════════════════════════
+   CIRCLE THEOREM generator (Y10)
+   Theorem A: angle in semicircle = 90°
+   Theorem B: angle at centre = 2 × angle at circumference
+   ══════════════════════════════════════════════════════════ */
+
+export function generateCircleTheoremMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  const theoremType = (template.data?.theoremType as 'semicircle' | 'center_double') || pickRandom(['semicircle', 'center_double'] as const);
+  const narrator = pickRandom(['周瑜', '诸葛亮']);
+
+  if (theoremType === 'semicircle') {
+    // Given one non-right angle, find the other in a semicircle triangle
+    const knownRanges: Record<number, [number, number]> = { 1: [20, 60], 2: [15, 70], 3: [10, 78] };
+    const [lo, hi] = knownRanges[tier];
+    const knownAngle = randInt(lo, hi);
+    const answer = 90 - knownAngle;
+
+    const description: BilingualText = {
+      zh: `AB 是直径，C 在圆上。$\\angle ABC = ${knownAngle}°$，求 $\\angle BAC$。`,
+      en: `AB is a diameter, C is on the circle. $\\angle ABC = ${knownAngle}°$, find $\\angle BAC$.`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: {
+          zh: `${narrator}：为什么要学圆中角度？\n赤壁之战，周瑜从岸上观察曹军船阵——"哪个位置看到的角度最大？"\n古希腊数学家泰勒斯发现：圆的直径所对的圆周角，永远是直角！\n无论 C 在圆上哪个位置，$\\angle ACB$ 都等于 $90°$。这就是"直径所对圆周角定理"。`,
+          en: `${narrator}: "Why learn circle angles?\nAt the Battle of Red Cliffs, Zhou Yu watched Cao Cao's fleet from shore — 'which position gives the widest angle?'\nAncient Greek mathematician Thales discovered: the inscribed angle subtended by a diameter is always a right angle!\nNo matter where C is on the circle, ∠ACB always equals 90°. This is the Thales' theorem."`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：关键定理\n直径所对的圆周角 = $90°$\n因为 AB 是直径，所以 $\\angle ACB = 90°$。\n三角形内角和 = $180°$，所以另外两个角加起来 = $90°$。`,
+          en: `${narrator}: "Key theorem\nThe inscribed angle subtended by a diameter = $90°$\nSince AB is a diameter, $\\angle ACB = 90°$.\nAngles in a triangle sum to $180°$, so the other two angles add up to $90°$."`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：已知信息\n$\\angle ABC = ${knownAngle}°$（已知）\n$\\angle ACB = 90°$（直径所对圆周角）\n三角形三个角加起来 = $180°$。`,
+          en: `${narrator}: "Given info\n$\\angle ABC = ${knownAngle}°$ (given)\n$\\angle ACB = 90°$ (angle in semicircle)\nThree angles of triangle sum to $180°$."`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：建立方程\n$\\angle BAC + \\angle ABC + \\angle ACB = 180°$\n$\\angle BAC + ${knownAngle}° + 90° = 180°$\n$\\angle BAC = 180° - ${knownAngle}° - 90°$`,
+          en: `${narrator}: "Set up the equation\n$\\angle BAC + \\angle ABC + \\angle ACB = 180°$\n$\\angle BAC + ${knownAngle}° + 90° = 180°$\n$\\angle BAC = 180° - ${knownAngle}° - 90°$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：计算答案\n$\\angle BAC = 180° - ${knownAngle}° - 90° = ${answer}°$`,
+          en: `${narrator}: "Calculate\n$\\angle BAC = 180° - ${knownAngle}° - 90° = ${answer}°$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算\n三角形三角之和：$${answer}° + ${knownAngle}° + 90° = ${answer + knownAngle + 90}°$ ✓\n完美！所有角之和等于 $180°$。`,
+          en: `${narrator}: "Verify\nSum of angles: $${answer}° + ${knownAngle}° + 90° = ${answer + knownAngle + 90}°$ ✓\nPerfect! All angles sum to $180°$."`,
+        },
+        highlightField: 'x',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { knownAngle, answer, theoremType: 'semicircle', generatorType: 'CIRCLE_THEOREM_RANDOM' },
+      tutorialSteps,
+    };
+  } else {
+    // Theorem B: angle at centre = 2 × angle at circumference
+    // Given central angle, find inscribed angle (or vice versa)
+    const isGivenCentral = pickRandom([true, false]);
+    const inscribedRanges: Record<number, [number, number]> = { 1: [20, 60], 2: [15, 75], 3: [10, 85] };
+    const [lo, hi] = inscribedRanges[tier];
+    const inscribedAngle = randInt(lo, hi);
+    const centralAngle = inscribedAngle * 2;
+
+    const knownAngle = isGivenCentral ? centralAngle : inscribedAngle;
+    const answer = isGivenCentral ? inscribedAngle : centralAngle;
+    const findLabel: BilingualText = isGivenCentral
+      ? { zh: '圆周角', en: 'inscribed angle' }
+      : { zh: '圆心角', en: 'central angle' };
+    const knownLabel: BilingualText = isGivenCentral
+      ? { zh: '圆心角', en: 'central angle' }
+      : { zh: '圆周角', en: 'inscribed angle' };
+
+    const description: BilingualText = {
+      zh: `同弧所对${knownLabel.zh} = $${knownAngle}°$，求${findLabel.zh}（$x$）。`,
+      en: `The ${knownLabel.en} subtending the same arc = $${knownAngle}°$. Find the ${findLabel.en} ($x$).`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: {
+          zh: `${narrator}：为什么圆心角是圆周角的两倍？\n想象圆心 O、圆上两点 A 和 B，以及圆上另一点 C。\n"圆心角"是从圆心看到 AB 的角，"圆周角"是从 C 看到 AB 的角。\nC 站在"边缘"看，视角只有圆心的一半——这是几何的奇妙规律！`,
+          en: `${narrator}: "Why is the central angle double the inscribed angle?\nImagine centre O, two points A and B on the circle, and another point C on the circle.\nThe 'central angle' is the angle from the centre to AB; the 'inscribed angle' is the angle from C to AB.\nC is at the 'edge' — its viewing angle is exactly half the centre's. This is a beautiful pattern!"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：核心定理\n同弧所对圆心角 = 2 × 圆周角\n换句话说：圆周角 = $\\frac{1}{2}$ × 圆心角\n这对圆上任意位置的点 C 都成立（C 和 AB 同侧）。`,
+          en: `${narrator}: "Core theorem\nCentral angle = 2 × inscribed angle (subtending same arc)\nIn other words: inscribed angle = $\\frac{1}{2}$ × central angle\nThis holds for any point C on the circle on the same side as the arc."`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：识别已知量\n已知${knownLabel.zh} = $${knownAngle}°$\n要求${findLabel.zh} = $x$`,
+          en: `${narrator}: "Identify the known\n${knownLabel.en} = $${knownAngle}°$ (given)\nFind ${findLabel.en} = $x$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：写出关系式\n圆心角 = 2 × 圆周角\n${isGivenCentral ? `$${centralAngle}° = 2 × x$` : `$x = 2 × ${inscribedAngle}°$`}`,
+          en: `${narrator}: "Write the relationship\nCentral angle = 2 × inscribed angle\n${isGivenCentral ? `$${centralAngle}° = 2 × x$` : `$x = 2 × ${inscribedAngle}°$`}"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：计算答案\n$x = ${answer}°$`,
+          en: `${narrator}: "Calculate\n$x = ${answer}°$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算\n圆心角 $${centralAngle}°$ ÷ 2 = 圆周角 $${inscribedAngle}°$ ✓\n比例关系成立！`,
+          en: `${narrator}: "Verify\nCentral angle $${centralAngle}°$ ÷ 2 = inscribed angle $${inscribedAngle}°$ ✓\nThe ratio holds!"`,
+        },
+        highlightField: 'x',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { knownAngle, answer, isGivenCentral, inscribedAngle, centralAngle, theoremType: 'center_double', generatorType: 'CIRCLE_THEOREM_RANDOM' },
+      tutorialSteps,
+    };
+  }
+}
+

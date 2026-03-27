@@ -13,7 +13,7 @@ import { generateIntegerAddMission, generateIntegerMulMission, generateFracAddSa
 
 import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateExpandNegMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission } from './algebra';
 
-import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission } from './geometry';
+import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission, generateCircleTheoremMission } from './geometry';
 
 import { generateProbSimpleMission, generateProbIndMission, generateStatsMeanMission, generateStatsMedianMission, generateStatsRangeMission, generateStatsModeMission, generateCumFreqMission } from './statistics';
 
@@ -44,7 +44,8 @@ export type GeneratorType =
   | 'CIRCLE_Y8_RANDOM' | 'VOLUME_Y8_RANDOM' | 'PERCENTAGE_INTEREST_RANDOM'
   | 'PARALLEL_ANGLES_RANDOM' | 'SYMMETRY_RANDOM' | 'SIMULTANEOUS_Y8_RANDOM'
   | 'RATIO_Y8_RANDOM' | 'VENN_RANDOM' | 'ROTATION_RANDOM'
-  | 'ENLARGEMENT_RANDOM' | 'VECTOR_ADD_RANDOM' | 'CUMFREQ_RANDOM' | 'SECTOR_RANDOM';
+  | 'ENLARGEMENT_RANDOM' | 'VECTOR_ADD_RANDOM' | 'CUMFREQ_RANDOM' | 'SECTOR_RANDOM'
+  | 'CIRCLE_THEOREM_RANDOM';
 
 /* ── Generator dispatch map ── */
 
@@ -110,6 +111,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   VOLUME_RANDOM: generateVolumeMission,
   VOLUME_Y8_RANDOM: generateVolumeY8Mission,
   SECTOR_RANDOM: generateSectorMission,
+  CIRCLE_THEOREM_RANDOM: generateCircleTheoremMission,
 
   // Statistics (CH8+CH9)
   PROBABILITY_SIMPLE_RANDOM: generateProbSimpleMission,
