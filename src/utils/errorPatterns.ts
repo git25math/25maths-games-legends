@@ -20,7 +20,7 @@ import type { ErrorType } from './diagnoseError';
 // ═══════════════════════════════════════════════════════════════
 
 export type ErrorPattern = {
-  id: string;                    // e.g., "sign_distribution_error"
+  id: string;                    // e.g., "sign_distribution"
   domain: string;                // e.g., "algebra"
   topicIds: string[];            // tech tree topics this pattern affects
   label: { en: string; zh: string };
@@ -29,6 +29,7 @@ export type ErrorPattern = {
   severityWeight: number;        // 1.0 = normal, 1.5 = severe
   legacyType: ErrorType;         // maps to existing diagnoseError type
   recoveryHint: { en: string; zh: string };
+  recoveryPackId: string;        // e.g., "RP-ALG-001"
 };
 
 /** Central error pattern registry — single source of truth */
@@ -50,6 +51,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'Remember: multiply the sign to EVERY term inside the bracket.',
       zh: '记住：把括号外的符号乘到括号内的每一项。',
     },
+    recoveryPackId: 'RP-ALG-001',
   },
 
   term_omission: {
@@ -68,6 +70,27 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'Count the terms: multiply each term inside by the factor outside.',
       zh: '数一数项数：外面的因子要乘到里面的每一项。',
     },
+    recoveryPackId: 'RP-ALG-002',
+  },
+
+
+  coefficient_distribution: {
+    id: 'coefficient_distribution',
+    domain: 'algebra',
+    topicIds: ['2.2'],
+    label: { en: 'Coefficient Distribution Error', zh: '系数分配计算错误' },
+    description: {
+      en: 'Expansion structure correct but coefficient multiplication is wrong.',
+      zh: '展开结构正确但系数乘法计算出错。',
+    },
+    icon: '×',
+    severityWeight: 1.1,
+    legacyType: 'method',
+    recoveryHint: {
+      en: 'Multiply the outside number by EACH coefficient inside: 4(2x-3) means 4×2x and 4×(-3).',
+      zh: '把外面的数和里面每个系数相乘：4(2x-3) 就是 4×2x 和 4×(-3)。',
+    },
+    recoveryPackId: 'RP-ALG-004',
   },
 
   like_term_merge: {
@@ -86,6 +109,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'Like terms have the same letter and power. Only add/subtract the coefficients.',
       zh: '同类项的字母和次数相同，只需加减系数。',
     },
+    recoveryPackId: 'RP-ALG-003',
   },
 
   operation_order: {
@@ -104,6 +128,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'BODMAS: Brackets → Orders → Division/Multiplication → Addition/Subtraction.',
       zh: '运算顺序：括号 → 指数 → 乘除 → 加减。',
     },
+    recoveryPackId: 'RP-NUM-001',
   },
 
   // ── Algebra: Equations ──
@@ -123,6 +148,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'To "undo" an operation: + ↔ −, × ↔ ÷, ^2 ↔ √.',
       zh: '逆运算：加↔减，乘↔除，平方↔开根号。',
     },
+    recoveryPackId: 'RP-ALG-005',
   },
 
   equation_balance: {
@@ -141,6 +167,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'Whatever you do to one side, do exactly the same to the other side.',
       zh: '对一边做的操作，另一边也要做完全一样的。',
     },
+    recoveryPackId: 'RP-ALG-006',
   },
 
   // ── Number: Fractions ──
@@ -160,6 +187,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'Add/subtract: find common denominator first. Multiply: top × top, bottom × bottom.',
       zh: '加减：先通分。乘法：分子×分子，分母×分母。',
     },
+    recoveryPackId: 'RP-NUM-002',
   },
 
   // ── Number: Percentages ──
@@ -179,6 +207,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'Increase: multiply by (1 + r). Decrease: multiply by (1 − r). Base is always the ORIGINAL.',
       zh: '增加：×(1+r)。减少：×(1−r)。基数永远是原来的值。',
     },
+    recoveryPackId: 'RP-NUM-003',
   },
 
   // ── Geometry: Angles ──
@@ -198,6 +227,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'Triangle = 180°. Quadrilateral = 360°. Polygon = (n−2) × 180°.',
       zh: '三角形 = 180°。四边形 = 360°。多边形 = (n−2) × 180°。',
     },
+    recoveryPackId: 'RP-GEO-001',
   },
 
   // ── Trigonometry ──
@@ -217,6 +247,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'SOH CAH TOA: Sin=Opposite/Hypotenuse, Cos=Adjacent/Hypotenuse, Tan=Opposite/Adjacent.',
       zh: 'SOH CAH TOA: Sin=对边/斜边, Cos=邻边/斜边, Tan=对边/邻边。',
     },
+    recoveryPackId: 'RP-TRIG-001',
   },
 
   // ── Statistics ──
@@ -236,6 +267,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
       en: 'Mean = sum ÷ count. Median = middle value when sorted.',
       zh: '均值 = 总和÷个数。中位数 = 排序后的中间值。',
     },
+    recoveryPackId: 'RP-STAT-001',
   },
 
   // ── Generic fallbacks ──
@@ -249,6 +281,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
     severityWeight: 0.8,
     legacyType: 'method',
     recoveryHint: { en: 'Review the algebraic steps carefully.', zh: '仔细回顾代数步骤。' },
+    recoveryPackId: 'RP-ALG-000',
   },
 
   generic_number: {
@@ -261,6 +294,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
     severityWeight: 0.7,
     legacyType: 'method',
     recoveryHint: { en: 'Double-check your arithmetic step by step.', zh: '逐步检查你的计算。' },
+    recoveryPackId: 'RP-NUM-000',
   },
 
   generic_geometry: {
@@ -273,6 +307,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
     severityWeight: 0.8,
     legacyType: 'method',
     recoveryHint: { en: 'Review the geometric properties and formulas.', zh: '回顾几何性质和公式。' },
+    recoveryPackId: 'RP-GEO-000',
   },
 };
 
