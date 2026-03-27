@@ -35,6 +35,7 @@ import { getStamina, getRemainingAttempts } from '../utils/stamina';
 import { getInventory, getTotalItems } from '../utils/inventory';
 import type { CharacterProgression } from '../types';
 import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completionState';
+import { getCurrency, CURRENCY_LABELS } from '../utils/currency';
 
 
 const CHAPTER_IMAGES = [
@@ -665,6 +666,26 @@ export const MapScreen = ({
                 }
               </p>
             )}
+            {/* ── Three-currency display ── */}
+            {(() => {
+              const bal = getCurrency(profile.completed_missions as Record<string, unknown>);
+              const nonZero = (['merit', 'wisdom', 'rations'] as const).filter(k => bal[k] > 0);
+              if (nonZero.length === 0) return null;
+              return (
+                <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                  {nonZero.map(type => {
+                    const lbl = CURRENCY_LABELS[type];
+                    const color = type === 'merit' ? 'text-amber-400' : type === 'wisdom' ? 'text-purple-400' : 'text-emerald-400';
+                    const bg = type === 'merit' ? 'bg-amber-500/10 border-amber-500/20' : type === 'wisdom' ? 'bg-purple-500/10 border-purple-500/20' : 'bg-emerald-500/10 border-emerald-500/20';
+                    return (
+                      <span key={type} className={`flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-black ${bg} ${color}`}>
+                        {lbl.icon} {bal[type]} {lang === 'en' ? lbl.en : lang === 'zh_TW' ? lbl.zh_TW : lbl.zh}
+                      </span>
+                    );
+                  })}
+                </div>
+              );
+            })()}
             {/* ── Core buttons (always visible) ── */}
             <div className="flex flex-wrap items-center gap-2 mt-1">
               <p className="text-indigo-400 font-bold text-sm">{selectedChar ? lt(selectedChar.name, lang) : ''}</p>

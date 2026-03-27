@@ -35,6 +35,7 @@ import type { Expedition } from './data/expeditions';
 import { hasAnyPracticeCompletion, markPracticeCompleted } from './utils/completionState';
 import { getRankMultiplier } from './utils/pkRank';
 import { getStamina, getRemainingAttempts, consumeAttempt, grantBonusAttempt } from './utils/stamina';
+import { awardCurrency, CURRENCY_REWARDS } from './utils/currency';
 import { getInventory, addItem, useItem } from './utils/inventory';
 import { awardBattleItems, computeRecoveryReward } from './utils/repairItems';
 import { buildRecoveryPath, advanceRecoveryStep, isRecoveryComplete, getCurrentStep, getRecoverySession } from './utils/recoveryPath';
@@ -653,6 +654,12 @@ export default function App() {
           }
         }
 
+        // Award merit currency for battle win
+        awardCurrency(cm, 'merit', CURRENCY_REWARDS.BATTLE_WIN);
+        if (isDailyBattle) {
+          awardCurrency(cm, 'merit', CURRENCY_REWARDS.DAILY_WIN_BONUS);
+        }
+
         // Step 6: Single atomic updateProfile call (use latestScoreRef — not stale battleData.newScore)
         latestScoreRef.current = prevScore + score;
         await updateProfile({ total_score: prevScore + score, completed_missions: cm, stats });
@@ -1104,6 +1111,8 @@ export default function App() {
                         lastMasteredAt: Date.now(),
                         repairCount: existingEq?.repairCount ?? 0,
                       };
+                      // Award wisdom currency for practice completion
+                      awardCurrency(cm, 'wisdom', CURRENCY_REWARDS.PRACTICE_COMPLETE);
                       // Merge pending errors
                       if (pendingErrorsRef.current.length > 0) {
                         cm._mistakes = recordErrors(
