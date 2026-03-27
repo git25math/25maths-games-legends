@@ -279,11 +279,16 @@ export const TechTreeScreen = ({
                     <div>
                       <div className="flex items-center gap-2 text-orange-400 text-xs font-bold mb-2">
                         <AlertTriangle size={12} />
-                        {lang === 'en'
-                          ? `Upstream skill ${selectedTopicData.nodeState.upstreamCorrupted} is unstable`
-                          : lang === 'zh_TW'
-                          ? `上游技能 ${selectedTopicData.nodeState.upstreamCorrupted} 不穩定`
-                          : `上游技能 ${selectedTopicData.nodeState.upstreamCorrupted} 不稳定`}
+                        {(() => {
+                          const upId = selectedTopicData.nodeState.upstreamCorrupted;
+                          const upInfo = upId ? getTopicInfo(upId) : null;
+                          const upName = upInfo ? (lang === 'en' ? upInfo.topic.title : lang === 'zh_TW' ? toTraditional(upInfo.topic.titleZh) : upInfo.topic.titleZh) : upId;
+                          return lang === 'en'
+                            ? `Upstream "${upName}" is corrupted`
+                            : lang === 'zh_TW'
+                            ? `上游「${upName}」已受損`
+                            : `上游「${upName}」已受损`;
+                        })()}
                       </div>
                       <p className="text-[11px] text-white/30 mb-2">
                         {lang === 'en'
@@ -292,21 +297,20 @@ export const TechTreeScreen = ({
                           ? '請先修復上游技能以穩定此節點。'
                           : '请先修复上游技能以稳定此节点。'}
                       </p>
-                      {onRepairMission && selectedTopicData.nodeState.upstreamCorrupted && (
+                      {selectedTopicData.nodeState.upstreamCorrupted && (
                         <button
                           onClick={() => {
-                            // Navigate to the corrupted upstream topic
                             setSelectedTopicId(selectedTopicData.nodeState!.upstreamCorrupted!);
                           }}
                           className="w-full py-2 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-400 text-xs font-bold hover:bg-orange-500/30 transition-colors flex items-center justify-center gap-1.5"
                         >
                           <Wrench size={12} />
-                          {lang === 'en' ? `Go to ${selectedTopicData.nodeState.upstreamCorrupted}` : `前往 ${selectedTopicData.nodeState.upstreamCorrupted}`}
+                          {lt({ zh: '前往修复上游技能', en: 'Go fix upstream skill' }, lang)}
                         </button>
                       )}
                     </div>
                   )}
-                  {(selectedTopicData.nodeState.status === 'researching' || selectedTopicData.nodeState.status === 'available') && (
+                  {(selectedTopicData.nodeState.status === 'researching' || selectedTopicData.nodeState.status === 'available' || selectedTopicData.nodeState.status === 'at_risk') && (
                     <div className="flex items-center gap-2">
                       <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
                         <div
