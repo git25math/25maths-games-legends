@@ -42,7 +42,8 @@ import type { RecoverySession } from './utils/recoveryPath';
 
 import { BottomNav, type BottomTab } from "./components/BottomNav";
 import { Confetti } from './components/Confetti';
-import { processAttempt, getSkillHealth, setSkillHealth, processRecoveryComplete, type AttemptResult } from './utils/processAttempt';
+import { useLessonRecovery } from './hooks/useLessonRecovery';
+import { processAttempt, getSkillHealth, setSkillHealth, processRecoveryComplete, getSkillHealthMap, type AttemptResult } from './utils/processAttempt';
 import { detectErrorPattern, getPattern, ERROR_PATTERNS } from './utils/errorPatterns';
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
 const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
@@ -189,6 +190,12 @@ export default function App() {
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
   const hasRestoredMissionRef = useRef(false);
+
+  // ExamHub lesson recovery detection — "you just completed training!"
+  const { offer: lessonRecoveryOffer, dismiss: dismissLessonRecovery } = useLessonRecovery(
+    user?.id ?? null,
+    profile?.completed_missions ?? null,
+  );
 
   // Must be after profile declaration
   if (profile) latestScoreRef.current = profile.total_score;
@@ -1635,6 +1642,53 @@ export default function App() {
                     (lang === 'en' ? 'Purify Scroll' : lang === 'zh_TW' ? '淨化卷軸' : '净化卷轴')
                   ).join(' + ')}
                 </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ═══ ExamHub Lesson Recovery Offer ═══ */}
+        <AnimatePresence>
+          {lessonRecoveryOffer && gameState === 'map' && (
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 60 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="fixed bottom-20 sm:bottom-24 left-1/2 -translate-x-1/2 z-[85] w-[90%] max-w-sm bg-purple-600/95 backdrop-blur-md border border-purple-400/40 rounded-2xl shadow-2xl p-4"
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-2xl flex-shrink-0">🎓</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-black text-sm mb-1">
+                    {lang === 'en' ? 'Training Complete!' : '特训完成！'}
+                  </p>
+                  <p className="text-purple-200 text-xs mb-3">
+                    {lang === 'en'
+                      ? "You just finished a guided lesson. Ready for another try?"
+                      : '你刚完成了引导课。准备好再挑战一次了吗？'}
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        dismissLessonRecovery();
+                        // Navigate to repair mode for the topic
+                        setRepairTopicId(lessonRecoveryOffer.topicId);
+                        setRepairPatternId(null);
+                        setGameState('repair');
+                      }}
+                      className="flex-1 py-2 bg-white/20 text-white font-bold text-xs rounded-lg hover:bg-white/30 transition-colors"
+                    >
+                      {lang === 'en' ? 'Retry Now →' : '再试一次 →'}
+                    </button>
+                    <button
+                      onClick={dismissLessonRecovery}
+                      className="px-3 py-2 text-purple-300/60 text-xs font-bold hover:text-purple-200 transition-colors"
+                    >
+                      {lang === 'en' ? 'Later' : '稍后'}
+                    </button>
+                  </div>
+                </div>
               </div>
             </motion.div>
           )}
