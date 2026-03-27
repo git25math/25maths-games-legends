@@ -133,11 +133,18 @@ export const TechNode = ({
             <p className={`text-xs font-bold truncate ${config.text}`}>{topic.id}</p>
             <p className="text-[10px] text-white/40 truncate">{title}</p>
           </div>
-          {state.total > 0 && (
-            <span className={`text-[10px] font-bold ${config.text}`}>
-              {state.progress}/{state.total}
-            </span>
-          )}
+          <div className="flex items-center gap-1">
+            {state.unlockableTopics.length > 0 && state.status === 'available' && (
+              <span className="text-[8px] font-bold text-cyan-400/60 bg-cyan-400/10 px-1 rounded">
+                →{state.unlockableTopics.length}
+              </span>
+            )}
+            {state.total > 0 && (
+              <span className={`text-[10px] font-bold ${config.text}`}>
+                {state.progress}/{state.total}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Progress bar for researching/available nodes */}

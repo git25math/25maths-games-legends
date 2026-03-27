@@ -482,6 +482,24 @@ export const MapScreen = ({
 
   // Memoize smart recommendation to avoid re-computing on every render
   const smartRecommendation = useMemo(() => {
+    // Check for corrupted skill nodes first — repair is highest priority
+    const skillHealthMap = (profile.completed_missions as any)?._skillHealth as Record<string, any> | undefined;
+    if (skillHealthMap) {
+      for (const [topicId, health] of Object.entries(skillHealthMap)) {
+        if (health && (health.corruptionLevel === 'blocked' || health.corruptionLevel === 'critical')) {
+          // Find a mission in this topic to suggest repair
+          const topicMission = gradeMissions.find(m => {
+            if (!m.kpId) return false;
+            const match = m.kpId.match(/^kp-(\d+\.\d+)/);
+            return match && match[1] === topicId;
+          });
+          if (topicMission) {
+            return { recommendedMission: topicMission, isWeakRecommendation: true as const, isRepairRecommendation: true as const, repairTopicId: topicId };
+          }
+        }
+      }
+    }
+    // Fallback: traditional weakness ranking
     const mistakes = getMistakes(profile.completed_missions as Record<string, unknown>);
     const weakRanked = rankByWeakness(mistakes);
     const gradeMissionIds = new Set(gradeMissions.map(m => m.id));
@@ -510,7 +528,9 @@ export const MapScreen = ({
             <span className="text-lg flex-shrink-0">{smartRecommendation.isWeakRecommendation ? '🔧' : '💡'}</span>
             <div className="min-w-0">
               <p className={`text-[10px] font-bold ${smartRecommendation.isWeakRecommendation ? 'text-rose-400' : 'text-indigo-400'}`}>
-                {smartRecommendation.isWeakRecommendation
+                {(smartRecommendation as any).isRepairRecommendation
+                  ? (lang === 'en' ? 'Skill needs repair' : '技能需要修复')
+                  : smartRecommendation.isWeakRecommendation
                   ? (lang === 'en' ? 'Needs review' : '建议复习')
                   : (lang === 'en' ? 'Next up' : '推荐下一步')}
               </p>
