@@ -43,7 +43,7 @@ export const PKSetupPanel = ({
         initial={{ scale: 0.9, y: 30 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 30 }}
-        className="bg-slate-800/95 border border-white/10 rounded-3xl p-5 max-w-md w-full max-h-[90vh] overflow-hidden flex flex-col"
+        className="bg-slate-800/95 border border-white/10 rounded-2xl sm:rounded-3xl p-3 sm:p-5 max-w-md w-full max-h-[90vh] overflow-hidden flex flex-col"
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-4">

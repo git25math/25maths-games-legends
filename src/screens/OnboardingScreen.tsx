@@ -49,11 +49,11 @@ export const OnboardingScreen = ({
   const phaseLabels = t.practicePhase as Record<string, string>;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] px-4">
+    <div className="flex flex-col items-center justify-center min-h-[80vh] px-3 sm:px-4">
       {/* Skip button */}
       <button
         onClick={skip}
-        className="absolute top-6 right-20 text-white/30 hover:text-white/60 text-sm font-bold transition-colors"
+        className="absolute top-4 sm:top-6 right-4 sm:right-20 text-white/30 hover:text-white/60 text-xs sm:text-sm font-bold transition-colors z-10"
       >
         {(t as any).skipOnboarding ?? 'Skip'}
       </button>
@@ -86,7 +86,7 @@ export const OnboardingScreen = ({
             </div>
 
             {/* Story text */}
-            <p className="text-xl md:text-2xl text-amber-100 font-bold leading-relaxed mb-10">
+            <p className="text-base sm:text-xl md:text-2xl text-amber-100 font-bold leading-relaxed mb-6 sm:mb-10">
               {t.onboardingStory}
             </p>
 
@@ -110,13 +110,13 @@ export const OnboardingScreen = ({
             transition={{ duration: 0.4 }}
             className="flex flex-col items-center text-center max-w-lg"
           >
-            <h2 className="text-2xl md:text-3xl font-black text-white mb-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-4 sm:mb-8">
               {t.onboardingPhaseTitle}
             </h2>
 
-            <div className="flex flex-col gap-4 w-full mb-10">
+            <div className="flex flex-col gap-3 sm:gap-4 w-full mb-6 sm:mb-10">
               {/* Green */}
-              <div className="flex items-center gap-4 bg-emerald-500/15 border border-emerald-500/30 rounded-2xl px-5 py-4">
+              <div className="flex items-center gap-4 bg-emerald-500/15 border border-emerald-500/30 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4">
                 <div className="w-12 h-12 bg-emerald-500/25 rounded-xl flex items-center justify-center shrink-0">
                   <Eye size={24} className="text-emerald-400" />
                 </div>
@@ -131,7 +131,7 @@ export const OnboardingScreen = ({
               </div>
 
               {/* Amber */}
-              <div className="flex items-center gap-4 bg-amber-500/15 border border-amber-500/30 rounded-2xl px-5 py-4">
+              <div className="flex items-center gap-4 bg-amber-500/15 border border-amber-500/30 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4">
                 <div className="w-12 h-12 bg-amber-500/25 rounded-xl flex items-center justify-center shrink-0">
                   <Lightbulb size={24} className="text-amber-400" />
                 </div>
@@ -146,7 +146,7 @@ export const OnboardingScreen = ({
               </div>
 
               {/* Red */}
-              <div className="flex items-center gap-4 bg-rose-500/15 border border-rose-500/30 rounded-2xl px-5 py-4">
+              <div className="flex items-center gap-4 bg-rose-500/15 border border-rose-500/30 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4">
                 <div className="w-12 h-12 bg-rose-500/25 rounded-xl flex items-center justify-center shrink-0">
                   <Sword size={24} className="text-rose-400" />
                 </div>
@@ -188,10 +188,10 @@ export const OnboardingScreen = ({
               </div>
             </div>
 
-            <h2 className="text-2xl md:text-3xl font-black text-white mb-3">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-3">
               {t.onboardingGuideTitle}
             </h2>
-            <p className="text-lg text-white/60 mb-10">
+            <p className="text-sm sm:text-lg text-white/60 mb-6 sm:mb-10">
               {t.onboardingGuideDesc}
             </p>
 
