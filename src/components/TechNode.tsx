@@ -90,14 +90,28 @@ export const TechNode = ({
 
   return (
     <div className="flex flex-col items-center">
-      {/* Connecting line from previous node */}
+      {/* Connecting line from previous node — glows based on status */}
       {!isFirst && (
-        <div className={`w-0.5 h-6 ${
-          state.status === 'locked' ? 'bg-white/5' :
-          state.status === 'corrupted' ? 'bg-rose-400/30' :
-          state.status === 'at_risk' ? 'bg-orange-400/20' :
-          'bg-white/20'
-        }`} />
+        <div className="relative">
+          <div className={`w-0.5 h-6 ${
+            state.status === 'locked' ? 'bg-white/5' :
+            state.status === 'corrupted' ? 'bg-rose-400/40' :
+            state.status === 'at_risk' ? 'bg-orange-400/30' :
+            state.status === 'unlocked' ? 'bg-emerald-400/50' :
+            state.status === 'available' ? 'bg-cyan-400/40' :
+            'bg-amber-400/30'
+          }`} />
+          {/* Glow effect for active connections */}
+          {(state.status === 'unlocked' || state.status === 'corrupted') && (
+            <motion.div
+              animate={{ opacity: [0.2, 0.6, 0.2] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              className={`absolute inset-0 w-1 -left-[1px] blur-sm ${
+                state.status === 'corrupted' ? 'bg-rose-400' : 'bg-emerald-400'
+              }`}
+            />
+          )}
+        </div>
       )}
 
       {/* Node */}

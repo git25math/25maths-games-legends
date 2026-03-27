@@ -25,6 +25,7 @@ import { INPUT_FIELDS } from '../components/MathBattle/inputConfig';
 import { MathView, LatexText } from '../components/MathView';
 import { interpolate } from '../utils/interpolate';
 import { useAudio } from '../audio';
+import { Confetti } from '../components/Confetti';
 
 type RepairPhase = 'diagnosis' | 'practice' | 'complete';
 
@@ -50,7 +51,8 @@ export const RepairScreen = ({
   const [correctCount, setCorrectCount] = useState(0);
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [showFeedback, setShowFeedback] = useState<'correct' | 'wrong' | null>(null);
-  const { playCorrect, playWrong, playVictory, playTap } = useAudio();
+  const { playCorrect, playWrong, playVictory, playTap, playBadgeUnlock } = useAudio();
+  const [confettiTrigger, setConfettiTrigger] = useState(0);
 
   const TOTAL_QUESTIONS = 5;
   const SUCCESS_THRESHOLD = 0.8; // 80% = 4/5
@@ -104,6 +106,11 @@ export const RepairScreen = ({
       setShowFeedback(null);
       setInputs({});
       if (currentQ + 1 >= TOTAL_QUESTIONS) {
+        const finalCorrect = correctCount + (showFeedback === 'correct' ? 0 : 0); // already incremented above
+        if (correctCount >= Math.ceil(TOTAL_QUESTIONS * SUCCESS_THRESHOLD)) {
+          playBadgeUnlock();
+          setConfettiTrigger(t => t + 1);
+        }
         playVictory();
         setPhase('complete');
       } else {
@@ -138,15 +145,35 @@ export const RepairScreen = ({
             <ArrowLeft size={16} /> {lang === 'en' ? 'Back' : '返回'}
           </button>
 
-          {/* Header */}
-          <div className="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-5 text-center">
-            <div className="w-16 h-16 bg-rose-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Wrench size={28} className="text-rose-400" />
+          {/* Header with crack effect */}
+          <div className="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-5 text-center relative overflow-hidden">
+            {/* Pulsing crack lines */}
+            <motion.div
+              animate={{ opacity: [0.15, 0.4, 0.15] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'radial-gradient(circle at 30% 40%, rgba(251,113,133,0.3) 0%, transparent 40%), radial-gradient(circle at 70% 60%, rgba(251,113,133,0.2) 0%, transparent 35%)',
+              }}
+            />
+            <div className="relative">
+              <motion.div
+                animate={{ scale: [1, 1.05, 1], boxShadow: ['0 0 0px rgba(251,113,133,0)', '0 0 20px rgba(251,113,133,0.4)', '0 0 0px rgba(251,113,133,0)'] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                className="w-16 h-16 bg-rose-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-rose-500/30"
+              >
+                <Wrench size={28} className="text-rose-400" />
+              </motion.div>
+              <h2 className="text-xl font-black text-white mb-2">
+                {lang === 'en' ? 'Repair Mode' : '修复模式'}
+              </h2>
+              <p className="text-rose-300 font-bold">{topicTitle}</p>
+              <p className="text-white/30 text-xs mt-2">
+                {lang === 'en'
+                  ? "You're not broken — you just need a closer look at this one thing."
+                  : '你不是不会——你只是在这个地方需要多看一眼。'}
+              </p>
             </div>
-            <h2 className="text-xl font-black text-white mb-1">
-              {lang === 'en' ? 'Repair Mode' : '修复模式'}
-            </h2>
-            <p className="text-rose-300 font-bold">{topicTitle}</p>
           </div>
 
           {/* Diagnosis */}
@@ -293,8 +320,12 @@ export const RepairScreen = ({
                     }`}
                   >
                     {showFeedback === 'correct'
-                      ? (lang === 'en' ? `Good — correct ${pattern ? pattern.label.en.toLowerCase().replace(' error', '') : 'answer'}!` : `正确！${pattern ? pattern.label.zh.replace('错误', '').replace('失误', '') : ''}没问题。`)
-                      : (lang === 'en' ? `Still working on ${pattern ? pattern.label.en.toLowerCase() : 'this'} — keep going.` : `继续加油，${pattern ? pattern.label.zh : '这道题'}还需要练习。`)
+                      ? (lang === 'en'
+                        ? `Feel that? That's a piece clicking into place. ${correctCount + 1}/${TOTAL_QUESTIONS} repaired.`
+                        : `感觉到了吗？那是一块拼图咔嗒到位的声音。${correctCount + 1}/${TOTAL_QUESTIONS} 已修复。`)
+                      : (lang === 'en'
+                        ? `Not yet — but you're getting closer. This is exactly why we're here.`
+                        : `还差一步——但你离正确越来越近了。这正是我们在这里的原因。`)
                     }
                   </motion.div>
                 )}
@@ -318,6 +349,7 @@ export const RepairScreen = ({
   // ═══ Complete Phase ═══
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+      <Confetti trigger={confettiTrigger} theme="goldWhite" />
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -325,28 +357,54 @@ export const RepairScreen = ({
       >
         {isSuccess ? (
           <>
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', bounce: 0.5 }}
-              className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto"
+            {/* Glowing restored node effect */}
+            <div className="relative">
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: [0, 1.5, 1], opacity: [0, 0.4, 0] }}
+                transition={{ duration: 1.5, ease: 'easeOut' }}
+                className="absolute inset-0 m-auto w-24 h-24 rounded-full bg-emerald-400 blur-xl"
+              />
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', bounce: 0.5, delay: 0.2 }}
+                className="relative w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto border-2 border-emerald-400/40"
+              >
+                <CheckCircle2 size={40} className="text-emerald-400" />
+              </motion.div>
+            </div>
+            <motion.h2
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-2xl font-black text-white"
             >
-              <CheckCircle2 size={40} className="text-emerald-400" />
-            </motion.div>
-            <h2 className="text-2xl font-black text-white">
               {lang === 'en' ? 'Skill Repaired!' : '技能已修复！'}
-            </h2>
-            <p className="text-emerald-400 font-bold">
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="text-emerald-400 font-bold"
+            >
               {pattern
                 ? (lang === 'en' ? `${pattern.label.en} resolved` : `${pattern.label.zh}已消除`)
                 : (lang === 'en' ? `${topicTitle} stabilised` : `${topicTitle}已稳定`)
               }
-            </p>
-            <p className="text-white/40 text-sm">
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="text-white/50 text-sm italic"
+            >
               {lang === 'en'
-                ? `Score: ${correctCount}/${TOTAL_QUESTIONS} correct`
-                : `得分：${correctCount}/${TOTAL_QUESTIONS} 正确`
-              }
+                ? "This is yours now. You earned it."
+                : '这是你挣来的。这个技能现在真的属于你了。'}
+            </motion.p>
+            <p className="text-white/30 text-xs">
+              {correctCount}/{TOTAL_QUESTIONS}
             </p>
             {downstreamTopics.length > 0 && (
               <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-3">

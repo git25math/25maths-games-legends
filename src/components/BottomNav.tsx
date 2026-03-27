@@ -3,6 +3,7 @@
  * Replaces the "More" dropdown menu on mobile for better UX.
  * Only visible on screens < md breakpoint.
  */
+import { motion } from 'motion/react';
 import { MapIcon, Swords, Trophy, User } from 'lucide-react';
 import type { Language } from '../types';
 
@@ -39,19 +40,27 @@ export function BottomNav({ activeTab, onTabChange, lang, badge = {} }: Props) {
                 isActive ? 'text-gold-light' : 'text-white/40'
               }`}
             >
-              <div className="relative">
+              <motion.div
+                animate={{ scale: isActive ? 1.15 : 1 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                className="relative"
+              >
                 <Icon size={20} strokeWidth={isActive ? 2.5 : 1.5} />
                 {count != null && count > 0 && (
                   <span className="absolute -top-1.5 -right-2.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">
                     {count > 9 ? '9+' : count}
                   </span>
                 )}
-              </div>
+              </motion.div>
               <span className={`text-[10px] font-bold ${isActive ? 'text-gold-light' : 'text-white/30'}`}>
                 {lang === 'en' ? tab.en : tab.zh}
               </span>
               {isActive && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gold-light rounded-full" />
+                <motion.div
+                  layoutId="bottomNavIndicator"
+                  className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gold-light rounded-full"
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                />
               )}
             </button>
           );

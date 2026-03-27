@@ -335,7 +335,11 @@ export const MapScreen = ({
                 whileHover: { y: -4, boxShadow: "0 12px 40px rgba(99,102,241,0.15)" },
                 whileTap: { y: -2, scale: 0.98 },
                 transition: { type: "spring", stiffness: 300, damping: 20 },
-              } : {})}
+              } : {
+                whileTap: { x: [0, -4, 4, -3, 3, -1, 1, 0] },
+                transition: { duration: 0.4 },
+                onClick: () => { playTap(); },
+              })}
             >
               <motion.div
                 animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})}
