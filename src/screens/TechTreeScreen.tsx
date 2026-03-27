@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, GitBranch, Wrench, ChevronRight, Swords, BookOpen, Flame, Info, X } from 'lucide-react';
+import { ArrowLeft, GitBranch, Wrench, ChevronRight, Swords, BookOpen, Flame, Info, X, AlertTriangle } from 'lucide-react';
 import type { Language, Mission, UserProfile } from '../types';
 import { computeTechTree, getTopicMissions, getTopicInfo } from '../utils/techTree';
 import type { TechNodeState } from '../utils/techTree';
@@ -8,7 +8,9 @@ import { getMistakes } from '../utils/errorMemory';
 import type { MistakeRecord } from '../utils/errorMemory';
 import { TechTreeColumn } from '../components/TechTreeColumn';
 import { lt } from '../i18n/resolveText';
+import { toTraditional } from '../i18n/zhHantMap';
 import { hasAnyPracticeCompletion } from '../utils/completionState';
+import { useAudio } from '../audio';
 
 const LABELS = {
   zh: {
@@ -62,6 +64,7 @@ export const TechTreeScreen = ({
   onBack,
   onMissionStart,
   onPracticeStart,
+  onRepairMission,
 }: {
   lang: Language;
   profile: UserProfile;
@@ -69,6 +72,7 @@ export const TechTreeScreen = ({
   onBack: () => void;
   onMissionStart: (mission: Mission) => void;
   onPracticeStart: (mission: Mission) => void;
+  onRepairMission?: (missionId: number) => void;
 }) => {
   const l = LABELS[lang];
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
@@ -80,6 +84,10 @@ export const TechTreeScreen = ({
     try { localStorage.setItem('gl_techtree_seen', '1'); } catch {}
   };
 
+  const { playBadgeUnlock } = useAudio();
+  const [unlockToast, setUnlockToast] = useState<string | null>(null);
+  const prevUnlockedRef = useRef<Set<string>>(new Set());
+
   const mistakes = useMemo(
     () => getMistakes(profile.completed_missions as Record<string, unknown>) as Record<string, MistakeRecord>,
     [profile.completed_missions],
@@ -89,6 +97,33 @@ export const TechTreeScreen = ({
     () => computeTechTree(missions, profile.completed_missions, mistakes),
     [missions, profile.completed_missions, mistakes],
   );
+
+  // Detect newly unlocked nodes and celebrate
+  useEffect(() => {
+    const currentUnlocked = new Set<string>();
+    for (const b of branches) {
+      for (const n of b.nodes) {
+        if (n.status === 'unlocked') currentUnlocked.add(n.topicId);
+      }
+    }
+    if (prevUnlockedRef.current.size > 0) {
+      for (const topicId of currentUnlocked) {
+        if (!prevUnlockedRef.current.has(topicId)) {
+          // New unlock detected!
+          const info = getTopicInfo(topicId);
+          if (info) {
+            const nameZh = lang === 'zh_TW' ? toTraditional(info.topic.titleZh) : info.topic.titleZh;
+            const name = lang === 'en' ? info.topic.title : nameZh;
+            playBadgeUnlock();
+            setUnlockToast(name);
+            setTimeout(() => setUnlockToast(null), 3500);
+          }
+          break; // Only celebrate one at a time
+        }
+      }
+    }
+    prevUnlockedRef.current = currentUnlocked;
+  }, [branches]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Topic detail panel data
   const selectedTopicData = useMemo(() => {
@@ -187,11 +222,15 @@ export const TechTreeScreen = ({
                 <h2 className="text-lg font-black text-white">
                   {lang === 'en'
                     ? selectedTopicData.info.topic.title
+                    : lang === 'zh_TW'
+                    ? toTraditional(selectedTopicData.info.topic.titleZh)
                     : selectedTopicData.info.topic.titleZh}
                 </h2>
                 <p className="text-xs text-white/30 mt-1">
                   {lang === 'en'
                     ? selectedTopicData.info.chapter.title
+                    : lang === 'zh_TW'
+                    ? toTraditional(selectedTopicData.info.chapter.titleZh)
                     : selectedTopicData.info.chapter.titleZh}
                 </p>
               </div>
@@ -201,6 +240,8 @@ export const TechTreeScreen = ({
                 <div className={`rounded-xl border p-3 mb-4 ${
                   selectedTopicData.nodeState.status === 'corrupted'
                     ? 'border-rose-500/30 bg-rose-950/30'
+                    : selectedTopicData.nodeState.status === 'at_risk'
+                    ? 'border-orange-500/30 bg-orange-950/30'
                     : selectedTopicData.nodeState.status === 'unlocked'
                     ? 'border-emerald-500/30 bg-emerald-950/30'
                     : selectedTopicData.nodeState.status === 'locked'
@@ -208,13 +249,62 @@ export const TechTreeScreen = ({
                     : 'border-amber-500/30 bg-amber-950/30'
                 }`}>
                   {selectedTopicData.nodeState.status === 'corrupted' && (
-                    <div className="flex items-center gap-2 text-rose-400 text-xs font-bold">
-                      <Wrench size={12} />
-                      {l.corrupted}
+                    <div>
+                      <div className="flex items-center gap-2 text-rose-400 text-xs font-bold mb-2">
+                        <Wrench size={12} />
+                        {l.corrupted}
+                      </div>
+                      {onRepairMission && selectedTopicData.topicMissions.length > 0 && (
+                        <button
+                          onClick={() => {
+                            // Find the most-errored mission in this topic to repair
+                            const missionToRepair = selectedTopicData.topicMissions[0];
+                            if (missionToRepair) {
+                              setSelectedTopicId(null);
+                              onRepairMission(missionToRepair.id);
+                            }
+                          }}
+                          className="w-full py-2 rounded-lg bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold hover:bg-rose-500/30 transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <Wrench size={12} />
+                          {lang === 'en' ? 'Repair Skill' : lang === 'zh_TW' ? '修復技能' : '修复技能'}
+                        </button>
+                      )}
                     </div>
                   )}
                   {selectedTopicData.nodeState.status === 'locked' && (
                     <p className="text-white/30 text-xs">{l.locked}</p>
+                  )}
+                  {selectedTopicData.nodeState.status === 'at_risk' && (
+                    <div>
+                      <div className="flex items-center gap-2 text-orange-400 text-xs font-bold mb-2">
+                        <AlertTriangle size={12} />
+                        {lang === 'en'
+                          ? `Upstream skill ${selectedTopicData.nodeState.upstreamCorrupted} is unstable`
+                          : lang === 'zh_TW'
+                          ? `上游技能 ${selectedTopicData.nodeState.upstreamCorrupted} 不穩定`
+                          : `上游技能 ${selectedTopicData.nodeState.upstreamCorrupted} 不稳定`}
+                      </div>
+                      <p className="text-[11px] text-white/30 mb-2">
+                        {lang === 'en'
+                          ? 'Fix the upstream skill first to stabilise this node.'
+                          : lang === 'zh_TW'
+                          ? '請先修復上游技能以穩定此節點。'
+                          : '请先修复上游技能以稳定此节点。'}
+                      </p>
+                      {onRepairMission && selectedTopicData.nodeState.upstreamCorrupted && (
+                        <button
+                          onClick={() => {
+                            // Navigate to the corrupted upstream topic
+                            setSelectedTopicId(selectedTopicData.nodeState!.upstreamCorrupted!);
+                          }}
+                          className="w-full py-2 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-400 text-xs font-bold hover:bg-orange-500/30 transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <Wrench size={12} />
+                          {lang === 'en' ? `Go to ${selectedTopicData.nodeState.upstreamCorrupted}` : `前往 ${selectedTopicData.nodeState.upstreamCorrupted}`}
+                        </button>
+                      )}
+                    </div>
                   )}
                   {(selectedTopicData.nodeState.status === 'researching' || selectedTopicData.nodeState.status === 'available') && (
                     <div className="flex items-center gap-2">
@@ -295,6 +385,27 @@ export const TechTreeScreen = ({
                 {l.back}
               </button>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Node unlock celebration toast */}
+      <AnimatePresence>
+        {unlockToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 60, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 60, scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[90] flex items-center gap-3 px-6 py-3 bg-emerald-500/90 backdrop-blur-md border border-emerald-400/50 rounded-2xl shadow-2xl pointer-events-none"
+          >
+            <span className="text-xl">🎉</span>
+            <div>
+              <p className="text-white font-black text-sm">
+                {lang === 'en' ? 'Node Unlocked!' : lang === 'zh_TW' ? '節點解鎖！' : '节点解锁！'}
+              </p>
+              <p className="text-white/70 font-bold text-xs">{unlockToast}</p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

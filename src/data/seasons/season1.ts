@@ -110,6 +110,18 @@ export const SEASON_1_TASKS: SeasonTask[] = [
     description: { zh: '累计修复 5 次装备', en: 'Repair equipment 5 times total' },
     frequency: 'milestone', target: 5, seasonXP: 350,
   },
+  {
+    id: 'milestone_items_10',
+    name: { zh: '收集家', en: 'Collector' },
+    description: { zh: '累计获得 10 个修复道具', en: 'Earn 10 repair items total' },
+    frequency: 'milestone', target: 10, seasonXP: 300,
+  },
+  {
+    id: 'weekly_crystal_1',
+    name: { zh: '完美修炼', en: 'Perfect Mastery' },
+    description: { zh: '获得 1 颗精通水晶', en: 'Earn 1 Master Crystal' },
+    frequency: 'weekly', target: 1, seasonXP: 200,
+  },
 ];
 
 /** 30-level reward track. XP per level = 100 (total 3000 to max). */

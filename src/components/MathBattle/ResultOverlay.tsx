@@ -30,6 +30,10 @@ type Props = {
   encouragement: string;
   onAchievementClose: () => void;
   onRetry: () => void;
+  canRetry?: boolean;
+  retryCount?: number;
+  maxRetries?: number;
+  onGiveUp?: () => void;
 };
 
 export function ResultOverlay({
@@ -37,6 +41,7 @@ export function ResultOverlay({
   isMultiQuestion, isFirstClear, completedDifficulties, difficultyMode,
   finalScore, finalDuration, correctCount, currentQIdx, hp,
   encouragement, onAchievementClose, onRetry,
+  canRetry = true, retryCount = 0, maxRetries = 2, onGiveUp,
 }: Props) {
   if (showResult === 'none') return null;
 
@@ -210,12 +215,37 @@ export function ResultOverlay({
             ) : (
               <p className="text-indigo-400 font-bold mb-8 italic">"{encouragement}"</p>
             )}
-            <button
-              onClick={onRetry}
-              className="px-12 py-5 bg-red-700 text-white font-black rounded-xl shadow-xl hover:bg-red-600 transition-all"
-            >
-              {t.retry}
-            </button>
+            {canRetry ? (
+              <div className="space-y-3">
+                <button
+                  onClick={onRetry}
+                  className="px-12 py-5 bg-red-700 text-white font-black rounded-xl shadow-xl hover:bg-red-600 transition-all"
+                >
+                  {t.retry}
+                </button>
+                <p className="text-slate-500 text-sm">
+                  {lang === 'en'
+                    ? `${maxRetries - retryCount} ${maxRetries - retryCount === 1 ? 'retry' : 'retries'} left`
+                    : `还剩 ${maxRetries - retryCount} 次重试机会`}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <p className="text-amber-400 font-bold text-lg">
+                  {lang === 'en'
+                    ? "No retries left. That's OK — every master was once a beginner."
+                    : '重试机会用完了。没关系——每个高手都曾经是新手。'}
+                </p>
+                {onGiveUp && (
+                  <button
+                    onClick={onGiveUp}
+                    className="px-12 py-5 bg-slate-700 text-white font-black rounded-xl shadow-xl hover:bg-slate-600 transition-all"
+                  >
+                    {lang === 'en' ? 'Back to Map' : '返回地图'}
+                  </button>
+                )}
+              </div>
+            )}
           </motion.div>
         )}
       </motion.div>

@@ -4,6 +4,7 @@ import type { TechBranch } from '../utils/techTree';
 import type { Topic } from '../data/curriculum/kp-registry';
 import { CHAPTERS } from '../data/curriculum/kp-registry';
 import { TechNode } from './TechNode';
+import { toTraditional } from '../i18n/zhHantMap';
 
 export const TechTreeColumn = ({
   lang,
@@ -34,7 +35,7 @@ export const TechTreeColumn = ({
         <div className="flex items-center gap-2 mb-1">
           <span className="text-lg">{branch.icon}</span>
           <h3 className="text-sm font-black text-white truncate">
-            {lang === 'en' ? branch.title : branch.titleZh}
+            {lang === 'en' ? branch.title : lang === 'zh_TW' ? toTraditional(branch.titleZh) : branch.titleZh}
           </h3>
         </div>
         <div className="flex items-center gap-2">

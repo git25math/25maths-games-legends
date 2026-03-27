@@ -23,6 +23,7 @@ import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 import { usePracticePersistedState } from '../hooks/usePracticeState';
 import { hasAnyPracticeCompletion } from '../utils/completionState';
+import { getTopicForKp } from '../data/curriculum/kp-registry';
 import { createQuestionFingerprint } from '../utils/questionFingerprint';
 
 type PracticePhase = 'green' | 'amber' | 'red' | 'battle';
@@ -94,6 +95,8 @@ export const PracticeScreen = ({
   // v7.0: Repair mode — count correct answers, complete after 3
   const [repairCorrect, setRepairCorrect] = useState(0);
   const REPAIR_TARGET = 3;
+  // v5.0: Skill impact hint — shown on wrong answer
+  const [skillImpactHint, setSkillImpactHint] = useState<string | null>(null);
 
   const {
     playSuccess, playFail, playClick,
@@ -131,6 +134,7 @@ export const PracticeScreen = ({
     setCurrentMission(q);
     setInputs({});
     setWrongAnswerData(null);
+    setSkillImpactHint(null);
     setTutorialStep(0);
   }, [mission, adaptiveTier]);
 
@@ -195,12 +199,25 @@ export const PracticeScreen = ({
       if (onRecordError) {
         onRecordError(diagnoseErrorFn(inputs, result.expected).type);
       }
+      // v5.0: Show skill impact hint (skip in repair mode — student already knows)
+      if (mission.kpId && !repairMode) {
+        const topic = getTopicForKp(mission.kpId);
+        if (topic) {
+          const topicName = lang === 'en' ? topic.title : topic.titleZh;
+          setSkillImpactHint(
+            lang === 'en' ? `This affects your "${topicName}" skill stability`
+            : lang === 'zh_TW' ? `這影響了你的「${topicName}」技能穩定性`
+            : `这影响了你的「${topicName}」技能稳定性`
+          );
+        }
+      }
       setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
     }
   };
 
   const handleWrongAnswerContinue = () => {
     setWrongAnswerData(null);
+    setSkillImpactHint(null);
     setIsSubmitting(false);
     regenerateQuestion();
   };
@@ -601,16 +618,28 @@ export const PracticeScreen = ({
 
                 {/* Wrong answer review panel */}
                 {wrongAnswerData && (
-                  <WrongAnswerPanel
-                    questionType={currentMission.type}
-                    userInputs={wrongAnswerData.userInputs}
-                    expected={wrongAnswerData.expected}
-                    formula={resolveFormula(currentMission.secret.formula, lang)}
-                    tutorialSteps={interpolatedTutorialSteps}
-                    lang={lang}
-                    onContinue={handleWrongAnswerContinue}
-                    continueLabel={t.gotItNextQuestion}
-                  />
+                  <>
+                    <WrongAnswerPanel
+                      questionType={currentMission.type}
+                      userInputs={wrongAnswerData.userInputs}
+                      expected={wrongAnswerData.expected}
+                      formula={resolveFormula(currentMission.secret.formula, lang)}
+                      tutorialSteps={interpolatedTutorialSteps}
+                      lang={lang}
+                      onContinue={handleWrongAnswerContinue}
+                      continueLabel={t.gotItNextQuestion}
+                    />
+                    {skillImpactHint && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-2 px-3 py-2 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center gap-2"
+                      >
+                        <span className="text-orange-400 text-xs">⚠️</span>
+                        <span className="text-[11px] text-orange-300/80">{skillImpactHint}</span>
+                      </motion.div>
+                    )}
+                  </>
                 )}
 
                 <motion.button

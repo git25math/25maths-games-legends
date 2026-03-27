@@ -469,11 +469,8 @@ export default function App() {
   };
 
   const handleBattleComplete = async (success: boolean, score = 0, durationSecs = 0, hpRemaining = 0) => {
-    if (success && activeMission && profile) {
-      const prevScore = profile.total_score;
-      const isFirstClearBattle = !profile.completed_missions[String(activeMission.id)];
-
-      // Step 1: Insert battle record to DB + compute profile data (does NOT save)
+    // Always record battle result (success AND failure) for data integrity
+    if (activeMission && profile) {
       const battleData = await recordBattleComplete(
         activeMission.id,
         selectedDifficulty,
@@ -484,6 +481,10 @@ export default function App() {
         activeMission.topic,
         activeMission.kpId,
       );
+
+    if (success) {
+      const prevScore = profile.total_score;
+      const isFirstClearBattle = !profile.completed_missions[String(activeMission.id)];
 
       if (battleData) {
         const { completedMissions: cm, stats, newScore } = battleData;
@@ -516,8 +517,7 @@ export default function App() {
         for (const taskId of pendingSeasonTasksRef.current) {
           sp = incrementTaskCount(sp, taskId);
         }
-        const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
-        cm._season = updatedProgress;
+        // NOTE: evaluateAndUpdateTasks is deferred until after item awarding (below)
 
         // Drain pending streak tokens
         if (pendingStreakTokensRef.current > 0) {
@@ -555,7 +555,15 @@ export default function App() {
             setItemRewardToast({ items: awarded });
             setTimeout(() => setItemRewardToast(null), 3500);
           }, 1500);
+          // Track season milestones for items
+          if (awarded.some(r => r.itemId === 'crystal')) {
+            sp = incrementTaskCount(sp, 'weekly_crystal_1');
+          }
         }
+
+        // Evaluate season tasks (after all increments including items)
+        const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
+        cm._season = updatedProgress;
 
         // Step 5: Merge pending errors into mistake memory
         if (pendingErrorsRef.current.length > 0) {
@@ -582,7 +590,9 @@ export default function App() {
       }
 
       setLastClearedMissionId(activeMission.id);
-    }
+    } // end if (success)
+    } // end if (activeMission && profile) — recordBattleComplete
+
     // Bridge failed attempts too (tracks attempts without incrementing wins)
     if (!success && activeMission?.kpId && user) {
       supabase.rpc('upsert_play_kp', {
@@ -1102,6 +1112,14 @@ export default function App() {
                   onBack={() => setGameState('map')}
                   onMissionStart={handleMissionStart}
                   onPracticeStart={handlePracticeStart}
+                  onRepairMission={(missionId) => {
+                    const m = missions.find(m => m.id === missionId);
+                    if (m) {
+                      setActiveMission(m);
+                      setIsRepairMode(true);
+                      setGameState('practice');
+                    }
+                  }}
                 />
               )}
 

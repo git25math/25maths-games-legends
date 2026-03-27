@@ -217,12 +217,16 @@ export function computeTechTree(
         // Mark all same-chapter downstream nodes as at_risk
         for (let j = i + 1; j < chapter.topics.length; j++) {
           const downstream = topicStates.get(chapter.topics[j].id)!;
-          // Only affect non-locked, non-corrupted nodes
+          // Only affect non-locked, non-corrupted nodes.
+          // Design choice: unlocked nodes keep their status (completed skills aren't penalized)
+          // but still record the upstream corruption for info display.
           if (downstream.status === 'available' || downstream.status === 'researching' || downstream.status === 'unlocked') {
             downstream.upstreamCorrupted = topic.id;
-            // Don't override corrupted status, but add at_risk for unlocked/researching
+            // Unlocked = already mastered, so only mark at_risk for in-progress/available nodes
             if (downstream.status !== 'unlocked') {
               downstream.status = 'at_risk';
+              // Propagate the upstream corruption pattern so UI can show relevant repair hints
+              downstream.corruptionPattern = state.corruptionPattern;
             }
           }
         }
@@ -233,6 +237,7 @@ export function computeTechTree(
             if (depState && (depState.status === 'available' || depState.status === 'researching')) {
               depState.upstreamCorrupted = topic.id;
               depState.status = 'at_risk';
+              depState.corruptionPattern = state.corruptionPattern;
             }
           }
         }
@@ -240,20 +245,25 @@ export function computeTechTree(
     }
   }
 
-  // Build branches
-  return CHAPTERS.map(chapter => {
-    const nodes = chapter.topics.map(t => topicStates.get(t.id)!);
-    const totalUnlocked = nodes.filter(n => n.status === 'unlocked' || n.status === 'corrupted').length;
-    return {
-      chapterId: chapter.id,
-      title: chapter.title,
-      titleZh: chapter.titleZh,
-      icon: CHAPTER_ICONS[chapter.id] ?? '📖',
-      nodes,
-      totalUnlocked,
-      totalNodes: chapter.topics.length,
-    };
-  });
+  // Build branches — only include chapters that have at least one mission mapped
+  // (prevents Y7 students from seeing Y8+ chapters with no missions as empty locked trees)
+  return CHAPTERS
+    .map(chapter => {
+      const nodes = chapter.topics.map(t => topicStates.get(t.id)!);
+      const mappedNodes = nodes.filter(n => n.total > 0);
+      if (mappedNodes.length === 0) return null; // skip chapters with no missions
+      const totalUnlocked = nodes.filter(n => n.status === 'unlocked' || n.status === 'corrupted').length;
+      return {
+        chapterId: chapter.id,
+        title: chapter.title,
+        titleZh: chapter.titleZh,
+        icon: CHAPTER_ICONS[chapter.id] ?? '📖',
+        nodes: mappedNodes, // only show nodes with mapped missions
+        totalUnlocked,
+        totalNodes: mappedNodes.length,
+      };
+    })
+    .filter((b): b is TechBranch => b !== null);
 }
 
 /** Get a flat list of all topics with their chapter info */

@@ -120,6 +120,8 @@ export const MathBattle = ({
   const [finalScore, setFinalScore] = useState(0);
   const [finalDuration, setFinalDuration] = useState(0);
   const [shieldCharges, setShieldCharges] = useState(skillCard === 'shield' ? 2 : 0);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 2;
   const [streakMilestone, setStreakMilestone] = useState<number | null>(null);
   const [partialCreditInfo, setPartialCreditInfo] = useState<{ score: number } | null>(null);
   const [shakeKey, setShakeKey] = useState(0);
@@ -377,6 +379,9 @@ export const MathBattle = ({
         const nextHp = hp - 1; setHp(nextHp);
         if (nextHp <= 0) {
           alive = false; setShowResult('fail'); stopBGM();
+          const duration = Math.round((Date.now() - startTime) / 1000);
+          setFinalDuration(duration); setFinalScore(totalScore);
+          onComplete(false, totalScore, duration, 0);
           advanceTimerRef.current = window.setTimeout(() => playDefeat(), BATTLE_TIMING.defeatSound);
         }
       }
@@ -392,6 +397,9 @@ export const MathBattle = ({
       const nextSingleHp = hp - 1; setHp(nextSingleHp);
       if (nextSingleHp <= 0) {
         setShowResult('fail'); stopBGM();
+        const duration = Math.round((Date.now() - startTime) / 1000);
+        setFinalDuration(duration); setFinalScore(totalScore);
+        onComplete(false, totalScore, duration, 0);
         advanceTimerRef.current = window.setTimeout(() => playDefeat(), BATTLE_TIMING.defeatSound);
       }
     }
@@ -402,10 +410,17 @@ export const MathBattle = ({
   const handleAchievementClose = () => {
     const baseScore = isMultiQuestion ? totalScore : finalScore;
     const bonusScore = Math.round(baseScore * heroScoreBonus);
-    onComplete(true, baseScore + bonusScore, finalDuration, hp);
+    // Score decay: 50% per retry (1st retry = 50%, 2nd retry = 25%)
+    const retryPenalty = retryCount > 0 ? Math.pow(0.5, retryCount) : 1;
+    const adjustedScore = Math.round((baseScore + bonusScore) * retryPenalty);
+    onComplete(true, adjustedScore, finalDuration, hp);
   };
 
+  const canRetry = retryCount < MAX_RETRIES;
+
   const handleRetry = () => {
+    if (!canRetry) return;
+    setRetryCount(prev => prev + 1);
     setHp(4); setShowResult('none'); setInputs({}); setWrongAnswerData(null); setPartialCreditInfo(null);
     setStreakMilestone(null); setCurrentQIdx(0); setCorrectCount(0); setStreak(0); setPeakStreak(0);
     setTotalScore(0); setFloatingScore(null); setShieldCharges(skillCard === 'shield' ? 2 : 0);
@@ -519,6 +534,10 @@ export const MathBattle = ({
           encouragement={encouragement}
           onAchievementClose={handleAchievementClose}
           onRetry={handleRetry}
+          canRetry={canRetry}
+          retryCount={retryCount}
+          maxRetries={MAX_RETRIES}
+          onGiveUp={onCancel}
         />
       </motion.div>
     </div>
