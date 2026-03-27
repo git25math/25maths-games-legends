@@ -415,17 +415,35 @@ const TOPIC_REMEDIATION: Record<string, ErrorRemediationMap> = {
       { topicId: '4.1', reason: { zh: '几何基本性质', en: 'Basic geometry properties' } },
     ],
   },
+  // 4.7 = Parallel lines & angles (alternate/corresponding/co-interior)
   '4.7': {
+    magnitude: [
+      { topicId: '4.6', reason: { zh: '同旁内角=180°（C形）vs 内错角相等（Z形）', en: 'Co-interior = 180° (C) vs alternate = equal (Z)' } },
+    ],
     method:    [
-      { topicId: '4.6', reason: { zh: '角度推理', en: 'Angle reasoning' } },
-      { topicId: '4.1', reason: { zh: '圆的基本性质', en: 'Circle basic properties' } },
+      { topicId: '4.6', reason: { zh: '角度基础：三角形和直线上的角度', en: 'Angle fundamentals: triangles and straight lines' } },
+      { topicId: '4.1', reason: { zh: '平行线定义与识别', en: 'Parallel line definition and identification' } },
     ],
   },
+  // 4.8 = Pythagoras theorem
   '4.8': {
+    sign:      [{ topicId: '1.6', reason: { zh: '加vs减：求斜边加，求直角边减', en: 'Add vs subtract: adding for hypotenuse, subtract for leg' } }],
+    magnitude: [{ topicId: '1.3', reason: { zh: '平方与平方根互逆', en: 'Squaring and square-rooting are inverses' } }],
     method:    [
-      { topicId: '4.2', reason: { zh: '作图基础', en: 'Construction fundamentals' } },
-      { topicId: '4.6', reason: { zh: '角度', en: 'Angles' } },
+      { topicId: '4.6', reason: { zh: '识别直角三角形中的直角', en: 'Identifying the right angle in the triangle' } },
+      { topicId: '1.3', reason: { zh: '幂与根运算', en: 'Powers and roots operations' } },
     ],
+  },
+  // 4.9 = Circle theorems
+  '4.9': {
+    magnitude: [
+      { topicId: '4.6', reason: { zh: '圆心角=2×圆周角（别用等于）', en: 'Central angle = 2 × inscribed angle (not equal)' } },
+    ],
+    method:    [
+      { topicId: '4.6', reason: { zh: '角度关系基础', en: 'Angle relationship fundamentals' } },
+      { topicId: '4.7', reason: { zh: '平行线与角度关系', en: 'Parallel lines and angle relationships' } },
+    ],
+    unknown:   [{ topicId: '4.6', reason: { zh: '角度基础', en: 'Angle fundamentals' } }],
   },
 
   // ─── Ch5: Mensuration ───
