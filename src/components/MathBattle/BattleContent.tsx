@@ -48,19 +48,20 @@ export function BattleContent({
   const p = currentQuestion.data ?? {};
 
   return (
-    <div className="p-2 md:p-4 lg:p-8 flex flex-col-reverse md:grid md:grid-cols-2 gap-4 md:gap-8">
-      {/* Left: Tactical Map (on mobile: below inputs due to flex-col-reverse) */}
-      <div className="bg-parchment-dark rounded-lg p-4 md:p-6 border-2 border-ink/20 shadow-inner">
-        <div className="flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
+    <div className="p-2 md:p-4 lg:p-8 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-8">
+      {/* Left: Question area — compact on mobile */}
+      <div className="bg-parchment-dark rounded-lg p-3 sm:p-4 md:p-6 border-2 border-ink/20 shadow-inner">
+        {/* Header — hidden on mobile to save space */}
+        <div className="hidden sm:flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
           <MapIcon size={18} />
           <span>{t.calculating}</span>
         </div>
 
-        <div className="bg-white/40 p-3 rounded-lg mb-4 italic text-xs text-ink-light border-l-4 border-[#8b0000]">
+        <div className="bg-white/40 p-2 sm:p-3 rounded-lg mb-2 sm:mb-4 italic text-xs text-ink-light border-l-4 border-[#8b0000]">
           <LatexText text={storyText} />
         </div>
 
-        <div className="text-ink-light text-sm font-bold mb-6 leading-relaxed">
+        <div className="text-ink-light text-sm font-bold mb-3 sm:mb-6 leading-relaxed">
           <LatexText text={descText} />
         </div>
         <VisualData mission={currentQuestion} lang={lang} />
@@ -81,7 +82,7 @@ export function BattleContent({
           </div>
         )}
 
-        <div className="mt-8 pt-4 border-t border-ink/10">
+        <div className="hidden sm:block mt-8 pt-4 border-t border-ink/10">
           <div className="flex items-center gap-2 text-ink-light text-xs font-bold">
             <Shield size={14} />
             <span>{t.defense}：{character.stats.wisdom}</span>

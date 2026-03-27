@@ -40,6 +40,7 @@ import { awardBattleItems, computeRecoveryReward } from './utils/repairItems';
 import { buildRecoveryPath, advanceRecoveryStep, isRecoveryComplete, getCurrentStep, getRecoverySession } from './utils/recoveryPath';
 import type { RecoverySession } from './utils/recoveryPath';
 
+import { BottomNav, type BottomTab } from "./components/BottomNav";
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
 const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
 const LobbyScreen = lazy(() => import('./screens/LobbyScreen').then(module => ({ default: module.LobbyScreen })));
@@ -299,7 +300,9 @@ export default function App() {
         const multiplier = getRankMultiplier(myRank);
         const bonusXP = Math.round(myScore * (multiplier - 1));
         if (bonusXP > 0) {
-          updateProfile({ total_score: profile.total_score + bonusXP });
+          const prevScore = latestScoreRef.current;
+          latestScoreRef.current = prevScore + bonusXP;
+          updateProfile({ total_score: prevScore + bonusXP });
         }
       }
       lastRoundPlayersRef.current = null;
@@ -357,7 +360,7 @@ export default function App() {
     let xp = streakRewards[cycleDay] ?? 50;
     let sp = cycleDay === 7 ? 1 : 0;
 
-    const cm = { ...profile.completed_missions } as any;
+    const cm = structuredClone(profile.completed_missions) as any;
     cm._login = { lastDate: todayStr, streak: newStreak, bestStreak };
 
     // Check streak milestones (14/21/30/60/100 days)
@@ -375,7 +378,9 @@ export default function App() {
     }
 
     (async () => {
-      await updateProfile({ completed_missions: cm, total_score: profile.total_score + xp });
+      const loginPrevScore = latestScoreRef.current;
+      latestScoreRef.current = loginPrevScore + xp;
+      await updateProfile({ completed_missions: cm, total_score: loginPrevScore + xp });
       setLoginRewardNotif({ streak: newStreak, xp, sp });
       setTimeout(() => setLoginRewardNotif(null), milestone ? 8000 : 5000);
     })();
@@ -488,7 +493,7 @@ export default function App() {
     const levelsGained = computeLevelsGained(prevScore, xp);
     if (levelsGained > 0) {
       // Merge SP + score into single write
-      const cm = { ...profile.completed_missions } as any;
+      const cm = structuredClone(profile.completed_missions) as any;
       cm._total_skill_points = (cm._total_skill_points ?? 0) + levelsGained;
       await updateProfile({ total_score: prevScore + xp, completed_missions: cm });
     } else {
@@ -512,7 +517,7 @@ export default function App() {
       );
 
     if (success) {
-      const prevScore = profile.total_score;
+      const prevScore = latestScoreRef.current;
       const isFirstClearBattle = !profile.completed_missions[String(activeMission.id)];
 
       if (battleData) {
@@ -631,7 +636,7 @@ export default function App() {
     }
     // Failed battles: consume stamina + record errors in single write
     if (!success && profile && activeMission) {
-      const cm = { ...(profile.completed_missions as any) };
+      const cm = structuredClone(profile.completed_missions) as any;
       // Stamina
       cm._stamina = consumeAttempt(getStamina(cm));
       // Errors
@@ -902,7 +907,7 @@ export default function App() {
                   }}
                   onRepairWithItem={async (missionId, itemId) => {
                     if (!profile) return;
-                    const cm = { ...(profile.completed_missions as any) };
+                    const cm = structuredClone(profile.completed_missions) as any;
                     const inv = getInventory(cm);
                     const newInv = useItem(inv, itemId);
                     if (!newInv) return;
@@ -991,7 +996,7 @@ export default function App() {
                   onComplete={async () => {
                     // Save practice completion — all 4 phases done (XP already awarded per-phase)
                     if (profile) {
-                      const cm = { ...profile.completed_missions } as any;
+                      const cm = structuredClone(profile.completed_missions) as any;
                       const key = String(activeMission.id);
                       const isFirstClearPractice = !hasAnyPracticeCompletion(cm[key]);
                       cm[key] = markPracticeCompleted(cm[key]);
@@ -1040,7 +1045,7 @@ export default function App() {
                   onCancel={async () => {
                     // Persist any errors recorded so far (even on mid-session cancel)
                     if (profile && activeMission && pendingErrorsRef.current.length > 0) {
-                      const cm = { ...(profile.completed_missions as any) };
+                      const cm = structuredClone(profile.completed_missions) as any;
                       cm._mistakes = recordErrors(
                         (cm._mistakes ?? {}) as any,
                         activeMission.id,
@@ -1057,7 +1062,7 @@ export default function App() {
                   onRepairComplete={async () => {
                     // Inline repair + season + scroll reward into single updateProfile
                     if (profile) {
-                      const cm = { ...profile.completed_missions } as any;
+                      const cm = structuredClone(profile.completed_missions) as any;
                       const eq = cm._equipment?.[String(activeMission.id)] as KPEquipment | undefined;
                       const bonus = eq ? computeRepairBonus(eq.repairCount) : 0;
                       // Update equipment
@@ -1105,9 +1110,11 @@ export default function App() {
                         }
                       }
 
+                      const repairPrevScore = latestScoreRef.current;
+                      latestScoreRef.current = repairPrevScore + bonus;
                       await updateProfile({
                         completed_missions: cm,
-                        total_score: profile.total_score + bonus,
+                        total_score: repairPrevScore + bonus,
                       });
                       setIsRepairMode(false);
 
@@ -1147,14 +1154,16 @@ export default function App() {
               {!isMissionShellLoading && gameState === 'expedition' && profile?.grade && selectedChar && activeExpedition && (() => {
                 const saveExpeditionXP = async (xp: number, nodes: number) => {
                   if (profile && xp > 0) {
-                    const cm = { ...profile.completed_missions } as any;
+                    const cm = structuredClone(profile.completed_missions) as any;
                     let sp = getSeasonProgress(cm);
                     for (let i = 0; i < nodes; i++) {
                       sp = incrementTaskCount(sp, 'daily_battles_3');
                     }
                     const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
                     cm._season = updatedProgress;
-                    await updateProfile({ total_score: profile.total_score + xp, completed_missions: cm });
+                    const expPrevScore = latestScoreRef.current;
+                    latestScoreRef.current = expPrevScore + xp;
+                    await updateProfile({ total_score: expPrevScore + xp, completed_missions: cm });
                   }
                 };
                 return (
@@ -1260,7 +1269,7 @@ export default function App() {
                   }}
                   onRecoveryCancelled={async () => {
                     if (profile) {
-                      const cm = { ...(profile.completed_missions as any) };
+                      const cm = structuredClone(profile.completed_missions) as any;
                       delete cm._recovery;
                       await updateProfile({ completed_missions: cm });
                     }
@@ -1484,7 +1493,9 @@ export default function App() {
                     const multiplier = getRankMultiplier(myRank);
                     const bonusXP = Math.round(myScore * (multiplier - 1));
                     if (bonusXP > 0) {
-                      await updateProfile({ total_score: profile.total_score + bonusXP });
+                      const prevScore = latestScoreRef.current;
+                      latestScoreRef.current = prevScore + bonusXP;
+                      await updateProfile({ total_score: prevScore + bonusXP });
                     }
                   }
                   // Start next round first — only close panel + transition if successful
@@ -1504,7 +1515,9 @@ export default function App() {
                     const multiplier = getRankMultiplier(myRank);
                     const bonusXP = Math.round(myScore * (multiplier - 1));
                     if (bonusXP > 0) {
-                      await updateProfile({ total_score: profile.total_score + bonusXP });
+                      const prevScore = latestScoreRef.current;
+                      latestScoreRef.current = prevScore + bonusXP;
+                      await updateProfile({ total_score: prevScore + bonusXP });
                     }
                   }
                   setShowPKResult(false);
@@ -1565,6 +1578,36 @@ export default function App() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* ═══ Global Bottom Navigation (mobile only, hidden during battle/welcome/onboarding) ═══ */}
+        {gameState !== 'welcome' && gameState !== 'onboarding' && gameState !== 'battle' && (
+          <BottomNav
+            activeTab={
+              gameState === 'expedition' ? 'expedition'
+                : gameState === 'achievements' ? 'achievements'
+                : 'map'
+            }
+            onTabChange={(tab: BottomTab) => {
+              if (tab === 'map') {
+                setGameState('map');
+              } else if (tab === 'expedition') {
+                if (profile?.grade) {
+                  const exps = getExpeditionsForGrade(profile.grade);
+                  if (exps.length > 0) {
+                    setActiveExpedition(exps[0]);
+                    setGameState('expedition');
+                  }
+                }
+              } else if (tab === 'achievements') {
+                setGameState('achievements');
+              } else if (tab === 'profile') {
+                setGameState('map');
+                // Profile items are accessed via MapScreen's overlay panels
+              }
+            }}
+            lang={lang}
+          />
+        )}
       </div>
     </ErrorBoundary>
   );
