@@ -55,8 +55,8 @@ export function saveExpeditionRecord(
 /** Star rating based on completion ratio */
 export function getRating(nodes: number, total: number): string {
   if (total === 0) return '';
-  if (nodes >= total) return '\u2605\u2605\u2605';
-  if (nodes >= Math.ceil(total * 0.6)) return '\u2605\u2605\u2606';
-  if (nodes > 0) return '\u2605\u2606\u2606';
-  return '\u2606\u2606\u2606';
+  if (nodes >= total) return '★★★';
+  if (nodes >= Math.ceil(total * 0.6)) return '★★☆';
+  if (nodes > 0) return '★☆☆';
+  return '☆☆☆';
 }

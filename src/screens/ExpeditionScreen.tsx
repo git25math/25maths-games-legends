@@ -23,14 +23,14 @@ type Phase = 'briefing' | 'map' | 'battle' | 'rest' | 'victory' | 'defeat' | 're
 // ── Helpers ──────────────────────────────────────────────────────────
 
 function getChineseDay(d: number): string {
-  const n = ['', '\u4e00', '\u4e8c', '\u4e09', '\u56db', '\u4e94', '\u516d', '\u4e03', '\u516b', '\u4e5d'];
-  if (d <= 9) return '\u521d' + n[d]; // 初X
-  if (d === 10) return '\u521d\u5341'; // 初十
-  if (d < 20) return '\u5341' + n[d - 10]; // 十X
-  if (d === 20) return '\u4e8c\u5341'; // 二十
-  if (d < 30) return '\u5eff' + n[d - 20]; // 廿X
-  if (d === 30) return '\u4e09\u5341'; // 三十
-  return '\u4e09\u5341\u4e00'; // 三十一
+  const n = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  if (d <= 9) return '初' + n[d]; // 初X
+  if (d === 10) return '初十'; // 初十
+  if (d < 20) return '十' + n[d - 10]; // 十X
+  if (d === 20) return '二十'; // 二十
+  if (d < 30) return '廿' + n[d - 20]; // 廿X
+  if (d === 30) return '三十'; // 三十
+  return '三十一'; // 三十一
 }
 
 function getAuspiciousDate(era: { zh: string; en: string } | undefined, lang: Language) {
@@ -39,11 +39,11 @@ function getAuspiciousDate(era: { zh: string; en: string } | undefined, lang: La
   const d = now.getDate();
   if (lang === 'en' || lang === 'zh_TW') {
     const eraStr = era?.[lang === 'zh_TW' ? 'zh' : 'en'] ?? '';
-    return { date: `${eraStr}  \u00b7  Month ${m}, Day ${d}`, auspicious: lang === 'zh_TW' ? '\u51fa\u5f81' : 'March Out' };
+    return { date: `${eraStr}  ·  Month ${m}, Day ${d}`, auspicious: lang === 'zh_TW' ? '出征' : 'March Out' };
   }
-  const months = ['\u6b63', '\u4e8c', '\u4e09', '\u56db', '\u4e94', '\u516d', '\u4e03', '\u516b', '\u4e5d', '\u5341', '\u5341\u4e00', '\u814a'];
-  const opts = ['\u51fa\u5f81', '\u7528\u5175', '\u514b\u654c', '\u8fdb\u519b'];
-  return { date: `${era?.zh ?? ''}  ${months[m - 1]}\u6708  ${getChineseDay(d)}`, auspicious: opts[(m + d) % opts.length] };
+  const months = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '腊'];
+  const opts = ['出征', '用兵', '克敌', '进军'];
+  return { date: `${era?.zh ?? ''}  ${months[m - 1]}月  ${getChineseDay(d)}`, auspicious: opts[(m + d) % opts.length] };
 }
 
 function pickQuote(quotes: ExpeditionQuote[]): ExpeditionQuote {
@@ -64,7 +64,7 @@ function getCorrectDisplay(question: Mission, lang: Language): string {
   const visibleFields = usedFieldIds && usedFieldIds.length > 0
     ? fields.filter(f => usedFieldIds.includes(f.id))
     : fields;
-  return visibleFields.map(f => `${f.id} = ${data[f.id] ?? '?'}`).join('\u3000');
+  return visibleFields.map(f => `${f.id} = ${data[f.id] ?? '?'}`).join('　');
 }
 
 // ── Component ────────────────────────────────────────────────────────
@@ -178,7 +178,7 @@ export const ExpeditionScreen = ({
           // Prefer checker's expected values (handles computed answers like Pythagoras)
           const expectedEntries = Object.entries(result.expected || {});
           const answerText = expectedEntries.length > 0
-            ? expectedEntries.map(([k, v]) => `${k} = ${v}`).join('\u3000')
+            ? expectedEntries.map(([k, v]) => `${k} = ${v}`).join('　')
             : getCorrectDisplay(question, lang);
           setCorrectAnswerText(answerText);
           setShowCorrectAnswer(true);
@@ -250,7 +250,7 @@ export const ExpeditionScreen = ({
           <div className="text-center mb-6">
             <div className="text-amber-400/60 text-xs tracking-[0.25em] mb-1 font-bold">{date}</div>
             <div className="text-amber-300/40 text-[10px] tracking-widest">
-              {lang === 'en' ? `Today is auspicious for: ${auspicious}` : `\u4eca\u65e5\u5b9c\uff1a${auspicious}`}
+              {lang === 'en' ? `Today is auspicious for: ${auspicious}` : `今日宜：${auspicious}`}
             </div>
           </div>
 
@@ -277,9 +277,9 @@ export const ExpeditionScreen = ({
               const estMin = Math.ceil(totalQ * 1.5);
               return (
                 <div className="flex flex-wrap justify-center gap-3 mb-5 text-xs">
-                  <span className="flex items-center gap-1 text-amber-400/70"><Package size={12} /> {expedition.startingRations} {lang === 'en' ? 'rations' : '\u519b\u7cae'}</span>
-                  <span className="flex items-center gap-1 text-white/30"><Swords size={12} /> {battleNodes.length} {lang === 'en' ? 'battles' : '\u5173'}</span>
-                  <span className="text-white/20">{lang === 'en' ? `~${estMin} min · ${totalQ}Q` : `\u7ea6${estMin}\u5206\u949f \u00b7 ${totalQ}\u9898`}</span>
+                  <span className="flex items-center gap-1 text-amber-400/70"><Package size={12} /> {expedition.startingRations} {lang === 'en' ? 'rations' : '军粮'}</span>
+                  <span className="flex items-center gap-1 text-white/30"><Swords size={12} /> {battleNodes.length} {lang === 'en' ? 'battles' : '关'}</span>
+                  <span className="text-white/20">{lang === 'en' ? `~${estMin} min · ${totalQ}Q` : `约${estMin}分钟 · ${totalQ}题`}</span>
                 </div>
               );
             })()}
@@ -288,35 +288,35 @@ export const ExpeditionScreen = ({
             {prevRecord ? (
               <div className="bg-white/5 rounded-xl p-3 mb-5 space-y-1.5">
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">{lang === 'en' ? 'Last run' : '\u4e0a\u6b21\u6218\u7ee9'}</span>
-                  <span className="text-white/60">{prevRecord.lastNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '\u5173'}  \u00b7  +{prevRecord.lastXP} XP</span>
+                  <span className="text-white/40">{lang === 'en' ? 'Last run' : '上次战绩'}</span>
+                  <span className="text-white/60">{prevRecord.lastNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '关'}  ·  +{prevRecord.lastXP} XP</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">{lang === 'en' ? 'Best' : '\u6700\u4f73\u6218\u7ee9'}</span>
-                  <span className="text-amber-400 font-bold">{prevRecord.bestNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '\u5173'}  \u00b7  +{prevRecord.bestXP} XP  {getRating(prevRecord.bestNodes, expedition.nodes.length)}</span>
+                  <span className="text-white/40">{lang === 'en' ? 'Best' : '最佳战绩'}</span>
+                  <span className="text-amber-400 font-bold">{prevRecord.bestNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '关'}  ·  +{prevRecord.bestXP} XP  {getRating(prevRecord.bestNodes, expedition.nodes.length)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">{lang === 'en' ? 'Attempts' : '\u51fa\u5f81\u6b21\u6570'}</span>
-                  <span className="text-white/40">{lang === 'en' ? `#${prevRecord.attempts + 1}` : `\u7b2c ${prevRecord.attempts + 1} \u6b21`}</span>
+                  <span className="text-white/40">{lang === 'en' ? 'Attempts' : '出征次数'}</span>
+                  <span className="text-white/40">{lang === 'en' ? `#${prevRecord.attempts + 1}` : `第 ${prevRecord.attempts + 1} 次`}</span>
                 </div>
               </div>
             ) : (
               <div className="bg-white/5 rounded-xl p-3 mb-5 text-center">
-                <p className="text-white/30 text-xs">{lang === 'en' ? 'First expedition' : '\u9996\u6b21\u51fa\u5f81'}</p>
+                <p className="text-white/30 text-xs">{lang === 'en' ? 'First expedition' : '首次出征'}</p>
               </div>
             )}
 
             {/* Buttons */}
             <button onClick={() => { playTap(); setPhase('map'); }} className="w-full py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 transition-all text-sm">
-              {lang === 'en' ? 'March Out \u2192' : '\u4eca\u65e5\u51fa\u5f81 \u2192'}
+              {lang === 'en' ? 'March Out →' : '今日出征 →'}
             </button>
             <div className="flex gap-2 mt-2">
               <button onClick={onCancel} className="flex-1 py-2 text-white/30 text-sm hover:text-white/50 transition-colors">
-                {lang === 'en' ? 'Return' : '\u8fd4\u56de'}
+                {lang === 'en' ? 'Return' : '返回'}
               </button>
               {prevRecord && (
                 <button onClick={() => { playTap(); setPhase('map'); }} className="flex-1 py-2 text-amber-400/40 text-sm hover:text-amber-400/70 transition-colors">
-                  {lang === 'en' ? 'Skip intro' : '\u8df3\u8fc7\u7b80\u62a5'}
+                  {lang === 'en' ? 'Skip intro' : '跳过简报'}
                 </button>
               )}
             </div>
@@ -360,8 +360,8 @@ export const ExpeditionScreen = ({
             />
           </div>
           <div className="flex justify-between mt-1 text-[9px] text-white/20">
-            <span>{lang === 'en' ? 'Start' : '\u51fa\u53d1'}</span>
-            <span>{lang === 'en' ? 'Final Battle' : '\u51b3\u6218'}</span>
+            <span>{lang === 'en' ? 'Start' : '出发'}</span>
+            <span>{lang === 'en' ? 'Final Battle' : '决战'}</span>
           </div>
         </div>
 
@@ -398,9 +398,9 @@ export const ExpeditionScreen = ({
                 <div className="flex-1 min-w-0">
                   <div className="text-white text-sm font-bold truncate">{lt(node.name, lang)}</div>
                   <div className="text-white/40 text-[10px]">
-                    {node.type === 'rest' ? (lang === 'en' ? `+${node.rationReward} rations` : `+${node.rationReward} \u519b\u7cae`)
-                      : node.type === 'boss' ? (lang === 'en' ? `${node.questionCount}Q \u00b7 \u00d7${node.xpMultiplier} XP` : `${node.questionCount}\u9898 \u00b7 \u00d7${node.xpMultiplier} XP`)
-                      : `${node.questionCount}${lang === 'en' ? 'Q' : '\u9898'}`}
+                    {node.type === 'rest' ? (lang === 'en' ? `+${node.rationReward} rations` : `+${node.rationReward} 军粮`)
+                      : node.type === 'boss' ? (lang === 'en' ? `${node.questionCount}Q · ×${node.xpMultiplier} XP` : `${node.questionCount}题 · ×${node.xpMultiplier} XP`)
+                      : `${node.questionCount}${lang === 'en' ? 'Q' : '题'}`}
                   </div>
                   {/* Node intel for current node */}
                   {isCurrent && node.intel && (
@@ -436,8 +436,8 @@ export const ExpeditionScreen = ({
           {currentNode.intel && (
             <p className="text-amber-400/60 text-xs italic mb-3 max-w-xs mx-auto">{lt(currentNode.intel, lang)}</p>
           )}
-          <p className="text-amber-400 font-bold mb-6">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '\u519b\u7cae'}</p>
-          <p className="text-white/40 text-sm mb-8">{lang === 'en' ? `You now have ${rations} rations.` : `\u73b0\u5728\u6709 ${rations} \u4efd\u519b\u7cae\u3002`}</p>
+          <p className="text-amber-400 font-bold mb-6">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '军粮'}</p>
+          <p className="text-white/40 text-sm mb-8">{lang === 'en' ? `You now have ${rations} rations.` : `现在有 ${rations} 份军粮。`}</p>
           <button onClick={() => { setCurrentNodeIdx(prev => prev + 1); setPhase('map'); }} className="px-8 py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 transition-all">
             {(t as any).continueMarching ?? 'Continue March'}
           </button>
@@ -477,13 +477,13 @@ export const ExpeditionScreen = ({
                 <div>
                   <div className="text-white font-bold text-sm">{lt(currentNode.name, lang)}</div>
                   <div className="text-white/40 text-[10px]">
-                    {lang === 'en' ? `Q${battleQIdx + 1}/${battleQuestions.length}` : `\u7b2c${battleQIdx + 1}/${battleQuestions.length}\u9898`}
+                    {lang === 'en' ? `Q${battleQIdx + 1}/${battleQuestions.length}` : `第${battleQIdx + 1}/${battleQuestions.length}题`}
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <span className={`flex items-center gap-1 text-xs font-bold ${rations <= 2 ? 'text-rose-400 animate-pulse' : 'text-amber-400'}`}><Package size={14} /> {rations}</span>
-                {currentNode.type === 'boss' && <span className="text-rose-400 text-xs font-black">\u00d7{currentNode.xpMultiplier}</span>}
+                {currentNode.type === 'boss' && <span className="text-rose-400 text-xs font-black">×{currentNode.xpMultiplier}</span>}
               </div>
             </div>
 
@@ -494,14 +494,14 @@ export const ExpeditionScreen = ({
                   className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-3xl backdrop-blur-sm">
                   <div className="text-center p-6">
                     <Shield size={32} className="text-amber-400 mx-auto mb-3" />
-                    <p className="text-white font-bold text-sm mb-1">{lang === 'en' ? 'Retreat?' : '\u786e\u5b9a\u64a4\u9000\uff1f'}</p>
-                    <p className="text-white/40 text-xs mb-4">{lang === 'en' ? 'Keep earned XP, end expedition.' : '\u4fdd\u7559\u5df2\u83b7\u7ecf\u9a8c\uff0c\u7ed3\u675f\u8fdc\u5f81\u3002'}</p>
+                    <p className="text-white font-bold text-sm mb-1">{lang === 'en' ? 'Retreat?' : '确定撤退？'}</p>
+                    <p className="text-white/40 text-xs mb-4">{lang === 'en' ? 'Keep earned XP, end expedition.' : '保留已获经验，结束远征。'}</p>
                     <div className="flex gap-2 justify-center">
                       <button onClick={() => setShowRetreatConfirm(false)} className="px-4 py-2 bg-white/10 text-white/70 rounded-xl text-xs font-bold">
-                        {lang === 'en' ? 'Continue' : '\u7ee7\u7eed\u6218\u6597'}
+                        {lang === 'en' ? 'Continue' : '继续战斗'}
                       </button>
                       <button onClick={confirmRetreat} className="px-4 py-2 bg-amber-500 text-white rounded-xl text-xs font-bold">
-                        {lang === 'en' ? 'Retreat' : '\u64a4\u9000'}
+                        {lang === 'en' ? 'Retreat' : '撤退'}
                       </button>
                     </div>
                   </div>
@@ -546,7 +546,7 @@ export const ExpeditionScreen = ({
               {showResult === 'wrong' && (
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
                   className="absolute inset-0 flex items-center justify-center bg-rose-500/20 rounded-3xl pointer-events-none">
-                  <span className="text-rose-400 font-black text-xl">-1 {lang === 'en' ? 'ration' : '\u519b\u7cae'}</span>
+                  <span className="text-rose-400 font-black text-xl">-1 {lang === 'en' ? 'ration' : '军粮'}</span>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -556,7 +556,7 @@ export const ExpeditionScreen = ({
               {showCorrectAnswer && (
                 <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                   className="mt-3 bg-amber-900/30 border border-amber-600/20 rounded-xl p-3 text-center">
-                  <p className="text-amber-400/50 text-[10px] mb-0.5">{lang === 'en' ? 'Correct answer' : '\u6b63\u786e\u7b54\u6848'}</p>
+                  <p className="text-amber-400/50 text-[10px] mb-0.5">{lang === 'en' ? 'Correct answer' : '正确答案'}</p>
                   <p className="text-amber-300 font-bold text-sm">{correctAnswerText}</p>
                 </motion.div>
               )}
@@ -578,10 +578,10 @@ export const ExpeditionScreen = ({
                   <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 200 }}
                     className="text-center">
                     <Shield size={40} className="text-emerald-400 mx-auto mb-2" />
-                    <h3 className="text-emerald-400 font-black text-xl">{lang === 'en' ? 'Node Cleared!' : '\u5173\u5361\u901a\u8fc7\uff01'}</h3>
+                    <h3 className="text-emerald-400 font-black text-xl">{lang === 'en' ? 'Node Cleared!' : '关卡通过！'}</h3>
                     <p className="text-amber-400 font-bold mt-1">+{nodeCompleteXP} XP</p>
                     {currentNode.rationReward > 0 && (
-                      <p className="text-amber-400/60 text-xs mt-0.5">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '\u519b\u7cae'}</p>
+                      <p className="text-amber-400/60 text-xs mt-0.5">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '军粮'}</p>
                     )}
                   </motion.div>
                 </motion.div>
@@ -611,7 +611,7 @@ export const ExpeditionScreen = ({
           {/* Report header */}
           <div className="bg-amber-900/30 px-5 py-3 border-b border-amber-700/20 flex items-center justify-between">
             <div>
-              <h3 className="text-amber-300 font-black text-sm">{lt(expedition.name, lang)} {lang === 'en' ? 'Report' : '\u6218\u62a5'}</h3>
+              <h3 className="text-amber-300 font-black text-sm">{lt(expedition.name, lang)} {lang === 'en' ? 'Report' : '战报'}</h3>
               <div className="text-amber-400/40 text-[10px]">{reportDate}</div>
             </div>
             {isVictory ? (
@@ -631,9 +631,9 @@ export const ExpeditionScreen = ({
                 : ((t as any).rationsDepleted ?? 'Rations Depleted')}
             </h2>
             <p className="text-white/40 text-xs">
-              {isVictory ? (lang === 'en' ? 'Full victory. All rewards earned.' : '\u5927\u83b7\u5168\u80dc\uff0c\u5168\u989d\u5956\u52b1\u5df2\u53d1\u653e\u3002')
-                : isRetreat ? (lang === 'en' ? 'Withdrew safely. Keep what you earned.' : '\u5b89\u5168\u64a4\u9000\uff0c\u5df2\u83b7\u7ecf\u9a8c\u4fdd\u7559\u3002')
-                : (lang === 'en' ? 'Rations depleted. Keep the XP you earned.' : '\u519b\u7cae\u8017\u5c3d\uff0c\u5df2\u83b7\u7ecf\u9a8c\u4fdd\u7559\u3002')}
+              {isVictory ? (lang === 'en' ? 'Full victory. All rewards earned.' : '大获全胜，全额奖励已发放。')
+                : isRetreat ? (lang === 'en' ? 'Withdrew safely. Keep what you earned.' : '安全撤退，已获经验保留。')
+                : (lang === 'en' ? 'Rations depleted. Keep the XP you earned.' : '军粮耗尽，已获经验保留。')}
             </p>
           </div>
 
@@ -641,10 +641,10 @@ export const ExpeditionScreen = ({
           <div className="px-5 pb-4">
             <div className="bg-white/5 rounded-xl p-4 mb-3">
               <div className="text-white/30 text-[10px] font-bold uppercase tracking-wider mb-2">
-                {lang === 'en' ? 'This Run' : '\u672c\u6b21\u6218\u7ee9'}
+                {lang === 'en' ? 'This Run' : '本次战绩'}
               </div>
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-white/50 text-xs">{lang === 'en' ? 'Nodes' : '\u901a\u5173'}</span>
+                <span className="text-white/50 text-xs">{lang === 'en' ? 'Nodes' : '通关'}</span>
                 <span className="text-white font-black">{nodesCleared}/{expedition.nodes.length} {rating}</span>
               </div>
               <div className="flex justify-between items-center mb-1.5">
@@ -652,7 +652,7 @@ export const ExpeditionScreen = ({
                 <span className="text-amber-400 font-black">+{xpEarned}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-white/50 text-xs">{lang === 'en' ? 'Rations left' : '\u519b\u7cae\u4f59\u91cf'}</span>
+                <span className="text-white/50 text-xs">{lang === 'en' ? 'Rations left' : '军粮余量'}</span>
                 <span className="text-white/60 font-bold">{rations}</span>
               </div>
             </div>
@@ -660,23 +660,23 @@ export const ExpeditionScreen = ({
             {/* Historical records */}
             <div className="bg-white/5 rounded-xl p-4 mb-4">
               <div className="text-white/30 text-[10px] font-bold uppercase tracking-wider mb-2">
-                {lang === 'en' ? 'Historical' : '\u5386\u53f2\u6218\u7ee9'}
+                {lang === 'en' ? 'Historical' : '历史战绩'}
               </div>
               {savedRecord && (
                 <>
                   <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Best' : '\u6700\u4f73'}</span>
+                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Best' : '最佳'}</span>
                     <span className="text-amber-400 font-bold text-sm">
-                      {savedRecord.bestNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '\u5173'}
-                      {(isNewBest || isFirstRun) && <span className="text-amber-300 ml-1 text-[10px]">{lang === 'en' ? 'NEW!' : '\u65b0\u7eaa\u5f55\uff01'}</span>}
+                      {savedRecord.bestNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '关'}
+                      {(isNewBest || isFirstRun) && <span className="text-amber-300 ml-1 text-[10px]">{lang === 'en' ? 'NEW!' : '新纪录！'}</span>}
                     </span>
                   </div>
                   <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Best XP' : '\u6700\u9ad8XP'}</span>
+                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Best XP' : '最高XP'}</span>
                     <span className="text-amber-400/70 font-bold text-sm">+{savedRecord.bestXP}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Attempts' : '\u51fa\u5f81\u6b21\u6570'}</span>
+                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Attempts' : '出征次数'}</span>
                     <span className="text-white/40 text-sm">{savedRecord.attempts}</span>
                   </div>
                 </>
@@ -710,7 +710,7 @@ export const ExpeditionScreen = ({
                 }}
                 className="flex-1 py-3 bg-amber-500/20 text-amber-400 border border-amber-500/30 font-black rounded-2xl hover:bg-amber-500/30 transition-all text-sm"
               >
-                {lang === 'en' ? 'Try Again' : '\u518d\u6218\u4e00\u6b21'}
+                {lang === 'en' ? 'Try Again' : '再战一次'}
               </button>
               <button
                 onClick={() => onComplete(xpEarned, nodesCleared)}
