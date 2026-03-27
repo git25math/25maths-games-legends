@@ -159,6 +159,7 @@ export default function App() {
   const [activeExpedition, setActiveExpedition] = useState<Expedition | null>(null);
   const [levelUpNotif, setLevelUpNotif] = useState<{ newLevel: number; rankName: string; spEarned: number } | null>(null);
   const [levelUpConfetti, setLevelUpConfetti] = useState(0);
+  const [skillHealToast, setSkillHealToast] = useState<{ topicId: string; delta: number; newHealth: number } | null>(null);
   const [repairToast, setRepairToast] = useState<{ bonus: number } | null>(null);
   const [nearLevelToast, setNearLevelToast] = useState<{ xpNeeded: number; rankName: string } | null>(null);
   const [loginRewardNotif, setLoginRewardNotif] = useState<{ streak: number; xp: number; sp: number } | null>(null);
@@ -622,8 +623,13 @@ export default function App() {
           if (topicMatch) {
             const topicId = topicMatch[1];
             const prevHealth = getSkillHealth(cm as Record<string, unknown>, topicId);
-            const { newState } = processAttempt(prevHealth, true, undefined, topicId);
+            const { newState, result: healthResult } = processAttempt(prevHealth, true, undefined, topicId);
             cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
+            // Show skill health recovery toast if health was below 100
+            if (prevHealth.healthScore < 100 && healthResult.healthDelta > 0) {
+              setSkillHealToast({ topicId, delta: healthResult.healthDelta, newHealth: newState.healthScore });
+              setTimeout(() => setSkillHealToast(null), 3000);
+            }
           }
         }
 
@@ -1590,6 +1596,24 @@ export default function App() {
                   ).join(' + ')}
                 </p>
               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ═══ Skill Heal Toast (shown after successful battle when health was low) ═══ */}
+        <AnimatePresence>
+          {skillHealToast && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="fixed bottom-20 sm:bottom-8 left-1/2 -translate-x-1/2 z-[85] flex items-center gap-2 px-4 py-2 bg-emerald-500/90 backdrop-blur-md border border-emerald-400/50 rounded-xl shadow-xl pointer-events-none"
+            >
+              <span className="text-sm">💚</span>
+              <p className="text-white font-bold text-xs">
+                {lang === 'en' ? `Skill +${skillHealToast.delta} HP → ${skillHealToast.newHealth}%` : `技能 +${skillHealToast.delta} HP → ${skillHealToast.newHealth}%`}
+              </p>
             </motion.div>
           )}
         </AnimatePresence>

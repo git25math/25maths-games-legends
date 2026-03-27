@@ -95,7 +95,7 @@ export function processAttempt(
   patternId?: string,
   topicId?: string,
 ): { newState: SkillHealthState; result: AttemptResult } {
-  var s = { ...state };
+  let s = { ...state };
   s.totalAttempts += 1;
 
   if (isCorrect) {

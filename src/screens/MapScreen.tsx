@@ -522,13 +522,23 @@ export const MapScreen = ({
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`flex items-center justify-between gap-3 px-4 py-3 rounded-xl border ${
-            smartRecommendation.isWeakRecommendation
+          className={`relative flex items-center justify-between gap-3 px-4 py-3 rounded-xl border overflow-hidden ${
+            (smartRecommendation as any).isRepairRecommendation
+              ? 'bg-rose-600/15 border-rose-500/30'
+              : smartRecommendation.isWeakRecommendation
               ? 'bg-rose-600/10 border-rose-500/20'
               : 'bg-indigo-600/10 border-indigo-500/20'
           }`}
         >
-          <div className="flex items-center gap-2 min-w-0">
+          {/* Repair urgency pulse */}
+          {(smartRecommendation as any).isRepairRecommendation && (
+            <motion.div
+              animate={{ opacity: [0, 0.08, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute inset-0 bg-rose-500 pointer-events-none"
+            />
+          )}
+          <div className="flex items-center gap-2 min-w-0 relative">
             <span className="text-lg flex-shrink-0">{smartRecommendation.isWeakRecommendation ? '🔧' : '💡'}</span>
             <div className="min-w-0">
               <p className={`text-[10px] font-bold ${smartRecommendation.isWeakRecommendation ? 'text-rose-400' : 'text-indigo-400'}`}>
