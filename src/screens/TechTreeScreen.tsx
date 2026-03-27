@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, GitBranch, Wrench, ChevronRight, Swords, BookOpen } from 'lucide-react';
+import { ArrowLeft, GitBranch, Wrench, ChevronRight, Swords, BookOpen, Flame, Info, X } from 'lucide-react';
 import type { Language, Mission, UserProfile } from '../types';
 import { computeTechTree, getTopicMissions, getTopicInfo } from '../utils/techTree';
 import type { TechNodeState } from '../utils/techTree';
@@ -21,6 +21,9 @@ const LABELS = {
     corrupted: '技能受损 — 需要修复',
     noMissions: '暂无对应关卡',
     completed: '已完成',
+    onboardingTitle: '选择你的研究路线',
+    onboardingBody: '完成关卡解锁新节点 · 多条路线可同时推进 · 受损节点需要修复',
+    onboardingDismiss: '明白了',
   },
   zh_TW: {
     title: '科技樹',
@@ -32,6 +35,9 @@ const LABELS = {
     corrupted: '技能受損 — 需要修復',
     noMissions: '暫無對應關卡',
     completed: '已完成',
+    onboardingTitle: '選擇你的研究路線',
+    onboardingBody: '完成關卡解鎖新節點 · 多條路線可同時推進 · 受損節點需要修復',
+    onboardingDismiss: '明白了',
   },
   en: {
     title: 'Tech Tree',
@@ -43,6 +49,9 @@ const LABELS = {
     corrupted: 'Skill corrupted — needs repair',
     noMissions: 'No missions available yet',
     completed: 'Completed',
+    onboardingTitle: 'Choose your research path',
+    onboardingBody: 'Complete missions to unlock nodes · Multiple paths available · Corrupted nodes need repair',
+    onboardingDismiss: 'Got it',
   },
 };
 
@@ -63,6 +72,13 @@ export const TechTreeScreen = ({
 }) => {
   const l = LABELS[lang];
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    try { return !localStorage.getItem('gl_techtree_seen'); } catch { return true; }
+  });
+  const dismissOnboarding = () => {
+    setShowOnboarding(false);
+    try { localStorage.setItem('gl_techtree_seen', '1'); } catch {}
+  };
 
   const mistakes = useMemo(
     () => getMistakes(profile.completed_missions as Record<string, unknown>) as Record<string, MistakeRecord>,
@@ -106,6 +122,32 @@ export const TechTreeScreen = ({
           </div>
         </div>
       </div>
+
+      {/* Onboarding banner — first visit only */}
+      <AnimatePresence>
+        {showOnboarding && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mx-4 mt-2 overflow-hidden"
+          >
+            <div className="max-w-6xl mx-auto bg-cyan-500/10 border border-cyan-500/20 rounded-2xl p-4 flex items-start gap-3">
+              <Info size={18} className="text-cyan-400 shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-cyan-300">{l.onboardingTitle}</p>
+                <p className="text-[11px] text-white/40 mt-0.5">{l.onboardingBody}</p>
+              </div>
+              <button
+                onClick={dismissOnboarding}
+                className="shrink-0 px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-400 text-xs font-bold hover:bg-cyan-500/30 transition-colors"
+              >
+                {l.onboardingDismiss}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Tech tree columns — horizontal scroll */}
       <div className="overflow-x-auto pb-8">
@@ -236,6 +278,7 @@ export const TechTreeScreen = ({
                           >
                             <Swords size={12} />
                             {lang === 'en' ? 'Battle' : lang === 'zh_TW' ? '闯關' : '闯关'}
+                            <Flame size={10} className="text-orange-400 ml-0.5" />
                           </button>
                         </div>
                       </div>

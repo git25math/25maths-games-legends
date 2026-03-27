@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Flame, Clock, BookOpen } from 'lucide-react';
 import type { Language } from '../types';
 import { getSecondsUntilReset, formatCountdown } from '../utils/stamina';
+import { useAudio } from '../audio';
 
 const LABELS = {
   zh: {
@@ -46,6 +47,12 @@ export const StaminaGate = ({
 }) => {
   const l = LABELS[lang];
   const [seconds, setSeconds] = useState(getSecondsUntilReset());
+  const { playTap, playDefeat } = useAudio();
+
+  // Play "depleted" sound on mount
+  useEffect(() => {
+    playDefeat();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -69,7 +76,13 @@ export const StaminaGate = ({
         {/* Depleted flames */}
         <div className="flex justify-center gap-2 mb-4">
           {[0, 1, 2].map(i => (
-            <Flame key={i} size={28} className="text-white/15" />
+            <motion.div
+              key={i}
+              animate={{ opacity: [0.12, 0.2, 0.12] }}
+              transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+            >
+              <Flame size={28} className="text-white/20" />
+            </motion.div>
           ))}
         </div>
 
@@ -98,14 +111,14 @@ export const StaminaGate = ({
         {/* Buttons */}
         <div className="flex flex-col gap-2">
           <button
-            onClick={onPractice}
+            onClick={() => { playTap(); onPractice(); }}
             className="w-full py-3 rounded-xl bg-emerald-500 text-white font-black text-sm hover:bg-emerald-400 transition-colors"
           >
             <BookOpen size={16} className="inline mr-2" />
             {l.practiceBtn}
           </button>
           <button
-            onClick={onBack}
+            onClick={() => { playTap(); onBack(); }}
             className="w-full py-2.5 rounded-xl bg-white/5 text-white/50 font-bold text-sm hover:bg-white/10 transition-colors"
           >
             {l.backBtn}

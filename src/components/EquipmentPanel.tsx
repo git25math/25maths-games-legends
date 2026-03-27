@@ -21,6 +21,7 @@ export const EquipmentPanel = ({
   missions,
   onRepair,
   onRepairWithItem,
+  onOpenInventory,
   onClose,
 }: {
   lang: Language;
@@ -28,6 +29,7 @@ export const EquipmentPanel = ({
   missions: Mission[];
   onRepair: (missionId: number) => void;
   onRepairWithItem?: (missionId: number) => void;
+  onOpenInventory?: () => void;
   onClose: () => void;
 }) => {
   const t = translations[lang];
@@ -92,12 +94,14 @@ export const EquipmentPanel = ({
                         {lt(label, lang)}
                       </span>
                       <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full transition-all ${
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${eq.health}%` }}
+                          transition={{ duration: 0.6, delay: 0.1 }}
+                          className={`h-full rounded-full ${
                             eq.health > 60 ? 'bg-amber-400' :
                             eq.health > 30 ? 'bg-rose-400' : 'bg-slate-400'
                           }`}
-                          style={{ width: `${eq.health}%` }}
                         />
                       </div>
                       <span className="text-[9px] text-white/30">{eq.health}%</span>
@@ -131,6 +135,16 @@ export const EquipmentPanel = ({
               );
             })}
           </div>
+        )}
+
+        {/* Inventory shortcut */}
+        {onOpenInventory && (
+          <button
+            onClick={() => { playTap(); onOpenInventory(); }}
+            className="w-full mt-4 py-2 rounded-xl bg-white/5 text-white/40 text-xs font-bold hover:bg-white/10 transition-colors flex items-center justify-center gap-1.5"
+          >
+            🎒 {lang === 'en' ? 'View Backpack' : lang === 'zh_TW' ? '查看背包' : '查看背包'}
+          </button>
         )}
       </motion.div>
     </motion.div>

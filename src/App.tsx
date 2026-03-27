@@ -29,12 +29,12 @@ import { BattleModeSelector } from './components/BattleModeSelector';
 import { StaminaGate } from './components/StaminaGate';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
-import { getExpeditionForGrade, getExpeditionsForGrade } from './data/expeditions';
+import { getExpeditionsForGrade } from './data/expeditions';
 import type { Expedition } from './data/expeditions';
 import { hasAnyPracticeCompletion, markPracticeCompleted } from './utils/completionState';
 import { getRankMultiplier } from './utils/pkRank';
-import { getStamina, getRemainingAttempts, consumeAttempt, setStamina } from './utils/stamina';
-import { getInventory, setInventory } from './utils/inventory';
+import { getStamina, getRemainingAttempts, consumeAttempt, grantBonusAttempt } from './utils/stamina';
+import { getInventory, addItem, useItem } from './utils/inventory';
 import { awardBattleItems, computeRecoveryReward } from './utils/repairItems';
 
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
@@ -546,6 +546,10 @@ export default function App() {
         );
         if (awarded.length > 0) {
           cm._inventory = newInventory;
+          // Master Crystal also grants +1 bonus stamina attempt
+          if (awarded.some(r => r.itemId === 'crystal')) {
+            cm._stamina = grantBonusAttempt(cm._stamina ?? getStamina(cm));
+          }
           // Show toast after a short delay (after battle result animation)
           setTimeout(() => {
             setItemRewardToast({ items: awarded });
@@ -841,7 +845,6 @@ export default function App() {
                     if (!profile) return;
                     const cm = { ...(profile.completed_missions as any) };
                     const inv = getInventory(cm);
-                    const { useItem } = await import('./utils/inventory');
                     const newInv = useItem(inv, itemId);
                     if (!newInv) return;
                     // Reset equipment mastery timestamp to now (repair)
@@ -996,7 +999,6 @@ export default function App() {
                           scrollAwarded = computeRecoveryReward(dominant, 1.0);
                           if (scrollAwarded) {
                             const inv = getInventory(cm);
-                            const { addItem } = await import('./utils/inventory');
                             cm._inventory = addItem(inv, scrollAwarded.itemId);
                           }
                         }
@@ -1357,7 +1359,7 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 60 }}
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[90] flex items-center gap-3 px-6 py-3 bg-purple-500/90 backdrop-blur-md border border-purple-400/50 rounded-2xl shadow-2xl pointer-events-none"
+              className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[90] flex items-center gap-3 px-6 py-3 bg-purple-500/90 backdrop-blur-md border border-purple-400/50 rounded-2xl shadow-2xl pointer-events-none"
             >
               <span className="text-xl">{itemRewardToast.items[0]?.itemId === 'crystal' ? '💎' : itemRewardToast.items[0]?.itemId?.startsWith('scroll') ? '📜' : '🔨'}</span>
               <div>

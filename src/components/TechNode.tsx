@@ -1,4 +1,5 @@
-import { motion } from 'motion/react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Lock, CheckCircle2, AlertTriangle, Loader2, Zap } from 'lucide-react';
 import type { Language } from '../types';
 import type { TechNodeStatus, TechNodeState } from '../utils/techTree';
@@ -47,6 +48,13 @@ const STATUS_CONFIG: Record<TechNodeStatus, {
     glow: 'shadow-[0_0_12px_rgba(251,113,133,0.3)]',
     icon: AlertTriangle,
   },
+  at_risk: {
+    ring: 'border-orange-400/40',
+    bg: 'bg-orange-950/30',
+    text: 'text-orange-400',
+    glow: 'shadow-[0_0_8px_rgba(251,146,60,0.15)]',
+    icon: AlertTriangle,
+  },
 };
 
 export const TechNode = ({
@@ -65,8 +73,19 @@ export const TechNode = ({
 }) => {
   const config = STATUS_CONFIG[state.status];
   const Icon = config.icon;
-  const isClickable = state.status !== 'locked';
+  const isLocked = state.status === 'locked';
+  const isClickable = !isLocked;
   const title = lang === 'en' ? topic.title : topic.titleZh;
+  const [showLockedHint, setShowLockedHint] = useState(false);
+
+  const handleClick = () => {
+    if (isLocked) {
+      setShowLockedHint(true);
+      setTimeout(() => setShowLockedHint(false), 2000);
+      return;
+    }
+    onClick();
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -81,19 +100,26 @@ export const TechNode = ({
 
       {/* Node */}
       <motion.button
-        onClick={isClickable ? onClick : undefined}
-        disabled={!isClickable}
+        onClick={handleClick}
         whileTap={isClickable ? { scale: 0.95 } : undefined}
         className={`relative w-full rounded-2xl border-2 p-3 transition-all ${config.ring} ${config.bg} ${config.glow} ${
           isClickable ? 'cursor-pointer hover:brightness-110' : 'cursor-default opacity-60'
         }`}
       >
-        {/* Corruption crack effect */}
+        {/* Corruption crack effect — pulsing glow + subtle scale */}
         {state.status === 'corrupted' && (
           <motion.div
-            animate={{ opacity: [0.4, 0.8, 0.4] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="absolute inset-0 rounded-2xl border-2 border-rose-500/30 pointer-events-none"
+            animate={{
+              opacity: [0.3, 0.7, 0.3],
+              scale: [1, 1.02, 1],
+              boxShadow: [
+                '0 0 0px rgba(251,113,133,0)',
+                '0 0 12px rgba(251,113,133,0.4)',
+                '0 0 0px rgba(251,113,133,0)',
+              ],
+            }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute inset-0 rounded-2xl border-2 border-rose-500/40 pointer-events-none"
           />
         )}
 
@@ -121,6 +147,7 @@ export const TechNode = ({
               transition={{ duration: 0.5 }}
               className={`h-full rounded-full ${
                 state.status === 'corrupted' ? 'bg-rose-400' :
+                state.status === 'at_risk' ? 'bg-orange-400' :
                 state.status === 'unlocked' ? 'bg-emerald-400' :
                 state.status === 'researching' ? 'bg-amber-400' :
                 'bg-cyan-400'
@@ -143,7 +170,31 @@ export const TechNode = ({
             </span>
           </div>
         )}
+
+        {/* At risk label — upstream node corrupted */}
+        {state.upstreamCorrupted && state.status === 'at_risk' && (
+          <div className="mt-1.5 flex items-center gap-1">
+            <AlertTriangle size={10} className="text-orange-400" />
+            <span className="text-[9px] text-orange-400 font-bold">
+              {lang === 'en' ? `Upstream ${state.upstreamCorrupted} unstable` : lang === 'zh_TW' ? `上游 ${state.upstreamCorrupted} 不穩定` : `上游 ${state.upstreamCorrupted} 不稳定`}
+            </span>
+          </div>
+        )}
       </motion.button>
+
+      {/* Locked hint tooltip */}
+      <AnimatePresence>
+        {showLockedHint && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="mt-1 px-2 py-1 bg-slate-700 border border-white/10 rounded-lg text-[10px] text-white/60 whitespace-nowrap"
+          >
+            🔒 {lang === 'en' ? 'Complete previous topics first' : lang === 'zh_TW' ? '請先完成前置課題' : '请先完成前置课题'}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

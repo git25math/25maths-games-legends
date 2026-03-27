@@ -12,7 +12,7 @@ import type { ErrorType } from './diagnoseError';
 
 // ── Types ──
 
-export type TechNodeStatus = 'locked' | 'available' | 'researching' | 'unlocked' | 'corrupted';
+export type TechNodeStatus = 'locked' | 'available' | 'researching' | 'unlocked' | 'corrupted' | 'at_risk';
 
 export type TechNodeState = {
   topicId: string;
@@ -20,6 +20,7 @@ export type TechNodeState = {
   progress: number;         // missions completed in this topic
   total: number;            // total missions mapped to this topic
   corruptionPattern?: ErrorType | null;
+  upstreamCorrupted?: string | null;  // topicId of the corrupted upstream node causing at_risk
   missionIds: number[];     // missions linked to this topic
 };
 
@@ -202,6 +203,38 @@ export function computeTechTree(
         const prereqs = getTopicPrereqs(chapter, i, topic.id);
         if (arePrereqsMet(prereqs, topicStates)) {
           state.status = 'available';
+        }
+      }
+    }
+  }
+
+  // Third pass: downstream impact — corrupted nodes make dependents "at_risk"
+  for (const chapter of CHAPTERS) {
+    for (let i = 0; i < chapter.topics.length; i++) {
+      const topic = chapter.topics[i];
+      const state = topicStates.get(topic.id)!;
+      if (state.status === 'corrupted') {
+        // Mark all same-chapter downstream nodes as at_risk
+        for (let j = i + 1; j < chapter.topics.length; j++) {
+          const downstream = topicStates.get(chapter.topics[j].id)!;
+          // Only affect non-locked, non-corrupted nodes
+          if (downstream.status === 'available' || downstream.status === 'researching' || downstream.status === 'unlocked') {
+            downstream.upstreamCorrupted = topic.id;
+            // Don't override corrupted status, but add at_risk for unlocked/researching
+            if (downstream.status !== 'unlocked') {
+              downstream.status = 'at_risk';
+            }
+          }
+        }
+        // Also check cross-chapter dependents
+        for (const [depTopicId, prereqs] of Object.entries(CROSS_CHAPTER_PREREQS)) {
+          if (prereqs.includes(topic.id)) {
+            const depState = topicStates.get(depTopicId);
+            if (depState && (depState.status === 'available' || depState.status === 'researching')) {
+              depState.upstreamCorrupted = topic.id;
+              depState.status = 'at_risk';
+            }
+          }
         }
       }
     }

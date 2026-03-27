@@ -8,6 +8,7 @@ import type { RepairItemDef } from '../utils/inventory';
 import { lt } from '../i18n/resolveText';
 import { EQUIPMENT_COLORS } from '../utils/equipment';
 import { useEscapeKey } from '../hooks/useEscapeKey';
+import { useAudio } from '../audio';
 
 const LABELS = {
   zh: {
@@ -75,6 +76,7 @@ export const RepairDialog = ({
   useEscapeKey(onClose);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const { playTap, playBadgeUnlock } = useAudio();
 
   const availableItems = getAvailableRepairItems(getInventory(completedMissions));
   const colors = EQUIPMENT_COLORS[equipmentState];
@@ -82,6 +84,7 @@ export const RepairDialog = ({
 
   const handleRepair = () => {
     if (!selectedItemId) return;
+    playBadgeUnlock();
     setShowSuccess(true);
     setTimeout(() => {
       onRepair(selectedItemId);
@@ -168,7 +171,7 @@ export const RepairDialog = ({
                     return (
                       <button
                         key={itemId}
-                        onClick={() => setSelectedItemId(itemId)}
+                        onClick={() => { playTap(); setSelectedItemId(itemId); }}
                         className={`rounded-xl border p-3 flex items-center gap-3 text-left transition-all ${
                           isSelected
                             ? 'border-amber-400/60 bg-amber-400/10'

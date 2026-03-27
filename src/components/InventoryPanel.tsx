@@ -74,8 +74,8 @@ export const InventoryPanel = ({
                 >
                   <span className="text-2xl">{item.icon}</span>
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-bold ${colors.text}`}>{lt(item.name, lang)}</p>
-                    <p className="text-[10px] text-white/40">{lt(item.description, lang)}</p>
+                    <p className={`text-sm font-bold truncate ${colors.text}`}>{lt(item.name, lang)}</p>
+                    <p className="text-[10px] text-white/40 truncate">{lt(item.description, lang)}</p>
                   </div>
                   <span className={`text-lg font-black ${colors.text}`}>×{count}</span>
                 </div>

@@ -368,7 +368,7 @@ export const MapScreen = ({
                     <button
                       onClick={(e) => { e.stopPropagation(); playTap(); onRepairEquipment(mission.id); }}
                       className={`absolute -top-2 -right-2 w-8 h-8 rounded-full ${colors.bg} border ${colors.border} flex items-center justify-center shadow-md z-10 hover:scale-110 transition-transform`}
-                      title={lang === 'en' ? 'Needs repair' : '需要修复'}
+                      title={lt({ zh: '需要修复', en: 'Needs repair' }, lang)}
                     >
                       <Wrench size={14} className={colors.text} />
                     </button>
@@ -404,22 +404,22 @@ export const MapScreen = ({
                     <div className="flex items-center gap-1.5 mb-4 flex-wrap">
                       {isAssigned && !isCompleted && (
                         <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-black rounded-full border border-purple-200 flex items-center gap-0.5">
-                          <ClipboardList size={10} /> {lang === 'en' ? 'Assigned' : '老师布置'}
+                          <ClipboardList size={10} /> {lt({ zh: '老师布置', en: 'Assigned' }, lang)}
                         </span>
                       )}
                       {kpProg?.mastered && (
                         <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full border border-emerald-200 flex items-center gap-0.5">
-                          <CheckCircle2 size={10} /> {lang === 'en' ? 'Mastered' : '已掌握'}
+                          <CheckCircle2 size={10} /> {lt({ zh: '已掌握', en: 'Mastered' }, lang)}
                         </span>
                       )}
                       {kpProg && !kpProg.mastered && kpProg.wins > 0 && (
                         <span className="px-2 py-0.5 bg-sky-100 text-sky-700 text-[10px] font-black rounded-full border border-sky-200">
-                          {lang === 'en' ? `${kpProg.wins} wins` : `${kpProg.wins} 胜`}
+                          {lang === 'en' ? `${kpProg.wins} wins` : `${kpProg.wins} ${lang === 'zh_TW' ? '勝' : '胜'}`}
                         </span>
                       )}
                       {isWeak && (
                         <span className="px-2 py-0.5 bg-rose-100 text-rose-700 text-[10px] font-black rounded-full border border-rose-200 flex items-center gap-0.5">
-                          <AlertTriangle size={10} /> {lang === 'en' ? 'Needs review' : '薄弱点'}
+                          <AlertTriangle size={10} /> {lt({ zh: '薄弱点', en: 'Needs review' }, lang)}
                         </span>
                       )}
                       {pb && (
@@ -446,8 +446,8 @@ export const MapScreen = ({
                   }`}
                 >
                   {isLocked ? <><Lock size={16} /> {t.locked}</>
-                    : isCompleted ? <><BookOpen size={16} /> {lang === 'en' ? 'Review' : '\u590d\u4e60'}</>
-                    : <><Swords size={16} /> {lang === 'en' ? 'Start Learning' : '\u5f00\u59cb\u5b66\u4e60'}</>
+                    : isCompleted ? <><BookOpen size={16} /> {lt({ zh: '复习', en: 'Review' }, lang)}</>
+                    : <><Swords size={16} /> {lt({ zh: '开始学习', en: 'Start Learning' }, lang)}</>
                   }
                 </motion.button>
                 {isLocked && (
@@ -564,7 +564,10 @@ export const MapScreen = ({
               })()}
 
               {/* ── Stamina indicator ── */}
-              <StaminaBar lang={lang} remaining={getRemainingAttempts(getStamina(profile.completed_missions as Record<string, unknown>))} />
+              {(() => {
+                const stamina = getStamina(profile.completed_missions as Record<string, unknown>);
+                return <StaminaBar lang={lang} remaining={getRemainingAttempts(stamina)} bonus={stamina.bonus} />;
+              })()}
 
               {/* ── Secondary buttons: visible on md+, collapsed on mobile ── */}
               {/* Desktop: inline buttons */}
@@ -818,7 +821,7 @@ export const MapScreen = ({
               {completedUnits.length > 0 && (
                 <div>
                   <h3 className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-3">
-                    {lang === 'en' ? 'Conquered Campaigns' : '\u5df2\u5f81\u670d\u7684\u6218\u5f79'}
+                    {lt({ zh: '已征服的战役', en: 'Conquered Campaigns' }, lang)}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {completedUnits.map(u => {
@@ -875,7 +878,7 @@ export const MapScreen = ({
               {upcomingUnits.length > 0 && (
                 <div className="space-y-3 pt-4">
                   <h3 className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-3">
-                    {lang === 'en' ? 'Upcoming Campaigns' : '\u524d\u65b9\u6218\u5f79'}
+                    {lt({ zh: '前方战役', en: 'Upcoming Campaigns' }, lang)}
                   </h3>
                   {upcomingUnits.map(u => (
                     <motion.div
@@ -889,7 +892,7 @@ export const MapScreen = ({
                       <div className="flex-1 min-w-0">
                         <h4 className="text-white/40 text-sm font-bold truncate">{u.unitTitle}</h4>
                         <p className="text-white/20 text-[10px]">
-                          {u.unitMissions.length} {lang === 'en' ? 'missions' : '\u5173'} · {lang === 'en' ? 'Locked' : '\u5f85\u89e3\u9501'}
+                          {u.unitMissions.length} {lt({ zh: '关', en: 'missions' }, lang)} · {lt({ zh: '待解锁', en: 'Locked' }, lang)}
                         </p>
                       </div>
                       <Lock size={16} className="text-white/15 shrink-0" />
@@ -934,6 +937,7 @@ export const MapScreen = ({
             setShowEquipmentPanel(false);
             setRepairDialogTarget(missionId);
           } : undefined}
+          onOpenInventory={() => { setShowEquipmentPanel(false); setShowInventory(true); }}
           onClose={() => setShowEquipmentPanel(false)}
         />
       )}

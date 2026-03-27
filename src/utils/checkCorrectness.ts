@@ -113,7 +113,9 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   if (type === 'PYTHAGORAS') {
     const { a, b, c } = data;
     if (c !== undefined) {
-      const val = Math.sqrt(c * c - a * a);
+      const disc = c * c - a * a;
+      if (disc < 0) return { correct: false, expected: { c: 'invalid' } };
+      const val = Math.sqrt(disc);
       return { correct: Math.abs(parse(inputs.c || '') - val) < 0.01, expected: { c: round(val) } };
     }
     const val = Math.sqrt(a * a + b * b);
@@ -168,6 +170,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   }
   if (type === 'PROBABILITY') {
     if (data.p1 !== undefined) {
+      if (data.p2 === undefined) return { correct: false, expected: { p: '0' } };
       const val = data.p1 * data.p2;
       return { correct: Math.abs(parse(inputs.p || '') - val) < 0.01, expected: { p: toFraction(val) } };
     }

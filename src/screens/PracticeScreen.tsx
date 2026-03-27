@@ -253,7 +253,7 @@ export const PracticeScreen = ({
     const phaseLabels: Record<string, string> = {
       amber: (t as any).phaseToAmber ?? 'Now try with hints.',
       red: (t as any).phaseToRed ?? 'No hints \u2014 independent challenge!',
-      battle: lang === 'en' ? 'Final battle \u2014 10 questions!' : '\u6700\u7ec8\u95ef\u5173\u2014\u201410 \u9898\u6311\u6218\uff01',
+      battle: lt({ zh: '最终闯关 — 10 题挑战！', en: 'Final battle — 10 questions!' }, lang),
     };
     const xpLabel = earnedXP > 0 ? ` \u2728 +${earnedXP} XP` : '';
     const label = phaseLabels[nextPhase] ?? '';
@@ -294,7 +294,7 @@ export const PracticeScreen = ({
         lang={lang}
         onUseResult={(val) => {
           const fieldConfig = INPUT_FIELDS[currentMission.type];
-          const langKey = lang === 'en' ? 'en' : 'zh';
+          const langKey = lang === 'en' ? 'en' : lang === 'zh_TW' ? 'zh_TW' : 'zh';
           const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
           const targetId = fields.find(f => !inputs[f.id])?.id ?? fields[0]?.id;
           if (targetId) setInputs(prev => ({ ...prev, [targetId]: val }));
@@ -447,8 +447,8 @@ export const PracticeScreen = ({
                 />
               </div>
               <div className="flex justify-between mt-0.5 text-[8px] text-white/20 px-0.5">
-                <span>{lang === 'en' ? 'Tutorial' : '\u6559\u5b66'}</span>
-                <span>{lang === 'en' ? 'Complete!' : '\u901a\u5173\uff01'}</span>
+                <span>{lt({ zh: '教学', en: 'Tutorial' }, lang)}</span>
+                <span>{lt({ zh: '通关！', en: 'Complete!' }, lang)}</span>
               </div>
             </div>
           );
@@ -574,7 +574,7 @@ export const PracticeScreen = ({
                   <div className="px-3 py-3 bg-indigo-900/40 border border-indigo-600/30 rounded-lg mb-2">
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-indigo-100 text-xs font-bold">
-                        {lang === 'en' ? 'Final Battle' : '\u6700\u7ec8\u95ef\u5173'}
+                        {lt({ zh: '最终闯关', en: 'Final Battle' }, lang)}
                       </span>
                       <span className="text-indigo-300 text-xs font-black">{phaseCorrectCount}/{PHASE_REQUIRED.battle}</span>
                     </div>
@@ -671,14 +671,14 @@ export const PracticeScreen = ({
             initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}
             className="bg-slate-800 border border-white/10 rounded-2xl p-6 max-w-xs text-center"
           >
-            <p className="text-white font-bold mb-1">{lang === 'en' ? 'Quit practice?' : '\u9000\u51fa\u7ec3\u4e60\uff1f'}</p>
-            <p className="text-white/40 text-xs mb-4">{lang === 'en' ? 'Current phase progress will be lost.' : '\u5f53\u524d\u9636\u6bb5\u8fdb\u5ea6\u5c06\u4e22\u5931\u3002'}</p>
+            <p className="text-white font-bold mb-1">{lt({ zh: '退出练习？', en: 'Quit practice?' }, lang)}</p>
+            <p className="text-white/40 text-xs mb-4">{lt({ zh: '当前阶段进度将丢失。', en: 'Current phase progress will be lost.' }, lang)}</p>
             <div className="flex gap-2">
               <button onClick={() => setShowExitConfirm(false)} className="flex-1 py-2.5 bg-white/10 text-white/70 rounded-xl text-xs font-bold">
-                {lang === 'en' ? 'Continue' : '\u7ee7\u7eed\u7ec3\u4e60'}
+                {lt({ zh: '继续练习', en: 'Continue' }, lang)}
               </button>
               <button onClick={onCancel} className="flex-1 py-2.5 bg-rose-500/80 text-white rounded-xl text-xs font-bold">
-                {lang === 'en' ? 'Quit' : '\u9000\u51fa'}
+                {lt({ zh: '退出', en: 'Quit' }, lang)}
               </button>
             </div>
           </motion.div>
