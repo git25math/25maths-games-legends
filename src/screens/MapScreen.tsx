@@ -286,11 +286,14 @@ export const MapScreen = ({
       <motion.div initial={{ x: -20, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} className="flex items-center gap-4">
         <div className="h-px flex-1 bg-white/10" />
         <div className="flex items-center gap-3">
-          <img
-            src={CHAPTER_IMAGES[u.unitIndex % CHAPTER_IMAGES.length]}
-            alt=""
-            className="w-10 h-10 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl object-cover border-2 border-amber-400/30 shadow-lg"
-          />
+          <div className="relative flex-shrink-0">
+            <div className="absolute inset-0 bg-amber-400/20 rounded-lg sm:rounded-xl blur-md" />
+            <img
+              src={CHAPTER_IMAGES[u.unitIndex % CHAPTER_IMAGES.length]}
+              alt=""
+              className="relative w-10 h-10 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl object-cover border-2 border-amber-400/30 shadow-lg"
+            />
+          </div>
           <h3 className="text-base sm:text-2xl font-black text-white uppercase tracking-widest flex items-center gap-2 sm:gap-3">
             <MapIcon className="text-indigo-400" size={18} />
             <span className="truncate">{u.unitTitle}</span>
