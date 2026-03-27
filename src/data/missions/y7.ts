@@ -13,10 +13,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '这个数有几个因数？', en: 'How many factors does this number have?' },
     data: { n: 24, factors: [1, 2, 3, 4, 6, 8, 12, 24], answer: 8, generatorType: 'FACTORS_LIST_RANDOM' }, difficulty: 'Easy', reward: 35,
     kpId: 'kp-1.1-02', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '刘备：24 个新兵怎么分队？先搞懂"因数"——能把 24 平均分开的数', en: 'Liu Bei: "24 recruits — how to divide? First understand \'factors\' — numbers that divide 24 evenly"' }, highlightField: 'ans' },
-      { text: { zh: '刘备：因数成对出现——$1 \\times 24 = 24$，$2 \\times 12 = 24$，$3 \\times 8 = 24$，$4 \\times 6 = 24$', en: 'Liu Bei: "Factors come in pairs: $1 \\times 24$, $2 \\times 12$, $3 \\times 8$, $4 \\times 6$"' }, highlightField: 'ans' },
-      { text: { zh: '刘备：所以 24 的全部因数是 $1, 2, 3, 4, 6, 8, 12, 24$——共 8 个', en: 'Liu Bei: "All factors of 24: $1, 2, 3, 4, 6, 8, 12, 24$ — total 8"' }, highlightField: 'ans' },
+        tutorialSteps: [
+      { text: { zh: '刘备：24 个新兵怎么分成人数相等的小队？\n\n"因数"就是能把 24 平均分开的数。比如 $24 \div 3 = 8$ 整除，说明 3 是因数。找出**所有**因数，就能知道所有可能的分法！', en: 'Liu Bei: How to divide 24 recruits into equal-sized teams?\n\nA "factor" is a number that divides 24 exactly. For example $24 \div 3 = 8$ exactly, so 3 is a factor. Find **all** factors to know every possible team size!' }, highlightField: 'ans' },
+      { text: { zh: '刘备：系统找因数——用配对法\n因数成对出现：若 $a$ 是因数，则 $24 \div a$ 也是因数。\n从 $1$ 开始，逐一试除，直到两个因数相遇！', en: 'Liu Bei: Find factors systematically — use pairing\nFactors come in pairs: if $a$ is a factor, then $24 \div a$ is also a factor.\nStart from $1$, test each divisor until the two factors meet!' }, highlightField: 'ans' },
+      { text: { zh: '刘备：枚举配对\n$1 \times 24 = 24$ ✓\n$2 \times 12 = 24$ ✓\n$3 \times 8 = 24$ ✓\n$4 \times 6 = 24$ ✓\n$5 \times ? = 24$：$24 \div 5$ 不整除 ✗', en: 'Liu Bei: List the pairs\n$1 \\times 24 = 24$ ✓\n$2 \\times 12 = 24$ ✓\n$3 \\times 8 = 24$ ✓\n$4 \\times 6 = 24$ ✓\n$5 \\times ? = 24$: $24 \div 5$ not exact ✗' }, highlightField: 'ans' },
+      { text: { zh: '刘备：收集所有因数\n$\\{1, 2, 3, 4, 6, 8, 12, 24\\}$\n\n共 $8$ 个因数。', en: 'Liu Bei: Collect all factors\n$\\{1, 2, 3, 4, 6, 8, 12, 24\\}$\n\n$8$ factors in total.' }, highlightField: 'ans' },
+      { text: { zh: '刘备：答案\n$24$ 共有 $8$ 个因数。\n\n可以分成 1, 2, 3, 4, 6, 8, 12, 或 24 人的小队！', en: 'Liu Bei: Answer\n$24$ has $8$ factors.\n\nTeams of 1, 2, 3, 4, 6, 8, 12, or 24 are all possible!' }, highlightField: 'ans' },
+      { text: { zh: '刘备：验算——逐一确认\n$24 \div 1 = 24$ ✓, $24 \div 2 = 12$ ✓, $24 \div 3 = 8$ ✓, $24 \div 4 = 6$ ✓\n$24 \div 6 = 4$ ✓, $24 \div 8 = 3$ ✓, $24 \div 12 = 2$ ✓, $24 \div 24 = 1$ ✓', en: 'Liu Bei: Verify — confirm each one\n$24 \div 1 = 24$ ✓, $24 \div 2 = 12$ ✓, $24 \div 3 = 8$ ✓, $24 \div 4 = 6$ ✓\n$24 \div 6 = 4$ ✓, $24 \div 8 = 3$ ✓, $24 \div 12 = 2$ ✓, $24 \div 24 = 1$ ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '因数是能整除一个数的数。因数成对出现，一对乘起来等于原数。', en: 'Factors divide a number evenly. They come in pairs whose product is the original number.' }, formula: { zh: '$n = a \\times b \\Rightarrow a, b \\text{ 都是 } n \\text{ 的因数}$', en: '$n = a \\times b \\Rightarrow a, b \\text{ are factors of } n$' }, tips: [{ zh: '刘备提示：编队方式越多，战术越灵活！', en: 'Liu Bei Tip: More ways to divide = more tactical flexibility!' }] },
     storyConsequence: { correct: { zh: '点兵编队——因数全部找齐！做得漂亮！', en: 'Troop Formation Count — Well done!' }, wrong: { zh: '因数漏了几个…再试一次！', en: 'Not quite... Try again!' } }
@@ -32,11 +35,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '判断这个数是不是质数。', en: 'Determine if this number is prime.' },
     data: { n: 17, isPrime: true, generatorType: 'PRIME_RANDOM' }, difficulty: 'Easy', reward: 35,
     kpId: 'kp-1.1-01', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '诸葛亮：什么是质数？只能被 1 和它自己整除的数', en: 'Zhuge Liang: "What is a prime? A number divisible only by 1 and itself"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：不是质数的叫"合数"——能被拆开', en: 'Zhuge Liang: "Non-primes are composites — they can be split"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：注意——1 不是质数，2 是唯一的偶数质数', en: 'Zhuge Liang: "Note: 1 is NOT prime. 2 is the only even prime"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：前 10 个质数：$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$', en: 'Zhuge Liang: "First 10 primes: $2, 3, 5, 7, 11, 13, 17, 19, 23, 29$"' }, highlightField: 'ans' }
+        tutorialSteps: [
+      { text: { zh: '诸葛亮：亲卫队为什么要"质数"人？\n\n质数只能被 1 和自己整除，不能被分成等大的小组——就像亲卫必须铁板一块，不能被分化！判断一个数是不是质数，要用**试除法**。', en: 'Zhuge Liang: Why does the elite guard need "prime" numbers?\n\nA prime is only divisible by 1 and itself — it cannot be split into equal groups. Like the elite guard being unbreakable! To test primality, use the trial division method.' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：质数的定义\n- 只有两个因数：$1$ 和自身\n- 注意：$1$ **不是**质数（只有一个因数）\n- $2$ 是唯一的偶数质数！\n\n合数 = 有三个或以上因数', en: 'Zhuge Liang: Definition of prime\n- Has exactly two factors: $1$ and itself\n- Note: $1$ is NOT prime (only one factor)\n- $2$ is the only even prime!\n\nComposite = has three or more factors' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：试除法——检验 17\n只需试到 $\\sqrt{17} \\approx 4.1$，即测试 $2, 3$\n\n（若 $17$ 有因数 $> 4.1$，对应的另一个因数必 $< 4.1$，早已被找到）', en: 'Zhuge Liang: Trial division — testing 17\nOnly need to test up to $\\sqrt{17} \\approx 4.1$, i.e. test $2, 3$\n\n(If 17 had a factor $> 4.1$, its pair would be $< 4.1$ and already found)' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：逐一试除\n$17 \div 2 = 8.5$（不整除）\n$17 \div 3 = 5.67$（不整除）\n\n没有因数 → $17$ 是质数！', en: 'Zhuge Liang: Test each divisor\n$17 \div 2 = 8.5$ (not exact)\n$17 \div 3 = 5.67$ (not exact)\n\nNo factors found → $17$ is prime!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：答案\n$17$ 是**质数**。\n\n亲卫队 17 人，铁板一块，无法分化！', en: 'Zhuge Liang: Answer\n$17$ is prime.\n\nElite guard of 17 — unbreakable, cannot be divided!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n$17$ 的因数只有 $1$ 和 $17$——确认是质数 ✓\n\n常见质数速记：$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$', en: 'Zhuge Liang: Verify\n$17$ has only two factors: $1$ and $17$ — confirmed prime ✓\n\nCommon primes to know: $2, 3, 5, 7, 11, 13, 17, 19, 23, 29$' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: { zh: '$\\text{质数 = 只被 1 和自己整除}$', en: '$\\text{Prime = only divisible by 1 and itself}$' }, tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorize.' }] },
     storyConsequence: { correct: { zh: '选拔亲卫——质数一个不漏！做得漂亮！', en: 'Selecting Elite Guards — Well done!' }, wrong: { zh: '混进了合数…再试一次！', en: 'Not quite... Try again!' } }
@@ -52,11 +57,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '把这个数拆成质因数，数一数共几个。', en: 'Factorize this number into primes and count them.' },
     data: { n: 24, primeCount: 4, generatorType: 'FACTOR_TREE_RANDOM' }, difficulty: 'Easy', reward: 40,
     kpId: 'kp-1.1-08', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '诸葛亮：24 个新兵，怎么拆成最小的战斗单元？', en: 'Zhuge Liang: "24 recruits — how to split into smallest units?"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：从 2 开始试。24÷2=12，记下 2', en: 'Zhuge Liang: "Start with 2. 24÷2=12, note 2"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：12÷2=6，记下 2。6÷2=3，记下 2。3 是质数，停！', en: 'Zhuge Liang: "12÷2=6, note 2. 6÷2=3, note 2. 3 is prime, stop!"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：$24 = 2 \\times 2 \\times 2 \\times 3 = 2^3 \\times 3$，共 4 个质因数', en: 'Zhuge Liang: "$24 = 2 \\times 2 \\times 2 \\times 3 = 2^3 \\times 3$, 4 prime factors total"' }, highlightField: 'ans' }
+        tutorialSteps: [
+      { text: { zh: '诸葛亮：质因数分解——拆成最小战斗单元\n\n质数是不可再分的原子单位。任何合数都能被拆成质数的乘积——就像把 24 名新兵拆成最小战斗小组，每组都不可再分！', en: 'Zhuge Liang: Prime factorisation — break down to smallest units\n\nPrimes are indivisible atomic units. Any composite can be broken into a product of primes — like splitting 24 recruits into the smallest possible unbreakable squads!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：因数树法\n从最小质数 $2$ 开始，能整除就拆开，直到所有末端都是质数。\n$$24 \to 2 \times 12 \to 2 \times 2 \times 6 \to 2 \times 2 \times 2 \times 3$$', en: 'Zhuge Liang: Factor tree method\nStart from the smallest prime $2$; if it divides evenly, split it; repeat until all end nodes are prime.\n$$24 \\to 2 \\times 12 \\to 2 \\times 2 \\times 6 \\to 2 \\times 2 \\times 2 \\times 3$$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：第一步——从 2 开始\n$24 \div 2 = 12$（整除！）\n记下 $2$，继续对 $12$ 分解。', en: 'Zhuge Liang: Step 1 — start with 2\n$24 \div 2 = 12$ (exact!)\nWrite down $2$, continue factorising $12$.' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：继续拆\n$12 \div 2 = 6$ → 记下 $2$\n$6 \div 2 = 3$ → 记下 $2$\n$3$ 是质数 → 停！', en: 'Zhuge Liang: Continue splitting\n$12 \div 2 = 6$ → write $2$\n$6 \div 2 = 3$ → write $2$\n$3$ is prime → stop!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：结果\n$$24 = 2 \times 2 \times 2 \times 3 = 2^3 \times 3$$\n共 $4$ 个质因数（含重复）。', en: 'Zhuge Liang: Result\n$$24 = 2 \\times 2 \\times 2 \\times 3 = 2^3 \\times 3$$\n$4$ prime factors in total (counting repeats).' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n$$2^3 \times 3 = 8 \times 3 = 24 \\checkmark$$\n\n乘回来还是 24——分解正确！', en: 'Zhuge Liang: Verify\n$$2^3 \\times 3 = 8 \\times 3 = 24 \\checkmark$$\n\nMultiply back and get 24 — factorisation correct!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '任何大于 1 的整数都能唯一地分解为质数的乘积。', en: 'Every integer greater than 1 can be uniquely expressed as a product of primes.' }, formula: { zh: '$\\text{因数树：从上往下拆到全是质数}$', en: '$\\text{Factor tree: split top-down until all primes}$' }, tips: [{ zh: '诸葛亮提示：知己知彼，先把自己的兵力拆解清楚。', en: 'Zhuge Liang Tip: Know yourself — first break down your own forces clearly.' }] },
     storyConsequence: { correct: { zh: '拆解兵力——因数树完美拆解！做得漂亮！', en: 'Breaking Down Forces — Well done!' }, wrong: { zh: '分解不到底…再试一次！', en: 'Not quite... Try again!' } }
@@ -72,27 +79,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '求最大公因数 (HCF)。', en: 'Find the Highest Common Factor (HCF).' },
     data: { numbers: [24, 36], generatorType: 'HCF_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-1.1-08', sectionId: 'number',
-    tutorialSteps: [
-      {
-        text: { zh: '刘备："两营分别有 24 和 36 名士兵，要分成人数相同的小队，每队最多几人？"', en: 'Liu Bei: "Two camps have 24 and 36 soldiers. Split into equal squads — what is the largest squad size?"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '刘备："先对 24 做质因数分解：$24 = 2^3 \\times 3$"', en: 'Liu Bei: "Prime factorize 24: $24 = 2^3 \\times 3$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '刘备："再对 36 做质因数分解：$36 = 2^2 \\times 3^2$"', en: 'Liu Bei: "Prime factorize 36: $36 = 2^2 \\times 3^2$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '刘备："找共有的质因数，取较小的次幂，乘起来：$2^2 \\times 3 = 12$"', en: 'Liu Bei: "Take common primes to lowest power: $2^2 \\times 3 = 12$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '刘备："所以 HCF(24, 36) = 12！每队 12 人，整编完毕！"', en: 'Liu Bei: "So HCF(24, 36) = 12! 12 soldiers per squad, troops organized!"' },
-        highlightField: 'ans'
-      }
+        tutorialSteps: [
+      { text: { zh: '刘备：最大公因数（HCF）——找最大的共同分法\n\n两营分别有 24 和 36 人，要分成人数**相同**的小队。最多能每队几人？最大公因数就是最大的"共同因数"！', en: 'Liu Bei: HCF — find the largest common divisor\n\nTwo battalions: 24 and 36 soldiers, to be split into equal teams. What\'s the maximum team size? HCF is the largest number that divides both!' }, highlightField: 'ans' },
+      { text: { zh: '刘备："先对 24 做质因数分解：$24 = 2^3 \times 3$"', en: 'Liu Bei: "First factorise 24: $24 = 2^3 \\times 3$"' }, highlightField: 'ans' },
+      { text: { zh: '刘备："再对 36 做质因数分解：$36 = 2^2 \times 3^2$"', en: 'Liu Bei: "Then factorise 36: $36 = 2^2 \\times 3^2$"' }, highlightField: 'ans' },
+      { text: { zh: '刘备："找共有的质因数，取较小的次幂，乘起来：$2^2 \times 3 = 12$"\n\n$2$ 的较小次幂：$\\min(3, 2) = 2$，$3$ 的较小次幂：$\\min(1, 2) = 1$', en: 'Liu Bei: "Find shared primes, take the smaller power, multiply: $2^2 \\times 3 = 12$"\n\n$2$: smaller power $\\min(3,2) = 2$; $3$: smaller power $\\min(1,2) = 1$' }, highlightField: 'ans' },
+      { text: { zh: '刘备："所以 HCF(24, 36) = 12！每队 12 人，整编完毕！"', en: 'Liu Bei: "So HCF(24, 36) = 12! 12 soldiers per team — integration complete!"' }, highlightField: 'ans' },
+      { text: { zh: '刘备：验算\n$24 \div 12 = 2$ ✓，$36 \div 12 = 3$ ✓\n有没有更大的公因数？$12 \times 2 = 24 > 12$ 但不整除 36 ✓\n\nHCF = 12 确认！', en: 'Liu Bei: Verify\n$24 \div 12 = 2$ ✓, $36 \div 12 = 3$ ✓\nIs there a larger common factor? $12 \times 2 = 24$ does not divide 36 ✓\n\nHCF = 12 confirmed!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: 'HCF 是两个数共有质因数（每个取次幂小的那个）的乘积。', en: 'HCF is the product of common prime factors, each taken to the lowest power.' }, formula: { zh: '$\\text{HCF = 短除法左边全乘}$', en: '$\\text{HCF = multiply all left-side divisors}$' }, tips: [{ zh: '刘备提示：队伍整齐，方能出征。', en: 'Liu Bei Tip: Well-organized troops are ready to march.' }] },
     storyConsequence: { correct: { zh: '整编队伍——最大公因数精准！做得漂亮！', en: 'Organizing Troops — Well done!' }, wrong: { zh: '公因数没找到最大的…再试一次！', en: 'Not quite... Try again!' } }
@@ -108,27 +101,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '求最小公倍数 (LCM)。', en: 'Find the Least Common Multiple (LCM).' },
     data: { numbers: [6, 8], generatorType: 'LCM_RANDOM' }, difficulty: 'Easy', reward: 55,
     kpId: 'kp-1.1-09', sectionId: 'number',
-    tutorialSteps: [
-      {
-        text: { zh: '关羽："我每 6 天巡营一次，张飞每 8 天一次。几天后我们同时巡营？"', en: 'Guan Yu: "I patrol every 6 days, Zhang Fei every 8 days. When do we both patrol together?"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '关羽："先对 6 做质因数分解：$6 = 2 \\times 3$"', en: 'Guan Yu: "Prime factorize 6: $6 = 2 \\times 3$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '关羽："再对 8 做质因数分解：$8 = 2^3$"', en: 'Guan Yu: "Prime factorize 8: $8 = 2^3$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '关羽："每个质因数取大的那个，乘起来：$2^3 \\times 3 = 24$"', en: 'Guan Yu: "Take all primes to highest power: $2^3 \\times 3 = 24$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '关羽："所以 LCM(6, 8) = 24！每 24 天我们同时巡营！"', en: 'Guan Yu: "So LCM(6, 8) = 24! We both patrol together every 24 days!"' },
-        highlightField: 'ans'
-      }
+        tutorialSteps: [
+      { text: { zh: '关羽：最小公倍数（LCM）——找最早重合的时刻\n\n我每 6 天巡营，张飞每 8 天。什么时候同时巡营？最小公倍数就是两个数的"最小共同倍数"！', en: 'Guan Yu: LCM — find the earliest they coincide\n\nI patrol every 6 days, Zhang Fei every 8. When do we patrol together? LCM is the smallest number that is a multiple of both!' }, highlightField: 'ans' },
+      { text: { zh: '关羽："先对 6 做质因数分解：$6 = 2 \times 3$"', en: 'Guan Yu: "Factorise 6: $6 = 2 \\times 3$"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："再对 8 做质因数分解：$8 = 2^3$"', en: 'Guan Yu: "Factorise 8: $8 = 2^3$"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："每个质因数取大的那个，乘起来：$2^3 \times 3 = 24$"\n\n$2$ 的较大次幂：$\\max(1, 3) = 3$，$3$ 的较大次幂：$\\max(1, 0) = 1$', en: 'Guan Yu: "For each prime, take the larger power, multiply: $2^3 \\times 3 = 24$"\n\n$2$: larger power $\\max(1,3) = 3$; $3$: larger power $\\max(1,0) = 1$' }, highlightField: 'ans' },
+      { text: { zh: '关羽："所以 LCM(6, 8) = 24！每 24 天我们同时巡营！"', en: 'Guan Yu: "So LCM(6, 8) = 24! We patrol together every 24 days!"' }, highlightField: 'ans' },
+      { text: { zh: '关羽：验算\n$24 \div 6 = 4$ ✓（6 的倍数），$24 \div 8 = 3$ ✓（8 的倍数）\n有没有更小的？$12 \div 8 = 1.5$ ✗ → $24$ 确实是最小公倍数 ✓', en: 'Guan Yu: Verify\n$24 \div 6 = 4$ ✓ (multiple of 6), $24 \div 8 = 3$ ✓ (multiple of 8)\nSmaller? $12 \div 8 = 1.5$ ✗ → $24$ is indeed the LCM ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: 'LCM 是所有质因数（每个取次幂大的那个）的乘积。', en: 'LCM is the product of all prime factors, each taken to the highest power.' }, formula: { zh: '$\\text{LCM = 左边×底部全乘}$', en: '$\\text{LCM = multiply left side × bottom}$' }, tips: [{ zh: '关羽提示：排班有序，方能守备森严。', en: 'Guan Yu Tip: Orderly schedules make strong defenses.' }] },
     storyConsequence: { correct: { zh: '巡营排班——最小公倍数正确！做得漂亮！', en: 'Patrol Schedule — Well done!' }, wrong: { zh: '公倍数算岔了…再试一次！', en: 'Not quite... Try again!' } }
@@ -144,27 +123,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '求最大公因数 (HCF)。', en: 'Find the Highest Common Factor (HCF).' },
     data: { numbers: [48, 60], generatorType: 'HCF_RANDOM' }, difficulty: 'Medium', reward: 65,
     kpId: 'kp-1.1-08', sectionId: 'number',
-    tutorialSteps: [
-      {
-        text: { zh: '张飞："俺们有 48 袋粮和 60 把刀，要平分给各村，每村最多能分几份？"', en: 'Zhang Fei: "We have 48 bags of grain and 60 swords. Each village gets equal shares — what is the max per village?"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '张飞："$48 = 2^4 \\times 3$"', en: 'Zhang Fei: "$48 = 2^4 \\times 3$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '张飞："$60 = 2^2 \\times 3 \\times 5$"', en: 'Zhang Fei: "$60 = 2^2 \\times 3 \\times 5$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '张飞："公共质因数：2 和 3。取最低次幂：$2^2 \\times 3 = 12$"', en: 'Zhang Fei: "Common primes: 2 and 3. Lowest powers: $2^2 \\times 3 = 12$"' },
-        highlightField: 'ans'
-      },
-      {
-        text: { zh: '张飞："HCF(48, 60) = 12！分给 12 个村，每村 4 袋粮 5 把刀！"', en: 'Zhang Fei: "HCF(48, 60) = 12! Split among 12 villages, each gets 4 bags of grain and 5 swords!"' },
-        highlightField: 'ans'
-      }
+        tutorialSteps: [
+      { text: { zh: '张飞：最大公因数再练！\n\n有 48 袋粮和 60 把刀，要**平均**分给每个村（每村数量相同）。最多能分给几个村？答案就是 48 和 60 的最大公因数（HCF）！', en: 'Zhang Fei: HCF practice again!\n\n48 grain bags and 60 swords, to be distributed equally to each village. Maximum number of villages? That\'s the HCF of 48 and 60!' }, highlightField: 'ans' },
+      { text: { zh: '张飞："$48 = 2^4 \times 3$"', en: 'Zhang Fei: "$48 = 2^4 \\times 3$"' }, highlightField: 'ans' },
+      { text: { zh: '张飞："$60 = 2^2 \times 3 \times 5$"', en: 'Zhang Fei: "$60 = 2^2 \\times 3 \\times 5$"' }, highlightField: 'ans' },
+      { text: { zh: '张飞："公共质因数：2 和 3。取最低次幂：$2^2 \times 3 = 12$"\n\n（$5$ 只出现在 60 的分解中，不是公因数）', en: 'Zhang Fei: "Shared primes: 2 and 3. Take lower powers: $2^2 \\times 3 = 12$"\n\n($5$ only appears in 60\'s factorisation, so not a shared prime)' }, highlightField: 'ans' },
+      { text: { zh: '张飞："HCF(48, 60) = 12！分给 12 个村，每村 4 袋粮 5 把刀！"', en: 'Zhang Fei: "HCF(48, 60) = 12! Distribute to 12 villages, each gets 4 bags and 5 swords!"' }, highlightField: 'ans' },
+      { text: { zh: '张飞：验算\n$48 \div 12 = 4$ ✓，$60 \div 12 = 5$ ✓\n有没有比 12 更大的公因数？$24$：$60 \div 24 = 2.5$ ✗\n\nHCF = 12 确认！', en: 'Zhang Fei: Verify\n$48 \div 12 = 4$ ✓, $60 \div 12 = 5$ ✓\nIs there a larger common factor? Try $24$: $60 \div 24 = 2.5$ ✗\n\nHCF = 12 confirmed!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: 'HCF 用于解决"平均分配且无剩余"的问题。', en: 'HCF solves "equal distribution with no remainder" problems.' }, formula: { zh: '$\\text{HCF} = \\text{最大均分数}$', en: '$\\text{HCF} = \\text{largest equal share}$' }, tips: [{ zh: '张飞提示：粮草不均，军心不稳！', en: 'Zhang Fei Tip: Unequal rations cause unrest!' }] },
     storyConsequence: { correct: { zh: '平分军粮——最大公因数精准！做得漂亮！', en: 'Dividing Grain Equally — Well done!' }, wrong: { zh: '公因数没找到最大的…再试一次！', en: 'Not quite... Try again!' } }
@@ -181,10 +146,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算粮草变化。', en: 'Calculate the supply change.' },
     data: { a: 50, b: -30, op: '+', answer: 20, generatorType: 'INTEGER_ADD_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-1.6-01', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '诸葛亮："粮仓补给 50 袋，消耗 30 袋。$50 + (-30) = ?$"', en: 'Zhuge Liang: "50 bags resupplied, 30 consumed. $50 + (-30) = ?$"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮："加一个负数 = 减去它的绝对值。$50 + (-30) = 50 - 30$"', en: 'Zhuge Liang: "Adding a negative = subtracting its absolute value. $50 + (-30) = 50 - 30$"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮："$50 - 30 = 20$！还剩 20 袋粮草。"', en: 'Zhuge Liang: "$50 - 30 = 20$! 20 bags remaining."' }, highlightField: 'ans' }
+        tutorialSteps: [
+      { text: { zh: '诸葛亮：正加负数——粮仓盈亏问题\n\n补给进来是正，消耗出去是负。$50 + (-30)$ 就是"进 50 袋，出 30 袋"。加一个负数，等于减去它的绝对值！', en: 'Zhuge Liang: Positive plus negative — warehouse balance\n\nSupply coming in is positive, consumption is negative. $50 + (-30)$ means "50 bags in, 30 bags out". Adding a negative equals subtracting its absolute value!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：规则\n$$a + (-b) = a - b$$\n\n异号相加 = 绝对值相减，符号跟绝对值大的那个！', en: 'Zhuge Liang: Rule\n$$a + (-b) = a - b$$\n\nAdding different signs = subtract absolute values; sign follows the larger absolute value!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：读取数据\n$$50 + (-30)$$\n\n正数 $50$，负数 $-30$——异号！', en: 'Zhuge Liang: Read the problem\n$$50 + (-30)$$\n\nPositive $50$, negative $-30$ — different signs!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：转换——加负数变减法\n$$50 + (-30) = 50 - 30$$', en: 'Zhuge Liang: Convert — adding negative becomes subtraction\n$$50 + (-30) = 50 - 30$$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：计算\n$$50 - 30 = 20$$\n\n粮仓还剩 $20$ 袋！', en: 'Zhuge Liang: Calculate\n$$50 - 30 = 20$$\n\n$20$ grain bags remaining!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n$20 + 30 = 50$ ✓（把消耗加回去还原）\n\n粮草盈余 $20$ 袋，后勤无忧！', en: 'Zhuge Liang: Verify\n$20 + 30 = 50$ ✓ (add consumption back to restore original)\n\n$20$ bags surplus — logistics secure!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '加一个负数就是减去它；结果的正负取决于谁的数字更大。', en: 'Adding a negative = subtracting it; the sign depends on which number is larger.' }, formula: '$a + (-b) = a - b$', tips: [{ zh: '诸葛亮提示：知彼知己，粮草先行。', en: 'Zhuge Liang Tip: Know your supplies before you march.' }] },
     storyConsequence: { correct: { zh: '粮草盈亏——正负运算无误！做得漂亮！', en: 'Grain Surplus & Loss — Well done!' }, wrong: { zh: '正负号搞混了…再试一次！', en: 'Not quite... Try again!' } }
@@ -200,10 +168,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算总损失。', en: 'Calculate total loss.' },
     data: { a: -20, b: -15, op: '+', answer: -35, generatorType: 'INTEGER_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-1.6-01', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '曹操："先损 20 人，又损 15 人。$(-20) + (-15) = ?$"', en: 'Cao Cao: "Lost 20 soldiers, then 15 more. $(-20) + (-15) = ?$"' }, highlightField: 'ans' },
-      { text: { zh: '曹操："两个负数相加，绝对值相加，结果还是负数"', en: 'Cao Cao: "Two negatives added: add absolute values, result stays negative"' }, highlightField: 'ans' },
-      { text: { zh: '曹操："$(-20) + (-15) = -35$！共损失 35 人，必须补充兵力。"', en: 'Cao Cao: "$(-20) + (-15) = -35$! 35 soldiers lost, must recruit more."' }, highlightField: 'ans' }
+        tutorialSteps: [
+      { text: { zh: '曹操：双重损失——两个负数相加\n\n先损 20 人（$-20$），又损 15 人（$-15$）。两次都是减少——负加负，越来越少！两个负数相加，结果更负！', en: 'Cao Cao: Double loss — adding two negatives\n\nFirst lost 20 ($-20$), then 15 more ($-15$). Both are reductions — negative plus negative means even more negative!' }, highlightField: 'ans' },
+      { text: { zh: '曹操：规则\n$$(-a) + (-b) = -(a + b)$$\n\n同号相加：绝对值相加，符号不变（都是负的）。', en: 'Cao Cao: Rule\n$$(-a) + (-b) = -(a + b)$$\n\nSame signs added: add the absolute values, keep the sign (both negative).' }, highlightField: 'ans' },
+      { text: { zh: '曹操：读取数据\n$$(-20) + (-15)$$\n\n两个都是负数——同号！', en: 'Cao Cao: Read the problem\n$$(-20) + (-15)$$\n\nBoth negative — same signs!' }, highlightField: 'ans' },
+      { text: { zh: '曹操：同号相加\n绝对值相加：$20 + 15 = 35$\n\n结果保持负号：$-(35) = -35$', en: 'Cao Cao: Same signs — add absolute values\nAbsolute values: $20 + 15 = 35$\n\nKeep the negative sign: $-(35) = -35$' }, highlightField: 'ans' },
+      { text: { zh: '曹操：答案\n$$(-20) + (-15) = -35$$\n\n共损失 $35$ 人，必须紧急补充兵力！', en: 'Cao Cao: Answer\n$$(-20) + (-15) = -35$$\n\nTotal loss: $35$ — must urgently reinforce!' }, highlightField: 'ans' },
+      { text: { zh: '曹操：验算\n$-35 + 15 = -20$ ✓（倒推：减少的补回 15，还是原来那次的损失）\n\n本相已知己知彼，厉兵秣马！', en: 'Cao Cao: Verify\n$-35 + 15 = -20$ ✓ (reverse: add back $15$ to get first loss)\n\nI know both sides — time to replenish and prepare!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '负数加负数，绝对值相加，符号取负。', en: 'Negative plus negative: add absolute values, keep negative sign.' }, formula: '$(-a) + (-b) = -(a+b)$', tips: [{ zh: '曹操提示：胜败乃兵家常事，关键是算清损失。', en: 'Cao Cao Tip: Victory and defeat are normal — the key is counting your losses.' }] },
     storyConsequence: { correct: { zh: '连续损失——正负运算无误！做得漂亮！', en: 'Consecutive Losses — Well done!' }, wrong: { zh: '正负号搞混了…再试一次！', en: 'Not quite... Try again!' } }
@@ -219,10 +190,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算净变化。', en: 'Calculate the net change.' },
     data: { a: 40, b: 60, op: '-', answer: -20, generatorType: 'INTEGER_ADD_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-1.6-02', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '关羽："战后先得 40 人投诚，又有 60 人离去。$40 - 60 = ?$"', en: 'Guan Yu: "After battle, 40 joined us but 60 left. $40 - 60 = ?$"' }, highlightField: 'ans' },
-      { text: { zh: '关羽："减去的数比原来大，结果就变成负数了"', en: 'Guan Yu: "Subtracting more than you have gives a negative result"' }, highlightField: 'ans' },
-      { text: { zh: '关羽："$40 - 60 = -20$！净减少 20 人。"', en: 'Guan Yu: "$40 - 60 = -20$! Net loss of 20."' }, highlightField: 'ans' }
+        tutorialSteps: [
+      { text: { zh: '关羽：得少失多——结果变负！\n\n战后 40 人投诚（$+40$），60 人离去（$-60$）。得少失多，净结果是负的——损失比收获大！$40 - 60 < 0$。', en: 'Guan Yu: Gained less than lost — result goes negative!\n\n40 joined ($+40$), 60 left ($-60$). Lost more than gained — net result is negative! $40 - 60 < 0$.' }, highlightField: 'ans' },
+      { text: { zh: '关羽：规则——减去更大的数\n$$40 - 60 = -(60 - 40)$$\n\n大减小得正，小减大得负！', en: 'Guan Yu: Rule — subtracting a larger number\n$$40 - 60 = -(60 - 40)$$\n\nLarger minus smaller is positive; smaller minus larger is negative!' }, highlightField: 'ans' },
+      { text: { zh: '关羽：读取数据\n$$40 - 60$$\n\n$40 < 60$，所以 $40 - 60$ 是负数。', en: 'Guan Yu: Read the problem\n$$40 - 60$$\n\n$40 < 60$, so $40 - 60$ is negative.' }, highlightField: 'ans' },
+      { text: { zh: '关羽：计算绝对值的差\n$$60 - 40 = 20$$\n\n加上负号：$40 - 60 = -20$', en: 'Guan Yu: Calculate the difference of absolute values\n$$60 - 40 = 20$$\n\nAdd the negative sign: $40 - 60 = -20$' }, highlightField: 'ans' },
+      { text: { zh: '关羽：答案\n$$40 - 60 = -20$$\n\n净减少 $20$ 人——要赶紧征兵！', en: 'Guan Yu: Answer\n$$40 - 60 = -20$$\n\nNet decrease of $20$ — must recruit urgently!' }, highlightField: 'ans' },
+      { text: { zh: '关羽：验算\n$-20 + 60 = 40$ ✓（补充 60 人后变回初始的 40 人投诚）\n\n净损 $20$ 人确认！', en: 'Guan Yu: Verify\n$-20 + 60 = 40$ ✓ (add 60 back to restore the initial 40 gained)\n\nNet loss of $20$ confirmed!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '减去比自己大的数，结果为负。', en: 'Subtracting more than you have gives a negative.' }, formula: '$a - b = -(b - a)$ when $b > a$', tips: [{ zh: '关羽提示：胜败之间，一算便知。', en: 'Guan Yu Tip: Between victory and defeat, the numbers tell all.' }] },
     storyConsequence: { correct: { zh: '攻守得失——正负运算无误！做得漂亮！', en: 'Gains and Losses — Well done!' }, wrong: { zh: '正负号搞混了…再试一次！', en: 'Not quite... Try again!' } }
@@ -285,11 +259,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算合并后的分数。', en: 'Calculate the combined fraction.' },
     data: { n1: 1, d1: 3, n2: 1, d2: 4, op: '+', ansNum: 7, ansDen: 12, generatorType: 'FRAC_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-1.4-01', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '关羽："第一营有全军 $\\frac{1}{3}$ 的粮草，第二营有 $\\frac{1}{4}$。合起来是多少？"', en: 'Guan Yu: "First camp has $\\frac{1}{3}$ of the grain, second has $\\frac{1}{4}$. What is the total?"' }, highlightField: 'ans' },
-      { text: { zh: '关羽："分母不同，要先通分。3 和 4 的最小公倍数是 12"', en: 'Guan Yu: "Different denominators — find LCD first. LCM of 3 and 4 is 12"' }, highlightField: 'ans' },
-      { text: { zh: '关羽："$\\frac{1}{3} = \\frac{4}{12}$，$\\frac{1}{4} = \\frac{3}{12}$"', en: 'Guan Yu: "$\\frac{1}{3} = \\frac{4}{12}$, $\\frac{1}{4} = \\frac{3}{12}$"' }, highlightField: 'ans' },
-      { text: { zh: '关羽："$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"', en: 'Guan Yu: "$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
+        tutorialSteps: [
+      { text: { zh: '关羽：合并粮草——分母不同怎么加？\n\n$\\frac{1}{3}$ 和 $\\frac{1}{4}$ 就像"三等份"和"四等份"——大小不同，不能直接加！必须先换成**同样大小的份数**（通分），才能相加。', en: 'Guan Yu: Combining grain — how to add with different denominators?\n\n$\\frac{1}{3}$ and $\\frac{1}{4}$ are like "thirds" and "quarters" — different unit sizes, cannot add directly! Must convert to the same unit size (common denominator) first.' }, highlightField: 'ans' },
+      { text: { zh: '关羽：通分步骤\n1. 找分母的最小公倍数（LCM）\n2. 每个分数的分子分母同乘倍数\n3. 再加分子，分母不变', en: 'Guan Yu: Steps to find common denominator\n1. Find the LCM of the denominators\n2. Multiply numerator and denominator of each fraction by the needed factor\n3. Add the numerators; denominator stays the same' }, highlightField: 'ans' },
+      { text: { zh: '关羽："分母不同，要先通分。3 和 4 的最小公倍数是 12"', en: 'Guan Yu: "Different denominators — find common denominator. LCM(3,4) = 12"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："$\\frac{1}{3} = \\frac{4}{12}$，$\\frac{1}{4} = \\frac{3}{12}$"\n\n$\\frac{1}{3}$：$3 \times 4 = 12$，分子也乘 4；$\\frac{1}{4}$：$4 \times 3 = 12$，分子也乘 3', en: 'Guan Yu: "$\\frac{1}{3} = \\frac{4}{12}$, $\\frac{1}{4} = \\frac{3}{12}$"\n\n$\\frac{1}{3}$: $3 \times 4 = 12$, multiply numerator by $4$; $\\frac{1}{4}$: $4 \times 3 = 12$, multiply numerator by $3$' }, highlightField: 'ans' },
+      { text: { zh: '关羽：加法\n$$\\frac{4}{12} + \\frac{3}{12} = \\frac{4+3}{12} = \\frac{7}{12}$$', en: 'Guan Yu: Add\n$$\\frac{4}{12} + \\frac{3}{12} = \\frac{4+3}{12} = \\frac{7}{12}$$' }, highlightField: 'ans' },
+      { text: { zh: '关羽：验算\n$\\frac{7}{12}$ 能化简吗？$\\gcd(7, 12) = 1$，已是最简 ✓\n$\\frac{7}{12} > \\frac{1}{2}$——两营合计超过一半粮草！', en: 'Guan Yu: Verify\nCan $\\frac{7}{12}$ be simplified? $\\gcd(7, 12) = 1$ — already simplest ✓\n$\\frac{7}{12} > \\frac{1}{2}$ — combined, over half the grain supply!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '异分母分数相加：先通分（找 LCD），再加分子，最后约分。', en: 'Adding fractions with different denominators: find LCD, add numerators, then simplify.' }, formula: '$\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd}$', tips: [{ zh: '关羽提示：合兵一处，粮草先算。', en: 'Guan Yu Tip: Before merging troops, count the grain.' }] },
     storyConsequence: { correct: { zh: '合并粮草——分数加减完美！做得漂亮！', en: 'Combining Grain — Well done!' }, wrong: { zh: '通分出了问题…再试一次！', en: 'Not quite... Try again!' } }
@@ -305,11 +281,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算剩余分数。', en: 'Calculate the remaining fraction.' },
     data: { n1: 3, d1: 4, n2: 1, d2: 6, op: '-', ansNum: 7, ansDen: 12, generatorType: 'FRAC_ADD_RANDOM' }, difficulty: 'Easy', reward: 55,
     kpId: 'kp-1.4-01', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '诸葛亮："粮仓有 $\\frac{3}{4}$ 满，消耗了 $\\frac{1}{6}$，还剩多少？"', en: 'Zhuge Liang: "Granary is $\\frac{3}{4}$ full, consumed $\\frac{1}{6}$. How much remains?"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮："4 和 6 的最小公倍数是 12"', en: 'Zhuge Liang: "LCM of 4 and 6 is 12"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮："$\\frac{3}{4} = \\frac{9}{12}$，$\\frac{1}{6} = \\frac{2}{12}$"', en: 'Zhuge Liang: "$\\frac{3}{4} = \\frac{9}{12}$, $\\frac{1}{6} = \\frac{2}{12}$"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮："$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"', en: 'Zhuge Liang: "$\\frac{9}{12} - \\frac{2}{12} = \\frac{7}{12}$"' }, highlightField: 'ans' }
+        tutorialSteps: [
+      { text: { zh: '诸葛亮：分数减法——先通分，再减\n\n粮仓 $\\frac{3}{4}$ 满，消耗了 $\\frac{1}{6}$。分母不同（4 和 6），不能直接相减！和加法一样，先找公分母！', en: 'Zhuge Liang: Fraction subtraction — common denominator first, then subtract\n\nStorehouse is $\\frac{3}{4}$ full; consumed $\\frac{1}{6}$. Different denominators (4 and 6) — cannot subtract directly! Same as addition: find common denominator first!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：找公分母\n$\\text{LCM}(4, 6) = ?$\n$4 = 2^2$，$6 = 2 \times 3$\n$\\text{LCM} = 2^2 \times 3 = 12$', en: 'Zhuge Liang: Find common denominator\n$\\text{LCM}(4, 6) = ?$\n$4 = 2^2$, $6 = 2 \\times 3$\n$\\text{LCM} = 2^2 \\times 3 = 12$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：通分\n$\\frac{3}{4} = \\frac{9}{12}$\n$\\frac{1}{6} = \\frac{2}{12}$', en: 'Zhuge Liang: Convert to common denominator\n$\\frac{3}{4} = \\frac{9}{12}$\n$\\frac{1}{6} = \\frac{2}{12}$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：减法\n$$\\frac{9}{12} - \\frac{2}{12} = \\frac{9-2}{12} = \\frac{7}{12}$$', en: 'Zhuge Liang: Subtract\n$$\\frac{9}{12} - \\frac{2}{12} = \\frac{9-2}{12} = \\frac{7}{12}$$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：答案\n粮仓还剩 $\\frac{7}{12}$。', en: 'Zhuge Liang: Answer\n$\\frac{7}{12}$ of the storehouse remains.' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n$\\frac{7}{12} + \\frac{2}{12} = \\frac{9}{12} = \\frac{3}{4}$ ✓（加回消耗量恢复原状）\n\n粮草核算完毕！', en: 'Zhuge Liang: Verify\n$\\frac{7}{12} + \\frac{2}{12} = \\frac{9}{12} = \\frac{3}{4}$ ✓ (adding consumption back restores original)\n\nGrain audit complete!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '异分母分数相减：通分后减分子，最后约分。', en: 'Subtracting fractions: find LCD, subtract numerators, then simplify.' }, formula: '$\\frac{a}{b} - \\frac{c}{d} = \\frac{ad - bc}{bd}$', tips: [{ zh: '诸葛亮提示：粮草不可不算，算清方能持久。', en: 'Zhuge Liang Tip: Always track your supplies — accurate counts sustain campaigns.' }] },
     storyConsequence: { correct: { zh: '消耗军粮——分数加减完美！做得漂亮！', en: 'Consuming Grain — Well done!' }, wrong: { zh: '通分出了问题…再试一次！', en: 'Not quite... Try again!' } }
@@ -349,7 +327,12 @@ export const MISSIONS_Y7: Mission[] = [
     data: { whole: 2, num: 3, den: 5, improperNum: 13, answer: 2, mode: 'to_mixed', generatorType: 'MIXED_IMPROPER_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-1.4-01', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：$\\frac{13}{5}$——13 份散装，每 5 份一箱', en: 'Zhuge Liang: "$\\frac{13}{5}$ — 13 loose parts, 5 per crate"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么要把假分数化成带分数？\n\n$\\frac{13}{5}$ 份粮草——士兵说"几整箱加几份散装"更直观。假分数化带分数就是把大数用"整数+余数"表示！', en: 'Zhuge Liang: Why convert improper fractions to mixed numbers?\n\n$\\frac{13}{5}$ portions — soldiers understand "2 full crates plus 3 loose" better. Converting is expressing a big fraction as "whole + remainder"!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：方法——用带余除法\n$$\\frac{13}{5}: \\quad 13 \\div 5 = 2 \\text{ 余 } 3$$\n商 $= 2$（整数），余数 $= 3$（分子），分母不变 $= 5$', en: 'Zhuge Liang: Method — use division with remainder\n$$\\frac{13}{5}: \\quad 13 \\div 5 = 2 \\text{ remainder } 3$$\nQuotient $= 2$ (whole), remainder $= 3$ (numerator), denominator stays $= 5$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：读取数据\n假分数 $\\frac{13}{5}$：分子 $= 13$，分母 $= 5$\n\n问：整数部分（商）是多少？', en: 'Zhuge Liang: Read the data\nImproper fraction $\\frac{13}{5}$: numerator $= 13$, denominator $= 5$\n\nQuestion: what is the whole number part (quotient)?' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：除法计算\n$$13 \\div 5 = 2 \\text{ 余 } 3$$\n\n整数部分 $= 2$', en: 'Zhuge Liang: Division calculation\n$$13 \\div 5 = 2 \\text{ remainder } 3$$\n\nWhole number part $= 2$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：写出带分数\n$$\\frac{13}{5} = 2\\frac{3}{5}$$\n\n答案（整数部分）$= 2$', en: 'Zhuge Liang: Write the mixed number\n$$\\frac{13}{5} = 2\\frac{3}{5}$$\n\nAnswer (whole number part) $= 2$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n$2\\frac{3}{5}$ 化回假分数：$2 \\times 5 + 3 = 13$，即 $\\frac{13}{5} \\checkmark$\n\n2 整箱 + 3 份散装，装车出发！', en: 'Zhuge Liang: Verify\nConvert $2\\frac{3}{5}$ back: $2 \\times 5 + 3 = 13$, giving $\\frac{13}{5} \\checkmark$\n\n2 full crates + 3 loose — load up and march!' }, highlightField: 'ans' },
     ],
     storyConsequence: {
       correct: { zh: '诸葛亮：2 整箱 + 3 份散装，装车出发！', en: 'Zhuge Liang: "2 full crates + 3 loose — load up and march!"' },
@@ -368,10 +351,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算分数乘法。', en: 'Calculate the fraction multiplication.' },
     data: { n1: 2, d1: 3, n2: 3, d2: 5, op: 'mul', ansNum: 2, ansDen: 5, generatorType: 'FRAC_MUL_RANDOM' }, difficulty: 'Easy', reward: 55,
     kpId: 'kp-1.4-02', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '张飞："$\\frac{2}{3}$ 的粮草再取 $\\frac{3}{5}$，能取多少？$\\frac{2}{3} \\times \\frac{3}{5} = ?$"', en: 'Zhang Fei: "Take $\\frac{3}{5}$ of $\\frac{2}{3}$ of the grain. $\\frac{2}{3} \\times \\frac{3}{5} = ?$"' }, highlightField: 'ans' },
-      { text: { zh: '张飞："分数乘法：分子乘分子，分母乘分母"', en: 'Zhang Fei: "Fraction multiplication: multiply tops, multiply bottoms"' }, highlightField: 'ans' },
-      { text: { zh: '张飞："$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$，约分得 $\\frac{2}{5}$"', en: 'Zhang Fei: "$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$, simplify to $\\frac{2}{5}$"' }, highlightField: 'ans' }
+        tutorialSteps: [
+      { text: { zh: '张飞：分数乘法——"几分之几的几分之几"是多少？\n\n$\\frac{2}{3}$ 的粮草，再取其中的 $\\frac{3}{5}$——就是取一部分的一部分。分数乘法就是"缩小再缩小"！分子乘分子，分母乘分母。', en: 'Zhang Fei: Fraction multiplication — "what fraction of a fraction"?\n\nTake $\\frac{3}{5}$ of $\\frac{2}{3}$ — taking a part of a part. Fraction multiplication is "shrinking twice"! Numerator times numerator, denominator times denominator.' }, highlightField: 'ans' },
+      { text: { zh: '张飞：乘法公式\n$$\\frac{a}{b} \times \\frac{c}{d} = \\frac{a \times c}{b \times d}$$\n\n分子分母分别相乘，然后约分到最简！', en: 'Zhang Fei: Multiplication formula\n$$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$$\n\nMultiply numerators and denominators separately, then simplify!' }, highlightField: 'ans' },
+      { text: { zh: '张飞：读取数据\n$$\\frac{2}{3} \times \\frac{3}{5}$$\n\n分子：$2 \times 3 = 6$，分母：$3 \times 5 = 15$', en: 'Zhang Fei: Read the data\n$$\\frac{2}{3} \\times \\frac{3}{5}$$\n\nNumerator: $2 \\times 3 = 6$, denominator: $3 \\times 5 = 15$' }, highlightField: 'ans' },
+      { text: { zh: '张飞：计算\n$$\\frac{2 \times 3}{3 \times 5} = \\frac{6}{15}$$\n\n能约分吗？$\\gcd(6, 15) = 3$', en: 'Zhang Fei: Calculate\n$$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$$\n\nCan simplify? $\\gcd(6, 15) = 3$' }, highlightField: 'ans' },
+      { text: { zh: '张飞：约分\n$$\\frac{6}{15} = \\frac{6 \div 3}{15 \div 3} = \\frac{2}{5}$$\n\n答案：$\\frac{2}{5}$', en: 'Zhang Fei: Simplify\n$$\\frac{6}{15} = \\frac{6 \div 3}{15 \div 3} = \\frac{2}{5}$$\n\nAnswer: $\\frac{2}{5}$' }, highlightField: 'ans' },
+      { text: { zh: '张飞：验算\n$\\frac{2}{5} \times \\frac{5}{2} = 1$ ✓（用倒数验算——乘回来等于 1）\n\n也可以用小数验：$0.667 \times 0.6 \\approx 0.4 = \\frac{2}{5}$ ✓', en: 'Zhang Fei: Verify\n$\\frac{2}{5} \\times \\frac{5}{2} = 1$ ✓ (verify with reciprocal)\n\nOr with decimals: $0.667 \\times 0.6 \\approx 0.4 = \\frac{2}{5}$ ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '分数乘法：分子×分子，分母×分母，最后约分。', en: 'Fraction multiplication: numerator×numerator, denominator×denominator, then simplify.' }, formula: '$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{ac}{bd}$', tips: [{ zh: '张飞提示：俺虽粗人，乘法还是会的！', en: 'Zhang Fei Tip: I may be rough, but I can multiply!' }] },
     storyConsequence: { correct: { zh: '粮草翻倍——分数乘除过关！做得漂亮！', en: 'Grain Multiplication — Well done!' }, wrong: { zh: '分数运算有误…再试一次！', en: 'Not quite... Try again!' } }
@@ -387,12 +373,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算分数除法。', en: 'Calculate the fraction division.' },
     data: { n1: 2, d1: 3, n2: 3, d2: 5, op: 'div', ansNum: 10, ansDen: 9, generatorType: 'FRAC_MUL_RANDOM' }, difficulty: 'Medium', reward: 60,
     kpId: 'kp-1.4-02', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '关羽："$\\frac{2}{3} \\div \\frac{3}{5} = ?$ 分数除法怎么算？"', en: 'Guan Yu: "$\\frac{2}{3} \\div \\frac{3}{5} = ?$ How to divide fractions?"' }, highlightField: 'ans' },
-      { text: { zh: '关羽："除以一个分数 = 乘以它的倒数。倒数就是把分子分母交换"', en: 'Guan Yu: "Dividing by a fraction = multiplying by its reciprocal. Reciprocal = swap top and bottom"' }, highlightField: 'ans' },
-      { text: { zh: '关羽："$\\frac{2}{3} \\div \\frac{3}{5} = \\frac{2}{3} \\times \\frac{5}{3}$"', en: 'Guan Yu: "$\\frac{2}{3} \\div \\frac{3}{5} = \\frac{2}{3} \\times \\frac{5}{3}$"' }, highlightField: 'ans' },
-      { text: { zh: '关羽："分子乘分子，分母乘分母：$\\frac{2 \\times 5}{3 \\times 3} = \\frac{10}{9}$"', en: 'Guan Yu: "Multiply tops, multiply bottoms: $\\frac{2 \\times 5}{3 \\times 3} = \\frac{10}{9}$"' }, highlightField: 'ans' },
-      { text: { zh: '关羽："$\\frac{10}{9}$ 已经是最简分数，所以答案是 $\\frac{10}{9}$"', en: 'Guan Yu: "$\\frac{10}{9}$ is already in simplest form, so the answer is $\\frac{10}{9}$"' }, highlightField: 'ans' }
+        tutorialSteps: [
+      { text: { zh: '关羽：分数除法——为什么"翻转再乘"？\n\n$\\frac{2}{3} \div \\frac{3}{5}$ 问的是"$\\frac{2}{3}$ 里面有几个 $\\frac{3}{5}$？"翻转 $\\frac{3}{5}$ 变成 $\\frac{5}{3}$，再乘——这和除法等价！', en: 'Guan Yu: Dividing fractions — why "flip and multiply"?\n\n$\\frac{2}{3} \div \\frac{3}{5}$ asks "how many $\\frac{3}{5}$s fit in $\\frac{2}{3}$?" Flip $\\frac{3}{5}$ to $\\frac{5}{3}$, then multiply — equivalent to division!' }, highlightField: 'ans' },
+      { text: { zh: '关羽："除以一个分数 = 乘以它的倒数。倒数就是把分子分母交换"', en: 'Guan Yu: "Dividing by a fraction = multiplying by its reciprocal. Reciprocal: swap numerator and denominator"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："$\\frac{2}{3} \div \\frac{3}{5} = \\frac{2}{3} \times \\frac{5}{3}$"', en: 'Guan Yu: "$\\frac{2}{3} \div \\frac{3}{5} = \\frac{2}{3} \\times \\frac{5}{3}$"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："分子乘分子，分母乘分母：$\\frac{2 \times 5}{3 \times 3} = \\frac{10}{9}$"', en: 'Guan Yu: "Numerator times numerator, denominator times denominator: $\\frac{2 \\times 5}{3 \\times 3} = \\frac{10}{9}$"' }, highlightField: 'ans' },
+      { text: { zh: '关羽："$\\frac{10}{9}$ 已经是最简分数，所以答案是 $\\frac{10}{9}$"', en: 'Guan Yu: "$\\frac{10}{9}$ is already in simplest form, so the answer is $\\frac{10}{9}$"' }, highlightField: 'ans' },
+      { text: { zh: '关羽：验算\n$\\frac{10}{9} \times \\frac{3}{5} = \\frac{30}{45} = \\frac{2}{3}$ ✓\n\n结果正确——粮草分配数量核实！', en: 'Guan Yu: Verify\n$\\frac{10}{9} \\times \\frac{3}{5} = \\frac{30}{45} = \\frac{2}{3}$ ✓\n\nCorrect — grain division verified!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '分数除法：除以一个分数 = 乘以它的倒数。', en: 'Fraction division: dividing by a fraction = multiplying by its reciprocal.' }, formula: '$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c} = \\frac{ad}{bc}$', tips: [{ zh: '关羽提示：翻转乾坤，化除为乘！', en: 'Guan Yu Tip: Flip and multiply — turn division into multiplication!' }] },
     storyConsequence: { correct: { zh: '分粮入户——分数乘除过关！做得漂亮！', en: 'Grain Division — Well done!' }, wrong: { zh: '分数运算有误…再试一次！', en: 'Not quite... Try again!' } }
@@ -432,10 +419,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算 $n^2$。', en: 'Calculate $n^2$.' },
     data: { n: 7, answer: 49, mode: 'square', generatorType: 'SQUARE_CUBE_RANDOM' }, difficulty: 'Easy', reward: 40,
     kpId: 'kp-1.3-01', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '刘备：什么是"平方"？一个数乘以自己', en: 'Liu Bei: "What is squaring? A number times itself"' }, highlightField: 'ans' },
-      { text: { zh: '刘备：$7^2 = 7 \\times 7 = 49$，7 行 7 列共 49 人', en: 'Liu Bei: "$7^2 = 7 \\times 7 = 49$, 7 rows × 7 columns = 49 soldiers"' }, highlightField: 'ans' },
-      { text: { zh: '刘备：记住前 10 个平方数：$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$', en: 'Liu Bei: "Remember the first 10 squares: $1, 4, 9, 16, 25, 36, 49, 64, 81, 100$"' }, highlightField: 'ans' },
+        tutorialSteps: [
+      { text: { zh: '刘备：方阵训练——为什么用"平方"？\n\n$7 \times 7$ 的方阵，$7$ 行 $7$ 列，总人数 $= 7^2$。"平方"就是一个数乘以自己——正方形面积的计算！$n^2 = n \times n$。', en: 'Liu Bei: Square formation — why "square"?\n\nA $7 \times 7$ formation, 7 rows and 7 columns, total $= 7^2$. "Squaring" means multiplying a number by itself — it calculates the area of a square! $n^2 = n \times n$.' }, highlightField: 'ans' },
+      { text: { zh: '刘备：平方的含义\n$$n^2 = n \times n$$\n\n读作"$n$ 的平方"，表示 $n$ 用了 $2$ 次。', en: 'Liu Bei: What squaring means\n$$n^2 = n \\times n$$\n\nRead "$n$ squared" — $n$ used $2$ times.' }, highlightField: 'ans' },
+      { text: { zh: '刘备：读取数据\n求 $7^2$（即 $7$ 的平方）', en: 'Liu Bei: Read the data\nFind $7^2$ (the square of $7$)' }, highlightField: 'ans' },
+      { text: { zh: '刘备：计算\n$$7^2 = 7 \times 7 = 49$$\n\n方阵总人数 $= 49$ 人。', en: 'Liu Bei: Calculate\n$$7^2 = 7 \\times 7 = 49$$\n\nTotal formation soldiers $= 49$.' }, highlightField: 'ans' },
+      { text: { zh: '刘备：答案\n$7^2 = 49$', en: 'Liu Bei: Answer\n$7^2 = 49$' }, highlightField: 'ans' },
+      { text: { zh: '刘备：验算\n$49 \div 7 = 7$ ✓\n\n前 10 个平方数速查：$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$', en: 'Liu Bei: Verify\n$49 \div 7 = 7$ ✓\n\nFirst 10 perfect squares: $1, 4, 9, 16, 25, 36, 49, 64, 81, 100$' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '平方就是一个数乘以自己，写作 $n^2$。来源于正方形面积公式。', en: 'Squaring means multiplying a number by itself, written $n^2$. Named after the area of a square.' }, formula: '$n^2 = n \\times n$', tips: [{ zh: '刘备提示：方阵排兵，行列相同，总数就是边长的平方！', en: 'Liu Bei Tip: In a square formation, rows equal columns — total is the side length squared!' }] },
     storyConsequence: { correct: { zh: '方阵操练——幂次全对！做得漂亮！', en: 'Square Formation Drill — Well done!' }, wrong: { zh: '幂次算错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -451,10 +441,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算 $n^3$。', en: 'Calculate $n^3$.' },
     data: { n: 3, answer: 27, mode: 'cube', generatorType: 'SQUARE_CUBE_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-1.3-02', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '张飞：什么是"立方"？一个数乘三次', en: 'Zhang Fei: "What is cubing? A number times itself three times"' }, highlightField: 'ans' },
-      { text: { zh: '张飞：先算 $3 \\times 3 = 9$，再乘 3：$9 \\times 3 = 27$', en: 'Zhang Fei: "First $3 \\times 3 = 9$, then × 3: $9 \\times 3 = 27$"' }, highlightField: 'ans' },
-      { text: { zh: '张飞：前 5 个立方数：$1, 8, 27, 64, 125$', en: 'Zhang Fei: "First 5 cubes: $1, 8, 27, 64, 125$"' }, highlightField: 'ans' },
+        tutorialSteps: [
+      { text: { zh: '张飞：粮箱码垛——为什么用"立方"？\n\n$3 \times 3 \times 3$ 的粮箱方块，$3$ 层 $\times 3$ 行 $\times 3$ 列 $= 3^3$ 箱。"立方"就是一个数乘三次——正方体体积的计算！', en: 'Zhang Fei: Stacking crates — why "cube"?\n\n$3 \times 3 \times 3$ crate block: $3$ layers $\times 3$ rows $\times 3$ columns $= 3^3$ crates. "Cubing" means multiplying a number by itself three times — it calculates the volume of a cube!' }, highlightField: 'ans' },
+      { text: { zh: '张飞：立方的含义\n$$n^3 = n \times n \times n$$\n\n读作"$n$ 的立方"，表示 $n$ 用了 $3$ 次。', en: 'Zhang Fei: What cubing means\n$$n^3 = n \\times n \\times n$$\n\nRead "$n$ cubed" — $n$ used $3$ times.' }, highlightField: 'ans' },
+      { text: { zh: '张飞：读取数据\n求 $3^3$（即 $3$ 的立方）', en: 'Zhang Fei: Read the data\nFind $3^3$ (the cube of $3$)' }, highlightField: 'ans' },
+      { text: { zh: '张飞：分两步计算\n$$3 \times 3 = 9, \quad 9 \times 3 = 27$$', en: 'Zhang Fei: Calculate in two steps\n$$3 \\times 3 = 9, \\quad 9 \\times 3 = 27$$' }, highlightField: 'ans' },
+      { text: { zh: '张飞：答案\n$3^3 = 27$\n\n粮箱方块共 $27$ 箱！', en: 'Zhang Fei: Answer\n$3^3 = 27$\n\nThe crate block contains $27$ crates!' }, highlightField: 'ans' },
+      { text: { zh: '张飞：验算\n$27 \div 3 = 9$，$9 \div 3 = 3$ ✓\n\n前 5 个立方数：$1, 8, 27, 64, 125$', en: 'Zhang Fei: Verify\n$27 \div 3 = 9$, $9 \div 3 = 3$ ✓\n\nFirst 5 perfect cubes: $1, 8, 27, 64, 125$' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '立方就是一个数乘三次，写作 $n^3$。来源于正方体体积公式。', en: 'Cubing means multiplying a number by itself three times, written $n^3$. Named after the volume of a cube.' }, formula: '$n^3 = n \\times n \\times n$', tips: [{ zh: '张飞提示：码粮箱，三个方向都一样长，总数就是边长的立方！', en: 'Zhang Fei Tip: Stacking crates — same length in all three directions, total is the side cubed!' }] },
     storyConsequence: { correct: { zh: '粮箱码垛——幂次全对！做得漂亮！', en: 'Stacking Supply Crates — Well done!' }, wrong: { zh: '幂次算错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -470,10 +463,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算 $\\sqrt{n}$。', en: 'Calculate $\\sqrt{n}$.' },
     data: { n: 49, answer: 7, mode: 'sqrt', generatorType: 'SQUARE_ROOT_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-1.3-03', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '关羽：平方根是平方的反操作', en: 'Guan Yu: "Square root is the reverse of squaring"' }, highlightField: 'ans' },
-      { text: { zh: '关羽：看到 49 人方阵 → 每行 $\\sqrt{49} = 7$ 人', en: 'Guan Yu: "49-soldier square formation → $\\sqrt{49} = 7$ per row"' }, highlightField: 'ans' },
-      { text: { zh: '关羽：常见平方根速查表', en: 'Guan Yu: "Common square roots reference"' }, highlightField: 'ans' },
+        tutorialSteps: [
+      { text: { zh: '关羽：侦察敌阵——从总人数反推每行几人！\n\n已知方阵共 $49$ 人，正方形方阵每行每列相同。问：每行几人？这就是求**平方根** $\\sqrt{49}$——平方的反操作！', en: 'Guan Yu: Scouting the enemy formation — find the side length from total soldiers!\n\nA square formation of $49$ soldiers, equal rows and columns. Question: how many per row? That\'s the square root $\\sqrt{49}$ — the inverse of squaring!' }, highlightField: 'ans' },
+      { text: { zh: '关羽：平方根的含义\n$$\\sqrt{n} = x \\iff x^2 = n$$\n\n"$x$ 是 $n$ 的平方根"意思是"$x$ 的平方等于 $n$"。', en: 'Guan Yu: What square root means\n$$\\sqrt{n} = x \\iff x^2 = n$$\n\n"$x$ is the square root of $n$" means "$x$ squared equals $n$".' }, highlightField: 'ans' },
+      { text: { zh: '关羽：读题\n$$\\sqrt{49} = ?$$\n\n问：哪个数的平方等于 $49$？', en: 'Guan Yu: Read the problem\n$$\\sqrt{49} = ?$$\n\nQuestion: which number squared equals $49$?' }, highlightField: 'ans' },
+      { text: { zh: '关羽：找答案\n试 $7$：$7^2 = 49$ ✓\n\n$$\\sqrt{49} = 7$$', en: 'Guan Yu: Find the answer\nTry $7$: $7^2 = 49$ ✓\n\n$$\\sqrt{49} = 7$$' }, highlightField: 'ans' },
+      { text: { zh: '关羽：答案\n$\\sqrt{49} = 7$\n\n每行 $7$ 人，方阵 $7 \times 7 = 49$ 人！', en: 'Guan Yu: Answer\n$\\sqrt{49} = 7$\n\n$7$ per row, formation $7 \\times 7 = 49$ soldiers!' }, highlightField: 'ans' },
+      { text: { zh: '关羽：验算\n$7^2 = 49 \\checkmark$\n\n常见平方根：$\\sqrt{1}=1, \\sqrt{4}=2, \\sqrt{9}=3, \\sqrt{16}=4, \\sqrt{25}=5, \\sqrt{36}=6, \\sqrt{49}=7$', en: 'Guan Yu: Verify\n$7^2 = 49 \\checkmark$\n\nCommon square roots: $\\sqrt{1}=1, \\sqrt{4}=2, \\sqrt{9}=3, \\sqrt{16}=4, \\sqrt{25}=5, \\sqrt{36}=6, \\sqrt{49}=7$' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '平方根 $\\sqrt{n}$ 就是"谁的平方等于 n"。它是平方运算的逆运算。', en: 'Square root $\\sqrt{n}$ means "whose square equals n". It\'s the inverse of squaring.' }, formula: '$\\sqrt{n^2} = n$', tips: [{ zh: '关羽提示：知道方阵总人数，开方就能算出每行几人！', en: 'Guan Yu Tip: Know the total in a square formation — take the square root to find soldiers per row!' }] },
     storyConsequence: { correct: { zh: '侦察敌阵——开方准确！做得漂亮！', en: 'Scouting Enemy Formation — Well done!' }, wrong: { zh: '开方结果不对…再试一次！', en: 'Not quite... Try again!' } }
@@ -489,10 +485,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '计算平方根或立方根。', en: 'Calculate the square or cube root.' },
     data: { n: 64, answer: 8, mode: 'mixed', op: 'sqrt', generatorType: 'SQUARE_ROOT_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-1.3-03', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '诸葛亮：平方根——"谁的平方等于这个数？"', en: 'Zhuge Liang: "Square root — whose square equals this number?"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：立方根——"谁的立方等于这个数？"', en: 'Zhuge Liang: "Cube root — whose cube equals this number?"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：看清符号！$\\sqrt{\\ }$ 是平方根，$\\sqrt[3]{\\ }$ 是立方根', en: 'Zhuge Liang: "Read the symbol! $\\sqrt{\\ }$ is square root, $\\sqrt[3]{\\ }$ is cube root"' }, highlightField: 'ans' },
+        tutorialSteps: [
+      { text: { zh: '诸葛亮：综合考核——平方根还是立方根？\n\n$\\sqrt{64}$ 还是 $\\sqrt[3]{64}$？符号不同，答案不同！看清符号是关键——$\\sqrt{\\ }$ 是平方根，$\\sqrt[3]{\\ }$ 是立方根。', en: 'Zhuge Liang: Combined test — square root or cube root?\n\n$\\sqrt{64}$ or $\\sqrt[3]{64}$? Different symbols, different answers! Reading the symbol is key — $\\sqrt{}$ = square root, $\\sqrt[3]{}$ = cube root.' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：两种根的含义\n$\\sqrt{n}$：哪个数的平方等于 $n$？→ $x^2 = n$\n$\\sqrt[3]{n}$：哪个数的立方等于 $n$？→ $x^3 = n$', en: 'Zhuge Liang: Two types of roots\n$\\sqrt{n}$: which number squared equals $n$? → $x^2 = n$\n$\\sqrt[3]{n}$: which number cubed equals $n$? → $x^3 = n$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：读题\n$$\\sqrt{64} = ?$$\n\n问：哪个数的平方等于 $64$？', en: 'Zhuge Liang: Read the problem\n$$\\sqrt{64} = ?$$\n\nQuestion: which number squared equals $64$?' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：试验\n试 $8$：$8^2 = 64$ ✓\n\n（对比：$\\sqrt[3]{64} = 4$，因为 $4^3 = 64$）', en: 'Zhuge Liang: Test\nTry $8$: $8^2 = 64$ ✓\n\n(Comparison: $\\sqrt[3]{64} = 4$ because $4^3 = 64$)' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：答案\n$\\sqrt{64} = 8$', en: 'Zhuge Liang: Answer\n$\\sqrt{64} = 8$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n$8^2 = 64 \\checkmark$\n\n综合考核通过！符号识别是关键！', en: 'Zhuge Liang: Verify\n$8^2 = 64 \\checkmark$\n\nCombined test passed! Symbol recognition is key!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '平方根和立方根分别是平方和立方的逆运算。看清根号上的小数字！', en: 'Square root and cube root are the inverses of squaring and cubing. Watch the index on the radical!' }, formula: '$\\sqrt{n^2} = n,\\quad \\sqrt[3]{n^3} = n$', tips: [{ zh: '诸葛亮提示：方阵用平方根，粮仓用立方根——看清题目再下笔！', en: 'Zhuge Liang Tip: Formations use square root, warehouses use cube root — read carefully before answering!' }] },
     storyConsequence: { correct: { zh: '方阵和粮仓的尺寸全算对了！诸葛亮：孺子可教！', en: 'Formation and warehouse dimensions all correct! Zhuge Liang: "A worthy student!"' }, wrong: { zh: '算错了尺寸，方阵排不齐…', en: 'Wrong dimensions — the formation is uneven...' } },
@@ -636,8 +635,12 @@ export const MISSIONS_Y7: Mission[] = [
     data: { x: 5, a: 3, b: 4, result: 19, left: '3x + 4', right: '19', generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM' }, difficulty: 'Medium', reward: 65,
     kpId: 'kp-2.5-02', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：$3x + 4 = 19$——$x$ 被两层包裹，先拆外层', en: 'Zhuge Liang: "$3x + 4 = 19$ — $x$ is double-wrapped, remove outer layer first"' }, highlightField: 'x' },
-      { text: { zh: '诸葛亮：内层是 $\\times 3$，用反操作 $\\div 3$ 消除', en: 'Zhuge Liang: "Inner layer: $\\times 3$, reverse: $\\div 3$"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：攻城有两层门——两步解方程！\n\n$3x + 4 = 19$，$x$ 被"乘以 3"和"加 4"两层保护。要找到 $x$，必须一层一层拆开——先拆外层（$+4$），再拆内层（$\\times 3$）！', en: 'Zhuge Liang: Two gates to storm — solve in two steps!\n\n$3x + 4 = 19$: $x$ is protected by "multiply by 3" and "add 4". To find $x$, peel off one layer at a time — outer first ($+4$), then inner ($\\times 3$)!' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：方程的黄金法则\n等式两边做**相同操作**，等号不变。\n加了就减，乘了就除——用反操作！', en: 'Zhuge Liang: The golden rule of equations\nDo the same operation to both sides, and equality holds.\nAdded? Subtract. Multiplied? Divide — use inverse operations!' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：读题\n$$3x + 4 = 19$$\n\n外层：$+4$，内层：$\\times 3$', en: 'Zhuge Liang: Read the equation\n$$3x + 4 = 19$$\n\nOuter layer: $+4$, inner layer: $\\times 3$' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：第一步——拆外层 $+4$\n$$3x + 4 - 4 = 19 - 4$$\n$$3x = 15$$', en: 'Zhuge Liang: Step 1 — remove outer layer $+4$\n$$3x + 4 - 4 = 19 - 4$$\n$$3x = 15$$' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：第二步——拆内层 $\\times 3$\n$$3x \\div 3 = 15 \\div 3$$\n$$x = 5$$', en: 'Zhuge Liang: Step 2 — remove inner layer $\\times 3$\n$$3x \\div 3 = 15 \\div 3$$\n$$x = 5$$' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：验算——代回原式\n$$3(5) + 4 = 15 + 4 = 19 \\checkmark$$\n\n城门攻破！$x = 5$', en: 'Zhuge Liang: Verify — substitute back\n$$3(5) + 4 = 15 + 4 = 19 \\checkmark$$\n\nGate stormed! $x = 5$' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '两步方程：先去掉加减（外层），再去掉乘除（内层）。顺序不能反！', en: 'Two-step equations: remove add/sub (outer) first, then mul/div (inner). Order matters!' }, formula: '$ax + b = c \\Rightarrow x = \\frac{c - b}{a}$', tips: [{ zh: '诸葛亮提示：攻城先破外门，解方程先去外层！', en: 'Zhuge Liang Tip: Siege the outer gate first, solve outer operations first!' }] },
     storyConsequence: { correct: { zh: '攻城双关——方程完美求解！做得漂亮！', en: 'Two-Gate Siege — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -872,8 +875,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '把总数按比例分配，求较小份。', en: 'Divide the total in the given ratio. Find the smaller share.' },
     data: { a: 2, b: 3, total: 120, answer: 48, mode: 'divide', generatorType: 'RATIO_Y7_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-1.11-02', sectionId: 'number',
-    tutorialSteps: [
-      { text: { zh: '曹操：按比分配——三步走', en: 'Cao Cao: "Divide by ratio — three steps"' }, highlightField: 'ans' },
+        tutorialSteps: [
+      { text: { zh: '曹操：战利品按比分配——比例公式\n\n$a:b$ 分 $T$ 件，$A$ 分得 $\\frac{a}{a+b} \times T$，$B$ 分得 $\\frac{b}{a+b} \times T$。总份数 $= a + b$，每份价值 $= T \div (a+b)$！', en: 'Cao Cao: Divide loot by ratio — ratio sharing formula\n\nIn ratio $a:b$ sharing $T$ items: $A$ gets $\\frac{a}{a+b} \times T$, $B$ gets $\\frac{b}{a+b} \times T$. Total parts $= a + b$, value per part $= T \div (a+b)$!' }, highlightField: 'ans' },
+      { text: { zh: '曹操：三步走\n1. 求总份数 $a + b$\n2. 求每份 = 总量 $\div$ 总份数\n3. 乘以各自份数得答案', en: 'Cao Cao: Three steps\n1. Find total parts $a + b$\n2. Find value per part = total $\div$ total parts\n3. Multiply each share by their portion count' }, highlightField: 'ans' },
+      { text: { zh: '曹操：读取数据（假设按 3:2 分 60 件战利品，求第一份）\n\n总份数 $= 3 + 2 = 5$', en: 'Cao Cao: Read the data (e.g. split 60 items in ratio 3:2, find first share)\n\nTotal parts $= 3 + 2 = 5$' }, highlightField: 'ans' },
+      { text: { zh: '曹操：求每份\n$$60 \div 5 = 12 \text{ 件/份}$$', en: 'Cao Cao: Find value per part\n$$60 \div 5 = 12 \\text{ items/part}$$' }, highlightField: 'ans' },
+      { text: { zh: '曹操：求第一份\n$$3 \times 12 = 36$$\n\n第二份：$2 \times 12 = 24$', en: 'Cao Cao: Find first share\n$$3 \\times 12 = 36$$\n\nSecond share: $2 \\times 12 = 24$' }, highlightField: 'ans' },
+      { text: { zh: '曹操：验算\n$36 + 24 = 60$ ✓（两份加起来等于总量）\n$36 : 24 = 3 : 2$ ✓（比例正确）', en: 'Cao Cao: Verify\n$36 + 24 = 60$ ✓ (shares sum to total)\n$36 : 24 = 3 : 2$ ✓ (ratio correct)' }, highlightField: 'ans' },
     ],
     storyConsequence: {
       correct: { zh: '曹操：分配公正！前锋 48 金，主力 72 金——军心大振！', en: 'Cao Cao: "Fair distribution! Vanguard 48, main 72 — morale soars!"' },
@@ -1016,9 +1024,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '求三角形的第三个角。', en: 'Find the missing angle in the triangle.' },
     data: { angle: 110, total: 180, a1: 60, a2: 50, generatorType: 'ANGLES_TRIANGLE_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-4.3-01', sectionId: 'geometry',
-    tutorialSteps: [
-      { text: { zh: '关羽：三角形内角和 = $180°$', en: 'Guan Yu: "Angles in a triangle sum to $180°$"' }, highlightField: 'x' },
-      { text: { zh: '关羽：第三个角 = $180° - 60° - 50° = 70°$', en: 'Guan Yu: "Third angle = $180° - 60° - 50° = 70°$"' }, highlightField: 'x' },
+        tutorialSteps: [
+      { text: { zh: '关羽：三角旗阵缺角——三角形内角和！\n\n三角形任意三个角加起来永远是 $180°$。这是几何的铁律！知道两个角，第三个角 $= 180° -$ 已知两角之和。', en: 'Guan Yu: Missing angle in the triangular banner — triangle angle sum!\n\nThe three angles of any triangle always add up to $180°$. This is an iron law of geometry! Know two angles, find the third: $= 180° -$ sum of known angles.' }, highlightField: 'ans' },
+      { text: { zh: '关羽：三角形内角和公式\n$$\\angle A + \\angle B + \\angle C = 180°$$\n\n适用于任何形状的三角形！', en: 'Guan Yu: Triangle angle sum formula\n$$\\angle A + \\angle B + \\angle C = 180°$$\n\nApplies to any triangle, any shape!' }, highlightField: 'ans' },
+      { text: { zh: '关羽：读取数据\n已知两角：$60°$ 和 $50°$\n求第三角 $x$', en: 'Guan Yu: Read the data\nKnown angles: $60°$ and $50°$\nFind the third angle $x$' }, highlightField: 'ans' },
+      { text: { zh: '关羽：建立方程\n$$60° + 50° + x = 180°$$\n$$110° + x = 180°$$', en: 'Guan Yu: Set up equation\n$$60° + 50° + x = 180°$$\n$$110° + x = 180°$$' }, highlightField: 'ans' },
+      { text: { zh: '关羽：计算\n$$x = 180° - 110° = 70°$$', en: 'Guan Yu: Calculate\n$$x = 180° - 110° = 70°$$' }, highlightField: 'ans' },
+      { text: { zh: '关羽：验算\n$$60° + 50° + 70° = 180° \\checkmark$$\n\n三角旗阵完美！', en: 'Guan Yu: Verify\n$$60° + 50° + 70° = 180° \\checkmark$$\n\nTriangular banner perfect!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '三角形内角和定理：任何三角形的三个内角之和 = 180°。', en: 'Triangle angle sum theorem: the three interior angles of any triangle sum to 180°.' }, formula: '$a + b + c = 180°$', tips: [{ zh: '关羽提示：三角旗阵，角度精准才能列阵如山！', en: 'Guan Yu Tip: Precise angles make an immovable formation!' }] },
     storyConsequence: { correct: { zh: '三角旗阵——角度完美！做得漂亮！', en: 'Triangular Banner — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -1038,10 +1050,13 @@ export const MISSIONS_Y7: Mission[] = [
       wrong: { zh: '诸葛亮：角度算错了...那个方向留出了漏洞，敌军趁夜偷袭！重新计算！', en: 'Zhuge Liang: "Wrong angle... that gap left a blind spot. The enemy attacked at night! Recalculate!"' },
     },
     kpId: 'kp-4.3-02', sectionId: 'geometry',
-    tutorialSteps: [
-      { text: { zh: '诸葛亮：想象你站在瞭望台正中央，转一整圈看遍所有方向', en: 'Zhuge Liang: "Imagine standing at the center of the watchtower, turning a full circle to see every direction"' }, highlightField: 'x' },
-      { text: { zh: '诸葛亮：已知的区域已经覆盖了多少度？', en: 'Zhuge Liang: "How many degrees are already covered?"' }, highlightField: 'x' },
-      { text: { zh: '诸葛亮：剩下的缺口就是未知角', en: 'Zhuge Liang: "The remaining gap is the unknown angle"' }, highlightField: 'x' },
+        tutorialSteps: [
+      { text: { zh: '诸葛亮：瞭望全景——一点周角是 $360°$！\n\n站在瞭望台转一整圈，看遍所有方向，转了 $360°$。一个点周围所有角之和 $= 360°$。知道几个区域，剩下的缺口就能算出！', en: 'Zhuge Liang: Full panoramic view — angles around a point sum to $360°$!\n\nStanding at the watchtower and turning a full circle covers all directions: $360°$. All angles around a point sum to $360°$. Know some sectors, calculate the remaining gap!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：周角公式\n$$\\text{所有角之和} = 360°$$\n\n求缺角：$x = 360° - \\text{已知角之和}$', en: 'Zhuge Liang: Angles around a point\n$$\\text{Sum of all angles} = 360°$$\n\nFind missing angle: $x = 360° -$ sum of known angles' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：读取数据\n已知区域：$120°$ 和 $140°$\n求剩余角 $x$', en: 'Zhuge Liang: Read the data\nKnown sectors: $120°$ and $140°$\nFind remaining angle $x$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：已知角之和\n$$120° + 140° = 260°$$', en: 'Zhuge Liang: Sum of known angles\n$$120° + 140° = 260°$$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：求缺角\n$$x = 360° - 260° = 100°$$', en: 'Zhuge Liang: Find missing angle\n$$x = 360° - 260° = 100°$$' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n$$120° + 140° + 100° = 360° \\checkmark$$\n\n全景覆盖无死角！', en: 'Zhuge Liang: Verify\n$$120° + 140° + 100° = 360° \\checkmark$$\n\nFull panoramic coverage, no blind spots!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '围绕一点的所有角加起来等于 360°（一整圈）。少一度都是防御漏洞！', en: 'Angles around a point sum to 360° (a full turn). Even 1° missing is a gap in defense!' }, formula: { zh: '$\\text{全部角之和} = 360°$', en: '$\\text{All angles sum} = 360°$' }, tips: [{ zh: '诸葛亮提示：三百六十度无死角，方可高枕无忧！', en: 'Zhuge Liang Tip: Full 360° coverage — only then can you sleep soundly!' }] }
   },
@@ -1057,9 +1072,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '读出目标位置的坐标 $(x, y)$。', en: 'Read the coordinates $(x, y)$ of the target.' },
     data: { targetX: 3, targetY: 5, mode: 'read', generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-3.1-01', sectionId: 'geometry',
-    tutorialSteps: [
-      { text: { zh: '诸葛亮：坐标就是地图上的"地址"——用两个数字定位', en: 'Zhuge Liang: "Coordinates are the address on a map — two numbers pin a location"' }, highlightField: 'x' },
-      { text: { zh: '诸葛亮：$x$ 往右为正，往左为负；$y$ 往上为正，往下为负', en: 'Zhuge Liang: "$x$: right = positive, left = negative; $y$: up = positive, down = negative"' }, highlightField: 'x' },
+        tutorialSteps: [
+      { text: { zh: '诸葛亮：读图定位——坐标是地图上的"地址"！\n\n战场地图上每个位置都有唯一坐标 $(x, y)$。$x$ 是横坐标（左右），$y$ 是纵坐标（上下）。先读 $x$，再读 $y$——先横后纵！', en: 'Zhuge Liang: Map reading — coordinates are the "address" on a map!\n\nEvery position on the battlefield map has a unique coordinate $(x, y)$. $x$ is horizontal (left-right), $y$ is vertical (up-down). Read $x$ first, then $y$ — across before up!' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：坐标轴规则\n$x > 0$: 右（正方向）\n$x < 0$: 左（负方向）\n$y > 0$: 上（正方向）\n$y < 0$: 下（负方向）\n\n原点 $(0, 0)$ 是中心！', en: 'Zhuge Liang: Coordinate axis rules\n$x > 0$: right (positive direction)\n$x < 0$: left (negative direction)\n$y > 0$: up (positive direction)\n$y < 0$: down (negative direction)\n\nOrigin $(0, 0)$ is the centre!' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：读取图形\n找到图上标记的点，先读 $x$ 轴的位置（从原点往右数）', en: 'Zhuge Liang: Read from the graph\nFind the marked point; read the $x$-axis position first (count right from origin)' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：读 $x$ 坐标\n从原点往右数 $3$ 格 → $x = 3$', en: 'Zhuge Liang: Read the $x$-coordinate\nCount $3$ units right from origin → $x = 3$' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：读 $y$ 坐标\n从原点往上数 $5$ 格 → $y = 5$\n\n答案：坐标 $(3, 5)$，$x = 3$', en: 'Zhuge Liang: Read the $y$-coordinate\nCount $5$ units up from origin → $y = 5$\n\nAnswer: coordinate $(3, 5)$, $x = 3$' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：验算\n从 $(0,0)$ 向右 $3$ 向上 $5$ 到达标记点 ✓\n\n敌营位置锁定！', en: 'Zhuge Liang: Verify\nFrom $(0,0)$ go right $3$ up $5$ to reach the marked point ✓\n\nEnemy camp location confirmed!' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '坐标系用 (x,y) 两个数字标记位置。x 是左右，y 是上下。原点 (0,0) 是起点。', en: 'The coordinate system uses (x,y) to mark positions. x = left/right, y = up/down. Origin (0,0) is the start.' }, formula: '$(x, y)$：先横后竖', tips: [{ zh: '诸葛亮提示：读图如读兵法——坐标不准，全盘皆输！', en: 'Zhuge Liang Tip: Reading maps is like reading strategy — wrong coordinates mean total defeat!' }] },
     storyConsequence: { correct: { zh: '读图定位——坐标精准！做得漂亮！', en: 'Map Reading — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
@@ -1076,7 +1095,12 @@ export const MISSIONS_Y7: Mission[] = [
     data: { targetX: -3, targetY: 4, mode: 'negative', generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-3.1-02', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '赵云：坐标有四个象限——正负数的组合', en: 'Zhao Yun: "Four quadrants — combinations of positive and negative"' }, highlightField: 'x' },
+      { text: { zh: '赵云：四象限侦察——负坐标代表什么方向？\n\n坐标轴把地图分成四个象限。$x < 0$ 表示**左**，$y > 0$ 表示**上**。点 $(-3, 4)$ 在左上方的第二象限——这是包抄的最佳位置！', en: 'Zhao Yun: Four-quadrant scouting — what direction do negative coordinates mean?\n\nThe axes divide the map into four quadrants. $x < 0$ means **left**, $y > 0$ means **up**. Point $(-3, 4)$ is in the upper-left second quadrant — perfect position for flanking!' }, highlightField: 'x' },
+      { text: { zh: '赵云：四象限速记\n第一象限：$(+, +)$ 右上\n第二象限：$(-, +)$ 左上\n第三象限：$(-, -)$ 左下\n第四象限：$(+, -)$ 右下', en: 'Zhao Yun: Four quadrants quick reference\nQ1: $(+, +)$ upper right\nQ2: $(-, +)$ upper left\nQ3: $(-, -)$ lower left\nQ4: $(+, -)$ lower right' }, highlightField: 'x' },
+      { text: { zh: '赵云：读取图形\n找到图上标记的点，先判断在哪个象限，再数格子。', en: 'Zhao Yun: Read from the graph\nFind the marked point; identify the quadrant first, then count squares.' }, highlightField: 'x' },
+      { text: { zh: '赵云：读 $x$ 坐标\n点在原点**左边** $3$ 格 → $x = -3$\n（向左 = 负方向）', en: 'Zhao Yun: Read the $x$-coordinate\nPoint is $3$ squares to the **left** of origin → $x = -3$\n(Going left = negative direction)' }, highlightField: 'x' },
+      { text: { zh: '赵云：读 $y$ 坐标\n点在原点**上方** $4$ 格 → $y = 4$\n\n答案：坐标 $(-3, 4)$，$x = -3$', en: 'Zhao Yun: Read the $y$-coordinate\nPoint is $4$ squares **above** origin → $y = 4$\n\nAnswer: coordinate $(-3, 4)$, $x = -3$' }, highlightField: 'x' },
+      { text: { zh: '赵云：验算\n$(-3, 4)$ 在第二象限（左上）✓\n从原点向左 $3$ 向上 $4$ 到达标记点 ✓\n\n敌营位置锁定，包抄出发！', en: 'Zhao Yun: Verify\n$(-3, 4)$ is in Q2 (upper left) ✓\nFrom origin: left $3$ up $4$ reaches the marked point ✓\n\nEnemy location confirmed — flanking begins!' }, highlightField: 'x' },
     ],
     storyConsequence: {
       correct: { zh: '赵云：坐标精确！敌营位置锁定，可以包抄！', en: 'Zhao Yun: "Precise coordinates! Enemy camp located — ready to flank!"' },
@@ -1096,8 +1120,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '找出数列的下一项。', en: 'Find the next term in the sequence.' },
     data: { a1: 3, d: 4, n: 5, mode: 'next', generatorType: 'SEQUENCE_Y7_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
-    tutorialSteps: [
-      { text: { zh: '刘备：每天比前天多招 4 人——这就是"公差"', en: 'Liu Bei: "4 more each day — that\'s the common difference"' }, highlightField: 'ans' },
+        tutorialSteps: [
+      { text: { zh: '刘备：增兵步伐——这是等差数列！\n\n每天比前天多招 $4$ 人，就是"公差 $d = 4$"的等差数列。数列的每一项都比上一项多一个固定值——这个固定值就是"公差"。', en: 'Liu Bei: Growing army — this is an arithmetic sequence!\n\nRecruiting 4 more each day than the day before means the common difference $d = 4$. Each term is exactly one fixed value more than the previous — that fixed value is the "common difference".' }, highlightField: 'ans' },
+      { text: { zh: '刘备：等差数列识别方法\n计算相邻两项的差：$a_2 - a_1 = a_3 - a_2 = \\ldots = d$\n\n差值恒定 → 等差数列！', en: 'Liu Bei: How to identify arithmetic sequences\nCalculate differences between consecutive terms: $a_2 - a_1 = a_3 - a_2 = \\ldots = d$\n\nConstant difference → arithmetic sequence!' }, highlightField: 'ans' },
+      { text: { zh: '刘备：读取数据\n每天增加的人数相同，差值 $d = 4$。\n\n写出数列：$a_1, a_1+4, a_1+8, \\ldots$', en: 'Liu Bei: Read the data\nThe same number of recruits added each day, difference $d = 4$.\n\nSequence: $a_1, a_1+4, a_1+8, \\ldots$' }, highlightField: 'ans' },
+      { text: { zh: '刘备：验证公差\n连续几天之差都等于 $4$——确认是公差！', en: 'Liu Bei: Verify common difference\nDifferences between consecutive days all equal $4$ — confirmed common difference!' }, highlightField: 'ans' },
+      { text: { zh: '刘备：答案\n公差 $d = 4$\n\n每天比前天多招 $4$ 人——增兵有序！', en: 'Liu Bei: Answer\nCommon difference $d = 4$\n\nRecruiting 4 more each day — orderly reinforcement!' }, highlightField: 'ans' },
+      { text: { zh: '刘备：验算\n用通项公式验证第 $n$ 项：$a_n = a_1 + (n-1) \times 4$\n\n如果 $a_1 = 5$，第 3 天 $= 5 + 2 \times 4 = 13$，确实比第 2 天（$9$）多 $4$ ✓', en: 'Liu Bei: Verify\nUse nth term formula to verify: $a_n = a_1 + (n-1) \\times 4$\n\nIf $a_1 = 5$, day 3 $= 5 + 2 \\times 4 = 13$, indeed $4$ more than day 2 ($9$) ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '等差数列：每项与前一项的差（公差）恒定。下一项 = 最后一项 + 公差。', en: 'Arithmetic sequence: the difference between consecutive terms is constant. Next = last + common difference.' }, formula: { zh: '$\\text{下一项} = \\text{末项} + d$', en: '$\\text{Next term} = \\text{Last term} + d$' }, tips: [{ zh: '刘备提示：找到规律，就能预见未来！', en: 'Liu Bei Tip: Find the pattern, predict the future!' }] },
     storyConsequence: { correct: { zh: '增兵步伐——数列过关！做得漂亮！', en: 'Troop Buildup Pattern — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
@@ -1272,7 +1301,12 @@ export const MISSIONS_Y7: Mission[] = [
     data: { x: 8, a: 12, result: 40, generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM' }, difficulty: 'Medium', reward: 60,
     kpId: 'kp-4.5-01', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '刘备：周长 = $2(长 + 宽)$，已知周长和宽，反推长', en: 'Liu Bei: "Perimeter = $2(l + w)$, known P and w, find l"' }, highlightField: 'x' },
+      { text: { zh: '刘备：围栅反推——已知周长，求边长！\n\n已知营寨周长 $40$ 米、宽 $12$ 米，求**长**。把周长公式变成方程求解——代数解决几何问题！', en: 'Liu Bei: Reverse the fence problem — find side length from perimeter!\n\nKnown: camp perimeter $= 40$ m, width $= 12$ m, find the **length**. Turn the perimeter formula into an equation — algebra solves a geometry problem!' }, highlightField: 'x' },
+      { text: { zh: '刘备：公式与方程\n$$P = 2(l + w)$$\n\n已知 $P = 40$，$w = 12$，代入求 $l$。', en: 'Liu Bei: Formula to equation\n$$P = 2(l + w)$$\n\nKnown: $P = 40$, $w = 12$; substitute and find $l$.' }, highlightField: 'x' },
+      { text: { zh: '刘备：代入已知量\n$$40 = 2(l + 12)$$', en: 'Liu Bei: Substitute known values\n$$40 = 2(l + 12)$$' }, highlightField: 'x' },
+      { text: { zh: '刘备：第一步——两边除以 2\n$$40 \\div 2 = l + 12$$\n$$20 = l + 12$$', en: 'Liu Bei: Step 1 — divide both sides by 2\n$$40 \\div 2 = l + 12$$\n$$20 = l + 12$$' }, highlightField: 'x' },
+      { text: { zh: '刘备：第二步——两边减 12\n$$20 - 12 = l$$\n$$l = 8$$', en: 'Liu Bei: Step 2 — subtract 12 from both sides\n$$20 - 12 = l$$\n$$l = 8$$' }, highlightField: 'x' },
+      { text: { zh: '刘备：验算\n$$P = 2(8 + 12) = 2 \\times 20 = 40 \\checkmark$$\n\n长 $8$ 宽 $12$，刚好围起来！营地开建！', en: 'Liu Bei: Verify\n$$P = 2(8 + 12) = 2 \\times 20 = 40 \\checkmark$$\n\nLength $8$, width $12$ — perfect fit! Start building!' }, highlightField: 'x' },
     ],
     storyConsequence: {
       correct: { zh: '刘备：长 8 宽 12，刚好围起来！营地开建！', en: 'Liu Bei: "Length 8, width 12 — perfect fit! Start building!"' },
@@ -1291,8 +1325,13 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '先代入求长，再算面积。', en: 'Substitute to find length, then calculate area.' },
     data: { a: 2, b: 3, x: 4, answer: 55, mode: 'linear', expr: '2x + 3', generatorType: 'SUBSTITUTION_RANDOM' }, difficulty: 'Medium', reward: 60,
     kpId: 'kp-2.2-01', sectionId: 'algebra',
-    tutorialSteps: [
-      { text: { zh: '赵云：分两步走——先代入求长，再算面积', en: 'Zhao Yun: "Two steps: substitute to find length, then calculate area"' }, highlightField: 'ans' },
+        tutorialSteps: [
+      { text: { zh: '赵云：营地蓝图——两步应用题！\n\n先用代入法求"长"（代入给定值算表达式），再用面积公式算面积。这是代数与几何的结合——先求边长，再求面积！', en: 'Zhao Yun: Camp blueprint — two-step application!\n\nFirst use substitution to find the "length" (substitute given value into expression), then use area formula. This combines algebra and geometry — find side length first, then area!' }, highlightField: 'ans' },
+      { text: { zh: '赵云：第一步——代入求长\n把给定的 $x$ 值代入长度表达式，得到具体长度。', en: 'Zhao Yun: Step 1 — substitution to find length\nSubstitute the given value of $x$ into the length expression to get the specific length.' }, highlightField: 'ans' },
+      { text: { zh: '赵云：第二步——面积公式\n$$\\text{面积} = \\text{长} \times \\text{宽}$$\n\n用第一步求出的长，乘以已知的宽。', en: 'Zhao Yun: Step 2 — area formula\n$$\\text{Area} = \\text{length} \\times \\text{width}$$\n\nUse the length from step 1, multiply by the given width.' }, highlightField: 'ans' },
+      { text: { zh: '赵云：代入计算\n若长 $= 2x + 1$，$x = 4$：\n$$2(4) + 1 = 9$$\n\n长 $= 9$ 米', en: 'Zhao Yun: Substitute and calculate\nIf length $= 2x + 1$, $x = 4$:\n$$2(4) + 1 = 9$$\n\nLength $= 9$ m' }, highlightField: 'ans' },
+      { text: { zh: '赵云：计算面积\n假设宽 $= 5$ 米：\n$$\\text{面积} = 9 \times 5 = 45 \\text{ m}^2$$', en: 'Zhao Yun: Calculate area\nIf width $= 5$ m:\n$$\\text{Area} = 9 \\times 5 = 45 \\text{ m}^2$$' }, highlightField: 'ans' },
+      { text: { zh: '赵云：验算\n代回：$2(4)+1=9$，$9 \times 5 = 45$ ✓\n\n营地蓝图完成！', en: 'Zhao Yun: Verify\nBack-substitute: $2(4)+1=9$, $9 \\times 5 = 45$ ✓\n\nCamp blueprint complete!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '代数和几何可以结合：用公式表示边长，代入后就能算面积。这是高中数学的基础！', en: 'Algebra + geometry combine: express sides as formulas, substitute to find area. This is the foundation of advanced math!' }, formula: '$A = (2x + 3) \\times w$', tips: [{ zh: '赵云提示：会画蓝图还不够，还要会算面积！', en: 'Zhao Yun Tip: Drawing blueprints isn\'t enough — you must calculate the area!' }] },
     storyConsequence: { correct: { zh: '营地蓝图完美落地，代数+几何完美结合！', en: 'Camp blueprint executed perfectly — algebra + geometry in harmony!' }, wrong: { zh: '蓝图尺寸算错，营地太小住不下…', en: 'Blueprint dimensions wrong — camp too small for the troops...' } },
