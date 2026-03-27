@@ -1364,7 +1364,7 @@ export default function App() {
                     // Write restored health back to profile
                     const cm = structuredClone(profile.completed_missions) as any;
                     const updated = setSkillHealth(cm as Record<string, unknown>, repairTopicId!, restoredState);
-                    await updateProfile({ completed_missions: updated });
+                    await updateProfile({ completed_missions: updated as import('./types').CompletedMissions });
                     setRepairTopicId(null);
                     setRepairPatternId(null);
                     setGameState('tech_tree');

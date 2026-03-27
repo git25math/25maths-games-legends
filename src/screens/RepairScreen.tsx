@@ -349,7 +349,7 @@ export const RepairScreen = ({
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSubmit}
-                disabled={Object.values(inputs).every(v => !v?.trim()) || !!showFeedback}
+                disabled={Object.values(inputs).every(v => !(v as string)?.trim()) || !!showFeedback}
                 className="w-full py-4 bg-rose-600 text-white font-black rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {lang === 'en' ? 'Submit' : '提交'}

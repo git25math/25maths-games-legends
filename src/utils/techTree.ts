@@ -310,7 +310,7 @@ export function computeTechTree(
         corruptionPattern: corruption,
         missionIds,
         maxErrorCount,
-        healthScore: status === 'locked' || status === 'available' ? 100 : healthScore,
+        healthScore: status === 'locked' ? 100 : healthScore,
         totalErrors,
         unlockableTopics: [], // filled in pass 4 below
       });
@@ -471,7 +471,7 @@ export function generateQuests(branches: TechBranch[]): Quest[] {
 
   // Priority 2: STABILISE — warning nodes (health < 60, not yet corrupted)
   for (const node of allNodes) {
-    if ((node.status === 'unlocked' || node.status === 'researching') && node.healthScore < 60 && node.healthScore > 0 && node.status !== 'corrupted') {
+    if ((node.status === 'unlocked' || node.status === 'researching') && node.healthScore < 60 && node.healthScore > 0) {
       const info = getTopicInfo(node.topicId);
       if (!info) continue;
       quests.push({
