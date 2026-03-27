@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v9.1.1 (2026-03-27)
+> **最后更新**: v9.2.0 (2026-03-27)
 
 ---
 
@@ -12,8 +12,8 @@
 Step 1: npm run build         → 必须零错误，否则不能改任何代码
 Step 2: 读 docs/CONTRIBUTING.md → 唯一权威规范（金标准/反模式/审查标准）
 Step 3: 读 docs/DEVELOPMENT-PLAN.md → 版本历程 + 下一步计划
-Step 4: 读本文件第三章"当前状态快照" → 210 关卡/已完成/遗留
-Step 5: npm test -- --run     → 1783 测试必须全通过
+Step 4: 读本文件第三章"当前状态快照" → 212 关卡/已完成/遗留
+Step 5: npm test -- --run     → 2214 测试必须全通过
 ```
 
 ---
@@ -25,19 +25,19 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.1.1 (2026-03-27) |
+| **当前版本** | v9.2.0 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
-| **测试框架** | Vitest (2164 tests, `npm test -- --run`) |
+| **测试框架** | Vitest (2214 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v9.1.1, 2026-03-27）
+## 三、当前状态快照（v9.2.0, 2026-03-27）
 
 ### 规模
-- **210 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(40) + Y11(25) + Y12(5)
-- **71 个活跃 generatorType**，100% 覆盖（所有关卡均有动态生成器）
-- **1,783 个 Vitest 用例**（含 completion/question fingerprint/generator tiering 回归护栏）
+- **212 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(42) + Y11(25) + Y12(5)
+- **72 个活跃 generatorType**（新增 CIRCLE_THEOREM_RANDOM），100% 覆盖
+- **2,214 个 Vitest 用例**（+50 新增 circle theorem 生成器覆盖）
 
 ### 教程质量覆盖率（截至 v8.9.3）
 
@@ -118,6 +118,26 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 - `gl_bug_reports` Supabase 表（migration 20260327000000）：category/description/mission_id/user_id，任意用户可 INSERT
 - `src/components/BugReportButton.tsx`：右下角半透明浮动按钮 + Modal（4 类别 + 可选描述 + 三语）
 - 集成到 `PracticeScreen` + `MathBattle`，静默失败不影响游戏流程
+
+### 本轮完成（v9.1.1→v9.2.0, 2026-03-27）
+
+#### C: Resilience Engine 入口强化
+- `MapScreen.tsx`: 腐败告警横幅（blocked/critical 节点计数 + 一键"科技树 →"按钮）
+- `ResultOverlay.tsx` + `MathBattle/index.tsx`: 失败界面新增"🔍 诊断问题"按钮（`onDiagnose` prop → `setGameState('tech_tree')`）
+
+#### A: DailyQuestPanel 每任务独立按钮
+- `DailyQuestPanel.tsx`: 战斗任务显示"去闯关 →"，练习任务显示"去练习 →"
+- `MapScreen.tsx`: 新增 `onBattleStart` prop 传入战斗导航
+
+#### B: CIRCLE_THEOREM_RANDOM 圆周角定理生成器
+- `generators/geometry.ts`: 新增 `generateCircleTheoremMission()`（两变体：直径所对90°/圆心角=2×圆周角）
+- `generators/index.ts`: 注册 `CIRCLE_THEOREM_RANDOM`（72 个生成器）
+- `missions/y10.ts`: 新增 Y10 Unit 14 两关（id 10141/10142），使用 ANGLES 类型复用现有 checker
+
+#### E: 三币经济基础
+- `utils/currency.ts`: 新建三币工具（getCurrency/awardCurrency/spendCurrency + CURRENCY_REWARDS + CURRENCY_LABELS）
+- `App.tsx`: 战斗胜利 → +30 功勋（每日闯关 +50 额外），练习完成 → +20 智略
+- `MapScreen.tsx`: 档案头部货币余额展示（只在余额>0时显示彩色标签）
 
 ### 已知遗留问题
 

@@ -18,7 +18,7 @@
 
 - **根目录**: `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends`
 - **部署**: push main → GitHub Actions → play.25maths.com
-- **版本**: v9.1.0 (2026-03-27)
+- **版本**: v9.2.0 (2026-03-27)
 - **仓库**: `git25math/25maths-games-legends`
 
 ## 关联项目
