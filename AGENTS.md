@@ -25,9 +25,9 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.0.0 (2026-03-27) |
+| **当前版本** | v9.1.0 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
-| **测试框架** | Vitest (1783 tests, `npm test -- --run`) |
+| **测试框架** | Vitest (2164 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---

@@ -291,13 +291,13 @@ export const MapScreen = ({
           <img
             src={CHAPTER_IMAGES[u.unitIndex % CHAPTER_IMAGES.length]}
             alt=""
-            className="w-16 h-16 rounded-xl object-cover border-2 border-amber-400/30 shadow-lg"
+            className="w-10 h-10 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl object-cover border-2 border-amber-400/30 shadow-lg"
           />
-          <h3 className="text-2xl font-black text-white uppercase tracking-widest flex items-center gap-3">
-            <MapIcon className="text-indigo-400" />
-            {u.unitTitle}
+          <h3 className="text-base sm:text-2xl font-black text-white uppercase tracking-widest flex items-center gap-2 sm:gap-3">
+            <MapIcon className="text-indigo-400" size={18} />
+            <span className="truncate">{u.unitTitle}</span>
             {u.unitComplete && (
-              <span className="ml-1 px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full normal-case tracking-normal">
+              <span className="ml-1 px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[9px] sm:text-xs font-bold rounded-full normal-case tracking-normal flex-shrink-0">
                 {(t as any).unitConquered ?? 'Conquered'}
               </span>
             )}
@@ -496,7 +496,7 @@ export const MapScreen = ({
   }, [profile.completed_missions, gradeMissions, currentUnit]);
 
   return (
-    <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12 pb-bottom-nav md:pb-0">
+    <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-6 sm:space-y-8 md:space-y-12 pb-bottom-nav md:pb-0">
       {/* ═══════════════════ Smart Recommendation Banner ═══════════════════ */}
       {smartRecommendation.recommendedMission && (
         <motion.div
@@ -804,18 +804,18 @@ export const MapScreen = ({
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`relative overflow-hidden rounded-2xl border-2 p-4 md:p-6 ${
+          className={`relative overflow-hidden rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6 ${
             dailyDone ? 'bg-emerald-900/30 border-emerald-500/30' : 'bg-gradient-to-r from-yellow-900/40 via-amber-900/40 to-yellow-900/40 border-yellow-500/40'
           }`}
         >
           {!dailyDone && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/5 to-transparent animate-pulse pointer-events-none" />}
           <div className="relative flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${dailyDone ? 'bg-emerald-500/20' : 'bg-yellow-500/20'}`}>
-                <Zap size={24} className={dailyDone ? 'text-emerald-400' : 'text-yellow-400'} />
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${dailyDone ? 'bg-emerald-500/20' : 'bg-yellow-500/20'}`}>
+                <Zap size={20} className={dailyDone ? 'text-emerald-400' : 'text-yellow-400'} />
               </div>
-              <div>
-                <h4 className={`font-black text-lg ${dailyDone ? 'text-emerald-300' : 'text-yellow-300'}`}>
+              <div className="min-w-0">
+                <h4 className={`font-black text-sm sm:text-lg ${dailyDone ? 'text-emerald-300' : 'text-yellow-300'}`}>
                   {t.dailyChallenge}
                   {!dailyDone && <span className="ml-2 text-xs font-bold px-2 py-0.5 bg-yellow-500/20 rounded-full">{t.dailyReward}</span>}
                 </h4>
@@ -867,7 +867,7 @@ export const MapScreen = ({
           loading="lazy"
           className="w-full rounded-3xl opacity-10 md:opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
         />
-        <div className="relative z-10 space-y-8 p-4 md:p-8">
+        <div className="relative z-10 space-y-6 sm:space-y-8 p-3 sm:p-4 md:p-8">
           {gradeMissions.length === 0 ? (
             <EmptyState icon={<MapIcon size={48} />} title={t.noMissions} description={t.noMissionsDesc} />
           ) : (
