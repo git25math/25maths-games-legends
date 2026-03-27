@@ -23,6 +23,9 @@ export type TechNodeState = {
   upstreamCorrupted?: string | null;  // topicId of the corrupted upstream node causing at_risk
   missionIds: number[];     // missions linked to this topic
   maxErrorCount?: number;   // highest error count across missions in this topic (for corruption progress)
+  healthScore: number;      // 0-100, computed from error rate + decay
+  totalErrors: number;      // sum of all errors across missions in this topic
+  unlockableTopics: string[]; // topic IDs that this topic unlocks (downstream dependents)
 };
 
 export type TechBranch = {
@@ -264,11 +267,28 @@ export function computeTechTree(
         status = 'corrupted';
       }
 
-      // Track max error count across missions for corruption-approach warning
-      const maxErrorCount = missionIds.reduce((max, mid) => {
+      // Track max error count + total errors across missions
+      var maxErrorCount = 0;
+      var totalErrors = 0;
+      for (const mid of missionIds) {
         const rec = mistakes[String(mid)];
-        return rec ? Math.max(max, rec.count) : max;
-      }, 0);
+        if (rec) {
+          if (rec.count > maxErrorCount) maxErrorCount = rec.count;
+          totalErrors += rec.count;
+        }
+      }
+
+      // healthScore: 100 = pristine, 0 = critically corrupted
+      // Decays based on error density: errors per mission attempted
+      const attemptedMissions = missionIds.filter(id => {
+        const rec = mistakes[String(id)];
+        return rec && rec.count > 0;
+      }).length;
+      const errorDensity = attemptedMissions > 0 ? totalErrors / attemptedMissions : 0;
+      // 0 errors = 100, CORRUPTION_THRESHOLD errors/mission = 0
+      const healthScore = Math.max(0, Math.min(100,
+        Math.round(100 * (1 - errorDensity / (TECH_TREE.CORRUPTION_ERROR_THRESHOLD + 1)))
+      ));
 
       topicStates.set(topic.id, {
         topicId: topic.id,
@@ -278,6 +298,9 @@ export function computeTechTree(
         corruptionPattern: corruption,
         missionIds,
         maxErrorCount,
+        healthScore: status === 'locked' || status === 'available' ? 100 : healthScore,
+        totalErrors,
+        unlockableTopics: [], // filled in pass 4 below
       });
     }
   }
@@ -333,6 +356,26 @@ export function computeTechTree(
     }
   }
 
+  // Fourth pass: compute unlockableTopics (what does this topic unlock when mastered?)
+  for (const chapter of CHAPTERS) {
+    for (let i = 0; i < chapter.topics.length; i++) {
+      const topic = chapter.topics[i];
+      const state = topicStates.get(topic.id)!;
+      // Same-chapter: next topic depends on this one
+      if (i + 1 < chapter.topics.length) {
+        state.unlockableTopics.push(chapter.topics[i + 1].id);
+      }
+      // Cross-chapter: find all topics that list this topic as prereq
+      for (const [depTopicId, prereqs] of Object.entries(CROSS_CHAPTER_PREREQS)) {
+        if (prereqs.includes(topic.id)) {
+          if (!state.unlockableTopics.includes(depTopicId)) {
+            state.unlockableTopics.push(depTopicId);
+          }
+        }
+      }
+    }
+  }
+
   // Build branches — only include chapters that have at least one mission mapped
   // (prevents Y7 students from seeing Y8+ chapters with no missions as empty locked trees)
   return CHAPTERS
@@ -370,4 +413,103 @@ export function getTopicMissions(topicId: string, missions: Mission[]): Mission[
     const match = m.kpId.match(/^kp-(\d+\.\d+)/);
     return match && match[1] === topicId;
   });
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Quest Recommendation Engine — "What should I do next?"
+// ═══════════════════════════════════════════════════════════════════════
+
+export type Quest = {
+  type: 'repair' | 'stabilise' | 'unlock' | 'advance';
+  priority: number;         // higher = more urgent
+  topicId: string;
+  title: string;
+  titleZh: string;
+  reason: string;
+  reasonZh: string;
+  healthScore?: number;
+  errorPattern?: ErrorType | null;
+  unlocks?: string[];       // what finishing this quest enables
+};
+
+/** Generate prioritised quests from tech tree state */
+export function generateQuests(branches: TechBranch[]): Quest[] {
+  const quests: Quest[] = [];
+  const allNodes = branches.flatMap(b => b.nodes);
+
+  // Priority 1: REPAIR — corrupted nodes need immediate attention
+  for (const node of allNodes) {
+    if (node.status === 'corrupted') {
+      const info = getTopicInfo(node.topicId);
+      if (!info) continue;
+      quests.push({
+        type: 'repair',
+        priority: 100,
+        topicId: node.topicId,
+        title: `Repair: ${info.topic.title}`,
+        titleZh: `修复：${info.topic.titleZh}`,
+        reason: `This skill is blocked by ${node.corruptionPattern ?? 'errors'}. Downstream topics are at risk.`,
+        reasonZh: `此技能因${node.corruptionPattern === 'sign' ? '正负号' : node.corruptionPattern === 'rounding' ? '精度' : node.corruptionPattern === 'magnitude' ? '量级' : '方法'}错误受阻，下游节点受影响。`,
+        healthScore: node.healthScore,
+        errorPattern: node.corruptionPattern,
+        unlocks: node.unlockableTopics,
+      });
+    }
+  }
+
+  // Priority 2: STABILISE — warning nodes (health < 60, not yet corrupted)
+  for (const node of allNodes) {
+    if ((node.status === 'unlocked' || node.status === 'researching') && node.healthScore < 60 && node.healthScore > 0 && node.status !== 'corrupted') {
+      const info = getTopicInfo(node.topicId);
+      if (!info) continue;
+      quests.push({
+        type: 'stabilise',
+        priority: 70,
+        topicId: node.topicId,
+        title: `Stabilise: ${info.topic.title}`,
+        titleZh: `巩固：${info.topic.titleZh}`,
+        reason: `Health at ${node.healthScore}%. Practice to prevent skill decay.`,
+        reasonZh: `健康度 ${node.healthScore}%，需要练习防止技能退化。`,
+        healthScore: node.healthScore,
+        errorPattern: node.corruptionPattern,
+      });
+    }
+  }
+
+  // Priority 3: UNLOCK — available nodes ready to learn
+  for (const node of allNodes) {
+    if (node.status === 'available') {
+      const info = getTopicInfo(node.topicId);
+      if (!info) continue;
+      quests.push({
+        type: 'unlock',
+        priority: 50,
+        topicId: node.topicId,
+        title: `Learn: ${info.topic.title}`,
+        titleZh: `学习：${info.topic.titleZh}`,
+        reason: `Prerequisites met! This unlocks ${node.unlockableTopics.length} downstream topic${node.unlockableTopics.length !== 1 ? 's' : ''}.`,
+        reasonZh: `前置已解锁！完成后可开启 ${node.unlockableTopics.length} 个新主题。`,
+        unlocks: node.unlockableTopics,
+      });
+    }
+  }
+
+  // Priority 4: ADVANCE — researching nodes (partially done)
+  for (const node of allNodes) {
+    if (node.status === 'researching') {
+      const info = getTopicInfo(node.topicId);
+      if (!info) continue;
+      quests.push({
+        type: 'advance',
+        priority: 30,
+        topicId: node.topicId,
+        title: `Continue: ${info.topic.title}`,
+        titleZh: `继续：${info.topic.titleZh}`,
+        reason: `${node.progress}/${node.total} missions completed.`,
+        reasonZh: `已完成 ${node.progress}/${node.total} 个关卡。`,
+      });
+    }
+  }
+
+  return quests.sort((a, b) => b.priority - a.priority);
 }

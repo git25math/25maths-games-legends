@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, GitBranch, Wrench, ChevronRight, Swords, BookOpen, Flame, Info, X, AlertTriangle } from 'lucide-react';
 import type { Language, Mission, UserProfile } from '../types';
-import { computeTechTree, getTopicMissions, getTopicInfo } from '../utils/techTree';
-import type { TechNodeState } from '../utils/techTree';
+import { computeTechTree, getTopicMissions, getTopicInfo, generateQuests } from '../utils/techTree';
+import type { TechNodeState, Quest } from '../utils/techTree';
 import { getMistakes } from '../utils/errorMemory';
 import type { MistakeRecord } from '../utils/errorMemory';
 import { TechTreeColumn } from '../components/TechTreeColumn';
@@ -108,6 +108,8 @@ export const TechTreeScreen = ({
     [missions, profile.completed_missions, mistakes],
   );
 
+  const quests = useMemo(() => generateQuests(branches), [branches]);
+
   // Detect newly unlocked nodes and celebrate
   useEffect(() => {
     const currentUnlocked = new Set<string>();
@@ -193,6 +195,46 @@ export const TechTreeScreen = ({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ═══ Quest Panel — "What should I do next?" ═══ */}
+      {quests.length > 0 && (
+        <div className="mx-4 mt-3 max-w-6xl lg:mx-auto">
+          <div className="space-y-2">
+            {quests.slice(0, 3).map((q, i) => {
+              const isRepair = q.type === 'repair';
+              const isStabilise = q.type === 'stabilise';
+              const isUnlock = q.type === 'unlock';
+              const bgColor = isRepair ? 'bg-rose-500/10 border-rose-500/20' : isStabilise ? 'bg-amber-500/10 border-amber-500/20' : isUnlock ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-indigo-500/10 border-indigo-500/20';
+              const iconColor = isRepair ? 'text-rose-400' : isStabilise ? 'text-amber-400' : isUnlock ? 'text-emerald-400' : 'text-indigo-400';
+              const icon = isRepair ? '🔧' : isStabilise ? '⚠️' : isUnlock ? '💡' : '▶️';
+              const label = i === 0 ? (lang === 'en' ? 'Main Quest' : '主线任务') : (lang === 'en' ? 'Side Quest' : '支线任务');
+
+              return (
+                <button
+                  key={q.topicId + q.type}
+                  onClick={() => setSelectedTopicId(q.topicId)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border ${bgColor} text-left hover:brightness-110 transition-all`}
+                >
+                  <span className="text-lg flex-shrink-0">{icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[9px] font-black uppercase tracking-wider ${iconColor}`}>{label}</span>
+                      {q.healthScore != null && q.healthScore < 100 && (
+                        <span className={`text-[9px] font-bold ${q.healthScore < 30 ? 'text-rose-400' : 'text-amber-400'}`}>
+                          HP {q.healthScore}%
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm font-bold text-white truncate">{lang === 'en' ? q.title : q.titleZh}</p>
+                    <p className="text-[10px] text-white/40 truncate">{lang === 'en' ? q.reason : q.reasonZh}</p>
+                  </div>
+                  <ChevronRight size={16} className="text-white/20 flex-shrink-0" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Tech tree columns — horizontal scroll */}
       <div className="overflow-x-auto pb-8">
