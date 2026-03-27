@@ -126,7 +126,7 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 | LOW | 道具修复 `applyRepair` 用 lastMasteredAt 反向计算，忽略 error penalty 项，health 略估高 | App.tsx `onRepairWithItem` | 可接受，完整修复需在 KPEquipment 加 `healthBonus` 字段 |
 | LOW | RepairDialog onRepair 关闭前无动画等待（1.2s success toast 后直接关闭 dialog） | MapScreen repairDialogTarget | 后续可改为监听 RepairDialog success 状态 |
 
-> **v9.1.1 CRITICAL 全清零**：2项全局 CRITICAL（浅拷贝竞态 + async XP 丢失）已修复，规则 J/K 已入 BUG-POSTMORTEM.md + CONTRIBUTING.md。
+> **v9.1.1 CRITICAL 全清零**：3项全局 CRITICAL 全部修复——浅拷贝竞态（规则 J）+ async XP 丢失（规则 K）+ techTree TDZ 崩溃（规则 L，`engineHealth` 先用后声明 → 前移声明）。规则 J/K/L 已入 BUG-POSTMORTEM.md + CONTRIBUTING.md。全项目 `var` 清零。
 
 ---
 

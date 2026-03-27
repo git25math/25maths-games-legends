@@ -174,6 +174,7 @@ step 999 → 全部显示
 | **I** | 新文件必须 git add | `git status` 检查 `??` |
 | **J** | `completed_missions` 写操作必须 `structuredClone` 深拷贝 | 搜索 `{ ...profile.completed_missions }` — 应为零结果 |
 | **K** | 写入 `total_score` 必须用 `latestScoreRef.current`，写前乐观更新 | 搜索 `profile.total_score +` — 写路径应为零结果 |
+| **L** | 禁止 `var`；`const`/`let` 声明必须在同块内所有引用之前 | `grep -rn '\bvar ' src/` — 应为零结果 |
 
 ---
 

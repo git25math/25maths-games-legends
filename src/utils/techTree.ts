@@ -260,8 +260,12 @@ export function computeTechTree(
         status = 'locked';
       }
 
+      // healthScore: prefer Resilience Engine's _skillHealth if available
+      const skillHealthMap = getSkillHealthMap(completedMissions as Record<string, unknown>);
+      const engineHealth = skillHealthMap[topic.id] as SkillHealthState | undefined;
+
       // Check corruption: prefer Resilience Engine state, fallback to mistake count
-      var corruption: ErrorType | null = null;
+      let corruption: ErrorType | null = null;
       if (engineHealth && (engineHealth.corruptionLevel === 'blocked' || engineHealth.corruptionLevel === 'critical')) {
         // Resilience Engine says this node is corrupted
         corruption = (engineHealth.dominantPatternId ? (ERROR_PATTERNS[engineHealth.dominantPatternId]?.legacyType ?? 'method') : 'method') as ErrorType;
@@ -272,8 +276,8 @@ export function computeTechTree(
       }
 
       // Track max error count + total errors across missions
-      var maxErrorCount = 0;
-      var totalErrors = 0;
+      let maxErrorCount = 0;
+      let totalErrors = 0;
       for (const mid of missionIds) {
         const rec = mistakes[String(mid)];
         if (rec) {
@@ -282,11 +286,7 @@ export function computeTechTree(
         }
       }
 
-      // healthScore: prefer Resilience Engine's _skillHealth if available
-      const skillHealthMap = getSkillHealthMap(completedMissions as Record<string, unknown>);
-      const engineHealth = skillHealthMap[topic.id] as SkillHealthState | undefined;
-
-      var healthScore: number;
+      let healthScore: number;
       if (engineHealth && engineHealth.totalAttempts > 0) {
         // Resilience Engine has processed this topic — use its authoritative state
         healthScore = engineHealth.healthScore;

@@ -150,6 +150,16 @@ await updateProfile({ total_score: prevScore + xp });
 
 ---
 
+## Bug 13: techTree.ts 中 `engineHealth` TDZ 访问导致运行时崩溃（CRITICAL）
+
+**现象**: 科技树页面打开时抛出 `ReferenceError: Cannot access 'engineHealth' before initialization`，整个科技树渲染崩溃。
+**根因**: `computeTechTree()` 内层循环中，`engineHealth` 在第 265 行用于污染检测，但 `const engineHealth` 声明在第 287 行——即在同一块作用域内先引用后声明。`const`/`let` 存在 **暂时性死区（TDZ）**，不像 `var` 那样提升，导致运行时立即抛错。TypeScript 编译器不报此错（不做时序静态分析）。同时存在多处 `var` 声明（`var corruption`、`var maxErrorCount`、`var totalErrors`、`var healthScore`、`var pool`）违反块作用域规范。
+**修复**: 将 `skillHealthMap` 和 `engineHealth` 的声明移到污染检测逻辑之前（前移约 22 行）；将所有 `var` 改为 `const`/`let`。涉及文件：`src/utils/techTree.ts`（4 处）、`src/screens/RepairScreen.tsx`（2 处）。
+**防范规则 L**:
+> 在同一块作用域内，`const`/`let` 声明必须在所有引用之前出现，TypeScript 不会静态检测 TDZ 违规。新增 `const`/`let` 变量时，先确认该块内没有更早的同名引用。禁止使用 `var`——`var` 提升掩盖 TDZ 问题，且函数作用域语义易造成意外泄漏。
+
+---
+
 ## 防范规则汇总
 
 | 规则 | 内容 | 检查方法 |
@@ -165,6 +175,7 @@ await updateProfile({ total_score: prevScore + xp });
 | **I** | 新文件必须 git add | `git status` 检查 `??` |
 | **J** | `completed_missions` 读写必须 `structuredClone` 深拷贝 | 搜索 `{ ...profile.completed_missions }` — 应为零结果 |
 | **K** | 写入 `total_score` 必须用 `latestScoreRef.current`，写前乐观更新 | 搜索 `profile.total_score +` — 应为零结果（写路径） |
+| **L** | 禁止 `var`；`const`/`let` 声明必须在同块内所有引用之前 | `grep -rn '\bvar ' src/` — 应为零结果 |
 
 ---
 
