@@ -252,6 +252,23 @@ describe('recoveryPath', () => {
       expect(getRecoverySession({ _recovery: {} })).toBeNull();
     });
 
+    it('returns null for malformed recovery data', () => {
+      // Missing originTopicId
+      expect(getRecoverySession({ _recovery: { steps: [], currentStepIdx: 0, startedAt: 1 } })).toBeNull();
+      // steps not array
+      expect(getRecoverySession({ _recovery: { originTopicId: '2.5', originErrorType: 'sign', steps: 'bad', currentStepIdx: 0, startedAt: 1 } })).toBeNull();
+      // Empty steps
+      expect(getRecoverySession({ _recovery: { originTopicId: '2.5', originErrorType: 'sign', steps: [], currentStepIdx: 0, startedAt: 1 } })).toBeNull();
+      // Negative currentStepIdx
+      expect(getRecoverySession({ _recovery: { originTopicId: '2.5', originErrorType: 'sign', steps: [{ topicId: '1.6', missionId: 1, errorType: 'sign', completed: false, reason: { zh: '', en: '' } }], currentStepIdx: -1, startedAt: 1 } })).toBeNull();
+      // Invalid step errorType
+      expect(getRecoverySession({ _recovery: { originTopicId: '2.5', originErrorType: 'sign', steps: [{ topicId: '1.6', missionId: 1, errorType: 'invalid_type', completed: false, reason: { zh: '', en: '' } }], currentStepIdx: 0, startedAt: 1 } })).toBeNull();
+      // Missing step missionId
+      expect(getRecoverySession({ _recovery: { originTopicId: '2.5', originErrorType: 'sign', steps: [{ topicId: '1.6', errorType: 'sign', completed: false, reason: { zh: '', en: '' } }], currentStepIdx: 0, startedAt: 1 } })).toBeNull();
+      // Non-finite startedAt
+      expect(getRecoverySession({ _recovery: { originTopicId: '2.5', originErrorType: 'sign', steps: [{ topicId: '1.6', missionId: 1, errorType: 'sign', completed: false, reason: { zh: '', en: '' } }], currentStepIdx: 0, startedAt: Infinity } })).toBeNull();
+    });
+
     it('round-trips through JSON serialization', () => {
       const session: RecoverySession = {
         originTopicId: '6.2', originErrorType: 'magnitude',

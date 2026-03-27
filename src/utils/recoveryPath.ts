@@ -143,12 +143,26 @@ export function getCurrentStep(session: RecoverySession): RecoveryStep | null {
   return session.steps[session.currentStepIdx];
 }
 
-/** Read a saved recovery session from completed_missions._recovery. */
+/** Read a saved recovery session from completed_missions._recovery.
+ *  Validates structure to prevent crashes from corrupted data. */
 export function getRecoverySession(
   completedMissions: Record<string, unknown>,
 ): RecoverySession | null {
   const raw = (completedMissions as any)?._recovery;
-  if (!raw || !raw.originTopicId || !Array.isArray(raw.steps)) return null;
+  if (!raw || typeof raw !== 'object') return null;
+  if (!raw.originTopicId || typeof raw.originTopicId !== 'string') return null;
+  if (!Array.isArray(raw.steps) || raw.steps.length === 0) return null;
+  if (typeof raw.currentStepIdx !== 'number' || raw.currentStepIdx < 0) return null;
+  if (!Number.isFinite(raw.startedAt)) return null;
+
+  // Validate each step has required fields
+  const validErrorTypes = ['sign', 'rounding', 'magnitude', 'method', 'unknown'];
+  for (const step of raw.steps) {
+    if (!step || typeof step.topicId !== 'string') return null;
+    if (typeof step.missionId !== 'number') return null;
+    if (!validErrorTypes.includes(step.errorType)) return null;
+  }
+
   return raw as RecoverySession;
 }
 

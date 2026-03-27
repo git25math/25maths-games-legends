@@ -207,14 +207,22 @@ export default function App() {
     }
   }, [missions, missionsLoading]);
 
-  // Restore recovery session from profile on load
+  // Restore recovery session from profile on load (with 14-day expiry)
   useEffect(() => {
     if (!profile) return;
     try {
       const saved = getRecoverySession(profile.completed_missions as any);
-      // Only restore if we don't have one yet OR if the saved one is newer
       if (saved && !recoverySessionRef.current) {
-        setRecoverySession(saved);
+        const ageMs = Date.now() - (saved.startedAt || 0);
+        const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000;
+        if (ageMs > TWO_WEEKS) {
+          // Discard stale session silently
+          const cm = { ...(profile.completed_missions as any) };
+          delete cm._recovery;
+          updateProfile({ completed_missions: cm });
+        } else {
+          setRecoverySession(saved);
+        }
       }
     } catch {
       // Malformed _recovery data — silently ignore
@@ -1212,7 +1220,8 @@ export default function App() {
                     const cm = profile.completed_missions as any;
                     const mistakesMap = (cm?._mistakes ?? {}) as Record<string, import('./utils/errorMemory').MistakeRecord>;
                     // Find dominant error for this topic
-                    const topicMissions = missions.filter(m => m.kpId?.match(new RegExp(`^kp-${topicId.replace('.', '\\.')}`)));
+                    const topicPrefix = `kp-${topicId}-`;
+                    const topicMissions = missions.filter(m => m.kpId?.startsWith(topicPrefix) || m.kpId === `kp-${topicId}`);
                     if (topicMissions.length === 0) return; // no missions for topic
                     let dominant: import('./utils/diagnoseError').ErrorType = 'method';
                     let maxErr = 0;
@@ -1228,6 +1237,7 @@ export default function App() {
                     if (session) {
                       const newCm = { ...cm, _recovery: session };
                       await updateProfile({ completed_missions: newCm });
+                      if (!profile) return; // user may have logged out during save
                       setRecoverySession(session);
                     } else {
                       // No weak prereqs — fall back to direct repair
