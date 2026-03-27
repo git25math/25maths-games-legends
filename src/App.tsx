@@ -1057,6 +1057,7 @@ export default function App() {
                   onStreakToken={handleStreakToken}
                   onStreakMilestone3={handleStreakMilestone3}
                   onRecordError={handleRecordError}
+                  onDiagnose={() => setGameState('tech_tree')}
                   battleMode={selectedBattleMode}
                   heroSkillEffect={selectedChar ? getActiveSkillEffect(getCharProgression(selectedChar.id)) : null}
                 />

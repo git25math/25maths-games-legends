@@ -48,6 +48,7 @@ export const MathBattle = ({
   onStreakToken,
   onStreakMilestone3,
   onRecordError,
+  onDiagnose,
   battleMode = 'classic',
   heroSkillEffect = null,
 }: {
@@ -68,6 +69,7 @@ export const MathBattle = ({
   onStreakToken?: () => void;
   onStreakMilestone3?: () => void;
   onRecordError?: (errorType: import('../../utils/diagnoseError').ErrorType) => void;
+  onDiagnose?: () => void;
   battleMode?: BattleMode;
   heroSkillEffect?: { effect: 'extra_hint' | 'time_extend' | 'error_forgive'; value: number } | null;
 }) => {
@@ -538,6 +540,7 @@ export const MathBattle = ({
           retryCount={retryCount}
           maxRetries={MAX_RETRIES}
           onGiveUp={onCancel}
+          onDiagnose={onDiagnose}
           hotTopicMultiplier={hotTopicMultiplier}
           isDailyChallenge={isDailyChallenge}
         />

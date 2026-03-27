@@ -489,6 +489,15 @@ export const MapScreen = ({
     </div>
   );
 
+  // Count corrupted (blocked/critical) skill nodes for the warning banner
+  const corruptedTopicCount = useMemo(() => {
+    const skillHealthMap = (profile.completed_missions as any)?._skillHealth as Record<string, any> | undefined;
+    if (!skillHealthMap) return 0;
+    return Object.values(skillHealthMap).filter(
+      h => h && (h.corruptionLevel === 'blocked' || h.corruptionLevel === 'critical')
+    ).length;
+  }, [profile.completed_missions]);
+
   // Memoize smart recommendation to avoid re-computing on every render
   const smartRecommendation = useMemo(() => {
     // Check for corrupted skill nodes first — repair is highest priority
@@ -565,6 +574,37 @@ export const MapScreen = ({
           >
             {lang === 'en' ? 'Go →' : '去学习 →'}
           </motion.button>
+        </motion.div>
+      )}
+
+      {/* ═══════════════════ Corruption Warning Banner ═══════════════════ */}
+      {corruptedTopicCount > 0 && onTechTree && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-orange-500/40 bg-orange-900/20 overflow-hidden"
+        >
+          <motion.div
+            animate={{ opacity: [0, 0.06, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute inset-0 bg-orange-400 pointer-events-none"
+          />
+          <div className="flex items-center gap-2 relative">
+            <AlertTriangle size={16} className="text-orange-400 flex-shrink-0" />
+            <p className="text-sm font-bold text-orange-200">
+              {lang === 'en'
+                ? `${corruptedTopicCount} skill node${corruptedTopicCount > 1 ? 's' : ''} need repair`
+                : lang === 'zh_TW'
+                ? `${corruptedTopicCount} 個知識節點需要修復`
+                : `${corruptedTopicCount} 个知识节点需要修复`}
+            </p>
+          </div>
+          <button
+            onClick={() => { playTap(); onTechTree(); }}
+            className="flex-shrink-0 px-3 py-1.5 bg-orange-600 hover:bg-orange-500 text-white text-xs font-black rounded-lg transition-colors relative"
+          >
+            {lang === 'en' ? 'Tech Tree →' : '科技树 →'}
+          </button>
         </motion.div>
       )}
 
