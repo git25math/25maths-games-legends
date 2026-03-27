@@ -11,7 +11,7 @@ import { useAudio } from '../audio';
 import { supabase } from '../supabase';
 import { tapScale, hoverGlow, springIn, staggerContainer, staggerItem } from '../utils/animationPresets';
 import { EmptyState } from '../components/EmptyState';
-import { getLevelInfo } from '../utils/xpLevels';
+import { getLevelInfo, getRankTier } from '../utils/xpLevels';
 import { getDailyMission, isDailyCompleted, getSecondsUntilMidnight, formatCountdown } from '../utils/dailyChallenge';
 import { MissionProgressBar } from '../components/MissionProgressBar';
 import { SkillTreePanel } from '../components/SkillTreePanel';
@@ -237,6 +237,7 @@ export const MapScreen = ({
   ).length;
   const levelInfo = getLevelInfo(profile.total_score);
   const rankName = levelInfo.rank[lang === 'zh_TW' ? 'zh_TW' : lang === 'en' ? 'en' : 'zh'];
+  const rankTier = getRankTier(levelInfo.level);
   const seasonProgress = getSeasonProgress(profile.completed_missions as Record<string, unknown>);
   const seasonLevelInfo = getSeasonLevel(seasonProgress.season_xp);
   const seasonBorder = getSeasonBorder(seasonLevelInfo.level);
@@ -622,14 +623,26 @@ export const MapScreen = ({
             <div className={`border-4 shadow-2xl rounded-full transition-colors ${seasonBorder ? seasonBorder.color : 'border-white/20'} group-hover:border-indigo-400`}>
               <CharacterAvatar characterId={selectedChar?.id || ''} size={72} />
             </div>
-            <div className="absolute -bottom-2 -right-2 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-full w-8 h-8 flex items-center justify-center text-white font-black text-xs border-2 border-white/30 shadow-lg">
+            <div className={`absolute -bottom-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center text-white font-black text-xs border-2 border-white/30 shadow-lg ${
+              rankTier.tier === 5 ? 'bg-gradient-to-br from-yellow-400 to-amber-500' :
+              rankTier.tier === 4 ? 'bg-gradient-to-br from-rose-500 to-pink-600' :
+              rankTier.tier === 3 ? 'bg-gradient-to-br from-amber-500 to-orange-600' :
+              rankTier.tier === 2 ? 'bg-gradient-to-br from-emerald-500 to-teal-600' :
+              'bg-gradient-to-br from-slate-500 to-slate-600'
+            }`}>
               {levelInfo.level}
             </div>
           </button>
           <div>
             <h3 className="text-white font-black text-lg md:text-2xl flex items-center gap-2 flex-wrap">
               {profile.display_name}
-              <span className="text-xs font-bold px-2 py-0.5 bg-amber-500/20 border border-amber-400/30 rounded-full text-amber-300">
+              <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+                rankTier.tier === 5 ? 'bg-yellow-500/20 border-yellow-400/30 text-yellow-300' :
+                rankTier.tier === 4 ? 'bg-rose-500/20 border-rose-400/30 text-rose-300' :
+                rankTier.tier === 3 ? 'bg-amber-500/20 border-amber-400/30 text-amber-300' :
+                rankTier.tier === 2 ? 'bg-emerald-500/20 border-emerald-400/30 text-emerald-300' :
+                'bg-slate-500/20 border-slate-400/30 text-slate-300'
+              }`}>
                 {rankName}
               </span>
               {seasonTitle && (
@@ -645,7 +658,13 @@ export const MapScreen = ({
                   initial={{ width: 0 }}
                   animate={{ width: `${levelInfo.progress * 100}%` }}
                   transition={{ duration: 0.8, ease: 'easeOut' }}
-                  className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full"
+                  className={`h-full rounded-full ${
+                    rankTier.tier === 5 ? 'bg-gradient-to-r from-yellow-400 to-amber-400' :
+                    rankTier.tier === 4 ? 'bg-gradient-to-r from-rose-400 to-pink-500' :
+                    rankTier.tier === 3 ? 'bg-gradient-to-r from-amber-400 to-orange-500' :
+                    rankTier.tier === 2 ? 'bg-gradient-to-r from-emerald-400 to-teal-500' :
+                    'bg-gradient-to-r from-slate-400 to-slate-500'
+                  }`}
                 />
               </div>
               {isNearLevel ? (
@@ -909,7 +928,7 @@ export const MapScreen = ({
           </div>
           <div className="text-center">
             <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.level}</span>
-            <span className="text-2xl md:text-4xl font-black text-amber-400">{levelInfo.level}</span>
+            <span className={`text-2xl md:text-4xl font-black ${rankTier.color}`}>{levelInfo.level}</span>
           </div>
           <div className="text-center">
             <span className="block text-slate-400 text-xs font-bold uppercase mb-1 tracking-widest">{t.completed}</span>

@@ -1,18 +1,80 @@
 // XP Level System — wraps total_score into military ranks (三国军衔)
 // 50 levels, exponential XP curve, Three Kingdoms rank names in 3 languages
+//
+// XP Curve Design (2-year achievement target):
+//   BASE_XP = 140, GROWTH = 1.12 → level 50 (大将军) ≈ 299,000 XP total
+//   Expected play: 3 sessions/week × 40 school weeks × 2 years ≈ 240 sessions
+//   Average XP/session: ~1,200 (mix of battles + practice)
+//   → 240 × 1,200 = 288,000 XP ≈ level 50
+//
+// 5 tiers with clear milestones:
+//   Tier 1 散兵 (lv 1–10):  ≈ 0–2,000 XP    → first 1-2 months
+//   Tier 2 将校 (lv 11–25): ≈ 2,000–15,000  → months 2-6
+//   Tier 3 大将 (lv 26–40): ≈ 15,000–85,000 → months 6-15
+//   Tier 4 九卿 (lv 41–49): ≈ 85,000–270,000→ months 15-23
+//   Tier 5 大将军 (lv 50):  ≈ 299,000       → ~2-year legendary achievement
 
 export type LevelInfo = {
   level: number;
   rank: { zh: string; zh_TW: string; en: string };
+  tier: 1 | 2 | 3 | 4 | 5;
   currentXP: number;       // XP accumulated in current level
   xpForNextLevel: number;  // XP needed to reach next level (0 at max)
   totalXPForLevel: number; // Total XP needed to reach this level
   progress: number;        // 0–1 progress within current level
 };
 
-// XP thresholds: level N requires sum of base * multiplier^(N-1)
-// Designed so level 1 = 0 XP, level 50 ≈ 500,000 XP
-const BASE_XP = 50;
+export type RankTier = {
+  tier: 1 | 2 | 3 | 4 | 5;
+  levelRange: [number, number];
+  name: { zh: string; zh_TW: string; en: string };
+  /** Tailwind text color class */
+  color: string;
+  /** Short description of the tier */
+  desc: { zh: string; en: string };
+};
+
+/** 5-tier rank system for visual differentiation */
+export const RANK_TIERS: RankTier[] = [
+  {
+    tier: 1, levelRange: [1, 10],
+    name: { zh: '散兵游勇', zh_TW: '散兵遊勇', en: 'Foot Soldier' },
+    color: 'text-slate-400',
+    desc: { zh: '初入战场，磨砺基础', en: 'First steps on the battlefield' },
+  },
+  {
+    tier: 2, levelRange: [11, 25],
+    name: { zh: '营级将校', zh_TW: '營級將校', en: 'Camp Officer' },
+    color: 'text-emerald-400',
+    desc: { zh: '统领一营，初显锋芒', en: 'Leading a company, talent emerging' },
+  },
+  {
+    tier: 3, levelRange: [26, 40],
+    name: { zh: '方面将领', zh_TW: '方面將領', en: 'Field General' },
+    color: 'text-amber-400',
+    desc: { zh: '坐镇一方，威震四海', en: 'Commanding a region, feared by all' },
+  },
+  {
+    tier: 4, levelRange: [41, 49],
+    name: { zh: '三公九卿', zh_TW: '三公九卿', en: 'Grand Council' },
+    color: 'text-rose-400',
+    desc: { zh: '位列三公，一人之下', en: 'Among the highest court officials' },
+  },
+  {
+    tier: 5, levelRange: [50, 50],
+    name: { zh: '传奇大将军', zh_TW: '傳奇大將軍', en: 'Legendary Grand General' },
+    color: 'text-yellow-300',
+    desc: { zh: '两年磨砺，天下无双', en: 'Two years of mastery — unmatched' },
+  },
+];
+
+/** Get tier info for a given level */
+export function getRankTier(level: number): RankTier {
+  return RANK_TIERS.find(t => level >= t.levelRange[0] && level <= t.levelRange[1]) ?? RANK_TIERS[0];
+}
+
+// XP thresholds: level N requires sum of BASE_XP * GROWTH^(N-1)
+const BASE_XP = 140;
 const GROWTH = 1.12;
 
 // Pre-compute cumulative XP thresholds for each level
@@ -95,6 +157,7 @@ export function getLevelInfo(totalScore: number): LevelInfo {
   return {
     level,
     rank: RANK_TITLES[level - 1],
+    tier: getRankTier(level).tier,
     currentXP,
     xpForNextLevel,
     totalXPForLevel: currentThreshold,
