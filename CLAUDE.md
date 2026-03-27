@@ -12,7 +12,7 @@
 2. **读取接手文档**: `AGENTS.md` → 当前状态快照、优先级、遗留问题
 3. **读取开发规范**: `docs/CONTRIBUTING.md` → 金标准、叙事原则、审查标准、Bug 防范规则
 4. **读取开发计划**: `docs/DEVELOPMENT-PLAN.md` → 版本历程、下一步
-5. **测试确认**: `npm test -- --run` → 必须 1783 passed 才能继续
+5. **测试确认**: `npm test -- --run` → 必须 2164 passed 才能继续
 
 ## 项目信息
 
