@@ -899,4 +899,36 @@ export const MISSIONS_Y10: Mission[] = [
     secret: { concept: { zh: '众数 = 出现次数最多的值。反映数据中"最常见的情况"。', en: 'Mode = most frequent value. Reflects the "most common case" in data.' }, formula: 'Mode = most frequent value', tips: [{ zh: '司马懿提示：数一数，最多的就是众数。', en: 'Sima Yi Tip: Count them — the most common is the mode.' }] },
     storyConsequence: { correct: { zh: '众数决策——数据分析到位！做得漂亮！', en: 'Mode Decision — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
+
+  // --- Y10 Unit 14: 圆周角定理 · 赤壁天机 (Circle Theorems) ---
+  {
+    id: 10141, grade: 10, unitId: 14, order: 1,
+    unitTitle: { zh: "Unit 14: 赤壁天机·圆周角定理", en: "Unit 14: Red Cliffs Secrets — Circle Theorems" },
+    topic: 'Geometry', type: 'ANGLES',
+    title: { zh: '半圆直角', en: 'Semicircle Right Angle' },
+    skillName: { zh: '直径所对圆周角', en: "Thales' Theorem" },
+    skillSummary: { zh: '直径所对圆周角 = 90°', en: 'Angle in semicircle = 90°' },
+    story: { zh: '周瑜在圆形大营中布阵。直径两端之间的角有奇特规律！', en: 'Zhou Yu deploys troops in a circular camp. The angle at the ends of a diameter has a special property!' },
+    description: { zh: 'AB 是直径，C 在圆上。求角度 $x$。', en: 'AB is a diameter, C is on the circle. Find angle $x$.' },
+    data: { knownAngle: 35, answer: 55, theoremType: 'semicircle', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Medium', reward: 480,
+    kpId: 'kp-5.4-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '直径所对圆周角 = 90°（泰勒斯定理）。用三角形内角和求另一角。', en: 'Angle in a semicircle = 90° (Thales). Use triangle angle sum to find the other angle.' }, formula: '$\\angle ACB = 90°$', tips: [{ zh: '周瑜提示：先标出直角，再用 180° 减已知角。', en: 'Zhou Yu Tip: Mark the right angle first, then subtract from 180°.' }] },
+    storyConsequence: { correct: { zh: '半圆直角——圆周角定理运用成功！做得漂亮！', en: 'Semicircle Right Angle — Well done!' }, wrong: { zh: '圆周角计算有误…再试一次！', en: 'Not quite... Try again!' } }
+  },
+  {
+    id: 10142, grade: 10, unitId: 14, order: 2,
+    unitTitle: { zh: "Unit 14: 赤壁天机·圆周角定理", en: "Unit 14: Red Cliffs Secrets — Circle Theorems" },
+    topic: 'Geometry', type: 'ANGLES',
+    title: { zh: '圆心角定理', en: 'Central Angle Theorem' },
+    skillName: { zh: '圆心角 = 2 × 圆周角', en: 'Central Angle = 2 × Inscribed Angle' },
+    skillSummary: { zh: '圆心角 = 2 × 同弧圆周角', en: 'Central angle = 2 × inscribed angle on same arc' },
+    story: { zh: '诸葛亮从圆心观察军阵，圆周上的将领从边缘看——视角竟差一倍！', en: 'Zhuge Liang watches from the center; a general on the circle edge sees the same span — but only half the angle!' },
+    description: { zh: '已知圆心角或圆周角，求另一个角 $x$。', en: 'Given a central or inscribed angle subtending the same arc, find the other angle $x$.' },
+    data: { knownAngle: 120, answer: 60, isGivenCentral: true, inscribedAngle: 60, centralAngle: 120, theoremType: 'center_double', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Hard', reward: 520,
+    kpId: 'kp-5.4-02', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '同弧所对圆心角 = 2 × 圆周角。记住：圆心"看"得更宽！', en: 'Central angle = 2 × inscribed angle subtending same arc. Remember: the centre "sees" wider!' }, formula: '$\\angle AOB = 2\\angle ACB$', tips: [{ zh: '诸葛亮提示：圆心角是圆周角的两倍。', en: 'Zhuge Liang Tip: Central angle is double the inscribed angle.' }] },
+    storyConsequence: { correct: { zh: '圆心角定理——几何推理精准！做得漂亮！', en: 'Central Angle — Well done!' }, wrong: { zh: '角度关系搞错了…再试一次！', en: 'Not quite... Try again!' } }
+  },
 ];
