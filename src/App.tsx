@@ -35,7 +35,8 @@ import type { Expedition } from './data/expeditions';
 import { hasAnyPracticeCompletion, markPracticeCompleted } from './utils/completionState';
 import { getRankMultiplier } from './utils/pkRank';
 import { getStamina, getRemainingAttempts, consumeAttempt, grantBonusAttempt } from './utils/stamina';
-import { awardCurrency, CURRENCY_REWARDS } from './utils/currency';
+import { awardCurrency, buyItem, CURRENCY_REWARDS } from './utils/currency';
+import { SHOP_PRICES } from './utils/gameBalance';
 import { getInventory, addItem, useItem } from './utils/inventory';
 import { awardBattleItems, computeRecoveryReward } from './utils/repairItems';
 import { buildRecoveryPath, advanceRecoveryStep, isRecoveryComplete, getCurrentStep, getRecoverySession } from './utils/recoveryPath';
@@ -998,6 +999,16 @@ export default function App() {
                       setIsRepairMode(true);
                       setGameState('practice');
                     }
+                  }}
+                  onBuyItem={async (itemId: string): Promise<boolean> => {
+                    if (!profile) return false;
+                    const price = SHOP_PRICES[itemId];
+                    if (!price) return false;
+                    const cm = structuredClone(profile.completed_missions) as any;
+                    const updated = buyItem(cm, itemId, price.type, price.amount);
+                    if (!updated) return false; // insufficient balance
+                    await updateProfile({ completed_missions: updated as any });
+                    return true;
                   }}
                   onRepairWithItem={async (missionId, itemId) => {
                     if (!profile) return;

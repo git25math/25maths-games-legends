@@ -37,3 +37,17 @@ export const TECH_TREE = {
   /** Minimum missions with errors to mark topic as corrupted */
   CORRUPTION_ERROR_THRESHOLD: 5,
 } as const;
+
+/**
+ * Shop item prices (currency type → cost per unit)
+ * merit = 功勋 (⚔️, earned from battle wins)
+ * wisdom = 智略 (📜, earned from practice)
+ */
+export const SHOP_PRICES: Record<string, { type: 'merit' | 'wisdom' | 'rations'; amount: number }> = {
+  hammer:          { type: 'merit',  amount: 30  },
+  scroll_sign:     { type: 'wisdom', amount: 50  },
+  scroll_rounding: { type: 'wisdom', amount: 50  },
+  scroll_magnitude:{ type: 'wisdom', amount: 50  },
+  scroll_method:   { type: 'wisdom', amount: 50  },
+  crystal:         { type: 'merit',  amount: 100 },
+} as const;

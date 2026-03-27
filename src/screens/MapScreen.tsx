@@ -17,9 +17,11 @@ import { MissionProgressBar } from '../components/MissionProgressBar';
 import { SkillTreePanel } from '../components/SkillTreePanel';
 import { EquipmentPanel } from '../components/EquipmentPanel';
 import { InventoryPanel } from '../components/InventoryPanel';
+import { ShopPanel } from '../components/ShopPanel';
 import { RepairDialog } from '../components/RepairDialog';
 import { BattlePassPanel } from '../components/BattlePassPanel';
 import { DailyQuestPanel } from '../components/DailyQuestPanel';
+import { StrategicScrollsPanel } from '../components/StrategicScrollsPanel';
 import { getSeasonLevel, getSeasonBorder, getSeasonTitle } from '../data/seasons/season1';
 import { getSeasonProgress } from '../utils/seasonTracker';
 import { getEquipmentState, countNeedsRepair, EQUIPMENT_COLORS, getEquipmentHealth } from '../utils/equipment';
@@ -97,6 +99,7 @@ export const MapScreen = ({
   onEquipSkill,
   onRepairEquipment,
   onRepairWithItem,
+  onBuyItem,
   onStartExpedition,
   hotTopicInfo,
   onLeaderboard,
@@ -123,6 +126,7 @@ export const MapScreen = ({
   onEquipSkill?: (charId: string, skillId: string | null) => void;
   onRepairEquipment?: (missionId: number) => void;
   onRepairWithItem?: (missionId: number, itemId: string) => void;
+  onBuyItem?: (itemId: string) => Promise<boolean>;
   onStartExpedition?: (expeditionId: string) => void;
   hotTopicInfo?: { topic: string; label: { zh: string; zh_TW: string; en: string }; multiplier: number };
   onLeaderboard?: () => void;
@@ -137,6 +141,8 @@ export const MapScreen = ({
   const [showEquipmentPanel, setShowEquipmentPanel] = useState(false);
   const [showBattlePass, setShowBattlePass] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
+  const [showShop, setShowShop] = useState(false);
+  const [showScrolls, setShowScrolls] = useState(false);
   const [repairDialogTarget, setRepairDialogTarget] = useState<number | null>(null);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [expandedCompletedUnit, setExpandedCompletedUnit] = useState<string | null>(null);
@@ -757,6 +763,11 @@ export const MapScreen = ({
                     </button>
                   );
                 })()}
+                {onBuyItem && (
+                  <button onClick={() => setShowShop(true)} className="px-2 py-0.5 bg-yellow-600/20 border border-yellow-500/30 rounded text-xs text-yellow-300 hover:bg-yellow-600/40 transition-colors">
+                    🏪 {lang === 'en' ? 'Shop' : lang === 'zh_TW' ? '商店' : '商店'}
+                  </button>
+                )}
                 {onLeaderboard && (
                   <button onClick={onLeaderboard} className="px-2 py-0.5 bg-yellow-600/20 border border-yellow-500/30 rounded text-xs text-yellow-300 hover:bg-yellow-600/40 transition-colors flex items-center gap-1">
                     🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
@@ -774,6 +785,9 @@ export const MapScreen = ({
                 )}
                 <button onClick={() => setShowBattlePass(true)} className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors">
                   {(t as any).growthHandbook ?? '\u624b\u518c'}
+                </button>
+                <button onClick={() => setShowScrolls(true)} className="px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors flex items-center gap-1">
+                  📜 {lang === 'en' ? 'Strategy' : lang === 'zh_TW' ? '兵法寶典' : '兵法宝典'}
                 </button>
                 {onStartExpedition && (() => {
                   const exps = getExpeditionsForGrade(profile.grade!);
@@ -843,6 +857,11 @@ export const MapScreen = ({
                         <span className="absolute -top-1 -right-1 w-4 h-4 bg-purple-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">{getTotalItems(getInventory(profile.completed_missions as Record<string, unknown>))}</span>
                       )}
                     </button>
+                    {onBuyItem && (
+                      <button onClick={() => { setShowShop(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-yellow-600/20 border border-yellow-500/30 rounded-lg text-xs text-yellow-300">
+                        🏪 {lang === 'en' ? 'Shop' : lang === 'zh_TW' ? '商店' : '商店'}
+                      </button>
+                    )}
                     {onLeaderboard && (
                       <button onClick={() => { onLeaderboard(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-yellow-600/20 border border-yellow-500/30 rounded-lg text-xs text-yellow-300">
                         🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
@@ -860,6 +879,9 @@ export const MapScreen = ({
                     )}
                     <button onClick={() => { setShowBattlePass(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-rose-600/20 border border-rose-500/30 rounded-lg text-xs text-rose-300">
                       {(t as any).growthHandbook ?? '\u624b\u518c'}
+                    </button>
+                    <button onClick={() => { setShowScrolls(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-amber-600/20 border border-amber-500/30 rounded-lg text-xs text-amber-300">
+                      📜 {lang === 'en' ? 'Strategy' : lang === 'zh_TW' ? '兵法寶典' : '兵法宝典'}
                     </button>
                     {onStartExpedition && (() => {
                       const exps = getExpeditionsForGrade(profile.grade!);
@@ -1149,6 +1171,22 @@ export const MapScreen = ({
           lang={lang}
           completedMissions={profile.completed_missions as Record<string, unknown>}
           onClose={() => setShowInventory(false)}
+        />
+      )}
+
+      {showScrolls && (
+        <StrategicScrollsPanel
+          lang={lang}
+          onClose={() => setShowScrolls(false)}
+        />
+      )}
+
+      {showShop && onBuyItem && (
+        <ShopPanel
+          lang={lang}
+          completedMissions={profile.completed_missions as Record<string, unknown>}
+          onBuyItem={onBuyItem}
+          onClose={() => setShowShop(false)}
         />
       )}
 

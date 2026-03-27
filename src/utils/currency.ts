@@ -63,6 +63,26 @@ export const CURRENCY_LABELS: Record<CurrencyType, { zh: string; zh_TW: string; 
   rations: { zh: '军粮', zh_TW: '軍糧', en: 'Rations', icon: '🍚' },
 };
 
+/**
+ * Buy a shop item — deducts currency and adds item to inventory.
+ * Returns mutated cm on success, null if insufficient balance.
+ * Caller must pass a structuredClone of completed_missions.
+ */
+export function buyItem(
+  cm: Record<string, unknown>,
+  itemId: string,
+  currencyType: CurrencyType,
+  price: number,
+): Record<string, unknown> | null {
+  const result = spendCurrency(cm, currencyType, price);
+  if (!result) return null; // insufficient balance
+  // Add item to inventory
+  const inv = (cm._inventory ?? {}) as Record<string, number>;
+  inv[itemId] = (inv[itemId] ?? 0) + 1;
+  cm._inventory = inv;
+  return cm;
+}
+
 /** Battle economy constants */
 export const CURRENCY_REWARDS = {
   /** Merit per correct answer in battle */
