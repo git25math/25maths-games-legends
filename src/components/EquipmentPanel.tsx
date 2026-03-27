@@ -9,11 +9,11 @@ import { EquipmentBadge } from './EquipmentBadge';
 import { useAudio } from '../audio';
 import { useEscapeKey } from '../hooks/useEscapeKey';
 
-const STATE_LABELS: Record<EquipmentState, { zh: string; en: string }> = {
-  pristine: { zh: '崭新', en: 'Pristine' },
-  worn: { zh: '磨损', en: 'Worn' },
-  damaged: { zh: '受损', en: 'Damaged' },
-  broken: { zh: '破损', en: 'Broken' },
+const STATE_LABELS: Record<EquipmentState, { zh: string; zh_TW: string; en: string }> = {
+  pristine: { zh: '崭新', zh_TW: '嶄新', en: 'Pristine' },
+  worn: { zh: '磨损', zh_TW: '磨損', en: 'Worn' },
+  damaged: { zh: '受损', zh_TW: '受損', en: 'Damaged' },
+  broken: { zh: '破损', zh_TW: '破損', en: 'Broken' },
 };
 
 export const EquipmentPanel = ({
@@ -55,7 +55,7 @@ export const EquipmentPanel = ({
         initial={{ scale: 0.9, y: 30 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 30 }}
-        className="bg-slate-800/95 border border-white/10 rounded-3xl p-6 max-w-md w-full max-h-[85vh] overflow-y-auto"
+        className="bg-slate-800/95 border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 max-w-md w-full max-h-[85vh] overflow-y-auto"
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
@@ -146,7 +146,7 @@ export const EquipmentPanel = ({
                         <button
                           onClick={() => { playTap(); onRepairWithItem(eq.missionId); }}
                           className="flex items-center gap-1 px-2 py-1.5 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded-lg text-xs font-bold hover:bg-purple-500/30 transition-all"
-                          title={lang === 'en' ? 'Use item from backpack' : '使用背包道具'}
+                          title={lang === 'en' ? 'Use item from backpack' : lang === 'zh_TW' ? '使用背包道具' : '使用背包道具'}
                         >
                           🔨
                         </button>

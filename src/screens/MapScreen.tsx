@@ -342,7 +342,7 @@ export const MapScreen = ({
               <motion.div
                 animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})}
                 transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : (isLastCleared ? { duration: 2.5, ease: "easeInOut" } : {})}
-                className={`bg-white rounded-[2rem] p-5 md:p-8 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isNextUp ? 'border-amber-400 shadow-amber-500/20' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
+                className={`bg-white rounded-xl sm:rounded-[2rem] p-3 sm:p-5 md:p-8 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isNextUp ? 'border-amber-400 shadow-amber-500/20' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
               >
                 {isNextUp && (
                   <div className="absolute -top-3 left-4 px-3 py-1 bg-amber-500 text-white text-[10px] font-black rounded-full z-10 shadow-md">
@@ -386,7 +386,7 @@ export const MapScreen = ({
                     </button>
                   );
                 })()}
-                <div className="flex justify-between items-start mb-6">
+                <div className="flex justify-between items-start mb-3 sm:mb-6">
                   <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                     mission.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' :
                     mission.difficulty === 'Medium' ? 'bg-orange-100 text-orange-700' : 'bg-rose-100 text-rose-700'
@@ -402,9 +402,9 @@ export const MapScreen = ({
                     </motion.div>
                   ) : isLocked ? <Lock className="text-slate-400" size={28} /> : null}
                 </div>
-                <h4 className="text-lg md:text-2xl font-black text-slate-800 mb-1">{lt(mission.title, lang)}</h4>
-                <p className="text-indigo-600 text-[10px] font-bold mb-3 uppercase">{t.questionTypes[mission.type]}</p>
-                <LatexText text={interpolate(lt(mission.description, lang), mission.data ?? {})} className="text-slate-500 text-sm mb-3 line-clamp-3 block" />
+                <h4 className="text-sm sm:text-lg md:text-2xl font-black text-slate-800 mb-0.5 sm:mb-1 line-clamp-2">{lt(mission.title, lang)}</h4>
+                <p className="text-indigo-600 text-[10px] font-bold mb-2 sm:mb-3 uppercase">{t.questionTypes[mission.type]}</p>
+                <LatexText text={interpolate(lt(mission.description, lang), mission.data ?? {})} className="text-slate-500 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2 sm:line-clamp-3 block" />
                 {(() => {
                   const pb = (profile.completed_missions as any)?._pb?.[String(mission.id)] as number | undefined;
                   const isHot = hotTopicInfo?.topic === mission.topic;
@@ -658,10 +658,10 @@ export const MapScreen = ({
                 )}
               </div>
 
-              {/* Mobile: "More" toggle */}
+              {/* Mobile: "More" toggle — hidden when BottomNav is active */}
               <button
                 onClick={() => setShowMoreMenu(!showMoreMenu)}
-                className="md:hidden px-2 py-0.5 bg-white/10 border border-white/20 rounded text-xs text-white/70 hover:bg-white/20 transition-colors relative"
+                className="hidden px-2 py-0.5 bg-white/10 border border-white/20 rounded text-xs text-white/70 hover:bg-white/20 transition-colors relative"
               >
                 {showMoreMenu ? <X size={14} /> : <MoreHorizontal size={14} />}
                 {onRepairEquipment && countNeedsRepair(profile.completed_missions as Record<string, unknown>) > 0 && !showMoreMenu && (
@@ -670,7 +670,7 @@ export const MapScreen = ({
               </button>
             </div>
 
-            {/* Mobile expanded menu */}
+            {/* Mobile expanded menu — replaced by BottomNav profile panel */}
             <AnimatePresence>
               {showMoreMenu && (
                 <motion.div
@@ -678,7 +678,7 @@ export const MapScreen = ({
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="md:hidden overflow-hidden mt-2"
+                  className="hidden overflow-hidden mt-2"
                 >
                   <div className="flex flex-wrap gap-2 p-2 bg-white/5 rounded-xl border border-white/10">
                     {onTechTree && (

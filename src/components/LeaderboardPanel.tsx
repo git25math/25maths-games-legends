@@ -186,7 +186,7 @@ export const LeaderboardPanel = ({
         initial={{ scale: 0.9, y: 30 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 30 }}
-        className="bg-slate-800/95 border border-white/10 rounded-3xl p-6 max-w-sm w-full max-h-[85vh] flex flex-col"
+        className="bg-slate-800/95 border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 max-w-sm w-full max-h-[85vh] flex flex-col"
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-3 shrink-0">
