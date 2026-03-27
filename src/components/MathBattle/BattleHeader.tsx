@@ -49,7 +49,7 @@ export function BattleHeader({
       <div className="flex items-center gap-4">
         <CharacterAvatar characterId={character.id} size={56} />
         <div>
-          <h2 className="text-base md:text-xl font-black tracking-widest">{lt(character.name, lang)} - {lt(mission.title, lang)}</h2>
+          <h2 className="text-sm sm:text-base md:text-xl font-black tracking-widest truncate max-w-[180px] sm:max-w-none">{lt(character.name, lang)} - {lt(mission.title, lang)}</h2>
           <div className="flex gap-1 mt-1 items-center">
             {battleMode === 'speed' ? (
               <>

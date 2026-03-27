@@ -111,7 +111,7 @@ export function ResultOverlay({
                   transition={{ delay: 0.8 }}
                   className="mt-6"
                 >
-                  <h3 className="text-4xl md:text-6xl font-black text-ink mb-2 drop-shadow-md">
+                  <h3 className="text-2xl sm:text-4xl md:text-6xl font-black text-ink mb-2 drop-shadow-md">
                     {willBePerfect ? (lang === 'zh' ? '完美通关！' : lang === 'zh_TW' ? '完美通關！' : 'Perfect Clear!') : t.successTitle}
                   </h3>
                   {(isFirstClear || willBePerfect) && (
@@ -233,7 +233,7 @@ export function ResultOverlay({
         ) : (
           <motion.div initial={{ y: 50 }} animate={{ y: 0 }}>
             <XCircle size={80} className="text-red-500 mb-6 mx-auto" />
-            <h3 className="text-3xl md:text-5xl font-black text-white mb-4">{t.failTitle}</h3>
+            <h3 className="text-2xl sm:text-3xl md:text-5xl font-black text-white mb-4">{t.failTitle}</h3>
             <p className="text-slate-400 mb-2">{t.failDesc}</p>
             {mission.storyConsequence ? (
               <p className="text-amber-400 font-bold mb-8 italic">{lt(mission.storyConsequence.wrong, lang)}</p>

@@ -83,7 +83,7 @@ export const WelcomeScreen = ({
           }}
           initial="initial" 
           animate="animate" 
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8 sm:mb-12"
         >
           {CHARACTERS.map(char => (
             <motion.div key={char.id} variants={staggerItem}>

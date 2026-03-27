@@ -314,7 +314,7 @@ export const MapScreen = ({
       />
 
       {/* Mission card grid */}
-      <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-8">
         {u.unitMissions.map(mission => {
           const comp = profile.completed_missions[String(mission.id)];
           const isNextUp = mission.id === u.firstPlayable?.id;
@@ -492,8 +492,8 @@ export const MapScreen = ({
   return (
     <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12 pb-bottom-nav md:pb-0">
       {/* ═══════════════════ Profile Header ═══════════════════ */}
-      <div className="flex flex-wrap items-center justify-between gap-6 bg-white/5 backdrop-blur-xl p-4 md:p-8 rounded-[2rem] border border-white/10">
-        <div className="flex items-center gap-4 md:gap-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-6 bg-white/5 backdrop-blur-xl p-3 sm:p-4 md:p-8 rounded-2xl sm:rounded-[2rem] border border-white/10">
+        <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
           <button onClick={onCharChange} className="relative group">
             <div className={`border-4 shadow-2xl rounded-full transition-colors ${seasonBorder ? seasonBorder.color : 'border-white/20'} group-hover:border-indigo-400`}>
               <CharacterAvatar characterId={selectedChar?.id || ''} size={72} />

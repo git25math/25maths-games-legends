@@ -163,6 +163,7 @@ export const PracticeScreen = ({
       setConsecutiveCorrect(newCorrect);
       setConsecutiveWrong(0);
       setConsecutiveSameType(0); // Reset error streak on correct answer
+      setPendingIntercept(false); // Clear any deferred intercept
       if (newCorrect >= 3 && adaptiveTier < 3 && currentPhase !== 'green') {
         playTierUp();
         setAdaptiveTier(prev => Math.min(3, prev + 1) as DifficultyTier);
@@ -529,7 +530,7 @@ export const PracticeScreen = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8"
+            className="p-3 sm:p-4 md:p-8 flex flex-col-reverse md:grid md:grid-cols-2 gap-4 md:gap-8"
           >
             {/* Left: Question area */}
             <motion.div

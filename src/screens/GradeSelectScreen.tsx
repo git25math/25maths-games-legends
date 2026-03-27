@@ -30,10 +30,10 @@ export const GradeSelectScreen = ({
 
   return (
     <motion.div key="grade-select" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl mx-auto text-center space-y-12 py-20">
-      <h2 className="text-5xl font-black text-white tracking-tighter">{t.chooseGrade}</h2>
+      <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tighter">{t.chooseGrade}</h2>
 
       {/* Grade buttons */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 sm:gap-6">
         {[7, 8, 9, 10, 11].map(g => (
           <motion.button
             key={g}
@@ -41,7 +41,7 @@ export const GradeSelectScreen = ({
             onClick={() => setSelectedGrade(g)}
             animate={selectedGrade === g ? { scale: 1.05, borderColor: '#818cf8' } : { scale: 1, borderColor: 'rgba(255,255,255,0.1)' }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className={`p-8 border-2 rounded-3xl text-white group ${
+            className={`p-4 sm:p-8 border-2 rounded-3xl text-white group ${
               selectedGrade === g
                 ? 'bg-indigo-600'
                 : 'bg-white/5 hover:bg-indigo-600/50'
@@ -66,7 +66,7 @@ export const GradeSelectScreen = ({
             value={className}
             onChange={e => setClassName(e.target.value.toUpperCase())}
             placeholder={l.placeholder}
-            className={`bg-white/10 border-2 border-white/20 rounded-xl px-6 py-3 text-center text-white text-xl font-bold w-48 placeholder:text-white/30 transition-colors ${INPUT_FOCUS_CLASS}`}
+            className={`bg-white/10 border-2 border-white/20 rounded-xl px-6 py-3 text-center text-white text-xl font-bold w-full max-w-[12rem] placeholder:text-white/30 transition-colors ${INPUT_FOCUS_CLASS}`}
             autoFocus
             onKeyDown={e => e.key === 'Enter' && handleConfirm()}
           />
