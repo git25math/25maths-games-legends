@@ -12,6 +12,7 @@ const KP_LESSON_MAP: Record<string, string> = {
   'kp-1.16-01': 'simple-compound-interest', 'kp-1.17-01': 'exponential-growth-decay',
   'kp-1.18-01': 'surds-rationalising',
   'kp-2.1-01': 'algebraic-substitution', 'kp-2.2-01': 'rearranging-formulae',
+  'kp-2.2-02': 'expansion-factorisation', 'kp-2.2-03': 'expansion-factorisation',
   'kp-2.3-01': 'expansion-factorisation', 'kp-2.3-02': 'advanced-factorisation',
   'kp-2.4-01': 'algebraic-fractions',
   'kp-2.5-01': 'linear-equations', 'kp-2.5-02': 'quadratic-equations',

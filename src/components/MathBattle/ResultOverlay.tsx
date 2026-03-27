@@ -35,6 +35,7 @@ type Props = {
   retryCount?: number;
   maxRetries?: number;
   onGiveUp?: () => void;
+  onDiagnose?: () => void;
   hotTopicMultiplier?: number;
   isDailyChallenge?: boolean;
 };
@@ -44,7 +45,7 @@ export function ResultOverlay({
   isMultiQuestion, isFirstClear, completedDifficulties, difficultyMode,
   finalScore, finalDuration, correctCount, currentQIdx, hp,
   encouragement, onAchievementClose, onRetry,
-  canRetry = true, retryCount = 0, maxRetries = 2, onGiveUp,
+  canRetry = true, retryCount = 0, maxRetries = 2, onGiveUp, onDiagnose,
   hotTopicMultiplier = 1, isDailyChallenge = false,
 }: Props) {
   if (showResult === 'none') return null;
@@ -264,6 +265,14 @@ export function ResultOverlay({
                       : `重试惩罚：得分 ×${(0.5 ** retryCount).toFixed(2)}`}
                   </p>
                 )}
+                {onDiagnose && (
+                  <button
+                    onClick={onDiagnose}
+                    className="px-8 py-2.5 bg-cyan-800/40 border border-cyan-600/40 text-cyan-300 font-bold rounded-xl hover:bg-cyan-700/50 transition-all text-sm"
+                  >
+                    🔍 {lang === 'en' ? 'Diagnose Issue' : lang === 'zh_TW' ? '診斷問題' : '诊断问题'}
+                  </button>
+                )}
               </div>
             ) : (
               <div className="space-y-4">
@@ -288,6 +297,14 @@ export function ResultOverlay({
                     </a>
                   ) : null;
                 })()}
+                {onDiagnose && (
+                  <button
+                    onClick={onDiagnose}
+                    className="px-10 py-4 bg-cyan-800/40 border border-cyan-600/40 text-cyan-300 font-black rounded-xl hover:bg-cyan-700/50 transition-all"
+                  >
+                    🔍 {lang === 'en' ? 'Diagnose Issue' : lang === 'zh_TW' ? '診斷問題' : '诊断问题'}
+                  </button>
+                )}
                 {onGiveUp && (
                   <div>
                     <button
