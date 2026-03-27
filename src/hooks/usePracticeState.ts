@@ -65,7 +65,7 @@ export function cleanStalePracticeKeys(maxAgeDays = 7): void {
           const match = key.match(/gl_practice_(\d+)_ts/);
           if (match) {
             const mid = match[1];
-            ['phase', 'step', 'tier', 'cc', 'cw', 'ts'].forEach(f => {
+            ['phase', 'step', 'tier', 'cc', 'cw', 'pc', 'ts'].forEach(f => {
               keysToRemove.push(`${PREFIX}${mid}_${f}`);
             });
           }

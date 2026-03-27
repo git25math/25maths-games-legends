@@ -255,10 +255,10 @@ export const ExpeditionScreen = ({
           </div>
 
           {/* Main scroll card */}
-          <div className="bg-amber-950/30 border border-amber-700/30 rounded-2xl p-6 backdrop-blur-sm">
+          <div className="bg-amber-950/30 border border-amber-700/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-sm">
             <div className="flex items-center justify-center gap-2 mb-1">
               <Scroll size={18} className="text-amber-500/60" />
-              <h2 className="text-2xl font-black text-amber-300">{lt(expedition.name, lang)}</h2>
+              <h2 className="text-xl sm:text-2xl font-black text-amber-300">{lt(expedition.name, lang)}</h2>
             </div>
             <p className="text-white/40 text-xs text-center mb-5 leading-relaxed">{lt(expedition.description, lang)}</p>
 
@@ -466,7 +466,7 @@ export const ExpeditionScreen = ({
             if (targetId) setInputs(prev => ({ ...prev, [targetId]: val }));
           }} />
 
-          <div className="bg-white/5 backdrop-blur-xl p-6 rounded-3xl border border-white/10 w-full max-w-lg relative">
+          <div className="bg-white/5 backdrop-blur-xl p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-white/10 w-full max-w-lg relative">
             {/* Battle header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
