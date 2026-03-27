@@ -62,23 +62,48 @@ const CROSS_CHAPTER_PREREQS: Record<string, string[]> = {
   '6.1': ['4.6'],
   // Mensuration needs geometry basics
   '5.2': ['4.1'],
-  // Transformations need coordinate geometry
-  '7.1': ['3.1'],
-
-  // ── Additional cross-chapter dependencies (complete the graph) ──
+  // ── Cross-chapter dependencies: wave 1 ──
 
   // Indices II (ch2) builds on Indices I (ch1) — different chapters, same concept arc
   '2.4': ['1.7'],
   // Proportion (ch2) needs Ratio/proportion foundation from ch1
   '2.8': ['1.11'],
-  // Similarity & congruency (ch4) relies on ratio as scale factor
+  // Practical graphs (ch2) are plotted on coordinate axes — needs ch3 coordinates first
+  '2.9': ['3.1'],
+  // Differentiation = gradient of a curve — needs gradient of linear graphs (ch3)
+  '2.12': ['3.3'],
+
+  // Scale drawings (ch4) use map ratios (1:50000) — needs Ratio/proportion (ch1)
+  '4.3': ['1.11'],
+  // Similarity & congruency (ch4) relies on ratio as scale factor (ch1)
   '4.4': ['1.11'],
+
+  // Units of measure (ch5) entry point — needs decimals for conversions (1 m = 0.001 km)
+  '5.1': ['1.4'],
+  // Arcs and sectors (ch5) use fraction-of-circle = (θ/360) — needs Ratio (ch1)
+  '5.3': ['1.11'],
+
+  // Sine/cosine rule chapter includes area = ½ab sinC — needs area concept (ch5)
+  '6.5': ['5.2'],
+  // 3D trigonometry works inside cuboids/pyramids — needs 3D shape knowledge (ch5)
+  '6.6': ['5.4'],
+
+  // Transformations (ch7): needs coordinates (ch3) AND angles for rotation (ch4)
+  '7.1': ['3.1', '4.6'],
   // Vector magnitude (ch7) uses Pythagoras directly (ch6)
   '7.3': ['6.1'],
+  // Vector geometry proofs need algebraic manipulation — expressions like OA + AB (ch2)
+  '7.4': ['2.2'],
+
   // Probability (ch8) is expressed as fractions/decimals — ch1 foundation
   '8.1': ['1.4'],
+
+  // Statistics entry point (ch9) — data tables need basic arithmetic (ch1)
+  '9.1': ['1.6'],
   // Scatter diagrams (ch9) require reading coordinate axes — ch3
   '9.5': ['3.1'],
+  // Histograms (ch9) use frequency density = freq ÷ class width = ratio (ch1)
+  '9.7': ['1.11'],
 };
 
 /** Get prerequisite topic IDs for a given topic */
