@@ -154,7 +154,8 @@ export function getRecoverySession(
 
 // ── Helpers ──
 
-/** Pick the mission with the highest error count in a topic. */
+/** Pick the mission with the highest error count in a topic.
+ *  Tie-break: prefer most recently errored (latest lastWrong). */
 function pickMostErroredMission(
   topicId: string,
   missionTopicMap: Map<string, number[]>,
@@ -165,11 +166,14 @@ function pickMostErroredMission(
 
   let bestId = missionIds[0];
   let bestCount = 0;
+  let bestDate = '';
 
   for (const mid of missionIds) {
     const rec = mistakes[String(mid)];
-    if (rec && rec.count > bestCount) {
+    if (!rec) continue;
+    if (rec.count > bestCount || (rec.count === bestCount && rec.lastWrong > bestDate)) {
       bestCount = rec.count;
+      bestDate = rec.lastWrong;
       bestId = mid;
     }
   }

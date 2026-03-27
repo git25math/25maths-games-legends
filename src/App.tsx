@@ -161,6 +161,8 @@ export default function App() {
   const [pendingBattleMission, setPendingBattleMission] = useState<Mission | null>(null);
   const [itemRewardToast, setItemRewardToast] = useState<{ items: { itemId: string; reason: string }[] } | null>(null);
   const [recoverySession, setRecoverySession] = useState<RecoverySession | null>(null);
+  const recoverySessionRef = useRef<RecoverySession | null>(null);
+  recoverySessionRef.current = recoverySession; // sync ref with state to avoid stale closures
 
   // Refs to accumulate mid-battle updates that get merged into handleBattleComplete's single save
   const pendingSeasonTasksRef = useRef<string[]>([]);
@@ -207,9 +209,15 @@ export default function App() {
 
   // Restore recovery session from profile on load
   useEffect(() => {
-    if (profile && !recoverySession) {
+    if (!profile) return;
+    try {
       const saved = getRecoverySession(profile.completed_missions as any);
-      if (saved) setRecoverySession(saved);
+      // Only restore if we don't have one yet OR if the saved one is newer
+      if (saved && !recoverySessionRef.current) {
+        setRecoverySession(saved);
+      }
+    } catch {
+      // Malformed _recovery data — silently ignore
     }
   }, [profile?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -1076,15 +1084,14 @@ export default function App() {
                       sp = incrementTaskCount(sp, 'weekly_repair_1');
                       const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
                       cm._season = updatedProgress;
-                      // Recovery session: advance step if active
-                      if (recoverySession) {
-                        const advanced = advanceRecoveryStep(recoverySession);
+                      // Recovery session: advance step if active (use ref to avoid stale closure)
+                      const currentRecovery = recoverySessionRef.current;
+                      if (currentRecovery) {
+                        const advanced = advanceRecoveryStep(currentRecovery);
                         if (isRecoveryComplete(advanced)) {
-                          // All steps done — clear recovery session
                           delete cm._recovery;
                           setRecoverySession(null);
                         } else {
-                          // Save advanced session state
                           cm._recovery = advanced;
                           setRecoverySession(advanced);
                         }
@@ -1096,7 +1103,7 @@ export default function App() {
                       });
                       setIsRepairMode(false);
 
-                      if (recoverySession) {
+                      if (currentRecovery) {
                         // In recovery mode: go back to tech tree to show next step
                         setGameState('tech_tree');
                         setActiveMission(null);
@@ -1200,12 +1207,13 @@ export default function App() {
                       setGameState('practice');
                     }
                   }}
-                  onStartRecovery={(topicId) => {
+                  onStartRecovery={async (topicId) => {
                     if (!profile) return;
                     const cm = profile.completed_missions as any;
                     const mistakesMap = (cm?._mistakes ?? {}) as Record<string, import('./utils/errorMemory').MistakeRecord>;
                     // Find dominant error for this topic
                     const topicMissions = missions.filter(m => m.kpId?.match(new RegExp(`^kp-${topicId.replace('.', '\\.')}`)));
+                    if (topicMissions.length === 0) return; // no missions for topic
                     let dominant: import('./utils/diagnoseError').ErrorType = 'method';
                     let maxErr = 0;
                     for (const m of topicMissions) {
@@ -1219,7 +1227,7 @@ export default function App() {
                     const session = buildRecoveryPath(topicId, dominant, mistakesMap, missions);
                     if (session) {
                       const newCm = { ...cm, _recovery: session };
-                      updateProfile({ completed_missions: newCm });
+                      await updateProfile({ completed_missions: newCm });
                       setRecoverySession(session);
                     } else {
                       // No weak prereqs — fall back to direct repair
@@ -1247,6 +1255,7 @@ export default function App() {
                       await updateProfile({ completed_missions: cm });
                     }
                     setRecoverySession(null);
+                    setActiveMission(null);
                   }}
                 />
               )}

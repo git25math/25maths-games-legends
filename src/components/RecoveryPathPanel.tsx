@@ -28,12 +28,14 @@ export function RecoveryPathPanel({
   missions,
   onStartStep,
   onCancel,
+  onComplete,
 }: {
   lang: Language;
   session: RecoverySession;
   missions: Mission[];
   onStartStep: (missionId: number) => void;
   onCancel: () => void;
+  onComplete?: () => void;
 }) {
   const current = getCurrentStep(session);
   const complete = isRecoveryComplete(session);
@@ -139,7 +141,7 @@ export function RecoveryPathPanel({
                   }`}>
                     {isCompleted ? <CheckCircle2 size={14} className="text-emerald-400" /> :
                      isActive ? <Zap size={14} className="text-amber-400" /> :
-                     <Lock size={12} className="text-white/20" />}
+                     <Lock size={12} className="text-white/30" />}
                   </div>
 
                   {/* Content */}
@@ -153,7 +155,7 @@ export function RecoveryPathPanel({
                       <span className={`text-[9px] px-1 py-0.5 rounded font-bold ${
                         isCompleted ? 'bg-emerald-500/10 text-emerald-400/60' :
                         isActive ? 'bg-amber-500/10 text-amber-400' :
-                        'bg-white/5 text-white/20'
+                        'bg-white/5 text-white/30'
                       }`}>{ERROR_SYMBOLS[step.errorType] ?? '!'}</span>
                     </div>
                     <p className={`text-xs font-bold truncate ${
@@ -164,7 +166,7 @@ export function RecoveryPathPanel({
                     <p className={`text-[10px] truncate ${
                       isCompleted ? 'text-emerald-400/40' :
                       isActive ? 'text-white/50' :
-                      'text-white/15'
+                      'text-white/25'
                     }`}>{reason}</p>
                   </div>
 
@@ -185,7 +187,7 @@ export function RecoveryPathPanel({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                     onClick={() => onStartStep(step.missionId)}
-                    className="mt-2 w-full py-2 rounded-lg bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-bold hover:bg-amber-500/30 transition-colors flex items-center justify-center gap-1.5"
+                    className="mt-2 w-full py-3 rounded-lg bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-bold hover:bg-amber-500/30 transition-colors flex items-center justify-center gap-1.5"
                   >
                     <Zap size={12} />
                     {lt({ zh: '开始练习', en: 'Start Practice' }, lang)}
@@ -210,6 +212,14 @@ export function RecoveryPathPanel({
             <p className="text-[10px] text-emerald-400/60 mt-1">
               {lt({ zh: '所有薄弱知识点已修复，可以继续推进。', en: 'All weak skills repaired. Ready to advance.' }, lang)}
             </p>
+            {onComplete && (
+              <button
+                onClick={onComplete}
+                className="mt-3 px-8 py-3 bg-emerald-600 text-white font-bold text-sm rounded-xl hover:bg-emerald-500 transition-colors"
+              >
+                {lt({ zh: '继续推进', en: 'Continue' }, lang)}
+              </button>
+            )}
           </motion.div>
         )}
       </div>

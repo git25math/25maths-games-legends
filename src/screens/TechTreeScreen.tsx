@@ -453,6 +453,7 @@ export const TechTreeScreen = ({
               onRecoveryStepStart(missionId);
             }}
             onCancel={onRecoveryCancelled}
+            onComplete={onRecoveryCancelled}
           />
         )}
       </AnimatePresence>
