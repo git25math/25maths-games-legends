@@ -656,7 +656,7 @@ export default function App() {
     }
     // Failed battles: consume stamina + record errors + update skill health
     if (!success && profile && activeMission) {
-      var cm = structuredClone(profile.completed_missions) as any;
+      let cm = structuredClone(profile.completed_missions) as any;
       // Stamina
       cm._stamina = consumeAttempt(getStamina(cm));
       // Errors
@@ -863,10 +863,10 @@ export default function App() {
                   : gameState === 'onboarding' ? 'onboarding'
                   : gameState
               }
-              initial={{ opacity: 0, x: 300 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -300 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
               className="w-full"
             >
               <Suspense fallback={<ScreenLoader lang={lang} label={lang === 'en' ? 'Loading screen' : '正在加载页面'} />}>
