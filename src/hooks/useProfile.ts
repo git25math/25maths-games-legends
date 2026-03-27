@@ -112,7 +112,7 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     hpRemaining: number,
     topic: string,
     kpId?: string,
-  ): Promise<{ completedMissions: any; stats: typeof DEFAULT_STATS; newScore: number } | null> => {
+  ): Promise<{ completedMissions: any; stats: typeof DEFAULT_STATS } | null> => {
     if (!profile) return null;
 
     // Record battle result (skip for guest)
@@ -132,7 +132,7 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     }
 
     if (success) {
-      const newCompleted: CompletedMissions = { ...profile.completed_missions };
+      const newCompleted: CompletedMissions = structuredClone(profile.completed_missions) as CompletedMissions;
       newCompleted[String(missionId)] = markBattleDifficultyCompleted(newCompleted[String(missionId)], difficultyMode);
 
       const newStats = { ...profile.stats };
@@ -146,7 +146,7 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
         cm._pb[String(missionId)] = score;
       }
 
-      return { completedMissions: cm, stats: newStats, newScore: profile.total_score + score };
+      return { completedMissions: cm, stats: newStats };
     }
     return null;
   };
@@ -178,7 +178,7 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     const prog = getCharProgression(charId);
     if (prog.unlocked_skills.includes(skillId)) return false;
 
-    const cm = { ...profile.completed_missions } as any;
+    const cm = structuredClone(profile.completed_missions) as any;
     if (!cm._char_progression) cm._char_progression = {};
     cm._char_progression[charId] = {
       ...prog,
@@ -196,7 +196,7 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     const prog = getCharProgression(charId);
     if (skillId && !prog.unlocked_skills.includes(skillId)) return;
 
-    const cm = { ...profile.completed_missions } as any;
+    const cm = structuredClone(profile.completed_missions) as any;
     if (!cm._char_progression) cm._char_progression = {};
     cm._char_progression[charId] = { ...prog, active_skill: skillId };
     await updateProfile({ completed_missions: cm });
@@ -204,7 +204,7 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
 
   const grantSkillPoint = async (count = 1) => {
     if (!profile || count <= 0) return;
-    const cm = { ...profile.completed_missions } as any;
+    const cm = structuredClone(profile.completed_missions) as any;
     cm._total_skill_points = (cm._total_skill_points ?? 0) + count;
     await updateProfile({ completed_missions: cm });
   };

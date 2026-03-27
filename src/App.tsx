@@ -41,6 +41,7 @@ import { buildRecoveryPath, advanceRecoveryStep, isRecoveryComplete, getCurrentS
 import type { RecoverySession } from './utils/recoveryPath';
 
 import { BottomNav, type BottomTab } from "./components/BottomNav";
+import { Confetti } from './components/Confetti';
 import { processAttempt, getSkillHealth, setSkillHealth, processRecoveryComplete, type AttemptResult } from './utils/processAttempt';
 import { detectErrorPattern, getPattern } from './utils/errorPatterns';
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
@@ -157,6 +158,7 @@ export default function App() {
   const [repairPatternId, setRepairPatternId] = useState<string | null>(null);
   const [activeExpedition, setActiveExpedition] = useState<Expedition | null>(null);
   const [levelUpNotif, setLevelUpNotif] = useState<{ newLevel: number; rankName: string; spEarned: number } | null>(null);
+  const [levelUpConfetti, setLevelUpConfetti] = useState(0);
   const [repairToast, setRepairToast] = useState<{ bonus: number } | null>(null);
   const [nearLevelToast, setNearLevelToast] = useState<{ xpNeeded: number; rankName: string } | null>(null);
   const [loginRewardNotif, setLoginRewardNotif] = useState<{ streak: number; xp: number; sp: number } | null>(null);
@@ -223,7 +225,7 @@ export default function App() {
         const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000;
         if (ageMs > TWO_WEEKS) {
           // Discard stale session silently
-          const cm = { ...(profile.completed_missions as any) };
+          const cm = structuredClone(profile.completed_missions) as any;
           delete cm._recovery;
           updateProfile({ completed_missions: cm });
         } else {
@@ -477,6 +479,7 @@ export default function App() {
     if (levelsGained > 0) {
       const rankName = lang === 'en' ? newInfo.rank.en : lang === 'zh_TW' ? newInfo.rank.zh_TW : newInfo.rank.zh;
       setLevelUpNotif({ newLevel: newInfo.level, rankName, spEarned: levelsGained });
+      setLevelUpConfetti(c => c + 1);
       setTimeout(() => setLevelUpNotif(null), 4000);
     } else if (newInfo.xpForNextLevel > 0) {
       const threshold = Math.ceil(newInfo.xpForNextLevel * 0.15);
@@ -526,7 +529,7 @@ export default function App() {
       const isFirstClearBattle = !profile.completed_missions[String(activeMission.id)];
 
       if (battleData) {
-        const { completedMissions: cm, stats, newScore } = battleData;
+        let { completedMissions: cm, stats } = battleData; // cm is reassigned below by setSkillHealth
 
         if (isDailyBattle) {
           cm[getDailyKey()] = true;
@@ -624,8 +627,9 @@ export default function App() {
           }
         }
 
-        // Step 6: Single atomic updateProfile call
-        await updateProfile({ total_score: newScore, completed_missions: cm, stats });
+        // Step 6: Single atomic updateProfile call (use latestScoreRef — not stale battleData.newScore)
+        latestScoreRef.current = prevScore + score;
+        await updateProfile({ total_score: prevScore + score, completed_missions: cm, stats });
 
         // Step 6: Notifications only (no writes)
         showLevelUpNotifications(prevScore, score, levelsGained);
@@ -1295,7 +1299,7 @@ export default function App() {
                   missions={missions}
                   onComplete={async (restoredState) => {
                     // Write restored health back to profile
-                    const cm = { ...(profile.completed_missions as any) };
+                    const cm = structuredClone(profile.completed_missions) as any;
                     const updated = setSkillHealth(cm as Record<string, unknown>, repairTopicId!, restoredState);
                     await updateProfile({ completed_missions: updated });
                     setRepairTopicId(null);
@@ -1408,6 +1412,9 @@ export default function App() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* ═══ Level-Up Confetti ═══ */}
+        <Confetti trigger={levelUpConfetti} theme="goldWhite" />
 
         {/* ═══ Level-Up Celebration Overlay ═══ */}
         <AnimatePresence>
