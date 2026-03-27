@@ -64,6 +64,21 @@ const CROSS_CHAPTER_PREREQS: Record<string, string[]> = {
   '5.2': ['4.1'],
   // Transformations need coordinate geometry
   '7.1': ['3.1'],
+
+  // ── Additional cross-chapter dependencies (complete the graph) ──
+
+  // Indices II (ch2) builds on Indices I (ch1) — different chapters, same concept arc
+  '2.4': ['1.7'],
+  // Proportion (ch2) needs Ratio/proportion foundation from ch1
+  '2.8': ['1.11'],
+  // Similarity & congruency (ch4) relies on ratio as scale factor
+  '4.4': ['1.11'],
+  // Vector magnitude (ch7) uses Pythagoras directly (ch6)
+  '7.3': ['6.1'],
+  // Probability (ch8) is expressed as fractions/decimals — ch1 foundation
+  '8.1': ['1.4'],
+  // Scatter diagrams (ch9) require reading coordinate axes — ch3
+  '9.5': ['3.1'],
 };
 
 /** Get prerequisite topic IDs for a given topic */
