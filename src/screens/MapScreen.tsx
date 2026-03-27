@@ -386,25 +386,31 @@ export const MapScreen = ({
                     </button>
                   );
                 })()}
-                <div className="flex justify-between items-start mb-3 sm:mb-6">
-                  <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                {/* Title first — primary visual weight */}
+                <h4 className="text-sm sm:text-lg md:text-2xl font-black text-slate-800 mb-1 sm:mb-2 line-clamp-2 pr-8">{lt(mission.title, lang)}</h4>
+
+                {/* Difficulty + completion + type — secondary, compact row */}
+                <div className="flex items-center gap-1.5 mb-2 sm:mb-3 flex-wrap">
+                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
                     mission.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' :
                     mission.difficulty === 'Medium' ? 'bg-orange-100 text-orange-700' : 'bg-rose-100 text-rose-700'
                   }`}>
                     {t.difficulty[mission.difficulty]}
-                  </div>
+                  </span>
+                  <span className="text-slate-400 text-[9px]">·</span>
+                  <span className="text-indigo-500 text-[9px] font-bold uppercase">{t.questionTypes[mission.type]}</span>
                   {isCompleted ? (
-                    <motion.div {...springIn} transition={{ type: "spring", bounce: 0.4 }} className="flex gap-1">
-                      {comp?.green && <div className="w-3 h-3 rounded-full bg-emerald-500" />}
-                      {comp?.amber && <div className="w-3 h-3 rounded-full bg-amber-500" />}
-                      {comp?.red && <div className="w-3 h-3 rounded-full bg-rose-500" />}
-                      <CheckCircle2 className="text-emerald-500 ml-1" size={20} />
-                    </motion.div>
-                  ) : isLocked ? <Lock className="text-slate-400" size={28} /> : null}
+                    <span className="flex gap-0.5 ml-auto">
+                      {comp?.green && <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />}
+                      {comp?.amber && <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />}
+                      {comp?.red && <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />}
+                      <CheckCircle2 className="text-emerald-500 ml-0.5" size={14} />
+                    </span>
+                  ) : isLocked ? <Lock className="text-slate-400 ml-auto" size={16} /> : null}
                 </div>
-                <h4 className="text-sm sm:text-lg md:text-2xl font-black text-slate-800 mb-0.5 sm:mb-1 line-clamp-2">{lt(mission.title, lang)}</h4>
-                <p className="text-indigo-600 text-[10px] font-bold mb-2 sm:mb-3 uppercase">{t.questionTypes[mission.type]}</p>
-                <LatexText text={interpolate(lt(mission.description, lang), mission.data ?? {})} className="text-slate-500 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2 sm:line-clamp-3 block" />
+
+                {/* Description — hidden on small mobile, visible on sm+ */}
+                <LatexText text={interpolate(lt(mission.description, lang), mission.data ?? {})} className="hidden sm:block text-slate-500 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2 sm:line-clamp-3" />
                 {(() => {
                   const pb = (profile.completed_missions as any)?._pb?.[String(mission.id)] as number | undefined;
                   const isHot = hotTopicInfo?.topic === mission.topic;
@@ -491,6 +497,40 @@ export const MapScreen = ({
 
   return (
     <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12 pb-bottom-nav md:pb-0">
+      {/* ═══════════════════ Smart Recommendation Banner ═══════════════════ */}
+      {smartRecommendation.recommendedMission && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`flex items-center justify-between gap-3 px-4 py-3 rounded-xl border ${
+            smartRecommendation.isWeakRecommendation
+              ? 'bg-rose-600/10 border-rose-500/20'
+              : 'bg-indigo-600/10 border-indigo-500/20'
+          }`}
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-lg flex-shrink-0">{smartRecommendation.isWeakRecommendation ? '🔧' : '💡'}</span>
+            <div className="min-w-0">
+              <p className={`text-[10px] font-bold ${smartRecommendation.isWeakRecommendation ? 'text-rose-400' : 'text-indigo-400'}`}>
+                {smartRecommendation.isWeakRecommendation
+                  ? (lang === 'en' ? 'Needs review' : '建议复习')
+                  : (lang === 'en' ? 'Next up' : '推荐下一步')}
+              </p>
+              <p className="text-sm font-black text-white truncate">{lt(smartRecommendation.recommendedMission.title, lang)}</p>
+            </div>
+          </div>
+          <motion.button
+            {...tapScale}
+            onClick={() => { playTap(); onPracticeStart(smartRecommendation.recommendedMission!); }}
+            className={`flex-shrink-0 px-4 py-2 rounded-lg text-xs font-black text-white ${
+              smartRecommendation.isWeakRecommendation ? 'bg-rose-600 hover:bg-rose-500' : 'bg-indigo-600 hover:bg-indigo-500'
+            }`}
+          >
+            {lang === 'en' ? 'Go →' : '去学习 →'}
+          </motion.button>
+        </motion.div>
+      )}
+
       {/* ═══════════════════ Profile Header ═══════════════════ */}
       <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-6 bg-white/5 backdrop-blur-xl p-3 sm:p-4 md:p-8 rounded-2xl sm:rounded-[2rem] border border-white/10">
         <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
