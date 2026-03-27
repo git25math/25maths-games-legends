@@ -912,7 +912,14 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: 'AB 是直径，C 在圆上。求角度 $x$。', en: 'AB is a diameter, C is on the circle. Find angle $x$.' },
     data: { knownAngle: 35, answer: 55, theoremType: 'semicircle', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-5.4-01', sectionId: 'geometry',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '周瑜：为什么要学圆中角度？\n赤壁之战，周瑜从岸上观察曹军船阵——"哪个位置看到的角度最大？"\n古希腊数学家泰勒斯发现：圆的直径所对的圆周角，永远是直角！\n无论 C 在圆上哪个位置，$\\angle ACB$ 都等于 $90°$。', en: 'Zhou Yu: "Why learn circle angles?\nAt Red Cliffs, Zhou Yu watched the fleet from shore — \'which position gives the widest angle?\'\nThales discovered: the inscribed angle subtended by a diameter is always a right angle!\nNo matter where C is, $\\angle ACB$ always equals $90°$."' }, highlightField: 'x' },
+      { text: { zh: '周瑜：关键定理\n直径所对的圆周角 = $90°$\n因为 AB 是直径，所以 $\\angle ACB = 90°$。\n三角形内角和 = $180°$，所以另外两个角加起来 = $90°$。', en: 'Zhou Yu: "Key theorem\nThe inscribed angle subtended by a diameter = $90°$\nSince AB is diameter, $\\angle ACB = 90°$.\nAngles in a triangle sum to $180°$, so the other two add up to $90°$."' }, highlightField: 'x' },
+      { text: { zh: '周瑜：已知信息\n$\\angle ABC = 35°$（已知）\n$\\angle ACB = 90°$（直径所对圆周角）\n三角形三个角加起来 = $180°$。', en: 'Zhou Yu: "Given info\n$\\angle ABC = 35°$ (given)\n$\\angle ACB = 90°$ (angle in semicircle)\nThree angles sum to $180°$."' }, highlightField: 'x' },
+      { text: { zh: '周瑜：建立方程\n$\\angle BAC + 35° + 90° = 180°$\n$\\angle BAC = 180° - 35° - 90°$', en: 'Zhou Yu: "Set up equation\n$\\angle BAC + 35° + 90° = 180°$\n$\\angle BAC = 180° - 35° - 90°$"' }, highlightField: 'x' },
+      { text: { zh: '周瑜：答案\n$\\angle BAC = 180° - 35° - 90° = 55°$', en: 'Zhou Yu: "Answer\n$\\angle BAC = 180° - 35° - 90° = 55°$"' }, highlightField: 'x' },
+      { text: { zh: '周瑜：验算\n三角形三角之和：$55° + 35° + 90° = 180°$ ✓\n完美！所有角之和等于 $180°$。', en: 'Zhou Yu: "Verify\nSum of angles: $55° + 35° + 90° = 180°$ ✓\nPerfect! All angles sum to $180°$."' }, highlightField: 'x' },
+    ],
     secret: { concept: { zh: '直径所对圆周角 = 90°（泰勒斯定理）。用三角形内角和求另一角。', en: 'Angle in a semicircle = 90° (Thales). Use triangle angle sum to find the other angle.' }, formula: '$\\angle ACB = 90°$', tips: [{ zh: '周瑜提示：先标出直角，再用 180° 减已知角。', en: 'Zhou Yu Tip: Mark the right angle first, then subtract from 180°.' }] },
     storyConsequence: { correct: { zh: '半圆直角——圆周角定理运用成功！做得漂亮！', en: 'Semicircle Right Angle — Well done!' }, wrong: { zh: '圆周角计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
@@ -927,7 +934,14 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '已知圆心角或圆周角，求另一个角 $x$。', en: 'Given a central or inscribed angle subtending the same arc, find the other angle $x$.' },
     data: { knownAngle: 120, answer: 60, isGivenCentral: true, inscribedAngle: 60, centralAngle: 120, theoremType: 'center_double', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-5.4-02', sectionId: 'geometry',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：为什么圆心角是圆周角的两倍？\n\n想象你站在圆心 O 看一段弧——你的视角最宽，正好是圆周上任意一点 C 看同一段弧的两倍。这叫"圆心角定理"：同弧所对的圆心角 = 2 × 圆周角。', en: 'Zhuge Liang: Why is the central angle twice the inscribed angle?\n\nImagine standing at centre O looking at an arc — your view is the widest, exactly twice the view from any point C on the circle looking at the same arc. This is the Central Angle Theorem: central angle = 2 × inscribed angle on the same arc.' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：核心定理\n$$\\angle AOB = 2 \\times \\angle ACB$$\n其中 $O$ 是圆心，$A$、$B$ 是弧的端点，$C$ 是圆周上任意一点（与弧同侧）。\n\n圆心"看"得更宽，所以圆心角更大。', en: 'Zhuge Liang: Core theorem\n$$\\angle AOB = 2 \\times \\angle ACB$$\nWhere $O$ is the centre, $A$ and $B$ are the arc endpoints, and $C$ is any point on the circle on the same side of the arc.\n\nThe centre "sees" wider, so the central angle is larger.' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：读取已知信息\n题目告诉我们：圆心角 $\\angle AOB = 120°$，求圆周角 $x$。\n\n我们已知较大的角（圆心角），要求较小的角（圆周角）。', en: 'Zhuge Liang: Read the given information\nThe problem tells us: central angle $\\angle AOB = 120°$, find the inscribed angle $x$.\n\nWe know the larger angle (central) and need to find the smaller angle (inscribed).' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：建立方程\n由圆心角定理：\n$$120° = 2 \\times x$$\n\n两边除以 2：\n$$x = \\frac{120°}{2}$$', en: 'Zhuge Liang: Set up the equation\nBy the Central Angle Theorem:\n$$120° = 2 \\times x$$\n\nDivide both sides by 2:\n$$x = \\frac{120°}{2}$$' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：计算答案\n$$x = \\frac{120°}{2} = 60°$$\n\n圆周角 $x = 60°$。', en: 'Zhuge Liang: Calculate the answer\n$$x = \\frac{120°}{2} = 60°$$\n\nThe inscribed angle $x = 60°$.' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：验算\n圆心角 = 2 × 圆周角？\n$$2 \\times 60° = 120° \\checkmark$$\n\n完美！圆心角确实是圆周角的两倍。赤壁之战，胜算已定！', en: 'Zhuge Liang: Verify\nCentral angle = 2 × inscribed angle?\n$$2 \\times 60° = 120° \\checkmark$$\n\nPerfect! The central angle is indeed twice the inscribed angle. Victory at Red Cliffs is assured!' }, highlightField: 'x' },
+    ],
     secret: { concept: { zh: '同弧所对圆心角 = 2 × 圆周角。记住：圆心"看"得更宽！', en: 'Central angle = 2 × inscribed angle subtending same arc. Remember: the centre "sees" wider!' }, formula: '$\\angle AOB = 2\\angle ACB$', tips: [{ zh: '诸葛亮提示：圆心角是圆周角的两倍。', en: 'Zhuge Liang Tip: Central angle is double the inscribed angle.' }] },
     storyConsequence: { correct: { zh: '圆心角定理——几何推理精准！做得漂亮！', en: 'Central Angle — Well done!' }, wrong: { zh: '角度关系搞错了…再试一次！', en: 'Not quite... Try again!' } }
   },
