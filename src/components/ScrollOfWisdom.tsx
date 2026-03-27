@@ -31,17 +31,17 @@ export const ScrollOfWisdom = ({ mission, lang, onClose, errorHint }: {
       exit={{ opacity: 0, scale: 0.9 }}
       className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md"
     >
-      <div className="bg-amber-50 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border-8 border-amber-200">
-        <div className="bg-amber-200 p-6 flex justify-between items-center">
-          <h2 className="text-2xl font-black text-amber-900 flex items-center gap-2">
-            <BookOpen size={28} />
+      <div className="bg-amber-50 w-full max-w-lg rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-4 sm:border-8 border-amber-200">
+        <div className="bg-amber-200 p-4 sm:p-6 flex justify-between items-center">
+          <h2 className="text-lg sm:text-2xl font-black text-amber-900 flex items-center gap-2">
+            <BookOpen size={24} />
             {t.secretBook}
           </h2>
           <button onClick={onClose} className="text-amber-900 hover:bg-amber-300 p-2 rounded-full transition-colors">
             <XCircle size={24} />
           </button>
         </div>
-        <div className="p-8 space-y-8 max-h-[70vh] overflow-y-auto">
+        <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-h-[70vh] overflow-y-auto">
           <motion.section 
             initial={{ opacity: 0, y: 15 }} 
             animate={{ opacity: 1, y: 0 }} 

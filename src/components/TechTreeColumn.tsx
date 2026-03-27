@@ -28,7 +28,7 @@ export const TechTreeColumn = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex-shrink-0 w-56 md:w-64"
+      className="flex-shrink-0 w-48 sm:w-56 md:w-64"
     >
       {/* Branch header */}
       <div className="sticky top-0 z-10 bg-slate-900/90 backdrop-blur-md pb-3 mb-2">
