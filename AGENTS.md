@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v8.9.3 (2026-03-26)
+> **最后更新**: v9.1.1 (2026-03-27)
 
 ---
 
@@ -25,14 +25,14 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.1.0 (2026-03-27) |
+| **当前版本** | v9.1.1 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (2164 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v9.0.0, 2026-03-27）
+## 三、当前状态快照（v9.1.1, 2026-03-27）
 
 ### 规模
 - **210 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(40) + Y11(25) + Y12(5)
@@ -125,6 +125,8 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 |--------|------|------|------|
 | LOW | 道具修复 `applyRepair` 用 lastMasteredAt 反向计算，忽略 error penalty 项，health 略估高 | App.tsx `onRepairWithItem` | 可接受，完整修复需在 KPEquipment 加 `healthBonus` 字段 |
 | LOW | RepairDialog onRepair 关闭前无动画等待（1.2s success toast 后直接关闭 dialog） | MapScreen repairDialogTarget | 后续可改为监听 RepairDialog success 状态 |
+
+> **v9.1.1 CRITICAL 全清零**：2项全局 CRITICAL（浅拷贝竞态 + async XP 丢失）已修复，规则 J/K 已入 BUG-POSTMORTEM.md + CONTRIBUTING.md。
 
 ---
 

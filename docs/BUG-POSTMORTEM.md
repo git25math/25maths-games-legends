@@ -110,6 +110,46 @@
 
 ---
 
+## Bug 11: completed_missions 浅拷贝导致嵌套对象原地 mutation（CRITICAL）
+
+**现象**: 修复装备 / 使用背包道具时，`profile.completed_missions._equipment` 内的对象被直接修改，造成两个问题：
+1. 在 `updateProfile` 完成前，React state 持有的 `profile.completed_missions` 已被污染（中间态渲染）
+2. 若两个异步操作并发（如 practice XP 写入 + 装备写入），后写入覆盖前写入的改动（race condition）
+
+**根因**: `const cm = { ...profile.completed_missions }` 是**浅拷贝**——顶层 key 新建，但 `cm._equipment` 仍是 `profile.completed_missions._equipment` 的同一引用。后续 `cm._equipment[id].field = value`（或 `cm._equipment[id] = ...`）直接 mutate React state 持有的原始嵌套对象，写操作在 `await updateProfile` 之前就已污染 state。
+
+**修复**: 9 处全部改为 `structuredClone(profile.completed_missions) as any`：
+- `onRepairWithItem`：`cm._equipment[id].lastMasteredAt = Date.now()` — 最严重（直接 mutate 嵌套属性）
+- `onRepairComplete`：`cm._equipment[id] = {...}` + `cm._mistakes[id] = {...}`
+- Practice `onComplete`：`cm._equipment[id] = {...}`
+- 其余 6 处：防御性深拷贝（顶层赋值本来安全，但统一 structuredClone 防止回归）
+
+**防范规则 J**:
+> 凡读取 `profile.completed_missions` 并要修改其中任何内容，**必须用 `structuredClone()` 深拷贝**，而非 `{ ...obj }` 浅拷贝。`completed_missions` 内含多层嵌套（_equipment/_mistakes/_inventory），浅拷贝无法切断与 React state 的引用关系，任何嵌套写入都是原地 mutation。
+
+---
+
+## Bug 12: profile.total_score 在异步回调中被过期闭包捕获导致 XP 丢失（CRITICAL）
+
+**现象**: 学生完成多阶段练习后立即做修复或 PK 结算，XP "归零"或被覆盖——实际总分低于应得。具体场景：
+- Practice 分阶段 XP（每阶段 50XP）已写入 Supabase，但 `onRepairComplete` 用的仍是修复操作触发时的旧 `profile.total_score` 快照，导致修复奖励 XP 从旧基准叠加，覆盖了练习 XP
+- PK 排名 bonus 结算时，`profile.total_score` 是对战开始前的快照，把对战中的 practice XP 冲掉
+
+**根因**: React 组件内 async 回调（event handler / useEffect callback）在创建时捕获 `profile` 的快照。当 `profile.total_score` 因中间写入（practice 阶段 XP）更新后，旧闭包仍持有更新前的值。7 处异步写入全部用 `profile.total_score` 作为"当前分数基准"，导致后写入覆盖先写入的 XP。`latestScoreRef` 已在 v9.1.0 中为 `handlePracticeEarnXP` 引入，但其余 7 处未使用。
+
+**修复**: 7 处全部改为 `latestScoreRef.current`（每次 render 同步，不受闭包过期影响），并在 async 写入前做乐观更新：
+```typescript
+const prevScore = latestScoreRef.current;
+latestScoreRef.current = prevScore + xp; // 乐观更新，保证下一次调用看到最新值
+await updateProfile({ total_score: prevScore + xp });
+```
+修复位置：login streak IIFE / PK 非房主 useEffect / `handleBattleComplete` prevScore / `onRepairComplete` / `saveExpeditionXP` / `PKResultPanel.onNextRound` / `PKResultPanel.onClose`
+
+**防范规则 K**:
+> 所有写入 `total_score` 的 async 操作，**必须用 `latestScoreRef.current` 作为基础值**，而非 `profile.total_score`（过期闭包快照）。写入前立即乐观更新：`latestScoreRef.current += earned`。这是 React stale closure 的经典陷阱——`profile` 是 useState，async 回调创建时的快照不会随 state 更新而自动刷新。
+
+---
+
 ## 防范规则汇总
 
 | 规则 | 内容 | 检查方法 |
@@ -121,8 +161,10 @@
 | **E** | 分数可视化处理假分数 | numerator ≥ denominator 时多圆 |
 | **F** | SVG 内不用 LaTeX | 手绘分数/上标 |
 | **G** | formula 字段用短公式不用长中文 | 目视检查 |
-| **H** | 无重复 ID | `sort | uniq -d` |
+| **H** | 无重复 ID | `sort \| uniq -d` |
 | **I** | 新文件必须 git add | `git status` 检查 `??` |
+| **J** | `completed_missions` 读写必须 `structuredClone` 深拷贝 | 搜索 `{ ...profile.completed_missions }` — 应为零结果 |
+| **K** | 写入 `total_score` 必须用 `latestScoreRef.current`，写前乐观更新 | 搜索 `profile.total_score +` — 应为零结果（写路径） |
 
 ---
 

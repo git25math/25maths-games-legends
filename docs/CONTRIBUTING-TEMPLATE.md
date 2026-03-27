@@ -56,6 +56,13 @@
 - 防范规则列表（带检查方法）
 - 如果项目还没有 bug 记录 → 创建空的 BUG-POSTMORTEM.md
 
+**React / 异步状态通用规则（所有含 React + 远端持久化的项目必须包含）：**
+
+| 规则 | 内容 | 检查方法 |
+|------|------|---------|
+| 深拷贝规则 | 读取嵌套 state 对象（如 `profile.completed_missions`）并修改其内容时，必须用 `structuredClone()` 深拷贝，禁止 `{ ...obj }` 浅拷贝 | 搜索 `{ ...profile.` — 写路径应为零结果 |
+| Ref 基准规则 | 所有写入"累计数值"字段（score/xp/count）的 async 回调，必须用 `useRef` 追踪最新值，写入前做乐观更新（`ref.current += delta`），禁止用 useState 快照 | 搜索 `profile.total_score +` — async 写路径应为零结果 |
+
 ### 第十节：审查标准
 - 功能正确性 checklist
 - 内容质量 checklist

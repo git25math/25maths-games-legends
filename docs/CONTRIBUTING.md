@@ -12,7 +12,7 @@
 - **仓库**: `git25math/25maths-games-legends`
 - **部署**: push main → GitHub Actions → https://play.25maths.com
 - **技术栈**: React + TypeScript + Vite + Tailwind + KaTeX + Supabase
-- **当前版本**: v8.9.3 (2026-03-26)
+- **当前版本**: v9.1.1 (2026-03-27)
 
 ---
 
@@ -157,7 +157,7 @@ step 999 → 全部显示
 
 ---
 
-## 九、Bug 防范规则（9 条）
+## 九、Bug 防范规则（11 条）
 
 > 详见 `docs/BUG-POSTMORTEM.md` 的完整根因分析。
 
@@ -172,6 +172,8 @@ step 999 → 全部显示
 | **G** | formula 字段用短公式 | 不要长中文 `\text{}` |
 | **H** | 无重复 mission ID | `grep -o 'id: [0-9]*' missions.ts \| sort \| uniq -d` |
 | **I** | 新文件必须 git add | `git status` 检查 `??` |
+| **J** | `completed_missions` 写操作必须 `structuredClone` 深拷贝 | 搜索 `{ ...profile.completed_missions }` — 应为零结果 |
+| **K** | 写入 `total_score` 必须用 `latestScoreRef.current`，写前乐观更新 | 搜索 `profile.total_score +` — 写路径应为零结果 |
 
 ---
 

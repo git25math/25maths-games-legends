@@ -812,7 +812,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v8.9.3</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v9.1.1</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
