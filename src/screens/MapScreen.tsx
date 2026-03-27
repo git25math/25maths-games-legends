@@ -746,6 +746,14 @@ export const MapScreen = ({
                 return <StaminaBar lang={lang} remaining={getRemainingAttempts(stamina)} bonus={stamina.bonus} />;
               })()}
 
+              {/* ── 兵法宝典: mobile-only shortcut button (desktop has it in secondary row) ── */}
+              <button
+                onClick={() => setShowScrolls(true)}
+                className="md:hidden px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors flex items-center gap-1"
+              >
+                📜 {lang === 'en' ? 'Strategy' : lang === 'zh_TW' ? '兵法寶典' : '兵法宝典'}
+              </button>
+
               {/* ── Secondary buttons: visible on md+, collapsed on mobile ── */}
               {/* Desktop: inline buttons */}
               <div className="hidden md:contents">
