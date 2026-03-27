@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v9.2.0 (2026-03-27)
+> **最后更新**: v9.5.0 (2026-03-27)
 
 ---
 
@@ -25,19 +25,19 @@ Step 5: npm test -- --run     → 2214 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.2.0 (2026-03-27) |
+| **当前版本** | v9.5.0 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (2214 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v9.2.0, 2026-03-27）
+## 三、当前状态快照（v9.5.0, 2026-03-27）
 
 ### 规模
 - **212 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(42) + Y11(25) + Y12(5)
-- **72 个活跃 generatorType**（新增 CIRCLE_THEOREM_RANDOM），100% 覆盖
-- **2,214 个 Vitest 用例**（+50 新增 circle theorem 生成器覆盖）
+- **72 个活跃 generatorType**（含 CIRCLE_THEOREM_RANDOM + EXPAND_NEG_RANDOM），100% 覆盖
+- **2,214 个 Vitest 用例**（全通过）
 
 ### 教程质量覆盖率（截至 v8.9.3）
 
@@ -119,34 +119,38 @@ Step 5: npm test -- --run     → 2214 测试必须全通过
 - `src/components/BugReportButton.tsx`：右下角半透明浮动按钮 + Modal（4 类别 + 可选描述 + 三语）
 - 集成到 `PracticeScreen` + `MathBattle`，静默失败不影响游戏流程
 
-### 本轮完成（v9.1.1→v9.2.0, 2026-03-27）
+### 本轮完成（v9.1.1→v9.5.0, 2026-03-27）
 
-#### C: Resilience Engine 入口强化
-- `MapScreen.tsx`: 腐败告警横幅（blocked/critical 节点计数 + 一键"科技树 →"按钮）
-- `ResultOverlay.tsx` + `MathBattle/index.tsx`: 失败界面新增"🔍 诊断问题"按钮（`onDiagnose` prop → `setGameState('tech_tree')`）
+#### v9.2.0 — 五方向全量优化（上一窗口完成）
+- **C: Resilience Engine 入口**: MapScreen 腐败告警横幅 + MathBattle 失败"🔍诊断"按钮
+- **A: DailyQuestPanel 分流**: 战斗任务→"去闯关 →"，练习任务→"去练习 →"
+- **B: CIRCLE_THEOREM_RANDOM**: geometry.ts 新生成器（2变体 6步金标准）+ Y10 Unit14 两关（id 10141/10142）
+- **E: 三币经济基础**: currency.ts + 战斗/练习自动发放 + MapScreen 余额展示
 
-#### A: DailyQuestPanel 每任务独立按钮
-- `DailyQuestPanel.tsx`: 战斗任务显示"去闯关 →"，练习任务显示"去练习 →"
-- `MapScreen.tsx`: 新增 `onBattleStart` prop 传入战斗导航
+#### v9.3→v9.4（并行窗口完成，v9.5.0 一次打包）
+- **Resilience Engine 全接入**: `processAttempt()` 答题→技能健康实时更新 + `detectErrorPattern()` 15 规则识别引擎
+- **Supabase 新表**: user_skill_health + user_attempt_log + error_pattern_remedy_map + recovery_packs + gl_lesson_runs（+RLS+seed）
+- **RepairScreen**: 完整修复屏幕（诊断卡→5题修复→庆祝），EXPAND_NEG_RANDOM 专用负号展开生成器
+- **ExamHub 精品课闭环**: negative-expansion 引导课 + useLessonRecovery hook "特训完成！再试一次？" + gl_lesson_runs 双写
+- **班级竞技场**: MapScreen Top 5 排行卡片
+- **底部导航全局化**: 4-tab 底部导航栏（全页面）
+- **UI 全面响应式**: 67 个 sm 断点 + 推荐引导条（corruption感知+脉动）+ 关卡卡片层级重排 + 页面过渡垂直淡入
+- **微动效打磨**: 体力火焰闪烁 + 技能节点辉光 + 升级 Confetti + 技能恢复 toast
+- **教师看板**: KP 薄弱点排名 + blocked 学生数 + gl_lesson_runs 引导课完成记录
 
-#### B: CIRCLE_THEOREM_RANDOM 圆周角定理生成器
-- `generators/geometry.ts`: 新增 `generateCircleTheoremMission()`（两变体：直径所对90°/圆心角=2×圆周角）
-- `generators/index.ts`: 注册 `CIRCLE_THEOREM_RANDOM`（72 个生成器）
-- `missions/y10.ts`: 新增 Y10 Unit 14 两关（id 10141/10142），使用 ANGLES 类型复用现有 checker
-
-#### E: 三币经济基础
-- `utils/currency.ts`: 新建三币工具（getCurrency/awardCurrency/spendCurrency + CURRENCY_REWARDS + CURRENCY_LABELS）
-- `App.tsx`: 战斗胜利 → +30 功勋（每日闯关 +50 额外），练习完成 → +20 智略
-- `MapScreen.tsx`: 档案头部货币余额展示（只在余额>0时显示彩色标签）
+#### v9.5.0 — CI 修复（本窗口完成）
+- `App.tsx` / `RepairScreen.tsx` / `techTree.ts(×2)`: 修复 4 处 TypeScript lint 错误（类型断言 + 死代码移除），恢复 CI/CD 绿灯
 
 ### 已知遗留问题
 
 | 优先级 | 问题 | 位置 | 建议 |
 |--------|------|------|------|
 | LOW | 道具修复 `applyRepair` 用 lastMasteredAt 反向计算，忽略 error penalty 项，health 略估高 | App.tsx `onRepairWithItem` | 可接受，完整修复需在 KPEquipment 加 `healthBonus` 字段 |
-| LOW | RepairDialog onRepair 关闭前无动画等待（1.2s success toast 后直接关闭 dialog） | MapScreen repairDialogTarget | 后续可改为监听 RepairDialog success 状态 |
+| LOW | RepairDialog onRepair 关闭前无动画等待（1.2s toast 后直接关闭） | MapScreen repairDialogTarget | 后续可监听 RepairDialog success 状态 |
+| MEDIUM | 三币商店未开放（merit/wisdom 积累无消费出口） | currency.ts | v9.6 目标：兑换道具/技能加成 |
+| MEDIUM | 军粮(rations) 只展示不发放 | currency.ts CURRENCY_REWARDS | 可从每日任务完成触发 |
 
-> **v9.1.1 CRITICAL 全清零**：3项全局 CRITICAL 全部修复——浅拷贝竞态（规则 J）+ async XP 丢失（规则 K）+ techTree TDZ 崩溃（规则 L，`engineHealth` 先用后声明 → 前移声明）。规则 J/K/L 已入 BUG-POSTMORTEM.md + CONTRIBUTING.md。全项目 `var` 清零。
+> **v9.1.1 CRITICAL 全清零**：浅拷贝竞态（规则 J）+ async XP 丢失（规则 K）+ techTree TDZ 崩溃（规则 L）。规则 J/K/L 已入 BUG-POSTMORTEM.md + CONTRIBUTING.md。全项目 `var` 清零。
 
 ---
 
