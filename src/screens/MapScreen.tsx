@@ -35,6 +35,7 @@ import { getStamina, getRemainingAttempts } from '../utils/stamina';
 import { getInventory, getTotalItems } from '../utils/inventory';
 import type { CharacterProgression } from '../types';
 import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completionState';
+import { BottomNav, type BottomTab } from '../components/BottomNav';
 
 const CHAPTER_IMAGES = [
   './map/ch1-peach-garden.png',
@@ -137,6 +138,8 @@ export const MapScreen = ({
   const [showInventory, setShowInventory] = useState(false);
   const [repairDialogTarget, setRepairDialogTarget] = useState<number | null>(null);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [bottomTab, setBottomTab] = useState<BottomTab>('map');
+  const [showProfilePanel, setShowProfilePanel] = useState(false);
   const [expandedCompletedUnit, setExpandedCompletedUnit] = useState<string | null>(null);
 
   // Daily challenge countdown
@@ -487,7 +490,7 @@ export const MapScreen = ({
   }, [profile.completed_missions, gradeMissions, currentUnit]);
 
   return (
-    <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12">
+    <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12 pb-bottom-nav md:pb-0">
       {/* ═══════════════════ Profile Header ═══════════════════ */}
       <div className="flex flex-wrap items-center justify-between gap-6 bg-white/5 backdrop-blur-xl p-4 md:p-8 rounded-[2rem] border border-white/10">
         <div className="flex items-center gap-4 md:gap-6">
@@ -988,6 +991,86 @@ export const MapScreen = ({
           />
         );
       })()}
+
+      {/* ═══ Bottom Navigation (mobile only) ═══ */}
+      <BottomNav
+        activeTab={bottomTab}
+        onTabChange={(tab) => {
+          setBottomTab(tab);
+          setShowMoreMenu(false);
+          if (tab === 'map') {
+            setShowProfilePanel(false);
+          } else if (tab === 'expedition') {
+            const exps = getExpeditionsForGrade(profile.grade!);
+            if (exps.length > 0 && onStartExpedition) onStartExpedition(exps[0].id);
+          } else if (tab === 'achievements') {
+            if (onAchievements) onAchievements();
+          } else if (tab === 'profile') {
+            setShowProfilePanel(true);
+          }
+        }}
+        lang={lang}
+        badge={{
+          profile: onRepairEquipment ? countNeedsRepair(profile.completed_missions as Record<string, unknown>) : undefined,
+        }}
+      />
+
+      {/* ═══ Profile Panel (mobile "我的" tab) ═══ */}
+      <AnimatePresence>
+        {showProfilePanel && (
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="md:hidden fixed inset-0 z-30 bg-slate-900/98 backdrop-blur-md overflow-y-auto pb-20"
+          >
+            <div className="p-4 pt-6 space-y-3">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-black text-white">{lang === 'en' ? 'My Profile' : '我的'}</h2>
+                <button onClick={() => { setShowProfilePanel(false); setBottomTab('map'); }} className="text-white/40 hover:text-white/70">
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Quick stats */}
+              <div className="flex gap-3">
+                <div className="flex-1 bg-white/5 rounded-xl p-3 text-center">
+                  <div className="text-lg font-black text-gold-light">{levelInfo.level}</div>
+                  <div className="text-[10px] text-white/40">{lang === 'en' ? 'Level' : '等级'}</div>
+                </div>
+                <div className="flex-1 bg-white/5 rounded-xl p-3 text-center">
+                  <div className="text-lg font-black text-emerald-400">{profile.total_score.toLocaleString()}</div>
+                  <div className="text-[10px] text-white/40">XP</div>
+                </div>
+                <div className="flex-1 bg-white/5 rounded-xl p-3 text-center">
+                  <div className="text-lg font-black text-amber-400">{getRemainingAttempts(getStamina(profile.completed_missions as Record<string, unknown>))}/3</div>
+                  <div className="text-[10px] text-white/40">{lang === 'en' ? 'Stamina' : '体力'}</div>
+                </div>
+              </div>
+
+              {/* Menu buttons */}
+              {(() => {
+                const closeProfile = () => { setShowProfilePanel(false); setBottomTab('map'); };
+                const repairCount = onRepairEquipment ? countNeedsRepair(profile.completed_missions as Record<string, unknown>) : 0;
+                const itemCount = getTotalItems(getInventory(profile.completed_missions as Record<string, unknown>));
+                const btnBase = 'w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors relative';
+                return <>
+                  {onTechTree && <button onClick={() => { onTechTree(); closeProfile(); }} className={`${btnBase} bg-cyan-600/10 border border-cyan-500/20 hover:bg-cyan-600/20`}><span className="text-lg">🌿</span><span className="text-sm font-bold text-cyan-300">{lang === 'en' ? 'Tech Tree' : '科技树'}</span></button>}
+                  {getCharProgression && selectedChar && <button onClick={() => { setShowSkillTree(true); closeProfile(); }} className={`${btnBase} bg-purple-600/10 border border-purple-500/20 hover:bg-purple-600/20`}><span className="text-lg">⚔️</span><span className="text-sm font-bold text-purple-300">{(t as any).skillTree ?? 'Skills'}</span></button>}
+                  {onRepairEquipment && <button onClick={() => { setShowEquipmentPanel(true); closeProfile(); }} className={`${btnBase} bg-amber-600/10 border border-amber-500/20 hover:bg-amber-600/20`}><span className="text-lg">🛡️</span><span className="text-sm font-bold text-amber-300">{(t as any).equipmentArsenal ?? 'Arsenal'}</span>{repairCount > 0 && <span className="absolute right-3 w-5 h-5 bg-rose-500 text-white text-[10px] font-black rounded-full flex items-center justify-center">{repairCount}</span>}</button>}
+                  <button onClick={() => { setShowInventory(true); closeProfile(); }} className={`${btnBase} bg-amber-600/10 border border-amber-500/20 hover:bg-amber-600/20`}><span className="text-lg">🎒</span><span className="text-sm font-bold text-amber-300">{lang === 'en' ? 'Backpack' : '背包'}</span>{itemCount > 0 && <span className="absolute right-3 w-5 h-5 bg-purple-500 text-white text-[10px] font-black rounded-full flex items-center justify-center">{itemCount}</span>}</button>
+                  <button onClick={() => { setShowBattlePass(true); closeProfile(); }} className={`${btnBase} bg-rose-600/10 border border-rose-500/20 hover:bg-rose-600/20`}><span className="text-lg">📜</span><span className="text-sm font-bold text-rose-300">{(t as any).growthHandbook ?? '战令'}</span></button>
+                  {onLeaderboard && <button onClick={() => { onLeaderboard(); closeProfile(); }} className={`${btnBase} bg-yellow-600/10 border border-yellow-500/20 hover:bg-yellow-600/20`}><span className="text-lg">🏆</span><span className="text-sm font-bold text-yellow-300">{lang === 'en' ? 'Leaderboard' : '排行榜'}</span></button>}
+                  {onFriendPK && <button onClick={() => { onFriendPK(); closeProfile(); }} className={`${btnBase} bg-cyan-600/10 border border-cyan-500/20 hover:bg-cyan-600/20`}><span className="text-lg">⚡</span><span className="text-sm font-bold text-cyan-300">{lang === 'en' ? 'Friend PK' : '好友对决'}</span></button>}
+                  {onDashboard && <button onClick={() => { onDashboard(); closeProfile(); }} className={`${btnBase} bg-emerald-600/10 border border-emerald-500/20 hover:bg-emerald-600/20`}><span className="text-lg">📊</span><span className="text-sm font-bold text-emerald-300">{t.dashboard}</span></button>}
+                </>;
+              })()}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

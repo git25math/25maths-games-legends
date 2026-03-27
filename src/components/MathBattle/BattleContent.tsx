@@ -48,9 +48,9 @@ export function BattleContent({
   const p = currentQuestion.data ?? {};
 
   return (
-    <div className="p-2 md:p-4 lg:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-      {/* Left: Tactical Map */}
-      <div className="bg-parchment-dark rounded-lg p-6 border-2 border-ink/20 shadow-inner">
+    <div className="p-2 md:p-4 lg:p-8 flex flex-col-reverse md:grid md:grid-cols-2 gap-4 md:gap-8">
+      {/* Left: Tactical Map (on mobile: below inputs due to flex-col-reverse) */}
+      <div className="bg-parchment-dark rounded-lg p-4 md:p-6 border-2 border-ink/20 shadow-inner">
         <div className="flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
           <MapIcon size={18} />
           <span>{t.calculating}</span>
