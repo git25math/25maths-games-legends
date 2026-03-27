@@ -112,19 +112,32 @@ export function evaluateAndUpdateTasks(
   return { updatedProgress: updated, xpEarned };
 }
 
-/** Increment a daily/weekly task counter (call after relevant action) */
-export function incrementTaskCount(progress: SeasonProgress, taskId: string): SeasonProgress {
+/** Increment a daily/weekly task counter (call after relevant action).
+ *  Returns the updated progress and whether THIS call caused the task to complete. */
+export function incrementTaskCount(
+  progress: SeasonProgress,
+  taskId: string,
+): { updatedProgress: SeasonProgress; justCompleted: boolean } {
   const task = SEASON_1_TASKS.find(t => t.id === taskId);
-  if (!task || progress.completed_tasks.includes(taskId)) return progress;
+  if (!task || progress.completed_tasks.includes(taskId)) {
+    return { updatedProgress: progress, justCompleted: false };
+  }
 
   const updated = { ...progress, task_counts: { ...progress.task_counts }, completed_tasks: [...progress.completed_tasks] };
   const newCount = (updated.task_counts[taskId] ?? 0) + 1;
   updated.task_counts[taskId] = newCount;
 
+  let justCompleted = false;
   if (newCount >= task.target) {
     updated.completed_tasks.push(taskId);
     updated.season_xp += task.seasonXP;
+    justCompleted = true;
   }
 
-  return updated;
+  return { updatedProgress: updated, justCompleted };
+}
+
+/** Returns true if the given task ID belongs to a daily-reset task */
+export function isDailyTask(taskId: string): boolean {
+  return SEASON_1_TASKS.find(t => t.id === taskId)?.frequency === 'daily';
 }

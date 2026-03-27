@@ -29,7 +29,7 @@ const BattleModeSelector = lazy(() => import('./components/BattleModeSelector').
 const StaminaGate = lazy(() => import('./components/StaminaGate').then(m => ({ default: m.StaminaGate })));
 const RepairCompleteOverlay = lazy(() => import('./components/RepairCompleteOverlay').then(m => ({ default: m.RepairCompleteOverlay })));
 import { getLevelInfo } from './utils/xpLevels';
-import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
+import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks, isDailyTask } from './utils/seasonTracker';
 import { getExpeditionsForGrade } from './data/expeditions';
 import type { Expedition } from './data/expeditions';
 import { hasAnyPracticeCompletion, markPracticeCompleted } from './utils/completionState';
@@ -558,16 +558,22 @@ export default function App() {
 
         // Step 3: Merge season tasks into the same completed_missions
         let sp = getSeasonProgress(cm);
-        sp = incrementTaskCount(sp, 'daily_battles_3');
+        { const { updatedProgress, justCompleted } = incrementTaskCount(sp, 'daily_battles_3');
+          sp = updatedProgress;
+          if (justCompleted) awardCurrency(cm, 'rations', CURRENCY_REWARDS.DAILY_TASK); }
         if (selectedDifficulty === 'red') {
-          sp = incrementTaskCount(sp, 'weekly_red_3');
+          const { updatedProgress } = incrementTaskCount(sp, 'weekly_red_3');
+          sp = updatedProgress;
         }
         if (isFirstClearBattle) {
-          sp = incrementTaskCount(sp, 'weekly_new_5');
+          const { updatedProgress } = incrementTaskCount(sp, 'weekly_new_5');
+          sp = updatedProgress;
         }
         // Drain any mid-battle season tasks (e.g., streak milestone)
         for (const taskId of pendingSeasonTasksRef.current) {
-          sp = incrementTaskCount(sp, taskId);
+          const { updatedProgress, justCompleted } = incrementTaskCount(sp, taskId);
+          sp = updatedProgress;
+          if (justCompleted && isDailyTask(taskId)) awardCurrency(cm, 'rations', CURRENCY_REWARDS.DAILY_TASK);
         }
         // NOTE: evaluateAndUpdateTasks is deferred until after item awarding (below)
 
@@ -609,7 +615,8 @@ export default function App() {
           }, 1500);
           // Track season milestones for items
           if (awarded.some(r => r.itemId === 'crystal')) {
-            sp = incrementTaskCount(sp, 'weekly_crystal_1');
+            const { updatedProgress } = incrementTaskCount(sp, 'weekly_crystal_1');
+            sp = updatedProgress;
           }
         }
 
@@ -1108,9 +1115,12 @@ export default function App() {
                       cm[key] = markPracticeCompleted(cm[key]);
                       // Season tasks
                       let sp = getSeasonProgress(cm);
-                      sp = incrementTaskCount(sp, 'daily_practice_1');
+                      { const { updatedProgress, justCompleted } = incrementTaskCount(sp, 'daily_practice_1');
+                        sp = updatedProgress;
+                        if (justCompleted) awardCurrency(cm, 'rations', CURRENCY_REWARDS.DAILY_TASK); }
                       if (isFirstClearPractice) {
-                        sp = incrementTaskCount(sp, 'weekly_new_5');
+                        const { updatedProgress: sp2 } = incrementTaskCount(sp, 'weekly_new_5');
+                        sp = sp2;
                       }
                       const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
                       cm._season = updatedProgress;
@@ -1202,7 +1212,8 @@ export default function App() {
                       }
                       // Season task: weekly_repair_1
                       let sp = getSeasonProgress(cm);
-                      sp = incrementTaskCount(sp, 'weekly_repair_1');
+                      { const { updatedProgress: sp2 } = incrementTaskCount(sp, 'weekly_repair_1');
+                        sp = sp2; }
                       const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
                       cm._season = updatedProgress;
                       // Recovery session: advance step if active (use ref to avoid stale closure)
@@ -1265,7 +1276,9 @@ export default function App() {
                     const cm = structuredClone(profile.completed_missions) as any;
                     let sp = getSeasonProgress(cm);
                     for (let i = 0; i < nodes; i++) {
-                      sp = incrementTaskCount(sp, 'daily_battles_3');
+                      const { updatedProgress: sp2, justCompleted } = incrementTaskCount(sp, 'daily_battles_3');
+                      sp = sp2;
+                      if (justCompleted) awardCurrency(cm, 'rations', CURRENCY_REWARDS.DAILY_TASK);
                     }
                     const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
                     cm._season = updatedProgress;
