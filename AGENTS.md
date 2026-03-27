@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v9.6.0 (2026-03-27)
+> **最后更新**: v9.4.0 (2026-03-27)
 
 ---
 
@@ -13,7 +13,7 @@ Step 1: npm run build         → 必须零错误，否则不能改任何代码
 Step 2: 读 docs/CONTRIBUTING.md → 唯一权威规范（金标准/反模式/审查标准）
 Step 3: 读 docs/DEVELOPMENT-PLAN.md → 版本历程 + 下一步计划
 Step 4: 读本文件第三章"当前状态快照" → 212 关卡/已完成/遗留
-Step 5: npm test -- --run     → 2214 测试必须全通过
+Step 5: npm test -- --run     → 2264 测试必须全通过
 ```
 
 ---
@@ -25,19 +25,19 @@ Step 5: npm test -- --run     → 2214 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.6.0 (2026-03-27) |
+| **当前版本** | v9.4.0 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
-| **测试框架** | Vitest (2214 tests, `npm test -- --run`) |
+| **测试框架** | Vitest (2264 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v9.6.0, 2026-03-27）
+## 三、当前状态快照（v9.4.0, 2026-03-27）
 
 ### 规模
-- **212 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(42) + Y11(25) + Y12(5)
-- **72 个活跃 generatorType**（含 CIRCLE_THEOREM_RANDOM + EXPAND_NEG_RANDOM），100% 覆盖
-- **2,214 个 Vitest 用例**（全通过）
+- **217 missions** 分布: Y7(57) + Y8(40) + Y9(44) + Y10(44) + Y11(27) + Y12(5)
+- **74 个活跃 generatorType**（新增 PROB_TREE_RANDOM + SEQUENCE_FORMULA_RANDOM），100% 覆盖
+- **2,264 个 Vitest 用例**（全通过）
 
 ### 教程质量覆盖率（截至 v8.9.3）
 
