@@ -94,6 +94,7 @@ export const TechNode = ({
         <div className={`w-0.5 h-6 ${
           state.status === 'locked' ? 'bg-white/5' :
           state.status === 'corrupted' ? 'bg-rose-400/30' :
+          state.status === 'at_risk' ? 'bg-orange-400/20' :
           'bg-white/20'
         }`} />
       )}
@@ -156,8 +157,8 @@ export const TechNode = ({
           </div>
         )}
 
-        {/* Corruption label */}
-        {state.corruptionPattern && (
+        {/* Corruption label — only for corrupted nodes (not at_risk, which has its own label) */}
+        {state.corruptionPattern && state.status === 'corrupted' && (
           <div className="mt-1.5 flex items-center gap-1">
             <AlertTriangle size={10} className="text-rose-400" />
             <span className="text-[9px] text-rose-400 font-bold">
