@@ -21,7 +21,7 @@ import { processRecoveryComplete } from '../utils/processAttempt';
 import { lt } from '../i18n/resolveText';
 import { generateMission } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
-import { InputFields } from '../components/MathBattle/inputConfig';
+import { INPUT_FIELDS } from '../components/MathBattle/inputConfig';
 import { MathView, LatexText } from '../components/MathView';
 import { interpolate } from '../utils/interpolate';
 import { useAudio } from '../audio';
@@ -257,17 +257,28 @@ export const RepairScreen = ({
               </div>
             )}
 
-            {/* Input — simplified single field for MVP */}
+            {/* Input fields — uses inputConfig for correct field IDs per question type */}
             <div className="space-y-3">
-              <input
-                type="text"
-                value={inputs['answer'] ?? ''}
-                onChange={e => setInputs({ answer: e.target.value })}
-                placeholder={lang === 'en' ? 'Your answer' : '你的答案'}
-                className="w-full px-4 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white text-lg font-bold text-center placeholder:text-white/20 focus:border-rose-400 focus:outline-none"
-                onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
-                autoFocus
-              />
+              {(() => {
+                const fieldConfig = INPUT_FIELDS[currentQuestion.type];
+                const langKey = lang === 'en' ? 'en' : 'zh';
+                const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [{ id: 'ans', label: lang === 'en' ? 'Answer' : '答案', placeholder: '?' }];
+                return fields.map((field, fi) => (
+                  <div key={field.id}>
+                    <label className="text-[10px] text-white/40 font-bold mb-1 block">{field.label}</label>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={inputs[field.id] ?? ''}
+                      onChange={e => setInputs(prev => ({ ...prev, [field.id]: e.target.value }))}
+                      placeholder={field.placeholder}
+                      className="w-full px-4 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white text-lg font-bold text-center placeholder:text-white/20 focus:border-rose-400 focus:outline-none"
+                      onKeyDown={e => { if (e.key === 'Enter' && fi === fields.length - 1) handleSubmit(); }}
+                      autoFocus={fi === 0}
+                    />
+                  </div>
+                ));
+              })()}
 
               {/* Feedback overlay */}
               <AnimatePresence>
@@ -291,7 +302,7 @@ export const RepairScreen = ({
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSubmit}
-                disabled={!inputs['answer']?.trim() || !!showFeedback}
+                disabled={Object.values(inputs).every(v => !v?.trim()) || !!showFeedback}
                 className="w-full py-4 bg-rose-600 text-white font-black rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {lang === 'en' ? 'Submit' : '提交'}

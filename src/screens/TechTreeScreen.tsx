@@ -212,7 +212,13 @@ export const TechTreeScreen = ({
               return (
                 <button
                   key={q.topicId + q.type}
-                  onClick={() => setSelectedTopicId(q.topicId)}
+                  onClick={() => {
+                    if (isRepair && onStartRecovery) {
+                      onStartRecovery(q.topicId); // Direct to Repair Mode
+                    } else {
+                      setSelectedTopicId(q.topicId); // Show topic detail
+                    }
+                  }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border ${bgColor} text-left hover:brightness-110 transition-all`}
                 >
                   <span className="text-lg flex-shrink-0">{icon}</span>
