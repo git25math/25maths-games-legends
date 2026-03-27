@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { motion } from 'motion/react';
 import type { Mission } from '../types';
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
 
 /**
  * Horizontal progress bar showing mission chain within a unit.
- * ● = completed (green), ◉ = current (amber pulse), ○ = locked (dim)
+ * ● = completed (green glow), ◉ = current (amber pulse), ○ = locked (dim)
  */
 export function MissionProgressBar({ missions, completedIds, currentId }: Props) {
   if (missions.length <= 1) return null;
@@ -22,16 +23,23 @@ export function MissionProgressBar({ missions, completedIds, currentId }: Props)
         return (
           <Fragment key={m.id}>
             {/* Node */}
-            <div
-              className={`w-2.5 h-2.5 rounded-full flex-shrink-0 transition-colors ${
-                done
-                  ? 'bg-emerald-400'
-                  : isCurrent
-                  ? 'bg-amber-400 ring-2 ring-amber-400/40 animate-pulse'
-                  : 'bg-white/15 border border-white/25'
-              }`}
-              title={typeof m.title === 'string' ? m.title : m.title.zh}
-            />
+            {isCurrent ? (
+              <motion.div
+                animate={{ scale: [1, 1.3, 1], boxShadow: ['0 0 0px rgba(251,191,36,0)', '0 0 8px rgba(251,191,36,0.6)', '0 0 0px rgba(251,191,36,0)'] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="w-3 h-3 rounded-full bg-amber-400 ring-2 ring-amber-400/30 flex-shrink-0"
+                title={typeof m.title === 'string' ? m.title : m.title.zh}
+              />
+            ) : (
+              <div
+                className={`w-2.5 h-2.5 rounded-full flex-shrink-0 transition-colors ${
+                  done
+                    ? 'bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.4)]'
+                    : 'bg-white/15 border border-white/25'
+                }`}
+                title={typeof m.title === 'string' ? m.title : m.title.zh}
+              />
+            )}
             {/* Connector line */}
             {i < missions.length - 1 && (
               <div

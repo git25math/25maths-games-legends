@@ -1,7 +1,7 @@
+import { motion } from 'motion/react';
 import { Flame } from 'lucide-react';
 import type { Language } from '../types';
 import { MAX_STAMINA } from '../utils/stamina';
-import type { DailyStamina } from '../utils/stamina';
 
 const LABELS = {
   zh: { title: '今日试炼', remaining: '剩余' },
@@ -29,17 +29,22 @@ export const StaminaBar = ({
     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10">
       <span className="text-[10px] text-white/40 font-bold mr-0.5">{l.title}</span>
       <div className="flex gap-0.5">
-        {/* Base flames (orange) */}
+        {/* Base flames (orange) — active ones flicker */}
         {Array.from({ length: MAX_STAMINA }).map((_, i) => (
-          <Flame
+          <motion.div
             key={i}
-            size={14}
-            className={i < remaining
-              ? 'text-orange-400 drop-shadow-[0_0_4px_rgba(251,146,60,0.6)]'
-              : 'text-white/15'
-            }
-            fill={i < remaining ? 'currentColor' : 'none'}
-          />
+            animate={i < remaining ? { scale: [1, 1.15, 1], opacity: [0.9, 1, 0.9] } : {}}
+            transition={i < remaining ? { duration: 1.5 + i * 0.3, repeat: Infinity, ease: 'easeInOut' } : undefined}
+          >
+            <Flame
+              size={14}
+              className={i < remaining
+                ? 'text-orange-400 drop-shadow-[0_0_4px_rgba(251,146,60,0.6)]'
+                : 'text-white/15'
+              }
+              fill={i < remaining ? 'currentColor' : 'none'}
+            />
+          </motion.div>
         ))}
         {/* Bonus flames (cyan) */}
         {bonus > 0 && Array.from({ length: bonus }).map((_, i) => (
