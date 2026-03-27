@@ -4,6 +4,7 @@ import type { Language, Mission, EquipmentState, KPEquipment } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import { getEquipmentList, computeRepairBonus, EQUIPMENT_COLORS } from '../utils/equipment';
+import { EQUIPMENT_DECAY } from '../utils/gameBalance';
 import { EquipmentBadge } from './EquipmentBadge';
 import { useAudio } from '../audio';
 import { useEscapeKey } from '../hooks/useEscapeKey';
@@ -77,6 +78,19 @@ export const EquipmentPanel = ({
               const needsRepair = eq.state !== 'pristine';
               const label = STATE_LABELS[eq.state];
               const bonus = computeRepairBonus(eq.repairCount);
+              // Days until next decay threshold (based on current effective health)
+              const rate = 100 / EQUIPMENT_DECAY.BROKEN_DAYS; // health pts per day
+              const daysUntilNext = eq.health >= 90 ? Math.floor((eq.health - 90) / rate)
+                : eq.health >= 60 ? Math.floor((eq.health - 60) / rate)
+                : eq.health >= 30 ? Math.floor((eq.health - 30) / rate)
+                : null;
+              const nextStateName = eq.health >= 90
+                ? (lang === 'en' ? 'Worn' : lang === 'zh_TW' ? '磨損' : '磨损')
+                : eq.health >= 60
+                ? (lang === 'en' ? 'Damaged' : lang === 'zh_TW' ? '受損' : '受损')
+                : eq.health >= 30
+                ? (lang === 'en' ? 'Broken' : lang === 'zh_TW' ? '破損' : '破损')
+                : null;
 
               return (
                 <div
@@ -93,7 +107,7 @@ export const EquipmentPanel = ({
                       <span className={`text-[10px] font-bold ${colors.text}`}>
                         {lt(label, lang)}
                       </span>
-                      <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                      <div className="flex-1 relative h-1.5 bg-white/10 rounded-full overflow-visible">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${eq.health}%` }}
@@ -103,12 +117,27 @@ export const EquipmentPanel = ({
                             eq.health > 30 ? 'bg-rose-400' : 'bg-slate-400'
                           }`}
                         />
+                        {/* State threshold markers */}
+                        {[30, 60, 90].map(pct => (
+                          <div
+                            key={pct}
+                            className="absolute top-0 bottom-0 w-px bg-slate-600/80"
+                            style={{ left: `${pct}%` }}
+                          />
+                        ))}
                       </div>
                       <span className="text-[9px] text-white/30">{eq.health}%</span>
                     </div>
-                    {needsRepair && (
-                      <div className={`text-[10px] ${colors.text} mt-0.5`}>+{bonus} XP</div>
-                    )}
+                    <div className="flex items-center gap-2 mt-0.5">
+                      {needsRepair && (
+                        <span className={`text-[10px] ${colors.text}`}>+{bonus} XP</span>
+                      )}
+                      {daysUntilNext !== null && nextStateName && (
+                        <span className={`text-[10px] ${daysUntilNext <= 1 ? 'text-rose-400' : daysUntilNext <= 3 ? 'text-amber-400' : 'text-white/20'}`}>
+                          ~{daysUntilNext}d → {nextStateName}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {needsRepair && (

@@ -5,6 +5,7 @@ import type { Language, EquipmentState } from '../types';
 import type { ErrorType } from '../utils/diagnoseError';
 import { getInventory, getAvailableRepairItems, getEffectiveRepairPower } from '../utils/inventory';
 import type { RepairItemDef } from '../utils/inventory';
+import { applyRepair, healthToEquipmentState } from '../utils/repairItems';
 import { lt } from '../i18n/resolveText';
 import { EQUIPMENT_COLORS } from '../utils/equipment';
 import { useEscapeKey } from '../hooks/useEscapeKey';
@@ -134,24 +135,55 @@ export const RepairDialog = ({
               </div>
 
               {/* Equipment info */}
-              <div className={`rounded-xl border p-3 mb-4 ${colors.border} ${colors.bg}`}>
-                <p className="text-sm font-bold text-white">{missionTitle}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className={`text-xs font-bold ${colors.text}`}>
-                    {lt(stateLabel, lang)}
-                  </span>
-                  <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all ${
-                        equipmentHealth > 60 ? 'bg-amber-400' :
-                        equipmentHealth > 30 ? 'bg-rose-400' : 'bg-slate-400'
-                      }`}
-                      style={{ width: `${equipmentHealth}%` }}
-                    />
+              {(() => {
+                const repairResult = selectedItemId
+                  ? applyRepair(equipmentHealth, selectedItemId, dominantError)
+                  : null;
+                const afterHealth = repairResult?.newHealth ?? equipmentHealth;
+                const afterState = healthToEquipmentState(afterHealth);
+                const afterColors = EQUIPMENT_COLORS[afterState];
+                const afterStateLabel = STATE_LABELS[afterState];
+                return (
+                  <div className={`rounded-xl border p-3 mb-4 ${colors.border} ${colors.bg}`}>
+                    <p className="text-sm font-bold text-white">{missionTitle}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className={`text-xs font-bold ${colors.text}`}>
+                        {lt(stateLabel, lang)}
+                      </span>
+                      <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            equipmentHealth > 60 ? 'bg-amber-400' :
+                            equipmentHealth > 30 ? 'bg-rose-400' : 'bg-slate-400'
+                          }`}
+                          style={{ width: `${equipmentHealth}%` }}
+                        />
+                      </div>
+                      <span className="text-[10px] text-white/40">{equipmentHealth}%</span>
+                    </div>
+                    {/* After-repair preview */}
+                    {repairResult && afterHealth > equipmentHealth && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className={`text-xs font-bold ${afterColors.text}`}>
+                          → {lt(afterStateLabel, lang)}
+                        </span>
+                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: `${equipmentHealth}%` }}
+                            animate={{ width: `${afterHealth}%` }}
+                            transition={{ duration: 0.4 }}
+                            className={`h-full rounded-full ${
+                              afterHealth > 60 ? 'bg-emerald-400' :
+                              afterHealth > 30 ? 'bg-amber-400' : 'bg-rose-400'
+                            }`}
+                          />
+                        </div>
+                        <span className="text-[10px] text-emerald-400 font-bold">+{repairResult.restored}%</span>
+                      </div>
+                    )}
                   </div>
-                  <span className="text-[10px] text-white/40">{equipmentHealth}%</span>
-                </div>
-              </div>
+                );
+              })()}
 
               {/* Item selection */}
               <p className="text-xs text-white/40 font-bold mb-2">{l.selectItem}</p>

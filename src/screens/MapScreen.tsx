@@ -263,11 +263,24 @@ export const MapScreen = ({
     return map;
   })();
 
-  // ── Weak missions (high error rate) ──
+  // ── Weak missions (high error rate) + dominant error pattern ──
   const weakMissionSet = getWeakMissions(
     ((profile.completed_missions as any)?._mistakes ?? {}) as any,
     3, // threshold: 3+ errors = weak
   );
+  const weakMissionPatterns = useMemo(() => {
+    const mistakesRaw = ((profile.completed_missions as any)?._mistakes ?? {}) as Record<string, MistakeRecord>;
+    const map = new Map<number, string | null>();
+    for (const id of weakMissionSet) {
+      const rec = mistakesRaw[String(id)];
+      if (rec) {
+        const pattern = getDominantPattern(rec);
+        const symbol = pattern === 'sign' ? '±' : pattern === 'rounding' ? '≈' : pattern === 'magnitude' ? '×10' : pattern === 'method' ? '?' : null;
+        map.set(id, symbol);
+      }
+    }
+    return map;
+  }, [weakMissionSet, profile.completed_missions]);
 
   // ── Render a full mission grid for a unit ──
   const renderUnitGrid = (u: UnitData, isCurrentUnit: boolean) => (
@@ -420,6 +433,9 @@ export const MapScreen = ({
                       {isWeak && (
                         <span className="px-2 py-0.5 bg-rose-100 text-rose-700 text-[10px] font-black rounded-full border border-rose-200 flex items-center gap-0.5">
                           <AlertTriangle size={10} /> {lt({ zh: '薄弱点', en: 'Needs review' }, lang)}
+                          {weakMissionPatterns.get(mission.id) && (
+                            <span className="ml-0.5 opacity-70">{weakMissionPatterns.get(mission.id)}</span>
+                          )}
                         </span>
                       )}
                       {pb && (

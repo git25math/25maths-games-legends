@@ -90,13 +90,18 @@ export const PracticeScreen = ({
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
   const [showBadge, setShowBadge] = useState(false);
-  const [phaseToast, setPhaseToast] = useState<string | null>(null);
+  const [phaseToast, setPhaseToast] = useState<{ text: string; phase: PracticePhase } | null>(null);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   // v7.0: Repair mode — count correct answers, complete after 3
   const [repairCorrect, setRepairCorrect] = useState(0);
   const REPAIR_TARGET = 3;
   // v5.0: Skill impact hint — shown on wrong answer
   const [skillImpactHint, setSkillImpactHint] = useState<string | null>(null);
+  // v5.0 Step 3: Track consecutive same-type errors for repair intercept
+  const [consecutiveSameType, setConsecutiveSameType] = useState(0);
+  const [lastErrorType, setLastErrorType] = useState<string | null>(null);
+  const [showRepairIntercept, setShowRepairIntercept] = useState(false);
+  const INTERCEPT_THRESHOLD = 3;
 
   const {
     playSuccess, playFail, playClick,
@@ -150,6 +155,7 @@ export const PracticeScreen = ({
       const newCorrect = consecutiveCorrect + 1;
       setConsecutiveCorrect(newCorrect);
       setConsecutiveWrong(0);
+      setConsecutiveSameType(0); // Reset error streak on correct answer
       if (newCorrect >= 3 && adaptiveTier < 3 && currentPhase !== 'green') {
         playTierUp();
         setAdaptiveTier(prev => Math.min(3, prev + 1) as DifficultyTier);
@@ -196,8 +202,23 @@ export const PracticeScreen = ({
         setTimeout(() => setPhaseToast(null), 2000);
       }
       // Record error type for persistent memory
+      const errorDiag = diagnoseErrorFn(inputs, result.expected);
       if (onRecordError) {
-        onRecordError(diagnoseErrorFn(inputs, result.expected).type);
+        onRecordError(errorDiag.type);
+      }
+      // v5.0 Step 3: Track consecutive same-type errors → trigger repair intercept
+      if (!repairMode) {
+        if (errorDiag.type === lastErrorType) {
+          const newCount = consecutiveSameType + 1;
+          setConsecutiveSameType(newCount);
+          if (newCount >= INTERCEPT_THRESHOLD) {
+            setShowRepairIntercept(true);
+            setConsecutiveSameType(0);
+          }
+        } else {
+          setLastErrorType(errorDiag.type);
+          setConsecutiveSameType(1);
+        }
       }
       // v5.0: Show skill impact hint (skip in repair mode — student already knows)
       if (mission.kpId && !repairMode) {
@@ -275,7 +296,7 @@ export const PracticeScreen = ({
     const xpLabel = earnedXP > 0 ? ` \u2728 +${earnedXP} XP` : '';
     const label = phaseLabels[nextPhase] ?? '';
     if (label || xpLabel) {
-      setPhaseToast(`${label}${xpLabel}`);
+      setPhaseToast({ text: `${label}${xpLabel}`, phase: nextPhase });
       setTimeout(() => setPhaseToast(null), 2500);
     }
     regenerateQuestion();
@@ -349,9 +370,14 @@ export const PracticeScreen = ({
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -30 }}
-            className="absolute top-4 left-1/2 -translate-x-1/2 z-40 px-6 py-3 bg-indigo-600 text-white text-sm font-bold rounded-xl shadow-2xl pointer-events-none"
+            className={`absolute top-4 left-1/2 -translate-x-1/2 z-40 px-6 py-3 text-white text-sm font-bold rounded-xl shadow-2xl pointer-events-none ${
+              phaseToast.phase === 'amber' ? 'bg-amber-600' :
+              phaseToast.phase === 'red' ? 'bg-rose-600' :
+              phaseToast.phase === 'battle' ? 'bg-indigo-600' :
+              'bg-emerald-600'
+            }`}
           >
-            {phaseToast}
+            {phaseToast.text}
           </motion.div>
         )}
       </AnimatePresence>
@@ -642,12 +668,52 @@ export const PracticeScreen = ({
                   </>
                 )}
 
+                {/* v5.0 Step 3: Repair intercept — 3 consecutive same-type errors */}
+                <AnimatePresence>
+                  {showRepairIntercept && !repairMode && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="rounded-2xl border-2 border-rose-500/40 bg-gradient-to-r from-rose-950/60 to-amber-950/40 p-4 mb-3"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">🛠</span>
+                        <h3 className="text-sm font-black text-rose-400">
+                          {lang === 'en' ? 'Skill Unstable' : lang === 'zh_TW' ? '技能不穩定' : '技能不稳定'}
+                        </h3>
+                      </div>
+                      <p className="text-[11px] text-white/50 mb-3">
+                        {lang === 'en'
+                          ? `Same error type ${INTERCEPT_THRESHOLD}× in a row. A repair session can help.`
+                          : lang === 'zh_TW'
+                          ? `已連續 ${INTERCEPT_THRESHOLD} 次同類錯誤，建議修復訓練。`
+                          : `已连续 ${INTERCEPT_THRESHOLD} 次同类错误，建议修复训练。`}
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => { setShowRepairIntercept(false); onCancel(); }}
+                          className="flex-1 py-2.5 rounded-xl bg-rose-500 text-white font-black text-xs hover:bg-rose-400 transition-colors"
+                        >
+                          🔧 {lang === 'en' ? 'Repair Skill' : lang === 'zh_TW' ? '修復技能' : '修复技能'}
+                        </button>
+                        <button
+                          onClick={() => setShowRepairIntercept(false)}
+                          className="flex-1 py-2.5 rounded-xl bg-white/5 text-white/50 font-bold text-xs hover:bg-white/10 transition-colors"
+                        >
+                          {lang === 'en' ? 'Continue' : lang === 'zh_TW' ? '繼續' : '继续'}
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <motion.button
-                  {...(wrongAnswerData || showCorrectFlash ? {} : buttonBase)}
+                  {...(wrongAnswerData || showCorrectFlash || showRepairIntercept ? {} : buttonBase)}
                   onClick={handleSubmit}
-                  disabled={!!wrongAnswerData || showCorrectFlash}
+                  disabled={!!wrongAnswerData || showCorrectFlash || showRepairIntercept}
                   className={`w-full py-5 text-[#f4e4bc] text-xl font-black rounded-lg transition-colors flex items-center justify-center gap-3 border-2 min-h-12 ${
-                    wrongAnswerData || showCorrectFlash
+                    wrongAnswerData || showCorrectFlash || showRepairIntercept
                       ? 'bg-slate-500 border-slate-600 cursor-not-allowed'
                       : 'bg-[#8b0000] shadow-[0_4px_0_#5c0000] border-[#5c0000]'
                   }`}
