@@ -4,6 +4,7 @@
 import type { Mission, CompletedMissions } from '../types';
 import type { Chapter, Topic } from '../data/curriculum/kp-registry';
 import { getSkillHealthMap, type SkillHealthState } from './processAttempt';
+import { ERROR_PATTERNS } from './errorPatterns';
 import { CHAPTERS } from '../data/curriculum/kp-registry';
 import { hasAnyPracticeCompletion } from './completionState';
 import type { MistakeRecord } from './errorMemory';
@@ -263,7 +264,7 @@ export function computeTechTree(
       var corruption: ErrorType | null = null;
       if (engineHealth && (engineHealth.corruptionLevel === 'blocked' || engineHealth.corruptionLevel === 'critical')) {
         // Resilience Engine says this node is corrupted
-        corruption = (engineHealth.dominantPatternId as ErrorType) ?? 'method';
+        corruption = (engineHealth.dominantPatternId ? (ERROR_PATTERNS[engineHealth.dominantPatternId]?.legacyType ?? 'method') : 'method') as ErrorType;
         if (status === 'unlocked') status = 'corrupted';
       } else if (status === 'unlocked' || status === 'researching') {
         corruption = getTopicCorruption(missionIds, mistakes);

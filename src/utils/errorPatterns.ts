@@ -77,7 +77,7 @@ export const ERROR_PATTERNS: Record<string, ErrorPattern> = {
   coefficient_distribution: {
     id: 'coefficient_distribution',
     domain: 'algebra',
-    topicIds: ['2.2'],
+    topicIds: ['2.1', '2.2', '2.3', '2.5'],
     label: { en: 'Coefficient Distribution Error', zh: '系数分配计算错误' },
     description: {
       en: 'Expansion structure correct but coefficient multiplication is wrong.',

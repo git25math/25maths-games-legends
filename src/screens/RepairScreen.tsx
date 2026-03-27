@@ -68,11 +68,12 @@ export const RepairScreen = ({
 
   // Generate questions
   const [questions] = useState<Mission[]>(() => {
-    const pool = topicMissions.length > 0 ? topicMissions : missions.filter(m => m.data?.generatorType).slice(0, 3);
+    var pool = topicMissions.length > 0 ? topicMissions : missions.filter(m => m.data?.generatorType).slice(0, 5);
+    if (pool.length === 0) return []; // guard: no questions available
     const qs: Mission[] = [];
     for (var i = 0; i < TOTAL_QUESTIONS; i++) {
       const base = pool[i % pool.length];
-      if (base) qs.push(generateMission(base));
+      qs.push(generateMission(base));
     }
     return qs;
   });

@@ -663,24 +663,18 @@ export default function App() {
           pendingErrorsRef.current,
         );
       }
-      // Skill health update via Resilience Engine (process each error)
+      // Skill health update via Resilience Engine — single call per battle, not per error
+      // One failed battle = one processAttempt call with the dominant error pattern
       if (activeMission.kpId) {
         const topicMatch = activeMission.kpId.match(/^kp-(\d+\.\d+)/);
         if (topicMatch) {
           const topicId = topicMatch[1];
-          var health = getSkillHealth(cm as Record<string, unknown>, topicId);
-          for (const err of pendingErrorsRef.current) {
-            // Map legacy ErrorType to new pattern system
-            const patternId = err === 'sign' ? 'sign_distribution' : err === 'method' ? 'generic_algebra' : 'generic_number';
-            const result = processAttempt(health, false, patternId, topicId);
-            health = result.newState;
-          }
-          if (pendingErrorsRef.current.length === 0) {
-            // No specific errors but still failed → generic
-            const result = processAttempt(health, false, undefined, topicId);
-            health = result.newState;
-          }
-          cm = setSkillHealth(cm as Record<string, unknown>, topicId, health) as any;
+          const health = getSkillHealth(cm as Record<string, unknown>, topicId);
+          // Use first error as dominant pattern (or generic if none)
+          const dominantErr = pendingErrorsRef.current[0];
+          const patternId = dominantErr === 'sign' ? 'sign_distribution' : dominantErr === 'method' ? 'generic_algebra' : dominantErr ? 'generic_number' : undefined;
+          const { newState } = processAttempt(health, false, patternId, topicId);
+          cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
         }
       }
       // Award items even on failure (score-based: only if score >= threshold)
