@@ -41,6 +41,8 @@ import { buildRecoveryPath, advanceRecoveryStep, isRecoveryComplete, getCurrentS
 import type { RecoverySession } from './utils/recoveryPath';
 
 import { BottomNav, type BottomTab } from "./components/BottomNav";
+import { processAttempt, getSkillHealth, setSkillHealth, processRecoveryComplete, type AttemptResult } from './utils/processAttempt';
+import { detectErrorPattern, getPattern } from './utils/errorPatterns';
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
 const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
 const LobbyScreen = lazy(() => import('./screens/LobbyScreen').then(module => ({ default: module.LobbyScreen })));
@@ -608,6 +610,17 @@ export default function App() {
           );
         }
 
+        // Step 5b: Update skill health via Resilience Engine
+        if (activeMission.kpId) {
+          const topicMatch = activeMission.kpId.match(/^kp-(\d+\.\d+)/);
+          if (topicMatch) {
+            const topicId = topicMatch[1];
+            const prevHealth = getSkillHealth(cm as Record<string, unknown>, topicId);
+            const { newState } = processAttempt(prevHealth, true, undefined, topicId);
+            cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
+          }
+        }
+
         // Step 6: Single atomic updateProfile call
         await updateProfile({ total_score: newScore, completed_missions: cm, stats });
 
@@ -634,9 +647,9 @@ export default function App() {
         p_success: false, p_score: score,
       });
     }
-    // Failed battles: consume stamina + record errors in single write
+    // Failed battles: consume stamina + record errors + update skill health
     if (!success && profile && activeMission) {
-      const cm = structuredClone(profile.completed_missions) as any;
+      var cm = structuredClone(profile.completed_missions) as any;
       // Stamina
       cm._stamina = consumeAttempt(getStamina(cm));
       // Errors
@@ -646,6 +659,26 @@ export default function App() {
           activeMission.id,
           pendingErrorsRef.current,
         );
+      }
+      // Skill health update via Resilience Engine (process each error)
+      if (activeMission.kpId) {
+        const topicMatch = activeMission.kpId.match(/^kp-(\d+\.\d+)/);
+        if (topicMatch) {
+          const topicId = topicMatch[1];
+          var health = getSkillHealth(cm as Record<string, unknown>, topicId);
+          for (const err of pendingErrorsRef.current) {
+            // Map legacy ErrorType to new pattern system
+            const patternId = err === 'sign' ? 'sign_distribution' : err === 'method' ? 'generic_algebra' : 'generic_number';
+            const result = processAttempt(health, false, patternId, topicId);
+            health = result.newState;
+          }
+          if (pendingErrorsRef.current.length === 0) {
+            // No specific errors but still failed → generic
+            const result = processAttempt(health, false, undefined, topicId);
+            health = result.newState;
+          }
+          cm = setSkillHealth(cm as Record<string, unknown>, topicId, health) as any;
+        }
       }
       // Award items even on failure (score-based: only if score >= threshold)
       const { inventory: newInv, awarded } = awardBattleItems(
