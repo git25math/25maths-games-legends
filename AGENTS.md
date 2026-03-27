@@ -25,14 +25,14 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v8.10.0 (2026-03-27) |
+| **当前版本** | v8.10.1 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (1783 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v8.10.0, 2026-03-27）
+## 三、当前状态快照（v8.10.1, 2026-03-27）
 
 ### 规模
 - **210 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(40) + Y11(25) + Y12(5)
@@ -95,6 +95,14 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 - `App.tsx`: `Map/Lobby/Battle/Practice/Dashboard/PK/Expedition` 切到 `Suspense` 懒加载
 - 构建主入口 `563.39 kB → 323.83 kB`，地图页单独拆出 `45.90 kB` chunk
 
+#### v8.10.1 — Bug 修复 + missions 按年级拆包
+- `checkCorrectness.ts`: ROOTS 负判别式守卫（`disc < 0` → 防 NaN）+ QUADRATIC x2=0 守卫
+- `BugReportButton.tsx`: 移到左下角，避免与 Calculator 右侧叠放过近
+- `Calculator.tsx`: popup 从 z-50 改为 z-[55]，避免被全屏模态遮盖
+- `missions.ts` 按年级拆分：557kB 单 chunk → 6 个 ~100-150kB 年级 chunk
+- `useMissions(grade)` 接受 grade 参数，只按年级懒加载对应文件（Y7 学生下载 35kB gzip，-78%）
+- MapScreen + TechNode/TechTreeColumn 修复 TS lint 错误，CI 全通过
+
 #### v8.10.0 — Bug 报告系统
 - `gl_bug_reports` Supabase 表（migration 20260327000000）：category/description/mission_id/user_id，任意用户可 INSERT
 - `src/components/BugReportButton.tsx`：右下角半透明浮动按钮 + Modal（4 类别 + 可选描述 + 三语）
@@ -104,8 +112,7 @@ Step 5: npm test -- --run     → 1783 测试必须全通过
 
 | 优先级 | 问题 | 位置 | 建议 |
 |--------|------|------|------|
-| HIGH | `missions` 数据块仍有 >500 kB 警告 | Vite build output | 下一步按年级拆 `missions.ts`，让 map/PK/dashboard 走 grade-level loader |
-| INFO | missions.ts 体量 ~4700 行，未来可拆分 | missions.ts | 可按年级拆成 y7.ts/y8.ts 等 |
+| INFO | WIP TechTree/Inventory/Stamina 文件已提交但未集成 | src/components/ src/utils/ | v9.0 需要继续开发这些模块（三币经济框架雏形） |
 
 ---
 
