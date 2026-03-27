@@ -3,7 +3,7 @@
  * Assembles all generators from chapter-based modules into a single dispatch map.
  */
 import type { Mission } from '../../types';
-import { setTier, type DifficultyTier, type GeneratorFn } from './shared';
+import { type DifficultyTier, type GeneratorFn } from './shared';
 
 // Re-export types for external consumers
 export { type DifficultyTier } from './shared';
@@ -131,10 +131,11 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   RATIO_Y8_RANDOM: generateRatioY8Mission,
 };
 
+export const REGISTERED_GENERATOR_TYPES = Object.keys(GENERATOR_MAP) as GeneratorType[];
+
 /** Dispatch to the right generator. Optional tier controls number difficulty. */
 export function generateMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const genType = template.data?.generatorType as GeneratorType | undefined;
   if (!genType || !GENERATOR_MAP[genType]) return template;
-  setTier(tier);
-  return GENERATOR_MAP[genType](template);
+  return GENERATOR_MAP[genType](template, tier);
 }

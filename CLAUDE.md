@@ -12,13 +12,13 @@
 2. **读取接手文档**: `AGENTS.md` → 当前状态快照、优先级、遗留问题
 3. **读取开发规范**: `docs/CONTRIBUTING.md` → 金标准、叙事原则、审查标准、Bug 防范规则
 4. **读取开发计划**: `docs/DEVELOPMENT-PLAN.md` → 版本历程、下一步
-5. **测试确认**: `npm test -- --run` → 必须 1776 passed 才能继续
+5. **测试确认**: `npm test -- --run` → 必须 1783 passed 才能继续
 
 ## 项目信息
 
 - **根目录**: `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends`
 - **部署**: push main → GitHub Actions → play.25maths.com
-- **版本**: v8.9.1 (2026-03-26)
+- **版本**: v8.9.3 (2026-03-26)
 - **仓库**: `git25math/25maths-games-legends`
 
 ## 关联项目

@@ -12,7 +12,7 @@
 - **仓库**: `git25math/25maths-games-legends`
 - **部署**: push main → GitHub Actions → https://play.25maths.com
 - **技术栈**: React + TypeScript + Vite + Tailwind + KaTeX + Supabase
-- **当前版本**: v8.9.1 (2026-03-26)
+- **当前版本**: v8.9.3 (2026-03-26)
 
 ---
 

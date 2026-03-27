@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v8.9.1 (2026-03-26)
+> **最后更新**: v8.9.3 (2026-03-26)
 
 ---
 
@@ -13,7 +13,7 @@ Step 1: npm run build         → 必须零错误，否则不能改任何代码
 Step 2: 读 docs/CONTRIBUTING.md → 唯一权威规范（金标准/反模式/审查标准）
 Step 3: 读 docs/DEVELOPMENT-PLAN.md → 版本历程 + 下一步计划
 Step 4: 读本文件第三章"当前状态快照" → 210 关卡/已完成/遗留
-Step 5: npm test -- --run     → 1776 测试必须全通过
+Step 5: npm test -- --run     → 1783 测试必须全通过
 ```
 
 ---
@@ -25,21 +25,21 @@ Step 5: npm test -- --run     → 1776 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v8.9.1 (2026-03-26) |
+| **当前版本** | v8.10.0 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
-| **测试框架** | Vitest (1776 tests, `npm test -- --run`) |
+| **测试框架** | Vitest (1783 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v8.9.1, 2026-03-26）
+## 三、当前状态快照（v8.10.0, 2026-03-27）
 
 ### 规模
 - **210 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(40) + Y11(25) + Y12(5)
 - **71 个活跃 generatorType**，100% 覆盖（所有关卡均有动态生成器）
-- **1,776 个 Vitest 用例**（当前 `src/__tests__/generators.test.ts` 全绿）
+- **1,783 个 Vitest 用例**（含 completion/question fingerprint/generator tiering 回归护栏）
 
-### 教程质量覆盖率（截至 v8.9.1）
+### 教程质量覆盖率（截至 v8.9.3）
 
 | 年级 | 关卡数 | 6步金标准 | WHY开场 | 验算结尾 | 状态 |
 |------|--------|-----------|---------|---------|------|
@@ -52,7 +52,7 @@ Step 5: npm test -- --run     → 1776 测试必须全通过
 
 **结论**: Y7-Y12 全部 210 关卡均达金标准。
 
-### 本轮完成（v8.5→v8.9.1, 2026-03-26）
+### 本轮完成（v8.5→v8.9.3, 2026-03-26）
 
 #### v8.6.0 — 全项目严格质量审计 + BUG修复
 - `checkCorrectness.ts`: FUNC_VAL/ROOTS/PROBABILITY/TRIGONOMETRY 加除零守卫
@@ -81,11 +81,30 @@ Step 5: npm test -- --run     → 1776 测试必须全通过
 - 部署前新增 `npm test -- --run`
 - 只有 `lint + test + build` 全通过才会继续 GitHub Pages 部署
 
+#### v8.9.2 — 状态一致性 + 去重护栏
+- `App.tsx`: 移除 daily challenge 对 `profile.completed_missions` 的原地 mutation
+- `completionState.ts`: 明确 practice 完成态只持久化 `green/amber/red`
+- `questionFingerprint.ts`: practice/battle 统一改为稳定题目指纹，避免同答案不同题误判重复
+- `generators.test.ts`: coverage 从“>=70”收紧为“与注册表精确一致”
+- Vitest 用例数 `1776 → 1780`
+
+#### v8.9.3 — generator 纯化 + 首屏拆包
+- `generators/shared.ts`: 删除模块级 `getTier/setTier` 全局状态，`safeRetry` 改为显式传递 `tier`
+- `generatorTiering.test.ts`: 新增 tier 行为和递归重试护栏，Vitest 用例数 `1780 → 1783`
+- `useMissions.ts`: missions 数据改为动态加载，`App.tsx` 改为延迟恢复 persisted mission
+- `App.tsx`: `Map/Lobby/Battle/Practice/Dashboard/PK/Expedition` 切到 `Suspense` 懒加载
+- 构建主入口 `563.39 kB → 323.83 kB`，地图页单独拆出 `45.90 kB` chunk
+
+#### v8.10.0 — Bug 报告系统
+- `gl_bug_reports` Supabase 表（migration 20260327000000）：category/description/mission_id/user_id，任意用户可 INSERT
+- `src/components/BugReportButton.tsx`：右下角半透明浮动按钮 + Modal（4 类别 + 可选描述 + 三语）
+- 集成到 `PracticeScreen` + `MathBattle`，静默失败不影响游戏流程
+
 ### 已知遗留问题
 
 | 优先级 | 问题 | 位置 | 建议 |
 |--------|------|------|------|
-| HIGH | 构建仍有 >500 kB chunk 警告 | Vite build output | 继续拆 `missions` / `index` 入口，增加延迟加载 |
+| HIGH | `missions` 数据块仍有 >500 kB 警告 | Vite build output | 下一步按年级拆 `missions.ts`，让 map/PK/dashboard 走 grade-level loader |
 | INFO | missions.ts 体量 ~4700 行，未来可拆分 | missions.ts | 可按年级拆成 y7.ts/y8.ts 等 |
 
 ---
@@ -96,7 +115,7 @@ Step 5: npm test -- --run     → 1776 测试必须全通过
 | 文件 | 用途 | 优先级 |
 |------|------|--------|
 | `docs/CONTRIBUTING.md` | **唯一权威规范**（金标准/反模式/审查/新关卡流程） | **必读** |
-| `docs/DEVELOPMENT-PLAN.md` | 版本历程 v0.1→v8.9.1 + 下一步计划 | **必读** |
+| `docs/DEVELOPMENT-PLAN.md` | 版本历程 v0.1→v8.9.3 + 下一步计划 | **必读** |
 | `docs/BUG-POSTMORTEM.md` | Bug 根因分析 + 9 条防范规则 | **开发前必读** |
 | `docs/Y8-DEVELOPMENT-PLAN.md` | Y8 课纲接手计划（Y8 开发时读） | Y8 专用 |
 | `docs/OPTIMIZATION-HISTORY.md` | v0.1→v7.3 全量优化历史 | 参考 |
@@ -169,7 +188,7 @@ if m:
 ### Git 规范
 ```bash
 npm run build         # 零错误才能 commit
-npm test -- --run     # 1776 tests 全通过
+npm test -- --run     # 1780 tests 全通过
 git add <files>       # 不用 git add -A（防止提交临时文件）
 git commit -m "..."
 git push              # 自动触发 GitHub Actions 部署
@@ -294,7 +313,7 @@ grep -A 20 'id: 1211' src/data/missions.ts | grep -c 'text:'
 
 **预期输出**:
 - Build: `✓ built in X.XXs`（无 ERROR）
-- Tests: `1776 passed`
+- Tests: `1780 passed`
 - 重复ID: 空输出
 - 关卡数: ~210
-- Y12 步骤: 3（已知遗留，需升级至6）
+- Y12 步骤: ≥6（当前已完成）

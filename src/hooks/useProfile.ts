@@ -4,6 +4,7 @@ import type { UserProfile, CompletedMissions, DifficultyMode, BattleResult, Char
 import type { User } from '@supabase/supabase-js';
 import { handleSupabaseError } from '../utils/errors';
 import { getSkillById, defaultProgression } from '../data/heroSkills';
+import { markBattleDifficultyCompleted } from '../utils/completionState';
 
 const DEFAULT_STATS = { Algebra: 0, Geometry: 0, Functions: 0, Calculus: 0, Statistics: 0 };
 const GUEST_STORAGE_KEY = 'gl_guest_profile';
@@ -132,10 +133,7 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
 
     if (success) {
       const newCompleted: CompletedMissions = { ...profile.completed_missions };
-      if (!newCompleted[String(missionId)]) {
-        newCompleted[String(missionId)] = { green: false, amber: false, red: false };
-      }
-      newCompleted[String(missionId)][difficultyMode] = true;
+      newCompleted[String(missionId)] = markBattleDifficultyCompleted(newCompleted[String(missionId)], difficultyMode);
 
       const newStats = { ...profile.stats };
       const key = topic as keyof typeof newStats;

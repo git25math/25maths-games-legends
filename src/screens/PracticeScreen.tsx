@@ -16,11 +16,14 @@ import { WrongAnswerPanel } from '../components/MathBattle/WrongAnswerPanel';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { SkillBadgeCard } from '../components/SkillBadgeCard';
 import { CalculatorWidget } from '../components/Calculator';
+import { BugReportButton } from '../components/BugReportButton';
 import { renderDiagram } from '../utils/renderDiagram';
 import { diagnoseError as diagnoseErrorFn } from '../utils/diagnoseError';
 import { useAudio } from '../audio';
 import { buttonBase, DURATION } from '../utils/animationPresets';
 import { usePracticePersistedState } from '../hooks/usePracticeState';
+import { hasAnyPracticeCompletion } from '../utils/completionState';
+import { createQuestionFingerprint } from '../utils/questionFingerprint';
 
 type PracticePhase = 'green' | 'amber' | 'red' | 'battle';
 
@@ -118,13 +121,13 @@ export const PracticeScreen = ({
   const regenerateQuestion = useCallback(() => {
     // Avoid generating the same question twice in a row
     let q = generateMission(mission, adaptiveTier);
-    const fp = (d: any) => JSON.stringify(d?.answer ?? '') + '|' + JSON.stringify(d?.n ?? '');
+    const fp = (candidate: Mission) => createQuestionFingerprint(candidate);
     let attempts = 0;
-    while (fp(q.data) === lastAnswerRef.current && attempts < 5) {
+    while (fp(q) === lastAnswerRef.current && attempts < 5) {
       q = generateMission(mission, adaptiveTier);
       attempts++;
     }
-    lastAnswerRef.current = fp(q.data);
+    lastAnswerRef.current = fp(q);
     setCurrentMission(q);
     setInputs({});
     setWrongAnswerData(null);
@@ -227,7 +230,7 @@ export const PracticeScreen = ({
       };
       const base = Math.max(3, Math.round((mission.reward || 50) * phaseRatios[currentPhase]));
       // First clear: full XP; repeat (any phase ever done): 20%
-      const isRepeat = !!(phaseCompletions && Object.values(phaseCompletions).some(Boolean));
+      const isRepeat = hasAnyPracticeCompletion(phaseCompletions);
       earnedXP = isRepeat ? Math.max(1, Math.round(base * 0.2)) : base;
       onEarnXP(earnedXP);
     }
@@ -654,6 +657,8 @@ export const PracticeScreen = ({
         </AnimatePresence>
       </motion.div>
     </div>
+
+    <BugReportButton mission={currentMission} lang={lang} />
 
     {/* Exit confirmation overlay */}
     <AnimatePresence>

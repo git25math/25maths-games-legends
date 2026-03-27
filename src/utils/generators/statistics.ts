@@ -1,8 +1,7 @@
 // Auto-extracted from generateMission.ts
-import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, getTier, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
+import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
 
-export function generateProbSimpleMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateProbSimpleMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const totalPools = { 1: [10, 12, 20], 2: [20, 30, 36, 40, 50, 52, 60, 80, 100], 3: [60, 80, 100, 200] };
   const targetPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8, 10, 12, 15], 3: [7, 11, 13, 17, 19] };
   const total = pickRandom(totalPools[tier]);
@@ -83,8 +82,7 @@ export function generateProbSimpleMission(template: Mission): Mission {
    Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
-export function generateProbIndMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateProbIndMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const pPools = { 1: [0.5, 0.5], 2: [0.3, 0.4, 0.5, 0.6, 0.7, 0.8], 3: [0.1, 0.2, 0.3, 0.7, 0.8, 0.9] };
   const p1 = pickRandom(pPools[tier]);
   const p2 = pickRandom(pPools[tier]);
@@ -173,8 +171,7 @@ const PYTHAGOREAN_TRIPLES_EXTRA: [number, number, number][] = [
   [20, 21, 29], [11, 60, 61],
 ];
 
-export function generateStatsMeanMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateStatsMeanMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const countPools = { 1: [5], 2: [5, 6, 7, 8], 3: [8, 9, 10] };
   const valRanges = { 1: [5, 20] as const, 2: [10, 50] as const, 3: [20, 100] as const };
   const count = pickRandom(countPools[tier]);
@@ -249,8 +246,7 @@ export function generateStatsMeanMission(template: Mission): Mission {
    Reads template data.func to decide mode.
    ══════════════════════════════════════════════════════════ */
 
-export function generateStatsMedianMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateStatsMedianMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const countPools: Record<DifficultyTier, number[]> = { 1: [5], 2: [5, 7], 3: [7, 9] };
   const valRanges: Record<DifficultyTier, [number, number]> = { 1: [3, 20], 2: [5, 50], 3: [10, 100] };
   const count = pickRandom(countPools[tier]);
@@ -327,8 +323,7 @@ export function generateStatsMedianMission(template: Mission): Mission {
    HCF generator: find highest common factor of two numbers
    ══════════════════════════════════════════════════════════ */
 
-export function generateStatsRangeMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateStatsRangeMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const countPools: Record<DifficultyTier, number[]> = { 1: [5], 2: [5, 6, 7], 3: [7, 8, 9, 10] };
   const valRanges: Record<DifficultyTier, [number, number]> = { 1: [3, 20], 2: [5, 50], 3: [10, 100] };
   const count = pickRandom(countPools[tier]);
@@ -402,8 +397,7 @@ export function generateStatsRangeMission(template: Mission): Mission {
    AREA_TRIANGLE generator: base × height ÷ 2
    ══════════════════════════════════════════════════════════ */
 
-export function generateStatsModeMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateStatsModeMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const countPools: Record<DifficultyTier, number[]> = { 1: [7], 2: [7, 9], 3: [9, 11] };
   const valRanges: Record<DifficultyTier, [number, number]> = { 1: [1, 10], 2: [1, 20], 3: [1, 30] };
   const count = pickRandom(countPools[tier]);
@@ -502,8 +496,7 @@ export function generateStatsModeMission(template: Mission): Mission {
    TWO-STEP EQUATION generator: ax + b = c
    ══════════════════════════════════════════════════════════ */
 
-export function generateCumFreqMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateCumFreqMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = pickRandom(['司马炎', '杜预', '羊祜']);
 
   // Generate grouped frequency data

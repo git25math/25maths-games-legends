@@ -6,13 +6,7 @@ import { lt } from '../i18n/resolveText';
 import { CHARACTERS } from '../data/characters';
 import { MISSIONS } from '../data/missions';
 import { Confetti } from './Confetti';
-
-/** XP multiplier by rank (1st, 2nd, 3rd, rest) */
-export const RANK_MULTIPLIERS = [2.0, 1.5, 1.2, 1.0];
-export function getRankMultiplier(rank: number): number {
-  if (rank < 0) return 1.0;
-  return RANK_MULTIPLIERS[Math.min(rank, RANK_MULTIPLIERS.length - 1)];
-}
+import { getRankMultiplier } from '../utils/pkRank';
 
 const MEDAL_COLORS = ['text-amber-400', 'text-slate-300', 'text-amber-600'];
 const MEDAL_BG = ['bg-amber-400/20', 'bg-slate-300/10', 'bg-amber-600/10'];

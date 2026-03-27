@@ -27,6 +27,7 @@ import { getNextMilestone } from '../data/streakMilestones';
 import { getWeakMissions, getMistakes, rankByWeakness } from '../utils/errorMemory';
 import { AssignmentBanner, useAssignedMissionIds } from '../components/AssignmentBanner';
 import type { CharacterProgression } from '../types';
+import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completionState';
 
 const CHAPTER_IMAGES = [
   './map/ch1-peach-garden.png',
@@ -55,7 +56,7 @@ function computeUnits(gradeMissions: Mission[], profile: UserProfile, lang: Lang
     const unitMissions = gradeMissions.filter(m => lt(m.unitTitle, lang) === unitTitle).sort((a, b) => a.order - b.order);
     const completedSet = new Set(unitMissions.filter(m => {
       const c = profile.completed_missions[String(m.id)];
-      return c && Object.values(c).some(Boolean);
+      return hasAnyPracticeCompletion(c);
     }).map(m => String(m.id)));
     const unitComplete = unitMissions.length > 0 && completedSet.size === unitMissions.length;
     const firstPlayable = unitMissions.find((m, i) => {
@@ -209,7 +210,7 @@ export const MapScreen = ({
 
   const completedCount = Object.keys(profile.completed_missions).filter(id =>
     !id.startsWith('daily_') && !id.startsWith('_') &&
-    Object.values(profile.completed_missions[id] || {}).some(Boolean)
+    hasAnyPracticeCompletion(profile.completed_missions[id])
   ).length;
   const levelInfo = getLevelInfo(profile.total_score);
   const rankName = levelInfo.rank[lang === 'zh_TW' ? 'zh_TW' : lang === 'en' ? 'en' : 'zh'];
@@ -292,12 +293,12 @@ export const MapScreen = ({
         {u.unitMissions.map(mission => {
           const comp = profile.completed_missions[String(mission.id)];
           const isNextUp = mission.id === u.firstPlayable?.id;
-          const isCompleted = comp && Object.values(comp).some(Boolean);
+          const isCompleted = hasAnyPracticeCompletion(comp);
           const prevMission = gradeMissions.find(m => m.unitId === mission.unitId && m.order === mission.order - 1);
           const prevComp = prevMission ? profile.completed_missions[String(prevMission.id)] : null;
-          const isLocked = mission.order > 1 && prevMission && !(prevComp && Object.values(prevComp).some(Boolean));
+          const isLocked = mission.order > 1 && prevMission && !hasAnyPracticeCompletion(prevComp);
           const isPlayable = !isLocked && !isCompleted;
-          const isPerfect = comp?.green && comp?.amber && comp?.red;
+          const isPerfect = isPracticePerfect(comp);
           const isLastCleared = lastClearedMissionId === mission.id;
           const cardVariants = isLocked ? { initial: { opacity: 0.5, y: 0 }, animate: { opacity: 0.5, y: 0 } } : staggerItem;
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Component } from 'react';
+import { useState, useEffect, useRef, Component, Suspense, lazy } from 'react';
 import 'katex/dist/katex.min.css';
 import { AnimatePresence, motion } from 'motion/react';
 import { Languages, LogOut, XCircle } from 'lucide-react';
@@ -14,33 +14,35 @@ import { useMissions } from './hooks/useMissions';
 import { useMultiplayer, PK_COUNTDOWN_SECS, getFirstFinishTime, getFirstOpponentFinishTime } from './hooks/useMultiplayer';
 
 import { ScrollOfWisdom } from './components/ScrollOfWisdom';
-import { MathBattle } from './components/MathBattle';
 import { SkillCardSelector } from './components/SkillCardSelector';
 import { generateMission } from './utils/generateMission';
-import { MISSIONS as LOCAL_MISSIONS } from './data/missions';
 import { getDailyKey, DAILY_MULTIPLIER } from './utils/dailyChallenge';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
-import { MapScreen } from './screens/MapScreen';
-import { LobbyScreen } from './screens/LobbyScreen';
-import { PracticeScreen } from './screens/PracticeScreen';
-import { DashboardScreen } from './screens/DashboardScreen';
 import { OnboardingScreen, isOnboardingDone, clearOnboardingFlag } from './screens/OnboardingScreen';
 import { cleanStalePracticeKeys, clearPracticeState } from './hooks/usePracticeState';
 import { translations } from './i18n/translations';
 import { getHotTopic } from './utils/hotTopic';
-import { LeaderboardPanel } from './components/LeaderboardPanel';
 import { getActiveSkillEffect } from './data/heroSkills';
 import { STREAK_MILESTONES, getNewlyEarnedMilestone, getNextMilestone } from './data/streakMilestones';
 import { BattleModeSelector } from './components/BattleModeSelector';
-import { AchievementWallPanel } from './components/AchievementWallPanel';
-import { PKSetupPanel } from './components/PKSetupPanel';
-import { PKResultPanel, getRankMultiplier } from './components/PKResultPanel';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
-import { ExpeditionScreen } from './screens/ExpeditionScreen';
 import { getExpeditionForGrade, getExpeditionsForGrade } from './data/expeditions';
 import type { Expedition } from './data/expeditions';
+import { hasAnyPracticeCompletion, markPracticeCompleted } from './utils/completionState';
+import { getRankMultiplier } from './utils/pkRank';
+
+const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
+const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
+const LobbyScreen = lazy(() => import('./screens/LobbyScreen').then(module => ({ default: module.LobbyScreen })));
+const PracticeScreen = lazy(() => import('./screens/PracticeScreen').then(module => ({ default: module.PracticeScreen })));
+const DashboardScreen = lazy(() => import('./screens/DashboardScreen').then(module => ({ default: module.DashboardScreen })));
+const LeaderboardPanel = lazy(() => import('./components/LeaderboardPanel').then(module => ({ default: module.LeaderboardPanel })));
+const AchievementWallPanel = lazy(() => import('./components/AchievementWallPanel').then(module => ({ default: module.AchievementWallPanel })));
+const PKSetupPanel = lazy(() => import('./components/PKSetupPanel').then(module => ({ default: module.PKSetupPanel })));
+const PKResultPanel = lazy(() => import('./components/PKResultPanel').then(module => ({ default: module.PKResultPanel })));
+const ExpeditionScreen = lazy(() => import('./screens/ExpeditionScreen').then(module => ({ default: module.ExpeditionScreen })));
 
 // Clean up stale practice localStorage keys on startup
 cleanStalePracticeKeys();
@@ -67,6 +69,22 @@ class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; er
     }
     return (this as any).props.children;
   }
+}
+
+function ScreenLoader({ lang, label }: { lang: Language; label: string }) {
+  return (
+    <div className="min-h-[70vh] flex items-center justify-center px-6">
+      <div className="rounded-3xl border border-white/15 bg-slate-900/70 px-8 py-6 text-center shadow-2xl backdrop-blur-xl">
+        <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-white/15 border-t-emerald-400" />
+        <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-300">
+          {label}
+        </p>
+        <p className="mt-2 text-xs text-white/45">
+          {lang === 'en' ? 'Please wait a moment.' : '请稍等片刻。'}
+        </p>
+      </div>
+    </div>
+  );
 }
 
 const LS_GUEST_KEY = 'gl_guest_profile';
@@ -100,7 +118,11 @@ function saveAppState(gameState: GameState, charId: string | null, isGuest: bool
 }
 
 export default function App() {
-  const persisted = loadPersistedState();
+  const persistedRef = useRef<PersistedState | null>(null);
+  if (!persistedRef.current) {
+    persistedRef.current = loadPersistedState();
+  }
+  const persisted = persistedRef.current;
   const [lang, setLangState] = useState<Language>(() => {
     try { const s = localStorage.getItem('gl_lang'); if (s === 'zh' || s === 'zh_TW' || s === 'en') return s; } catch {}
     return 'zh';
@@ -108,14 +130,7 @@ export default function App() {
   const setLang = (l: Language) => { setLangState(l); try { localStorage.setItem('gl_lang', l); } catch {} };
   const [gameState, setGameState] = useState<GameState>(persisted.gameState);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(persisted.charId);
-  const [activeMission, setActiveMission] = useState<Mission | null>(() => {
-    // Restore mission from persisted ID (for practice mode refresh)
-    if (persisted.missionId) {
-      const found = LOCAL_MISSIONS.find(m => m.id === persisted.missionId);
-      return found || null;
-    }
-    return null;
-  });
+  const [activeMission, setActiveMission] = useState<Mission | null>(null);
   const [showSecret, setShowSecret] = useState(false);
   const [selectedSkillCard, setSelectedSkillCard] = useState<string | null>(null);
   const [showSkillCards, setShowSkillCards] = useState(false);
@@ -146,8 +161,10 @@ export default function App() {
     profile, updateProfile, recordBattleComplete,
     getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
-  const { missions } = useMissions();
+  const { missions, loading: missionsLoading } = useMissions();
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
+  const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
+  const hasRestoredMissionRef = useRef(false);
 
   // Must be after profile declaration
   if (profile) latestScoreRef.current = profile.total_score;
@@ -163,6 +180,17 @@ export default function App() {
   useEffect(() => {
     saveAppState(gameState, selectedCharId, isGuest, activeMission?.id);
   }, [gameState, selectedCharId, isGuest, activeMission?.id]);
+
+  useEffect(() => {
+    if (missionsLoading || hasRestoredMissionRef.current) return;
+    hasRestoredMissionRef.current = true;
+    const missionId = initialMissionIdRef.current;
+    if (!missionId) return;
+    const found = missions.find(m => m.id === missionId);
+    if (found) {
+      setActiveMission(found);
+    }
+  }, [missions, missionsLoading]);
 
   // If Supabase auth restored a session, jump to map
   useEffect(() => {
@@ -248,15 +276,16 @@ export default function App() {
 
   // PK: When non-host detects room status='playing' via realtime, auto-enter battle
   useEffect(() => {
+    if (missionsLoading) return;
     if (gameState === 'lobby' && activeRoom?.status === 'playing' && !activeMission) {
-      const m = LOCAL_MISSIONS.find(mi => mi.id === activeRoom.missionId);
+      const m = missions.find(mi => mi.id === activeRoom.missionId);
       if (m) {
         const battleMission = m.data?.generatorType ? generateMission(m) : m;
         setActiveMission(battleMission);
         setGameState('battle');
       }
     }
-  }, [activeRoom?.status, gameState]);
+  }, [activeRoom?.missionId, activeRoom?.status, activeMission, gameState, missions, missionsLoading]);
 
   // If not logged in and stuck on a screen that requires auth, redirect to welcome
   useEffect(() => {
@@ -426,12 +455,6 @@ export default function App() {
       const prevScore = profile.total_score;
       const isFirstClearBattle = !profile.completed_missions[String(activeMission.id)];
 
-      // If daily challenge, inject daily key into completed_missions BEFORE
-      // recordBattleComplete, which spreads profile.completed_missions internally.
-      if (isDailyBattle) {
-        (profile.completed_missions as Record<string, unknown>)[getDailyKey()] = true;
-      }
-
       // Step 1: Insert battle record to DB + compute profile data (does NOT save)
       const battleData = await recordBattleComplete(
         activeMission.id,
@@ -446,6 +469,10 @@ export default function App() {
 
       if (battleData) {
         const { completedMissions: cm, stats, newScore } = battleData;
+
+        if (isDailyBattle) {
+          cm[getDailyKey()] = true;
+        }
 
         // Step 2: Merge equipment into the same completed_missions
         if (selectedDifficulty === 'red') {
@@ -551,6 +578,14 @@ export default function App() {
   const isLoggedIn = !!user || isGuest;
   // Teacher access: original admin email OR any user with TEACHER tag in class_tags
   const isTeacher = user?.email === 'zhuxingda86@hotmail.com' || (profile?.class_tags ?? []).some(t => t.toUpperCase() === 'TEACHER');
+  const isMissionShellLoading = missionsLoading && (
+    gameState === 'map' ||
+    gameState === 'lobby' ||
+    gameState === 'battle' ||
+    gameState === 'practice' ||
+    gameState === 'pk_setup' ||
+    gameState === 'expedition'
+  );
 
   // Loading splash while auth initializes
   if (authLoading) {
@@ -626,7 +661,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Version indicator */}
-        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v8.2.0</div>
+        <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v8.9.3</div>
 
         {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -649,6 +684,7 @@ export default function App() {
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="w-full"
             >
+              <Suspense fallback={<ScreenLoader lang={lang} label={lang === 'en' ? 'Loading screen' : '正在加载页面'} />}>
               {gameState === 'welcome' && (
                 <WelcomeScreen
                   lang={lang}
@@ -683,7 +719,11 @@ export default function App() {
                 />
               )}
 
-              {gameState === 'map' && profile && profile.grade && (
+              {isMissionShellLoading && (
+                <ScreenLoader lang={lang} label={lang === 'en' ? 'Loading mission data' : '正在加载关卡数据'} />
+              )}
+
+              {!isMissionShellLoading && gameState === 'map' && profile && profile.grade && (
                 <MapScreen
                   lang={lang}
                   profile={profile}
@@ -721,7 +761,7 @@ export default function App() {
                 />
               )}
 
-              {gameState === 'lobby' && activeRoom && user && (
+              {!isMissionShellLoading && gameState === 'lobby' && activeRoom && user && (
                 <LobbyScreen
                   lang={lang}
                   room={activeRoom}
@@ -730,7 +770,7 @@ export default function App() {
                   onStart={async () => {
                     await startGame();
                     // Set activeMission from room's missionId so MathBattle can render
-                    const m = LOCAL_MISSIONS.find(mi => mi.id === activeRoom.missionId);
+                    const m = missions.find(mi => mi.id === activeRoom.missionId);
                     if (m) {
                       const battleMission = m.data?.generatorType ? generateMission(m) : m;
                       setActiveMission(battleMission);
@@ -741,7 +781,7 @@ export default function App() {
                 />
               )}
 
-              {gameState === 'battle' && activeMission && selectedChar && (
+              {!isMissionShellLoading && gameState === 'battle' && activeMission && selectedChar && (
                 <MathBattle
                   mission={activeMission}
                   character={selectedChar}
@@ -765,7 +805,7 @@ export default function App() {
                 />
               )}
 
-              {gameState === 'practice' && activeMission && selectedChar && (
+              {!isMissionShellLoading && gameState === 'practice' && activeMission && selectedChar && (
                 <PracticeScreen
                   mission={activeMission}
                   character={selectedChar}
@@ -778,8 +818,8 @@ export default function App() {
                     if (profile) {
                       const cm = { ...profile.completed_missions } as any;
                       const key = String(activeMission.id);
-                      const isFirstClearPractice = !cm[key] || !Object.values(cm[key] || {}).some(Boolean);
-                      cm[key] = { ...(cm[key] || {}), green: true, amber: true, red: true };
+                      const isFirstClearPractice = !hasAnyPracticeCompletion(cm[key]);
+                      cm[key] = markPracticeCompleted(cm[key]);
                       // Season tasks
                       let sp = getSeasonProgress(cm);
                       sp = incrementTaskCount(sp, 'daily_practice_1');
@@ -867,7 +907,7 @@ export default function App() {
                 />
               )}
 
-              {gameState === 'expedition' && profile?.grade && selectedChar && activeExpedition && (() => {
+              {!isMissionShellLoading && gameState === 'expedition' && profile?.grade && selectedChar && activeExpedition && (() => {
                 const saveExpeditionXP = async (xp: number, nodes: number) => {
                   if (profile && xp > 0) {
                     const cm = { ...profile.completed_missions } as any;
@@ -948,6 +988,7 @@ export default function App() {
                   onClose={() => { leaveRoom(); setGameState('map'); }}
                 />
               )}
+              </Suspense>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -1120,48 +1161,50 @@ export default function App() {
         {/* ═══ PK Result Overlay ═══ */}
         <AnimatePresence>
           {showPKResult && activeRoom && user && (
-            <PKResultPanel
-              lang={lang}
-              room={activeRoom}
-              currentUserId={user.id}
-              grade={profile?.grade ?? 7}
-              onNextRound={async (missionId: number) => {
-                // Apply XP bonus first, then start next round
-                if (profile) {
-                  const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
-                  const myRank = ranked.findIndex(([uid]) => uid === user.id);
-                  const myScore = activeRoom.players[user.id]?.score ?? 0;
-                  const multiplier = getRankMultiplier(myRank);
-                  const bonusXP = Math.round(myScore * (multiplier - 1));
-                  if (bonusXP > 0) {
-                    await updateProfile({ total_score: profile.total_score + bonusXP });
+            <Suspense fallback={<ScreenLoader lang={lang} label={lang === 'en' ? 'Loading result' : '正在加载结算'} />}>
+              <PKResultPanel
+                lang={lang}
+                room={activeRoom}
+                currentUserId={user.id}
+                grade={profile?.grade ?? 7}
+                onNextRound={async (missionId: number) => {
+                  // Apply XP bonus first, then start next round
+                  if (profile) {
+                    const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
+                    const myRank = ranked.findIndex(([uid]) => uid === user.id);
+                    const myScore = activeRoom.players[user.id]?.score ?? 0;
+                    const multiplier = getRankMultiplier(myRank);
+                    const bonusXP = Math.round(myScore * (multiplier - 1));
+                    if (bonusXP > 0) {
+                      await updateProfile({ total_score: profile.total_score + bonusXP });
+                    }
                   }
-                }
-                // Start next round first — only close panel + transition if successful
-                const ok = await startNextRound(missionId);
-                if (ok) {
+                  // Start next round first — only close panel + transition if successful
+                  const ok = await startNextRound(missionId);
+                  if (ok) {
+                    setShowPKResult(false);
+                    pkAutoCompleteRef.current = false;
+                    setGameState('lobby');
+                  }
+                }}
+                onClose={async () => {
+                  // Apply PK rank XP bonus
+                  if (profile) {
+                    const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
+                    const myRank = ranked.findIndex(([uid]) => uid === user.id);
+                    const myScore = activeRoom.players[user.id]?.score ?? 0;
+                    const multiplier = getRankMultiplier(myRank);
+                    const bonusXP = Math.round(myScore * (multiplier - 1));
+                    if (bonusXP > 0) {
+                      await updateProfile({ total_score: profile.total_score + bonusXP });
+                    }
+                  }
                   setShowPKResult(false);
                   pkAutoCompleteRef.current = false;
-                  setGameState('lobby');
-                }
-              }}
-              onClose={async () => {
-                // Apply PK rank XP bonus
-                if (profile) {
-                  const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
-                  const myRank = ranked.findIndex(([uid]) => uid === user.id);
-                  const myScore = activeRoom.players[user.id]?.score ?? 0;
-                  const multiplier = getRankMultiplier(myRank);
-                  const bonusXP = Math.round(myScore * (multiplier - 1));
-                  if (bonusXP > 0) {
-                    await updateProfile({ total_score: profile.total_score + bonusXP });
-                  }
-                }
-                setShowPKResult(false);
-                pkAutoCompleteRef.current = false;
-                await leaveRoomClean();
-              }}
-            />
+                  await leaveRoomClean();
+                }}
+              />
+            </Suspense>
           )}
         </AnimatePresence>
 

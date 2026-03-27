@@ -1,4 +1,4 @@
-import { MISSIONS as LOCAL_MISSIONS } from '../data/missions';
+import { useEffect, useState } from 'react';
 import type { Mission } from '../types';
 
 /**
@@ -10,7 +10,31 @@ import type { Mission } from '../types';
  * DB sync can be re-enabled in Phase 3 when gl_missions is updated.
  */
 export function useMissions() {
-  const missions: Mission[] = LOCAL_MISSIONS;
-  const loading = false;
+  const [missions, setMissions] = useState<Mission[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadMissions = async () => {
+      try {
+        const { MISSIONS } = await import('../data/missions');
+        if (!cancelled) {
+          setMissions(MISSIONS);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadMissions();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return { missions, loading };
 }

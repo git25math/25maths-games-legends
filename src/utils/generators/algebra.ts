@@ -1,8 +1,7 @@
 // Auto-extracted from generateMission.ts
-import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, getTier, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
+import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
 
-export function generateSimpleEqMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSimpleEqMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const aPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8, 9], 3: [3, 5, 7, 8, 9, 11, 12, 15] };
   const xPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15], 3: [5, 8, 10, 12, 15, 18, 20, 25] };
   const a = pickRandom(aPools[tier]);
@@ -34,8 +33,7 @@ export function generateSimpleEqMission(template: Mission): Mission {
  * Story/title/description are templates with {a}, {result} — interpolated at render time.
  */
 
-export function generateAddEqMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateAddEqMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const aPools = { 1: [3, 4, 5, 6], 2: [3, 4, 5, 6, 7, 8, 9, 11, 13, 15], 3: [7, 9, 11, 13, 15, 18, 21, 25] };
   const xPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20], 3: [8, 10, 12, 15, 18, 20, 25, 30] };
   const a = pickRandom(aPools[tier]);
@@ -66,8 +64,7 @@ export function generateAddEqMission(template: Mission): Mission {
    Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
-export function generateTwoStepEqMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateTwoStepEqMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
 
   const aPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7], 3: [3, 4, 5, 6, 7, 8, 9] };
@@ -158,8 +155,7 @@ export function generateTwoStepEqMission(template: Mission): Mission {
    COORDINATES generator: read/identify coordinate points
    ══════════════════════════════════════════════════════════ */
 
-export function generateExpandMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateExpandMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['诸葛亮', '庞统', '徐庶'];
   const narrator = pickRandom(narrators);
 
@@ -233,8 +229,7 @@ export function generateExpandMission(template: Mission): Mission {
   };
 }
 
-export function generateFactoriseMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateFactoriseMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['诸葛亮', '庞统', '徐庶'];
   const narrator = pickRandom(narrators);
 
@@ -247,7 +242,7 @@ export function generateFactoriseMission(template: Mission): Mission {
   let q = pickRandom(qPools[tier]);
   // Ensure gcd(p,q) === 1 so that `factor` is the true HCF of a and b
   const pqGcd = (a: number, b: number): number => { while (b) { [a, b] = [b, a % b]; } return a; };
-  if (pqGcd(p, q) !== 1) return safeRetry(template, generateFactoriseMission);
+  if (pqGcd(p, q) !== 1) return safeRetry(template, generateFactoriseMission, tier);
   const a = factor * p;
   const b = factor * q;
   const answer = factor;
@@ -316,8 +311,7 @@ export function generateFactoriseMission(template: Mission): Mission {
   };
 }
 
-export function generateSimplifyMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSimplifyMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
 
   const aPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7], 3: [3, 4, 5, 6, 7, 8, 9] };
@@ -403,8 +397,7 @@ export function generateSimplifyMission(template: Mission): Mission {
    STATISTICS_MODE generator: find the most frequent value
    ══════════════════════════════════════════════════════════ */
 
-export function generateInequalityMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateInequalityMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['诸葛亮', '庞统', '荀彧'];
   const narrator = pickRandom(narrators);
 
@@ -488,8 +481,7 @@ export function generateInequalityMission(template: Mission): Mission {
   };
 }
 
-export function generateSubstitutionMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSubstitutionMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
   const mode: 'linear' | 'power' = template.data?.mode ?? 'linear';
 
@@ -631,15 +623,14 @@ export function generateSubstitutionMission(template: Mission): Mission {
    PERIMETER (rectangle) generator
    ══════════════════════════════════════════════════════════ */
 
-export function generateLinearMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateLinearMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const mPools = { 1: [1, 2, -1, -2], 2: [1, 2, 3, -1, -2, -3], 3: [-4, -3, -2, 2, 3, 4, 5] };
   const cPools = { 1: [0, 1, 2, 3, -1], 2: [-5, -3, -1, 0, 1, 3, 5], 3: [-8, -5, -3, 3, 5, 7, 10] };
   const m = pickRandom(mPools[tier]);
   const c = pickRandom(cPools[tier]);
   const x1 = pickRandom([-2, -1, 0, 1, 2, 3]);
   const x2 = x1 + pickRandom([1, 2, 3]); // guarantees x2 > x1 (no division by zero)
-  if (x2 === x1) return safeRetry(template, generateLinearMission); // defensive guard
+  if (x2 === x1) return safeRetry(template, generateLinearMission, tier); // defensive guard
   const y1 = m * x1 + c;
   const y2 = m * x2 + c;
 
@@ -726,8 +717,7 @@ export function generateLinearMission(template: Mission): Mission {
    SIMULTANEOUS generator: two linear equations
    ══════════════════════════════════════════════════════════ */
 
-export function generateQuadraticMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateQuadraticMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const isCal = template.topic === 'Calculus';
   const narrator = pickRandom(['周瑜', '诸葛亮']);
 
@@ -739,7 +729,7 @@ export function generateQuadraticMission(template: Mission): Mission {
     const b = pickRandom(calBPools[tier]);
     const vertexX = -b / (2 * a);
     // Ensure clean integer
-    if (vertexX !== Math.round(vertexX)) return safeRetry(template, generateQuadraticMission);
+    if (vertexX !== Math.round(vertexX)) return safeRetry(template, generateQuadraticMission, tier);
     const vertexY = a * vertexX * vertexX + b * vertexX;
 
     const description: BilingualText = {
@@ -886,8 +876,7 @@ export function generateQuadraticMission(template: Mission): Mission {
    Student enters either root x
    ══════════════════════════════════════════════════════════ */
 
-export function generateRootsMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateRootsMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const rootPools = { 1: [-3, -2, -1, 1, 2, 3], 2: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5], 3: [-8, -5, -3, 3, 5, 7, 8] };
   const r1 = pickRandom(rootPools[tier]);
   let r2 = pickRandom(rootPools[tier]);
@@ -930,8 +919,7 @@ export function generateRootsMission(template: Mission): Mission {
    default (x^2): slope at point → input k = 2*data.x
    ══════════════════════════════════════════════════════════ */
 
-export function generateSimultaneousMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSimultaneousMission(template: Mission, tier: DifficultyTier = 2): Mission {
   // Generate solution first, then build equations
   const xyPools = { 1: [-2, -1, 1, 2], 2: [-3, -2, -1, 1, 2, 3, 4, 5], 3: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5] };
   const coeffPools = { 1: [1, 2], 2: [1, 2, 3, -1], 3: [1, 2, 3, -1, -2] };
@@ -946,7 +934,7 @@ export function generateSimultaneousMission(template: Mission): Mission {
 
   // Ensure the system has unique solution (det ≠ 0)
   const det = a1 * b2 - a2 * b1;
-  if (det === 0) return safeRetry(template, generateSimultaneousMission); // retry
+  if (det === 0) return safeRetry(template, generateSimultaneousMission, tier); // retry
 
   const narrator = pickRandom(['周瑜', '诸葛亮']);
   const eq1Display = eqStr(a1, b1, c1);
@@ -971,7 +959,7 @@ export function generateSimultaneousMission(template: Mission): Mission {
   const elimA = sameSignB ? newA1 - newA2 : newA1 + newA2;
   const elimC = sameSignB ? newC1 - newC2 : newC1 + newC2;
   // Safety: if elimA is still 0 after sign-aware elimination, retry
-  if (elimA === 0) return safeRetry(template, generateSimultaneousMission);
+  if (elimA === 0) return safeRetry(template, generateSimultaneousMission, tier);
 
   const tutorialSteps = [
     { text: { zh: `${narrator}：为什么需要两个方程？\n一个未知数用一个方程就够，但两个未知数——比如粮草和兵力——必须两个条件才能定位答案！\n联立方程 = 用两个条件锁定两个未知数。`, en: `${narrator}: "Why do we need two equations?\nOne unknown needs just one equation, but two unknowns — like grain supply and troop count — require two conditions to pin down the answer!\nSimultaneous equations = using two conditions to lock in two unknowns."` }, highlightField: 'x' },
@@ -1001,8 +989,7 @@ export function generateSimultaneousMission(template: Mission): Mission {
    RATIO generator: a:b = x:y, given one value find the other
    ══════════════════════════════════════════════════════════ */
 
-export function generateSimultaneousY8Mission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSimultaneousY8Mission(template: Mission, tier: DifficultyTier = 2): Mission {
   // Generate y = ax + b (first equation, already solved for y)
   const aPools = { 1: [1, 2], 2: [1, 2, 3, -1], 3: [1, 2, 3, -1, -2, -3] };
   const bPools = { 1: [1, 2, 3], 2: [-3, -2, -1, 1, 2, 3, 4, 5], 3: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5] };
@@ -1028,7 +1015,7 @@ export function generateSimultaneousY8Mission(template: Mission): Mission {
   const constant = d * b;
 
   // Avoid trivial or zero-coefficient cases
-  if (combinedCoeff === 0) return safeRetry(template, generateSimultaneousY8Mission);
+  if (combinedCoeff === 0) return safeRetry(template, generateSimultaneousY8Mission, tier);
 
   const eq1Zh = `$y = ${linearExpr(a, b)}$`;
   const eq1En = eq1Zh;
@@ -1123,8 +1110,7 @@ export function generateSimultaneousY8Mission(template: Mission): Mission {
    RATIO_Y8 generator: direct & inverse proportion (y=kx or y=k/x)
    ══════════════════════════════════════════════════════════ */
 
-export function generateFuncValMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateFuncValMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const hasM = template.data?.m !== undefined;
   const narrator = pickRandom(['夏侯惇', '曹操', '赵云']);
 
@@ -1198,7 +1184,7 @@ export function generateFuncValMission(template: Mission): Mission {
   const a = pickRandom([-3, -2, -1, 1, 2, 3]);
   const bCoeff = pickRandom([2, 4, 6, 8, 10, 12, -2, -4, -6]);
   const t = -bCoeff / (2 * a);
-  if (t !== Math.round(t * 100) / 100) return safeRetry(template, generateFuncValMission);
+  if (t !== Math.round(t * 100) / 100) return safeRetry(template, generateFuncValMission, tier);
 
   const description: BilingualText = {
     zh: `求 $f(x) = ${a}x^2 ${bCoeff >= 0 ? '+' : ''}${bCoeff}x$ 的顶点 $t$。`,
@@ -1263,8 +1249,7 @@ export function generateFuncValMission(template: Mission): Mission {
    STATISTICS MEDIAN generator
    ══════════════════════════════════════════════════════════ */
 
-export function generateArithmeticMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateArithmeticMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const a1Pools = { 1: [50, 80, 100], 2: [50, 80, 100, 150, 200, 300], 3: [200, 500, 800] };
   const dPools = { 1: [5, 8, 10], 2: [5, 8, 10, 15, 20, 25, 30, 50], 3: [15, 25, 50, 75] };
   const nRanges = { 1: [3, 6] as const, 2: [5, 15] as const, 3: [10, 20] as const };
@@ -1305,8 +1290,7 @@ export function generateArithmeticMission(template: Mission): Mission {
    Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
-export function generateSequenceY7Mission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSequenceY7Mission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
   const mode: 'next' | 'nth' = template.data?.mode ?? 'next';
 
@@ -1457,8 +1441,7 @@ export function generateSequenceY7Mission(template: Mission): Mission {
    STATISTICS_RANGE generator
    ══════════════════════════════════════════════════════════ */
 
-export function generateCoordinatesMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateCoordinatesMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
   const mode: 'read' | 'negative' = template.data?.mode ?? 'read';
 

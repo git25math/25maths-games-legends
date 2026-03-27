@@ -1,5 +1,5 @@
 // Auto-extracted from generateMission.ts — CH1 Number generators
-import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, getTier, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
+import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
 
 /* ── Number-specific helpers ── */
 
@@ -62,8 +62,7 @@ function getLeaves(node: FactorTreeNode): number[] {
 
 /* ── Generators ── */
 
-export function generateIntegerAddMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateIntegerAddMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const posPools = { 1: [5, 10, 15, 20, 25, 30], 2: [10, 20, 30, 40, 50], 3: [25, 40, 55, 70, 85, 100] };
   const negPools = { 1: [-5, -10, -15, -20], 2: [-10, -20, -30, -40, -50], 3: [-25, -40, -55, -70, -85] };
 
@@ -216,8 +215,7 @@ export function generateIntegerAddMission(template: Mission): Mission {
    FRAC_ADD generator: fraction addition/subtraction
    ══════════════════════════════════════════════════════════ */
 
-export function generateIntegerMulMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateIntegerMulMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '张飞';
   const mode: 'mul' | 'div' = template.data?.mode ?? 'mul';
 
@@ -360,8 +358,7 @@ export function generateFracAddSameDenMission(template: Mission): Mission {
   };
 }
 
-export function generateFracAddMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateFracAddMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const denPools = { 1: [2, 3, 4, 5, 6], 2: [3, 4, 5, 6, 8, 10], 3: [4, 5, 6, 7, 8, 9, 10, 12] };
 
   const d1 = pickRandom(denPools[tier]);
@@ -379,7 +376,7 @@ export function generateFracAddMission(template: Mission): Mission {
   const adjN2 = n2 * (lcd / d2);
 
   // Guard: if subtraction would give 0 (equal fractions), regenerate
-  if (isSubtract && adjN1 === adjN2) return safeRetry(template, generateFracAddMission);
+  if (isSubtract && adjN1 === adjN2) return safeRetry(template, generateFracAddMission, tier);
 
   let ansNum: number, ansDen: number;
   if (isSubtract) {
@@ -515,8 +512,7 @@ export function generateFracAddMission(template: Mission): Mission {
    FRAC_MUL generator: fraction multiplication/division
    ══════════════════════════════════════════════════════════ */
 
-export function generateFracMulMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateFracMulMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const denPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8], 3: [3, 4, 5, 6, 7, 8, 9, 10] };
 
   const d1 = pickRandom(denPools[tier]);
@@ -682,8 +678,7 @@ export function generateFracMulMission(template: Mission): Mission {
    SQUARE_CUBE generator: n² or n³ depending on data.mode
    ══════════════════════════════════════════════════════════ */
 
-export function generateMixedImproperMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateMixedImproperMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
   const mode: 'to_improper' | 'to_mixed' = template.data?.mode ?? 'to_improper';
 
@@ -830,8 +825,7 @@ export function generateMixedImproperMission(template: Mission): Mission {
 
 // ========== Y8 Generators ==========
 
-export function generatePrimeMission(template: Mission): Mission {
-  const tier = getTier();
+export function generatePrimeMission(template: Mission, tier: DifficultyTier = 2): Mission {
   // Mix of primes and non-primes for variety
   // Tier 1: exclude 2 (only even prime, confuses beginners who expect "odd = prime")
   const primePools: Record<DifficultyTier, number[]> = { 1: [3, 5, 7, 11, 13], 2: [2, 17, 19, 23, 29, 31, 37], 3: [41, 43, 47, 53, 59, 61, 67, 71] };
@@ -977,8 +971,7 @@ export function generatePrimeMission(template: Mission): Mission {
    FACTOR_TREE generator: prime factorization of a single number
    ══════════════════════════════════════════════════════════ */
 
-export function generateFactorTreeMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateFactorTreeMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const pools = {
     1: [12, 18, 20, 24, 28, 30],
     2: [36, 40, 42, 48, 54, 56, 60],
@@ -1084,8 +1077,7 @@ export function generateFactorTreeMission(template: Mission): Mission {
   };
 }
 
-export function generateFactorsListMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateFactorsListMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const pools: Record<DifficultyTier, number[]> = {
     1: [6, 8, 10, 12, 15, 18, 20],
     2: [12, 16, 18, 20, 24, 28, 30, 36],
@@ -1180,8 +1172,7 @@ export function generateFactorsListMission(template: Mission): Mission {
    INTEGER_MUL generator: multiply/divide with negatives
    ══════════════════════════════════════════════════════════ */
 
-export function generateHcfMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateHcfMission(template: Mission, tier: DifficultyTier = 2): Mission {
   // Generate two numbers that have a non-trivial HCF
   const hcfPools = { 1: [2, 3, 4, 5, 6], 2: [4, 6, 8, 10, 12], 3: [6, 8, 12, 15, 18, 24] };
   const multPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7], 3: [3, 5, 7, 8, 9, 11] };
@@ -1425,8 +1416,7 @@ export function generateHcfMission(template: Mission): Mission {
    LCM generator: find least common multiple of two numbers
    ══════════════════════════════════════════════════════════ */
 
-export function generateLcmMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateLcmMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const hcfPools = { 1: [2, 3, 4], 2: [2, 3, 4, 5, 6], 3: [4, 6, 8, 10, 12] };
   const multPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 7], 3: [3, 5, 7, 8, 11] };
 
@@ -1654,8 +1644,7 @@ export function generateLcmMission(template: Mission): Mission {
    INTEGER_ADD generator: positive/negative number addition/subtraction
    ══════════════════════════════════════════════════════════ */
 
-export function generateSquareCubeMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSquareCubeMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const mode: 'square' | 'cube' = template.data?.mode ?? 'square';
 
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '刘备';
@@ -1785,8 +1774,7 @@ export function generateSquareCubeMission(template: Mission): Mission {
    SQUARE_ROOT generator: √n or ∛n depending on data.mode
    ══════════════════════════════════════════════════════════ */
 
-export function generateSquareRootMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSquareRootMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const mode: 'sqrt' | 'cbrt' | 'mixed' = template.data?.mode ?? 'sqrt';
 
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '关羽';
@@ -1924,8 +1912,7 @@ export function generateSquareRootMission(template: Mission): Mission {
    SUBSTITUTION generator: evaluate expression for given x
    ══════════════════════════════════════════════════════════ */
 
-export function generateIndicesMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateIndicesMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const basePools = { 1: [2, 3], 2: [2, 3, 5], 3: [2, 3, 5, 7] };
   const base = pickRandom(basePools[tier]);
   // Follow template: if template has op='div', stay div; otherwise stay mul
@@ -2020,8 +2007,7 @@ export function generateIndicesMission(template: Mission): Mission {
    Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
-export function generateFdpConvertMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateFdpConvertMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
 
   // Common FDP equivalences
@@ -2141,8 +2127,7 @@ export function generateFdpConvertMission(template: Mission): Mission {
    BODMAS generator: order of operations
    ══════════════════════════════════════════════════════════ */
 
-export function generateBodmasMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateBodmasMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
 
   let a: number, b: number, c: number, answer: number, expr: string;
@@ -2283,8 +2268,7 @@ export function generateBodmasMission(template: Mission): Mission {
    SIMPLIFY generator: collecting like terms (ax + bx = (a+b)x)
    ══════════════════════════════════════════════════════════ */
 
-export function generatePercentageOfMission(template: Mission): Mission {
-  const tier = getTier();
+export function generatePercentageOfMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const pctPools: Record<DifficultyTier, number[]> = { 1: [10, 20, 25, 50], 2: [5, 10, 15, 20, 25, 30, 40, 50, 75], 3: [5, 12, 15, 18, 22, 35, 45, 60, 75, 80] };
   const nPools: Record<DifficultyTier, number[]> = { 1: [40, 50, 60, 80, 100, 200], 2: [60, 80, 100, 120, 150, 200, 250, 300, 400, 500], 3: [120, 150, 200, 250, 300, 400, 500, 800, 1000] };
   const pct = pickRandom(pctPools[tier]);
@@ -2356,8 +2340,7 @@ export function generatePercentageOfMission(template: Mission): Mission {
    ESTIMATION_ROUND generator: rounding to nearest 10/100/1000
    ══════════════════════════════════════════════════════════ */
 
-export function generatePercentageMission(template: Mission): Mission {
-  const tier = getTier();
+export function generatePercentageMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const isDiscount = (template.data?.rate ?? 0) < 0;
   const initialPools = { 1: [100, 200, 500], 2: [200, 500, 800, 1000, 1500, 2000, 3000, 5000], 3: [2000, 5000, 8000] };
   const pctPools = { 1: [10, 20, 50], 2: [10, 15, 20, 25, 30, 40, 50], 3: [12, 15, 18, 22, 35] };
@@ -2434,8 +2417,7 @@ export function generatePercentageMission(template: Mission): Mission {
    LINEAR generator: y = mx + c from two points
    ══════════════════════════════════════════════════════════ */
 
-export function generatePercentageInterestMission(template: Mission): Mission {
-  const tier = getTier();
+export function generatePercentageInterestMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['曹操', '荀彧', '诸葛亮'];
   const narrator = pickRandom(narrators);
 
@@ -2583,8 +2565,7 @@ export function generatePercentageInterestMission(template: Mission): Mission {
   };
 }
 
-export function generateEstimationRoundMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateEstimationRoundMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
 
   let n: number, place: number, placeNameZh: string, placeNameEn: string, answer: number;
@@ -2676,8 +2657,7 @@ export function generateEstimationRoundMission(template: Mission): Mission {
    ANGLES_TRIANGLE generator: find missing angle in a triangle
    ══════════════════════════════════════════════════════════ */
 
-export function generateStdFormMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateStdFormMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['诸葛亮', '曹操', '荀彧'];
   const narrator = pickRandom(narrators);
 
@@ -2747,8 +2727,7 @@ export function generateStdFormMission(template: Mission): Mission {
   };
 }
 
-export function generateSpeedMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSpeedMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['诸葛亮', '赵云', '曹操'];
   const narrator = pickRandom(narrators);
 
@@ -2847,8 +2826,7 @@ export function generateSpeedMission(template: Mission): Mission {
   };
 }
 
-export function generateVennMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateVennMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = pickRandom(['司马炎', '杜预', '诸葛亮']);
 
   // Total, set A only, intersection, set B only
@@ -2866,7 +2844,7 @@ export function generateVennMission(template: Mission): Mission {
   const neither = total - aOnly - both - bOnly;
 
   // Ensure neither >= 0
-  if (neither < 0) return safeRetry(template, generateVennMission);
+  if (neither < 0) return safeRetry(template, generateVennMission, tier);
 
   const setA = aOnly + both;
   const setB = bOnly + both;

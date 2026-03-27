@@ -1,8 +1,7 @@
 // Auto-extracted from generateMission.ts
-import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, getTier, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
+import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
 
-export function generateSymmetryMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSymmetryMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const coordPools = { 1: [1, 2, 3, 4, 5], 2: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5], 3: [-8, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 8] };
   const px = pickRandom(coordPools[tier]);
   const py = pickRandom(coordPools[tier]);
@@ -145,8 +144,7 @@ export function generateSymmetryMission(template: Mission): Mission {
    SIMULTANEOUS_Y8 generator: substitution method (simpler than Y9 elimination)
    ══════════════════════════════════════════════════════════ */
 
-export function generateRotationMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateRotationMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = pickRandom(['诸葛亮', '马谡', '魏延']);
 
   const pointPools = { 1: [1, 2, 3, 4], 2: [-4, -3, -2, 2, 3, 4, 5], 3: [-5, -4, -3, 3, 4, 5, 6] };
@@ -190,8 +188,7 @@ export function generateRotationMission(template: Mission): Mission {
    ENLARGEMENT generator: enlarge a point from the origin by scale factor k
    ══════════════════════════════════════════════════════════ */
 
-export function generateEnlargementMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateEnlargementMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = pickRandom(['诸葛亮', '魏延', '姜维']);
 
   const pointPools = { 1: [1, 2, 3], 2: [1, 2, 3, 4, 5], 3: [-3, -2, 2, 3, 4, 5] };
@@ -229,8 +226,7 @@ export function generateEnlargementMission(template: Mission): Mission {
    VECTOR_ADD generator: add two 2D vectors
    ══════════════════════════════════════════════════════════ */
 
-export function generateVectorAddMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateVectorAddMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = pickRandom(['诸葛亮', '姜维', '赵云']);
 
   const pools = { 1: [1, 2, 3, 4], 2: [-4, -3, -2, 2, 3, 4, 5], 3: [-5, -4, -3, 3, 4, 5, 6] };
@@ -269,8 +265,7 @@ export function generateVectorAddMission(template: Mission): Mission {
    Uses STATISTICS type with mode='mean' (checker uses data.answer path)
    ══════════════════════════════════════════════════════════ */
 
-export function generateDerivativeMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateDerivativeMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const func = template.data?.func as string | undefined;
   const narrator = pickRandom(['姜维', '诸葛亮', '刘禅']);
 
@@ -404,8 +399,7 @@ export function generateDerivativeMission(template: Mission): Mission {
    else: ∫ 2x dx = u²-l²
    ══════════════════════════════════════════════════════════ */
 
-export function generateIntegrationMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateIntegrationMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const func = template.data?.func as string;
   const narrator = pickRandom(['邓艾', '钟会', '诸葛亮']);
 
@@ -590,8 +584,7 @@ export function generateIntegrationMission(template: Mission): Mission {
    VOLUME generator: cylinder V = pi*r²*h (or cone V = 1/3*pi*r²*h)
    ══════════════════════════════════════════════════════════ */
 
-export function generateRatioMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateRatioMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const ratios: [number, number][] = [[2, 3], [2, 5], [3, 4], [3, 5], [3, 7], [4, 5], [1, 3], [1, 4]];
   const [a, b] = pickRandom(ratios);
   const multiplierPools = { 1: [10, 20, 50], 2: [50, 100, 150, 200, 300, 500], 3: [200, 500, 800, 1000] };
@@ -662,8 +655,7 @@ export function generateRatioMission(template: Mission): Mission {
    SIMILARITY generator: proportional sides
    ══════════════════════════════════════════════════════════ */
 
-export function generateRatioY7Mission(template: Mission): Mission {
-  const tier = getTier();
+export function generateRatioY7Mission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '曹操';
   const mode: 'simplify' | 'divide' = template.data?.mode ?? 'simplify';
 
@@ -820,8 +812,7 @@ export function generateRatioY7Mission(template: Mission): Mission {
    and improper fractions
    ══════════════════════════════════════════════════════════ */
 
-export function generateRatioY8Mission(template: Mission): Mission {
-  const tier = getTier();
+export function generateRatioY8Mission(template: Mission, tier: DifficultyTier = 2): Mission {
   const mode = (template.data?.mode as 'direct' | 'inverse') || pickRandom(['direct', 'inverse']) as 'direct' | 'inverse';
 
   const x1Pools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 8], 3: [2, 3, 4, 5, 6, 8, 10] };

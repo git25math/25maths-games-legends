@@ -22,7 +22,9 @@ import { BattleHeader } from './BattleHeader';
 import { BattleContent } from './BattleContent';
 import { BattleEffects } from './BattleEffects';
 import { ResultOverlay } from './ResultOverlay';
+import { BugReportButton } from '../BugReportButton';
 import type { BattleMode } from '../BattleModeSelector';
+import { createQuestionFingerprint } from '../../utils/questionFingerprint';
 
 const DIFFICULTY_MULTIPLIER: Record<DifficultyMode, number> = { green: 1, amber: 1.5, red: 2 };
 const MODE_QUESTIONS: Record<BattleMode, number> = { classic: 5, speed: 50, marathon: 20 };
@@ -80,7 +82,7 @@ export const MathBattle = ({
     let attempts = 0;
     while (queue.length < totalQuestions && attempts < totalQuestions * 3) {
       const q = generateMission(mission);
-      const fp = q.description.zh;
+      const fp = createQuestionFingerprint(q);
       attempts++;
       if (seen.has(fp) && attempts < totalQuestions * 2) continue;
       seen.add(fp);
@@ -495,6 +497,8 @@ export const MathBattle = ({
           streakMilestone={streakMilestone}
           floatingScore={floatingScore}
         />
+
+        <BugReportButton mission={currentQuestion} lang={lang} />
 
         <ResultOverlay
           showResult={showResult}

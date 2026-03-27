@@ -1,5 +1,5 @@
 /**
- * Automated generator test: run each of the 77 generators ×20 times.
+ * Automated generator test: run each active generator ×20 times.
  * For each generated mission:
  *   1. Generator doesn't throw
  *   2. Output preserves template identity (id, type, topic)
@@ -8,7 +8,7 @@
  *   5. No NaN/Infinity in numeric data fields
  */
 import { describe, it, expect } from 'vitest';
-import { generateMission, type GeneratorType } from '../utils/generators/index';
+import { generateMission, REGISTERED_GENERATOR_TYPES, type GeneratorType } from '../utils/generators/index';
 import { checkAnswer } from '../utils/checkCorrectness';
 import { MISSIONS } from '../data/missions';
 import type { Mission } from '../types';
@@ -28,8 +28,8 @@ for (const m of MISSIONS) {
 const allTypes = Array.from(templatesByType.keys()).sort();
 
 describe(`Generator coverage: ${allTypes.length} types found`, () => {
-  it('should have at least 70 generator types', () => {
-    expect(allTypes.length).toBeGreaterThanOrEqual(70);
+  it('should match the registered generator registry exactly', () => {
+    expect(allTypes).toEqual([...REGISTERED_GENERATOR_TYPES].sort());
   });
 });
 

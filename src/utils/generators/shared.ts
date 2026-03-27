@@ -52,20 +52,19 @@ export function linearExpr(m: number, c: number, variable = 'x'): string {
 
 const MAX_RETRY = 20;
 
-export function safeRetry<T>(template: Mission, generator: (t: Mission) => T): T {
+export function safeRetry<T>(
+  template: Mission,
+  generator: (t: Mission, tier?: DifficultyTier) => T,
+  tier: DifficultyTier,
+): T {
   const count = ((template as any)._retryCount || 0) + 1;
   if (count > MAX_RETRY) throw new Error(`Generator exceeded ${MAX_RETRY} retries`);
-  return generator({ ...template, _retryCount: count } as any);
+  return generator({ ...template, _retryCount: count } as any, tier);
 }
 
 /* ── Difficulty tier ── */
 
 export type DifficultyTier = 1 | 2 | 3;
-
-let _currentTier: DifficultyTier = 2;
-
-export function getTier(): DifficultyTier { return _currentTier; }
-export function setTier(t: DifficultyTier): void { _currentTier = t; }
 
 /* ── Math helpers ── */
 
@@ -75,4 +74,4 @@ export function gcdCalc(a: number, b: number): number {
 }
 
 /** Generator function signature */
-export type GeneratorFn = (template: Mission) => Mission;
+export type GeneratorFn = (template: Mission, tier?: DifficultyTier) => Mission;

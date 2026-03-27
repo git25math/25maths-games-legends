@@ -1,8 +1,7 @@
 // Auto-extracted from generateMission.ts
-import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, getTier, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
+import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
 
-export function generateAnglesMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateAnglesMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const total = template.data?.total || 180;
   const suppRanges = { 1: [30, 150] as const, 2: [20, 160] as const, 3: [10, 170] as const };
   const compRanges = { 1: [20, 70] as const, 2: [10, 80] as const, 3: [5, 85] as const };
@@ -75,8 +74,7 @@ export function generateAnglesMission(template: Mission): Mission {
    Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
-export function generateAnglesTriangleMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateAnglesTriangleMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '关羽';
 
   const ranges: Record<DifficultyTier, [number, number]> = { 1: [30, 80], 2: [20, 90], 3: [15, 120] };
@@ -148,8 +146,7 @@ export function generateAnglesTriangleMission(template: Mission): Mission {
    ANGLES_POINT generator: angles at a point sum to 360°
    ══════════════════════════════════════════════════════════ */
 
-export function generateAnglesPointMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateAnglesPointMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = (template.tutorialSteps?.[0]?.text?.zh?.split(/[:\uff1a]/)?.[0]) || '诸葛亮';
 
   // Generate 2-3 known angles, find the missing one
@@ -166,7 +163,7 @@ export function generateAnglesPointMission(template: Mission): Mission {
   }
   const answer = remaining;
   // Safety: ensure answer is positive and reasonable; retry if not
-  if (answer < 10 || answer > 350) return safeRetry(template, generateAnglesPointMission);
+  if (answer < 10 || answer > 350) return safeRetry(template, generateAnglesPointMission, tier);
 
   const anglesStr = angles.map(a => `$${a}°$`).join('、');
   const anglesStrEn = angles.map(a => `$${a}°$`).join(', ');
@@ -234,8 +231,7 @@ export function generateAnglesPointMission(template: Mission): Mission {
    SEQUENCE_Y7 generator: simple linear sequences for Y7
    ══════════════════════════════════════════════════════════ */
 
-export function generateParallelAnglesMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateParallelAnglesMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['关羽', '张飞', '赵云'];
   const narrator = pickRandom(narrators);
 
@@ -340,8 +336,7 @@ export function generateParallelAnglesMission(template: Mission): Mission {
    Modes: 'reflect_x' (reflect over x-axis), 'reflect_y' (reflect over y-axis), 'rotate_180' (rotate 180° about origin)
    ══════════════════════════════════════════════════════════ */
 
-export function generateAreaRectMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateAreaRectMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const lengthPools = { 1: [5, 8, 10], 2: [8, 10, 15, 20, 25, 30, 35, 40], 3: [20, 35, 50, 80] };
   const widthPools = { 1: [3, 5, 7], 2: [5, 8, 10, 15, 20, 25, 30], 3: [15, 25, 40, 60] };
   const length = tier === 2 ? randInt(8, 40) : pickRandom(lengthPools[tier]);
@@ -412,8 +407,7 @@ export function generateAreaRectMission(template: Mission): Mission {
    Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
-export function generateAreaTrapMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateAreaTrapMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const aPools = { 1: [3, 5, 8], 2: null, 3: [10, 15, 20] };
   const bOffsets = { 1: [2, 5], 2: null, 3: [5, 15] };
   const hPools = { 1: [3, 5, 7], 2: null, 3: [8, 12, 18] };
@@ -489,8 +483,7 @@ export function generateAreaTrapMission(template: Mission): Mission {
    Story is now a template on the mission — generator only updates data + description + tutorialSteps.
    ══════════════════════════════════════════════════════════ */
 
-export function generateAreaTriangleMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateAreaTriangleMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const bPools: Record<DifficultyTier, number[]> = { 1: [4, 6, 8, 10], 2: [6, 8, 10, 12, 14, 16, 20], 3: [10, 12, 15, 18, 20, 24, 30] };
   const hPools: Record<DifficultyTier, number[]> = { 1: [3, 4, 5, 6], 2: [4, 5, 6, 7, 8, 10], 3: [6, 8, 9, 10, 12, 15] };
   const base = pickRandom(bPools[tier]);
@@ -561,8 +554,7 @@ export function generateAreaTriangleMission(template: Mission): Mission {
    FACTORS_LIST generator: list all factors of a number
    ══════════════════════════════════════════════════════════ */
 
-export function generatePerimeterRectMission(template: Mission): Mission {
-  const tier = getTier();
+export function generatePerimeterRectMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const lPools: Record<DifficultyTier, number[]> = { 1: [3, 4, 5, 6, 7, 8, 10], 2: [5, 8, 10, 12, 15, 18, 20], 3: [10, 15, 20, 25, 30, 35, 40, 50] };
   const wPools: Record<DifficultyTier, number[]> = { 1: [2, 3, 4, 5, 6], 2: [3, 5, 7, 8, 10, 12, 15], 3: [8, 10, 15, 20, 25, 30] };
   const length = pickRandom(lPools[tier]);
@@ -640,8 +632,7 @@ const PYTHAGOREAN_TRIPLES_EXTRA: [number, number, number][] = [
   [20, 21, 29], [11, 60, 61],
 ];
 
-export function generatePythagorasMission(template: Mission): Mission {
-  const tier = getTier();
+export function generatePythagorasMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const triplePools = {
     1: PYTHAGOREAN_TRIPLES.slice(0, 3),
     2: PYTHAGOREAN_TRIPLES,
@@ -697,8 +688,7 @@ export function generatePythagorasMission(template: Mission): Mission {
    Template data.rate sign determines mode: negative → discount, positive → tax.
    ══════════════════════════════════════════════════════════ */
 
-export function generateTrigonometryMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateTrigonometryMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const func = template.data?.func as string | undefined;
   const narrator = pickRandom(['甘宁', '乐进', '赵云']);
 
@@ -891,8 +881,7 @@ export function generateTrigonometryMission(template: Mission): Mission {
    otherwise → student finds a and c
    ══════════════════════════════════════════════════════════ */
 
-export function generateSimilarityMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSimilarityMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const sidePools = {
     1: { a: [2, 3, 4, 6, 8, 12], b: [4, 6, 8, 12, 16, 24], c: [3, 4, 6, 8, 10, 12] },
     2: { a: [3, 4, 5, 6, 8, 10], b: [6, 8, 10, 12, 15, 20], c: [4, 5, 6, 7, 9, 12] },
@@ -904,7 +893,7 @@ export function generateSimilarityMission(template: Mission): Mission {
   const correctX = (a / b) * c;
 
   // Ensure clean answer
-  if (correctX !== Math.round(correctX * 100) / 100) return safeRetry(template, generateSimilarityMission);
+  if (correctX !== Math.round(correctX * 100) / 100) return safeRetry(template, generateSimilarityMission, tier);
 
   const narrator = pickRandom(['关羽', '赵云']);
   const description: BilingualText = {
@@ -934,8 +923,7 @@ export function generateSimilarityMission(template: Mission): Mission {
    STATISTICS (mean) generator
    ══════════════════════════════════════════════════════════ */
 
-export function generateCircleY8Mission(template: Mission): Mission {
-  const tier = getTier();
+export function generateCircleY8Mission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['鲁肃', '曹操', '刘备'];
   const narrator = pickRandom(narrators);
 
@@ -1060,8 +1048,7 @@ export function generateCircleY8Mission(template: Mission): Mission {
   };
 }
 
-export function generateVolumeMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateVolumeMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const mode = template.data?.mode as string | undefined;
   const isCone = mode === 'cone';
   const radiusPools = { 1: [2, 3, 4], 2: [2, 3, 4, 5, 6, 8, 10], 3: [6, 8, 10, 12] };
@@ -1102,8 +1089,7 @@ export function generateVolumeMission(template: Mission): Mission {
    Else: vertex t = -b/(2a), input t
    ══════════════════════════════════════════════════════════ */
 
-export function generateVolumeY8Mission(template: Mission): Mission {
-  const tier = getTier();
+export function generateVolumeY8Mission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['曹操', '荀彧', '袁绍'];
   const narrator = pickRandom(narrators);
 
@@ -1175,8 +1161,7 @@ export function generateVolumeY8Mission(template: Mission): Mission {
   };
 }
 
-export function generateSectorMission(template: Mission): Mission {
-  const tier = getTier();
+export function generateSectorMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrator = pickRandom(['诸葛亮', '马良', '姜维']);
 
   const rPools = { 1: [5, 10], 2: [6, 8, 10, 12], 3: [5, 8, 10, 14, 20] };
