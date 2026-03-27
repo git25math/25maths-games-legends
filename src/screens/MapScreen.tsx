@@ -94,6 +94,7 @@ export const MapScreen = ({
   onLeaderboard,
   onAchievements,
   onFriendPK,
+  onTechTree,
 }: {
   lang: Language;
   profile: UserProfile;
