@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v9.5.0 (2026-03-27)
+> **最后更新**: v9.6.0 (2026-03-27)
 
 ---
 
@@ -25,14 +25,14 @@ Step 5: npm test -- --run     → 2214 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.5.0 (2026-03-27) |
+| **当前版本** | v9.6.0 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (2214 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v9.5.0, 2026-03-27）
+## 三、当前状态快照（v9.6.0, 2026-03-27）
 
 ### 规模
 - **212 missions** 分布: Y7(57) + Y8(40) + Y9(43) + Y10(42) + Y11(25) + Y12(5)
