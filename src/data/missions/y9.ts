@@ -1149,4 +1149,26 @@ export const MISSIONS_Y9: Mission[] = [
     secret: { concept: { zh: '累积频率 = 逐组频率的连续求和。', en: 'Cumulative frequency = running sum of group frequencies.' }, formula: '$CF_n = \\sum_{i=1}^{n} f_i$', tips: [{ zh: '司马懿提示：数据是冷酷的，但它不会骗人。', en: 'Sima Yi Tip: Data is cold, but it never lies.' }] },
     storyConsequence: { correct: { zh: '伤亡频率——数据分析到位！做得漂亮！', en: 'Casualty Frequency — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
   },
+  {
+    id: 9147, grade: 9, unitId: 14, order: 7,
+    unitTitle: { zh: "Unit 14: 赤壁前奏·数据与变换", en: "Unit 14: Red Cliffs Prelude — Data & Transformations" },
+    topic: 'Statistics', type: 'PROBABILITY_TREE',
+    title: { zh: '二阶兵符', en: 'Two-Stage Token' },
+    skillName: { zh: '概率树形图', en: 'Probability Tree' },
+    skillSummary: { zh: '两阶段独立事件概率计算', en: 'Two-stage independent event probability' },
+    story: { zh: '赤壁前夜，细作两次传令。第一次成功概率 $\\frac{1}{2}$，第二次成功概率 $\\frac{1}{3}$。两次都成功的概率是多少？', en: 'On the eve of Red Cliffs, a spy delivers two messages. The first succeeds with probability $\\frac{1}{2}$, the second with $\\frac{1}{3}$. What is the probability that both succeed?' },
+    description: { zh: '用树形图求两次都成功的概率。', en: 'Use a probability tree to find P(both succeed).' },
+    data: { p1: 1/2, p2: 1/3, mode: 'and', frac1: '1/2', frac2: '1/3', generatorType: 'PROB_TREE_RANDOM' }, difficulty: 'Medium', reward: 280,
+    kpId: 'kp-9.2-01', sectionId: 'statistics',
+    tutorialSteps: [
+      { text: { zh: '荀彧："为什么要学树形图？情报两次传递，每次都可能成功或失败——我们要算「都成功」的概率，树形图把每种可能性都画出来。"', en: 'Xun Yu: "Why probability trees? A message passes through two stages, each can succeed or fail — we need P(both succeed). A tree diagrams every possibility."' }, highlightField: 'p' },
+      { text: { zh: '荀彧："乘法原则：独立事件同时发生，概率相乘。P(A 且 B) = P(A) × P(B)。"', en: 'Xun Yu: "Multiplication rule: independent events both occurring — multiply probabilities. P(A and B) = P(A) × P(B)."' }, highlightField: 'p' },
+      { text: { zh: '荀彧："画树：第一阶段 → 成功 ($\\frac{1}{2}$) / 失败 ($\\frac{1}{2}$)。从「成功」分支再画第二阶段 → 成功 ($\\frac{1}{3}$) / 失败 ($\\frac{2}{3}$)。"', en: 'Xun Yu: "Draw tree: Stage 1 → success ($\\frac{1}{2}$) / fail ($\\frac{1}{2}$). From success branch, Stage 2 → success ($\\frac{1}{3}$) / fail ($\\frac{2}{3}$)."' }, highlightField: 'p' },
+      { text: { zh: '荀彧："沿「成功-成功」路径相乘：$\\frac{1}{2} \\times \\frac{1}{3} = \\frac{1}{6}$。"', en: 'Xun Yu: "Multiply along success-success path: $\\frac{1}{2} \\times \\frac{1}{3} = \\frac{1}{6}$."' }, highlightField: 'p' },
+      { text: { zh: '荀彧："答案：P(两次都成功) = $\\frac{1}{6}$。"', en: 'Xun Yu: "Answer: P(both succeed) = $\\frac{1}{6}$."' }, highlightField: 'p' },
+      { text: { zh: '荀彧："验算：四条路径概率之和 = $\\frac{1}{6} + \\frac{2}{6} + \\frac{1}{6} + \\frac{2}{6} = 1$ ✓ 树形图每层概率之和必须为 1。"', en: 'Xun Yu: "Check: four branch probabilities sum to 1 ✓ Every level of a probability tree must sum to 1."' }, highlightField: 'p' },
+    ],
+    secret: { concept: { zh: '独立两阶段事件：沿树形图路径相乘，各路径概率之和为 1。', en: 'Independent two-stage events: multiply along tree paths; all paths sum to 1.' }, formula: '$P(A \\cap B) = P(A) \\times P(B)$', tips: [{ zh: '荀彧提示：树的每一层概率之和为 1，出错必能自我检验。', en: 'Xun Yu Tip: Each level of the tree sums to 1 — errors are self-checking.' }] },
+    storyConsequence: { correct: { zh: '二阶兵符——概率树形图运用完美！做得漂亮！', en: 'Two-Stage Token — Well done!' }, wrong: { zh: '概率计算有误…再试一次！', en: 'Not quite... Try again!' } }
+  },
 ];

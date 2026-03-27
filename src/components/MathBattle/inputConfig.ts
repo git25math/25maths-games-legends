@@ -193,4 +193,12 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'x', label: '新 x 坐标', placeholder: 'x = ?' }, { id: 'y', label: '新 y 坐标', placeholder: 'y = ?' }],
     en: [{ id: 'x', label: 'New x coordinate', placeholder: 'x = ?' }, { id: 'y', label: 'New y coordinate', placeholder: 'y = ?' }],
   },
+  SEQUENCE_FORMULA: {
+    zh: [{ id: 'p', label: 'n 的系数 p', placeholder: 'p = ?' }, { id: 'q', label: '常数 q', placeholder: 'q = ?' }],
+    en: [{ id: 'p', label: 'Coefficient of n', placeholder: 'p = ?' }, { id: 'q', label: 'Constant q', placeholder: 'q = ?' }],
+  },
+  PROBABILITY_TREE: {
+    zh: [{ id: 'p', label: '概率 P', placeholder: 'P = ?' }],
+    en: [{ id: 'p', label: 'Probability P', placeholder: 'P = ?' }],
+  },
 };

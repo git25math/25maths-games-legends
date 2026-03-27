@@ -1604,6 +1604,100 @@ export function generateCoordinatesMission(template: Mission, tier: DifficultyTi
 }
 
 /* ══════════════════════════════════════════════════════════
+   SEQUENCE_FORMULA generator: find nth term formula pn + q
+   Given first 4 terms, find p (common difference) and q = a1 - d
+   Uses SEQUENCE_FORMULA type
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSequenceFormulaMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  // Common differences and first terms per tier
+  const dPools: Record<number, number[]> = {
+    1: [2, 3, 4, 5],
+    2: [3, 4, 5, 6, 7, 8],
+    3: [5, 6, 7, 8, 9, 10, -2, -3, -4, -5],
+  };
+  const a1Pools: Record<number, number[]> = {
+    1: [1, 2, 3, 4, 5, 6, 7, 8],
+    2: [1, 2, 3, 4, 5, 6, 7, 8, 10, -1, -2],
+    3: [1, 3, 5, 7, -2, -3, -5, -7, 10, 15],
+  };
+
+  const d = pickRandom(dPools[tier]);
+  const a1 = pickRandom(a1Pools[tier]);
+
+  // First 4 terms
+  const terms = [a1, a1 + d, a1 + 2 * d, a1 + 3 * d];
+  const termsStr = terms.join(', ');
+
+  // nth term formula: pn + q  where p = d, q = a1 - d
+  const p = d;
+  const q = a1 - d;
+
+  // Format the formula nicely
+  const formulaSign = q >= 0 ? `+\\, ${q}` : `-\\, ${Math.abs(q)}`;
+  const formulaStr = q === 0 ? `${p}n` : `${p}n \\, ${formulaSign}`;
+
+  const narrator = pickRandom(['诸葛亮', '曹操', '荀彧']);
+
+  const description: BilingualText = {
+    zh: `数列：$${termsStr}, \\ldots$\n求第 $n$ 项的通项公式，写成 $pn + q$ 的形式。求 $p$ 和 $q$。`,
+    en: `Sequence: $${termsStr}, \\ldots$\nFind the nth term formula in the form $pn + q$. Find $p$ and $q$.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么要找通项公式？\n曹操每天征粮：第1天征 $${a1}$ 石，之后每天比前一天多征 $${Math.abs(d)}$ 石。\n第100天征了多少？一天天算到第100天太慢！\n通项公式 $pn + q$ 让你直接算出第 $n$ 天——无论第多少天，一秒算出来。这就是代数的力量！`,
+        en: `${narrator}: "Why find the nth term formula?\nCao Cao levies grain: day 1 gets $${a1}$ dan, then $${Math.abs(d)}$ more each day.\nHow much on day 100? Counting to day 100 one by one is too slow!\nThe formula $pn + q$ gives the answer for any day $n$ — instantly. That's the power of algebra!"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：第一步——找公差 $d$（即 $p$）\n相邻两项之差：$${terms[1]} - ${terms[0]} = ${d}$，$${terms[2]} - ${terms[1]} = ${d}$，$${terms[3]} - ${terms[2]} = ${d}$。\n公差相同 ✓ 这是等差数列。\n$\\boxed{p = d = ${d}}$`,
+        en: `${narrator}: "Step 1 — Find common difference $d$ (= $p$)\nDifferences: $${terms[1]} - ${terms[0]} = ${d}$, $${terms[2]} - ${terms[1]} = ${d}$, $${terms[3]} - ${terms[2]} = ${d}$.\nConstant difference ✓ This is an arithmetic sequence.\n$\\boxed{p = d = ${d}}$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：第二步——找常数项 $q$\n公式是 $pn + q$，代入第1项（$n = 1$）：\n$p \\times 1 + q = a_1$\n$${d} \\times 1 + q = ${a1}$\n$q = ${a1} - ${d} = ${q}$`,
+        en: `${narrator}: "Step 2 — Find constant $q$\nFormula is $pn + q$. Substitute the 1st term ($n = 1$):\n$p \\times 1 + q = a_1$\n$${d} \\times 1 + q = ${a1}$\n$q = ${a1} - ${d} = ${q}$"`,
+      },
+      highlightField: 'q',
+    },
+    {
+      text: {
+        zh: `${narrator}：第三步——写出通项公式\n$p = ${p}$，$q = ${q}$\n第 $n$ 项 $= ${formulaStr}$`,
+        en: `${narrator}: "Step 3 — Write the formula\n$p = ${p}$, $q = ${q}$\nnth term $= ${formulaStr}$"`,
+      },
+      highlightField: 'q',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n$p = ${p}$，$q = ${q}$\n第 $n$ 项 $= ${formulaStr}$`,
+        en: `${narrator}: "Answer\n$p = ${p}$, $q = ${q}$\nnth term $= ${formulaStr}$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——代回几项检验\n$n=1$: $${formulaStr.replace('n', '(1)')} = ${a1}$ ✓\n$n=2$: $${formulaStr.replace('n', '(2)')} = ${a1 + d}$ ✓\n$n=4$: $${formulaStr.replace('n', '(4)')} = ${a1 + 3 * d}$ ✓\n公式正确！`,
+        en: `${narrator}: "Verify — substitute a few terms\n$n=1$: formula $= ${a1}$ ✓\n$n=2$: formula $= ${a1 + d}$ ✓\n$n=4$: formula $= ${a1 + 3 * d}$ ✓\nFormula confirmed!"`,
+      },
+      highlightField: 'p',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { a1, d, terms, p, q, generatorType: 'SEQUENCE_FORMULA_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
    RATIO_Y7 generator: simplify ratios and divide in ratio
    ══════════════════════════════════════════════════════════ */
 

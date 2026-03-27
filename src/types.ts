@@ -60,7 +60,9 @@ export type QuestionType =
   | 'FACTORISE'
   | 'INEQUALITY'
   | 'STD_FORM'
-  | 'SYMMETRY';
+  | 'SYMMETRY'
+  | 'SEQUENCE_FORMULA'
+  | 'PROBABILITY_TREE';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 

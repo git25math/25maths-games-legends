@@ -204,6 +204,28 @@ export const MISSIONS_Y10: Mission[] = [
     storyConsequence: { correct: { zh: '华容道伏兵——概率算准！做得漂亮！', en: 'Huarong Pass Ambush — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
+    id: 1034, grade: 10, unitId: 3, order: 4,
+    unitTitle: { zh: "Unit 3: 天命占卜与概率", en: "Unit 3: Divination & Probability" },
+    topic: 'Statistics', type: 'PROBABILITY_TREE',
+    title: { zh: '两卦连占', en: 'Double Divination' },
+    skillName: { zh: '概率树形图', en: 'Probability Tree' },
+    skillSummary: { zh: '恰好一次发生的概率', en: 'Probability of exactly one event' },
+    story: { zh: '诸葛亮连摇两卦。第一卦出现「吉」的概率是 $\\frac{2}{5}$，第二卦是 $\\frac{1}{4}$。恰好一卦为「吉」的概率是多少？', en: 'Zhuge Liang casts two divinations. P(auspicious on first) = $\\frac{2}{5}$, on second = $\\frac{1}{4}$. What is P(exactly one auspicious)?' },
+    description: { zh: '用概率树求恰好一次「吉」的概率。', en: 'Use a probability tree to find P(exactly one auspicious).' },
+    data: { p1: 2/5, p2: 1/4, p3: 1/4, mode: 'exactly_one', frac1: '2/5', frac2: '1/4', generatorType: 'PROB_TREE_RANDOM' }, difficulty: 'Hard', reward: 500,
+    kpId: 'kp-9.2-01', sectionId: 'statistics',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮："为什么要用树形图？「恰好一次」意味着两种情况：第一卦吉第二卦凶，或第一卦凶第二卦吉——树形图帮你不遗漏任何情况。"', en: 'Zhuge Liang: "Why a tree? \'Exactly one\' means two scenarios: first auspicious second not, OR first not second auspicious — a tree ensures no case is missed."' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："画树：左边 → 第一卦吉 ($\\frac{2}{5}$) 或凶 ($\\frac{3}{5}$)。每条分支再接第二卦吉 ($\\frac{1}{4}$) 或凶 ($\\frac{3}{4}$)。"', en: 'Zhuge Liang: "Tree: First auspicious ($\\frac{2}{5}$) or not ($\\frac{3}{5}$). Each branches to second auspicious ($\\frac{1}{4}$) or not ($\\frac{3}{4}$)."' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："情况一：第一卦吉、第二卦凶。路径概率 = $\\frac{2}{5} \\times \\frac{3}{4} = \\frac{6}{20}$。"', en: 'Zhuge Liang: "Case 1: first auspicious, second not. Path = $\\frac{2}{5} \\times \\frac{3}{4} = \\frac{6}{20}$."' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："情况二：第一卦凶、第二卦吉。路径概率 = $\\frac{3}{5} \\times \\frac{1}{4} = \\frac{3}{20}$。"', en: 'Zhuge Liang: "Case 2: first not, second auspicious. Path = $\\frac{3}{5} \\times \\frac{1}{4} = \\frac{3}{20}$."' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："两情况相加：$\\frac{6}{20} + \\frac{3}{20} = \\frac{9}{20}$。"', en: 'Zhuge Liang: "Add both cases: $\\frac{6}{20} + \\frac{3}{20} = \\frac{9}{20}$."' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："验算：四条路径概率之和 = $\\frac{2}{20} + \\frac{6}{20} + \\frac{3}{20} + \\frac{9}{20} = 1$ ✓ 天机已算，决策在人！"', en: 'Zhuge Liang: "Check: all four paths sum to 1 ✓ Heaven\'s plan is revealed!"' }, highlightField: 'p' },
+    ],
+    secret: { concept: { zh: '恰好一次 = 「成败」路径 + 「败成」路径，各自相乘后相加。', en: 'Exactly one = (success-fail path) + (fail-success path), multiply each then add.' }, formula: '$P(\\text{exactly one}) = p_1(1-p_2) + (1-p_1)p_2$', tips: [{ zh: '诸葛亮提示：「恰好」型题找两条路径，「至少」型题用补集法。', en: 'Zhuge Liang Tip: For "exactly one", find two paths. For "at least one", use complement.' }] },
+    storyConsequence: { correct: { zh: '两卦连占——树形图运用娴熟！做得漂亮！', en: 'Double Divination — Well done!' }, wrong: { zh: '概率树走错了…再试一次！', en: 'Not quite... Try again!' } }
+  },
+  {
     id: 1041, grade: 10, unitId: 4, order: 1,
     unitTitle: { zh: "Unit 4: 水战风云与三角函数", en: "Unit 4: Naval Warfare & Trigonometry" },
     topic: 'Geometry', type: 'TRIGONOMETRY',
@@ -334,6 +356,28 @@ export const MISSIONS_Y10: Mission[] = [
     ],
     secret: { concept: { zh: '等差数列在实际问题中的应用。', en: 'Arithmetic sequences in real-world problems.' }, formula: '$a_{15} = 300 + 14 \\times 20 = 580$', tips: [{ zh: '张昭提示：内政之要，在于精算。', en: 'Zhang Zhao Tip: The key to governance is precise calculation.' }] },
     storyConsequence: { correct: { zh: '粮草消耗——数列过关！做得漂亮！', en: 'Supply Depletion — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
+  },
+  {
+    id: 1054, grade: 10, unitId: 5, order: 4,
+    unitTitle: { zh: "Unit 5: 等差军阵与序列", en: "Unit 5: Military Formations & Sequences" },
+    topic: 'Algebra', type: 'SEQUENCE_FORMULA',
+    title: { zh: '军阵通项', en: 'Formation nth Term' },
+    skillName: { zh: '通项公式术', en: 'nth Term Formula' },
+    skillSummary: { zh: '找等差数列的 pn + q 公式', en: 'Find pn + q formula for arithmetic sequence' },
+    story: { zh: '孙权整编水师，第 1 队 {a1} 人，之后每队增加 {d} 人。请写出第 n 队人数的通项公式。', en: 'Sun Quan reorganises his navy. Unit 1 has {a1} soldiers, each subsequent unit has {d} more. Write the nth term formula.' },
+    description: { zh: '求等差数列第 n 项的公式 $pn + q$。', en: 'Find the nth term formula $pn + q$ of the arithmetic sequence.' },
+    data: { a1: 5, d: 3, terms: [5, 8, 11, 14], p: 3, q: 2, generatorType: 'SEQUENCE_FORMULA_RANDOM' }, difficulty: 'Hard', reward: 520,
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '张昭："为什么要找通项公式？曹操有 100 支队，数到第 99 支要多少人？一项项数太慢——通项公式 $pn+q$ 代入 $n=99$ 就搞定。"', en: 'Zhang Zhao: "Why find the nth term formula? Cao Cao has 100 units — counting to Unit 99 takes forever. The formula $pn+q$ gives you Unit 99 in one step."' }, highlightField: 'p' },
+      { text: { zh: '张昭："公差 $d$ 就是公式中 $n$ 的系数 $p$。每队多 {d} 人，所以 $p = {d}$。"', en: 'Zhang Zhao: "Common difference $d$ is the coefficient $p$ of $n$. Each unit gains {d} soldiers, so $p = {d}$."' }, highlightField: 'p' },
+      { text: { zh: '张昭："用 $n=1$ 代入找 $q$：$p \\times 1 + q = a_1$，即 ${d} \\times 1 + q = {a1}$，得 $q = {a1} - {d} = {q}$。"', en: 'Zhang Zhao: "Use $n=1$ to find $q$: $p \\times 1 + q = a_1$, so ${d} \\times 1 + q = {a1}$, giving $q = {a1} - {d} = {q}$."' }, highlightField: 'q' },
+      { text: { zh: '张昭："通项公式 = $pn + q = {d}n + {q}$。"', en: 'Zhang Zhao: "nth term formula = $pn + q = {d}n + {q}$."' }, highlightField: 'p' },
+      { text: { zh: '张昭："答案：$p = {d}$，$q = {q}$。第 n 队有 ${d}n + {q}$ 人。"', en: 'Zhang Zhao: "Answer: $p = {d}$, $q = {q}$. Unit n has ${d}n + {q}$ soldiers."' }, highlightField: 'p' },
+      { text: { zh: '张昭："验算：$n=1$: ${d} \\times 1 + {q} = {a1}$ ✓，$n=2$: ${d} \\times 2 + {q}$ = 下一项 ✓。公式稳准狠！"', en: 'Zhang Zhao: "Check: $n=1$: ${d}\\times 1+{q}={a1}$ ✓, $n=2$ gives next term ✓. Formula is solid!"' }, highlightField: 'p' },
+    ],
+    secret: { concept: { zh: '等差数列通项 = $dn + (a_1 - d)$，即 $p = d$，$q = a_1 - d$。', en: 'nth term = $dn + (a_1 - d)$, i.e. $p = d$, $q = a_1 - d$.' }, formula: '$a_n = pn + q$', tips: [{ zh: '张昭提示：$p$ 就是公差，$q$ 用 $n=1$ 代入求。', en: 'Zhang Zhao Tip: $p$ = common difference; find $q$ by substituting $n=1$.' }] },
+    storyConsequence: { correct: { zh: '军阵通项——公式推导完美！做得漂亮！', en: 'Formation nth Term — Well done!' }, wrong: { zh: '通项公式推错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 10 Unit 6-7: Jingzhou Governance — Mensuration ---

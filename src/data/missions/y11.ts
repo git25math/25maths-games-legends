@@ -112,6 +112,28 @@ export const MISSIONS_Y11: Mission[] = [
     secret: { concept: { zh: '等差数列通项公式：$a_n = a_1 + (n-1)d$。', en: 'Arithmetic sequence formula: $a_n = a_1 + (n-1)d$.' }, formula: '$a_{10} = 100 + 9 \\times 50$', tips: [{ zh: '费祎提示：粮草充足，军心方稳。', en: "Fei Yi Tip: With sufficient supplies, the army's morale is stable." }] },
     storyConsequence: { correct: { zh: '运粮序列——数列过关！做得漂亮！', en: 'Supply Line — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
   },
+  {
+    id: 1132, grade: 11, unitId: 3, order: 2,
+    unitTitle: { zh: "Unit 3: 粮草序列", en: "Unit 3: Supply Sequences" },
+    topic: 'Algebra', type: 'SEQUENCE_FORMULA',
+    title: { zh: '屯粮通项', en: 'Stockpile nth Term' },
+    skillName: { zh: '通项公式术', en: 'nth Term Formula' },
+    skillSummary: { zh: '从数列推导 pn + q 公式', en: 'Derive pn + q formula from a sequence' },
+    story: { zh: '诸葛亮屯粮：第 1 批 {a1} 石，之后每批增加 {d} 石。写出第 n 批的通项公式。', en: 'Zhuge Liang stockpiles grain: Batch 1 has {a1} units, each subsequent batch increases by {d}. Write the nth batch formula.' },
+    description: { zh: '求等差数列第 n 项的公式 $pn + q$，其中 $p$ 和 $q$ 待定。', en: 'Find the nth term formula $pn + q$ for this arithmetic sequence.' },
+    data: { a1: 8, d: 5, terms: [8, 13, 18, 23], p: 5, q: 3, generatorType: 'SEQUENCE_FORMULA_RANDOM' }, difficulty: 'Medium', reward: 450,
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '费祎："为什么写通项公式？第 n 批不用逐项算——公式代入 n 就是答案，节省大量时间。作战期间争分夺秒！"', en: 'Fei Yi: "Why write an nth term formula? Skip counting term by term — just substitute n. In wartime every second counts!"' }, highlightField: 'p' },
+      { text: { zh: '费祎："先找公差 $d$：相邻两项相减。${a2} - {a1} = {d}$，这就是公式里 $n$ 的系数 $p = {d}$。"', en: 'Fei Yi: "Find common difference $d$: subtract adjacent terms. ${a2} - {a1} = {d}$. This is coefficient $p = {d}$."' }, highlightField: 'p' },
+      { text: { zh: '费祎："再找常数 $q$：令 $n=1$ 代入 $pn+q = a_1$，即 ${d} \\times 1 + q = {a1}$，得 $q = {a1} - {d} = {q}$。"', en: 'Fei Yi: "Find constant $q$: set $n=1$ in $pn+q = a_1$, so ${d}+q={a1}$, giving $q={q}$."' }, highlightField: 'q' },
+      { text: { zh: '费祎："通项公式：第 n 批 = ${d}n + {q}$。"', en: 'Fei Yi: "nth term formula: Batch n = ${d}n + {q}$."' }, highlightField: 'p' },
+      { text: { zh: '费祎："答案：$p = {d}$，$q = {q}$。"', en: 'Fei Yi: "Answer: $p = {d}$, $q = {q}$."' }, highlightField: 'p' },
+      { text: { zh: '费祎："验算：$n=1$: ${d}+{q} = {a1}$ ✓，$n=2$: $2\\times{d}+{q} = {a2}$ ✓。公式可靠，屯粮有序！"', en: 'Fei Yi: "Check: $n=1$: ${d}+{q}={a1}$ ✓, $n=2$: $2\\times{d}+{q}={a2}$ ✓. Formula reliable, stockpiling in order!"' }, highlightField: 'p' },
+    ],
+    secret: { concept: { zh: '通项公式 $pn+q$：$p$ = 公差，$q = a_1 - d$。', en: 'nth term $pn+q$: $p$ = common difference, $q = a_1 - d$.' }, formula: '$a_n = pn + q,\\; p=d,\\; q=a_1-d$', tips: [{ zh: '费祎提示：$p$ 就是公差——差多少加多少。', en: 'Fei Yi Tip: $p$ is the common difference — how much it grows each step.' }] },
+    storyConsequence: { correct: { zh: '屯粮通项——公式推导完美！做得漂亮！', en: 'Stockpile nth Term — Well done!' }, wrong: { zh: '通项公式推错了…再试一次！', en: 'Not quite... Try again!' } }
+  },
 
   // --- Year 11 Units 4-5: Jin Unification — Statistics & Probability ---
   {
@@ -267,6 +289,28 @@ export const MISSIONS_Y11: Mission[] = [
     ],
     secret: { concept: { zh: '韦恩图：两个圆圈的交叠表示交集，合在一起表示并集，圈外表示补集。', en: 'Venn diagram: overlap = intersection, combined = union, outside = complement.' }, formula: '$|A \\cup B| = |A| + |B| - |A \\cap B|$', tips: [{ zh: '司马炎提示：四个区域加起来等于总数——这是验算的金标准。', en: 'Sima Yan Tip: Four regions sum to total — the gold standard for verification.' }] },
     storyConsequence: { correct: { zh: '将领履历——集合理清！做得漂亮！', en: 'Generals\' Records — Well done!' }, wrong: { zh: '集合关系理错了…再试一次！', en: 'Not quite... Try again!' } }
+  },
+  {
+    id: 1154, grade: 11, unitId: 5, order: 4,
+    unitTitle: { zh: "Unit 5: 战损清算·概率推演", en: "Unit 5: War Damage Audit — Probability Analysis" },
+    topic: 'Statistics', type: 'PROBABILITY_TREE',
+    title: { zh: '斥候两探', en: 'Double Scouting' },
+    skillName: { zh: '概率树形图', en: 'Probability Tree' },
+    skillSummary: { zh: '至少一次成功的概率', en: 'Probability of at least one success' },
+    story: { zh: '北伐前，姜维派两名斥候分别侦察。第一名斥候成功概率 $\\frac{3}{5}$，第二名 $\\frac{2}{3}$。至少一名成功的概率是多少？', en: 'Before the northern expedition, Jiang Wei sends two scouts. P(first succeeds) = $\\frac{3}{5}$, P(second succeeds) = $\\frac{2}{3}$. What is P(at least one succeeds)?' },
+    description: { zh: '用补集法求至少一名斥候成功的概率。', en: 'Use the complement method to find P(at least one scout succeeds).' },
+    data: { p1: 3/5, p2: 2/3, mode: 'at_least_one', frac1: '3/5', frac2: '2/3', generatorType: 'PROB_TREE_RANDOM' }, difficulty: 'Hard', reward: 600,
+    kpId: 'kp-9.2-01', sectionId: 'statistics',
+    tutorialSteps: [
+      { text: { zh: '姜维："「至少一次」——遇到这个词，老将军的秘诀是补集法。正面算「一次都没有」反而更容易，再用 1 减！"', en: 'Jiang Wei: "\'At least one\' — seasoned commanders use the complement. It\'s easier to find P(none succeed), then subtract from 1!"' }, highlightField: 'p' },
+      { text: { zh: '姜维："补集法：P(至少一次) = 1 - P(一次都没有)。P(都失败) = P(第一失败) × P(第二失败)。"', en: 'Jiang Wei: "Complement: P(at least one) = 1 - P(none). P(both fail) = P(first fails) × P(second fails)."' }, highlightField: 'p' },
+      { text: { zh: '姜维："第一名失败概率 = $1 - \\frac{3}{5} = \\frac{2}{5}$，第二名失败概率 = $1 - \\frac{2}{3} = \\frac{1}{3}$。"', en: 'Jiang Wei: "P(first fails) = $1 - \\frac{3}{5} = \\frac{2}{5}$, P(second fails) = $1 - \\frac{2}{3} = \\frac{1}{3}$."' }, highlightField: 'p' },
+      { text: { zh: '姜维："P(都失败) = $\\frac{2}{5} \\times \\frac{1}{3} = \\frac{2}{15}$。"', en: 'Jiang Wei: "P(both fail) = $\\frac{2}{5} \\times \\frac{1}{3} = \\frac{2}{15}$."' }, highlightField: 'p' },
+      { text: { zh: '姜维："P(至少一次成功) = $1 - \\frac{2}{15} = \\frac{13}{15}$。"', en: 'Jiang Wei: "P(at least one succeeds) = $1 - \\frac{2}{15} = \\frac{13}{15}$."' }, highlightField: 'p' },
+      { text: { zh: '姜维："验算：$\\frac{13}{15} + \\frac{2}{15} = 1$ ✓ 概率与其补集之和必为 1。北伐，出发！"', en: 'Jiang Wei: "Check: $\\frac{13}{15} + \\frac{2}{15} = 1$ ✓ A probability and its complement always sum to 1. Northern expedition — march!"' }, highlightField: 'p' },
+    ],
+    secret: { concept: { zh: '补集法：P(至少一次) = 1 - P(一次都没有)。遇到「至少」首选补集！', en: 'Complement method: P(at least one) = 1 - P(none). Always try the complement for "at least" problems!' }, formula: '$P(\\text{at least one}) = 1 - P(\\text{none})$', tips: [{ zh: '姜维提示：「至少一次」→ 补集法！P(都不发生) 往往更好算。', en: 'Jiang Wei Tip: "At least one" → complement method! P(none) is usually easier.' }] },
+    storyConsequence: { correct: { zh: '斥候两探——概率推算精准！做得漂亮！', en: 'Double Scouting — Well done!' }, wrong: { zh: '概率算岔了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 11 Unit 6: March Vectors ---

@@ -11,11 +11,11 @@ export { type DifficultyTier } from './shared';
 // Import all generators from chapter modules
 import { generateIntegerAddMission, generateIntegerMulMission, generateFracAddSameDenMission, generateFracAddMission, generateFracMulMission, generateMixedImproperMission, generatePrimeMission, generateFactorTreeMission, generateFactorsListMission, generateHcfMission, generateLcmMission, generateSquareCubeMission, generateSquareRootMission, generateIndicesMission, generateFdpConvertMission, generateBodmasMission, generatePercentageOfMission, generatePercentageMission, generatePercentageInterestMission, generateEstimationRoundMission, generateStdFormMission, generateSpeedMission, generateVennMission } from './number';
 
-import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateExpandNegMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission } from './algebra';
+import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateExpandNegMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission, generateSequenceFormulaMission } from './algebra';
 
 import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission, generateCircleTheoremMission } from './geometry';
 
-import { generateProbSimpleMission, generateProbIndMission, generateStatsMeanMission, generateStatsMedianMission, generateStatsRangeMission, generateStatsModeMission, generateCumFreqMission } from './statistics';
+import { generateProbSimpleMission, generateProbIndMission, generateStatsMeanMission, generateStatsMedianMission, generateStatsRangeMission, generateStatsModeMission, generateCumFreqMission, generateProbTreeMission } from './statistics';
 
 import { generateSymmetryMission, generateRotationMission, generateEnlargementMission, generateVectorAddMission, generateDerivativeMission, generateIntegrationMission, generateRatioMission, generateRatioY7Mission, generateRatioY8Mission } from './advanced';
 
@@ -45,7 +45,9 @@ export type GeneratorType =
   | 'PARALLEL_ANGLES_RANDOM' | 'SYMMETRY_RANDOM' | 'SIMULTANEOUS_Y8_RANDOM'
   | 'RATIO_Y8_RANDOM' | 'VENN_RANDOM' | 'ROTATION_RANDOM'
   | 'ENLARGEMENT_RANDOM' | 'VECTOR_ADD_RANDOM' | 'CUMFREQ_RANDOM' | 'SECTOR_RANDOM'
-  | 'CIRCLE_THEOREM_RANDOM';
+  | 'CIRCLE_THEOREM_RANDOM'
+  | 'PROB_TREE_RANDOM'
+  | 'SEQUENCE_FORMULA_RANDOM';
 
 /* ── Generator dispatch map ── */
 
@@ -93,6 +95,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   FUNC_VAL_RANDOM: generateFuncValMission,
   ARITHMETIC_RANDOM: generateArithmeticMission,
   SEQUENCE_Y7_RANDOM: generateSequenceY7Mission,
+  SEQUENCE_FORMULA_RANDOM: generateSequenceFormulaMission,
   COORDINATES_RANDOM: generateCoordinatesMission,
 
   // Geometry (CH4+CH5+CH6)
@@ -116,6 +119,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   // Statistics (CH8+CH9)
   PROBABILITY_SIMPLE_RANDOM: generateProbSimpleMission,
   PROBABILITY_IND_RANDOM: generateProbIndMission,
+  PROB_TREE_RANDOM: generateProbTreeMission,
   STATISTICS_MEAN_RANDOM: generateStatsMeanMission,
   STATISTICS_MEDIAN_RANDOM: generateStatsMedianMission,
   STATISTICS_RANGE_RANDOM: generateStatsRangeMission,

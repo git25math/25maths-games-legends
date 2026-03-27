@@ -562,6 +562,142 @@ export function generateCumFreqMission(template: Mission, tier: DifficultyTier =
 }
 
 /* ══════════════════════════════════════════════════════════
+   PROBABILITY_TREE generator
+   Two-stage tree diagram — compound probability
+   Uses PROBABILITY_TREE type
+   ══════════════════════════════════════════════════════════ */
+
+export function generateProbTreeMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  // Friendly fractions as probabilities: numerator/denominator pairs that make clean arithmetic
+  const fracPools: Record<number, { n: number; d: number }[]> = {
+    1: [{ n: 1, d: 2 }, { n: 1, d: 3 }, { n: 2, d: 3 }, { n: 1, d: 4 }, { n: 3, d: 4 }],
+    2: [{ n: 1, d: 5 }, { n: 2, d: 5 }, { n: 3, d: 5 }, { n: 1, d: 6 }, { n: 5, d: 6 }, { n: 2, d: 7 }, { n: 3, d: 7 }],
+    3: [{ n: 3, d: 8 }, { n: 5, d: 8 }, { n: 3, d: 10 }, { n: 7, d: 10 }, { n: 2, d: 9 }, { n: 5, d: 9 }],
+  };
+
+  const frac1 = pickRandom(fracPools[tier]);
+  const frac2 = pickRandom(fracPools[Math.min(tier, 2) as 1 | 2 | 3]);
+  const p1 = frac1.n / frac1.d;
+  const p2 = frac2.n / frac2.d;
+
+  // Pick mode — tier 1: always 'and', tier 2-3: also 'exactly_one' / 'at_least_one'
+  const modePool: string[] = tier === 1 ? ['and'] : ['and', 'and', 'exactly_one'];
+  const mode = pickRandom(modePool) as 'and' | 'exactly_one';
+
+  let answer: number;
+  let answerFrac: string;
+  if (mode === 'exactly_one') {
+    answer = p1 * (1 - p2) + (1 - p1) * p2;
+  } else {
+    answer = p1 * p2;
+  }
+  answer = Math.round(answer * 1000) / 1000;
+
+  // Express answer as fraction (lowest terms)
+  function toFracStr(val: number, denom: number): string {
+    const numer = Math.round(val * denom);
+    const g = gcdCalc(Math.abs(numer), denom);
+    return g === denom ? String(numer / g) : `${numer / g}/${denom / g}`;
+  }
+  const commonDenom = frac1.d * frac2.d;
+  answerFrac = toFracStr(answer, commonDenom);
+
+  const narrator = pickRandom(['诸葛亮', '周瑜', '司马懿']);
+
+  // Narrative: spinning two wheels / drawing two balls
+  const scenarios = [
+    {
+      zh: (p1f: string, p2f: string) =>
+        `军师布下双转盘阵：第一个转盘指向红区概率为 $\\frac{${frac1.n}}{${frac1.d}}$，第二个转盘指向红区概率为 $\\frac{${frac2.n}}{${frac2.d}}$。`,
+      en: (p1f: string, p2f: string) =>
+        `Two war drums spin: the first lands on red with probability $\\frac{${frac1.n}}{${frac1.d}}$, the second with probability $\\frac{${frac2.n}}{${frac2.d}}$.`,
+      objZh: mode === 'exactly_one' ? '恰好只有一个转盘指向红区的概率？' : '两个转盘都指向红区的概率？',
+      objEn: mode === 'exactly_one' ? 'Find the probability exactly one spinner lands on red.' : 'Find the probability both spinners land on red.',
+    },
+    {
+      zh: (p1f: string, p2f: string) =>
+        `两支军队各自出击，第一支胜利概率为 $\\frac{${frac1.n}}{${frac1.d}}$，第二支胜利概率为 $\\frac{${frac2.n}}{${frac2.d}}$（两支独立作战）。`,
+      en: (p1f: string, p2f: string) =>
+        `Two detachments attack independently. The first succeeds with probability $\\frac{${frac1.n}}{${frac1.d}}$, the second with probability $\\frac{${frac2.n}}{${frac2.d}}$.`,
+      objZh: mode === 'exactly_one' ? '恰好只有一支军队取胜的概率？' : '两支军队都取得胜利的概率？',
+      objEn: mode === 'exactly_one' ? 'Find the probability exactly one detachment succeeds.' : 'Find the probability both detachments succeed.',
+    },
+  ];
+
+  const scenario = pickRandom(scenarios);
+  const description: BilingualText = {
+    zh: `${scenario.zh('', '')} ${scenario.objZh}`,
+    en: `${scenario.en('', '')} ${scenario.objEn}`,
+  };
+
+  const treeZh = mode === 'exactly_one'
+    ? `树形图分支：\n• A成功 ($\\frac{${frac1.n}}{${frac1.d}}$) 且 B失败 ($\\frac{${frac2.d - frac2.n}}{${frac2.d}}$) → $\\frac{${frac1.n}}{${frac1.d}} \\times \\frac{${frac2.d - frac2.n}}{${frac2.d}}$\n• A失败 ($\\frac{${frac1.d - frac1.n}}{${frac1.d}}$) 且 B成功 ($\\frac{${frac2.n}}{${frac2.d}}$) → $\\frac{${frac1.d - frac1.n}}{${frac1.d}} \\times \\frac{${frac2.n}}{${frac2.d}}$`
+    : `树形图分支：\n• A成功 ($\\frac{${frac1.n}}{${frac1.d}}$) 且 B成功 ($\\frac{${frac2.n}}{${frac2.d}}$) → $\\frac{${frac1.n}}{${frac1.d}} \\times \\frac{${frac2.n}}{${frac2.d}}$`;
+  const treeEn = mode === 'exactly_one'
+    ? `Tree branches:\n• A succeeds ($\\frac{${frac1.n}}{${frac1.d}}$) and B fails ($\\frac{${frac2.d - frac2.n}}{${frac2.d}}$) → multiply\n• A fails ($\\frac{${frac1.d - frac1.n}}{${frac1.d}}$) and B succeeds ($\\frac{${frac2.n}}{${frac2.d}}$) → multiply`
+    : `Tree branches:\n• A succeeds ($\\frac{${frac1.n}}{${frac1.d}}$) and B succeeds ($\\frac{${frac2.n}}{${frac2.d}}$) → multiply`;
+
+  const calcZh = mode === 'exactly_one'
+    ? `$P(\\text{恰好一个}) = \\frac{${frac1.n}}{${frac1.d}} \\times \\frac{${frac2.d - frac2.n}}{${frac2.d}} + \\frac{${frac1.d - frac1.n}}{${frac1.d}} \\times \\frac{${frac2.n}}{${frac2.d}} = ${answerFrac}$`
+    : `$P(\\text{两者都}) = \\frac{${frac1.n}}{${frac1.d}} \\times \\frac{${frac2.n}}{${frac2.d}} = ${answerFrac}$`;
+  const calcEn = mode === 'exactly_one'
+    ? `$P(\\text{exactly one}) = \\frac{${frac1.n}}{${frac1.d}} \\times \\frac{${frac2.d - frac2.n}}{${frac2.d}} + \\frac{${frac1.d - frac1.n}}{${frac1.d}} \\times \\frac{${frac2.n}}{${frac2.d}} = ${answerFrac}$`
+    : `$P(\\text{both}) = \\frac{${frac1.n}}{${frac1.d}} \\times \\frac{${frac2.n}}{${frac2.d}} = ${answerFrac}$`;
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么要学树形图？\n战场上常有多事件连续发生。"第一支军队取胜"之后，"第二支军队是否也取胜"——两件事各有不确定性。\n树形图就是把所有可能的"剧情分支"列出来，像棵树一样展开，每条路径的概率一目了然。\n树形图不只是工具——它是把不确定性变成可计算问题的魔法。`,
+        en: `${narrator}: "Why learn tree diagrams?\nBattlefields have chains of events. Whether the first detachment wins, then whether the second one does too — each is uncertain.\nA tree diagram lists every possible 'storyline branch', spreading out like a tree. Every path's probability is clear at a glance.\nTree diagrams aren't just a tool — they turn uncertainty into calculable problems."`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：核心法则——乘法原理\n两个**独立事件**同时发生：把各自的概率相乘！\n$P(A \\text{ 且 } B) = P(A) \\times P(B)$\n为什么是乘？因为每种 A 的结果都对应所有 B 的可能，总路径数 = $a \\times b$。`,
+        en: `${narrator}: "Core rule — Multiplication Principle\nFor two independent events both occurring: MULTIPLY their probabilities!\n$P(A \\text{ and } B) = P(A) \\times P(B)$\nWhy multiply? Every outcome of A pairs with every outcome of B — total paths = $a \\times b$."`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：画出树形图\n${treeZh}`,
+        en: `${narrator}: "Draw the tree diagram\n${treeEn}"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算所求概率\n${calcZh}`,
+        en: `${narrator}: "Calculate the required probability\n${calcEn}"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n所求概率 $= ${answerFrac}$`,
+        en: `${narrator}: "Answer\nRequired probability $= ${answerFrac}$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n概率必须在 $[0,1]$ 之间：$0 \\leq ${answerFrac} \\leq 1$ ✓\n所有分支概率之和 = 1 ✓（树形图的自验算法则）`,
+        en: `${narrator}: "Verify\nProbability must be in $[0,1]$: $0 \\leq ${answerFrac} \\leq 1$ ✓\nAll branch probabilities sum to 1 ✓ (tree diagram self-check rule)"`,
+      },
+      highlightField: 'p',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { p1, p2, mode, frac1, frac2, generatorType: 'PROB_TREE_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
    SECTOR generator: arc length or sector area
    Uses CIRCLE type with answer field
    ══════════════════════════════════════════════════════════ */

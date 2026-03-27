@@ -349,6 +349,29 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
   if (type === 'VENN') {
     return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
   }
+  // nth term formula: pn + q where p = common difference, q = a1 - d
+  if (type === 'SEQUENCE_FORMULA') {
+    const expectedP = data.d;
+    const expectedQ = data.a1 - data.d;
+    const okP = parse(inputs.p || '') === expectedP;
+    const okQ = parse(inputs.q || '') === expectedQ;
+    return { correct: okP && okQ, expected: { p: String(expectedP), q: String(expectedQ) } };
+  }
+  // Probability tree: compound probability (P(A∩B), P(exactly one), P(≥1))
+  if (type === 'PROBABILITY_TREE') {
+    const { p1, p2, mode } = data;
+    let val: number;
+    if (mode === 'exactly_one') {
+      const p3 = typeof data.p3 === 'number' ? data.p3 : p2;
+      val = p1 * (1 - p2) + (1 - p1) * p3;
+    } else if (mode === 'at_least_one') {
+      val = 1 - (1 - p1) * (1 - p2);
+    } else {
+      val = p1 * p2;
+    }
+    val = Math.round(val * 1000) / 1000;
+    return { correct: Math.abs(parse(inputs.p || '') - val) < 0.01, expected: { p: toFraction(val) } };
+  }
   return { correct: false, expected: {} };
 }
 
@@ -364,6 +387,7 @@ const PARTIAL_CREDIT_TYPES = new Set([
   'FACTORISE', 'INEQUALITY', 'FDP_CONVERT', 'BODMAS', 'SIMPLIFY',
   'ARITHMETIC', 'ESTIMATION', 'SQUARE_CUBE', 'SQUARE_ROOT',
   'INTEGER_ADD', 'INTEGER_MUL', 'HCF', 'LCM',
+  'PROBABILITY_TREE', 'SEQUENCE_FORMULA',
 ]);
 
 // Types that NEVER get partial credit (boolean/discrete answers)
