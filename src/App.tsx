@@ -47,6 +47,7 @@ const MathBattle = lazy(() => import('./components/MathBattle').then(module => (
 const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
 const LobbyScreen = lazy(() => import('./screens/LobbyScreen').then(module => ({ default: module.LobbyScreen })));
 const PracticeScreen = lazy(() => import('./screens/PracticeScreen').then(module => ({ default: module.PracticeScreen })));
+const RepairScreen = lazy(() => import('./screens/RepairScreen').then(module => ({ default: module.RepairScreen })));
 const DashboardScreen = lazy(() => import('./screens/DashboardScreen').then(module => ({ default: module.DashboardScreen })));
 const TechTreeScreen = lazy(() => import('./screens/TechTreeScreen').then(module => ({ default: module.TechTreeScreen })));
 const LeaderboardPanel = lazy(() => import('./components/LeaderboardPanel').then(module => ({ default: module.LeaderboardPanel })));
@@ -122,7 +123,7 @@ function loadPersistedState(): PersistedState {
 function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
     // Battle/onboarding/expedition can't be restored → save as map
-    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition' || gameState === 'leaderboard' || gameState === 'achievements' || gameState === 'pk_setup' || gameState === 'tech_tree') ? 'map' : gameState;
+    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition' || gameState === 'leaderboard' || gameState === 'achievements' || gameState === 'pk_setup' || gameState === 'tech_tree' || gameState === 'repair') ? 'map' : gameState;
     const safeMission = safeState === 'practice' ? missionId : null;
     localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
@@ -152,6 +153,8 @@ export default function App() {
   const [lastClearedMissionId, setLastClearedMissionId] = useState<number | null>(null);
   const [isDailyBattle, setIsDailyBattle] = useState(false);
   const [isRepairMode, setIsRepairMode] = useState(false);
+  const [repairTopicId, setRepairTopicId] = useState<string | null>(null);
+  const [repairPatternId, setRepairPatternId] = useState<string | null>(null);
   const [activeExpedition, setActiveExpedition] = useState<Expedition | null>(null);
   const [levelUpNotif, setLevelUpNotif] = useState<{ newLevel: number; rankName: string; spEarned: number } | null>(null);
   const [repairToast, setRepairToast] = useState<{ bonus: number } | null>(null);
@@ -1257,39 +1260,15 @@ export default function App() {
                       setGameState('practice');
                     }
                   }}
-                  onStartRecovery={async (topicId) => {
+                  onStartRecovery={(topicId) => {
                     if (!profile) return;
-                    const cm = profile.completed_missions as any;
-                    const mistakesMap = (cm?._mistakes ?? {}) as Record<string, import('./utils/errorMemory').MistakeRecord>;
-                    // Find dominant error for this topic
-                    const topicPrefix = `kp-${topicId}-`;
-                    const topicMissions = missions.filter(m => m.kpId?.startsWith(topicPrefix) || m.kpId === `kp-${topicId}`);
-                    if (topicMissions.length === 0) return; // no missions for topic
-                    let dominant: import('./utils/diagnoseError').ErrorType = 'method';
-                    let maxErr = 0;
-                    for (const m of topicMissions) {
-                      const rec = mistakesMap[String(m.id)];
-                      if (rec && rec.count > maxErr) {
-                        maxErr = rec.count;
-                        const d = getDominantPattern(rec);
-                        if (d) dominant = d;
-                      }
-                    }
-                    const session = buildRecoveryPath(topicId, dominant, mistakesMap, missions);
-                    if (session) {
-                      const newCm = { ...cm, _recovery: session };
-                      await updateProfile({ completed_missions: newCm });
-                      if (!profile) return; // user may have logged out during save
-                      setRecoverySession(session);
-                    } else {
-                      // No weak prereqs — fall back to direct repair
-                      const m = topicMissions[0];
-                      if (m) {
-                        setActiveMission(m);
-                        setIsRepairMode(true);
-                        setGameState('practice');
-                      }
-                    }
+                    // Launch Repair Mode with the topic's dominant error pattern
+                    const healthMap = getSkillHealthMap(profile.completed_missions as Record<string, unknown>);
+                    const health = healthMap[topicId];
+                    const patternId = health?.dominantPatternId ?? null;
+                    setRepairTopicId(topicId);
+                    setRepairPatternId(patternId);
+                    setGameState('repair');
                   }}
                   recoverySession={recoverySession}
                   onRecoveryStepStart={(missionId) => {
@@ -1308,6 +1287,31 @@ export default function App() {
                     }
                     setRecoverySession(null);
                     setActiveMission(null);
+                  }}
+                />
+              )}
+
+              {/* ═══ Repair Mode ═══ */}
+              {gameState === 'repair' && profile && repairTopicId && (
+                <RepairScreen
+                  lang={lang}
+                  topicId={repairTopicId}
+                  patternId={repairPatternId}
+                  healthState={getSkillHealth(profile.completed_missions as Record<string, unknown>, repairTopicId)}
+                  missions={missions}
+                  onComplete={async (restoredState) => {
+                    // Write restored health back to profile
+                    const cm = { ...(profile.completed_missions as any) };
+                    const updated = setSkillHealth(cm as Record<string, unknown>, repairTopicId!, restoredState);
+                    await updateProfile({ completed_missions: updated });
+                    setRepairTopicId(null);
+                    setRepairPatternId(null);
+                    setGameState('tech_tree');
+                  }}
+                  onCancel={() => {
+                    setRepairTopicId(null);
+                    setRepairPatternId(null);
+                    setGameState('tech_tree');
                   }}
                 />
               )}
@@ -1613,7 +1617,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* ═══ Global Bottom Navigation (mobile only, hidden during battle/welcome/onboarding) ═══ */}
-        {gameState !== 'welcome' && gameState !== 'onboarding' && gameState !== 'battle' && (
+        {gameState !== 'welcome' && gameState !== 'onboarding' && gameState !== 'battle' && gameState !== 'repair' && (
           <BottomNav
             activeTab={
               gameState === 'expedition' ? 'expedition'

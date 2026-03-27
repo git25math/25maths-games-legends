@@ -3,6 +3,7 @@
 
 import type { Mission, CompletedMissions } from '../types';
 import type { Chapter, Topic } from '../data/curriculum/kp-registry';
+import { getSkillHealthMap, type SkillHealthState } from './processAttempt';
 import { CHAPTERS } from '../data/curriculum/kp-registry';
 import { hasAnyPracticeCompletion } from './completionState';
 import type { MistakeRecord } from './errorMemory';
@@ -258,13 +259,15 @@ export function computeTechTree(
         status = 'locked';
       }
 
-      // Check corruption overlay for unlocked/researching nodes
-      const corruption = (status === 'unlocked' || status === 'researching')
-        ? getTopicCorruption(missionIds, mistakes)
-        : null;
-
-      if (corruption && status === 'unlocked') {
-        status = 'corrupted';
+      // Check corruption: prefer Resilience Engine state, fallback to mistake count
+      var corruption: ErrorType | null = null;
+      if (engineHealth && (engineHealth.corruptionLevel === 'blocked' || engineHealth.corruptionLevel === 'critical')) {
+        // Resilience Engine says this node is corrupted
+        corruption = (engineHealth.dominantPatternId as ErrorType) ?? 'method';
+        if (status === 'unlocked') status = 'corrupted';
+      } else if (status === 'unlocked' || status === 'researching') {
+        corruption = getTopicCorruption(missionIds, mistakes);
+        if (corruption && status === 'unlocked') status = 'corrupted';
       }
 
       // Track max error count + total errors across missions
@@ -278,17 +281,25 @@ export function computeTechTree(
         }
       }
 
-      // healthScore: 100 = pristine, 0 = critically corrupted
-      // Decays based on error density: errors per mission attempted
-      const attemptedMissions = missionIds.filter(id => {
-        const rec = mistakes[String(id)];
-        return rec && rec.count > 0;
-      }).length;
-      const errorDensity = attemptedMissions > 0 ? totalErrors / attemptedMissions : 0;
-      // 0 errors = 100, CORRUPTION_THRESHOLD errors/mission = 0
-      const healthScore = Math.max(0, Math.min(100,
-        Math.round(100 * (1 - errorDensity / (TECH_TREE.CORRUPTION_ERROR_THRESHOLD + 1)))
-      ));
+      // healthScore: prefer Resilience Engine's _skillHealth if available
+      const skillHealthMap = getSkillHealthMap(completedMissions as Record<string, unknown>);
+      const engineHealth = skillHealthMap[topic.id] as SkillHealthState | undefined;
+
+      var healthScore: number;
+      if (engineHealth && engineHealth.totalAttempts > 0) {
+        // Resilience Engine has processed this topic — use its authoritative state
+        healthScore = engineHealth.healthScore;
+      } else {
+        // Fallback: compute from raw mistakes (legacy path)
+        const attemptedMissions = missionIds.filter(id => {
+          const rec = mistakes[String(id)];
+          return rec && rec.count > 0;
+        }).length;
+        const errorDensity = attemptedMissions > 0 ? totalErrors / attemptedMissions : 0;
+        healthScore = Math.max(0, Math.min(100,
+          Math.round(100 * (1 - errorDensity / (TECH_TREE.CORRUPTION_ERROR_THRESHOLD + 1)))
+        ));
+      }
 
       topicStates.set(topic.id, {
         topicId: topic.id,
