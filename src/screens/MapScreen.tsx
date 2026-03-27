@@ -264,23 +264,19 @@ export const MapScreen = ({
   })();
 
   // ── Weak missions (high error rate) + dominant error pattern ──
-  const weakMissionSet = getWeakMissions(
-    ((profile.completed_missions as any)?._mistakes ?? {}) as any,
-    3, // threshold: 3+ errors = weak
-  );
-  const weakMissionPatterns = useMemo(() => {
+  const { weakMissionSet, weakMissionPatterns } = useMemo(() => {
     const mistakesRaw = ((profile.completed_missions as any)?._mistakes ?? {}) as Record<string, MistakeRecord>;
-    const map = new Map<number, string | null>();
-    for (const id of weakMissionSet) {
+    const set = getWeakMissions(mistakesRaw as any, 3);
+    const patterns = new Map<number, string | null>();
+    for (const id of set) {
       const rec = mistakesRaw[String(id)];
       if (rec) {
-        const pattern = getDominantPattern(rec);
-        const symbol = pattern === 'sign' ? '±' : pattern === 'rounding' ? '≈' : pattern === 'magnitude' ? '×10' : pattern === 'method' ? '?' : null;
-        map.set(id, symbol);
+        const p = getDominantPattern(rec);
+        patterns.set(id, p === 'sign' ? '±' : p === 'rounding' ? '≈' : p === 'magnitude' ? '×10' : p === 'method' ? '?' : null);
       }
     }
-    return map;
-  }, [weakMissionSet, profile.completed_missions]);
+    return { weakMissionSet: set, weakMissionPatterns: patterns };
+  }, [profile.completed_missions]);
 
   // ── Render a full mission grid for a unit ──
   const renderUnitGrid = (u: UnitData, isCurrentUnit: boolean) => (

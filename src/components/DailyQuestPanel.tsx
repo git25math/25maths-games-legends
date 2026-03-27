@@ -103,7 +103,7 @@ export const DailyQuestPanel = ({
           }`}
         >
           {isWeakRecommendation
-            ? (lang === 'en' ? 'Review weak spot: ' : '复习薄弱点：')
+            ? lt({ zh: '复习薄弱点：', en: 'Review weak spot: ' }, lang)
             : `${l.start}: `}{lt(recommendedMission.title, lang)}
           <ChevronRight size={14} />
         </button>
