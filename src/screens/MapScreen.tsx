@@ -925,6 +925,7 @@ export const MapScreen = ({
         lang={lang}
         completedMissions={profile.completed_missions as Record<string, unknown>}
         onSmartStart={(m) => { playTap(); onPracticeStart(m); }}
+        onBattleStart={(m) => { playTap(); onMissionStart(m); }}
         {...smartRecommendation}
       />
 

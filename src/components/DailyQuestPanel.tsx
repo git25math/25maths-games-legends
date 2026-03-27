@@ -6,21 +6,26 @@ import { getSeasonProgress, getTaskStatus } from '../utils/seasonTracker';
 import { lt } from '../i18n/resolveText';
 
 const LABELS = {
-  zh: { title: '今日军令', allDone: '全部完成！', bonus: '额外赛季经验已领取', start: '一键开始', xp: '赛季经验' },
-  zh_TW: { title: '今日軍令', allDone: '全部完成！', bonus: '額外賽季經驗已領取', start: '一鍵開始', xp: '賽季經驗' },
-  en: { title: "Today's Orders", allDone: 'All Complete!', bonus: 'Bonus season XP claimed', start: 'Quick Start', xp: 'Season XP' },
+  zh: { title: '今日军令', allDone: '全部完成！', bonus: '额外赛季经验已领取', start: '一键开始', xp: '赛季经验', battle: '去闯关', practice: '去练习' },
+  zh_TW: { title: '今日軍令', allDone: '全部完成！', bonus: '額外賽季經驗已領取', start: '一鍵開始', xp: '賽季經驗', battle: '去闖關', practice: '去練習' },
+  en: { title: "Today's Orders", allDone: 'All Complete!', bonus: 'Bonus season XP claimed', start: 'Quick Start', xp: 'Season XP', battle: 'Battle', practice: 'Practice' },
 };
+
+/** Task IDs that require battle mode navigation */
+const BATTLE_TASK_IDS = new Set(['daily_battles_3', 'daily_streak_3']);
 
 export const DailyQuestPanel = ({
   lang,
   completedMissions,
   onSmartStart,
+  onBattleStart,
   recommendedMission,
   isWeakRecommendation = false,
 }: {
   lang: Language;
   completedMissions: Record<string, unknown>;
   onSmartStart: (mission: Mission) => void;
+  onBattleStart?: (mission: Mission) => void;
   recommendedMission: Mission | null;
   isWeakRecommendation?: boolean;
 }) => {
@@ -56,6 +61,8 @@ export const DailyQuestPanel = ({
         {dailyTasks.map((task, i) => {
           const s = statuses[i];
           const pct = Math.min(100, (s.current / s.target) * 100);
+          const isBattleTask = BATTLE_TASK_IDS.has(task.id);
+          const canQuickStart = !s.completed && recommendedMission && (isBattleTask ? !!onBattleStart : true);
           return (
             <div key={task.id} className={`flex items-center gap-3 px-3 py-2 rounded-xl ${s.completed ? 'bg-emerald-500/10' : 'bg-white/5'}`}>
               {s.completed
@@ -80,9 +87,22 @@ export const DailyQuestPanel = ({
                   </div>
                 )}
               </div>
-              <span className={`text-[10px] font-black shrink-0 ${s.completed ? 'text-emerald-400' : 'text-amber-400/50'}`}>
-                +{task.seasonXP} {l.xp}
-              </span>
+              {canQuickStart ? (
+                <button
+                  onClick={() => isBattleTask ? onBattleStart!(recommendedMission!) : onSmartStart(recommendedMission!)}
+                  className={`shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-black transition-colors ${
+                    isBattleTask
+                      ? 'bg-rose-600/30 border border-rose-500/30 text-rose-300 hover:bg-rose-600/50'
+                      : 'bg-indigo-600/30 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600/50'
+                  }`}
+                >
+                  {isBattleTask ? l.battle : l.practice} →
+                </button>
+              ) : (
+                <span className={`text-[10px] font-black shrink-0 ${s.completed ? 'text-emerald-400' : 'text-amber-400/50'}`}>
+                  +{task.seasonXP} {l.xp}
+                </span>
+              )}
             </div>
           );
         })}
