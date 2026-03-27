@@ -43,7 +43,7 @@ import type { RecoverySession } from './utils/recoveryPath';
 import { BottomNav, type BottomTab } from "./components/BottomNav";
 import { Confetti } from './components/Confetti';
 import { processAttempt, getSkillHealth, setSkillHealth, processRecoveryComplete, type AttemptResult } from './utils/processAttempt';
-import { detectErrorPattern, getPattern } from './utils/errorPatterns';
+import { detectErrorPattern, getPattern, ERROR_PATTERNS } from './utils/errorPatterns';
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
 const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
 const LobbyScreen = lazy(() => import('./screens/LobbyScreen').then(module => ({ default: module.LobbyScreen })));
@@ -630,6 +630,19 @@ export default function App() {
               setSkillHealToast({ topicId, delta: healthResult.healthDelta, newHealth: newState.healthScore });
               setTimeout(() => setSkillHealToast(null), 3000);
             }
+            // Fire-and-forget: sync to Supabase user_skill_health table
+            if (user && !isGuest) {
+              supabase.from('user_skill_health').upsert({
+                user_id: user.id,
+                node_id: topicId,
+                health_score: newState.healthScore,
+                corruption_level: newState.corruptionLevel,
+                dominant_error_pattern_id: newState.dominantPatternId,
+                consecutive_same_pattern_count: newState.consecutiveSamePattern,
+                total_attempt_count: newState.totalAttempts,
+                last_attempt_at: new Date().toISOString(),
+              }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+            }
           }
         }
 
@@ -685,6 +698,23 @@ export default function App() {
           const patternId = dominantErr === 'sign' ? 'sign_distribution' : dominantErr === 'method' ? 'generic_algebra' : dominantErr ? 'generic_number' : undefined;
           const { newState } = processAttempt(health, false, patternId, topicId);
           cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
+          // Fire-and-forget: sync to Supabase
+          if (user && !isGuest) {
+            supabase.from('user_skill_health').upsert({
+              user_id: user.id,
+              node_id: topicId,
+              health_score: newState.healthScore,
+              corruption_level: newState.corruptionLevel,
+              dominant_error_pattern_id: newState.dominantPatternId,
+              consecutive_same_pattern_count: newState.consecutiveSamePattern,
+              recent_error_count: newState.recentErrorCount,
+              total_attempt_count: newState.totalAttempts,
+              last_attempt_at: new Date().toISOString(),
+              last_error_at: new Date().toISOString(),
+              recommended_recovery_pack_id: newState.corruptionLevel === 'blocked' || newState.corruptionLevel === 'critical'
+                ? (patternId ? (ERROR_PATTERNS[patternId]?.recoveryPackId ?? null) : null) : null,
+            }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+          }
         }
       }
       // Award items even on failure (score-based: only if score >= threshold)

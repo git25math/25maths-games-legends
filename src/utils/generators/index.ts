@@ -11,7 +11,7 @@ export { type DifficultyTier } from './shared';
 // Import all generators from chapter modules
 import { generateIntegerAddMission, generateIntegerMulMission, generateFracAddSameDenMission, generateFracAddMission, generateFracMulMission, generateMixedImproperMission, generatePrimeMission, generateFactorTreeMission, generateFactorsListMission, generateHcfMission, generateLcmMission, generateSquareCubeMission, generateSquareRootMission, generateIndicesMission, generateFdpConvertMission, generateBodmasMission, generatePercentageOfMission, generatePercentageMission, generatePercentageInterestMission, generateEstimationRoundMission, generateStdFormMission, generateSpeedMission, generateVennMission } from './number';
 
-import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission } from './algebra';
+import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateExpandNegMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission } from './algebra';
 
 import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission } from './geometry';
 
@@ -39,7 +39,7 @@ export type GeneratorType =
   | 'FACTORS_LIST_RANDOM' | 'INTEGER_MUL_RANDOM' | 'FDP_CONVERT_RANDOM'
   | 'BODMAS_RANDOM' | 'SIMPLIFY_RANDOM' | 'STATISTICS_MODE_RANDOM'
   | 'SIMPLE_EQ_TWOSTEP_RANDOM' | 'COORDINATES_RANDOM' | 'RATIO_Y7_RANDOM'
-  | 'MIXED_IMPROPER_RANDOM' | 'EXPAND_RANDOM' | 'FACTORISE_RANDOM'
+  | 'MIXED_IMPROPER_RANDOM' | 'EXPAND_RANDOM' | 'EXPAND_NEG_RANDOM' | 'FACTORISE_RANDOM'
   | 'INEQUALITY_RANDOM' | 'STD_FORM_RANDOM' | 'SPEED_RANDOM'
   | 'CIRCLE_Y8_RANDOM' | 'VOLUME_Y8_RANDOM' | 'PERCENTAGE_INTEREST_RANDOM'
   | 'PARALLEL_ANGLES_RANDOM' | 'SYMMETRY_RANDOM' | 'SIMULTANEOUS_Y8_RANDOM'
@@ -79,6 +79,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   SIMPLE_EQ_ADD_RANDOM: generateAddEqMission,
   SIMPLE_EQ_TWOSTEP_RANDOM: generateTwoStepEqMission,
   EXPAND_RANDOM: generateExpandMission,
+  EXPAND_NEG_RANDOM: generateExpandNegMission,
   FACTORISE_RANDOM: generateFactoriseMission,
   SIMPLIFY_RANDOM: generateSimplifyMission,
   INEQUALITY_RANDOM: generateInequalityMission,

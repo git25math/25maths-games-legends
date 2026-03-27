@@ -61,16 +61,31 @@ export const RepairScreen = ({
   const pattern = patternId ? getPattern(patternId) : null;
   const topicTitle = topicInfo ? (lang === 'en' ? topicInfo.topic.title : topicInfo.topic.titleZh) : topicId;
 
-  // Get repair missions for this topic
+  // Get repair missions — prefer pattern-specific generators (e.g., EXPAND_NEG_RANDOM for sign_distribution)
+  const PATTERN_GENERATORS: Record<string, string> = {
+    sign_distribution: 'EXPAND_NEG_RANDOM',
+  };
+  const preferredGen = patternId ? PATTERN_GENERATORS[patternId] : undefined;
+
   const topicMissions = missions.filter(m => {
-    if (!m.kpId) return false;
+    if (!m.kpId || !m.data?.generatorType) return false;
+    // If we have a preferred generator for this pattern, prioritize it
+    if (preferredGen && m.data.generatorType === preferredGen) return true;
     const match = m.kpId.match(/^kp-(\d+\.\d+)/);
-    return match && match[1] === topicId && m.data?.generatorType;
+    return match && match[1] === topicId;
   });
 
-  // Generate questions
+  // Generate questions — prefer pattern-specific missions first
   const [questions] = useState<Mission[]>(() => {
-    const pool = topicMissions.length > 0 ? topicMissions : missions.filter(m => m.data?.generatorType).slice(0, 5);
+    // Sort: preferred generator first
+    const sorted = [...topicMissions].sort((a, b) => {
+      if (preferredGen) {
+        if (a.data?.generatorType === preferredGen && b.data?.generatorType !== preferredGen) return -1;
+        if (b.data?.generatorType === preferredGen && a.data?.generatorType !== preferredGen) return 1;
+      }
+      return 0;
+    });
+    const pool = sorted.length > 0 ? sorted : missions.filter(m => m.data?.generatorType).slice(0, 5);
     if (pool.length === 0) return []; // guard: no questions available
     const qs: Mission[] = [];
     for (let i = 0; i < TOTAL_QUESTIONS; i++) {

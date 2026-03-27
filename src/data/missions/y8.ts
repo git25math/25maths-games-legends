@@ -907,4 +907,27 @@ export const MISSIONS_Y8: Mission[] = [
     secret: { concept: { zh: '时间 = 距离 ÷ 速度。三个量知二求一。', en: 'Time = Distance ÷ Speed. Know two, find the third.' }, formula: '$T = \\frac{D}{S}$', tips: [{ zh: '关羽提示：千里走单骑，时间就是一切！', en: 'Guan Yu Tip: A thousand-mile ride alone — time is everything!' }] },
     storyConsequence: { correct: { zh: 'Y8 课程圆满完结！荆州基业已稳，三分天下的宏图正式展开！', en: 'Y8 curriculum complete! Jingzhou\'s foundation is solid — the grand plan for three kingdoms begins!' }, wrong: { zh: '时间算错，错失战机…', en: 'Time miscalculated — the opportunity is lost...' } },
   },
+  // ═══ Recovery Mission: Negative Bracket Expansion (RP-ALG-001 source) ═══
+  {
+    id: 898, grade: 8, unitId: 6, order: 9,
+    unitTitle: { zh: 'Unit 6: 代数篇 · 隆中对前奏', en: 'Unit 6: Algebra · Prelude to Longzhong' },
+    topic: 'Algebra', type: 'EXPAND' as any,
+    title: { zh: '负号突围', en: 'Negative Breakthrough' },
+    skillName: { zh: '负号分配术', en: 'Negative Distribution' },
+    skillSummary: { zh: '$-a(bx+c) = -abx - ac$', en: '$-a(bx+c) = -abx - ac$' },
+    story: { zh: '敌军设下陷阱，负号隐藏在括号之外——你能正确分配它吗？', en: 'The enemy has set a trap — a negative sign lurks outside the brackets. Can you distribute it correctly?' },
+    description: { zh: '展开负号括号，求 $x$ 的系数', en: 'Expand negative brackets, find the coefficient of $x$' },
+    data: { a: 2, b: 3, c: 4, coeff: -6, constant: -8, answer: -6, generatorType: 'EXPAND_NEG_RANDOM' },
+    difficulty: 'Medium' as any, reward: 180, kpId: 'kp-2.2-03', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮：负号展开是很多人的"隐形敌人"。\n关键就一句话：负号要乘到里面的每一项！\n$-2(3x + 4)$ = $-2 \\times 3x$ 和 $-2 \\times 4$', en: 'Zhuge Liang: "Negative expansion is many people\'s hidden enemy.\nOne key rule: the negative multiplies EVERY term inside!\n$-2(3x + 4)$ = $-2 \\times 3x$ and $-2 \\times 4$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：第一项\n$-2 \\times 3x = -6x$\n负 × 正 = 负', en: 'Zhuge Liang: "First term\n$-2 \\times 3x = -6x$\nNegative × positive = negative"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：第二项\n$-2 \\times 4 = -8$\n负 × 正 = 负\n两项都变负了！', en: 'Zhuge Liang: "Second term\n$-2 \\times 4 = -8$\nNegative × positive = negative\nBoth terms become negative!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：结果\n$-2(3x + 4) = -6x - 8$\n$x$ 的系数是 $-6$', en: 'Zhuge Liang: "Result\n$-2(3x + 4) = -6x - 8$\nCoefficient of $x$ is $-6$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：验算\n$x=1$: 左边 $-2(3+4) = -2 \\times 7 = -14$\n右边 $-6-8 = -14$ ✓', en: 'Zhuge Liang: "Verify\n$x=1$: Left $-2(3+4) = -2 \\times 7 = -14$\nRight $-6-8 = -14$ ✓"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：记住——负号是隐形的敌人，但只要你把它分配到每一项，它就无处遁形！', en: 'Zhuge Liang: "Remember — the negative sign is an invisible enemy, but as long as you distribute it to every term, it has nowhere to hide!"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '负号要分配到括号内的每一项——这是最常见的代数错误。', en: 'The negative sign must be distributed to EVERY term inside — this is the most common algebra mistake.' }, formula: '$-a(bx+c) = -abx - ac$', tips: [{ zh: '诸葛亮提示：负号是陷阱之王！', en: 'Zhuge Liang Tip: The negative sign is the king of traps!' }] },
+    storyConsequence: { correct: { zh: '负号陷阱已破解！你的符号分配术越来越强了！', en: 'Negative trap defeated! Your sign distribution skills are growing!' }, wrong: { zh: '负号又偷袭了…记住，每一项都要乘！', en: 'The negative struck again... Remember, multiply EVERY term!' } },
+  },
 ];

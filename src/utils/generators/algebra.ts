@@ -229,6 +229,73 @@ export function generateExpandMission(template: Mission, tier: DifficultyTier = 
   };
 }
 
+/**
+ * EXPAND_NEG_RANDOM — Negative sign distribution repair generator
+ * Focuses specifically on -a(bx ± c) patterns where students must
+ * correctly distribute the negative sign to ALL terms.
+ * Used by Recovery Pack RP-ALG-001 (Negative Bracket Master).
+ */
+export function generateExpandNegMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  const aPools: Record<number, number[]> = { 1: [2, 3], 2: [2, 3, 4, 5], 3: [3, 4, 5, 6] };
+  const bPools: Record<number, number[]> = { 1: [1, 2], 2: [1, 2, 3], 3: [2, 3, 4] };
+  const cPools: Record<number, number[]> = { 1: [1, 2, 3], 2: [2, 3, 4, 5], 3: [3, 4, 5, 6, 7] };
+
+  const a = pickRandom(aPools[tier]);
+  const b = pickRandom(bPools[tier]);
+  const c = pickRandom(cPools[tier]);
+  // Randomly choose + or - inside brackets
+  const innerSign = pickRandom([1, -1]);
+  const cSigned = c * innerSign;
+
+  // -a(bx + cSigned) = -ab·x + (-a·cSigned)
+  const negA = -a;
+  const coeff = negA * b;       // coefficient of x
+  const constant = negA * cSigned; // constant term
+
+  // Format the expression: -a(bx + c) or -a(bx - c)
+  const innerExpr = innerSign > 0 ? `${coeffStr(b, 'x')} + ${c}` : `${coeffStr(b, 'x')} - ${c}`;
+  const resultExpr = `${coeffStr(coeff, 'x')} ${constant >= 0 ? '+' : '-'} ${Math.abs(constant)}`;
+
+  const description = {
+    zh: `展开 $-${a}(${innerExpr})$，写出 $x$ 的系数。`,
+    en: `Expand $-${a}(${innerExpr})$. What is the coefficient of $x$?`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `负号展开的关键：外面的负号要乘到里面的**每一项**。\n不能只乘第一项就忘了后面！\n\n$-${a}(${innerExpr})$ 意思是：$-${a}$ 要分别乘 $${coeffStr(b, 'x')}$ 和 $${innerSign > 0 ? '+' : '-'}${c}$`,
+        en: `Key to negative expansion: the negative sign multiplies EVERY term inside.\nDon't just multiply the first term and forget the rest!\n\n$-${a}(${innerExpr})$ means: $-${a}$ multiplies both $${coeffStr(b, 'x')}$ and $${innerSign > 0 ? '+' : '-'}${c}$`,
+      },
+    },
+    {
+      text: {
+        zh: `第一项：$-${a} \\times ${coeffStr(b, 'x')} = ${coeffStr(coeff, 'x')}$\n\n负数乘正数 = 负数。所以 $x$ 前面的系数变成了 $${coeff}$。`,
+        en: `First term: $-${a} \\times ${coeffStr(b, 'x')} = ${coeffStr(coeff, 'x')}$\n\nNegative × positive = negative. So the coefficient of $x$ becomes $${coeff}$.`,
+      },
+    },
+    {
+      text: {
+        zh: `第二项：$-${a} \\times (${innerSign > 0 ? '+' : '-'}${c}) = ${constant >= 0 ? '+' : '-'}${Math.abs(constant)}$\n\n${innerSign < 0 ? '负负得正！' : '负正得负！'}\n\n完整结果：$${resultExpr}$`,
+        en: `Second term: $-${a} \\times (${innerSign > 0 ? '+' : '-'}${c}) = ${constant >= 0 ? '+' : ''}${constant}$\n\n${innerSign < 0 ? 'Negative × negative = positive!' : 'Negative × positive = negative!'}\n\nFull result: $${resultExpr}$`,
+      },
+    },
+    {
+      text: {
+        zh: `答案：$x$ 的系数是 $${coeff}$\n\n验算：代入 $x=1$\n左边：$-${a}(${b} ${innerSign > 0 ? '+' : '-'} ${c}) = -${a} \\times ${b + cSigned} = ${negA * (b + cSigned)}$\n右边：$${coeff} ${constant >= 0 ? '+' : '-'} ${Math.abs(constant)} = ${coeff + constant}$ ✓`,
+        en: `Answer: coefficient of $x$ is $${coeff}$\n\nVerify with $x=1$:\nLeft: $-${a}(${b} ${innerSign > 0 ? '+' : '-'} ${c}) = -${a} \\times ${b + cSigned} = ${negA * (b + cSigned)}$\nRight: $${coeff} ${constant >= 0 ? '+' : '-'} ${Math.abs(constant)} = ${coeff + constant}$ ✓`,
+      },
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { a, b, c, coeff, constant, answer: coeff, generatorType: 'EXPAND_NEG_RANDOM' },
+    tutorialSteps,
+  };
+}
+
 export function generateFactoriseMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const narrators = ['诸葛亮', '庞统', '徐庶'];
   const narrator = pickRandom(narrators);
