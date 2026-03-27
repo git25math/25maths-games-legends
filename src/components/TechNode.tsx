@@ -56,6 +56,7 @@ export const TechNode = ({
   isFirst,
   onClick,
 }: {
+  key?: any;
   lang: Language;
   topic: Topic;
   state: TechNodeState;

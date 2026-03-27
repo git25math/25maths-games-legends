@@ -10,6 +10,7 @@ export const TechTreeColumn = ({
   branch,
   onNodeClick,
 }: {
+  key?: any;
   lang: Language;
   branch: TechBranch;
   onNodeClick: (topicId: string) => void;
