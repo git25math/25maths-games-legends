@@ -566,7 +566,7 @@ export const MISSIONS_Y10: Mission[] = [
     title: { zh: '战损评估', en: 'Battle Casualties' },
     skillName: { zh: '百分比计算术', en: 'Percentage Calculation' },
     skillSummary: { zh: '求某个数的百分之几', en: 'Find a percentage of a number' },
-    story: { zh: '赤壁大战后统计战损。曹军号称 80 万，实际损失了一定百分比。', en: 'Post-Red Cliffs battle damage assessment. Cao Cao claimed 800,000 troops, lost a percentage.' },
+    story: { zh: '赤壁大战后统计战损。曹军初始兵力约 {initial} 万，实际损失了一定百分比。', en: 'Post-Red Cliffs battle damage assessment. Cao Cao\'s initial force: {initial} units. Lost a percentage.' },
     description: { zh: '计算百分比变化后的值。', en: 'Calculate the value after percentage change.' },
     data: { initial: 800, rate: -0.35, years: 1, answer: 520, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-1.13-01', sectionId: 'number',

@@ -231,7 +231,7 @@ export const MISSIONS_Y11: Mission[] = [
     title: { zh: '攻城胜算', en: 'Siege Probability' },
     skillName: { zh: '相对频率术', en: 'Relative Frequency' },
     skillSummary: { zh: '概率 = 有利事件 ÷ 总事件', en: 'P = favorable ÷ total' },
-    story: { zh: '根据历史战绩推算攻城胜率。50 次攻城中成功 30 次。', en: 'Estimate siege success rate from historical records. 30 successes in 50 attempts.' },
+    story: { zh: '根据历史战绩推算攻城胜率。{total} 次攻城中成功 {target} 次。', en: 'Estimate siege success rate from historical records. {target} successes in {total} attempts.' },
     description: { zh: '总数 $${total}$，目标事件 $${target}$，求概率。', en: 'Total $${total}$, favorable $${target}$. Find the probability.' },
     data: { total: 50, target: 30, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-8.2-01', sectionId: 'statistics',
