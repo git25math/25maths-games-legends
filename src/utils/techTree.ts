@@ -53,57 +53,97 @@ const CHAPTER_ICONS: Record<string, string> = {
 // Topics in the same chapter are sequential (later topics require earlier ones)
 // Cross-chapter prereqs are defined here
 
+// ═══════════════════════════════════════════════════════════════════════
+// CROSS-CHAPTER PREREQUISITE GRAPH — CIE 0580 Complete Knowledge Network
+// ═══════════════════════════════════════════════════════════════════════
+// Each entry: topicId → [prereq topicIds]
+// Within-chapter linear ordering (topic N → N-1) is handled separately.
+// This map captures ALL non-linear dependencies:
+//   - Cross-chapter links (e.g. Algebra needs Number)
+//   - Within-chapter skip links (e.g. 1.17 needs 1.7, not just 1.16)
+//
+// Audit date: 2026-03-27 | Source: CIE 0580 (2025) syllabus + mathematical logic
+// ═══════════════════════════════════════════════════════════════════════
+
 const CROSS_CHAPTER_PREREQS: Record<string, string[]> = {
-  // Algebra needs basic number skills
-  '2.1': ['1.6'],
-  // Coordinate geometry needs algebra basics
-  '3.1': ['2.1'],
-  // Trigonometry needs geometry + Pythagoras
-  '6.1': ['4.6'],
-  // Mensuration needs geometry basics
-  '5.2': ['4.1'],
-  // ── Cross-chapter dependencies: wave 1 ──
+  // ── Chapter 1: Number (internal skip links) ──
+  // 1.1-1.6 are linearly sequential (default behavior)
+  '1.7':  ['1.3'],             // Indices I ← Powers & roots (x² concept)
+  '1.8':  ['1.7'],             // Standard form ← Indices (10ⁿ notation)
+  '1.10': ['1.9'],             // Limits of accuracy ← Estimation (rounding)
+  '1.11': ['1.4'],             // Ratio & proportion ← Fractions (simplifying ratios = simplifying fractions)
+  '1.12': ['1.11'],            // Rates ← Ratio (speed = distance:time ratio)
+  '1.13': ['1.4'],             // Percentage applications ← Fractions (% = fraction of 100)
+  '1.16': ['1.13', '1.11'],    // Money ← Percentages (interest) + Ratio (exchange rates)
+  '1.17': ['1.7', '1.13'],     // Exponential growth ← Indices (aⁿ) + Percentages (compound %)
+  '1.18': ['1.3', '1.7'],      // Surds ← Powers & roots (√) + Indices (rational exponents)
 
-  // Indices II (ch2) builds on Indices I (ch1) — different chapters, same concept arc
-  '2.4': ['1.7'],
-  // Proportion (ch2) needs Ratio/proportion foundation from ch1
-  '2.8': ['1.11'],
-  // Practical graphs (ch2) are plotted on coordinate axes — needs ch3 coordinates first
-  '2.9': ['3.1'],
-  // Differentiation = gradient of a curve — needs gradient of linear graphs (ch3)
-  '2.12': ['3.3'],
+  // ── Chapter 2: Algebra ──
+  '2.1':  ['1.6'],             // Intro to algebra ← Four operations
+  '2.3':  ['2.2', '1.4'],     // Algebraic fractions ← Manipulation + Fractions (common denominator)
+  '2.4':  ['1.7', '2.1'],     // Indices II ← Indices I + Algebra intro (algebraic bases)
+  '2.5':  ['2.2'],            // Equations ← Manipulation (rearranging)
+  '2.7':  ['2.1'],            // Sequences ← Algebra intro (nth term expressions)
+  '2.8':  ['1.11', '2.5'],    // Proportion ← Ratio + Equations (y = kx² solving)
+  '2.9':  ['3.1', '1.12'],    // Practical graphs ← Coordinates + Rates (distance-time, speed-time)
+  '2.10': ['3.2', '2.5'],     // Function graphs ← Drawing graphs + Equations (y = ax² + bx + c)
+  '2.11': ['2.10', '2.5'],    // Sketching curves ← Function graphs + Equations (factoring for roots)
+  '2.12': ['3.3', '2.4'],     // Differentiation ← Gradient + Indices II (power rule: nxⁿ⁻¹)
+  '2.13': ['2.5', '2.2'],     // Functions ← Equations (inverse) + Manipulation (composite)
 
-  // Scale drawings (ch4) use map ratios (1:50000) — needs Ratio/proportion (ch1)
-  '4.3': ['1.11'],
-  // Similarity & congruency (ch4) relies on ratio as scale factor (ch1)
-  '4.4': ['1.11'],
+  // ── Chapter 3: Coordinate Geometry ──
+  '3.1':  ['2.1'],            // Coordinates ← Algebra intro (substitution into y = ...)
+  '3.2':  ['3.1', '2.5'],     // Drawing linear graphs ← Coordinates + Equations (solving for y)
+  '3.3':  ['3.2', '1.4'],     // Gradient ← Drawing graphs + Fractions (rise/run)
+  '3.4':  ['3.1', '1.3'],     // Length & midpoint ← Coordinates + Powers & roots (√ for distance)
+  '3.5':  ['3.3', '2.5'],     // Line equations ← Gradient + Equations (y = mx + c rearranging)
+  '3.6':  ['3.5'],            // Parallel lines ← Line equations (same gradient)
+  '3.7':  ['3.6', '1.4'],     // Perpendicular lines ← Parallel lines + Fractions (neg. reciprocal)
 
-  // Units of measure (ch5) entry point — needs decimals for conversions (1 m = 0.001 km)
-  '5.1': ['1.4'],
-  // Arcs and sectors (ch5) use fraction-of-circle = (θ/360) — needs Ratio (ch1)
-  '5.3': ['1.11'],
+  // ── Chapter 4: Geometry ──
+  // 4.1 Geometrical terms — foundation, no math prereqs
+  // 4.2 Constructions ← 4.1 (linear default)
+  '4.3':  ['1.11'],            // Scale drawings ← Ratio (map scale 1:50000)
+  '4.4':  ['1.11'],            // Similarity & congruence ← Ratio (scale factor)
+  // 4.5 Symmetry ← 4.1 (via linear chain)
+  '4.6':  ['2.5'],             // Angles ← Equations (forming & solving angle equations)
+  '4.7':  ['4.6'],             // Circle theorems ← Angles (angle at centre, etc.)
+  '4.8':  ['4.2', '4.7'],      // Constructions & loci ← Constructions + Circle theorems
 
-  // Sine/cosine rule chapter includes area = ½ab sinC — needs area concept (ch5)
-  '6.5': ['5.2'],
-  // 3D trigonometry works inside cuboids/pyramids — needs 3D shape knowledge (ch5)
-  '6.6': ['5.4'],
+  // ── Chapter 5: Mensuration ──
+  '5.1':  ['1.4'],             // Units ← Fractions/decimals (unit conversions)
+  '5.2':  ['4.1', '1.6'],     // Area & perimeter ← Geometry terms + Four operations
+  '5.3':  ['5.2', '1.11'],    // Circles, arcs, sectors ← Area + Ratio (θ/360 fraction)
+  '5.4':  ['5.2', '5.3'],     // Surface area & volume ← Area + Circles (cylinder = circle + rect)
+  '5.5':  ['5.2', '5.3'],     // Compound shapes ← Area + Circles
 
-  // Transformations (ch7): needs coordinates (ch3) AND angles for rotation (ch4)
-  '7.1': ['3.1', '4.6'],
-  // Vector magnitude (ch7) uses Pythagoras directly (ch6)
-  '7.3': ['6.1'],
-  // Vector geometry proofs need algebraic manipulation — expressions like OA + AB (ch2)
-  '7.4': ['2.2'],
+  // ── Chapter 6: Trigonometry ──
+  '6.1':  ['4.6', '1.3'],     // Pythagoras ← Angles (right angle) + Powers & roots (√)
+  '6.2':  ['6.1', '1.4'],     // SOHCAHTOA ← Pythagoras + Fractions (trig ratios)
+  '6.3':  ['6.2', '1.18'],    // Exact trig values ← SOHCAHTOA + Surds (√2, √3)
+  '6.4':  ['6.2', '2.10'],    // Trig graphs ← SOHCAHTOA + Function graphs (y = sin x)
+  '6.5':  ['6.2', '5.2'],     // Sine/cosine rule ← SOHCAHTOA + Area (½ab sinC)
+  '6.6':  ['6.2', '5.4'],     // 3D trig ← SOHCAHTOA + Surface area/volume (3D shapes)
 
-  // Probability (ch8) is expressed as fractions/decimals — ch1 foundation
-  '8.1': ['1.4'],
+  // ── Chapter 7: Transformations & Vectors ──
+  '7.1':  ['3.1', '4.6'],     // Transformations ← Coordinates + Angles (rotation)
+  '7.2':  ['3.1', '2.1'],     // Vectors 2D ← Coordinates + Algebra (vector notation a + b)
+  '7.3':  ['7.2', '6.1'],     // Vector magnitude ← Vectors + Pythagoras (|v| = √(x²+y²))
+  '7.4':  ['7.2', '2.2'],     // Vector geometry ← Vectors + Manipulation (OA + AB = OB)
 
-  // Statistics entry point (ch9) — data tables need basic arithmetic (ch1)
-  '9.1': ['1.6'],
-  // Scatter diagrams (ch9) require reading coordinate axes — ch3
-  '9.5': ['3.1'],
-  // Histograms (ch9) use frequency density = freq ÷ class width = ratio (ch1)
-  '9.7': ['1.11'],
+  // ── Chapter 8: Probability ──
+  '8.1':  ['1.4'],             // Intro probability ← Fractions/decimals/percentages
+  '8.2':  ['8.1'],             // Relative frequency ← Intro probability
+  '8.3':  ['8.1', '1.4'],     // Combined events ← Intro prob + Fractions (P(A)×P(B))
+  '8.4':  ['8.3'],             // Conditional probability ← Combined events
+
+  // ── Chapter 9: Statistics ──
+  '9.1':  ['1.6'],             // Classifying data ← Four operations
+  '9.3':  ['9.1', '1.6'],     // Averages ← Data classification + Operations (mean = sum/n)
+  '9.4':  ['9.1', '1.4'],     // Charts ← Data + Fractions (pie chart sectors)
+  '9.5':  ['3.1', '9.1'],     // Scatter diagrams ← Coordinates + Data
+  '9.6':  ['9.3', '9.4'],     // Cumulative frequency ← Averages + Charts (reading graphs)
+  '9.7':  ['9.4', '1.11'],    // Histograms ← Charts + Ratio (freq density = freq ÷ width)
 };
 
 /** Get prerequisite topic IDs for a given topic */
