@@ -350,8 +350,14 @@ export function generateFracAddSameDenMission(template: Mission): Mission {
     { text: { zh: `${narrator}：做得好！记住：分母是"切法"，分子是"拿法"。\n切法一样才能直接加！`, en: `${narrator}: "Well done! Remember: denominator = how you cut, numerator = how much you take.\nSame cut means just add!"` }, highlightField: 'ans' as const },
   ];
 
+  const story: BilingualText = {
+    zh: `桃园结义后第一顿饭！一块大饼切成 ${den} 等份。刘备拿了 $\\frac{${n1}}{${den}}$，关羽拿了 $\\frac{${n2}}{${den}}$。一共拿了多少？`,
+    en: `First meal after the Peach Garden Oath! A flatbread cut into ${den} equal pieces. Liu Bei takes $\\frac{${n1}}{${den}}$, Guan Yu takes $\\frac{${n2}}{${den}}$. How much in total?`,
+  };
+
   return {
     ...template,
+    story,
     description,
     data: { n1, d1: den, n2, d2: den, op: '+', ansNum, ansDen, generatorType: 'FRAC_ADD_SAME_DEN_RANDOM' as any },
     tutorialSteps,
