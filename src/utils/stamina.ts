@@ -1,7 +1,9 @@
 // Daily Boss Trial Stamina — 3 attempts per day, resets at midnight
 // Practice (GREEN/AMBER/RED) is always free; only Battle costs stamina
 
-const MAX_DAILY = 3;
+import { STAMINA } from './gameBalance';
+
+const MAX_DAILY = STAMINA.MAX_DAILY;
 
 export type DailyStamina = {
   date: string;   // YYYYMMDD

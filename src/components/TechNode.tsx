@@ -139,7 +139,7 @@ export const TechNode = ({
                state.corruptionPattern === 'magnitude' ? '×10' :
                state.corruptionPattern === 'method' ? '?' : '!'}
               {' '}
-              {lang === 'en' ? 'Corrupted' : '受损'}
+              {lang === 'en' ? 'Corrupted' : lang === 'zh_TW' ? '受損' : '受损'}
             </span>
           </div>
         )}

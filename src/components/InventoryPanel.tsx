@@ -86,11 +86,12 @@ export const InventoryPanel = ({
 
         {/* How to earn hint */}
         <div className="mt-4 px-3 py-2 rounded-xl bg-white/5 text-[10px] text-white/30">
-          {lang === 'en' ? (
-            <>🔨 Score ≥80% in battle · 📜 Complete Recovery Pack · 💎 Red difficulty, 0 errors</>
-          ) : (
-            <>🔨 闯关≥80分 · 📜 完成修复训练 · 💎 红色难度零失误</>
-          )}
+          {lang === 'en'
+            ? <>🔨 Score ≥80% in battle · 📜 Complete Recovery Pack · 💎 Red difficulty, 0 errors</>
+            : lang === 'zh_TW'
+            ? <>🔨 闯關≥80分 · 📜 完成修復訓練 · 💎 紅色難度零失誤</>
+            : <>🔨 闯关≥80分 · 📜 完成修复训练 · 💎 红色难度零失误</>
+          }
         </div>
       </motion.div>
     </motion.div>

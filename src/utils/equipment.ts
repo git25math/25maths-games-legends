@@ -1,13 +1,19 @@
 import type { EquipmentState, KPEquipment } from '../types';
 import type { MistakeRecord } from './errorMemory';
 
+import { EQUIPMENT_DECAY } from './gameBalance';
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** Thresholds in days (effective days, including error penalty) */
-const THRESHOLDS = { worn: 7, damaged: 14, broken: 30 };
+const THRESHOLDS = {
+  worn: EQUIPMENT_DECAY.WORN_DAYS,
+  damaged: EQUIPMENT_DECAY.DAMAGED_DAYS,
+  broken: EQUIPMENT_DECAY.BROKEN_DAYS,
+};
 
 /** Error penalty: each recorded error adds this many "effective days" of decay */
-const ERROR_PENALTY_DAYS = 1.5;
+const ERROR_PENALTY_DAYS = EQUIPMENT_DECAY.ERROR_PENALTY_DAYS;
 
 /** Compute equipment state from time since last mastery */
 export function getEquipmentState(lastMasteredAt: number): EquipmentState {

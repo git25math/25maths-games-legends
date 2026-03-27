@@ -45,11 +45,11 @@ const LABELS = {
   },
 };
 
-const STATE_LABELS: Record<EquipmentState, { zh: string; en: string }> = {
-  pristine: { zh: '崭新', en: 'Pristine' },
-  worn: { zh: '磨损', en: 'Worn' },
-  damaged: { zh: '受损', en: 'Damaged' },
-  broken: { zh: '破损', en: 'Broken' },
+const STATE_LABELS: Record<EquipmentState, { zh: string; zh_TW: string; en: string }> = {
+  pristine: { zh: '崭新', zh_TW: '嶄新', en: 'Pristine' },
+  worn: { zh: '磨损', zh_TW: '磨損', en: 'Worn' },
+  damaged: { zh: '受损', zh_TW: '受損', en: 'Damaged' },
+  broken: { zh: '破损', zh_TW: '破損', en: 'Broken' },
 };
 
 export const RepairDialog = ({
@@ -135,7 +135,7 @@ export const RepairDialog = ({
                 <p className="text-sm font-bold text-white">{missionTitle}</p>
                 <div className="flex items-center gap-2 mt-1">
                   <span className={`text-xs font-bold ${colors.text}`}>
-                    {lang === 'en' ? stateLabel.en : stateLabel.zh}
+                    {lt(stateLabel, lang)}
                   </span>
                   <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
                     <div

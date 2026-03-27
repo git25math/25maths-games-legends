@@ -20,12 +20,14 @@ export const EquipmentPanel = ({
   completedMissions,
   missions,
   onRepair,
+  onRepairWithItem,
   onClose,
 }: {
   lang: Language;
   completedMissions: Record<string, unknown>;
   missions: Mission[];
   onRepair: (missionId: number) => void;
+  onRepairWithItem?: (missionId: number) => void;
   onClose: () => void;
 }) => {
   const t = translations[lang];
@@ -85,20 +87,45 @@ export const EquipmentPanel = ({
                     <div className="font-bold text-white text-sm truncate">
                       {getMissionTitle(eq.missionId)}
                     </div>
-                    <div className={`text-xs ${colors.text}`}>
-                      {lt(label, lang)}
-                      {needsRepair && ` · +${bonus} XP`}
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className={`text-[10px] font-bold ${colors.text}`}>
+                        {lt(label, lang)}
+                      </span>
+                      <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all ${
+                            eq.health > 60 ? 'bg-amber-400' :
+                            eq.health > 30 ? 'bg-rose-400' : 'bg-slate-400'
+                          }`}
+                          style={{ width: `${eq.health}%` }}
+                        />
+                      </div>
+                      <span className="text-[9px] text-white/30">{eq.health}%</span>
                     </div>
+                    {needsRepair && (
+                      <div className={`text-[10px] ${colors.text} mt-0.5`}>+{bonus} XP</div>
+                    )}
                   </div>
 
                   {needsRepair && (
-                    <button
-                      onClick={() => { playTap(); onRepair(eq.missionId); }}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-xs font-bold hover:bg-amber-500/30 transition-all shrink-0"
-                    >
-                      <Wrench size={14} />
-                      {(t as any).repair ?? '修复'}
-                    </button>
+                    <div className="flex items-center gap-1 shrink-0">
+                      {onRepairWithItem && (
+                        <button
+                          onClick={() => { playTap(); onRepairWithItem(eq.missionId); }}
+                          className="flex items-center gap-1 px-2 py-1.5 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded-lg text-xs font-bold hover:bg-purple-500/30 transition-all"
+                          title={lang === 'en' ? 'Use item from backpack' : '使用背包道具'}
+                        >
+                          🔨
+                        </button>
+                      )}
+                      <button
+                        onClick={() => { playTap(); onRepair(eq.missionId); }}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-xs font-bold hover:bg-amber-500/30 transition-all"
+                      >
+                        <Wrench size={14} />
+                        {(t as any).repair ?? '修复'}
+                      </button>
+                    </div>
                   )}
                 </div>
               );

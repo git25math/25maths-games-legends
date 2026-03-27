@@ -6,6 +6,7 @@ import type { Chapter, Topic } from '../data/curriculum/kp-registry';
 import { CHAPTERS } from '../data/curriculum/kp-registry';
 import { hasAnyPracticeCompletion } from './completionState';
 import type { MistakeRecord } from './errorMemory';
+import { TECH_TREE } from './gameBalance';
 import { getDominantPattern } from './errorMemory';
 import type { ErrorType } from './diagnoseError';
 
@@ -131,7 +132,7 @@ function getTopicCorruption(
 
   for (const mid of missionIds) {
     const rec = mistakes[String(mid)];
-    if (rec && rec.count >= 5) {
+    if (rec && rec.count >= TECH_TREE.CORRUPTION_ERROR_THRESHOLD) {
       if (rec.count > maxErrors) {
         maxErrors = rec.count;
         dominantPattern = getDominantPattern(rec);

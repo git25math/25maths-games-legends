@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, GitBranch, Wrench, ChevronRight } from 'lucide-react';
+import { ArrowLeft, GitBranch, Wrench, ChevronRight, Swords, BookOpen } from 'lucide-react';
 import type { Language, Mission, UserProfile } from '../types';
 import { computeTechTree, getTopicMissions, getTopicInfo } from '../utils/techTree';
 import type { TechNodeState } from '../utils/techTree';
@@ -201,29 +201,44 @@ export const TechTreeScreen = ({
                       profile.completed_missions[String(mission.id)]
                     );
                     return (
-                      <button
+                      <div
                         key={mission.id}
-                        onClick={() => onPracticeStart(mission)}
-                        className={`w-full text-left rounded-xl border p-3 flex items-center gap-2 transition-all ${
+                        className={`rounded-xl border p-3 transition-all ${
                           completed
-                            ? 'border-emerald-500/20 bg-emerald-950/20 hover:bg-emerald-950/30'
-                            : 'border-white/10 bg-white/5 hover:bg-white/10'
+                            ? 'border-emerald-500/20 bg-emerald-950/20'
+                            : 'border-white/10 bg-white/5'
                         }`}
                       >
-                        <div className="flex-1 min-w-0">
-                          <p className={`text-sm font-bold ${completed ? 'text-emerald-400' : 'text-white'}`}>
-                            {lt(mission.title, lang)}
-                          </p>
-                          {mission.skillName && (
-                            <p className="text-[10px] text-white/30 truncate">{lt(mission.skillName, lang)}</p>
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm font-bold ${completed ? 'text-emerald-400' : 'text-white'}`}>
+                              {lt(mission.title, lang)}
+                            </p>
+                            {mission.skillName && (
+                              <p className="text-[10px] text-white/30 truncate">{lt(mission.skillName, lang)}</p>
+                            )}
+                          </div>
+                          {completed && (
+                            <span className="text-[10px] text-emerald-400 font-bold">{l.completed}</span>
                           )}
                         </div>
-                        {completed ? (
-                          <span className="text-[10px] text-emerald-400 font-bold">{l.completed}</span>
-                        ) : (
-                          <ChevronRight size={14} className="text-white/30" />
-                        )}
-                      </button>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => onPracticeStart(mission)}
+                            className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold hover:bg-emerald-500/25 transition-colors"
+                          >
+                            <BookOpen size={12} />
+                            {lang === 'en' ? 'Practice' : lang === 'zh_TW' ? '練習' : '练习'}
+                          </button>
+                          <button
+                            onClick={() => onMissionStart(mission)}
+                            className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-bold hover:bg-rose-500/25 transition-colors"
+                          >
+                            <Swords size={12} />
+                            {lang === 'en' ? 'Battle' : lang === 'zh_TW' ? '闯關' : '闯关'}
+                          </button>
+                        </div>
+                      </div>
                     );
                   })}
                 </div>

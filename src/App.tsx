@@ -6,7 +6,7 @@ import { Languages, LogOut, XCircle } from 'lucide-react';
 import type { Language, Mission, GameState, DifficultyMode, KPEquipment } from './types';
 import { computeRepairBonus } from './utils/equipment';
 import { supabase } from './supabase';
-import { recordErrors, getMissionErrorSummary, getMistakes as getMistakesMap } from './utils/errorMemory';
+import { recordErrors, getMissionErrorSummary, getMistakes as getMistakesMap, getDominantPattern } from './utils/errorMemory';
 import { CHARACTERS } from './data/characters';
 import { useAuth } from './hooks/useAuth';
 import { useProfile } from './hooks/useProfile';
@@ -35,7 +35,7 @@ import { hasAnyPracticeCompletion, markPracticeCompleted } from './utils/complet
 import { getRankMultiplier } from './utils/pkRank';
 import { getStamina, getRemainingAttempts, consumeAttempt, setStamina } from './utils/stamina';
 import { getInventory, setInventory } from './utils/inventory';
-import { awardBattleItems } from './utils/repairItems';
+import { awardBattleItems, computeRecoveryReward } from './utils/repairItems';
 
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
 const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
@@ -155,6 +155,7 @@ export default function App() {
   const [pkCountdown, setPkCountdown] = useState<number | null>(null); // seconds remaining, null = no countdown
   const [showStaminaGate, setShowStaminaGate] = useState(false);
   const [pendingBattleMission, setPendingBattleMission] = useState<Mission | null>(null);
+  const [itemRewardToast, setItemRewardToast] = useState<{ items: { itemId: string; reason: string }[] } | null>(null);
 
   // Refs to accumulate mid-battle updates that get merged into handleBattleComplete's single save
   const pendingSeasonTasksRef = useRef<string[]>([]);
@@ -545,6 +546,11 @@ export default function App() {
         );
         if (awarded.length > 0) {
           cm._inventory = newInventory;
+          // Show toast after a short delay (after battle result animation)
+          setTimeout(() => {
+            setItemRewardToast({ items: awarded });
+            setTimeout(() => setItemRewardToast(null), 3500);
+          }, 1500);
         }
 
         // Step 5: Merge pending errors into mistake memory
@@ -580,12 +586,12 @@ export default function App() {
         p_success: false, p_score: score,
       });
     }
-    // Consume stamina for failed battles too (success path already consumed above)
+    // Failed battles: consume stamina + record errors in single write
     if (!success && profile && activeMission) {
       const cm = { ...(profile.completed_missions as any) };
-      const currentStamina = getStamina(cm);
-      cm._stamina = consumeAttempt(currentStamina);
-      // Merge pending errors on failure too
+      // Stamina
+      cm._stamina = consumeAttempt(getStamina(cm));
+      // Errors
       if (pendingErrorsRef.current.length > 0) {
         cm._mistakes = recordErrors(
           (cm._mistakes ?? {}) as any,
@@ -593,7 +599,19 @@ export default function App() {
           pendingErrorsRef.current,
         );
       }
+      // Award items even on failure (score-based: only if score >= threshold)
+      const { inventory: newInv, awarded } = awardBattleItems(
+        getInventory(cm), false, score, selectedDifficulty, pendingErrorsRef.current.length,
+      );
+      if (awarded.length > 0) cm._inventory = newInv;
+      // Single atomic write
       await updateProfile({ completed_missions: cm });
+      if (awarded.length > 0) {
+        setTimeout(() => {
+          setItemRewardToast({ items: awarded });
+          setTimeout(() => setItemRewardToast(null), 3500);
+        }, 1500);
+      }
     }
     // Always drain pending refs (even on failure, so stale data doesn't leak to next battle)
     pendingSeasonTasksRef.current = [];
@@ -819,6 +837,25 @@ export default function App() {
                       setGameState('practice');
                     }
                   }}
+                  onRepairWithItem={async (missionId, itemId) => {
+                    if (!profile) return;
+                    const cm = { ...(profile.completed_missions as any) };
+                    const inv = getInventory(cm);
+                    const { useItem } = await import('./utils/inventory');
+                    const newInv = useItem(inv, itemId);
+                    if (!newInv) return;
+                    // Reset equipment mastery timestamp to now (repair)
+                    if (cm._equipment?.[String(missionId)]) {
+                      cm._equipment[String(missionId)].lastMasteredAt = Date.now();
+                      cm._equipment[String(missionId)].repairCount = (cm._equipment[String(missionId)].repairCount ?? 0) + 1;
+                    }
+                    // Clear mistake record for this mission
+                    if (cm._mistakes?.[String(missionId)]) {
+                      cm._mistakes[String(missionId)] = { count: 0, lastWrong: '', patterns: {} };
+                    }
+                    cm._inventory = newInv;
+                    await updateProfile({ completed_missions: cm });
+                  }}
                   hotTopicInfo={hotTopic}
                   onLeaderboard={() => setGameState('leaderboard')}
                   onAchievements={() => setGameState('achievements')}
@@ -935,7 +972,7 @@ export default function App() {
                   }}
                   repairMode={isRepairMode}
                   onRepairComplete={async () => {
-                    // Inline repair + season into single updateProfile (avoids stale-profile race)
+                    // Inline repair + season + scroll reward into single updateProfile
                     if (profile) {
                       const cm = { ...profile.completed_missions } as any;
                       const eq = cm._equipment?.[String(activeMission.id)] as KPEquipment | undefined;
@@ -947,6 +984,26 @@ export default function App() {
                           lastMasteredAt: Date.now(),
                           repairCount: eq.repairCount + 1,
                         };
+                      }
+                      // Award Purify Scroll based on dominant error pattern
+                      const mistakesMap = getMistakesMap(cm);
+                      const missionMistakes = mistakesMap[String(activeMission.id)];
+                      let scrollAwarded: { itemId: string; reason: string } | null = null;
+                      if (missionMistakes) {
+                        const dominant = getDominantPattern(missionMistakes);
+                        if (dominant) {
+                          // Recovery Pack = 100% accuracy (completed 3/3 correct)
+                          scrollAwarded = computeRecoveryReward(dominant, 1.0);
+                          if (scrollAwarded) {
+                            const inv = getInventory(cm);
+                            const { addItem } = await import('./utils/inventory');
+                            cm._inventory = addItem(inv, scrollAwarded.itemId);
+                          }
+                        }
+                      }
+                      // Clear mistake record after successful repair
+                      if (cm._mistakes?.[String(activeMission.id)]) {
+                        cm._mistakes[String(activeMission.id)] = { count: 0, lastWrong: '', patterns: {} };
                       }
                       // Season task: weekly_repair_1
                       let sp = getSeasonProgress(cm);
@@ -963,6 +1020,13 @@ export default function App() {
                       if (bonus > 0) {
                         setRepairToast({ bonus });
                         setTimeout(() => setRepairToast(null), 3000);
+                      }
+                      // Show scroll reward toast after repair toast
+                      if (scrollAwarded) {
+                        setTimeout(() => {
+                          setItemRewardToast({ items: [scrollAwarded!] });
+                          setTimeout(() => setItemRewardToast(null), 3500);
+                        }, bonus > 0 ? 3200 : 500);
                       }
                     } else {
                       setIsRepairMode(false);
@@ -1282,6 +1346,33 @@ export default function App() {
                 }}
               />
             </Suspense>
+          )}
+        </AnimatePresence>
+
+        {/* ═══ Item Reward Toast ═══ */}
+        <AnimatePresence>
+          {itemRewardToast && (
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 60 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[90] flex items-center gap-3 px-6 py-3 bg-purple-500/90 backdrop-blur-md border border-purple-400/50 rounded-2xl shadow-2xl pointer-events-none"
+            >
+              <span className="text-xl">{itemRewardToast.items[0]?.itemId === 'crystal' ? '💎' : itemRewardToast.items[0]?.itemId?.startsWith('scroll') ? '📜' : '🔨'}</span>
+              <div>
+                <p className="text-white font-black text-sm">
+                  {lang === 'en' ? 'Item Obtained!' : lang === 'zh_TW' ? '獲得道具！' : '获得道具！'}
+                </p>
+                <p className="text-white/70 font-bold text-xs">
+                  {itemRewardToast.items.map(i =>
+                    i.itemId === 'crystal' ? (lang === 'en' ? 'Master Crystal' : '精通水晶') :
+                    i.itemId === 'hammer' ? (lang === 'en' ? 'Repair Hammer' : '修复锤') :
+                    (lang === 'en' ? 'Purify Scroll' : '净化卷轴')
+                  ).join(' + ')}
+                </p>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
 

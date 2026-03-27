@@ -16,18 +16,23 @@ import { getDailyMission, isDailyCompleted, getSecondsUntilMidnight, formatCount
 import { MissionProgressBar } from '../components/MissionProgressBar';
 import { SkillTreePanel } from '../components/SkillTreePanel';
 import { EquipmentPanel } from '../components/EquipmentPanel';
+import { InventoryPanel } from '../components/InventoryPanel';
+import { RepairDialog } from '../components/RepairDialog';
 import { BattlePassPanel } from '../components/BattlePassPanel';
 import { DailyQuestPanel } from '../components/DailyQuestPanel';
 import { getSeasonLevel, getSeasonBorder, getSeasonTitle } from '../data/seasons/season1';
 import { getSeasonProgress } from '../utils/seasonTracker';
-import { getEquipmentState, countNeedsRepair, EQUIPMENT_COLORS } from '../utils/equipment';
+import { getEquipmentState, countNeedsRepair, EQUIPMENT_COLORS, getEquipmentHealth } from '../utils/equipment';
+import { healthToEquipmentState } from '../utils/repairItems';
 import type { KPEquipment, EquipmentState } from '../types';
 import { getExpeditionsForGrade, type Expedition } from '../data/expeditions';
 import { getNextMilestone } from '../data/streakMilestones';
-import { getWeakMissions, getMistakes, rankByWeakness } from '../utils/errorMemory';
+import { getWeakMissions, getMistakes, rankByWeakness, getDominantPattern } from '../utils/errorMemory';
+import type { MistakeRecord } from '../utils/errorMemory';
 import { AssignmentBanner, useAssignedMissionIds } from '../components/AssignmentBanner';
 import { StaminaBar } from '../components/StaminaBar';
 import { getStamina, getRemainingAttempts } from '../utils/stamina';
+import { getInventory, getTotalItems } from '../utils/inventory';
 import type { CharacterProgression } from '../types';
 import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completionState';
 
@@ -89,6 +94,7 @@ export const MapScreen = ({
   onUnlockSkill,
   onEquipSkill,
   onRepairEquipment,
+  onRepairWithItem,
   onStartExpedition,
   hotTopicInfo,
   onLeaderboard,
@@ -114,6 +120,7 @@ export const MapScreen = ({
   onUnlockSkill?: (charId: string, skillId: string) => void;
   onEquipSkill?: (charId: string, skillId: string | null) => void;
   onRepairEquipment?: (missionId: number) => void;
+  onRepairWithItem?: (missionId: number, itemId: string) => void;
   onStartExpedition?: (expeditionId: string) => void;
   hotTopicInfo?: { topic: string; label: { zh: string; zh_TW: string; en: string }; multiplier: number };
   onLeaderboard?: () => void;
@@ -127,6 +134,8 @@ export const MapScreen = ({
   const [showSkillTree, setShowSkillTree] = useState(false);
   const [showEquipmentPanel, setShowEquipmentPanel] = useState(false);
   const [showBattlePass, setShowBattlePass] = useState(false);
+  const [showInventory, setShowInventory] = useState(false);
+  const [repairDialogTarget, setRepairDialogTarget] = useState<number | null>(null);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [expandedCompletedUnit, setExpandedCompletedUnit] = useState<string | null>(null);
 
@@ -581,6 +590,17 @@ export const MapScreen = ({
                     </button>
                   );
                 })()}
+                {(() => {
+                  const itemCount = getTotalItems(getInventory(profile.completed_missions as Record<string, unknown>));
+                  return (
+                    <button onClick={() => setShowInventory(true)} className="relative px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors">
+                      🎒 {lang === 'en' ? 'Backpack' : lang === 'zh_TW' ? '背包' : '背包'}
+                      {itemCount > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-purple-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">{itemCount}</span>
+                      )}
+                    </button>
+                  );
+                })()}
                 {onLeaderboard && (
                   <button onClick={onLeaderboard} className="px-2 py-0.5 bg-yellow-600/20 border border-yellow-500/30 rounded text-xs text-yellow-300 hover:bg-yellow-600/40 transition-colors flex items-center gap-1">
                     🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
@@ -661,6 +681,12 @@ export const MapScreen = ({
                         )}
                       </button>
                     )}
+                    <button onClick={() => { setShowInventory(true); setShowMoreMenu(false); }} className="relative px-3 py-1.5 bg-amber-600/20 border border-amber-500/30 rounded-lg text-xs text-amber-300">
+                      🎒 {lang === 'en' ? 'Backpack' : lang === 'zh_TW' ? '背包' : '背包'}
+                      {getTotalItems(getInventory(profile.completed_missions as Record<string, unknown>)) > 0 && (
+                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-purple-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">{getTotalItems(getInventory(profile.completed_missions as Record<string, unknown>))}</span>
+                      )}
+                    </button>
                     {onLeaderboard && (
                       <button onClick={() => { onLeaderboard(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-yellow-600/20 border border-yellow-500/30 rounded-lg text-xs text-yellow-300">
                         🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
@@ -904,9 +930,48 @@ export const MapScreen = ({
           completedMissions={profile.completed_missions as Record<string, unknown>}
           missions={missions}
           onRepair={(missionId) => { setShowEquipmentPanel(false); onRepairEquipment(missionId); }}
+          onRepairWithItem={onRepairWithItem ? (missionId) => {
+            setShowEquipmentPanel(false);
+            setRepairDialogTarget(missionId);
+          } : undefined}
           onClose={() => setShowEquipmentPanel(false)}
         />
       )}
+
+      {showInventory && (
+        <InventoryPanel
+          lang={lang}
+          completedMissions={profile.completed_missions as Record<string, unknown>}
+          onClose={() => setShowInventory(false)}
+        />
+      )}
+
+      {repairDialogTarget !== null && onRepairWithItem && (() => {
+        const cm = profile.completed_missions as Record<string, unknown>;
+        const mission = missions.find(m => m.id === repairDialogTarget);
+        if (!mission) return null;
+        const eq = (cm._equipment as Record<string, { lastMasteredAt: number }> | undefined)?.[String(repairDialogTarget)];
+        const mistakesMap = getMistakes(cm) as Record<string, MistakeRecord>;
+        const mRecord = mistakesMap[String(repairDialogTarget)];
+        const health = eq ? getEquipmentHealth(eq.lastMasteredAt, mRecord) : 0;
+        const dominantError = mRecord ? getDominantPattern(mRecord) : null;
+        const equipmentState = healthToEquipmentState(health);
+        return (
+          <RepairDialog
+            lang={lang}
+            missionTitle={lt(mission.title, lang)}
+            equipmentState={equipmentState}
+            equipmentHealth={health}
+            dominantError={dominantError}
+            completedMissions={cm}
+            onRepair={(itemId) => {
+              onRepairWithItem(repairDialogTarget, itemId);
+              setRepairDialogTarget(null);
+            }}
+            onClose={() => setRepairDialogTarget(null)}
+          />
+        );
+      })()}
     </motion.div>
   );
 };

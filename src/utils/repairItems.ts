@@ -7,6 +7,7 @@ import type { MistakeRecord } from './errorMemory';
 import { getDominantPattern } from './errorMemory';
 import type { InventoryMap, RepairItemDef } from './inventory';
 import { addItem, getItemDef, getEffectiveRepairPower } from './inventory';
+import { ITEM_REWARDS } from './gameBalance';
 
 /** Determine which items to award after a battle */
 export function computeBattleRewards(
@@ -17,8 +18,8 @@ export function computeBattleRewards(
 ): { itemId: string; reason: string }[] {
   const rewards: { itemId: string; reason: string }[] = [];
 
-  // Hammer: complete any battle with score ≥ 80%
-  if (success && score >= 80) {
+  // Hammer: complete any battle with score ≥ threshold
+  if (success && score >= ITEM_REWARDS.HAMMER_MIN_SCORE) {
     rewards.push({ itemId: 'hammer', reason: 'battle_score_80' });
   }
 
@@ -35,7 +36,7 @@ export function computeRecoveryReward(
   errorPattern: ErrorType,
   accuracy: number,
 ): { itemId: string; reason: string } | null {
-  if (accuracy < 0.8) return null;
+  if (accuracy < ITEM_REWARDS.SCROLL_MIN_ACCURACY) return null;
 
   // Map error pattern to corresponding scroll
   const scrollMap: Record<ErrorType, string> = {
