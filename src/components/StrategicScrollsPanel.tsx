@@ -389,16 +389,16 @@ export function StrategicScrollsPanel({ lang, onClose }: { lang: Language; onClo
         </div>
 
         {/* ── Navigation Footer ── */}
-        <div className="p-3 sm:p-4 border-t border-white/8 flex items-center justify-between gap-3">
+        <div className="p-3 sm:p-4 border-t border-white/8 flex items-center gap-2">
           <button
             onClick={prev}
-            className="flex items-center gap-1 px-3 py-2 bg-white/8 hover:bg-white/15 rounded-xl text-white/60 hover:text-white text-xs font-bold transition-colors"
+            className="flex-shrink-0 flex items-center justify-center gap-1 w-16 sm:w-20 py-2 bg-white/8 hover:bg-white/15 rounded-xl text-white/60 hover:text-white text-xs font-bold transition-colors"
           >
             <ChevronLeft size={14} />
             {lang === 'en' ? 'Prev' : '上一篇'}
           </button>
 
-          <div className="flex items-center gap-1">
+          <div className="flex-1 flex items-center justify-center gap-1">
             {SCROLLS.map((_, i) => (
               <div
                 key={i}
@@ -410,7 +410,7 @@ export function StrategicScrollsPanel({ lang, onClose }: { lang: Language; onClo
           {activeIndex < SCROLLS.length - 1 ? (
             <button
               onClick={next}
-              className="flex items-center gap-1 px-3 py-2 bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/30 rounded-xl text-amber-300 hover:text-amber-200 text-xs font-bold transition-colors"
+              className="flex-shrink-0 flex items-center justify-center gap-1 w-16 sm:w-20 py-2 bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/30 rounded-xl text-amber-300 hover:text-amber-200 text-xs font-bold transition-colors"
             >
               {lang === 'en' ? 'Next' : '下一篇'}
               <ChevronRight size={14} />
@@ -418,10 +418,10 @@ export function StrategicScrollsPanel({ lang, onClose }: { lang: Language; onClo
           ) : (
             <button
               onClick={onClose}
-              className="flex items-center gap-1 px-3 py-2 bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/30 rounded-xl text-emerald-300 hover:text-emerald-200 text-xs font-bold transition-colors"
+              className="flex-shrink-0 flex items-center justify-center gap-1 w-16 sm:w-20 py-2 bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/30 rounded-xl text-emerald-300 hover:text-emerald-200 text-xs font-bold transition-colors"
             >
               <ScrollText size={14} />
-              {closeBtnLabel}
+              <span className="truncate">{lang === 'en' ? 'Done' : closeBtnLabel}</span>
             </button>
           )}
         </div>
