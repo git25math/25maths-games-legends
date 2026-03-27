@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v9.4.0 (2026-03-27)
+> **最后更新**: v9.7.0 (2026-03-27)
 
 ---
 
@@ -25,14 +25,14 @@ Step 5: npm test -- --run     → 2264 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.4.0 (2026-03-27) |
+| **当前版本** | v9.7.0 (2026-03-27) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (2264 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v9.4.0, 2026-03-27）
+## 三、当前状态快照（v9.7.0, 2026-03-27）
 
 ### 规模
 - **217 missions** 分布: Y7(57) + Y8(40) + Y9(44) + Y10(44) + Y11(27) + Y12(5)
@@ -119,7 +119,7 @@ Step 5: npm test -- --run     → 2264 测试必须全通过
 - `src/components/BugReportButton.tsx`：右下角半透明浮动按钮 + Modal（4 类别 + 可选描述 + 三语）
 - 集成到 `PracticeScreen` + `MathBattle`，静默失败不影响游戏流程
 
-### 本轮完成（v9.1.1→v9.5.0, 2026-03-27）
+### 本轮完成（v9.1.1→v9.7.0, 2026-03-27）
 
 #### v9.2.0 — 五方向全量优化（上一窗口完成）
 - **C: Resilience Engine 入口**: MapScreen 腐败告警横幅 + MathBattle 失败"🔍诊断"按钮
@@ -141,13 +141,20 @@ Step 5: npm test -- --run     → 2264 测试必须全通过
 #### v9.5.0 — CI 修复（本窗口完成）
 - `App.tsx` / `RepairScreen.tsx` / `techTree.ts(×2)`: 修复 4 处 TypeScript lint 错误（类型断言 + 死代码移除），恢复 CI/CD 绿灯
 
+#### v9.6.0 — 三币商店上线
+- `ShopPanel.tsx` + `gameBalance.ts` + `inventory.ts`: 军械库商店（merit/wisdom 兑换道具），三类道具分色卡片，余额实时展示
+
+#### v9.7.0 — Y7 全量教程升级 + Y10 圆心角修复
+- **Y10 修复**: missions 10141/10142 空 tutorialSteps → 6步金标准（圆周角+圆心角定理，诸葛亮/周瑜叙事）
+- **Y7 全量升级**: 45关教程 1-5步 → 全部≥6步金标准（BODMAS/分数/整数/代入/合并同类项/百分比/比例/质因数/HCF/LCM/数列/估算/几何/坐标/统计）
+- 测试: 2214 → 2264（+50 测试）
+
 ### 已知遗留问题
 
 | 优先级 | 问题 | 位置 | 建议 |
 |--------|------|------|------|
 | LOW | 道具修复 `applyRepair` 用 lastMasteredAt 反向计算，忽略 error penalty 项，health 略估高 | App.tsx `onRepairWithItem` | 可接受，完整修复需在 KPEquipment 加 `healthBonus` 字段 |
 | LOW | RepairDialog onRepair 关闭前无动画等待（1.2s toast 后直接关闭） | MapScreen repairDialogTarget | 后续可监听 RepairDialog success 状态 |
-| MEDIUM | 三币商店未开放（merit/wisdom 积累无消费出口） | currency.ts | v9.6 目标：兑换道具/技能加成 |
 | MEDIUM | 军粮(rations) 只展示不发放 | currency.ts CURRENCY_REWARDS | 可从每日任务完成触发 |
 
 > **v9.1.1 CRITICAL 全清零**：浅拷贝竞态（规则 J）+ async XP 丢失（规则 K）+ techTree TDZ 崩溃（规则 L）。规则 J/K/L 已入 BUG-POSTMORTEM.md + CONTRIBUTING.md。全项目 `var` 清零。
@@ -324,10 +331,9 @@ for mid, steps_raw in missions:
 | 优先级 | 任务 | 说明 |
 |--------|------|------|
 | HIGH | **Bundle 拆分** | 降低 `missions` / `index` chunk 体积，消除 >500 kB 构建警告 |
-| MEDIUM | **Y7 Tutorial Refresh** | 部分 Y7 教程叙事老旧，按现代三国风格重写 |
-| MEDIUM | **新题型 SIMILAR_TRIANGLES** | Y9 相似三角形，有生成器需求 |
+| HIGH | **军粮发放修复** | `currency.ts` CURRENCY_REWARDS 中军粮(rations)只展示不发放，需接通每日任务完成逻辑 |
+| MEDIUM | **新题型 SIMILAR_TRIANGLES** | Y9 相似三角形，生成器+checker+6步教程 |
 | LOW | **missions.ts 拆分** | 按年级拆成 y7-missions.ts 等，降低文件体积 |
-| FUTURE | **v9.0.0 三币经济** | 金/银/铜三种货币系统 |
 | FUTURE | **班级远征** | 多人协作通关 |
 
 ---
@@ -358,7 +364,7 @@ grep -A 20 'id: 1211' src/data/missions.ts | grep -c 'text:'
 
 **预期输出**:
 - Build: `✓ built in X.XXs`（无 ERROR）
-- Tests: `1780 passed`
+- Tests: `2264 passed`
 - 重复ID: 空输出
 - 关卡数: ~210
 - Y12 步骤: ≥6（当前已完成）
