@@ -5,6 +5,7 @@ import type { Language } from '../types';
 import type { TechNodeStatus, TechNodeState } from '../utils/techTree';
 import type { Topic } from '../data/curriculum/kp-registry';
 import { lt } from '../i18n/resolveText';
+import { TECH_TREE } from '../utils/gameBalance';
 
 const STATUS_CONFIG: Record<TechNodeStatus, {
   ring: string;
@@ -178,6 +179,18 @@ export const TechNode = ({
             <AlertTriangle size={10} className="text-orange-400" />
             <span className="text-[9px] text-orange-400 font-bold">
               {lang === 'en' ? `Upstream ${state.upstreamCorrupted} unstable` : lang === 'zh_TW' ? `上游 ${state.upstreamCorrupted} 不穩定` : `上游 ${state.upstreamCorrupted} 不稳定`}
+            </span>
+          </div>
+        )}
+
+        {/* Approaching-corruption warning — high error count but not yet corrupted */}
+        {state.status === 'researching' && (state.maxErrorCount ?? 0) >= 3 && (state.maxErrorCount ?? 0) < TECH_TREE.CORRUPTION_ERROR_THRESHOLD && (
+          <div className="mt-1.5 flex items-center gap-1">
+            <AlertTriangle size={10} className="text-amber-400" />
+            <span className="text-[9px] text-amber-400 font-bold">
+              {state.maxErrorCount}/{TECH_TREE.CORRUPTION_ERROR_THRESHOLD}
+              {' '}
+              {lang === 'en' ? 'errors' : lang === 'zh_TW' ? '錯誤' : '错误'}
             </span>
           </div>
         )}

@@ -22,6 +22,7 @@ export type TechNodeState = {
   corruptionPattern?: ErrorType | null;
   upstreamCorrupted?: string | null;  // topicId of the corrupted upstream node causing at_risk
   missionIds: number[];     // missions linked to this topic
+  maxErrorCount?: number;   // highest error count across missions in this topic (for corruption progress)
 };
 
 export type TechBranch = {
@@ -183,6 +184,12 @@ export function computeTechTree(
         status = 'corrupted';
       }
 
+      // Track max error count across missions for corruption-approach warning
+      const maxErrorCount = missionIds.reduce((max, mid) => {
+        const rec = mistakes[String(mid)];
+        return rec ? Math.max(max, rec.count) : max;
+      }, 0);
+
       topicStates.set(topic.id, {
         topicId: topic.id,
         status,
@@ -190,6 +197,7 @@ export function computeTechTree(
         total,
         corruptionPattern: corruption,
         missionIds,
+        maxErrorCount,
       });
     }
   }

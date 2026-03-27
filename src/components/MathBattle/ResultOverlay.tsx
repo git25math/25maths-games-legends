@@ -35,6 +35,8 @@ type Props = {
   retryCount?: number;
   maxRetries?: number;
   onGiveUp?: () => void;
+  hotTopicMultiplier?: number;
+  isDailyChallenge?: boolean;
 };
 
 export function ResultOverlay({
@@ -43,6 +45,7 @@ export function ResultOverlay({
   finalScore, finalDuration, correctCount, currentQIdx, hp,
   encouragement, onAchievementClose, onRetry,
   canRetry = true, retryCount = 0, maxRetries = 2, onGiveUp,
+  hotTopicMultiplier = 1, isDailyChallenge = false,
 }: Props) {
   if (showResult === 'none') return null;
 
@@ -160,6 +163,27 @@ export function ResultOverlay({
               </motion.div>
             )}
 
+            {/* Phase C+: Active multiplier badges */}
+            {victoryPhase >= 3 && (hotTopicMultiplier > 1 || isDailyChallenge) && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 }}
+                className="flex gap-2 mt-3 z-10"
+              >
+                {hotTopicMultiplier > 1 && (
+                  <span className="px-3 py-1 bg-orange-500/20 border border-orange-400/40 rounded-full text-orange-300 text-xs font-black">
+                    🔥 {lang === 'en' ? `Hot Topic ×${hotTopicMultiplier}` : lang === 'zh_TW' ? `本周熱點 ×${hotTopicMultiplier}` : `本周热点 ×${hotTopicMultiplier}`}
+                  </span>
+                )}
+                {isDailyChallenge && (
+                  <span className="px-3 py-1 bg-amber-500/20 border border-amber-400/40 rounded-full text-amber-300 text-xs font-black">
+                    ⚡ {lang === 'en' ? 'Daily ×3' : lang === 'zh_TW' ? '每日 ×3' : '每日 ×3'}
+                  </span>
+                )}
+              </motion.div>
+            )}
+
             {/* Phase D: Skill Badge */}
             <AnimatePresence>
               {victoryPhase === 4 && mission.skillName && (
@@ -190,7 +214,7 @@ export function ResultOverlay({
                 onClick={onAchievementClose}
                 className="absolute bottom-8 px-6 py-2.5 bg-white/10 text-white/60 text-sm font-bold rounded-xl hover:bg-white/20 transition-colors z-30 backdrop-blur-sm"
               >
-                {lang === 'en' ? 'Skip →' : '跳过 →'}
+                {lang === 'en' ? 'Skip →' : lang === 'zh_TW' ? '跳過 →' : '跳过 →'}
               </motion.button>
             )}
 
@@ -227,14 +251,27 @@ export function ResultOverlay({
                 <p className="text-slate-500 text-sm">
                   {lang === 'en'
                     ? `${maxRetries - retryCount} ${maxRetries - retryCount === 1 ? 'retry' : 'retries'} left`
+                    : lang === 'zh_TW'
+                    ? `還剩 ${maxRetries - retryCount} 次重試機會`
                     : `还剩 ${maxRetries - retryCount} 次重试机会`}
                 </p>
+                {retryCount > 0 && (
+                  <p className="text-amber-500/70 text-xs">
+                    {lang === 'en'
+                      ? `Score penalty active: ×${(0.5 ** retryCount).toFixed(2)}`
+                      : lang === 'zh_TW'
+                      ? `重試懲罰：得分 ×${(0.5 ** retryCount).toFixed(2)}`
+                      : `重试惩罚：得分 ×${(0.5 ** retryCount).toFixed(2)}`}
+                  </p>
+                )}
               </div>
             ) : (
               <div className="space-y-4">
                 <p className="text-amber-400 font-bold text-lg">
                   {lang === 'en'
                     ? "No retries left. That's OK — every master was once a beginner."
+                    : lang === 'zh_TW'
+                    ? '重試機會用完了。沒關係——每個高手都曾經是新手。'
                     : '重试机会用完了。没关系——每个高手都曾经是新手。'}
                 </p>
                 {(() => {
@@ -247,7 +284,7 @@ export function ResultOverlay({
                       className="inline-flex items-center gap-2 px-10 py-5 bg-purple-700 text-white font-black rounded-xl shadow-xl hover:bg-purple-600 transition-all"
                     >
                       <BookOpen size={20} />
-                      {lang === 'en' ? 'Learn This Skill' : '去学会这个技能'}
+                      {lang === 'en' ? 'Learn This Skill' : lang === 'zh_TW' ? '去學會這個技能' : '去学会这个技能'}
                     </a>
                   ) : null;
                 })()}
@@ -257,7 +294,7 @@ export function ResultOverlay({
                       onClick={onGiveUp}
                       className="px-10 py-3 bg-slate-700/50 text-slate-300 font-bold rounded-xl hover:bg-slate-600/50 transition-all text-sm"
                     >
-                      {lang === 'en' ? 'Back to Map' : '返回地图'}
+                      {lang === 'en' ? 'Back to Map' : lang === 'zh_TW' ? '返回地圖' : '返回地图'}
                     </button>
                   </div>
                 )}

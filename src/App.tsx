@@ -27,6 +27,7 @@ import { getActiveSkillEffect } from './data/heroSkills';
 import { STREAK_MILESTONES, getNewlyEarnedMilestone, getNextMilestone } from './data/streakMilestones';
 import { BattleModeSelector } from './components/BattleModeSelector';
 import { StaminaGate } from './components/StaminaGate';
+import { RepairCompleteOverlay } from './components/RepairCompleteOverlay';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
 import { getExpeditionsForGrade } from './data/expeditions';
@@ -154,6 +155,7 @@ export default function App() {
   const [showPKResult, setShowPKResult] = useState(false);
   const [pkCountdown, setPkCountdown] = useState<number | null>(null); // seconds remaining, null = no countdown
   const [showStaminaGate, setShowStaminaGate] = useState(false);
+  const [repairCompleteInfo, setRepairCompleteInfo] = useState<{ missionId: number; bonus: number; scrollAwarded: boolean } | null>(null);
   const [pendingBattleMission, setPendingBattleMission] = useState<Mission | null>(null);
   const [itemRewardToast, setItemRewardToast] = useState<{ items: { itemId: string; reason: string }[] } | null>(null);
 
@@ -743,6 +745,26 @@ export default function App() {
           )}
         </AnimatePresence>
 
+        {/* v5.0 Step 5+6: Repair Complete — "Skill Stabilised" + Retry */}
+        <AnimatePresence>
+          {repairCompleteInfo && (
+            <RepairCompleteOverlay
+              lang={lang}
+              bonus={repairCompleteInfo.bonus}
+              scrollAwarded={repairCompleteInfo.scrollAwarded}
+              onRetry={() => {
+                const m = missions.find(mi => mi.id === repairCompleteInfo.missionId);
+                setRepairCompleteInfo(null);
+                if (m) handlePracticeStart(m);
+              }}
+              onBack={() => {
+                setRepairCompleteInfo(null);
+                setActiveMission(null);
+              }}
+            />
+          )}
+        </AnimatePresence>
+
         <AnimatePresence>
           {showSecret && activeMission && (
             <ScrollOfWisdom
@@ -929,6 +951,19 @@ export default function App() {
                   phaseCompletions={profile?.completed_missions[String(activeMission.id)] as any}
                   onEarnXP={handlePracticeEarnXP}
                   onRecordError={handleRecordError}
+                  repairPattern={isRepairMode && profile ? (() => {
+                    const mistakes = getMistakesMap(profile.completed_missions as Record<string, unknown>);
+                    const rec = mistakes[String(activeMission.id)];
+                    return rec ? getDominantPattern(rec) : null;
+                  })() : null}
+                  onRepairIntercept={() => {
+                    // v5.0: Switch to repair mode for the same mission (don't return to map)
+                    setIsRepairMode(true);
+                    // Force PracticeScreen to re-mount in repair mode by briefly clearing activeMission
+                    const m = activeMission;
+                    setActiveMission(null);
+                    setTimeout(() => setActiveMission(m), 0);
+                  }}
                   onComplete={async () => {
                     // Save practice completion — all 4 phases done (XP already awarded per-phase)
                     if (profile) {
@@ -978,7 +1013,18 @@ export default function App() {
                     setGameState('map');
                     setActiveMission(null);
                   }}
-                  onCancel={() => {
+                  onCancel={async () => {
+                    // Persist any errors recorded so far (even on mid-session cancel)
+                    if (profile && activeMission && pendingErrorsRef.current.length > 0) {
+                      const cm = { ...(profile.completed_missions as any) };
+                      cm._mistakes = recordErrors(
+                        (cm._mistakes ?? {}) as any,
+                        activeMission.id,
+                        pendingErrorsRef.current,
+                      );
+                      await updateProfile({ completed_missions: cm });
+                      pendingErrorsRef.current = [];
+                    }
                     setIsRepairMode(false);
                     setGameState('map');
                     setActiveMission(null);
@@ -1027,13 +1073,18 @@ export default function App() {
                         total_score: profile.total_score + bonus,
                       });
                       setIsRepairMode(false);
+                      // v5.0 Step 5+6: Show "Skill Stabilised" closure with retry option
+                      setRepairCompleteInfo({
+                        missionId: activeMission.id,
+                        bonus,
+                        scrollAwarded: !!scrollAwarded,
+                      });
                       setGameState('map');
-                      setActiveMission(null);
+                      // Don't clear activeMission yet — needed for retry
                       if (bonus > 0) {
                         setRepairToast({ bonus });
                         setTimeout(() => setRepairToast(null), 3000);
                       }
-                      // Show scroll reward toast after repair toast
                       if (scrollAwarded) {
                         setTimeout(() => {
                           setItemRewardToast({ items: [scrollAwarded!] });

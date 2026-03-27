@@ -538,6 +538,8 @@ export const MathBattle = ({
           retryCount={retryCount}
           maxRetries={MAX_RETRIES}
           onGiveUp={onCancel}
+          hotTopicMultiplier={hotTopicMultiplier}
+          isDailyChallenge={isDailyChallenge}
         />
       </motion.div>
     </div>

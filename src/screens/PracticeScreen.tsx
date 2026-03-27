@@ -45,10 +45,12 @@ export const PracticeScreen = ({
   onComplete,
   onCancel,
   repairMode = false,
+  repairPattern = null,
   onRepairComplete,
   phaseCompletions,
   onEarnXP,
   onRecordError,
+  onRepairIntercept,
 }: {
   mission: Mission;
   character: Character;
@@ -56,6 +58,8 @@ export const PracticeScreen = ({
   onComplete: () => void;
   onCancel: () => void;
   repairMode?: boolean;
+  /** Dominant error pattern being repaired (shown to student in repair mode) */
+  repairPattern?: import('../utils/diagnoseError').ErrorType | null;
   onRepairComplete?: () => void;
   /** Previous completion state for this mission — used to detect first-clear vs repeat */
   phaseCompletions?: { green?: boolean; amber?: boolean; red?: boolean };
@@ -63,6 +67,8 @@ export const PracticeScreen = ({
   onEarnXP?: (xp: number) => void;
   /** Called on each wrong answer with error type for persistent memory */
   onRecordError?: (errorType: import('../utils/diagnoseError').ErrorType) => void;
+  /** v5.0: Called when repair intercept triggered — enter repair mode for same mission */
+  onRepairIntercept?: () => void;
 }) => {
   const t = translations[lang];
 
@@ -101,6 +107,7 @@ export const PracticeScreen = ({
   const [consecutiveSameType, setConsecutiveSameType] = useState(0);
   const [lastErrorType, setLastErrorType] = useState<string | null>(null);
   const [showRepairIntercept, setShowRepairIntercept] = useState(false);
+  const [pendingIntercept, setPendingIntercept] = useState(false); // deferred until wrong answer dismissed
   const INTERCEPT_THRESHOLD = 3;
 
   const {
@@ -212,7 +219,7 @@ export const PracticeScreen = ({
           const newCount = consecutiveSameType + 1;
           setConsecutiveSameType(newCount);
           if (newCount >= INTERCEPT_THRESHOLD) {
-            setShowRepairIntercept(true);
+            setPendingIntercept(true); // Deferred — shown after wrong answer panel dismissal
             setConsecutiveSameType(0);
           }
         } else {
@@ -240,6 +247,12 @@ export const PracticeScreen = ({
     setWrongAnswerData(null);
     setSkillImpactHint(null);
     setIsSubmitting(false);
+    // v5.0: Show deferred repair intercept after dismissing wrong answer feedback
+    if (pendingIntercept) {
+      setPendingIntercept(false);
+      setShowRepairIntercept(true);
+      return; // Don't regenerate — intercept card will handle next step
+    }
     regenerateQuestion();
   };
 
@@ -400,13 +413,24 @@ export const PracticeScreen = ({
               </h2>
               {/* Phase indicator — repair mode shows progress bar instead */}
               {repairMode ? (
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-amber-400 text-xs font-bold">
-                    {`${(t as any).repair ?? '修复'} ${repairCorrect}/${REPAIR_TARGET}`}
-                  </span>
-                  <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden max-w-[120px]">
-                    <div className="h-full bg-amber-400 rounded-full transition-all" style={{ width: `${(repairCorrect / REPAIR_TARGET) * 100}%` }} />
+                <div className="flex flex-col gap-1 mt-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-amber-400 text-xs font-bold">
+                      {`${(t as any).repair ?? '修复'} ${repairCorrect}/${REPAIR_TARGET}`}
+                    </span>
+                    <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden max-w-[120px]">
+                      <div className="h-full bg-amber-400 rounded-full transition-all" style={{ width: `${(repairCorrect / REPAIR_TARGET) * 100}%` }} />
+                    </div>
                   </div>
+                  {repairPattern && (
+                    <span className="text-rose-400/80 text-[10px] font-bold">
+                      {repairPattern === 'sign' ? `⚠️ ${lang === 'en' ? 'Fixing: sign errors (±)' : lang === 'zh_TW' ? '修復：正負號錯誤 (±)' : '修复：正负号错误 (±)'}` :
+                       repairPattern === 'rounding' ? `⚠️ ${lang === 'en' ? 'Fixing: rounding errors (≈)' : lang === 'zh_TW' ? '修復：精度錯誤 (≈)' : '修复：精度错误 (≈)'}` :
+                       repairPattern === 'magnitude' ? `⚠️ ${lang === 'en' ? 'Fixing: magnitude errors (×10)' : lang === 'zh_TW' ? '修復：數量級錯誤 (×10)' : '修复：数量级错误 (×10)'}` :
+                       repairPattern === 'method' ? `⚠️ ${lang === 'en' ? 'Fixing: method errors (?)' : lang === 'zh_TW' ? '修復：方法錯誤 (?)' : '修复：方法错误 (?)'}` :
+                       `⚠️ ${lang === 'en' ? 'Repair training' : lang === 'zh_TW' ? '修復訓練' : '修复训练'}`}
+                    </span>
+                  )}
                 </div>
               ) : (
               <div className="flex flex-wrap items-center gap-2 mt-1">
@@ -692,13 +716,13 @@ export const PracticeScreen = ({
                       </p>
                       <div className="flex gap-2">
                         <button
-                          onClick={() => { setShowRepairIntercept(false); onCancel(); }}
+                          onClick={() => { setShowRepairIntercept(false); onRepairIntercept ? onRepairIntercept() : onCancel(); }}
                           className="flex-1 py-2.5 rounded-xl bg-rose-500 text-white font-black text-xs hover:bg-rose-400 transition-colors"
                         >
                           🔧 {lang === 'en' ? 'Repair Skill' : lang === 'zh_TW' ? '修復技能' : '修复技能'}
                         </button>
                         <button
-                          onClick={() => setShowRepairIntercept(false)}
+                          onClick={() => { setShowRepairIntercept(false); regenerateQuestion(); }}
                           className="flex-1 py-2.5 rounded-xl bg-white/5 text-white/50 font-bold text-xs hover:bg-white/10 transition-colors"
                         >
                           {lang === 'en' ? 'Continue' : lang === 'zh_TW' ? '繼續' : '继续'}
