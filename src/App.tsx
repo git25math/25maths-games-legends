@@ -13,8 +13,6 @@ import { useProfile } from './hooks/useProfile';
 import { useMissions } from './hooks/useMissions';
 import { useMultiplayer, PK_COUNTDOWN_SECS, getFirstFinishTime, getFirstOpponentFinishTime } from './hooks/useMultiplayer';
 
-import { ScrollOfWisdom } from './components/ScrollOfWisdom';
-import { SkillCardSelector } from './components/SkillCardSelector';
 import { generateMission } from './utils/generateMission';
 import { getDailyKey, DAILY_MULTIPLIER } from './utils/dailyChallenge';
 import { WelcomeScreen } from './screens/WelcomeScreen';
@@ -25,9 +23,11 @@ import { translations } from './i18n/translations';
 import { getHotTopic } from './utils/hotTopic';
 import { getActiveSkillEffect } from './data/heroSkills';
 import { STREAK_MILESTONES, getNewlyEarnedMilestone, getNextMilestone } from './data/streakMilestones';
-import { BattleModeSelector } from './components/BattleModeSelector';
-import { StaminaGate } from './components/StaminaGate';
-import { RepairCompleteOverlay } from './components/RepairCompleteOverlay';
+const ScrollOfWisdom = lazy(() => import('./components/ScrollOfWisdom').then(m => ({ default: m.ScrollOfWisdom })));
+const SkillCardSelector = lazy(() => import('./components/SkillCardSelector').then(m => ({ default: m.SkillCardSelector })));
+const BattleModeSelector = lazy(() => import('./components/BattleModeSelector').then(m => ({ default: m.BattleModeSelector })));
+const StaminaGate = lazy(() => import('./components/StaminaGate').then(m => ({ default: m.StaminaGate })));
+const RepairCompleteOverlay = lazy(() => import('./components/RepairCompleteOverlay').then(m => ({ default: m.RepairCompleteOverlay })));
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
 import { getExpeditionsForGrade } from './data/expeditions';
@@ -815,71 +815,81 @@ export default function App() {
           )}
         </div>
 
-        {/* Overlays */}
-        <AnimatePresence>
-          {showBattleModeSelector && (
-            <BattleModeSelector lang={lang} onSelect={handleBattleModeSelect} />
-          )}
-        </AnimatePresence>
+        {/* Overlays — lazy loaded (all appear after user interaction, null fallback is safe) */}
+        <Suspense fallback={null}>
+          <AnimatePresence>
+            {showBattleModeSelector && (
+              <BattleModeSelector lang={lang} onSelect={handleBattleModeSelect} />
+            )}
+          </AnimatePresence>
+        </Suspense>
 
-        <AnimatePresence>
-          {showSkillCards && (
-            <SkillCardSelector
-              lang={lang}
-              onSelect={handleSkillCardSelect}
-            />
-          )}
-        </AnimatePresence>
+        <Suspense fallback={null}>
+          <AnimatePresence>
+            {showSkillCards && (
+              <SkillCardSelector
+                lang={lang}
+                onSelect={handleSkillCardSelect}
+              />
+            )}
+          </AnimatePresence>
+        </Suspense>
 
-        <AnimatePresence>
-          {showStaminaGate && (
-            <StaminaGate
-              lang={lang}
-              onPractice={() => {
-                setShowStaminaGate(false);
-                if (pendingBattleMission) {
-                  handlePracticeStart(pendingBattleMission);
-                  setPendingBattleMission(null);
-                }
-              }}
-              onBack={() => { setShowStaminaGate(false); setPendingBattleMission(null); }}
-            />
-          )}
-        </AnimatePresence>
+        <Suspense fallback={null}>
+          <AnimatePresence>
+            {showStaminaGate && (
+              <StaminaGate
+                lang={lang}
+                onPractice={() => {
+                  setShowStaminaGate(false);
+                  if (pendingBattleMission) {
+                    handlePracticeStart(pendingBattleMission);
+                    setPendingBattleMission(null);
+                  }
+                }}
+                onBack={() => { setShowStaminaGate(false); setPendingBattleMission(null); }}
+              />
+            )}
+          </AnimatePresence>
+        </Suspense>
 
         {/* v5.0 Step 5+6: Repair Complete — "Skill Stabilised" + Retry */}
-        <AnimatePresence>
-          {repairCompleteInfo && (
-            <RepairCompleteOverlay
-              lang={lang}
-              bonus={repairCompleteInfo.bonus}
-              scrollAwarded={repairCompleteInfo.scrollAwarded}
-              onRetry={() => {
-                const m = missions.find(mi => mi.id === repairCompleteInfo.missionId);
-                setRepairCompleteInfo(null);
-                if (m) handlePracticeStart(m);
-              }}
-              onBack={() => {
-                setRepairCompleteInfo(null);
-                setActiveMission(null);
-              }}
-            />
-          )}
-        </AnimatePresence>
+        <Suspense fallback={null}>
+          <AnimatePresence>
+            {repairCompleteInfo && (
+              <RepairCompleteOverlay
+                lang={lang}
+                bonus={repairCompleteInfo.bonus}
+                scrollAwarded={repairCompleteInfo.scrollAwarded}
+                onRetry={() => {
+                  const m = missions.find(mi => mi.id === repairCompleteInfo.missionId);
+                  setRepairCompleteInfo(null);
+                  if (m) handlePracticeStart(m);
+                }}
+                onBack={() => {
+                  setRepairCompleteInfo(null);
+                  setActiveMission(null);
+                }}
+              />
+            )}
+          </AnimatePresence>
+        </Suspense>
 
-        <AnimatePresence>
-          {showSecret && activeMission && (
-            <ScrollOfWisdom
-              mission={activeMission}
-              lang={lang}
-              onClose={() => { setShowSecret(false); setGameState('battle'); }}
-              errorHint={profile && activeMission
-                ? getMissionErrorSummary(getMistakesMap(profile.completed_missions as Record<string, unknown>), activeMission.id)
-                : null
-              }
-            />
-          )}
-        </AnimatePresence>
+        <Suspense fallback={null}>
+          <AnimatePresence>
+            {showSecret && activeMission && (
+              <ScrollOfWisdom
+                mission={activeMission}
+                lang={lang}
+                onClose={() => { setShowSecret(false); setGameState('battle'); }}
+                errorHint={profile && activeMission
+                  ? getMissionErrorSummary(getMistakesMap(profile.completed_missions as Record<string, unknown>), activeMission.id)
+                  : null
+                }
+              />
+            )}
+          </AnimatePresence>
+        </Suspense>
 
         {/* Version indicator */}
         <div className="fixed bottom-1 left-1 z-50 text-white/15 text-[9px] font-mono">v9.1.1</div>

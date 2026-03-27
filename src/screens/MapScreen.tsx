@@ -147,8 +147,9 @@ export const MapScreen = ({
     return () => clearInterval(timer);
   }, []);
 
-  // Class rank (runs once on load, not on every score change)
+  // Class rank + top 5 leaderboard (runs once on load)
   const [classRankInfo, setClassRankInfo] = useState<{ rank: number; total: number } | null>(null);
+  const [classTop5, setClassTop5] = useState<{ display_name: string; total_score: number; user_id: string }[]>([]);
   const [classRankLoading, setClassRankLoading] = useState(true);
   useEffect(() => {
     const tags = profile.class_tags;
@@ -156,7 +157,7 @@ export const MapScreen = ({
     setClassRankLoading(true);
     supabase
       .from('gl_user_progress')
-      .select('user_id, total_score')
+      .select('user_id, display_name, total_score')
       .eq('grade', profile.grade)
       .contains('class_tags', [tags[0]])
       .order('total_score', { ascending: false })
@@ -165,6 +166,7 @@ export const MapScreen = ({
         if (!data) { setClassRankLoading(false); return; }
         const rank = data.findIndex(d => d.user_id === profile.user_id) + 1;
         setClassRankInfo(rank > 0 ? { rank, total: data.length } : null);
+        setClassTop5(data.slice(0, 5) as any[]);
         setClassRankLoading(false);
       }, () => { setClassRankLoading(false); });
   }, [profile.user_id]);
@@ -885,6 +887,54 @@ export const MapScreen = ({
         onSmartStart={(m) => { playTap(); onPracticeStart(m); }}
         {...smartRecommendation}
       />
+
+      {/* ═══════════════════ Class Arena — Top 5 ═══════════════════ */}
+      {classTop5.length >= 2 && profile.class_tags?.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-indigo-900/30 via-purple-900/30 to-indigo-900/30 border border-indigo-500/20 rounded-xl sm:rounded-2xl p-3 sm:p-4"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Crown size={16} className="text-amber-400" />
+              <span className="text-sm font-black text-white">
+                {profile.class_tags[0]} {lang === 'en' ? 'Arena' : '竞技场'}
+              </span>
+            </div>
+            {classRankInfo && (
+              <span className="text-[10px] font-bold text-indigo-300 bg-indigo-500/20 px-2 py-0.5 rounded-full">
+                #{classRankInfo.rank}/{classRankInfo.total}
+              </span>
+            )}
+          </div>
+          <div className="space-y-1.5">
+            {classTop5.map((entry, i) => {
+              const isMe = entry.user_id === profile.user_id;
+              const medals = ['🥇', '🥈', '🥉'];
+              return (
+                <div
+                  key={entry.user_id}
+                  className={`flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors ${
+                    isMe ? 'bg-amber-500/15 border border-amber-400/20' : 'hover:bg-white/5'
+                  }`}
+                >
+                  <span className="w-5 text-center text-xs font-black">
+                    {i < 3 ? medals[i] : <span className="text-white/30">{i + 1}</span>}
+                  </span>
+                  <span className={`flex-1 text-xs font-bold truncate ${isMe ? 'text-amber-300' : 'text-white/70'}`}>
+                    {entry.display_name || 'Anonymous'}
+                    {isMe && <span className="ml-1 text-[9px] text-amber-400/60">{lang === 'en' ? '(you)' : '(我)'}</span>}
+                  </span>
+                  <span className={`text-xs font-black tabular-nums ${isMe ? 'text-amber-400' : 'text-white/40'}`}>
+                    {entry.total_score.toLocaleString()}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
 
       {/* ═══════════════════ Teacher Assignments (v8.3) ═══════════════════ */}
       <AssignmentBanner
