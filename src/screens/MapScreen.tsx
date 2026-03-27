@@ -26,6 +26,8 @@ import { getExpeditionsForGrade, type Expedition } from '../data/expeditions';
 import { getNextMilestone } from '../data/streakMilestones';
 import { getWeakMissions, getMistakes, rankByWeakness } from '../utils/errorMemory';
 import { AssignmentBanner, useAssignedMissionIds } from '../components/AssignmentBanner';
+import { StaminaBar } from '../components/StaminaBar';
+import { getStamina, getRemainingAttempts } from '../utils/stamina';
 import type { CharacterProgression } from '../types';
 import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completionState';
 
@@ -116,6 +118,7 @@ export const MapScreen = ({
   onLeaderboard?: () => void;
   onAchievements?: () => void;
   onFriendPK?: () => void;
+  onTechTree?: () => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
@@ -550,9 +553,17 @@ export const MapScreen = ({
                 );
               })()}
 
+              {/* ── Stamina indicator ── */}
+              <StaminaBar lang={lang} remaining={getRemainingAttempts(getStamina(profile.completed_missions as Record<string, unknown>))} />
+
               {/* ── Secondary buttons: visible on md+, collapsed on mobile ── */}
               {/* Desktop: inline buttons */}
               <div className="hidden md:contents">
+                {onTechTree && (
+                  <button onClick={onTechTree} className="px-2 py-0.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-xs text-cyan-300 hover:bg-cyan-600/40 transition-colors flex items-center gap-1">
+                    🌿 {lang === 'en' ? 'Tech Tree' : '科技树'}
+                  </button>
+                )}
                 {getCharProgression && selectedChar && (
                   <button onClick={() => setShowSkillTree(true)} className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors">
                     {(t as any).skillTree ?? 'Skills'}
@@ -631,6 +642,11 @@ export const MapScreen = ({
                   className="md:hidden overflow-hidden mt-2"
                 >
                   <div className="flex flex-wrap gap-2 p-2 bg-white/5 rounded-xl border border-white/10">
+                    {onTechTree && (
+                      <button onClick={() => { onTechTree(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded-lg text-xs text-cyan-300">
+                        🌿 {lang === 'en' ? 'Tech Tree' : '科技树'}
+                      </button>
+                    )}
                     {getCharProgression && selectedChar && (
                       <button onClick={() => { setShowSkillTree(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300">
                         {(t as any).skillTree ?? 'Skills'}

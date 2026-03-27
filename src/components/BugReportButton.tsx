@@ -136,7 +136,7 @@ export function BugReportButton({
       <button
         onClick={handleOpen}
         title={L.btnTitle}
-        className="fixed bottom-4 right-4 z-40 flex items-center gap-1.5 px-3 py-2 rounded-full bg-slate-800/70 hover:bg-slate-700/90 border border-white/10 text-white/50 hover:text-white/80 text-xs font-bold backdrop-blur-sm transition-all shadow-md"
+        className="fixed bottom-4 left-4 z-40 flex items-center gap-1.5 px-3 py-2 rounded-full bg-slate-800/70 hover:bg-slate-700/90 border border-white/10 text-white/50 hover:text-white/80 text-xs font-bold backdrop-blur-sm transition-all shadow-md"
       >
         <Bug size={14} />
         <span className="hidden sm:inline">{L.btnTitle}</span>

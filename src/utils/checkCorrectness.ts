@@ -100,6 +100,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const [x1, y1] = data.p1;
     const [x2, y2] = data.p2;
     const cVal = y1;
+    if (!x2) return { correct: false, expected: {} };
     const aVal = (y2 - y1) / (x2 * x2);
     const ok = Math.abs(parse(inputs.a || '') - aVal) < 0.01 && Math.abs(parse(inputs.c || '') - cVal) < 0.01;
     return { correct: ok, expected: { a: round(aVal), c: round(cVal) } };
@@ -192,6 +193,7 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const { a, b, c } = data;
     if (!a) return { correct: false, expected: { x: 'undefined' } };
     const disc = b * b - 4 * a * c;
+    if (disc < 0) return { correct: false, expected: { x: 'no real roots' } };
     const x1 = (-b + Math.sqrt(disc)) / (2 * a);
     const x2 = (-b - Math.sqrt(disc)) / (2 * a);
     const inputX = parse(inputs.x || '');

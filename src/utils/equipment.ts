@@ -1,9 +1,13 @@
 import type { EquipmentState, KPEquipment } from '../types';
+import type { MistakeRecord } from './errorMemory';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** Thresholds in days */
+/** Thresholds in days (effective days, including error penalty) */
 const THRESHOLDS = { worn: 7, damaged: 14, broken: 30 };
+
+/** Error penalty: each recorded error adds this many "effective days" of decay */
+const ERROR_PENALTY_DAYS = 1.5;
 
 /** Compute equipment state from time since last mastery */
 export function getEquipmentState(lastMasteredAt: number): EquipmentState {
@@ -12,6 +16,36 @@ export function getEquipmentState(lastMasteredAt: number): EquipmentState {
   if (daysSince >= THRESHOLDS.damaged) return 'damaged';
   if (daysSince >= THRESHOLDS.worn) return 'worn';
   return 'pristine';
+}
+
+/**
+ * Enhanced equipment state: factors in error patterns to accelerate decay.
+ * Each recorded error adds ERROR_PENALTY_DAYS to the effective age.
+ * e.g., equipment mastered 5 days ago with 4 errors → effective age = 5 + 4*1.5 = 11 days → "damaged"
+ */
+export function getEnhancedEquipmentState(
+  lastMasteredAt: number,
+  mistakeRecord?: MistakeRecord | null,
+): EquipmentState {
+  const timeDays = (Date.now() - lastMasteredAt) / DAY_MS;
+  const errorPenalty = mistakeRecord ? mistakeRecord.count * ERROR_PENALTY_DAYS : 0;
+  const effectiveDays = timeDays + errorPenalty;
+  if (effectiveDays >= THRESHOLDS.broken) return 'broken';
+  if (effectiveDays >= THRESHOLDS.damaged) return 'damaged';
+  if (effectiveDays >= THRESHOLDS.worn) return 'worn';
+  return 'pristine';
+}
+
+/** Compute approximate health score (0-100) for an equipment piece */
+export function getEquipmentHealth(
+  lastMasteredAt: number,
+  mistakeRecord?: MistakeRecord | null,
+): number {
+  const timeDays = (Date.now() - lastMasteredAt) / DAY_MS;
+  const errorPenalty = mistakeRecord ? mistakeRecord.count * ERROR_PENALTY_DAYS : 0;
+  const effectiveDays = timeDays + errorPenalty;
+  // Linear decay from 100 to 0 over THRESHOLDS.broken days
+  return Math.max(0, Math.round(100 * (1 - effectiveDays / THRESHOLDS.broken)));
 }
 
 /** Tailwind color classes for each state */
@@ -28,30 +62,29 @@ const STATE_PRIORITY: Record<EquipmentState, number> = {
 };
 
 /** Get all equipment from completed_missions JSONB, sorted by urgency.
- *  If mistakes map provided, factors error count into sort (more errors = higher priority). */
+ *  If mistakes map provided, factors error count into both state calculation and sort. */
 export function getEquipmentList(
   completedMissions: Record<string, unknown>,
   mistakes?: Record<string, { count: number }>,
-): (KPEquipment & { state: EquipmentState })[] {
+): (KPEquipment & { state: EquipmentState; health: number })[] {
   const raw = (completedMissions as any)._equipment as Record<string, KPEquipment> | undefined;
   if (!raw) return [];
   return Object.entries(raw)
-    .map(([mid, eq]) => ({
-      ...eq,
-      missionId: Number(mid),
-      state: getEquipmentState(eq.lastMasteredAt),
-    }))
+    .map(([mid, eq]) => {
+      const mistakeRec = mistakes?.[mid] as MistakeRecord | undefined;
+      return {
+        ...eq,
+        missionId: Number(mid),
+        state: getEnhancedEquipmentState(eq.lastMasteredAt, mistakeRec),
+        health: getEquipmentHealth(eq.lastMasteredAt, mistakeRec),
+      };
+    })
     .sort((a, b) => {
       const pA = STATE_PRIORITY[a.state];
       const pB = STATE_PRIORITY[b.state];
       if (pA !== pB) return pA - pB;
-      // Same state: sort by mistake count (more errors first)
-      if (mistakes) {
-        const mA = mistakes[String(a.missionId)]?.count ?? 0;
-        const mB = mistakes[String(b.missionId)]?.count ?? 0;
-        return mB - mA;
-      }
-      return 0;
+      // Same state: sort by health (lower health = higher priority)
+      return a.health - b.health;
     });
 }
 

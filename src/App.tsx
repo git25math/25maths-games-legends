@@ -26,18 +26,23 @@ import { getHotTopic } from './utils/hotTopic';
 import { getActiveSkillEffect } from './data/heroSkills';
 import { STREAK_MILESTONES, getNewlyEarnedMilestone, getNextMilestone } from './data/streakMilestones';
 import { BattleModeSelector } from './components/BattleModeSelector';
+import { StaminaGate } from './components/StaminaGate';
 import { getLevelInfo } from './utils/xpLevels';
 import { getSeasonProgress, incrementTaskCount, evaluateAndUpdateTasks } from './utils/seasonTracker';
 import { getExpeditionForGrade, getExpeditionsForGrade } from './data/expeditions';
 import type { Expedition } from './data/expeditions';
 import { hasAnyPracticeCompletion, markPracticeCompleted } from './utils/completionState';
 import { getRankMultiplier } from './utils/pkRank';
+import { getStamina, getRemainingAttempts, consumeAttempt, setStamina } from './utils/stamina';
+import { getInventory, setInventory } from './utils/inventory';
+import { awardBattleItems } from './utils/repairItems';
 
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
 const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
 const LobbyScreen = lazy(() => import('./screens/LobbyScreen').then(module => ({ default: module.LobbyScreen })));
 const PracticeScreen = lazy(() => import('./screens/PracticeScreen').then(module => ({ default: module.PracticeScreen })));
 const DashboardScreen = lazy(() => import('./screens/DashboardScreen').then(module => ({ default: module.DashboardScreen })));
+const TechTreeScreen = lazy(() => import('./screens/TechTreeScreen').then(module => ({ default: module.TechTreeScreen })));
 const LeaderboardPanel = lazy(() => import('./components/LeaderboardPanel').then(module => ({ default: module.LeaderboardPanel })));
 const AchievementWallPanel = lazy(() => import('./components/AchievementWallPanel').then(module => ({ default: module.AchievementWallPanel })));
 const PKSetupPanel = lazy(() => import('./components/PKSetupPanel').then(module => ({ default: module.PKSetupPanel })));
@@ -111,7 +116,7 @@ function loadPersistedState(): PersistedState {
 function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
     // Battle/onboarding/expedition can't be restored → save as map
-    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition' || gameState === 'leaderboard' || gameState === 'achievements' || gameState === 'pk_setup') ? 'map' : gameState;
+    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition' || gameState === 'leaderboard' || gameState === 'achievements' || gameState === 'pk_setup' || gameState === 'tech_tree') ? 'map' : gameState;
     const safeMission = safeState === 'practice' ? missionId : null;
     localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
@@ -148,6 +153,8 @@ export default function App() {
   const [loginRewardNotif, setLoginRewardNotif] = useState<{ streak: number; xp: number; sp: number } | null>(null);
   const [showPKResult, setShowPKResult] = useState(false);
   const [pkCountdown, setPkCountdown] = useState<number | null>(null); // seconds remaining, null = no countdown
+  const [showStaminaGate, setShowStaminaGate] = useState(false);
+  const [pendingBattleMission, setPendingBattleMission] = useState<Mission | null>(null);
 
   // Refs to accumulate mid-battle updates that get merged into handleBattleComplete's single save
   const pendingSeasonTasksRef = useRef<string[]>([]);
@@ -161,7 +168,7 @@ export default function App() {
     profile, updateProfile, recordBattleComplete,
     getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
-  const { missions, loading: missionsLoading } = useMissions();
+  const { missions, loading: missionsLoading } = useMissions(profile?.grade);
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
   const hasRestoredMissionRef = useRef(false);
@@ -354,6 +361,16 @@ export default function App() {
   };
 
   const handleMissionStart = (mission: Mission) => {
+    // Check daily stamina before allowing battle
+    if (profile) {
+      const stamina = getStamina(profile.completed_missions);
+      if (getRemainingAttempts(stamina) <= 0) {
+        setPendingBattleMission(mission);
+        setShowStaminaGate(true);
+        return;
+      }
+    }
+
     // Challenge mode: skip difficulty selector, go straight to battle
     // Difficulty progression (Green→Amber→Red) is handled in Practice mode
     let battleMission = mission;
@@ -513,6 +530,23 @@ export default function App() {
           cm._total_skill_points = (cm._total_skill_points ?? 0) + levelsGained;
         }
 
+        // Step 5a: Consume stamina (1 attempt per battle)
+        const currentStamina = getStamina(cm);
+        cm._stamina = consumeAttempt(currentStamina);
+
+        // Step 5b: Award repair items based on performance
+        const errorCount = pendingErrorsRef.current.length;
+        const { inventory: newInventory, awarded } = awardBattleItems(
+          getInventory(cm),
+          success,
+          score,
+          selectedDifficulty,
+          errorCount,
+        );
+        if (awarded.length > 0) {
+          cm._inventory = newInventory;
+        }
+
         // Step 5: Merge pending errors into mistake memory
         if (pendingErrorsRef.current.length > 0) {
           cm._mistakes = recordErrors(
@@ -545,6 +579,21 @@ export default function App() {
         p_user_id: user.id, p_kp_id: activeMission.kpId,
         p_success: false, p_score: score,
       });
+    }
+    // Consume stamina for failed battles too (success path already consumed above)
+    if (!success && profile && activeMission) {
+      const cm = { ...(profile.completed_missions as any) };
+      const currentStamina = getStamina(cm);
+      cm._stamina = consumeAttempt(currentStamina);
+      // Merge pending errors on failure too
+      if (pendingErrorsRef.current.length > 0) {
+        cm._mistakes = recordErrors(
+          (cm._mistakes ?? {}) as any,
+          activeMission.id,
+          pendingErrorsRef.current,
+        );
+      }
+      await updateProfile({ completed_missions: cm });
     }
     // Always drain pending refs (even on failure, so stale data doesn't leak to next battle)
     pendingSeasonTasksRef.current = [];
@@ -642,6 +691,22 @@ export default function App() {
             <SkillCardSelector
               lang={lang}
               onSelect={handleSkillCardSelect}
+            />
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {showStaminaGate && (
+            <StaminaGate
+              lang={lang}
+              onPractice={() => {
+                setShowStaminaGate(false);
+                if (pendingBattleMission) {
+                  handlePracticeStart(pendingBattleMission);
+                  setPendingBattleMission(null);
+                }
+              }}
+              onBack={() => { setShowStaminaGate(false); setPendingBattleMission(null); }}
             />
           )}
         </AnimatePresence>
@@ -758,6 +823,7 @@ export default function App() {
                   onLeaderboard={() => setGameState('leaderboard')}
                   onAchievements={() => setGameState('achievements')}
                   onFriendPK={user ? () => setGameState('pk_setup') : undefined}
+                  onTechTree={() => setGameState('tech_tree')}
                 />
               )}
 
@@ -959,6 +1025,17 @@ export default function App() {
                   lang={lang}
                   profile={profile}
                   onClose={() => setGameState('map')}
+                />
+              )}
+
+              {gameState === 'tech_tree' && profile && (
+                <TechTreeScreen
+                  lang={lang}
+                  profile={profile}
+                  missions={missions}
+                  onBack={() => setGameState('map')}
+                  onMissionStart={handleMissionStart}
+                  onPracticeStart={handlePracticeStart}
                 />
               )}
 

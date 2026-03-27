@@ -94,7 +94,7 @@ export const CalculatorWidget = memo(function CalculatorWidget({ onUseResult, la
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-30 right-4 z-50 w-52 sm:w-64 bg-[#1a1a2e] rounded-2xl shadow-2xl border-2 border-[#b8860b]/30 overflow-hidden max-h-[60vh] overflow-y-auto"
+            className="fixed bottom-30 right-4 z-[55] w-52 sm:w-64 bg-[#1a1a2e] rounded-2xl shadow-2xl border-2 border-[#b8860b]/30 overflow-hidden max-h-[60vh] overflow-y-auto"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-3 py-2 bg-[#b8860b]/20">
