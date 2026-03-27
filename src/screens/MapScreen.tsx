@@ -106,6 +106,8 @@ export const MapScreen = ({
   onAchievements,
   onFriendPK,
   onTechTree,
+  mobileMenuOpen,
+  onMobileMenuClose,
 }: {
   lang: Language;
   profile: UserProfile;
@@ -133,6 +135,8 @@ export const MapScreen = ({
   onAchievements?: () => void;
   onFriendPK?: () => void;
   onTechTree?: () => void;
+  mobileMenuOpen?: boolean;
+  onMobileMenuClose?: () => void;
 }) => {
   const t = translations[lang];
   const { playTap, playBGMMap, stopBGM } = useAudio();
@@ -1244,6 +1248,124 @@ export const MapScreen = ({
       })()}
 
       {/* BottomNav is now rendered globally in App.tsx */}
+
+      {/* ── Mobile "Me" bottom sheet ── */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-slate-900/70 backdrop-blur-sm md:hidden"
+            onClick={onMobileMenuClose}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 340, damping: 32 }}
+              className="absolute bottom-0 left-0 right-0 bg-[#161226] rounded-t-2xl border-t border-white/10 p-4 pb-safe"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Handle bar */}
+              <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4" />
+              <p className="text-white/40 text-[10px] font-bold tracking-widest text-center mb-3 uppercase">
+                {lang === 'en' ? 'Quick Access' : '快捷入口'}
+              </p>
+              <div className="grid grid-cols-4 gap-2">
+                {/* 背包 */}
+                <button onClick={() => { onMobileMenuClose?.(); setShowInventory(true); }}
+                  className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                  <span className="text-xl">🎒</span>
+                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Pack' : '背包'}</span>
+                </button>
+                {/* 商店 */}
+                {onBuyItem && (
+                  <button onClick={() => { onMobileMenuClose?.(); setShowShop(true); }}
+                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    <span className="text-xl">🏪</span>
+                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Shop' : '商店'}</span>
+                  </button>
+                )}
+                {/* 兵法宝典 */}
+                <button onClick={() => { onMobileMenuClose?.(); setShowScrolls(true); }}
+                  className="flex flex-col items-center gap-1 py-3 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-300 active:bg-amber-500/20">
+                  <span className="text-xl">📜</span>
+                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Strategy' : '兵法'}</span>
+                </button>
+                {/* 成长手册 */}
+                <button onClick={() => { onMobileMenuClose?.(); setShowBattlePass(true); }}
+                  className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                  <span className="text-xl">📔</span>
+                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Handbook' : '手册'}</span>
+                </button>
+                {/* 科技树 */}
+                {onTechTree && (
+                  <button onClick={() => { onMobileMenuClose?.(); onTechTree(); }}
+                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    <span className="text-xl">🌿</span>
+                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Tech Tree' : '科技树'}</span>
+                  </button>
+                )}
+                {/* 技能树 */}
+                {getCharProgression && selectedChar && (
+                  <button onClick={() => { onMobileMenuClose?.(); setShowSkillTree(true); }}
+                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    <span className="text-xl">🃏</span>
+                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Skills' : '技能'}</span>
+                  </button>
+                )}
+                {/* 装备库 */}
+                {onRepairEquipment && (
+                  <button onClick={() => { onMobileMenuClose?.(); setShowEquipmentPanel(true); }}
+                    className="relative flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    <span className="text-xl">🛡️</span>
+                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Arsenal' : '装备'}</span>
+                    {countNeedsRepair(profile.completed_missions as Record<string, unknown>) > 0 && (
+                      <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">
+                        {countNeedsRepair(profile.completed_missions as Record<string, unknown>)}
+                      </span>
+                    )}
+                  </button>
+                )}
+                {/* 排行榜 */}
+                {onLeaderboard && (
+                  <button onClick={() => { onMobileMenuClose?.(); onLeaderboard(); }}
+                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    <span className="text-xl">🏆</span>
+                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Ranks' : '排行'}</span>
+                  </button>
+                )}
+                {/* 好友对决 */}
+                {onFriendPK && (
+                  <button onClick={() => { onMobileMenuClose?.(); onFriendPK(); }}
+                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    <span className="text-xl">⚔️</span>
+                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Friend PK' : 'PK'}</span>
+                  </button>
+                )}
+                {/* 成就墙 */}
+                {onAchievements && (
+                  <button onClick={() => { onMobileMenuClose?.(); onAchievements(); }}
+                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    <span className="text-xl">🏅</span>
+                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Awards' : '成就'}</span>
+                  </button>
+                )}
+                {/* 教师看板 */}
+                {onDashboard && (
+                  <button onClick={() => { onMobileMenuClose?.(); onDashboard(); }}
+                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    <span className="text-xl">📊</span>
+                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Dashboard' : '看板'}</span>
+                  </button>
+                )}
+              </div>
+              <div className="h-4" /> {/* safe area spacer above BottomNav */}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

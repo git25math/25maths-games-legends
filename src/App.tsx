@@ -169,6 +169,7 @@ export default function App() {
   const [showPKResult, setShowPKResult] = useState(false);
   const [pkCountdown, setPkCountdown] = useState<number | null>(null); // seconds remaining, null = no countdown
   const [showStaminaGate, setShowStaminaGate] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [repairCompleteInfo, setRepairCompleteInfo] = useState<{ missionId: number; bonus: number; scrollAwarded: boolean } | null>(null);
   const [pendingBattleMission, setPendingBattleMission] = useState<Mission | null>(null);
   const [itemRewardToast, setItemRewardToast] = useState<{ items: { itemId: string; reason: string }[] } | null>(null);
@@ -1040,6 +1041,8 @@ export default function App() {
                   onAchievements={() => setGameState('achievements')}
                   onFriendPK={user ? () => setGameState('pk_setup') : undefined}
                   onTechTree={() => setGameState('tech_tree')}
+                  mobileMenuOpen={mobileMenuOpen}
+                  onMobileMenuClose={() => setMobileMenuOpen(false)}
                 />
               )}
 
@@ -1773,14 +1776,17 @@ export default function App() {
         {gameState !== 'welcome' && gameState !== 'onboarding' && gameState !== 'battle' && gameState !== 'repair' && (
           <BottomNav
             activeTab={
-              gameState === 'expedition' ? 'expedition'
+              mobileMenuOpen ? 'profile'
+                : gameState === 'expedition' ? 'expedition'
                 : gameState === 'achievements' ? 'achievements'
                 : 'map'
             }
             onTabChange={(tab: BottomTab) => {
               if (tab === 'map') {
+                setMobileMenuOpen(false);
                 setGameState('map');
               } else if (tab === 'expedition') {
+                setMobileMenuOpen(false);
                 if (profile?.grade) {
                   const exps = getExpeditionsForGrade(profile.grade);
                   if (exps.length > 0) {
@@ -1789,10 +1795,11 @@ export default function App() {
                   }
                 }
               } else if (tab === 'achievements') {
+                setMobileMenuOpen(false);
                 setGameState('achievements');
               } else if (tab === 'profile') {
                 setGameState('map');
-                // Profile items are accessed via MapScreen's overlay panels
+                setMobileMenuOpen(prev => !prev);
               }
             }}
             lang={lang}
