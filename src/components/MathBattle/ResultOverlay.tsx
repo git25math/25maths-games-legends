@@ -2,7 +2,7 @@
  * ResultOverlay — Victory (5-phase) + Defeat screens (v8.4 refactor)
  */
 import { motion, AnimatePresence } from 'motion/react';
-import { XCircle, Trophy, Heart, CheckCircle2 } from 'lucide-react';
+import { XCircle, Trophy, Heart, CheckCircle2, BookOpen } from 'lucide-react';
 import type { Mission, Character, Language } from '../../types';
 import { translations } from '../../i18n/translations';
 import { lt, resolveFormula } from '../../i18n/resolveText';
@@ -10,6 +10,7 @@ import { CharacterAvatar } from '../CharacterAvatar';
 import { AnimatedCounter } from '../AnimatedCounter';
 import { SkillBadgeCard } from '../SkillBadgeCard';
 import type { BattleMode } from '../BattleModeSelector';
+import { getExamHubLessonUrl } from '../../utils/lessonMap';
 
 type Props = {
   showResult: 'none' | 'success' | 'fail';
@@ -236,13 +237,29 @@ export function ResultOverlay({
                     ? "No retries left. That's OK — every master was once a beginner."
                     : '重试机会用完了。没关系——每个高手都曾经是新手。'}
                 </p>
+                {(() => {
+                  const lessonUrl = mission.kpId ? getExamHubLessonUrl(mission.kpId) : null;
+                  return lessonUrl ? (
+                    <a
+                      href={lessonUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-10 py-5 bg-purple-700 text-white font-black rounded-xl shadow-xl hover:bg-purple-600 transition-all"
+                    >
+                      <BookOpen size={20} />
+                      {lang === 'en' ? 'Learn This Skill' : '去学会这个技能'}
+                    </a>
+                  ) : null;
+                })()}
                 {onGiveUp && (
-                  <button
-                    onClick={onGiveUp}
-                    className="px-12 py-5 bg-slate-700 text-white font-black rounded-xl shadow-xl hover:bg-slate-600 transition-all"
-                  >
-                    {lang === 'en' ? 'Back to Map' : '返回地图'}
-                  </button>
+                  <div>
+                    <button
+                      onClick={onGiveUp}
+                      className="px-10 py-3 bg-slate-700/50 text-slate-300 font-bold rounded-xl hover:bg-slate-600/50 transition-all text-sm"
+                    >
+                      {lang === 'en' ? 'Back to Map' : '返回地图'}
+                    </button>
+                  </div>
                 )}
               </div>
             )}
