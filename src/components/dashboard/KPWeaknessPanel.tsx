@@ -26,6 +26,7 @@ type AggregatedKP = {
   failureRate: number;
   studentCount: number;         // students who attempted
   strugglingCount: number;      // students with attempts>2 and wins===0
+  blockedCount: number;         // students with blocked/critical corruption (Resilience Engine)
   hasLesson: boolean;
   lessonUrl: string | null;
 };
@@ -42,19 +43,31 @@ export function KPWeaknessPanel({
   students: StudentRow[];
 }) {
   const [kpData, setKpData] = useState<KPProgressRow[]>([]);
+  const [healthData, setHealthData] = useState<{ user_id: string; node_id: string; corruption_level: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    supabase.rpc('get_class_kp_progress', {
-      p_grade: grade,
-      p_class: filterTag || null,
-    }).then(({ data }) => {
-      setKpData((data as KPProgressRow[]) ?? []);
+    const studentIds = students.map(s => s.user_id);
+    Promise.all([
+      supabase.rpc('get_class_kp_progress', {
+        p_grade: grade,
+        p_class: filterTag || null,
+      }),
+      // Fetch Resilience Engine health data for blocked/critical nodes
+      studentIds.length > 0
+        ? supabase.from('user_skill_health')
+            .select('user_id, node_id, corruption_level')
+            .in('user_id', studentIds)
+            .in('corruption_level', ['blocked', 'critical'])
+        : Promise.resolve({ data: [] }),
+    ]).then(([kpRes, healthRes]) => {
+      setKpData((kpRes.data as KPProgressRow[]) ?? []);
+      setHealthData((healthRes.data as any[]) ?? []);
       setLoading(false);
     });
-  }, [grade, filterTag]);
+  }, [grade, filterTag, students]);
 
   const weakestKPs = useMemo(() => {
     const studentIds = new Set(students.map(s => s.user_id));
@@ -72,6 +85,7 @@ export function KPWeaknessPanel({
           failureRate: 0,
           studentCount: 0,
           strugglingCount: 0,
+          blockedCount: 0,
           hasLesson: !!getLessonId(row.kp_id),
           lessonUrl: getExamHubLessonUrl(row.kp_id),
         });
@@ -81,6 +95,18 @@ export function KPWeaknessPanel({
       kp.totalWins += row.wins;
       kp.studentCount += 1;
       if (row.attempts > 2 && row.wins === 0) kp.strugglingCount += 1;
+    }
+
+    // Merge Resilience Engine blocked counts
+    for (const h of healthData) {
+      // node_id is topicId (e.g., '2.2'), find matching kp_ids
+      for (const [kpId, kp] of kpMap) {
+        const topicMatch = kpId.match(/^kp-(\d+\.\d+)/);
+        if (topicMatch && topicMatch[1] === h.node_id) {
+          kp.blockedCount += 1;
+          break; // count each student once per topic
+        }
+      }
     }
 
     // Calculate failure rate and sort
@@ -169,9 +195,14 @@ export function KPWeaknessPanel({
                   </div>
                   <span className="text-[10px] text-slate-400">
                     {kp.studentCount}{lang === 'en' ? ' students' : '人'}
-                    {kp.strugglingCount > 0 && (
-                      <span className="text-rose-500 ml-1">
-                        ({kp.strugglingCount}{lang === 'en' ? ' stuck' : '人卡住'})
+                    {kp.blockedCount > 0 && (
+                      <span className="text-rose-500 ml-1 font-bold">
+                        ({kp.blockedCount}{lang === 'en' ? ' blocked' : '人受阻'})
+                      </span>
+                    )}
+                    {kp.blockedCount === 0 && kp.strugglingCount > 0 && (
+                      <span className="text-amber-500 ml-1">
+                        ({kp.strugglingCount}{lang === 'en' ? ' weak' : '人薄弱'})
                       </span>
                     )}
                   </span>
