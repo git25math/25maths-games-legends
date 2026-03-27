@@ -432,7 +432,7 @@ export const ExpeditionScreen = ({
       <div className="min-h-[80vh] flex flex-col items-center justify-center px-4">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center">
           <Coffee size={48} className="text-amber-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-black text-white mb-2">{lt(currentNode.name, lang)}</h2>
+          <h2 className="text-lg sm:text-2xl font-black text-white mb-2">{lt(currentNode.name, lang)}</h2>
           {currentNode.intel && (
             <p className="text-amber-400/60 text-xs italic mb-3 max-w-xs mx-auto">{lt(currentNode.intel, lang)}</p>
           )}
@@ -491,8 +491,8 @@ export const ExpeditionScreen = ({
             <AnimatePresence>
               {showRetreatConfirm && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-3xl backdrop-blur-sm">
-                  <div className="text-center p-6">
+                  className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-2xl sm:rounded-3xl backdrop-blur-sm">
+                  <div className="text-center p-4 sm:p-6">
                     <Shield size={32} className="text-amber-400 mx-auto mb-3" />
                     <p className="text-white font-bold text-sm mb-1">{lang === 'en' ? 'Retreat?' : '确定撤退？'}</p>
                     <p className="text-white/40 text-xs mb-4">{lang === 'en' ? 'Keep earned XP, end expedition.' : '保留已获经验，结束远征。'}</p>
@@ -540,7 +540,7 @@ export const ExpeditionScreen = ({
               {showResult === 'correct' && (
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
                   className="absolute inset-0 flex items-center justify-center bg-emerald-500/20 rounded-3xl pointer-events-none">
-                  <span className="text-emerald-400 font-black text-3xl">{t.correct}</span>
+                  <span className="text-emerald-400 font-black text-2xl sm:text-3xl">{t.correct}</span>
                 </motion.div>
               )}
               {showResult === 'wrong' && (

@@ -12,15 +12,15 @@ export const CharacterCard = ({ character, isSelected, onSelect, lang }: { chara
     onClick={onSelect}
     animate={isSelected ? { borderColor: ["#b8860b", "#daa520", "#b8860b"] } : { borderColor: "transparent" }}
     transition={isSelected ? { repeat: Infinity, duration: 2 } : undefined}
-    className={`cursor-pointer p-4 rounded-2xl border-4 transition-all ${
+    className={`cursor-pointer p-2 sm:p-4 rounded-xl sm:rounded-2xl border-4 transition-all ${
       isSelected ? 'shadow-xl scale-105 bg-white/10' : 'border-transparent bg-white/5'
     }`}
     style={isSelected ? { borderColor: '#b8860b' } : undefined}
   >
-    <div className="mx-auto mb-4 flex justify-center">
-      <CharacterAvatar characterId={character.id} size={96} />
+    <div className="mx-auto mb-2 sm:mb-4 flex justify-center">
+      <CharacterAvatar characterId={character.id} size={72} />
     </div>
-    <h3 className="text-lg font-bold text-white text-center">{lt(character.name, lang)}</h3>
+    <h3 className="text-sm sm:text-lg font-bold text-white text-center">{lt(character.name, lang)}</h3>
     <p className="text-yellow-300 text-xs text-center font-medium mb-3">{lt(character.role, lang)}</p>
 
     <div className="bg-black/20 p-2 rounded-lg mb-3">
@@ -39,6 +39,6 @@ export const CharacterCard = ({ character, isSelected, onSelect, lang }: { chara
         </div>
       ))}
     </div>
-    <p className="text-gray-400 text-[10px] text-center leading-tight">{lt(character.description, lang)}</p>
+    <p className="text-gray-400 text-[10px] text-center leading-tight hidden sm:block">{lt(character.description, lang)}</p>
   </motion.div>
 );
