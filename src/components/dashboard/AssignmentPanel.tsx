@@ -369,8 +369,8 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
               setShowCreate(false);
               fetchAssignments();
               const msg = lang === 'en'
-                ? `"${title}" assigned (${count} missions → ${students.length} students)`
-                : `"${title}" 已布置（${count} 关 → ${students.length} 名学生）`;
+                ? `"${title}" assigned (${count} missions → ${students.length} students). Click 🔗 to copy share link.`
+                : `"${title}" 已布置（${count} 关 → ${students.length} 名学生）。点 🔗 复制链接发到班级群。`;
               setToast(msg);
               setTimeout(() => setToast(null), 4000);
             }}

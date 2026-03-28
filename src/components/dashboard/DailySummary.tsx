@@ -73,7 +73,7 @@ export function DailySummary({ lang, students, assignmentCompletionRate, totalAs
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
       {cards.map((c, i) => (
         <div key={i} className={`rounded-xl p-3 ${c.color} border border-current/10`}>
-          <div className="flex items-center gap-2 mb-1 opacity-70">{c.icon}<span className="text-[10px] font-bold">{c.label}</span></div>
+          <div className="flex items-center gap-2 mb-1 opacity-80">{c.icon}<span className="text-xs font-bold">{c.label}</span></div>
           <div className="text-2xl font-black">{c.value}</div>
         </div>
       ))}
