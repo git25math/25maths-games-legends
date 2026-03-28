@@ -1398,7 +1398,7 @@ export const MapScreen = ({
           missions={missions}
           completedMissions={(profile.completed_missions || {}) as CompletedMissions}
           onMissionStart={onPracticeStart}
-          onClose={() => setShowMyHomework(false)}
+          onClose={() => { setShowMyHomework(false); onHomeworkOpened?.(); }}
         />
       )}
 

@@ -174,7 +174,7 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
                     key={`${stepIdx}-${i}`}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleChoice(item.originalIdx, i)}
-                    className={`w-full py-4 px-5 min-h-[52px] border-2 rounded-xl text-base text-left transition-all break-words [overflow-wrap:anywhere] ${
+                    className={`w-full py-3 px-4 min-h-[48px] border-2 rounded-xl text-base text-left transition-all break-words [overflow-wrap:anywhere] ${
                       selectedIdx === i
                         ? 'bg-amber-600 border-amber-400 text-white font-bold'
                         : 'bg-slate-700 hover:bg-slate-600 border-slate-500 text-white'
@@ -248,7 +248,7 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
               onClick={advance}
-              className="mt-4 w-full py-3 min-h-[52px] bg-slate-600 hover:bg-slate-500 text-white font-black rounded-xl transition-colors text-base"
+              className="mt-4 w-full py-3 min-h-[48px] bg-slate-600 hover:bg-slate-500 text-white font-black rounded-xl transition-colors text-base"
             >
               {stepIdx + 1 >= steps.length
                 ? (lang === 'en' ? 'I\'m ready — show me the method →' : '我准备好了——教我方法 →')

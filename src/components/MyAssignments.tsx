@@ -99,7 +99,7 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
               const pct = total > 0 ? Math.round((done / total) * 100) : 0;
 
               return (
-                <div key={a.id} className={`rounded-xl border-2 p-4 ${
+                <div key={a.id} className={`rounded-2xl border-2 p-4 ${
                   allDone ? 'bg-emerald-50 border-emerald-200' :
                   overdue ? 'bg-rose-50 border-rose-200' :
                   'bg-white border-slate-200'

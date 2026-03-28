@@ -1069,7 +1069,7 @@ export default function App() {
                   learnerMode={learnerMode}
                   onLearnerModeChange={handleSetLearnerMode}
                   autoOpenHomework={pendingHomework || showHomeworkTab}
-                  onHomeworkOpened={() => { setPendingHomework(false); if (!showHomeworkTab) window.history.replaceState({}, '', window.location.pathname); }}
+                  onHomeworkOpened={() => { setPendingHomework(false); setShowHomeworkTab(false); window.history.replaceState({}, '', window.location.pathname); }}
                   onMissionStart={handleMissionStart}
                   onPracticeStart={handlePracticeStart}
                   onGradeChange={() => updateProfile({ grade: null })}
@@ -1911,7 +1911,7 @@ export default function App() {
                 if (gameState !== 'map') setGameState('map');
               } else if (tab === 'homework') {
                 setMobileMenuOpen(false);
-                setShowHomeworkTab(true);
+                setShowHomeworkTab(prev => !prev);
                 if (gameState !== 'map') setGameState('map');
               } else if (tab === 'profile') {
                 setShowHomeworkTab(false);
