@@ -431,24 +431,17 @@ export const MapScreen = ({
                 {/* Title first — primary visual weight */}
                 <h4 className="text-sm sm:text-lg md:text-2xl font-black text-slate-800 mb-1 sm:mb-2 line-clamp-2 pr-8">{lt(mission.title, lang)}</h4>
 
-                {/* Difficulty + completion + type — secondary, compact row */}
-                <div className="flex items-center gap-1.5 mb-2 sm:mb-3 flex-wrap">
+                {/* Status row — minimal on mobile */}
+                <div className="flex items-center gap-1.5 mb-2 sm:mb-3">
                   <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
                     mission.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' :
                     mission.difficulty === 'Medium' ? 'bg-orange-100 text-orange-700' : 'bg-rose-100 text-rose-700'
                   }`}>
                     {t.difficulty[mission.difficulty]}
                   </span>
-                  <span className="text-slate-400 text-[9px]">·</span>
-                  <span className="text-indigo-500 text-[9px] font-bold uppercase">{t.questionTypes[mission.type]}</span>
-                  {isCompleted ? (
-                    <span className="flex gap-0.5 ml-auto">
-                      {comp?.green && <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />}
-                      {comp?.amber && <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />}
-                      {comp?.red && <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />}
-                      <CheckCircle2 className="text-emerald-500 ml-0.5" size={14} />
-                    </span>
-                  ) : isLocked ? <Lock className="text-slate-400 ml-auto" size={16} /> : null}
+                  <span className="hidden sm:inline text-indigo-500 text-[9px] font-bold uppercase">{t.questionTypes[mission.type]}</span>
+                  {isCompleted && <CheckCircle2 className="text-emerald-500 ml-auto" size={16} />}
+                  {isLocked && <Lock className="text-slate-400 ml-auto" size={16} />}
                 </div>
 
                 {/* Description — hidden on small mobile, visible on sm+ */}
@@ -460,43 +453,25 @@ export const MapScreen = ({
                   const isWeak = weakMissionSet.has(mission.id);
                   const kpProg = mission.kpId ? kpProgress.get(mission.kpId) : undefined;
                   const isAssigned = assignedMissionIds.has(mission.id);
-                  return (pb || isHot || isWeak || kpProg || isAssigned) ? (
-                    <div className="flex items-center gap-1.5 mb-4 flex-wrap">
+                  // Mobile: only show homework + weak badges. Desktop: show all.
+                  const hasBadges = isAssigned || isWeak;
+                  return hasBadges ? (
+                    <div className="flex items-center gap-1.5 mb-3 flex-wrap">
                       {isAssigned && !isCompleted && (
                         <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-black rounded-full border border-purple-200 flex items-center gap-0.5">
-                          <ClipboardList size={10} /> {lt({ zh: '老师布置', en: 'Assigned' }, lang)}
-                        </span>
-                      )}
-                      {kpProg?.mastered && (
-                        <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full border border-emerald-200 flex items-center gap-0.5">
-                          <CheckCircle2 size={10} /> {lt({ zh: '已掌握', en: 'Mastered' }, lang)}
-                        </span>
-                      )}
-                      {kpProg && !kpProg.mastered && kpProg.wins > 0 && (
-                        <span className="px-2 py-0.5 bg-sky-100 text-sky-700 text-[10px] font-black rounded-full border border-sky-200">
-                          {lang === 'en' ? `${kpProg.wins} wins` : `${kpProg.wins} ${lang === 'zh_TW' ? '勝' : '胜'}`}
+                          <ClipboardList size={10} /> {lt({ zh: '作业', en: 'HW' }, lang)}
                         </span>
                       )}
                       {isWeak && (
                         <span className="px-2 py-0.5 bg-rose-100 text-rose-700 text-[10px] font-black rounded-full border border-rose-200 flex items-center gap-0.5">
-                          <AlertTriangle size={10} /> {lt({ zh: '薄弱点', en: 'Needs review' }, lang)}
-                          {weakMissionPatterns.get(mission.id) && (
-                            <span className="ml-0.5 opacity-70">{weakMissionPatterns.get(mission.id)}</span>
-                          )}
+                          <AlertTriangle size={10} /> {lt({ zh: '需复习', en: 'Review' }, lang)}
                         </span>
                       )}
-                      {pb && (
-                        <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-black rounded-full border border-amber-200">
-                          PB {pb}
-                        </span>
-                      )}
-                      {isHot && (
-                        <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] font-black rounded-full border border-orange-200 animate-pulse">
-                          🔥 {lang === 'en' ? `${hotLabel} ×1.5` : `本周热点 ×1.5`}
-                        </span>
-                      )}
+                      {/* Desktop-only badges */}
+                      {pb && <span className="hidden sm:inline px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-black rounded-full border border-amber-200">PB {pb}</span>}
+                      {isHot && <span className="hidden sm:inline px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] font-black rounded-full border border-orange-200">🔥 {hotLabel}</span>}
                     </div>
-                  ) : <div className="mb-4" />;
+                  ) : <div className="mb-2" />;
                 })()}
                 <motion.button
                   {...(isLocked ? {} : { ...tapScale, ...hoverGlow })}
