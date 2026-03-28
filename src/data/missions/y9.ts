@@ -529,7 +529,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { points: [[0, 1], [2, 5]], generatorType: 'LINEAR_RANDOM' }, difficulty: 'Easy', reward: 140,
     kpId: 'kp-3.3-02', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：为什么要学平行线？\n两条道路永远不交叉——平行线性质决定了角的关系。\n掌握了同位角、内错角，就能破解任何几何迷阵！', en: 'Zhuge Liang: "Why learn parallel lines?\nTwo roads that never cross — parallel line properties determine angle relationships.\nMaster corresponding and alternate angles, and you can solve any geometric puzzle!"' }, highlightField: 'm' },
+      { text: { zh: '贾诩：为什么要学平行线？\n两条道路永远不交叉——平行线性质决定了角的关系。\n掌握了同位角、内错角，就能破解任何几何迷阵！', en: 'Zhuge Liang: "Why learn parallel lines?\nTwo roads that never cross — parallel line properties determine angle relationships.\nMaster corresponding and alternate angles, and you can solve any geometric puzzle!"' }, highlightField: 'm' },
       { text: { zh: '贾诩：判断平行的方法\n分别算出两条线的斜率 $m_1$ 和 $m_2$：\n如果 $m_1 = m_2$ → 平行 ✓\n如果 $m_1 \\neq m_2$ → 不平行 ✗', en: 'Jia Xu: "How to check for parallel lines\nCalculate both gradients $m_1$ and $m_2$:\nIf $m_1 = m_2$ → parallel ✓\nIf $m_1 \\neq m_2$ → not parallel ✗"' }, highlightField: 'm' },
       { text: { zh: '贾诩：先算这条线的斜率\n用斜率公式 $m = \\frac{y_2 - y_1}{x_2 - x_1}$\n代入给定的两个坐标点。', en: 'Jia Xu: "First calculate this line\'s gradient\nUsing $m = \\frac{y_2 - y_1}{x_2 - x_1}$\nSubstitute the two given coordinate points."' }, highlightField: 'm' },
       { text: { zh: '贾诩：再求截距 $c$\n把 $m$ 和一个点代入 $y = mx + c$，解出 $c$。', en: 'Jia Xu: "Then find intercept $c$\nSubstitute $m$ and one point into $y = mx + c$, solve for $c$."' }, highlightField: 'c' },
@@ -551,7 +551,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { points: [[2, 5], [4, 9]], generatorType: 'LINEAR_RANDOM' }, difficulty: 'Medium', reward: 180,
     kpId: 'kp-3.5-02', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：为什么要求 $y$ 截距？\n$y$ 截距就是起点——行军从哪里出发。\n知道了起点和斜率，就能画出整条路线！', en: 'Zhuge Liang: "Why find the y-intercept?\nThe y-intercept is the starting point — where the march begins.\nKnow the start and the slope, and you can trace the entire route!"' }, highlightField: 'c' },
+      { text: { zh: '贾诩：为什么要求 $y$ 截距？\n$y$ 截距就是起点——行军从哪里出发。\n知道了起点和斜率，就能画出整条路线！', en: 'Zhuge Liang: "Why find the y-intercept?\nThe y-intercept is the starting point — where the march begins.\nKnow the start and the slope, and you can trace the entire route!"' }, highlightField: 'c' },
       { text: { zh: '贾诩：怎么求 $y$ 截距？\n第 1 步：先用两个驿站坐标求斜率 $m$\n第 2 步：把 $m$ 和任一点代入 $y = mx + c$，解出 $c$', en: 'Jia Xu: "How to find the y-intercept?\nStep 1: Find gradient $m$ from the two relay stations\nStep 2: Substitute $m$ and any point into $y = mx + c$, solve for $c$"' }, highlightField: 'c' },
       { text: { zh: '贾诩：第 1 步——求斜率\n$m = \\frac{y_2 - y_1}{x_2 - x_1}$\n代入两个驿站的坐标。', en: 'Jia Xu: "Step 1 — find gradient\n$m = \\frac{y_2 - y_1}{x_2 - x_1}$\nSubstitute the two relay station coordinates."' }, highlightField: 'm' },
       { text: { zh: '贾诩：第 2 步——求截距\n把 $m$ 和点代入：$y = mx + c$\n移项得 $c = y - mx$。', en: 'Jia Xu: "Step 2 — find intercept\nSubstitute $m$ and the point: $y = mx + c$\nRearrange: $c = y - mx$."' }, highlightField: 'c' },
@@ -573,7 +573,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { targetX: 3, targetY: 5, generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Hard', reward: 200,
     kpId: 'kp-3.4-01', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：为什么要学中点公式？\n两支军队要在中间会合——中点就是最公平的汇合点。\n坐标的中点 = 两端坐标的平均值，简单又精准！', en: 'Zhuge Liang: "Why learn the midpoint formula?\nTwo armies must meet in the middle — the midpoint is the fairest meeting place.\nMidpoint coordinates = average of both endpoints, simple and precise!"' }, highlightField: 'x' },
+      { text: { zh: '贾诩：为什么要学中点公式？\n两支军队要在中间会合——中点就是最公平的汇合点。\n坐标的中点 = 两端坐标的平均值，简单又精准！', en: 'Zhuge Liang: "Why learn the midpoint formula?\nTwo armies must meet in the middle — the midpoint is the fairest meeting place.\nMidpoint coordinates = average of both endpoints, simple and precise!"' }, highlightField: 'x' },
       { text: { zh: '贾诩：中点公式\n$$\\text{中点} = \\left(\\frac{x_1 + x_2}{2}, \\frac{y_1 + y_2}{2}\\right)$$\n就是把两个 $x$ 加起来除以 2，两个 $y$ 加起来除以 2。\n"取平均值"——这就是"中间"的数学含义！', en: 'Jia Xu: "The midpoint formula\n$$\\text{midpoint} = \\left(\\frac{x_1 + x_2}{2}, \\frac{y_1 + y_2}{2}\\right)$$\nAdd the two $x$\'s and halve, add the two $y$\'s and halve.\n\'Average\' — that\'s the math meaning of \'middle\'!"' }, highlightField: 'x' },
       { text: { zh: '贾诩：代入坐标\n据点 A 和 据点 B 的坐标已知，\n中点 $x = \\frac{x_1 + x_2}{2}$\n中点 $y = \\frac{y_1 + y_2}{2}$', en: 'Jia Xu: "Substitute coordinates\nBase A and Base B coordinates are known,\nMidpoint $x = \\frac{x_1 + x_2}{2}$\nMidpoint $y = \\frac{y_1 + y_2}{2}$"' }, highlightField: 'x' },
       { text: { zh: '贾诩：计算\n$x$ 坐标的平均值和 $y$ 坐标的平均值分别计算。', en: 'Jia Xu: "Calculate\nAverage the $x$-coordinates and $y$-coordinates separately."' }, highlightField: 'x' },
@@ -619,7 +619,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { factor: 3, p: 2, q: 5, generatorType: 'FACTORISE_RANDOM' }, difficulty: 'Medium', reward: 180,
     kpId: 'kp-2.2-06', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：为什么要学因式分解？\n方程太复杂？把它拆成简单部分的乘积——\n就像把散兵收拢成整齐方阵，化繁为简是解方程的核心！', en: 'Zhuge Liang: "Why learn factorisation?\nEquation too complex? Break it into a product of simpler parts —\nLike regrouping scattered soldiers into formations, simplification is key!"' }, highlightField: 'ans' },
+      { text: { zh: '荀彧：为什么要学因式分解？\n方程太复杂？把它拆成简单部分的乘积——\n就像把散兵收拢成整齐方阵，化繁为简是解方程的核心！', en: 'Zhuge Liang: "Why learn factorisation?\nEquation too complex? Break it into a product of simpler parts —\nLike regrouping scattered soldiers into formations, simplification is key!"' }, highlightField: 'ans' },
       { text: { zh: '荀彧：怎么找公因子？\n列出两个数的因数，找最大的公共因数。', en: 'Xun Yu: "How to find the common factor?\nList factors of both numbers, find the largest common one."' }, highlightField: 'ans' },
       { text: { zh: '荀彧：用公因子去除每一项\n看是否整除——整除就说明打包完美！', en: 'Xun Yu: "Divide each term by the common factor\nIf both divide evenly — perfect bundling!"' }, highlightField: 'ans' },
       { text: { zh: '荀彧：拼起来\n公因子放外面，除完的放括号里。', en: 'Xun Yu: "Put it together\nCommon factor outside, quotients inside brackets."' }, highlightField: 'ans' },
@@ -641,7 +641,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { a: 4, b: 3, c: 15, generatorType: 'INEQUALITY_RANDOM' }, difficulty: 'Medium', reward: 200,
     kpId: 'kp-2.6-01', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：为什么要学不等式？\n方程告诉你恰好是多少，但现实中更多的是至少需要多少——\n不等式就是描述范围和限制条件的数学语言！', en: 'Zhuge Liang: "Why learn inequalities?\nEquations tell you exact amounts, but reality is about at least or at most —\nInequalities are the math language for ranges and constraints!"' }, highlightField: 'ans' },
+      { text: { zh: '荀彧：为什么要学不等式？\n方程告诉你恰好是多少，但现实中更多的是至少需要多少——\n不等式就是描述范围和限制条件的数学语言！', en: 'Zhuge Liang: "Why learn inequalities?\nEquations tell you exact amounts, but reality is about at least or at most —\nInequalities are the math language for ranges and constraints!"' }, highlightField: 'ans' },
       { text: { zh: '荀彧：不等式和方程的区别\n方程：$=$ 一个精确值\n不等式：$>$, $<$, $\\geq$, $\\leq$ 一个范围\n\n解法几乎一样！只是答案是一个范围而不是一个点。', en: 'Xun Yu: "Inequality vs equation\nEquation: $=$ one exact value\nInequality: $>$, $<$, $\\geq$, $\\leq$ a range\n\nSolving is almost identical! But the answer is a range, not a point."' }, highlightField: 'ans' },
       { text: { zh: '荀彧：解法——跟解方程一样\n移项、合并，把 $x$ 留在一边。\n除以 $x$ 的系数得到临界值。', en: 'Xun Yu: "Method — same as equations\nRearrange, combine, isolate $x$ on one side.\nDivide by $x$\'s coefficient to find the critical value."' }, highlightField: 'ans' },
       { text: { zh: '荀彧：代入计算\n一步步移项，求出 $x$ 的临界值。', en: 'Xun Yu: "Substitute and calculate\nStep by step rearranging to find the critical $x$ value."' }, highlightField: 'ans' },
@@ -709,7 +709,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { angle: 65, total: 180, answer: 65, generatorType: 'PARALLEL_ANGLES_RANDOM' }, difficulty: 'Medium', reward: 180,
     kpId: 'kp-4.6-04', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '张昭：为什么要学平行线截角？\n城墙上两条平行线被一条横线截断——产生了成对的角。\n掌握这些角的关系，就能在不量角的情况下算出任何角！', en: 'Zhang Zhao: "Why learn parallel angles?\nTwo parallel lines cut by a transversal create paired angles.\nMaster these relationships and calculate any angle without measuring!"' }, highlightField: 'x' },
+      { text: { zh: '关羽：为什么要学平行线截角？\n城墙上两条平行线被一条横线截断——产生了成对的角。\n掌握这些角的关系，就能在不量角的情况下算出任何角！', en: 'Zhang Zhao: "Why learn parallel angles?\nTwo parallel lines cut by a transversal create paired angles.\nMaster these relationships and calculate any angle without measuring!"' }, highlightField: 'x' },
       { text: { zh: '关羽：三大角度关系\n① 同位角（F形）相等\n② 内错角（Z形）相等\n③ 同旁内角（C形）互补（加起来 180°）', en: 'Guan Yu: "Three angle relationships\n① Corresponding angles (F-shape) are EQUAL\n② Alternate angles (Z-shape) are EQUAL\n③ Co-interior angles (C-shape) are SUPPLEMENTARY (sum to 180°)"' }, highlightField: 'x' },
       { text: { zh: '关羽：识别角度关系\n看已知角和未知角的位置——是 F 形、Z 形还是 C 形？', en: 'Guan Yu: "Identify the relationship\nLook at positions of known and unknown angles — F, Z, or C shape?"' }, highlightField: 'x' },
       { text: { zh: '关羽：应用规则\n根据识别出的关系，直接得到答案。', en: 'Guan Yu: "Apply the rule\nBased on the identified relationship, get the answer directly."' }, highlightField: 'x' },
@@ -731,7 +731,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { angle: 300, total: 360, generatorType: 'ANGLES_POINT_RANDOM' }, difficulty: 'Hard', reward: 220,
     kpId: 'kp-4.6-06', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '张昭：为什么要学多边形内角和？\n修建城堡时，每面墙的角度必须精准——否则墙合不拢！\n$n$ 边形内角和 = $(n-2) \\times 180°$，知道了这个就能算出每个角。', en: 'Zhang Zhao: "Why learn polygon interior angles?\nBuilding a fortress, every wall angle must be precise — or the walls don\'t close!\n$n$-gon interior angles = $(n-2) \\times 180°$, know this to find any angle."' }, highlightField: 'x' },
+      { text: { zh: '赵云：为什么要学多边形内角和？\n修建城堡时，每面墙的角度必须精准——否则墙合不拢！\n$n$ 边形内角和 = $(n-2) \\times 180°$，知道了这个就能算出每个角。', en: 'Zhang Zhao: "Why learn polygon interior angles?\nBuilding a fortress, every wall angle must be precise — or the walls don\'t close!\n$n$-gon interior angles = $(n-2) \\times 180°$, know this to find any angle."' }, highlightField: 'x' },
       { text: { zh: '赵云：为什么是 $(n-2)$？\n任何多边形都能从一个顶点画对角线，分成 $(n-2)$ 个三角形。\n每个三角形 $180°$，所以总共 $(n-2) \\times 180°$！', en: 'Zhao Yun: "Why $(n-2)$?\nAny polygon can be split into $(n-2)$ triangles by drawing diagonals from one vertex.\nEach triangle has $180°$, so total = $(n-2) \\times 180°$!"' }, highlightField: 'x' },
       { text: { zh: '赵云：解题思路\n内角和 - 已知角之和 = 未知角 $x$', en: 'Zhao Yun: "Strategy\nInterior angle sum - known angles = unknown angle $x$"' }, highlightField: 'x' },
       { text: { zh: '赵云：计算\n先算内角和，再减去所有已知角。', en: 'Zhao Yun: "Calculate\nFirst find interior angle sum, then subtract all known angles."' }, highlightField: 'x' },
@@ -755,7 +755,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { speed: 15, distance: 60, time: 4, mode: 'speed', answer: 15, x: 15, generatorType: 'SPEED_RANDOM' }, difficulty: 'Easy', reward: 140,
     kpId: 'kp-1.12-02', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '张昭：为什么要学速度公式？\n行军打仗，速度决定生死。提前到达 = 抢占先机，迟到 = 全军覆没。\n速度 = 距离 ÷ 时间，三个量知二求一！', en: 'Zhang Zhao: "Why learn the speed formula?\nIn war, speed means life or death. Arrive early = seize advantage, arrive late = total defeat.\nSpeed = distance ÷ time, know any two to find the third!"' }, highlightField: 'x' },
+      { text: { zh: '赵云：为什么要学速度公式？\n行军打仗，速度决定生死。提前到达 = 抢占先机，迟到 = 全军覆没。\n速度 = 距离 ÷ 时间，三个量知二求一！', en: 'Zhang Zhao: "Why learn the speed formula?\nIn war, speed means life or death. Arrive early = seize advantage, arrive late = total defeat.\nSpeed = distance ÷ time, know any two to find the third!"' }, highlightField: 'x' },
       { text: { zh: '赵云：三个公式\n$S = \\frac{D}{T}$（求速度）\n$D = S \\times T$（求距离）\n$T = \\frac{D}{S}$（求时间）', en: 'Zhao Yun: "Three formulas\n$S = \\frac{D}{T}$ (find speed)\n$D = S \\times T$ (find distance)\n$T = \\frac{D}{S}$ (find time)"' }, highlightField: 'x' },
       { text: { zh: '赵云：代入数据\n已知量代入对应公式。', en: 'Zhao Yun: "Substitute\nPlug known values into the formula."' }, highlightField: 'x' },
       { text: { zh: '赵云：计算\n一步除法或乘法。', en: 'Zhao Yun: "Calculate\nOne division or multiplication."' }, highlightField: 'x' },
@@ -777,7 +777,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { initial: 5000, rate: 0.2, years: 1, answer: 6000, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Medium', reward: 180,
     kpId: 'kp-1.13-02', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '张昭：为什么要学百分比增长？\n军队扩编、粮价上涨——数量在原基础上增加一定百分比。\n掌握百分比增减，才能预测未来的规模变化！', en: 'Zhang Zhao: "Why learn percentage increase?\nArmy expansion, grain price rises — quantities increase by a percentage of the original.\nMaster percentage change to predict future scale!"' }, highlightField: 'ans' },
+      { text: { zh: '曹操：为什么要学百分比增长？\n军队扩编、粮价上涨——数量在原基础上增加一定百分比。\n掌握百分比增减，才能预测未来的规模变化！', en: 'Zhang Zhao: "Why learn percentage increase?\nArmy expansion, grain price rises — quantities increase by a percentage of the original.\nMaster percentage change to predict future scale!"' }, highlightField: 'ans' },
       { text: { zh: '曹操：公式\n$$\\text{新值} = \\text{原值} \\times (1 + r)$$\n增长用正 $r$，减少用负 $r$。', en: 'Cao Cao: "Formula\n$$\\text{New} = \\text{Original} \\times (1 + r)$$\nIncrease = positive $r$, decrease = negative $r$."' }, highlightField: 'ans' },
       { text: { zh: '曹操：代入数据\n原值和变化率代入。', en: 'Cao Cao: "Substitute\nOriginal value and rate."' }, highlightField: 'ans' },
       { text: { zh: '曹操：计算\n一步乘法。', en: 'Cao Cao: "Calculate\nOne multiplication."' }, highlightField: 'ans' },
@@ -799,7 +799,7 @@ export const MISSIONS_Y9: Mission[] = [
     data: { initial: 500, rate: 0.25, years: 1, answer: 625, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Hard', reward: 220,
     kpId: 'kp-1.13-04', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '张昭：为什么要学反向百分比？\n现价已经涨过了——原价是多少？打折后的价格知道了——原价呢？\n反向百分比就是从结果倒推回起点的技巧！', en: 'Zhang Zhao: "Why learn reverse percentages?\nThe current price already increased — what was the original? You know the sale price — what\'s the original?\nReverse percentage is the technique of working backwards from the result!"' }, highlightField: 'ans' },
+      { text: { zh: '曹操：为什么要学反向百分比？\n现价已经涨过了——原价是多少？打折后的价格知道了——原价呢？\n反向百分比就是从结果倒推回起点的技巧！', en: 'Zhang Zhao: "Why learn reverse percentages?\nThe current price already increased — what was the original? You know the sale price — what\'s the original?\nReverse percentage is the technique of working backwards from the result!"' }, highlightField: 'ans' },
       { text: { zh: '曹操：公式\n$$\\text{原值} = \\frac{\\text{新值}}{1 + r}$$\n新值 ÷ $(1 + 百分比)$ = 原值。', en: 'Cao Cao: "Formula\n$$\\text{Original} = \\frac{\\text{New}}{1 + r}$$\nNew ÷ $(1 + \\text{percentage})$ = original."' }, highlightField: 'ans' },
       { text: { zh: '曹操：代入数据\n新值和变化率代入。', en: 'Cao Cao: "Substitute\nNew value and rate."' }, highlightField: 'ans' },
       { text: { zh: '曹操：计算\n一步除法。', en: 'Cao Cao: "Calculate\nOne division."' }, highlightField: 'ans' },
