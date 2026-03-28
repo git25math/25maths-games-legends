@@ -968,7 +968,14 @@ export function generatePrimeMission(template: Mission, tier: DifficultyTier = 2
   return {
     ...template,
     description,
-    data: { n, isPrime: result, generatorType: 'PRIME_RANDOM' },
+    data: {
+      n, isPrime: result, generatorType: 'PRIME_RANDOM',
+      choices: [
+        { label: { zh: '是质数 ✓', en: 'Yes, prime ✓' }, value: '1' },
+        { label: { zh: '不是质数 ✗', en: 'No, not prime ✗' }, value: '2' },
+      ],
+      correctChoice: result ? '1' : '2',
+    },
     tutorialSteps,
   };
 }

@@ -59,7 +59,14 @@ export const MISSIONS_Y7: Mission[] = [
     skillSummary: { zh: '质数只能被 1 和自己整除', en: 'Primes are only divisible by 1 and themselves' },
     story: { zh: '桃园结义后要选拔精锐亲卫。"质数战士"不能被拆分——只听命于天子和自己。判断一个数是不是质数！', en: 'After the oath, elite guards must be selected. "Prime warriors" cannot be split — they answer only to the emperor and themselves. Determine if a number is prime!' },
     description: { zh: '判断这个数是不是质数。', en: 'Determine if this number is prime.' },
-    data: { n: 17, isPrime: true, generatorType: 'PRIME_RANDOM' }, difficulty: 'Easy', reward: 35,
+    data: {
+      n: 17, isPrime: true, generatorType: 'PRIME_RANDOM',
+      choices: [
+        { label: { zh: '是质数 ✓', en: 'Yes, prime ✓' }, value: '1' },
+        { label: { zh: '不是质数 ✗', en: 'No, not prime ✗' }, value: '2' },
+      ],
+      correctChoice: '1',
+    }, difficulty: 'Easy', reward: 35,
     kpId: 'kp-1.1-01', sectionId: 'number',
         tutorialSteps: [
       { text: { zh: '诸葛亮：亲卫队为什么要"质数"人？\n\n质数只能被 1 和自己整除，不能被分成等大的小组——就像亲卫必须铁板一块，不能被分化！判断一个数是不是质数，要用**试除法**。', en: 'Zhuge Liang: Why does the elite guard need "prime" numbers?\n\nA prime is only divisible by 1 and itself — it cannot be split into equal groups. Like the elite guard being unbreakable! To test primality, use the trial division method.' }, highlightField: 'ans' },
