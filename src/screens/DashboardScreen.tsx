@@ -459,7 +459,9 @@ export function DashboardScreen({ lang, onClose }: Props) {
         <div className="mb-3 px-4 py-2 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs font-bold">{error}</div>
       )}
 
-      {/* ═══ Daily Summary — 30-second glance ═══ */}
+      {/* ╔══════════════════════════════════════════╗
+         ║  ZONE 1: 今天怎么样？（一眼扫完）        ║
+         ╚══════════════════════════════════════════╝ */}
       {loading && students.length === 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[0,1,2,3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-xl animate-pulse" />)}
@@ -551,16 +553,22 @@ export function DashboardScreen({ lang, onClose }: Props) {
         )}
       </AnimatePresence>
 
-      {/* ═══ Assignments — teacher's daily tool (moved up from middle) ═══ */}
+      {/* ╔══════════════════════════════════════════╗
+         ║  ZONE 2: 我该做什么？（每天操作区）      ║
+         ╚══════════════════════════════════════════╝ */}
+      <div className="mt-2 mb-3 flex items-center gap-2">
+        <div className="h-px flex-1 bg-slate-200" />
+        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{lang === 'en' ? 'Action' : '今日行动'}</span>
+        <div className="h-px flex-1 bg-slate-200" />
+      </div>
+
       <AssignmentPanel lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} />
 
-      {/* ═══ Alert Panel — who needs attention ═══ */}
       <AlertPanel lang={lang} alerts={alerts} alertOnly={alertOnly} onToggleAlertOnly={() => setAlertOnly(!alertOnly)} onStudentClick={(uid) => {
         const s = students.find(st => st.user_id === uid);
         if (s) setSelectedStudent(s);
       }} />
 
-      {/* ═══ KP Weakness Ranking — what to teach ═══ */}
       <KPWeaknessPanel lang={lang} grade={grade} filterTag={filterTag} students={students} />
 
       {/* Live indicator + stats row */}
@@ -749,7 +757,14 @@ export function DashboardScreen({ lang, onClose }: Props) {
       </div>
       </div>
 
-      {/* ═══ Lower-priority panels (less frequently used) ═══ */}
+      {/* ╔══════════════════════════════════════════╗
+         ║  ZONE 3: 深入分析（需要时展开）          ║
+         ╚══════════════════════════════════════════╝ */}
+      <div className="mt-2 mb-3 flex items-center gap-2">
+        <div className="h-px flex-1 bg-slate-200" />
+        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{lang === 'en' ? 'Analysis' : '深入分析'}</span>
+        <div className="h-px flex-1 bg-slate-200" />
+      </div>
       <WeeklyTrend lang={lang} grade={grade} filterTag={filterTag} />
       <ClassOverview lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} totalMissions={totalMissions} />
       <ClassManager lang={lang} grade={grade} students={students} onClassCreated={(name) => setFilterTag(name)} />
