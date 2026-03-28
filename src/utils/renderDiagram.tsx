@@ -336,6 +336,72 @@ export function renderDiagram(
     );
   }
 
+  // ── Tree Diagram → two-stage probability tree (without replacement) ──
+  if (mission.type === 'TREE_DIAGRAM' && d.total !== undefined) {
+    const r = d.red as number, b = (d.total as number) - r, t = d.total as number;
+    return (
+      <svg viewBox="0 0 280 120" className="w-full max-w-xs mx-auto">
+        {/* Root */}
+        <circle cx="30" cy="60" r="4" fill="#555"/>
+        {/* Stage 1 branches */}
+        <line x1="34" y1="58" x2="110" y2="25" stroke="#c0392b" strokeWidth="1.2"/>
+        <line x1="34" y1="62" x2="110" y2="95" stroke="#2980b9" strokeWidth="1.2"/>
+        {/* Stage 1 labels */}
+        <text x="65" y="35" textAnchor="middle" fontSize="9" fill="#c0392b">{r}/{t}</text>
+        <text x="65" y="88" textAnchor="middle" fontSize="9" fill="#2980b9">{b}/{t}</text>
+        <circle cx="114" cy="25" r="3" fill="#c0392b"/>
+        <circle cx="114" cy="95" r="3" fill="#2980b9"/>
+        <text x="120" y="20" fontSize="8" fill="#c0392b">R</text>
+        <text x="120" y="102" fontSize="8" fill="#2980b9">B</text>
+        {/* Stage 2 from R */}
+        <line x1="117" y1="23" x2="200" y2="10" stroke="#c0392b" strokeWidth="1" strokeDasharray="3"/>
+        <line x1="117" y1="27" x2="200" y2="40" stroke="#2980b9" strokeWidth="1" strokeDasharray="3"/>
+        <text x="155" y="12" textAnchor="middle" fontSize="8" fill="#c0392b">{r-1}/{t-1}</text>
+        <text x="155" y="38" textAnchor="middle" fontSize="8" fill="#2980b9">{b}/{t-1}</text>
+        <text x="208" y="12" fontSize="7" fill="#c0392b">RR</text>
+        <text x="208" y="42" fontSize="7" fill="#666">RB</text>
+        {/* Stage 2 from B */}
+        <line x1="117" y1="93" x2="200" y2="80" stroke="#c0392b" strokeWidth="1" strokeDasharray="3"/>
+        <line x1="117" y1="97" x2="200" y2="110" stroke="#2980b9" strokeWidth="1" strokeDasharray="3"/>
+        <text x="155" y="82" textAnchor="middle" fontSize="8" fill="#c0392b">{r}/{t-1}</text>
+        <text x="155" y="108" textAnchor="middle" fontSize="8" fill="#2980b9">{b-1}/{t-1}</text>
+        <text x="208" y="82" fontSize="7" fill="#666">BR</text>
+        <text x="208" y="112" fontSize="7" fill="#2980b9">BB</text>
+        {/* Title */}
+        <text x="250" y="60" textAnchor="middle" fontSize="8" fill="#888">no repl.</text>
+      </svg>
+    );
+  }
+
+  // ── Vector 3D → two arrows showing a + b ──
+  if (mission.type === 'VECTOR_3D' && d.a1 !== undefined) {
+    const a1 = d.a1 as number, a2 = d.a2 as number, b1 = d.b1 as number, b2 = d.b2 as number;
+    const cx = 80, cy = 60, sc = 4;
+    return (
+      <svg viewBox="0 0 200 120" className="w-full max-w-xs mx-auto">
+        <defs>
+          <marker id="ah" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#c0392b"/></marker>
+          <marker id="bh" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#2980b9"/></marker>
+          <marker id="rh" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#27ae60"/></marker>
+        </defs>
+        {/* Grid */}
+        <line x1="10" y1={cy} x2="190" y2={cy} stroke="#ddd" strokeWidth="0.5"/>
+        <line x1={cx} y1="10" x2={cx} y2="110" stroke="#ddd" strokeWidth="0.5"/>
+        {/* Vector a (red) */}
+        <line x1={cx} y1={cy} x2={cx+a1*sc} y2={cy-a2*sc} stroke="#c0392b" strokeWidth="1.5" markerEnd="url(#ah)"/>
+        <text x={cx+a1*sc/2-6} y={cy-a2*sc/2-4} fontSize="9" fill="#c0392b">a</text>
+        {/* Vector b (blue) from tip of a */}
+        <line x1={cx+a1*sc} y1={cy-a2*sc} x2={cx+(a1+b1)*sc} y2={cy-(a2+b2)*sc} stroke="#2980b9" strokeWidth="1.5" markerEnd="url(#bh)"/>
+        <text x={cx+a1*sc+b1*sc/2+4} y={cy-a2*sc-b2*sc/2-4} fontSize="9" fill="#2980b9">b</text>
+        {/* Resultant (green, dashed) */}
+        <line x1={cx} y1={cy} x2={cx+(a1+b1)*sc} y2={cy-(a2+b2)*sc} stroke="#27ae60" strokeWidth="1.5" strokeDasharray="4" markerEnd="url(#rh)"/>
+        <text x={cx+(a1+b1)*sc/2-8} y={cy-(a2+b2)*sc/2+12} fontSize="9" fill="#27ae60" fontWeight="bold">a+b</text>
+        {/* Origin label */}
+        <text x={cx-8} y={cy+12} fontSize="8" fill="#888">O</text>
+      </svg>
+    );
+  }
+
   // ── Area triangle ──
   if (mission.type === 'AREA' && gen === 'AREA_TRIANGLE_RANDOM' && d.base !== undefined) {
     return <AreaShape shape="triangle" base={d.base as number} height={d.height as number} />;
