@@ -13,6 +13,20 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求箭矢飞行的最高点坐标。', en: 'Find the peak coordinates of the arrow trajectory.' },
     data: { p1: [0, 0], p2: [5, 25], generatorType: 'QUADRATIC_RANDOM' }, difficulty: 'Easy', reward: 300,
     kpId: 'kp-2.10-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: '把球向上扔出去，轨迹是什么形状？', en: 'Throw a ball upward. What shape does the path trace?' },
+        type: 'choice',
+        choices: [
+          { zh: '弧形（抛物线）——先升后降', en: 'An arc (parabola) — rises then falls' },
+          { zh: '直线——一直向上', en: 'A straight line — goes up forever' },
+          { zh: '圆形——绕一圈回来', en: 'A circle — loops back around' },
+        ],
+        onCorrect: { zh: '对！抛出的物体都走抛物线——先升后降，形成一个倒U形。\n用数学描述就是 $y = -x^2 + bx$。\n二次函数的威力：一个公式就能描述整条弧线的每个点。', en: 'Yes! Thrown objects follow a parabola — rise then fall, forming an inverted U.\nIn math: $y = -x^2 + bx$.\nQuadratic functions describe every point on that arc with one formula.' },
+        onWrong: { zh: '想象扔石头——它不会一直上升，也不会绕圈。它会先升到最高点，再落下来。\n这个"先升后降"的弧线叫抛物线，用二次函数 $y = ax^2 + bx$ 描述。', en: 'Imagine throwing a stone — it won\'t rise forever or loop. It rises to a peak, then falls.\nThis "rise-then-fall" arc is a parabola, described by a quadratic: $y = ax^2 + bx$.' },
+        onSkip: { zh: '抛物线 = 先升后降的弧形。数学公式：$y = -x^2 + bx$。最高点就是顶点。', en: 'Parabola = arc that rises then falls. Formula: $y = -x^2 + bx$. The peak is the vertex.' },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要找抛物线的最高点？\n草船借箭，箭矢在空中划出弧线。最高点决定了箭能飞多远——\n算错了，箭就落进江里；算对了，万箭齐收！', en: 'Zhou Yu: "Why find the peak of a parabola?\nArrows trace an arc through the air. The peak determines how far they fly —\nGet it wrong and arrows fall into the river; get it right and we collect them all!"' }, highlightField: 'a' },
       { text: { zh: '周瑜：抛物线顶点公式\n二次函数 $y = ax^2 + bx$ 的最高/低点在\n$$x = \\frac{-b}{2a}$$\n就像天平的支点——左右对称，中间最高！', en: 'Zhou Yu: "Vertex formula\nFor $y = ax^2 + bx$, the peak/trough is at\n$$x = \\frac{-b}{2a}$$\nLike the fulcrum of a balance — symmetric left and right, highest in the middle!"' }, highlightField: 'a' },
@@ -149,6 +163,19 @@ export const MISSIONS_Y10: Mission[] = [
       wrong: { zh: '东风未至...庞统建议先用连环计拖延时间，等待下一次机会。', en: 'The wind fails to come... Pang Tong suggests the chain strategy to buy time.' },
     },
     kpId: 'kp-8.1-01', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: '一副 52 张牌，抽出一张。\n抽到红心的可能性大还是小？你怎么衡量？', en: 'A deck of 52 cards. Draw one.\nIs getting a heart likely or unlikely? How would you measure it?' },
+        type: 'choice',
+        choices: [
+          { zh: '13 张红心 ÷ 52 张总数 = 四分之一的机会', en: '13 hearts ÷ 52 total = one-quarter chance' },
+          { zh: '一半一半，要么抽到要么没抽到', en: '50-50, either you get it or you don\'t' },
+        ],
+        onCorrect: { zh: '你已经懂概率了！\n$P(\\text{红心}) = \\frac{13}{52} = \\frac{1}{4}$\n概率 = 目标数量 ÷ 总数量。不是"要么有要么没有"的二选一！', en: 'You already understand probability!\n$P(\\text{heart}) = \\frac{13}{52} = \\frac{1}{4}$\nProbability = target count ÷ total count. Not just "yes or no"!' },
+        onWrong: { zh: '"要么抽到要么没有"是一个常见的错觉。\n52 张牌只有 13 张红心，所以机会是 $\\frac{13}{52} = \\frac{1}{4}$，不是 $\\frac{1}{2}$。\n概率 = 目标数 ÷ 总数。', en: '"Either you get it or not" is a common illusion.\n52 cards but only 13 hearts, so the chance is $\\frac{13}{52} = \\frac{1}{4}$, not $\\frac{1}{2}$.\nProbability = target ÷ total.' },
+        onSkip: { zh: '概率 = 目标数量 ÷ 总数量。$\\frac{13}{52} = \\frac{1}{4} = 25\\%$。', en: 'Probability = target ÷ total. $\\frac{13}{52} = \\frac{1}{4} = 25\\%$.' },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '庞统：为什么要算概率？\n诸葛亮设坛借东风，但东风真的会来吗？\n概率就是衡量一件事发生的可能性有多大——帮你在不确定中做出最好的决策！', en: 'Pang Tong: "Why calculate probability?\nZhuge Liang prays for the East Wind, but will it really come?\nProbability measures how likely something is — helping you make the best decision amid uncertainty!"' }, highlightField: 'p' },
       { text: { zh: '庞统：概率的核心公式\n$$P = \\frac{\\text{目标结果数}}{\\text{总结果数}}$$\n就像抽签——52 张牌里有 4 张东风，抽到东风的机会是 4 出 52。', en: 'Pang Tong: "The core formula\n$$P = \\frac{\\text{favorable outcomes}}{\\text{total outcomes}}$$\nLike drawing lots — 4 East Wind cards out of 52, the chance is 4 out of 52."' }, highlightField: 'p' },

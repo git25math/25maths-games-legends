@@ -376,6 +376,20 @@ export const MISSIONS_Y8: Mission[] = [
     description: { zh: '计算平均兵力', en: 'Calculate the mean troop count' },
     data: { values: [200, 250, 300, 350, 400], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' },
     difficulty: 'Easy', reward: 150, kpId: 'kp-9.3-01', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: '三座敌营分别有 100、200、300 名士兵。\n如果要"均匀分配"到三座营，每座应该有多少人？', en: 'Three enemy camps have 100, 200, and 300 soldiers.\nIf distributed evenly across three camps, how many per camp?' },
+        type: 'choice',
+        choices: [
+          { zh: '200人（总共600，分3份）', en: '200 (600 total, split 3 ways)' },
+          { zh: '300人（取最大的那个）', en: '300 (take the largest)' },
+          { zh: '100人（取最小的那个）', en: '100 (take the smallest)' },
+        ],
+        onCorrect: { zh: '你已经会求平均数了！\n$100 + 200 + 300 = 600$，分 $3$ 份 → $600 ÷ 3 = 200$。\n平均数就是"把所有的加起来，再均匀分"。', en: 'You already know how to find the mean!\n$100 + 200 + 300 = 600$, split into $3$ → $600 ÷ 3 = 200$.\nThe mean is "add everything up, then distribute evenly".' },
+        onWrong: { zh: '平均不是找最大或最小——是把所有的加起来，再均匀分。\n$100 + 200 + 300 = 600$，$600 ÷ 3 = 200$。\n每座营平均 200 人。', en: 'The mean is not the max or min — add everything up and distribute evenly.\n$100 + 200 + 300 = 600$, $600 ÷ 3 = 200$.\nAverage: 200 per camp.' },
+        onSkip: { zh: '平均数 = 总和 ÷ 个数。$600 ÷ 3 = 200$。就像把所有士兵重新均匀分配。', en: 'Mean = total ÷ count. $600 ÷ 3 = 200$. Like redistributing all soldiers evenly.' },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要算平均兵力？\n知道各城驻军的平均值，才能判断总体实力。\n平均数 = 总和 ÷ 个数。', en: '诸葛亮：为什么要算平均兵力？\n知道各城驻军的平均值，才能判断总体实力。\n平均数 = 总和 ÷ 个数。' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：平均数公式\n$$\\bar{x} = \\frac{\\text{所有值之和}}{\\text{值的个数}}$$', en: '诸葛亮：平均数公式\n$$\\bar{x} = \\frac{\\text{所有值之和}}{\\text{值的个数}}$$' }, highlightField: 'ans' },
@@ -466,6 +480,19 @@ export const MISSIONS_Y8: Mission[] = [
     description: { zh: '展开括号，求 $x$ 的系数', en: 'Expand brackets, find the coefficient of $x$' },
     data: { a: 3, b: 2, c: 4, ab: 6, ac: 12, answer: 6, generatorType: 'EXPAND_RANDOM' },
     difficulty: 'Easy', reward: 150, kpId: 'kp-2.2-03', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: '一个将军带 $3$ 支小队出征，每支小队有 $2$ 名骑兵和 $4$ 名步兵。\n总共有多少名骑兵？多少名步兵？', en: 'A general takes $3$ squads. Each squad has $2$ cavalry and $4$ infantry.\nHow many cavalry total? How many infantry total?' },
+        type: 'choice',
+        choices: [
+          { zh: '骑兵 $3 \\times 2 = 6$，步兵 $3 \\times 4 = 12$', en: 'Cavalry $3 \\times 2 = 6$, infantry $3 \\times 4 = 12$' },
+          { zh: '总共 $3 + 2 + 4 = 9$ 人', en: 'Total $3 + 2 + 4 = 9$ people' },
+        ],
+        onCorrect: { zh: '你刚才做的就是"展开括号"！\n$3(2 + 4) = 3 \\times 2 + 3 \\times 4 = 6 + 12 = 18$\n外面的 $3$ 要分别乘以括号里的每一项——这叫分配律。', en: 'What you just did IS "expanding brackets"!\n$3(2 + 4) = 3 \\times 2 + 3 \\times 4 = 6 + 12 = 18$\nThe $3$ outside multiplies EACH term inside — this is the distributive law.' },
+        onWrong: { zh: '不是直接加——3 支小队各有 2 骑兵，所以骑兵共 $3 \\times 2 = 6$；步兵共 $3 \\times 4 = 12$。\n这就是展开括号：$3(2+4) = 6 + 12 = 18$。', en: 'Not simple addition — 3 squads with 2 cavalry each = $3 \\times 2 = 6$ cavalry; infantry = $3 \\times 4 = 12$.\nThis is expanding: $3(2+4) = 6 + 12 = 18$.' },
+        onSkip: { zh: '$3$ 支小队，每队 $(2+4)$ 人。展开：$3 \\times 2 + 3 \\times 4 = 6 + 12 = 18$。', en: '$3$ squads, each $(2+4)$ people. Expand: $3 \\times 2 + 3 \\times 4 = 6 + 12 = 18$.' },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '曹操：为什么要学展开括号？\n$a(b + c)$ 看起来简洁，但计算时需要展开成 $ab + ac$。\n展开就是分配律——把外面的数分给括号里每一项！', en: '曹操：为什么要学展开括号？\n$a(b + c)$ 看起来简洁，但计算时需要展开成 $ab + ac$。\n展开就是分配律——把外面的数分给括号里每一项！' }, highlightField: 'ans' },
       { text: { zh: '曹操：分配律\n$$a(bx + c) = abx + ac$$\n外面的数要和括号里每一项都乘一遍。', en: '曹操：分配律\n$$a(bx + c) = abx + ac$$\n外面的数要和括号里每一项都乘一遍。' }, highlightField: 'ans' },
