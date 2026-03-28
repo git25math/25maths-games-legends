@@ -605,6 +605,19 @@ export const PracticeScreen = ({
                   />
                 )}
 
+                {/* Skip tutorial option — shown after first step to measure engagement */}
+                {tutorialStep >= 1 && (
+                  <button
+                    onClick={() => {
+                      logAttempt({ questionId: `${mission.id}-skip-tutorial`, nodeId: mission.kpId || mission.type, isCorrect: true, sourceMode: 'practice', durationMs: Date.now() - questionStartRef.current });
+                      advancePhase();
+                    }}
+                    className="text-white/25 text-[10px] text-center hover:text-white/50 transition-colors mb-1"
+                  >
+                    {lang === 'en' ? 'I know this — skip to practice →' : lang === 'zh_TW' ? '我會了——跳到練習 →' : '我会了——跳到练习 →'}
+                  </button>
+                )}
+
                 {/* Step through tutorial with prev/next, then offer "next example" */}
                 <div className="flex gap-2">
                   {tutorialStep > 0 && (

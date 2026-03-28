@@ -17,6 +17,7 @@ import { Confetti } from '../Confetti';
 import { CalculatorWidget } from '../Calculator';
 import { generateMission } from '../../utils/generateMission';
 import { diagnoseError } from '../../utils/diagnoseError';
+import { logAttempt } from '../../utils/logAttempt';
 
 import { BattleHeader } from './BattleHeader';
 import { BattleContent } from './BattleContent';
@@ -134,6 +135,8 @@ export const MathBattle = ({
   totalScoreRef.current = totalScore;
   const achievementTimerRef = useRef<number | null>(null);
   const shakeTimerRef = useRef<number | null>(null);
+  const questionStartRef = useRef(Date.now());
+  useEffect(() => { questionStartRef.current = Date.now(); }, [currentQIdx]);
   const advanceTimerRef = useRef<number | null>(null);
   const milestoneTimerRef = useRef<number | null>(null);
   const victoryReturnTimerRef = useRef<number | null>(null);
@@ -258,8 +261,11 @@ export const MathBattle = ({
     playClick();
     const rawResult = checkAnswer(currentQuestion, inputs);
     const result = checkPartialCredit(currentQuestion, inputs, rawResult);
+    const qDurationMs = Date.now() - questionStartRef.current;
+    const firstVal = Object.values(inputs)[0] || '';
 
     if (result.correct) {
+      logAttempt({ questionId: `${mission.id}-battle-${currentQIdx}`, nodeId: mission.kpId || mission.type, isCorrect: true, rawAnswer: firstVal, sourceMode: 'practice', durationMs: qDurationMs });
       if (isMultiQuestion) {
         const newStreak = streak + 1;
         if (newStreak >= 2) playStreak(newStreak); else playCorrect();
@@ -332,8 +338,9 @@ export const MathBattle = ({
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       setShakeKey(k => k + 1);
       shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), BATTLE_TIMING.shake);
+      const diag = diagnoseError(inputs, result.expected);
+      logAttempt({ questionId: `${mission.id}-battle-${currentQIdx}`, nodeId: mission.kpId || mission.type, isCorrect: false, rawAnswer: firstVal, errorPatternId: diag.type, sourceMode: 'practice', durationMs: qDurationMs });
       if (onRecordError) {
-        const diag = diagnoseError(inputs, result.expected);
         onRecordError(diag.type);
       }
       setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
