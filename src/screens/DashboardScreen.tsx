@@ -18,6 +18,8 @@ import { StudentDetailCard } from '../components/dashboard/StudentDetailCard';
 import { ClassOverview } from '../components/dashboard/ClassOverview';
 import { ClassManager } from '../components/dashboard/ClassManager';
 import { DailySummary } from '../components/dashboard/DailySummary';
+import { ClassWeeklyReport } from '../components/dashboard/ClassWeeklyReport';
+import { ParentReport } from '../components/dashboard/ParentReport';
 import { KPHeatmap } from '../components/dashboard/KPHeatmap';
 import { WeeklyTrend } from '../components/dashboard/WeeklyTrend';
 import { AssignmentPanel } from '../components/dashboard/AssignmentPanel';
@@ -95,6 +97,8 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [showBatchAssign, setShowBatchAssign] = useState(false);
   const [batchTag, setBatchTag] = useState('');
   const [selectedStudent, setSelectedStudent] = useState<StudentRow | null>(null);
+  const [showWeeklyReport, setShowWeeklyReport] = useState(false);
+  const [parentReportStudent, setParentReportStudent] = useState<StudentRow | null>(null);
   const [alertOnly, setAlertOnly] = useState(false);
 
   // Assignments (shared: AssignmentPanel renders, StudentDetailCard reads)
@@ -431,6 +435,14 @@ export function DashboardScreen({ lang, onClose }: Props) {
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           </button>
           <button
+            onClick={() => setShowWeeklyReport(true)}
+            disabled={students.length === 0}
+            className="flex items-center gap-1 bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-1.5 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-colors shadow-sm disabled:opacity-40"
+            title={lang === 'en' ? 'Weekly Report' : '周报'}
+          >
+            📊 {lang === 'en' ? 'Report' : '周报'}
+          </button>
+          <button
             onClick={exportCSV}
             disabled={students.length === 0}
             className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-emerald-50 hover:border-emerald-200 transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-50 disabled:hover:border-slate-200"
@@ -763,6 +775,25 @@ export function DashboardScreen({ lang, onClose }: Props) {
           />
         )}
       </AnimatePresence>
+
+      {showWeeklyReport && (
+        <ClassWeeklyReport
+          lang={lang}
+          grade={grade}
+          filterTag={filterTag}
+          students={students}
+          onClose={() => setShowWeeklyReport(false)}
+        />
+      )}
+
+      {parentReportStudent && (
+        <ParentReport
+          lang={lang}
+          student={parentReportStudent}
+          grade={grade}
+          onClose={() => setParentReportStudent(null)}
+        />
+      )}
     </motion.div>
   );
 }

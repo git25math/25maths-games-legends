@@ -100,6 +100,7 @@ export const StudentDetailCard = ({
   assignments = [],
   classAverageDims,
   onClose,
+  onParentReport,
 }: {
   lang: Language;
   student: StudentRow;
@@ -108,6 +109,7 @@ export const StudentDetailCard = ({
   assignments?: StudentAssignment[];
   classAverageDims?: number[];
   onClose: () => void;
+  onParentReport?: () => void;
 }) => {
   useEscapeKey(onClose);
   const [battles, setBattles] = useState<BattleRecord[]>([]);
@@ -217,6 +219,11 @@ export const StudentDetailCard = ({
               </p>
             </div>
           </div>
+          {onParentReport && (
+            <button onClick={onParentReport} className="px-3 py-1.5 bg-indigo-50 text-indigo-700 text-[10px] font-bold rounded-lg hover:bg-indigo-100 transition-colors">
+              {lang === 'en' ? '📄 Parent Report' : '📄 家长报告'}
+            </button>
+          )}
           <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-600 transition-colors">
             <X size={20} />
           </button>
