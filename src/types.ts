@@ -84,6 +84,16 @@ export type TutorialStep = {
   validation?: { field: string; answer: number };
 };
 
+export type DiscoverStep = {
+  prompt: BilingualText;
+  type: 'choice' | 'input';
+  choices?: BilingualText[];
+  acceptPattern?: string;
+  onCorrect: BilingualText;
+  onWrong: BilingualText;
+  onSkip: BilingualText;
+};
+
 export type Mission = {
   id: number;
   grade: number;
@@ -100,6 +110,7 @@ export type Mission = {
   data: any;
   difficulty: 'Easy' | 'Medium' | 'Hard';
   reward: number;
+  discoverSteps?: DiscoverStep[];
   tutorialSteps?: TutorialStep[];
   secret: {
     concept: BilingualText;
