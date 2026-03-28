@@ -165,7 +165,8 @@ export function KPWeaknessPanel({
           const textColor = kp.failureRate >= 70 ? 'text-rose-600' : kp.failureRate >= 40 ? 'text-amber-600' : 'text-blue-600';
 
           return (
-            <div key={kp.kpId} className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50/50 transition-colors">
+            <div key={kp.kpId}>
+            <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50/50 transition-colors">
               {/* Rank */}
               <span className={`text-xs font-black w-5 ${idx < 3 ? 'text-rose-500' : 'text-slate-400'}`}>
                 {idx + 1}
@@ -221,6 +222,16 @@ export function KPWeaknessPanel({
               ) : (
                 <div className="w-[42px]" />
               )}
+            </div>
+            {idx < 3 && kp.strugglingCount + kp.blockedCount > 0 && (
+              <div className="mx-4 mb-1 px-3 py-1.5 bg-amber-50 border border-amber-100 rounded-lg">
+                <p className="text-[10px] text-amber-700">
+                  {lang === 'en'
+                    ? `→ ${kp.strugglingCount + kp.blockedCount} student${(kp.strugglingCount + kp.blockedCount) > 1 ? 's' : ''} need extra practice. Consider assigning 5 targeted questions this week.`
+                    : `→ ${kp.strugglingCount + kp.blockedCount} 名学生需要加强。建议本周布置 5 道专项练习。`}
+                </p>
+              </div>
+            )}
             </div>
           );
         })}
