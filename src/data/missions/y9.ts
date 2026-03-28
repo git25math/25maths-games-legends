@@ -1000,7 +1000,7 @@ export const MISSIONS_Y9: Mission[] = [
     skillSummary: { zh: 'P = 有利结果 ÷ 总结果', en: 'P = favorable ÷ total' },
     story: { zh: '司马懿分析情报：{total} 路援军中有 {favorable} 路能及时赶到。援军到达的概率是多少？', en: 'Sima Yi analyzes intel: {favorable} of {total} reinforcement routes will arrive in time. What\'s the probability?' },
     description: { zh: '计算简单事件的概率。', en: 'Calculate the probability of a simple event.' },
-    data: { favorable: 2, total: 5, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Easy', reward: 140,
+    data: { target: 2, total: 5, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Easy', reward: 140,
     kpId: 'kp-8.1-01', sectionId: 'statistics',
     tutorialSteps: [
       { text: { zh: '司马懿：为什么需要概率？\n战场上充满不确定性——概率就是"量化不确定性"的工具。\n$P = 0$ 绝不发生，$P = 1$ 必定发生。', en: 'Sima Yi: "Why probability?\nThe battlefield is full of uncertainty — probability is the tool to quantify it.\n$P = 0$ never happens, $P = 1$ always happens."' }, highlightField: 'ans' },

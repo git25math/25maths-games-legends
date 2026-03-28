@@ -25,6 +25,7 @@ import { usePracticePersistedState } from '../hooks/usePracticeState';
 import { hasAnyPracticeCompletion } from '../utils/completionState';
 import { getTopicForKp } from '../data/curriculum/kp-registry';
 import { createQuestionFingerprint } from '../utils/questionFingerprint';
+import { logAttempt } from '../utils/logAttempt';
 
 type PracticePhase = 'green' | 'amber' | 'red' | 'battle';
 
@@ -108,6 +109,7 @@ export const PracticeScreen = ({
   const [lastErrorType, setLastErrorType] = useState<string | null>(null);
   const [showRepairIntercept, setShowRepairIntercept] = useState(false);
   const [pendingIntercept, setPendingIntercept] = useState(false); // deferred until wrong answer dismissed
+  const questionStartRef = useRef(Date.now()); // track time per question
   const INTERCEPT_THRESHOLD = 3;
 
   const {
@@ -148,14 +150,28 @@ export const PracticeScreen = ({
     setWrongAnswerData(null);
     setSkillImpactHint(null);
     setTutorialStep(0);
+    questionStartRef.current = Date.now();
   }, [mission, adaptiveTier]);
 
   const handleSubmit = () => {
     if (isSubmitting || showCorrectFlash) return;
+    // Validate: at least one non-empty input required
+    const fieldConfig = INPUT_FIELDS[currentMission.type];
+    const langKey = lang === 'en' ? 'en' : lang === 'zh_TW' ? 'zh_TW' : 'zh';
+    const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
+    const hasEmpty = fields.some((f: { id: string }) => !inputs[f.id]?.trim());
+    if (hasEmpty) {
+      setPhaseToast({ text: lang === 'en' ? 'Fill in all fields first' : '请先填写所有答题栏', phase: currentPhase });
+      setTimeout(() => setPhaseToast(null), 2000);
+      return;
+    }
     setIsSubmitting(true);
     playClick();
     const result = checkAnswer(currentMission, inputs);
+    const attemptDurationMs = Date.now() - questionStartRef.current;
+    const attemptFirstField = Object.values(inputs)[0] || '';
     if (result.correct) {
+      logAttempt({ questionId: `${mission.id}-${createQuestionFingerprint(currentMission)}`, nodeId: mission.kpId || mission.type, isCorrect: true, rawAnswer: attemptFirstField, sourceMode: repairMode ? 'recovery' : 'practice', durationMs: attemptDurationMs });
       playSuccess();
       setShowCorrectFlash(true);
       // Adaptive: track consecutive correct, level up after 3
@@ -211,6 +227,7 @@ export const PracticeScreen = ({
       }
       // Record error type for persistent memory
       const errorDiag = diagnoseErrorFn(inputs, result.expected);
+      logAttempt({ questionId: `${mission.id}-${createQuestionFingerprint(currentMission)}`, nodeId: mission.kpId || mission.type, isCorrect: false, rawAnswer: attemptFirstField, errorPatternId: errorDiag.type, sourceMode: repairMode ? 'recovery' : 'practice', durationMs: attemptDurationMs });
       if (onRecordError) {
         onRecordError(errorDiag.type);
       }
@@ -705,28 +722,28 @@ export const PracticeScreen = ({
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-lg">🛠</span>
                         <h3 className="text-sm font-black text-rose-400">
-                          {lang === 'en' ? 'Skill Unstable' : lang === 'zh_TW' ? '技能不穩定' : '技能不稳定'}
+                          {lang === 'en' ? 'You\'re stuck — let\'s fix the foundation' : lang === 'zh_TW' ? '你卡住了——先修基礎' : '你卡住了——先修基础'}
                         </h3>
                       </div>
-                      <p className="text-[11px] text-white/50 mb-3">
+                      <p className="text-xs text-white/70 mb-3">
                         {lang === 'en'
-                          ? `Same error type ${INTERCEPT_THRESHOLD}× in a row. A repair session can help.`
+                          ? 'Same mistake 3 times. This usually means a prerequisite concept needs reinforcing. A 2-minute repair session can unblock you.'
                           : lang === 'zh_TW'
-                          ? `已連續 ${INTERCEPT_THRESHOLD} 次同類錯誤，建議修復訓練。`
-                          : `已连续 ${INTERCEPT_THRESHOLD} 次同类错误，建议修复训练。`}
+                          ? '同一個錯誤出現了3次。這通常表示前置知識需要鞏固。2分鐘的修復訓練就能幫你打通關卡。'
+                          : '同一个错误出现了3次。这通常表示前置知识需要巩固。2分钟的修复训练就能帮你打通关卡。'}
                       </p>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2">
                         <button
                           onClick={() => { setShowRepairIntercept(false); onRepairIntercept ? onRepairIntercept() : onCancel(); }}
-                          className="flex-1 py-2.5 rounded-xl bg-rose-500 text-white font-black text-xs hover:bg-rose-400 transition-colors"
+                          className="w-full py-3 min-h-[48px] rounded-xl bg-rose-500 text-white font-black text-sm hover:bg-rose-400 transition-colors"
                         >
-                          🔧 {lang === 'en' ? 'Repair Skill' : lang === 'zh_TW' ? '修復技能' : '修复技能'}
+                          🔧 {lang === 'en' ? 'Fix It Now (recommended)' : lang === 'zh_TW' ? '立即修復（推薦）' : '立即修复（推荐）'}
                         </button>
                         <button
                           onClick={() => { setShowRepairIntercept(false); regenerateQuestion(); }}
-                          className="flex-1 py-2.5 rounded-xl bg-white/5 text-white/50 font-bold text-xs hover:bg-white/10 transition-colors"
+                          className="w-full py-2 rounded-xl text-white/30 text-[10px] hover:text-white/50 transition-colors"
                         >
-                          {lang === 'en' ? 'Continue' : lang === 'zh_TW' ? '繼續' : '继续'}
+                          {lang === 'en' ? 'skip for now' : lang === 'zh_TW' ? '暫時跳過' : '暂时跳过'}
                         </button>
                       </div>
                     </motion.div>

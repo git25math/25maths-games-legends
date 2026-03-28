@@ -203,7 +203,7 @@ export function WrongAnswerPanel({
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
         onClick={onContinue}
-        className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
+        className="w-full py-3 min-h-[48px] bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         {continueLabel || t.continue}
         <ChevronRight size={18} />

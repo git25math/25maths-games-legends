@@ -504,7 +504,7 @@ export const MISSIONS_Y11: Mission[] = [
     skillSummary: { zh: '∫ f(x)dx 求曲线下面积', en: '∫ f(x)dx finds area under curve' },
     story: { zh: '粮草消耗率随时间变化。要算总消耗量，就是求消耗率曲线下的面积——定积分！', en: 'Supply consumption rate varies with time. Total consumption = area under the rate curve — definite integration!' },
     description: { zh: '求定积分的值。', en: 'Evaluate the definite integral.' },
-    data: { coeffA: 2, coeffB: 3, powerA: 2, powerB: 1, constant: 0, generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 550,
+    data: { lower: 0, upper: 4, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-2.12-02', sectionId: 'calculus',
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要学积分？\n速度在变、加速度在变——怎么算总距离？\n积分就是把无穷多个微小片段累加起来，是处理连续变化量的终极工具！', en: 'Zhuge Liang: "Why learn integration?\nSpeed is changing, acceleration is changing — how to find total distance?\nIntegration adds up infinitely many tiny pieces — the ultimate tool for continuous change!"' }, highlightField: 'ans' },
