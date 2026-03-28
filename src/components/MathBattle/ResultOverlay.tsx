@@ -275,7 +275,11 @@ export function ResultOverlay({
           <motion.div initial={{ y: 50 }} animate={{ y: 0 }}>
             <XCircle size={80} className="text-red-500 mb-6 mx-auto" />
             <h3 className="text-2xl sm:text-3xl md:text-5xl font-black text-white mb-4">{t.failTitle}</h3>
-            <p className="text-slate-400 mb-2">{t.failDesc}</p>
+            <p className="text-slate-300 mb-3 text-sm max-w-xs mx-auto leading-relaxed italic">
+              {lang === 'en'
+                ? "This doesn't define you. What defines you is what you do next."
+                : '这一次不代表你。代表你的，是你接下来的选择。'}
+            </p>
             {mission.storyConsequence ? (
               <p className="text-amber-400 font-bold mb-8 italic">{lt(mission.storyConsequence.wrong, lang)}</p>
             ) : (
@@ -318,10 +322,10 @@ export function ResultOverlay({
               <div className="space-y-4">
                 <p className="text-amber-400 font-bold text-lg">
                   {lang === 'en'
-                    ? "No retries left. That's OK — every master was once a beginner."
+                    ? "No retries left — but this isn't the end. Every master once stood where you stand now. Go learn the skill, then come back stronger."
                     : lang === 'zh_TW'
-                    ? '重試機會用完了。沒關係——每個高手都曾經是新手。'
-                    : '重试机会用完了。没关系——每个高手都曾经是新手。'}
+                    ? '重試機會用完了——但這不是終點。每個高手都曾站在你現在的位置。去學會這個技能，然後更強地回來。'
+                    : '重试机会用完了——但这不是终点。每个高手都曾站在你现在的位置。去学会这个技能，然后更强地回来。'}
                 </p>
                 {(() => {
                   const lessonUrl = mission.kpId ? getExamHubLessonUrl(mission.kpId) : null;

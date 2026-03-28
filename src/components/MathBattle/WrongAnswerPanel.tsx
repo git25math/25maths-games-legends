@@ -19,7 +19,7 @@ const LABELS = {
     yourAnswer: '你的答案',
     correctAnswer: '正确答案',
     explanation: '解题过程',
-    continue: '明白了，再来一题！',
+    continue: '我懂了，继续前进！',
     showSteps: '看解题过程',
     hideSteps: '收起',
   },
@@ -30,7 +30,7 @@ const LABELS = {
     yourAnswer: '你的答案',
     correctAnswer: '正確答案',
     explanation: '解題過程',
-    continue: '明白了，再來一題！',
+    continue: '我懂了，繼續前進！',
     showSteps: '看解題過程',
     hideSteps: '收起',
   },
@@ -41,11 +41,27 @@ const LABELS = {
     yourAnswer: 'Your answer',
     correctAnswer: 'Correct answer',
     explanation: 'Solution steps',
-    continue: 'Got it, next question!',
+    continue: 'I understand — onward!',
     showSteps: 'Show solution steps',
     hideSteps: 'Hide',
   },
 } as const;
+
+/**
+ * 产品灵魂语录 — 接住学生没说出口的声音
+ * 学生做错时心里想的不是"答案是什么"，而是"我是不是很笨？"
+ * 系统要在学生下这个结论之前先接住他。
+ */
+const SOUL_MESSAGES: { zh: string; en: string }[] = [
+  { zh: '这一步卡住了？没关系，我们一起再看一遍。', en: "Stuck on this step? That's OK — let's look at it together." },
+  { zh: '做错不丢人。每一次试错，都是离正确更近一步。', en: "Getting it wrong isn't failure. Every attempt brings you closer." },
+  { zh: '你敢尝试，就已经比放弃的人强了。', en: "You tried — that already puts you ahead of those who gave up." },
+  { zh: '这道题难住了很多人。你不是一个人。', en: "This problem trips up many people. You're not alone." },
+  { zh: '看看正确答案，下次你就知道了。这就是学习。', en: "See the correct answer — next time you'll know. That's learning." },
+  { zh: '差一点点！你的思路是对的，只是细节需要打磨。', en: "So close! Your thinking is right — just the details need polishing." },
+  { zh: '每个高手都曾经在这里摔过。区别在于——他们爬起来了。', en: "Every master once fell here. The difference? They got back up." },
+  { zh: '我不会走的。我们在一起。', en: "I'm not going anywhere. We're in this together." },
+];
 
 type Props = {
   questionType: string;
@@ -114,7 +130,23 @@ export function WrongAnswerPanel({
         )}
       </div>
 
-      {/* Error diagnosis — the soul of the panel */}
+      {/* Soul message — catch the student before they think "I'm stupid" */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.15 }}
+        className={`text-sm italic leading-relaxed ${isPartial ? 'text-yellow-600' : 'text-slate-500'}`}
+      >
+        {(() => {
+          const msgs = isPartial
+            ? SOUL_MESSAGES.filter((_, i) => i === 5 || i === 1) // partial: encouraging ones
+            : SOUL_MESSAGES;
+          const msg = msgs[Math.floor(Math.random() * msgs.length)];
+          return lang === 'en' ? msg.en : msg.zh;
+        })()}
+      </motion.p>
+
+      {/* Error diagnosis */}
       {(() => {
         // Map legacy type to pattern for enhanced display
         const patternMap: Record<string, string> = { sign: 'sign_distribution', method: 'generic_algebra', rounding: 'generic_number', magnitude: 'generic_number' };
