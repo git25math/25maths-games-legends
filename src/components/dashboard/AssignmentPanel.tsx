@@ -129,7 +129,15 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
     return lang === 'en' ? `${diffDays} days left` : `剩余 ${diffDays} 天`;
   };
 
-  if (!filterTag) return null;
+  if (!filterTag) return (
+    <div className="bg-white/60 backdrop-blur rounded-2xl border border-slate-100 p-4">
+      <div className="flex items-center gap-2 mb-2">
+        <ClipboardList size={16} className="text-indigo-500" />
+        <h3 className="text-sm font-black text-slate-700">{lang === 'en' ? 'Assignments' : '任务布置'}</h3>
+      </div>
+      <p className="text-xs text-slate-400">{lang === 'en' ? 'Select a class above to manage assignments.' : '请先在上方选择一个班级，才能布置作业。'}</p>
+    </div>
+  );
 
   return (
     <div className="space-y-4">
