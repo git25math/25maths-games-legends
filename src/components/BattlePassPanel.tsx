@@ -4,8 +4,8 @@ import { X, Star, Check, Lock, Gift, Flame, Swords, Shield, Palette } from 'luci
 import type { Language } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
-import { SEASON_1_TASKS, SEASON_1_REWARDS, getSeasonLevel, type SeasonTask } from '../data/seasons/season1';
-import { getSeasonProgress, getTaskStatus, type SeasonProgress } from '../utils/seasonTracker';
+import { getSeasonLevel, type SeasonTask } from '../data/seasons/season1';
+import { getSeasonProgress, getTaskStatus, getActiveSeasonTasks, getActiveSeasonRewards, type SeasonProgress } from '../utils/seasonTracker';
 import { useAudio } from '../audio';
 import { useEscapeKey } from '../hooks/useEscapeKey';
 
@@ -85,7 +85,7 @@ export const BattlePassPanel = ({
         {tab === 'tasks' && (
           <div className="flex flex-col gap-2">
             {(['daily', 'weekly', 'milestone'] as const).map(freq => {
-              const tasks = SEASON_1_TASKS.filter(t => t.frequency === freq);
+              const tasks = getActiveSeasonTasks().filter(t => t.frequency === freq);
               return (
                 <div key={freq}>
                   <div className="text-[10px] font-bold uppercase text-white/30 mb-1 tracking-wider">
@@ -127,7 +127,7 @@ export const BattlePassPanel = ({
         {/* Rewards tab */}
         {tab === 'rewards' && (
           <div className="flex flex-col gap-1">
-            {SEASON_1_REWARDS.map(r => {
+            {getActiveSeasonRewards().map(r => {
               const unlocked = level >= r.level;
               const isCurrent = level === r.level - 1;
               return (

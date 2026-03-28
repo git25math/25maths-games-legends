@@ -1,8 +1,7 @@
 import { motion } from 'motion/react';
 import { Scroll, CheckCircle2, ChevronRight, Flame } from 'lucide-react';
 import type { Language, Mission } from '../types';
-import { SEASON_1_TASKS } from '../data/seasons/season1';
-import { getSeasonProgress, getTaskStatus, isDailyTask } from '../utils/seasonTracker';
+import { getSeasonProgress, getTaskStatus, isDailyTask, getActiveSeasonTasks } from '../utils/seasonTracker';
 import { CURRENCY_REWARDS } from '../utils/currency';
 import { lt } from '../i18n/resolveText';
 
@@ -32,7 +31,7 @@ export const DailyQuestPanel = ({
 }) => {
   const l = LABELS[lang];
   const progress = getSeasonProgress(completedMissions);
-  const dailyTasks = SEASON_1_TASKS.filter(t => t.frequency === 'daily');
+  const dailyTasks = getActiveSeasonTasks().filter(t => t.frequency === 'daily');
   const statuses = dailyTasks.map(t => getTaskStatus(t, progress));
   const completedCount = statuses.filter(s => s.completed).length;
   const allComplete = completedCount === dailyTasks.length;

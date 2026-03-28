@@ -1,4 +1,5 @@
-import { SEASON_1_ID, SEASON_1_TASKS, type SeasonTask, type TaskFrequency } from '../data/seasons/season1';
+import { SEASON_1_ID, SEASON_1_TASKS, SEASON_1_REWARDS, type SeasonTask, type SeasonReward, type TaskFrequency } from '../data/seasons/season1';
+import { SEASON_2_ID, SEASON_2_TASKS, SEASON_2_REWARDS } from '../data/seasons/season2';
 import type { UserProfile } from '../types';
 import { getLevelInfo } from './xpLevels';
 
@@ -10,6 +11,35 @@ export type SeasonProgress = {
   daily_reset: string;                 // YYYYMMDD
   weekly_reset: string;                // YYYYMMDD (Monday)
 };
+
+/* ── Season registry ── */
+
+type SeasonConfig = { id: string; tasks: SeasonTask[]; rewards: SeasonReward[] };
+
+const SEASONS: SeasonConfig[] = [
+  { id: SEASON_1_ID, tasks: SEASON_1_TASKS, rewards: SEASON_1_REWARDS },
+  { id: SEASON_2_ID, tasks: SEASON_2_TASKS, rewards: SEASON_2_REWARDS },
+];
+
+/** Active season — change this single line to switch seasons */
+const ACTIVE_SEASON: SeasonConfig = SEASONS[0];
+
+/** Get the active season's tasks */
+export function getActiveSeasonTasks(): SeasonTask[] {
+  return ACTIVE_SEASON.tasks;
+}
+
+/** Get the active season's ID */
+export function getActiveSeasonId(): string {
+  return ACTIVE_SEASON.id;
+}
+
+/** Get the active season's rewards */
+export function getActiveSeasonRewards(): SeasonReward[] {
+  return ACTIVE_SEASON.rewards;
+}
+
+/* ── Helpers ── */
 
 const LS_KEY = '_season';
 
@@ -29,8 +59,9 @@ function thisMonday(): string {
 /** Get or initialize season progress from profile */
 export function getSeasonProgress(completedMissions: Record<string, unknown>): SeasonProgress {
   const raw = (completedMissions as any)?.[LS_KEY] as SeasonProgress | undefined;
+  const tasks = ACTIVE_SEASON.tasks;
   const prog: SeasonProgress = raw ?? {
-    season_id: SEASON_1_ID,
+    season_id: ACTIVE_SEASON.id,
     season_xp: 0,
     task_counts: {},
     completed_tasks: [],
@@ -38,10 +69,20 @@ export function getSeasonProgress(completedMissions: Record<string, unknown>): S
     weekly_reset: thisMonday(),
   };
 
+  // If player has progress from a different season, reset for current season
+  if (prog.season_id !== ACTIVE_SEASON.id) {
+    prog.season_id = ACTIVE_SEASON.id;
+    prog.season_xp = 0;
+    prog.task_counts = {};
+    prog.completed_tasks = [];
+    prog.daily_reset = today();
+    prog.weekly_reset = thisMonday();
+  }
+
   // Auto-reset daily tasks
   const todayStr = today();
   if (prog.daily_reset !== todayStr) {
-    const dailyIds = new Set(SEASON_1_TASKS.filter(t => t.frequency === 'daily').map(t => t.id));
+    const dailyIds = new Set(tasks.filter(t => t.frequency === 'daily').map(t => t.id));
     dailyIds.forEach(id => delete prog.task_counts[id]);
     prog.completed_tasks = prog.completed_tasks.filter(id => !dailyIds.has(id));
     prog.daily_reset = todayStr;
@@ -50,7 +91,7 @@ export function getSeasonProgress(completedMissions: Record<string, unknown>): S
   // Auto-reset weekly tasks
   const mondayStr = thisMonday();
   if (prog.weekly_reset !== mondayStr) {
-    const weeklyIds = new Set(SEASON_1_TASKS.filter(t => t.frequency === 'weekly').map(t => t.id));
+    const weeklyIds = new Set(tasks.filter(t => t.frequency === 'weekly').map(t => t.id));
     weeklyIds.forEach(id => delete prog.task_counts[id]);
     prog.completed_tasks = prog.completed_tasks.filter(id => !weeklyIds.has(id));
     prog.weekly_reset = mondayStr;
@@ -77,6 +118,7 @@ export function evaluateAndUpdateTasks(
 ): { updatedProgress: SeasonProgress; xpEarned: number } {
   let xpEarned = 0;
   const updated = { ...progress, task_counts: { ...progress.task_counts }, completed_tasks: [...progress.completed_tasks] };
+  const tasks = ACTIVE_SEASON.tasks;
 
   const cm = profile.completed_missions as Record<string, any>;
   const totalMissions = Object.keys(cm).filter(k => !k.startsWith('_') && !k.startsWith('daily_')).length;
@@ -86,18 +128,25 @@ export function evaluateAndUpdateTasks(
   const totalRepairs = Object.values((cm._equipment ?? {}) as Record<string, any>)
     .reduce((sum: number, eq: any) => sum + (eq.repairCount ?? 0), 0);
 
-  for (const task of SEASON_1_TASKS) {
+  for (const task of tasks) {
     if (updated.completed_tasks.includes(task.id)) continue;
 
     // Evaluate milestone tasks from profile data
     let currentCount = updated.task_counts[task.id] ?? 0;
 
     if (task.frequency === 'milestone') {
+      // S1 milestones
       switch (task.id) {
         case 'milestone_level_10': currentCount = levelInfo.level; break;
         case 'milestone_missions_50': currentCount = totalMissions; break;
         case 'milestone_skill_3': currentCount = totalSkills; break;
         case 'milestone_repair_5': currentCount = totalRepairs; break;
+      }
+      // S2 milestones
+      switch (task.id) {
+        case 's2_milestone_level_20': currentCount = levelInfo.level; break;
+        case 's2_milestone_missions_100': currentCount = totalMissions; break;
+        case 's2_milestone_repair_10': currentCount = totalRepairs; break;
       }
       updated.task_counts[task.id] = currentCount;
     }
@@ -118,7 +167,8 @@ export function incrementTaskCount(
   progress: SeasonProgress,
   taskId: string,
 ): { updatedProgress: SeasonProgress; justCompleted: boolean } {
-  const task = SEASON_1_TASKS.find(t => t.id === taskId);
+  const tasks = ACTIVE_SEASON.tasks;
+  const task = tasks.find(t => t.id === taskId);
   if (!task || progress.completed_tasks.includes(taskId)) {
     return { updatedProgress: progress, justCompleted: false };
   }
@@ -139,5 +189,5 @@ export function incrementTaskCount(
 
 /** Returns true if the given task ID belongs to a daily-reset task */
 export function isDailyTask(taskId: string): boolean {
-  return SEASON_1_TASKS.find(t => t.id === taskId)?.frequency === 'daily';
+  return ACTIVE_SEASON.tasks.find(t => t.id === taskId)?.frequency === 'daily';
 }
