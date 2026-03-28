@@ -91,6 +91,19 @@ export const MISSIONS_Y10: Mission[] = [
     skillSummary: { zh: '消元法解联立方程', en: 'Elimination method for simultaneous equations' },
     story: { zh: '孙刘联军合围曹操。两路兵力需满足两个条件。', en: 'Sun-Liu coalition encircles Cao. Two forces must satisfy two conditions.' },
     description: { zh: '求孙军 $x$ 和刘军 $y$ 的兵力。', en: 'Find Sun army $x$ and Liu army $y$ strength.' },
+    discoverSteps: [
+      {
+        prompt: { zh: '一只鸡有 $2$ 条腿，一只兔有 $4$ 条腿。\n笼子里有 $5$ 只动物，共 $14$ 条腿。\n鸡和兔各几只？', en: 'A chicken has $2$ legs, a rabbit has $4$.\n$5$ animals in a cage, $14$ legs total.\nHow many chickens and rabbits?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$3$ 鸡 $2$ 兔（$3×2+2×4=14$ ✓）', en: '$3$ chickens, $2$ rabbits ($3×2+2×4=14$ ✓)' },
+          { zh: '$2$ 鸡 $3$ 兔', en: '$2$ chickens, $3$ rabbits' },
+        ],
+        onCorrect: { zh: '你刚才做的就是"联立方程"！\n$x+y=5$（总数），$2x+4y=14$（总腿数）。\n两个等式、两个未知数——这就是联立方程的核心。', en: 'You just solved "simultaneous equations"!\n$x+y=5$ (total), $2x+4y=14$ (total legs).\nTwo equations, two unknowns — the core of simultaneous equations.' },
+        onWrong: { zh: '$2$ 鸡 $3$ 兔：$2×2+3×4=16≠14$。\n试试 $3$ 鸡 $2$ 兔：$3×2+2×4=6+8=14$ ✓\n联立方程帮你系统地找到答案。', en: '$2$ chickens, $3$ rabbits: $2×2+3×4=16≠14$.\nTry $3+2$: $3×2+2×4=6+8=14$ ✓\nSimultaneous equations help you find answers systematically.' },
+        onSkip: { zh: '鸡+兔=5，腿=14。设鸡x兔y：$x+y=5$, $2x+4y=14$。解得 $x=3,y=2$。', en: 'Chickens+rabbits=5, legs=14. Let x=chickens, y=rabbits: $x+y=5$, $2x+4y=14$. Solution: $x=3,y=2$.' },
+      },
+    ],
     data: { x: 5000, y: 5000, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Easy', reward: 320,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
@@ -261,6 +274,19 @@ export const MISSIONS_Y10: Mission[] = [
     skillSummary: { zh: '用正弦值求斜边', en: 'Find hypotenuse using sine' },
     story: { zh: '江面上烟雾缭绕。已知我军旗舰与敌舰连线与江岸成 ${angle}^\\circ$ 角，对边距离为 {opposite} 丈。', en: "Mist on the river. The line between flagship and enemy is ${angle}^\\circ$ to the bank, opposite distance is {opposite}." },
     description: { zh: '求斜边距离 $c$。', en: 'Find hypotenuse distance $c$.' },
+    discoverSteps: [
+      {
+        prompt: { zh: '赤壁高 $50$ 米的瞭望塔。你站在塔顶看到江面上的船，俯角 $30°$。\n船大约离塔底多远？（提示：$\\tan 30° ≈ 0.577$）', en: 'A $50$m watchtower at Red Cliffs. From the top, you see a ship at $30°$ below horizontal.\nHow far is the ship from the tower base? (Hint: $\\tan 30° ≈ 0.577$)' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '约 $87$ 米（$50 ÷ 0.577$）', en: 'About $87$m ($50 ÷ 0.577$)' },
+          { zh: '约 $29$ 米（$50 × 0.577$）', en: 'About $29$m ($50 × 0.577$)' },
+        ],
+        onCorrect: { zh: '完全正确！$\\tan 30° = \\frac{50}{d}$，所以 $d = \\frac{50}{0.577} ≈ 87$。\n\n三角函数就是用角度和已知边，求未知边。\n$\\tan = \\frac{对边}{邻边}$，知二求一。', en: 'Exactly! $\\tan 30° = \\frac{50}{d}$, so $d = \\frac{50}{0.577} ≈ 87$.\n\nTrig uses angles and known sides to find unknown sides.\n$\\tan = \\frac{opposite}{adjacent}$, know two, find one.' },
+        onWrong: { zh: '$50 × 0.577$ 求的是另一种情况（已知邻边求对边）。\n这里已知对边 $50$，求邻边：$d = 50 ÷ \\tan 30° = 50 ÷ 0.577 ≈ 87$。\n关键：搞清楚"已知什么，求什么"。', en: '$50 × 0.577$ solves a different case (known adjacent, find opposite).\nHere: known opposite $50$, find adjacent: $d = 50 ÷ \\tan 30° ≈ 87$.\nKey: clarify what you know vs what you need.' },
+        onSkip: { zh: '$\\tan(\\theta) = \\frac{对边}{邻边}$。已知对边=50，角=30°。\n$d = \\frac{50}{\\tan 30°} ≈ 87$ 米。', en: '$\\tan(\\theta) = \\frac{opp}{adj}$. Known: opp=50, angle=30°.\n$d = \\frac{50}{\\tan 30°} ≈ 87$m.' },
+      },
+    ],
     data: { angle: 30, opposite: 50, func: 'sin', generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Easy', reward: 400,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
@@ -616,6 +642,19 @@ export const MISSIONS_Y10: Mission[] = [
     skillSummary: { zh: '体积 = 长 × 宽 × 高', en: 'Volume = length × width × height' },
     story: { zh: '荆州粮仓修建完毕。长方体粮仓能装多少粮食？需要计算体积。', en: 'Jingzhou granary is built. How much grain can this cuboid store? Calculate the volume.' },
     description: { zh: '底面半径 ${radius}$，高 ${height}$，$\\pi = {pi}$，求体积。', en: 'Base radius ${radius}$, height ${height}$, $\\pi = {pi}$. Find the volume.' },
+    discoverSteps: [
+      {
+        prompt: { zh: '一个水桶底面积是 $100 \\text{cm}^2$，装了 $20$ 厘米深的水。\n桶里有多少立方厘米的水？', en: 'A bucket has base area $100 \\text{cm}^2$, filled $20$cm deep.\nHow many cubic centimetres of water?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$2000 \\text{cm}^3$（底面积 × 高）', en: '$2000 \\text{cm}^3$ (base area × height)' },
+          { zh: '$120 \\text{cm}^3$（$100 + 20$）', en: '$120 \\text{cm}^3$ ($100 + 20$)' },
+        ],
+        onCorrect: { zh: '就是这样！体积 = 底面积 × 高。\n$100 × 20 = 2000 \\text{cm}^3$。\n\n想象把底面积"堆叠"20层——每层100，20层就是2000。', en: 'That\'s it! Volume = base area × height.\n$100 × 20 = 2000 \\text{cm}^3$.\n\nImagine stacking the base area 20 layers — 100 each, 20 layers = 2000.' },
+        onWrong: { zh: '体积不是加法——是面积×高度。\n每一层 $100 \\text{cm}^2$，叠 $20$ 层 → $100×20=2000 \\text{cm}^3$。', en: 'Volume is not addition — it\'s area × height.\nEach layer $100 \\text{cm}^2$, stack $20$ layers → $100×20=2000 \\text{cm}^3$.' },
+        onSkip: { zh: '体积 = 底面积 × 高 = $100 × 20 = 2000 \\text{cm}^3$。\n记住：面积是二维（$\\text{cm}^2$），体积是三维（$\\text{cm}^3$）。', en: 'Volume = base area × height = $100 × 20 = 2000 \\text{cm}^3$.\nRemember: area is 2D ($\\text{cm}^2$), volume is 3D ($\\text{cm}^3$).' },
+      },
+    ],
     data: { radius: 5, height: 10, pi: 3.14, generatorType: 'VOLUME_RANDOM' }, difficulty: 'Easy', reward: 350,
     kpId: 'kp-5.4-01', sectionId: 'geometry',
     tutorialSteps: [
@@ -842,6 +881,19 @@ export const MISSIONS_Y10: Mission[] = [
     skillSummary: { zh: '弧长 = (θ/360) × 2πr', en: 'Arc length = (θ/360) × 2πr' },
     story: { zh: '荆州城有一段弧形城墙需要修缮。已知半径和圆心角，求弧长以准备建材。', en: 'A curved section of Jingzhou wall needs repair. Given radius and angle, find arc length for materials.' },
     description: { zh: '半径 $r = {r}$，圆心角 ${angle}°$，$\\pi = {pi}$，求弧长。', en: 'Radius $r = {r}$, angle ${angle}°$, $\\pi = {pi}$. Find arc length.' },
+    discoverSteps: [
+      {
+        prompt: { zh: '用绳子绕一个直径 $1$ 米的圆柱一圈。\n绳子大约多长？（$\\pi ≈ 3.14$）', en: 'Wrap a rope around a cylinder with diameter $1$m.\nHow long is the rope? ($\\pi ≈ 3.14$)' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '约 $3.14$ 米（$\\pi × d$）', en: 'About $3.14$m ($\\pi × d$)' },
+          { zh: '约 $1$ 米（直径就是周长）', en: 'About $1$m (diameter = circumference)' },
+        ],
+        onCorrect: { zh: '对！绕一圈 = 周长 = $\\pi × d = 3.14 × 1 = 3.14$ 米。\n\n$\\pi$ 就是"周长比直径"——大约 $3.14$。\n任何圆，周长永远是直径的 $\\pi$ 倍。', en: 'Right! One lap = circumference = $\\pi × d = 3.14 × 1 = 3.14$m.\n\n$\\pi$ IS "circumference ÷ diameter" — about $3.14$.\nFor ANY circle, circumference is always $\\pi$ times the diameter.' },
+        onWrong: { zh: '周长比直径长得多！绕一圈 $≈ 3.14$ 倍直径。\n$C = \\pi × d = 3.14 × 1 = 3.14$ 米。\n$\\pi$ 就是这个"3倍多一点"的比值。', en: 'Circumference is much longer than diameter! One lap $≈ 3.14×$ diameter.\n$C = \\pi × d = 3.14 × 1 = 3.14$m.\n$\\pi$ is this "just over 3" ratio.' },
+        onSkip: { zh: '周长 $C = \\pi d$。直径 $1$ 米 → $C = 3.14$ 米。\n$\\pi ≈ 3.14$ = 周长/直径，对所有圆都成立。', en: 'Circumference $C = \\pi d$. Diameter $1$m → $C = 3.14$m.\n$\\pi ≈ 3.14$ = circumference/diameter, for ALL circles.' },
+      },
+    ],
     data: { r: 10, pi: 3.14, angle: 90, mode: 'circumference', answer: 15.7, generatorType: 'SECTOR_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-5.3-03', sectionId: 'geometry',
     tutorialSteps: [
