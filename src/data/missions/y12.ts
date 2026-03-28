@@ -80,7 +80,14 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $f(x) = x^2$ 在 $x = 3$ 处的导数值。', en: 'Find the derivative of $f(x) = x^2$ at $x = 3$.' },
     data: { x: 3, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '司马炎：为什么要求导数？\n攻城不是匀速推进——有时猛攻，有时停滞。\n"此刻的推进速度"就是导数。知道速率，才能决定何时投入预备队。', en: 'Sima Yan: "Why find derivatives?\nSieges don\'t progress at constant speed — sometimes rushing, sometimes stalling.\nThe \'speed right now\' is the derivative. Knowing the rate tells you when to commit reserves."' }, highlightField: 'k' },
+      { text: { zh: '司马炎：幂规则\n$$f(x) = x^n \\Rightarrow f\'(x) = n \\cdot x^{n-1}$$\n指数拿下来当系数，指数减 $1$。\n就这一条规则，搞定所有幂函数！', en: 'Sima Yan: "Power rule\n$$f(x) = x^n \\Rightarrow f\'(x) = n \\cdot x^{n-1}$$\nBring the exponent down as coefficient, reduce exponent by 1.\nThis one rule handles all power functions!"' }, highlightField: 'k' },
+      { text: { zh: '司马炎：求导\n$f(x) = x^2$\n$f\'(x) = 2 \\cdot x^{2-1} = 2x$', en: 'Sima Yan: "Differentiate\n$f(x) = x^2$\n$f\'(x) = 2 \\cdot x^{2-1} = 2x$"' }, highlightField: 'k' },
+      { text: { zh: '司马炎：代入 $x = 3$\n$f\'(3) = 2 \\times 3 = 6$', en: 'Sima Yan: "Substitute $x = 3$\n$f\'(3) = 2 \\times 3 = 6$"' }, highlightField: 'k' },
+      { text: { zh: '司马炎：答案\n在 $x = 3$ 处，攻城速率为 $6$。', en: 'Sima Yan: "Answer\nAt $x = 3$, the siege rate is $6$."' }, highlightField: 'k' },
+      { text: { zh: '司马炎：验算\n切线 $y = 6(x-3) + 9 = 6x - 9$\n代入 $x = 3$：$6(3) - 9 = 9 = f(3) = 3^2$ ✓', en: 'Sima Yan: "Verify\nTangent $y = 6(x-3) + 9 = 6x - 9$\nAt $x = 3$: $6(3) - 9 = 9 = f(3) = 3^2$ ✓"' }, highlightField: 'k' },
+    ],
     secret: { concept: { zh: '导数 = 切线斜率。$f(x) = x^2$ 的导数是 $f\'(x) = 2x$。', en: 'Derivative = tangent slope. For $f(x) = x^2$, $f\'(x) = 2x$.' }, formula: "$f'(x) = 2x$", tips: [{ zh: '司马炎提示：幂函数的导数——指数拿下来当系数，指数减1。', en: 'Sima Yan Tip: Power rule — bring the exponent down, reduce it by 1.' }] },
     storyConsequence: { correct: { zh: '攻城速率——导数精准！做得漂亮！', en: 'Siege Rate — Derivative nailed!' }, wrong: { zh: '导数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
@@ -95,7 +102,14 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '计算加权平均值。', en: 'Calculate the weighted mean.' },
     data: { values: [40, 50, 80], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-8.2-01', sectionId: 'statistics',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '司马炎：为什么要加权平均？\n三个郡的粮仓大小不一样。\n小仓存 40 石，大仓存 80 石——简单平均 $\\frac{40+50+80}{3}$ 不公平。\n大仓应该"说话声更大"——这就是加权的意义。', en: 'Sima Yan: "Why weighted average?\nThree prefectures have different granary sizes.\nSmall stores 40, large stores 80 — simple average $\\frac{40+50+80}{3}$ isn\'t fair.\nThe larger granary should \'count more\' — that\'s what weighting means."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：加权平均公式\n$$\\bar{x} = \\frac{\\sum f_i \\cdot x_i}{\\sum f_i}$$\n$f_i$ = 权重（仓库容量），$x_i$ = 数值（存粮率）\n分子 = 每个值 × 它的权重，分母 = 权重之和。', en: 'Sima Yan: "Weighted mean formula\n$$\\bar{x} = \\frac{\\sum f_i \\cdot x_i}{\\sum f_i}$$\n$f_i$ = weight (granary size), $x_i$ = value (stock rate)\nNumerator = each value × its weight, denominator = sum of weights."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：代入数据\n$\\bar{x} = \\frac{40 + 50 + 80}{3}$\n$= \\frac{170}{3}$', en: 'Sima Yan: "Substitute\n$\\bar{x} = \\frac{40 + 50 + 80}{3}$\n$= \\frac{170}{3}$"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：计算\n$= 56.\\overline{6}$\n约 $56.7$ 石。', en: 'Sima Yan: "Calculate\n$= 56.\\overline{6}$\nAbout $56.7$ units."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：答案\n平均存粮约 $56.7$ 石。', en: 'Sima Yan: "Answer\nAverage grain stock is about $56.7$ units."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：验算\n$56.7 \\times 3 = 170.1 \\approx 170$ ✓\n所有仓加起来 $40 + 50 + 80 = 170$ ✓', en: 'Sima Yan: "Verify\n$56.7 \\times 3 = 170.1 \\approx 170$ ✓\nAll granaries: $40 + 50 + 80 = 170$ ✓"' }, highlightField: 'ans' },
+    ],
     secret: { concept: { zh: '加权平均考虑每个数据的"重要程度"。不是简单平均！', en: 'Weighted mean accounts for how important each data point is. Not a simple average!' }, formula: '$\\bar{x} = \\frac{\\sum f_i x_i}{\\sum f_i}$', tips: [{ zh: '司马炎提示：大仓多算，小仓少算——加权平均更公平。', en: 'Sima Yan Tip: Big granaries count more — weighted average is fairer.' }] },
     storyConsequence: { correct: { zh: '军粮盘点——统计精准！做得漂亮！', en: 'Grain Stocktake — Well done!' }, wrong: { zh: '平均值算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
@@ -135,7 +149,7 @@ export const MISSIONS_Y12: Mission[] = [
     data: { a: 2, b: -3, c: 1, x: 5, generatorType: 'FUNC_VAL_RANDOM' }, difficulty: 'Easy', reward: 450,
     kpId: 'kp-2.13-01', sectionId: 'functions',
     tutorialSteps: [
-      { text: { zh: '司马炎：函数是什么？\n函数就是一台"输入→输出"的机器。\n给它一个 $x$，它吐出一个 $f(x)$。\n$f(5)$ 就是把 $5$ 塞进机器看出来什么。', en: 'Sima Yan: "What\'s a function?\nA function is an input→output machine.\nGive it an $x$, it gives back $f(x)$.\n$f(5)$ means feed 5 into the machine and see what comes out."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：为什么要算国力？\n战争的胜负不看一时勇猛——看的是国力曲线。\n$f(5)$ 就是"第五年国力多少"——一个数字决定攻守。\n会代入函数，就是会预测未来。', en: 'Sima Yan: "Why calculate national power?\nWar isn\'t won by bravery alone — it\'s decided by the power curve.\n$f(5)$ means \'how strong are we in year 5?\' — one number decides attack or defend.\nFunction evaluation is predicting the future."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：代入法\n$f(x) = 2x^2 - 3x + 1$\n$f(5)$ = 把所有 $x$ 换成 $5$。\n注意：$x^2$ 是"先平方再乘系数"，不是"先乘系数再平方"！', en: 'Sima Yan: "Substitution\n$f(x) = 2x^2 - 3x + 1$\n$f(5)$ = replace every $x$ with 5.\nNote: $x^2$ means \'square first, then multiply by coefficient\'!"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：逐项代入\n$f(5) = 2(5)^2 - 3(5) + 1$\n$= 2 \\times 25 - 15 + 1$', en: 'Sima Yan: "Substitute term by term\n$f(5) = 2(5)^2 - 3(5) + 1$\n$= 2 \\times 25 - 15 + 1$"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：计算\n$= 50 - 15 + 1 = 36$', en: 'Sima Yan: "Calculate\n$= 50 - 15 + 1 = 36$"' }, highlightField: 'ans' },
@@ -157,7 +171,7 @@ export const MISSIONS_Y12: Mission[] = [
     data: { angle: 50, adj: 20, generatorType: 'TRIGONOMETRY_RANDOM', func: 'tan' }, difficulty: 'Hard', reward: 600,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '司马炎：三年所学，此刻汇聚\n从 Y9 的 SOH-CAH-TOA 到 Y11 的正弦余弦定理——你已经走过了完整的三角旅程。\n这最后一题，用最基本的 tan，但心境已不同。', en: 'Sima Yan: "Three years of learning converge here\nFrom Y9\'s SOH-CAH-TOA to Y11\'s sine and cosine rules — you\'ve completed the full trig journey.\nThis final problem uses basic tan, but your understanding is now complete."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：为什么三角函数是将军的必修课？\n站在瞭望塔上，你不可能飞到敌营量距离。\n但只需一个角度和一条已知边，tan 就能告诉你答案。\n数学让你在安全的高处掌控整个战场。', en: 'Sima Yan: "Why is trigonometry a commander\'s essential skill?\nYou can\'t fly to the enemy camp to measure distance.\nBut with just one angle and one known side, tan gives you the answer.\nMath lets you command the entire battlefield from a safe height."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：正切 = 对边 ÷ 邻边\n$\\tan \\theta = \\frac{\\text{对边}}{\\text{邻边}}$\n瞭望塔高度（对边）和敌军水平距离（邻边）的关系。', en: 'Sima Yan: "Tangent = opposite ÷ adjacent\n$\\tan \\theta = \\frac{\\text{opposite}}{\\text{adjacent}}$\nRelationship between tower height (opposite) and enemy distance (adjacent)."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：代入\n$\\tan {angle}° = \\frac{x}{{adj}}$\n$x = {adj} \\times \\tan {angle}°$', en: 'Sima Yan: "Substitute\n$\\tan {angle}° = \\frac{x}{{adj}}$\n$x = {adj} \\times \\tan {angle}°$"' }, highlightField: 'ans' },
       { text: { zh: '司马炎：计算\n$\\tan {angle}° = {tan_val}$\n$x = {adj} \\times {tan_val} = {answer}$', en: 'Sima Yan: "Calculate\n$\\tan {angle}° = {tan_val}$\n$x = {adj} \\times {tan_val} = {answer}$"' }, highlightField: 'ans' },
@@ -249,7 +263,7 @@ export const MISSIONS_Y12: Mission[] = [
     data: { lower: 0, upper: 3, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 600,
     kpId: 'kp-2.12-02', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '司马炎："升级：$3x^2$ 的积分\n上一关是 $x$ 的积分，现在升级到 $3x^2$。\n幂函数的积分规律：指数加一，再除以新指数。\n$\\int 3x^2\\,dx = 3 \\times \\frac{x^3}{3} = x^3$"', en: 'Sima Yan: "Level up: integrating $3x^2$\nLast time was $x$, now we tackle $3x^2$.\nPower rule for integration: increase the exponent by 1, divide by the new exponent.\n$\\int 3x^2\\,dx = 3 \\times \\frac{x^3}{3} = x^3$"' }, highlightField: 'area' },
+      { text: { zh: '司马炎：为什么要积分求面积？\n城墙截面不是矩形——是曲线。\n"长 × 宽"只能算方块面积，曲线下面积只有积分能算。\n重修洛阳城墙，每一寸材料都要精确计算。', en: 'Sima Yan: "Why integrate for area?\nThe wall cross-section isn\'t rectangular — it\'s curved.\n\'Length × width\' only works for rectangles. Curved areas need integration.\nRebuilding Luoyang\'s walls demands precision in every inch of material."' }, highlightField: 'area' },
       { text: { zh: '司马炎："幂函数积分公式\n$$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C$$\n对 $3x^2$：$n = 2$，所以 $\\frac{3x^3}{3} = x^3$。"', en: 'Sima Yan: "Power rule formula\n$$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C$$\nFor $3x^2$: $n = 2$, so $\\frac{3x^3}{3} = x^3$."' }, highlightField: 'area' },
       { text: { zh: '司马炎："代入上下界\n$$\\int_0^3 3x^2\\,dx = \\left[x^3\\right]_0^3 = 3^3 - 0^3$$"', en: 'Sima Yan: "Substitute bounds\n$$\\int_0^3 3x^2\\,dx = \\left[x^3\\right]_0^3 = 3^3 - 0^3$$"' }, highlightField: 'area' },
       { text: { zh: '司马炎："计算\n$= 27 - 0 = 27$"', en: 'Sima Yan: "Calculate\n$= 27 - 0 = 27$"' }, highlightField: 'area' },
@@ -270,7 +284,14 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $\\int_0^b 4x^3\\,dx$ 的值。', en: 'Evaluate $\\int_0^b 4x^3\\,dx$.' },
     data: { lower: 0, upper: 3, func: '4x^3', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 620,
     kpId: 'kp-2.12-02', sectionId: 'calculus',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '司马炎：为什么要学高次积分？\n城防加固不是线性的——材料消耗随进度呈指数增长。\n$4x^3$ 意味着越到后面，消耗越恐怖。\n只有积分才能精确算出总消耗。', en: 'Sima Yan: "Why learn higher power integration?\nFortification isn\'t linear — material consumption grows exponentially.\n$4x^3$ means the further you go, the more terrifying the cost.\nOnly integration can precisely calculate the total."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：幂规则（积分版）\n$$\\int ax^n\\,dx = \\frac{a}{n+1}x^{n+1} + C$$\n指数加 $1$，除以新指数。\n$n = 3$ 时：$\\frac{4}{3+1}x^{3+1} = \\frac{4}{4}x^4 = x^4$', en: 'Sima Yan: "Power rule (integration)\n$$\\int ax^n\\,dx = \\frac{a}{n+1}x^{n+1} + C$$\nAdd 1 to power, divide by new power.\nFor $n=3$: $\\frac{4}{3+1}x^{3+1} = \\frac{4}{4}x^4 = x^4$"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：求不定积分\n$\\int 4x^3\\,dx = x^4 + C$\n系数 $4$ 和新指数 $4$ 正好抵消！', en: 'Sima Yan: "Antiderivative\n$\\int 4x^3\\,dx = x^4 + C$\nCoefficient 4 and new exponent 4 cancel perfectly!"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：代入上下限\n$[x^4]_0^3 = 3^4 - 0^4$\n$= 81 - 0$', en: 'Sima Yan: "Apply bounds\n$[x^4]_0^3 = 3^4 - 0^4$\n$= 81 - 0$"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：答案\n总消耗量 $= 81$ 单位。', en: 'Sima Yan: "Answer\nTotal consumption $= 81$ units."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎：验算\n$(x^4)\' = 4x^3$ ✓ 导回原函数！\n$3^4 = 81$：$3 \\times 3 = 9$，$9 \\times 9 = 81$ ✓', en: 'Sima Yan: "Verify\n$(x^4)\' = 4x^3$ ✓ Differentiates back!\n$3^4 = 81$: $3 \\times 3 = 9$, $9 \\times 9 = 81$ ✓"' }, highlightField: 'ans' },
+    ],
     secret: { concept: { zh: '$\\int 4x^3\\,dx = x^4 + C$。四次幂增长极快——幂规则照样适用。', en: '$\\int 4x^3\\,dx = x^4 + C$. Fourth powers grow rapidly — power rule still applies.' }, formula: '$\\int 4x^3\\,dx = x^4 + C$', tips: [{ zh: '司马炎提示：$4 \\div 4 = 1$，系数正好抵消！', en: 'Sima Yan Tip: $4 \\div 4 = 1$, the coefficient cancels perfectly!' }] },
     storyConsequence: { correct: { zh: '四次幂堆积——高次积分完成！', en: 'Quartic Accumulation — Higher integration done!' }, wrong: { zh: '高次积分公式有误…再试一次！', en: 'Higher power integration error... Try again!' } }
   },
