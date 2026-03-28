@@ -66,7 +66,8 @@ export type QuestionType =
   | 'SIMILAR_TRIANGLES'
   | 'TREE_DIAGRAM'
   | 'SEQUENCE_NTH'
-  | 'COORD_3D';
+  | 'COORD_3D'
+  | 'VECTOR_3D';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 

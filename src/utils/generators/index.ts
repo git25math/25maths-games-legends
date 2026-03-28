@@ -17,7 +17,7 @@ import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPoi
 
 import { generateProbSimpleMission, generateProbIndMission, generateStatsMeanMission, generateStatsMedianMission, generateStatsRangeMission, generateStatsModeMission, generateCumFreqMission, generateProbTreeMission, generateTreeDiagramMission } from './statistics';
 
-import { generateSymmetryMission, generateRotationMission, generateEnlargementMission, generateVectorAddMission, generateDerivativeMission, generateIntegrationMission, generateRatioMission, generateRatioY7Mission, generateRatioY8Mission } from './advanced';
+import { generateSymmetryMission, generateRotationMission, generateEnlargementMission, generateVectorAddMission, generateVector3DMission, generateDerivativeMission, generateIntegrationMission, generateRatioMission, generateRatioY7Mission, generateRatioY8Mission } from './advanced';
 
 /* ── Generator type registry ── */
 
@@ -51,7 +51,8 @@ export type GeneratorType =
   | 'SIMILAR_TRIANGLES_RANDOM'
   | 'TREE_DIAGRAM_RANDOM'
   | 'SEQUENCE_NTH_RANDOM'
-  | 'COORD_3D_RANDOM';
+  | 'COORD_3D_RANDOM'
+  | 'VECTOR_3D_RANDOM';
 
 /* ── Generator dispatch map ── */
 
@@ -139,6 +140,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   ROTATION_RANDOM: generateRotationMission,
   ENLARGEMENT_RANDOM: generateEnlargementMission,
   VECTOR_ADD_RANDOM: generateVectorAddMission,
+  VECTOR_3D_RANDOM: generateVector3DMission,
   DERIVATIVE_RANDOM: generateDerivativeMission,
   INTEGRATION_RANDOM: generateIntegrationMission,
   RATIO_RANDOM: generateRatioMission,

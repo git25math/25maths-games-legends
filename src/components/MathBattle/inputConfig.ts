@@ -181,6 +181,10 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'x', label: 'x', placeholder: 'x = ?' }, { id: 'y', label: 'y', placeholder: 'y = ?' }, { id: 'z', label: 'z', placeholder: 'z = ?' }],
     en: [{ id: 'x', label: 'x', placeholder: 'x = ?' }, { id: 'y', label: 'y', placeholder: 'y = ?' }, { id: 'z', label: 'z', placeholder: 'z = ?' }],
   },
+  VECTOR_3D: {
+    zh: [{ id: 'x', label: 'x 分量', placeholder: 'x = ?' }, { id: 'y', label: 'y 分量', placeholder: 'y = ?' }, { id: 'z', label: 'z 分量', placeholder: 'z = ?' }],
+    en: [{ id: 'x', label: 'x component', placeholder: 'x = ?' }, { id: 'y', label: 'y component', placeholder: 'y = ?' }, { id: 'z', label: 'z component', placeholder: 'z = ?' }],
+  },
   EXPAND: {
     zh: [{ id: 'ans', label: '展开结果', placeholder: '= ?' }],
     en: [{ id: 'ans', label: 'Expanded form', placeholder: '= ?' }],

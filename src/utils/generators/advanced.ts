@@ -261,6 +261,47 @@ export function generateVectorAddMission(template: Mission, tier: DifficultyTier
 }
 
 /* ══════════════════════════════════════════════════════════
+   VECTOR_3D generator: add two 3D vectors
+   ══════════════════════════════════════════════════════════ */
+
+export function generateVector3DMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  const narrator = pickRandom(['诸葛亮', '姜维', '司马懿']);
+
+  const pools = { 1: [1, 2, 3, 4], 2: [-4, -3, -2, 2, 3, 4, 5], 3: [-6, -5, -4, 3, 4, 5, 6, 7] };
+  const a1 = pickRandom(pools[tier]);
+  const a2 = pickRandom(pools[tier]);
+  const a3 = pickRandom(pools[tier]);
+  const b1 = pickRandom(pools[tier]);
+  const b2 = pickRandom(pools[tier]);
+  const b3 = pickRandom(pools[tier]);
+
+  const ansX = a1 + b1;
+  const ansY = a2 + b2;
+  const ansZ = a3 + b3;
+
+  const description: BilingualText = {
+    zh: `三维向量 $\\vec{a} = \\begin{pmatrix}${a1}\\\\${a2}\\\\${a3}\\end{pmatrix}$，$\\vec{b} = \\begin{pmatrix}${b1}\\\\${b2}\\\\${b3}\\end{pmatrix}$，求 $\\vec{a} + \\vec{b}$ 的三个分量。`,
+    en: `3D vectors $\\vec{a} = \\begin{pmatrix}${a1}\\\\${a2}\\\\${a3}\\end{pmatrix}$, $\\vec{b} = \\begin{pmatrix}${b1}\\\\${b2}\\\\${b3}\\end{pmatrix}$. Find all three components of $\\vec{a} + \\vec{b}$.`,
+  };
+
+  const tutorialSteps = [
+    { text: { zh: `${narrator}："为什么要学三维向量？\n\n真实的战场是三维的——不仅有东西南北，还有高低。\n弩箭射向敌阵：水平方向 $${a1}$，纵向 $${a2}$，还有高度 $${a3}$。\n三维向量 $\\begin{pmatrix}x\\\\y\\\\z\\end{pmatrix}$ 同时记录三个方向的分量。"`, en: `${narrator}: "Why learn 3D vectors?\n\nReal battlefields are three-dimensional — not just north-south-east-west, but also up-down.\nAn arrow toward the enemy: horizontal $${a1}$, lateral $${a2}$, height $${a3}$.\nA 3D vector $\\begin{pmatrix}x\\\\y\\\\z\\end{pmatrix}$ records all three components."` }, highlightField: 'x' },
+    { text: { zh: `${narrator}："三维向量加法和二维一模一样——分量分别相加：\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}${a1}${signTerm(b1)}\\\\${a2}${signTerm(b2)}\\\\${a3}${signTerm(b3)}\\end{pmatrix}$$"`, en: `${narrator}: "3D vector addition works exactly like 2D — add components separately:\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}${a1}${signTerm(b1)}\\\\${a2}${signTerm(b2)}\\\\${a3}${signTerm(b3)}\\end{pmatrix}$$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}："$x$ 分量：$${a1} ${signTerm(b1)} = ${ansX}$"`, en: `${narrator}: "$x$ component: $${a1} ${signTerm(b1)} = ${ansX}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}："$y$ 分量：$${a2} ${signTerm(b2)} = ${ansY}$\n$z$ 分量：$${a3} ${signTerm(b3)} = ${ansZ}$"`, en: `${narrator}: "$y$ component: $${a2} ${signTerm(b2)} = ${ansY}$\n$z$ component: $${a3} ${signTerm(b3)} = ${ansZ}$"` }, highlightField: 'y' },
+    { text: { zh: `${narrator}："答案：$\\vec{a}+\\vec{b} = \\begin{pmatrix}${ansX}\\\\${ansY}\\\\${ansZ}\\end{pmatrix}$"`, en: `${narrator}: "Answer: $\\vec{a}+\\vec{b} = \\begin{pmatrix}${ansX}\\\\${ansY}\\\\${ansZ}\\end{pmatrix}$"` }, highlightField: 'x' },
+    { text: { zh: `${narrator}："验算：$\\begin{pmatrix}${ansX}\\\\${ansY}\\\\${ansZ}\\end{pmatrix} - \\begin{pmatrix}${b1}\\\\${b2}\\\\${b3}\\end{pmatrix} = \\begin{pmatrix}${a1}\\\\${a2}\\\\${a3}\\end{pmatrix}$ ✓ 减回去等于第一段！"`, en: `${narrator}: "Verify: $\\begin{pmatrix}${ansX}\\\\${ansY}\\\\${ansZ}\\end{pmatrix} - \\begin{pmatrix}${b1}\\\\${b2}\\\\${b3}\\end{pmatrix} = \\begin{pmatrix}${a1}\\\\${a2}\\\\${a3}\\end{pmatrix}$ ✓ Subtract back = first vector!"` }, highlightField: 'x' },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { targetX: ansX, targetY: ansY, targetZ: ansZ, a1, a2, a3, b1, b2, b3, generatorType: 'VECTOR_3D_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
    CUMFREQ generator: cumulative frequency — find median from grouped data
    Uses STATISTICS type with mode='mean' (checker uses data.answer path)
    ══════════════════════════════════════════════════════════ */

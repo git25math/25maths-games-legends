@@ -135,5 +135,37 @@ export const MISSIONS_Y12: Mission[] = [
     ],
     secret: { concept: { zh: 'tan θ = 对边/邻边。三国故事结束，数学旅途永远在路上。', en: 'tan θ = opp/adj. The Three Kingdoms end, but the math journey continues forever.' }, formula: '$\\tan\\theta = \\frac{\\text{opp}}{\\text{adj}}$', tips: [{ zh: '司马炎提示：天下大势，合久必分，分久必合。你的数学之路，永远不会结束。', en: 'Sima Yan Tip: The world unites and divides. Your math journey never ends.' }] },
     storyConsequence: { correct: { zh: '最终防线——三角精准！做得漂亮！', en: 'The Final Defense — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
+  },
+
+  // --- Year 12 Unit 4: 三维战场·向量 ---
+  {
+    id: 1241, grade: 12, unitId: 4, order: 1,
+    unitTitle: { zh: "Unit 4: 三维战场·向量", en: "Unit 4: 3D Battlefield — Vectors" },
+    topic: 'Geometry', type: 'VECTOR_3D',
+    title: { zh: '空间行军', en: 'Spatial March' },
+    skillName: { zh: '三维向量加法', en: '3D Vector Addition' },
+    skillSummary: { zh: '$\\vec{a}+\\vec{b}$：分量分别相加', en: '$\\vec{a}+\\vec{b}$: add components separately' },
+    story: { zh: '司马昭两路夹击蜀军：$\\vec{a}$ 从东面进攻，$\\vec{b}$ 从山上俯冲。两路合力向量是多少？', en: 'Sima Zhao attacks Shu from two directions: $\\vec{a}$ from the east, $\\vec{b}$ from above. What is the combined force vector?' },
+    description: { zh: '求 $\\vec{a}+\\vec{b}$ 的三个分量（x, y, z）。', en: 'Find all three components (x, y, z) of $\\vec{a}+\\vec{b}$.' },
+    data: { targetX: 7, targetY: 1, targetZ: 5, a1: 3, a2: 4, a3: 2, b1: 4, b2: -3, b3: 3, generatorType: 'VECTOR_3D_RANDOM' }, difficulty: 'Medium', reward: 500,
+    kpId: 'kp-4.11-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '三维向量加法：分量分别相加，和二维一模一样。', en: '3D vector addition: add components separately, just like 2D.' }, formula: '$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$', tips: [{ zh: '司马昭提示：三维也不过是多加一个分量而已。', en: 'Sima Zhao Tip: 3D is just one more component to add.' }] },
+    storyConsequence: { correct: { zh: '空间行军——三维向量精准！做得漂亮！', en: 'Spatial March — 3D vectors nailed!' }, wrong: { zh: '分量加错了…再试一次！', en: 'Component error... Try again!' } }
+  },
+  {
+    id: 1242, grade: 12, unitId: 4, order: 2,
+    unitTitle: { zh: "Unit 4: 三维战场·向量", en: "Unit 4: 3D Battlefield — Vectors" },
+    topic: 'Geometry', type: 'VECTOR_3D',
+    title: { zh: '炮火交叉', en: 'Crossfire Vectors' },
+    skillName: { zh: '三维向量加法（含负分量）', en: '3D Vector Addition (with negatives)' },
+    skillSummary: { zh: '含负数分量的三维向量加法', en: '3D vector addition with negative components' },
+    story: { zh: '姜维从两个方向发射弩箭：$\\vec{a}$ 和 $\\vec{b}$，部分分量为负（向下/后方）。合力向量是多少？', en: 'Jiang Wei fires crossbow bolts from two directions: $\\vec{a}$ and $\\vec{b}$, some components negative (downward/backward). Find the resultant.' },
+    description: { zh: '求 $\\vec{a}+\\vec{b}$ 的三个分量（x, y, z）。', en: 'Find all three components (x, y, z) of $\\vec{a}+\\vec{b}$.' },
+    data: { targetX: 1, targetY: -1, targetZ: 4, a1: -3, a2: 5, a3: 1, b1: 4, b2: -6, b3: 3, generatorType: 'VECTOR_3D_RANDOM' }, difficulty: 'Hard', reward: 550,
+    kpId: 'kp-4.11-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: '负分量表示反方向。加法时正负抵消，方向由符号决定。', en: 'Negative components mean opposite direction. Addition cancels positives with negatives.' }, formula: '$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$', tips: [{ zh: '姜维提示：正负号决定方向——算错方向，弩箭就射到自己人了。', en: 'Jiang Wei Tip: Signs determine direction — get it wrong and you hit your own troops.' }] },
+    storyConsequence: { correct: { zh: '炮火交叉——三维向量运用自如！', en: 'Crossfire Vectors — 3D mastery!' }, wrong: { zh: '正负号算错了…再试一次！', en: 'Sign error... Try again!' } }
   }
 ];

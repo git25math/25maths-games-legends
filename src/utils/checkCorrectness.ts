@@ -349,6 +349,10 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const ok = parse(inputs.x || '') === mx && parse(inputs.y || '') === my && parse(inputs.z || '') === mz;
     return { correct: ok, expected: { x: String(mx), y: String(my), z: String(mz) } };
   }
+  if (type === 'VECTOR_3D') {
+    const ok = parse(inputs.x || '') === data.targetX && parse(inputs.y || '') === data.targetY && parse(inputs.z || '') === data.targetZ;
+    return { correct: ok, expected: { x: String(data.targetX), y: String(data.targetY), z: String(data.targetZ) } };
+  }
   if (type === 'EXPAND') {
     return { correct: Math.abs(parse(inputs.ans || '') - data.answer) < 0.01, expected: { ans: String(data.answer) } };
   }
@@ -439,7 +443,7 @@ const PARTIAL_CREDIT_TYPES = new Set([
   'FACTORISE', 'INEQUALITY', 'FDP_CONVERT', 'BODMAS', 'SIMPLIFY',
   'ARITHMETIC', 'ESTIMATION', 'SQUARE_CUBE', 'SQUARE_ROOT',
   'INTEGER_ADD', 'INTEGER_MUL', 'HCF', 'LCM',
-  'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES', 'TREE_DIAGRAM', 'SEQUENCE_NTH', 'COORD_3D',
+  'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES', 'TREE_DIAGRAM', 'SEQUENCE_NTH', 'COORD_3D', 'VECTOR_3D',
 ]);
 
 // Types that NEVER get partial credit (boolean/discrete answers)
