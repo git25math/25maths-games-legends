@@ -414,7 +414,7 @@ export const MISSIONS_Y10: Mission[] = [
     data: { a: 3, r: 2, n: 5, seqType: 'geometric', generatorType: 'SEQUENCE_NTH_RANDOM' }, difficulty: 'Hard', reward: 540,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '华佗："等比数列中每项是前一项的固定倍数——就像瘟疫：第1天 3 人染病，第2天 6，第3天 12，第4天 24……翻倍速度极其恐怖！"', en: 'Hua Tuo: "In a geometric sequence each term is a fixed multiple of the previous — like plague: day 1: 3, day 2: 6, day 3: 12, day 4: 24... Doubling speed is terrifying!"' }, highlightField: 'ans' },
+      { text: { zh: '华佗：为什么要懂等比增长？\n瘟疫不是线性蔓延的——它翻倍！今天 3 人，明天 6，后天 12……\n如果不懂指数增长，你永远低估疫情的速度。\n学会计算第 $n$ 天的感染人数，才能及时隔离。', en: 'Hua Tuo: "Why understand geometric growth?\nPlagues don\'t spread linearly — they multiply! 3 today, 6 tomorrow, 12 the day after...\nIf you don\'t understand exponential growth, you\'ll always underestimate its speed.\nCalculating day $n$ infections is the key to timely quarantine."' }, highlightField: 'ans' },
       { text: { zh: '华佗："识别等比数列：$6/3 = 2$，$12/6 = 2$，$24/12 = 2$，比值恒定 ✓ 公比 $r = 2$。"', en: 'Hua Tuo: "Identify geometric: $6/3 = 2$, $12/6 = 2$, $24/12 = 2$. Constant ratio ✓ Common ratio $r = 2$."' }, highlightField: 'ans' },
       { text: { zh: '华佗："等比数列公式：$$a_n = a_1 \\times r^{n-1}$$\n首项 $a_1 = 3$，公比 $r = 2$，求第 $5$ 项：$$a_5 = 3 \\times 2^{5-1} = 3 \\times 2^4$$"', en: 'Hua Tuo: "Geometric formula: $$a_n = a_1 \\times r^{n-1}$$\nFirst term $a_1 = 3$, ratio $r = 2$. Find term 5: $$a_5 = 3 \\times 2^{5-1} = 3 \\times 2^4$$"' }, highlightField: 'ans' },
       { text: { zh: '华佗："计算 $2^4$：$2^1=2$，$2^2=4$，$2^3=8$，$2^4=16$。\n所以 $a_5 = 3 \\times 16 = 48$。"', en: 'Hua Tuo: "Calculate $2^4$: $2^1=2$, $2^2=4$, $2^3=8$, $2^4=16$.\nSo $a_5 = 3 \\times 16 = 48$."' }, highlightField: 'ans' },
@@ -570,7 +570,7 @@ export const MISSIONS_Y10: Mission[] = [
     data: { x1: -3, y1: 5, z1: 1, x2: 7, y2: -1, z2: 9, mode: 'midpoint', generatorType: 'COORD_3D_RANDOM' }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-4.1-02', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '费祎："负坐标也是坐标\n三维空间里，$-3$ 意味着在原点的反方向。中点公式不变——把负数当成普通数字代入即可。\n关键：$(-3) + 7 = 4$，不是 $10$！注意正负号。"', en: 'Fei Yi: "Negative coordinates are still coordinates.\nIn 3D space, $-3$ means opposite direction from the origin. The midpoint formula stays the same — just treat negatives as regular numbers.\nKey: $(-3) + 7 = 4$, not $10$! Watch the signs."' }, highlightField: 'x' },
+      { text: { zh: '费祎：为什么要掌握负坐标中点？\n战场不是只有"前方"——敌人可能在你身后、地下、高空。\n负坐标代表反方向。如果你只会算正数中点，一半的战场你就看不到了。\n关键陷阱：$(-3) + 7 = 4$，不是 $10$！', en: 'Fei Yi: "Why master midpoints with negatives?\nThe battlefield isn\'t just \'forward\' — enemies could be behind, below, or above.\nNegative coordinates mean opposite direction. If you can only handle positives, half the battlefield is invisible.\nKey trap: $(-3) + 7 = 4$, not $10$!"' }, highlightField: 'x' },
       { text: { zh: '费祎："公式回顾\n$$M = \\left(\\frac{x_1+x_2}{2},\\; \\frac{y_1+y_2}{2},\\; \\frac{z_1+z_2}{2}\\right)$$"', en: 'Fei Yi: "Formula review\n$$M = \\left(\\frac{x_1+x_2}{2},\\; \\frac{y_1+y_2}{2},\\; \\frac{z_1+z_2}{2}\\right)$$"' }, highlightField: 'x' },
       { text: { zh: '费祎："代入 x\n$x_M = \\frac{-3 + 7}{2} = \\frac{4}{2} = 2$"', en: 'Fei Yi: "Substitute x\n$x_M = \\frac{-3 + 7}{2} = \\frac{4}{2} = 2$"' }, highlightField: 'x' },
       { text: { zh: '费祎："代入 y 和 z\n$y_M = \\frac{5 + (-1)}{2} = \\frac{4}{2} = 2$\n$z_M = \\frac{1 + 9}{2} = \\frac{10}{2} = 5$"', en: 'Fei Yi: "Substitute y and z\n$y_M = \\frac{5 + (-1)}{2} = \\frac{4}{2} = 2$\n$z_M = \\frac{1 + 9}{2} = \\frac{10}{2} = 5$"' }, highlightField: 'z' },
@@ -889,8 +889,8 @@ export const MISSIONS_Y10: Mission[] = [
       { text: { zh: '周瑜：为什么要展开括号？\n$3(x + 5)$ 就像"3份(x加5)"——展开就是把每份的内容都写出来。\n这是代数最基本的操作，后面因式分解、解方程全要用！', en: 'Zhou Yu: "Why expand brackets?\n$3(x + 5)$ means \'3 lots of (x plus 5)\' — expanding writes out each lot.\nThis is the most basic algebra operation — factoring and solving all need it!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：分配律\n$$a(b + c) = ab + ac$$\n括号外的数，要和括号里的每一项都乘一遍。\n就像发工资——每个人都要发到。', en: 'Zhou Yu: "Distributive law\n$$a(b + c) = ab + ac$$\nThe number outside multiplies EVERY term inside.\nLike paying wages — everyone gets their share."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：代入\n${a}({b_term} + {c_term})$\n= ${a} \\times {b_term} + {a} \\times {c_term}$', en: 'Zhou Yu: "Substitute\n${a}({b_term} + {c_term})$\n= ${a} \\times {b_term} + {a} \\times {c_term}$"' }, highlightField: 'ans' },
-      { text: { zh: '周瑜：计算每一项', en: 'Zhou Yu: "Calculate each term"' }, highlightField: 'ans' },
-      { text: { zh: '周瑜：答案\n展开结果确认！', en: 'Zhou Yu: "Answer\nExpansion complete!"' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：逐项计算\n先乘第一项，再乘第二项。\n别忘了符号——正负号跟着一起乘！', en: 'Zhou Yu: "Compute term by term\nMultiply the first term, then the second.\nDon\'t forget signs — they multiply too!"' }, highlightField: 'ans' },
+      { text: { zh: '周瑜：答案\n展开完成！检查每一项的系数和符号。', en: 'Zhou Yu: "Answer\nExpansion complete! Check each term\'s coefficient and sign."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：验算\n代入 $x = 1$，原式和展开后应该相等 ✓', en: 'Zhou Yu: "Verify\nSubstitute $x = 1$, original and expanded should be equal ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '展开括号：括号外的数乘以括号内的每一项。', en: 'Expand: multiply the outside by every term inside.' }, formula: '$a(b+c) = ab + ac$', tips: [{ zh: '周瑜提示：外面的数，里面每项都要乘到。', en: 'Zhou Yu Tip: Outside number multiplies every inside term.' }] },
