@@ -1,9 +1,21 @@
 /**
- * BattleEffects — Streak milestone flash + floating score animation (v8.4 refactor)
+ * BattleEffects — Streak milestone flash + floating score + micro-encouragement (v8.4 refactor)
  */
 import { AnimatePresence, motion } from 'motion/react';
 import type { Language } from '../../types';
 import { translations } from '../../i18n/translations';
+
+/** Short, punchy encouragement for correct answers — rotate randomly */
+const CORRECT_CHEERS: { zh: string; en: string }[] = [
+  { zh: '漂亮！', en: 'Nice!' },
+  { zh: '就是这样！', en: 'That\'s it!' },
+  { zh: '稳！', en: 'Solid!' },
+  { zh: '这是你挣来的。', en: 'You earned this.' },
+  { zh: '感觉到了吗？', en: 'Feel that?' },
+  { zh: '又进一步！', en: 'One step closer!' },
+  { zh: '太强了！', en: 'Powerful!' },
+  { zh: '拿下！', en: 'Got it!' },
+];
 
 type Props = {
   lang: Language;
@@ -40,6 +52,13 @@ export function BattleEffects({ lang, streakMilestone, floatingScore }: Props) {
             <div className="text-5xl font-black text-yellow-400 drop-shadow-lg" style={{ textShadow: '0 0 20px rgba(250,204,21,0.5)' }}>
               {streakMilestone} {t.streakLabel}!
             </div>
+            <div className="text-sm font-bold text-yellow-200/80 mt-1">
+              {streakMilestone >= 5
+                ? (lang === 'en' ? "You're unstoppable." : '势不可挡。')
+                : streakMilestone >= 3
+                ? (lang === 'en' ? 'You found your rhythm!' : '你找到节奏了！')
+                : (lang === 'en' ? 'Keep going!' : '继续保持！')}
+            </div>
             {streakMilestone === 5 && (
               <div className="text-lg font-black text-amber-300 mt-1">{t.streakToken} +1</div>
             )}
@@ -47,18 +66,29 @@ export function BattleEffects({ lang, streakMilestone, floatingScore }: Props) {
         )}
       </AnimatePresence>
 
-      {/* Floating Score Animation */}
+      {/* Floating Score + Micro-Encouragement */}
       <AnimatePresence>
         {floatingScore && (
           <motion.div
             key={floatingScore.key}
             initial={{ y: 0, opacity: 1 }}
             animate={{ y: -60, opacity: 0 }}
-            transition={{ duration: 1, ease: 'easeOut' }}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 pointer-events-none z-30 text-3xl font-black text-yellow-500 drop-shadow-lg"
-            style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 pointer-events-none z-30 text-center"
           >
-            {floatingScore.value}
+            <div className="text-3xl font-black text-yellow-500 drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
+              {floatingScore.value}
+            </div>
+            {!floatingScore.value.startsWith('-') && (
+              <motion.div
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="text-sm font-bold text-emerald-300 mt-1 drop-shadow"
+              >
+                {(() => { const c = CORRECT_CHEERS[floatingScore.key % CORRECT_CHEERS.length]; return lang === 'en' ? c.en : c.zh; })()}
+              </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
