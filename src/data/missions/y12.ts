@@ -389,4 +389,42 @@ export const MISSIONS_Y12: Mission[] = [
     secret: { concept: { zh: '到两点等距的轨迹是连线的垂直平分线。两条轨迹的交集是同时满足两个条件的区域。', en: 'Locus equidistant from two points is the perpendicular bisector. Intersection of loci satisfies all conditions simultaneously.' }, formula: '$AM = MB = \\frac{AB}{2}$', tips: [{ zh: '司马炎提示：垂直平分线——最公平的边界！', en: 'Sima Yan Tip: Perpendicular bisector — the fairest border!' }] },
     storyConsequence: { correct: { zh: '两城等距——垂直平分线完美！', en: 'Equidistant Border — perpendicular bisector perfect!' }, wrong: { zh: '中点距离算偏了——AB÷2试试？', en: 'Midpoint distance off — try AB÷2?' } }
   },
+
+  // --- Unit 7: 轨迹进阶 · 天下归一 (Advanced Loci) ---
+  {
+    id: 1263, grade: 12, unitId: 7, order: 1,
+    unitTitle: { zh: 'Unit 7: 轨迹进阶', en: 'Unit 7: Advanced Loci' },
+    topic: 'Geometry', type: 'ESTIMATION',
+    title: { zh: '轨迹交点', en: 'Loci Intersection' },
+    skillName: { zh: '轨迹交点术', en: 'Loci Intersection' },
+    skillSummary: { zh: '两条件轨迹的交点数', en: 'Number of intersection points of two loci' },
+    story: { zh: '司马昭规划新城：到点 $A$ 等距（圆）且到线 $l$ 等距（平行线对）。交点有几个？', en: 'Sima Zhao plans a new city: equidistant from point $A$ (circle) and from line $l$ (pair of parallel lines). How many intersections?' },
+    description: { zh: '到A等距且到线l等距的点有几个?', en: 'Points equidistant from A and from line l = ?' },
+    discoverSteps: [
+      {
+        prompt: { zh: '到一个点等距的轨迹是什么形状？\n到一条直线等距的轨迹又是什么形状？', en: 'What shape is the locus equidistant from a point?\nWhat shape is the locus equidistant from a line?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '圆 和 两条平行线', en: 'Circle and two parallel lines' },
+          { zh: '两条直线 和 一个圆', en: 'Two straight lines and a circle' },
+          { zh: '一条直线 和 一条直线', en: 'One line and one line' },
+        ],
+        onCorrect: { zh: '对！到一个点等距 → 圆（以该点为圆心）。\n到一条直线等距（距离=d）→ 两条平行线（线的上方和下方各一条）。\n圆和两条平行线通常有两个交点。', en: 'Correct! Equidistant from a point → circle (centred at that point).\nEquidistant from a line (distance=d) → two parallel lines (one above, one below).\nA circle and two parallel lines typically have two intersection points.' },
+        onWrong: { zh: '到一个点等距 = 圆。到一条直线等距 = 两条平行线（上下各一条）。\n圆和两条平行线的交点：通常是2个。', en: 'Equidistant from a point = circle. Equidistant from a line = two parallel lines.\nCircle intersecting two parallel lines: typically 2 points.' },
+        onSkip: { zh: '点的等距轨迹=圆，线的等距轨迹=两条平行线。交点数=2。', en: 'Point equidistant locus = circle, line equidistant locus = two parallel lines. Intersections = 2.' },
+      },
+    ],
+    data: { answer: 2 },
+    difficulty: 'Hard', reward: 700, kpId: 'kp-4.8-03', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '司马昭：为什么要算轨迹交点？\n新城选址必须同时满足两个条件：离 $A$ 一定距离，离主干道 $l$ 一定距离。\n满足两个条件的点就是两条轨迹的交点——那就是最佳城址！', en: 'Sima Zhao: "Why count loci intersections?\nThe new city must satisfy two conditions: fixed distance from $A$, fixed distance from road $l$.\nPoints satisfying both conditions are the intersections — those are the best city sites!"' }, highlightField: 'ans' },
+      { text: { zh: '司马昭：两种轨迹\n到点 $A$ 等距 → 圆（圆心 $A$，半径 $r$）\n到线 $l$ 等距（距离 $d$）→ 两条平行线', en: 'Sima Zhao: "Two loci\nEquidistant from point $A$ → circle (centre $A$, radius $r$)\nEquidistant from line $l$ (distance $d$) → two parallel lines"' }, highlightField: 'ans' },
+      { text: { zh: '司马昭：画图分析\n圆穿过两条平行线——上方的线被圆截一次，下方的线也被截一次。\n（假设圆足够大能同时碰到两条线）', en: 'Sima Zhao: "Diagram analysis\nThe circle passes through both parallel lines — upper line intersected once, lower line once.\n(Assuming the circle is large enough to reach both lines)"' }, highlightField: 'ans' },
+      { text: { zh: '司马昭：数交点\n圆与每条平行线相切或相交 → 通常共 $2$ 个交点。\n（极端情况下可能 0、1、3 或 4 个，但标准情况是 2 个）', en: 'Sima Zhao: "Count intersections\nCircle meets each parallel line → typically $2$ intersection points total.\n(Edge cases could give 0, 1, 3, or 4, but the standard case is 2)"' }, highlightField: 'ans' },
+      { text: { zh: '司马昭：答案\n交点数 = $2$', en: 'Sima Zhao: "Answer\nNumber of intersections = $2$"' }, highlightField: 'ans' },
+      { text: { zh: '司马昭：验算\n画图验证：圆穿过两条平行线，每条线上各有一个交点 ✓\n如果圆心恰好在 $l$ 上且半径 = $d$，两条平行线各相切 → 仍是 2 个点 ✓', en: 'Sima Zhao: "Verify\nDraw to verify: circle crosses two parallel lines, one intersection on each ✓\nIf centre is on $l$ and radius = $d$, each parallel line is tangent → still 2 points ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '到点等距=圆，到线等距=两条平行线。两轨迹交点=满足所有条件的位置。', en: 'Equidistant from point = circle, from line = two parallel lines. Intersections = positions satisfying all conditions.' }, formula: '$\\text{circle} \\cap \\text{2 parallel lines} = 2 \\text{ points}$', tips: [{ zh: '司马昭提示：圆和两条平行线通常交于2点！', en: 'Sima Zhao Tip: Circle and two parallel lines typically meet at 2 points!' }] },
+    storyConsequence: { correct: { zh: '轨迹交点——2个最佳城址找到了！', en: 'Loci Intersection — 2 optimal city sites found!' }, wrong: { zh: '圆穿过两条平行线→每条线上各1个交点→共2个。', en: 'Circle crosses two parallel lines → 1 intersection on each → 2 total.' } },
+  },
 ];
