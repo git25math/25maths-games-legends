@@ -821,7 +821,7 @@ export default function App() {
 
   const isLoggedIn = !!user || isGuest;
   // Teacher access: original admin email OR any user with TEACHER tag in class_tags
-  const isTeacher = user?.email === 'zhuxingda86@hotmail.com' || (profile?.class_tags ?? []).some(t => t.toUpperCase() === 'TEACHER');
+  const isTeacher = user?.email === 'zhuxingda86@hotmail.com' || user?.email === 'nzhu@harrowhaikou.cn' || (profile?.class_tags ?? []).some(t => t.toUpperCase() === 'TEACHER');
   const isMissionShellLoading = missionsLoading && (
     gameState === 'map' ||
     gameState === 'lobby' ||
