@@ -35,9 +35,9 @@ Step 5: npm test -- --run     → 2289 测试必须全通过
 ## 三、当前状态快照（v9.8.0, 2026-03-28）
 
 ### 规模
-- **216 missions** 分布: Y7(57) + Y8(40) + Y9(45) + Y10(45) + Y11(27) + Y12(5)（含 SIMILAR_TRIANGLES: Y9 id=933, Y10 id=1065）
-- **74 个活跃 generatorType**（含 SIMILAR_TRIANGLES_RANDOM），100% 覆盖
-- **2,289 个 Vitest 用例**（全通过）
+- **218 missions** 分布: Y7(57) + Y8(40) + Y9(47) + Y10(45) + Y11(27) + Y12(5)（含 SIMILAR_TRIANGLES/TREE_DIAGRAM 新题型）
+- **75 个活跃 generatorType**（含 SIMILAR_TRIANGLES_RANDOM + TREE_DIAGRAM_RANDOM），100% 覆盖
+- **2,314 个 Vitest 用例**（全通过）
 
 ### 教程质量覆盖率（截至 v8.9.3）
 
@@ -148,6 +148,12 @@ Step 5: npm test -- --run     → 2289 测试必须全通过
 - **Y10 修复**: missions 10141/10142 空 tutorialSteps → 6步金标准（圆周角+圆心角定理，诸葛亮/周瑜叙事）
 - **Y7 全量升级**: 45关教程 1-5步 → 全部≥6步金标准（BODMAS/分数/整数/代入/合并同类项/百分比/比例/质因数/HCF/LCM/数列/估算/几何/坐标/统计）
 - 测试: 2214 → 2264（+50 测试）
+
+#### v9.9.0 — TREE_DIAGRAM 新题型（条件概率不放回）
+- **7 文件全流程**: types/translations(3语)/inputConfig/checkCorrectness/statistics.ts/index.ts/y9.ts
+- **generateTreeDiagramMission**: 3 模式（both_red/both_same/diff）× 3 档位，P(B|A) 条件概率，6步金标准动态教程
+- **Y9 新关卡**: id=9148（不放回抽签，5r+3b，Medium/300）+ id=9149（颜色配对，4r+2b，Hard/360）
+- 测试: 2289 → 2314（+25）
 
 #### v9.8.0 — 三币经济完整闭环 + SIMILAR_TRIANGLES 新题型 + story插值修复
 - **军粮消费**: `ration_pack`（补给包📦）— 修复力 20，售价 25 军粮，inventory.ts 新增 `supply` 类型
@@ -341,7 +347,7 @@ for mid, steps_raw in missions:
 
 | 优先级 | 任务 | 说明 |
 |--------|------|------|
-| HIGH | **TREE_DIAGRAM 新题型** | Y9/Y10 树形图概率，生成器+checker+2关卡（Season 2 核心内容） |
+| ~~HIGH~~ | ~~TREE_DIAGRAM 新题型~~ | ✅ 完成：Y9 id=9148/9149，7文件全流程，2314 tests |
 | HIGH | **SEQUENCE_NTH 新题型** | Y10/Y11 等差等比数列第n项，公式代入类题型 |
 | MEDIUM | **新远征·蜀道** | expeditions.ts 新增蜀道远征（8节点），配合赛季2主题 |
 | LOW | **3D_COORD 新题型** | Y10 三维坐标题（Season 2 Y10内容） |
