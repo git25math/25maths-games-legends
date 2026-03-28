@@ -254,6 +254,11 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const val = (data.a / data.b) * data.c;
     return { correct: Math.abs(parse(inputs.x || '') - val) < 0.01, expected: { x: round(val) } };
   }
+  if (type === 'SIMILAR_TRIANGLES') {
+    if (!data.p) return { correct: false, expected: { x: '0' } };
+    const val = (data.q / data.p) * data.r;
+    return { correct: Math.abs(parse(inputs.x || '') - val) < 0.01, expected: { x: round(val) } };
+  }
   if (type === 'HCF') {
     const nums = data.numbers as number[];
     if (!nums || nums.length === 0) return { correct: false, expected: { ans: '0' } };
@@ -387,7 +392,7 @@ const PARTIAL_CREDIT_TYPES = new Set([
   'FACTORISE', 'INEQUALITY', 'FDP_CONVERT', 'BODMAS', 'SIMPLIFY',
   'ARITHMETIC', 'ESTIMATION', 'SQUARE_CUBE', 'SQUARE_ROOT',
   'INTEGER_ADD', 'INTEGER_MUL', 'HCF', 'LCM',
-  'PROBABILITY_TREE', 'SEQUENCE_FORMULA',
+  'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES',
 ]);
 
 // Types that NEVER get partial credit (boolean/discrete answers)

@@ -1360,3 +1360,96 @@ export function generateCircleTheoremMission(template: Mission, tier: Difficulty
   }
 }
 
+/* ══════════════════════════════════════════════════════════
+   SIMILAR TRIANGLES generator
+   △ABC ~ △DEF: given p=AB, q=BC, r=DE, find EF=x
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSimilarTrianglesMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  // p = AB (known side of △ABC), q = BC (other known side of △ABC)
+  // r = DE (corresponding to AB in △DEF), x = EF (unknown, corresponding to BC)
+  const pPools: Record<number, number[]> = { 1: [2, 3, 4, 5], 2: [3, 4, 5, 6, 8], 3: [5, 6, 8, 9, 10] };
+  const qPools: Record<number, number[]> = { 1: [4, 6, 8, 10], 2: [6, 8, 9, 12, 15], 3: [9, 12, 14, 16, 20] };
+  const scaleFactors: Record<number, number[]> = { 1: [2, 3], 2: [2, 3, 4], 3: [2, 3, 5] };
+
+  const p = pickRandom(pPools[tier]);
+  const q = pickRandom(qPools[tier]);
+  const scale = pickRandom(scaleFactors[tier]);
+  const r = p * scale;
+  const x = q * scale;
+
+  // Ensure x is a whole number (always is since p,q,scale are integers)
+  if (x !== Math.round(x)) return safeRetry(template, generateSimilarTrianglesMission, tier);
+
+  const narratorPairs: Array<[string, string]> = [
+    ['诸葛亮', '赵云'],
+    ['曹操', '郭嘉'],
+    ['孙权', '周瑜'],
+  ];
+  const [narrator1, narrator2] = pickRandom(narratorPairs);
+
+  const scenarios = [
+    {
+      zh: `${narrator1}用影子测量旗杆高度。小旗杆高 $${p}$ 米，影长 $${r}$ 米。大旗杆影长 $${q}$ 米，求大旗杆高度 $x$。`,
+      en: `${narrator1} measures flagpole height using shadows. Small flagpole: height $${p}$ m, shadow $${r}$ m. Large flagpole shadow: $${q}$ m. Find height $x$.`,
+    },
+    {
+      zh: `${narrator2}测绘两座相似的营地塔楼。△ABC ~ △DEF，$AB = ${p}$，$BC = ${q}$，$DE = ${r}$，求 $EF = x$。`,
+      en: `${narrator2} surveys two similar camp towers. △ABC ~ △DEF, $AB = ${p}$, $BC = ${q}$, $DE = ${r}$. Find $EF = x$.`,
+    },
+  ];
+  const scenario = pickRandom(scenarios);
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator1}："为什么相似三角形能测量遥远的距离？\n\n古人没有现代测量工具，但他们发现：阳光下，同一时刻所有物体的「影子/高度」比值相同。\n一根 ${p} 米的竹竿影长 ${r} 米——这个比值就是「相似比」。\n只要知道另一个物体的影长，就能算出它的真实高度！\n这就是相似三角形的威力：形状角度完全相同，大小按比例变化。"`,
+        en: `${narrator1}: "Why can similar triangles measure distant objects?\n\nAncient surveyors had no modern tools, but they discovered: at the same moment, every object has the same shadow-to-height ratio.\nA ${p}-metre pole casts a ${r}-metre shadow — that ratio IS the similarity ratio.\nKnowing another object's shadow length lets you calculate its true height!\nThat's the power of similar triangles: identical angles, proportional sides."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator1}："认识相似三角形的标记方式：\n\n当我们写 △ABC ~ △DEF，意思是：\n• 角 A = 角 D，角 B = 角 E，角 C = 角 F（角度完全对应）\n• 对应边：$\\frac{AB}{DE} = \\frac{BC}{EF} = \\frac{CA}{FD}$（比值完全相同）\n\n已知：$AB = ${p}$，$BC = ${q}$，$DE = ${r}$，求 $EF = x$。"`,
+        en: `${narrator1}: "Understanding similar triangle notation:\n\nWhen we write △ABC ~ △DEF, it means:\n• Angle A = Angle D, Angle B = Angle E, Angle C = Angle F (angles match perfectly)\n• Corresponding sides: $\\frac{AB}{DE} = \\frac{BC}{EF} = \\frac{CA}{FD}$ (same ratio)\n\nGiven: $AB = ${p}$, $BC = ${q}$, $DE = ${r}$. Find $EF = x$."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator1}："第一步：求相似比（scale factor）。\n\n$AB$ 对应 $DE$，所以：\n$$k = \\frac{DE}{AB} = \\frac{${r}}{${p}} = ${scale}$$\n\n△DEF 是 △ABC 放大了 ${scale} 倍。"`,
+        en: `${narrator1}: "Step 1: Find the scale factor.\n\n$AB$ corresponds to $DE$, so:\n$$k = \\frac{DE}{AB} = \\frac{${r}}{${p}} = ${scale}$$\n\n△DEF is ${scale} times larger than △ABC."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator1}："第二步：用相似比求未知边。\n\n$BC$ 对应 $EF$，用同样的 scale factor：\n$$x = EF = BC \\times k = ${q} \\times ${scale} = ${x}$$"`,
+        en: `${narrator1}: "Step 2: Use the scale factor to find the unknown side.\n\n$BC$ corresponds to $EF$, apply the same scale factor:\n$$x = EF = BC \\times k = ${q} \\times ${scale} = ${x}$$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator1}："答案：$x = ${x}$\n\n△DEF 中，$EF = ${x}$。"`,
+        en: `${narrator1}: "Answer: $x = ${x}$\n\nIn △DEF, $EF = ${x}$."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator1}："验算——检查三组对应边的比值是否相等：\n$$\\frac{DE}{AB} = \\frac{${r}}{${p}} = ${scale} \\checkmark$$\n$$\\frac{EF}{BC} = \\frac{${x}}{${q}} = ${scale} \\checkmark$$\n两个比值相等！△ABC ~ △DEF 验证成功。"`,
+        en: `${narrator1}: "Verify — check that corresponding side ratios are equal:\n$$\\frac{DE}{AB} = \\frac{${r}}{${p}} = ${scale} \\checkmark$$\n$$\\frac{EF}{BC} = \\frac{${x}}{${q}} = ${scale} \\checkmark$$\nBoth ratios equal! △ABC ~ △DEF confirmed."`,
+      },
+      highlightField: 'x',
+    },
+  ];
+
+  return {
+    ...template,
+    description: scenario,
+    data: { p, q, r, generatorType: 'SIMILAR_TRIANGLES_RANDOM' },
+    tutorialSteps,
+  };
+}
+

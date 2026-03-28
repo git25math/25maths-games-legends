@@ -15,9 +15,10 @@ const LABELS = {
 };
 
 const TYPE_COLORS = {
-  hammer: { bg: 'bg-amber-500/15', border: 'border-amber-500/30', text: 'text-amber-400', btn: 'bg-amber-600/70 hover:bg-amber-600 text-white' },
-  scroll: { bg: 'bg-blue-500/15',  border: 'border-blue-500/30',  text: 'text-blue-400',  btn: 'bg-blue-600/70  hover:bg-blue-600  text-white' },
-  crystal:{ bg: 'bg-purple-500/15',border: 'border-purple-500/30',text: 'text-purple-400',btn: 'bg-purple-600/70 hover:bg-purple-600 text-white' },
+  hammer: { bg: 'bg-amber-500/15',   border: 'border-amber-500/30',   text: 'text-amber-400',   btn: 'bg-amber-600/70  hover:bg-amber-600  text-white' },
+  scroll: { bg: 'bg-blue-500/15',    border: 'border-blue-500/30',    text: 'text-blue-400',    btn: 'bg-blue-600/70   hover:bg-blue-600   text-white' },
+  crystal:{ bg: 'bg-purple-500/15',  border: 'border-purple-500/30',  text: 'text-purple-400',  btn: 'bg-purple-600/70 hover:bg-purple-600 text-white' },
+  supply: { bg: 'bg-emerald-500/15', border: 'border-emerald-500/30', text: 'text-emerald-400', btn: 'bg-emerald-600/70 hover:bg-emerald-600 text-white' },
 };
 
 export const ShopPanel = ({
@@ -149,7 +150,7 @@ export const ShopPanel = ({
 
         {/* Rations earn hint */}
         <div className="mt-3 px-3 py-2 rounded-xl bg-white/5 text-[10px] text-white/25">
-          🍚 {lang === 'en' ? 'Rations: complete daily tasks' : lang === 'zh_TW' ? '軍糧：完成每日軍令' : '军粮：完成每日军令'}
+          🍚 {lang === 'en' ? 'Rations: complete daily tasks · spend on Supply Pack 📦' : lang === 'zh_TW' ? '軍糧：完成每日軍令獲得 · 可兌換軍營補給包 📦' : '军粮：完成每日军令获得 · 可兑换军营补给包 📦'}
         </div>
       </motion.div>
     </motion.div>

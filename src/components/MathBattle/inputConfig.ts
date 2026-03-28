@@ -93,6 +93,10 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'x', label: '未知边 x', placeholder: 'x = ?' }],
     en: [{ id: 'x', label: 'Unknown side x', placeholder: 'x = ?' }],
   },
+  SIMILAR_TRIANGLES: {
+    zh: [{ id: 'x', label: '未知边 x', placeholder: 'x = ?' }],
+    en: [{ id: 'x', label: 'Unknown side x', placeholder: 'x = ?' }],
+  },
   FRACTION: {
     zh: [{ id: 'ans', label: '结果', placeholder: '结果 = ?' }],
     en: [{ id: 'ans', label: 'Result', placeholder: 'Result = ?' }],

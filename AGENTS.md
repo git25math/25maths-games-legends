@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v9.7.0 (2026-03-27)
+> **最后更新**: v9.8.0 (2026-03-28)
 
 ---
 
@@ -25,14 +25,14 @@ Step 5: npm test -- --run     → 2264 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.7.0 (2026-03-27) |
+| **当前版本** | v9.8.0 (2026-03-28) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (2264 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v9.7.0, 2026-03-27）
+## 三、当前状态快照（v9.8.0, 2026-03-28）
 
 ### 规模
 - **217 missions** 分布: Y7(57) + Y8(40) + Y9(44) + Y10(44) + Y11(27) + Y12(5)
@@ -148,6 +148,12 @@ Step 5: npm test -- --run     → 2264 测试必须全通过
 - **Y10 修复**: missions 10141/10142 空 tutorialSteps → 6步金标准（圆周角+圆心角定理，诸葛亮/周瑜叙事）
 - **Y7 全量升级**: 45关教程 1-5步 → 全部≥6步金标准（BODMAS/分数/整数/代入/合并同类项/百分比/比例/质因数/HCF/LCM/数列/估算/几何/坐标/统计）
 - 测试: 2214 → 2264（+50 测试）
+
+#### v9.8.0 — 三币经济完整闭环
+- **军粮消费**: `ration_pack`（补给包📦）— 修复力 20，售价 25 军粮，inventory.ts 新增 `supply` 类型
+- **gameBalance.ts**: SHOP_PRICES 接入 rations 定价
+- **ShopPanel.tsx**: 新增 supply 绿色配色 + 底部提示更新（告知玩家如何用军粮）
+- **确认已完成遗留**: Bundle 拆分（已有 manualChunks，最大 chunk 364 kB）+ SIMILARITY 题型（y9.ts id 931/932 已有 6步教程）
 
 ### 已知遗留问题
 
@@ -330,10 +336,10 @@ for mid, steps_raw in missions:
 
 | 优先级 | 任务 | 说明 |
 |--------|------|------|
-| HIGH | **Bundle 拆分** | 降低 `missions` / `index` chunk 体积，消除 >500 kB 构建警告 |
-| HIGH | **军粮发放修复** | `currency.ts` CURRENCY_REWARDS 中军粮(rations)只展示不发放，需接通每日任务完成逻辑 |
-| MEDIUM | **新题型 SIMILAR_TRIANGLES** | Y9 相似三角形，生成器+checker+6步教程 |
-| LOW | **missions.ts 拆分** | 按年级拆成 y7-missions.ts 等，降低文件体积 |
+| HIGH | **Y8 教程质量审查** | 部分 Y8 关卡教程仍为 3-5 步，需升级到 6 步金标准（参考 Y7 已完成的模式） |
+| MEDIUM | **新远征·蜀道** | expeditions.ts 新增蜀道远征（8节点），配合赛季2主题 |
+| LOW | **missions.ts 拆分已完成** | ✅ 已按年级拆分（y7-y12.ts），manualChunks 已配置，最大 chunk 364 kB |
+| LOW | **SIMILARITY 题型已完成** | ✅ y9.ts id 931/932 已有 6步金标准教程（赵云/诸葛亮） |
 | FUTURE | **班级远征** | 多人协作通关 |
 
 ---

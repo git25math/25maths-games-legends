@@ -4,7 +4,7 @@
 import type { BilingualText } from '../types';
 import type { ErrorType } from './diagnoseError';
 
-export type RepairItemType = 'hammer' | 'scroll' | 'crystal';
+export type RepairItemType = 'hammer' | 'scroll' | 'crystal' | 'supply';
 
 export type RepairItemDef = {
   id: string;
@@ -75,6 +75,15 @@ export const REPAIR_ITEMS: RepairItemDef[] = [
     description: { zh: '完全修复装备至崭新状态', en: 'Fully restores equipment to pristine' },
     icon: '💎',
     repairPower: 100,
+    bonusMultiplier: 1.0,
+  },
+  {
+    id: 'ration_pack',
+    type: 'supply',
+    name: { zh: '军营补给包', en: 'Supply Pack' },
+    description: { zh: '每日军令的积累，换一次轻度修复。修复力：20', en: 'Daily effort converted to a light repair. Repair power: 20' },
+    icon: '📦',
+    repairPower: 20,
     bonusMultiplier: 1.0,
   },
 ];

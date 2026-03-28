@@ -13,7 +13,7 @@ import { generateIntegerAddMission, generateIntegerMulMission, generateFracAddSa
 
 import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateExpandNegMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission, generateSequenceFormulaMission } from './algebra';
 
-import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission, generateCircleTheoremMission } from './geometry';
+import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission, generateCircleTheoremMission, generateSimilarTrianglesMission } from './geometry';
 
 import { generateProbSimpleMission, generateProbIndMission, generateStatsMeanMission, generateStatsMedianMission, generateStatsRangeMission, generateStatsModeMission, generateCumFreqMission, generateProbTreeMission } from './statistics';
 
@@ -47,7 +47,8 @@ export type GeneratorType =
   | 'ENLARGEMENT_RANDOM' | 'VECTOR_ADD_RANDOM' | 'CUMFREQ_RANDOM' | 'SECTOR_RANDOM'
   | 'CIRCLE_THEOREM_RANDOM'
   | 'PROB_TREE_RANDOM'
-  | 'SEQUENCE_FORMULA_RANDOM';
+  | 'SEQUENCE_FORMULA_RANDOM'
+  | 'SIMILAR_TRIANGLES_RANDOM';
 
 /* ── Generator dispatch map ── */
 
@@ -110,6 +111,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   PYTHAGORAS_RANDOM: generatePythagorasMission,
   TRIGONOMETRY_RANDOM: generateTrigonometryMission,
   SIMILARITY_RANDOM: generateSimilarityMission,
+  SIMILAR_TRIANGLES_RANDOM: generateSimilarTrianglesMission,
   CIRCLE_Y8_RANDOM: generateCircleY8Mission,
   VOLUME_RANDOM: generateVolumeMission,
   VOLUME_Y8_RANDOM: generateVolumeY8Mission,
