@@ -4,7 +4,7 @@
  * the KPs where students struggle most. Links to ExamHub guided lessons.
  */
 import { useEffect, useState, useMemo } from 'react';
-import { AlertTriangle, BookOpen, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { AlertTriangle, BookOpen, ExternalLink, ChevronDown, ChevronUp, ClipboardList } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, KPProgressRow } from './types';
 import { supabase } from '../../supabase';
@@ -28,11 +28,13 @@ export function KPWeaknessPanel({
   grade,
   filterTag,
   students,
+  onAssignKP,
 }: {
   lang: Language;
   grade: number;
   filterTag: string;
   students: StudentRow[];
+  onAssignKP?: (kpId: string, weakStudentNames: string[]) => void;
 }) {
   const [kpData, setKpData] = useState<KPProgressRow[]>([]);
   const [healthData, setHealthData] = useState<{ user_id: string; node_id: string; corruption_level: string }[]>([]);
@@ -227,6 +229,18 @@ export function KPWeaknessPanel({
                 </a>
               ) : (
                 <div className="w-[42px]" />
+              )}
+
+              {/* Assign targeted homework button */}
+              {onAssignKP && filterTag && (
+                <button
+                  onClick={() => onAssignKP(kp.kpId, kp.weakStudentNames)}
+                  className="flex items-center gap-1 px-2 py-1 bg-indigo-100 text-indigo-700 text-[10px] font-bold rounded-lg hover:bg-indigo-200 transition-colors"
+                  title={lang === 'en' ? 'Assign targeted practice for this topic' : '针对此知识点布置练习'}
+                >
+                  <ClipboardList size={10} />
+                  {lang === 'en' ? 'Assign' : '布置'}
+                </button>
               )}
             </div>
             {idx < 3 && kp.weakStudentNames.length > 0 && (

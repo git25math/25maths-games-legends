@@ -30,9 +30,12 @@ type Props = {
   filterTag: string;
   students: StudentRow[];
   units: UnitEntry[];
+  /** Pre-fill context from KPWeaknessPanel "Assign" button */
+  kpAssignContext?: { kpId: string; missionIds: number[]; weakStudentNames: string[] } | null;
+  onClearKpAssignContext?: () => void;
 };
 
-export function AssignmentPanel({ lang, grade, filterTag, students, units }: Props) {
+export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAssignContext, onClearKpAssignContext }: Props) {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [copiedAssignmentId, setCopiedAssignmentId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -40,6 +43,13 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
   const [showArchived, setShowArchived] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+
+  // Auto-open create modal when KP assign context is set
+  useEffect(() => {
+    if (kpAssignContext && kpAssignContext.missionIds.length > 0) {
+      setShowCreate(true);
+    }
+  }, [kpAssignContext]);
   const [sharePrompt, setSharePrompt] = useState<{ title: string; url: string } | null>(null);
 
   // All missions for current grade, grouped by unit
@@ -373,9 +383,13 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
             grade={grade}
             filterTag={filterTag}
             units={units}
-            onClose={() => setShowCreate(false)}
+            initialKpId={kpAssignContext?.kpId}
+            initialMissionIds={kpAssignContext?.missionIds}
+            weakStudentNames={kpAssignContext?.weakStudentNames}
+            onClose={() => { setShowCreate(false); onClearKpAssignContext?.(); }}
             onCreated={(title, count, assignmentId) => {
               setShowCreate(false);
+              onClearKpAssignContext?.();
               fetchAssignments();
               const url = `${window.location.origin}${window.location.pathname}?hw=${assignmentId || '1'}`;
               setSharePrompt({ title, url });
@@ -448,6 +462,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
 
 function CreateAssignmentModal({
   lang, grade, filterTag, units, onClose, onCreated,
+  initialKpId, initialMissionIds, weakStudentNames,
 }: {
   lang: Language;
   grade: number;
@@ -455,11 +470,24 @@ function CreateAssignmentModal({
   units: UnitEntry[];
   onClose: () => void;
   onCreated: (title: string, missionCount: number, assignmentId?: string) => void;
+  initialKpId?: string;
+  initialMissionIds?: number[];
+  weakStudentNames?: string[];
 }) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState(
+    initialKpId ? (lang === 'en' ? `Targeted: ${initialKpId}` : `专项练习：${initialKpId}`) : ''
+  );
+  const [description, setDescription] = useState(
+    weakStudentNames?.length
+      ? (lang === 'en'
+        ? `Recommended for: ${weakStudentNames.join(', ')}`
+        : `推荐给：${weakStudentNames.join('、')}`)
+      : ''
+  );
   const [deadline, setDeadline] = useState('');
-  const [selectedMissions, setSelectedMissions] = useState<Set<number>>(new Set());
+  const [selectedMissions, setSelectedMissions] = useState<Set<number>>(
+    new Set(initialMissionIds ?? [])
+  );
   const [missionSearch, setMissionSearch] = useState('');
   const [expandedUnit, setExpandedUnit] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);

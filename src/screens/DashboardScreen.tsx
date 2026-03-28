@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag, Download, ArrowUpDown, Filter } from 'lucide-react';
 import type { Language, Mission } from '../types';
 import { supabase } from '../supabase';
+import { getMissionIdsForKP } from '../utils/kpMissions';
 import { SkeletonRow } from '../components/SkeletonRow';
 import { INPUT_FOCUS_CLASS } from '../utils/animationPresets';
 import { MISSIONS } from '../data/missions';
@@ -97,6 +98,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [newTagValue, setNewTagValue] = useState('');
   const [showBatchAssign, setShowBatchAssign] = useState(false);
   const [batchTag, setBatchTag] = useState('');
+  const [kpAssignContext, setKpAssignContext] = useState<{ kpId: string; missionIds: number[]; weakStudentNames: string[] } | null>(null);
   const [selectedStudent, setSelectedStudent] = useState<StudentRow | null>(null);
   const [showWeeklyReport, setShowWeeklyReport] = useState(false);
   const [parentReportStudent, setParentReportStudent] = useState<StudentRow | null>(null);
@@ -587,14 +589,29 @@ export function DashboardScreen({ lang, onClose }: Props) {
         <div className="h-px flex-1 bg-slate-200" />
       </div>
 
-      <AssignmentPanel lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} />
+      <AssignmentPanel
+        lang={lang} grade={grade} filterTag={filterTag} students={students} units={units}
+        kpAssignContext={kpAssignContext}
+        onClearKpAssignContext={() => setKpAssignContext(null)}
+      />
 
       <AlertPanel lang={lang} alerts={alerts} alertOnly={alertOnly} onToggleAlertOnly={() => setAlertOnly(!alertOnly)} onStudentClick={(uid) => {
         const s = students.find(st => st.user_id === uid);
         if (s) setSelectedStudent(s);
       }} />
 
-      <KPWeaknessPanel lang={lang} grade={grade} filterTag={filterTag} students={students} />
+      <KPWeaknessPanel
+        lang={lang} grade={grade} filterTag={filterTag} students={students}
+        onAssignKP={(kpId, weakStudentNames) => {
+          const missionIds = getMissionIdsForKP(kpId);
+          if (missionIds.length === 0) {
+            setError(lang === 'en' ? `No missions found for ${kpId}` : `${kpId} 暂无对应关卡`);
+            setTimeout(() => setError(''), 3000);
+            return;
+          }
+          setKpAssignContext({ kpId, missionIds, weakStudentNames });
+        }}
+      />
 
       {/* Live indicator + stats row */}
       <div className="flex items-center justify-between mb-3 px-1">
