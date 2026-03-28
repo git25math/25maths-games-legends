@@ -248,11 +248,10 @@ export default function App() {
   }, [activeRoom?.status]);
 
   // Check URL for homework deep link (?hw=<id>)
-  const [pendingHomework, setPendingHomework] = useState(() => {
+  const [pendingHomework, setPendingHomework] = useState<string | null>(() => {
     try {
-      const params = new URLSearchParams(window.location.search);
-      return !!params.get('hw');
-    } catch { return false; }
+      return new URLSearchParams(window.location.search).get('hw') || null;
+    } catch { return null; }
   });
 
   // Persist state across page refresh
@@ -1068,8 +1067,8 @@ export default function App() {
                   selectedChar={selectedChar}
                   learnerMode={learnerMode}
                   onLearnerModeChange={handleSetLearnerMode}
-                  autoOpenHomework={pendingHomework || showHomeworkTab}
-                  onHomeworkOpened={() => { setPendingHomework(false); setShowHomeworkTab(false); window.history.replaceState({}, '', window.location.pathname); }}
+                  autoOpenHomework={!!pendingHomework || showHomeworkTab}
+                  onHomeworkOpened={() => { setPendingHomework(null); setShowHomeworkTab(false); window.history.replaceState({}, '', window.location.pathname); }}
                   onMissionStart={handleMissionStart}
                   onPracticeStart={handlePracticeStart}
                   onGradeChange={() => updateProfile({ grade: null })}
