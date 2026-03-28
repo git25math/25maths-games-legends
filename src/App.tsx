@@ -206,6 +206,7 @@ export default function App() {
   const [pkCountdown, setPkCountdown] = useState<number | null>(null); // seconds remaining, null = no countdown
   const [showStaminaGate, setShowStaminaGate] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showHomeworkTab, setShowHomeworkTab] = useState(false);
   const [repairCompleteInfo, setRepairCompleteInfo] = useState<{ missionId: number; bonus: number; scrollAwarded: boolean } | null>(null);
   const [pendingBattleMission, setPendingBattleMission] = useState<Mission | null>(null);
   const [itemRewardToast, setItemRewardToast] = useState<{ items: { itemId: string; reason: string }[] } | null>(null);
@@ -1067,8 +1068,8 @@ export default function App() {
                   selectedChar={selectedChar}
                   learnerMode={learnerMode}
                   onLearnerModeChange={handleSetLearnerMode}
-                  autoOpenHomework={pendingHomework}
-                  onHomeworkOpened={() => { setPendingHomework(false); window.history.replaceState({}, '', window.location.pathname); }}
+                  autoOpenHomework={pendingHomework || showHomeworkTab}
+                  onHomeworkOpened={() => { setPendingHomework(false); if (!showHomeworkTab) window.history.replaceState({}, '', window.location.pathname); }}
                   onMissionStart={handleMissionStart}
                   onPracticeStart={handlePracticeStart}
                   onGradeChange={() => updateProfile({ grade: null })}
@@ -1900,17 +1901,20 @@ export default function App() {
           <BottomNav
             activeTab={
               mobileMenuOpen ? 'profile'
-                : gameState === 'homework' ? 'homework'
+                : showHomeworkTab ? 'homework'
                 : 'map'
             }
             onTabChange={(tab: BottomTab) => {
               if (tab === 'map') {
                 setMobileMenuOpen(false);
-                setGameState('map');
+                setShowHomeworkTab(false);
+                if (gameState !== 'map') setGameState('map');
               } else if (tab === 'homework') {
                 setMobileMenuOpen(false);
-                setGameState('homework');
+                setShowHomeworkTab(true);
+                if (gameState !== 'map') setGameState('map');
               } else if (tab === 'profile') {
+                setShowHomeworkTab(false);
                 setGameState('map');
                 setMobileMenuOpen(prev => !prev);
               }

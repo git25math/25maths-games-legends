@@ -290,6 +290,20 @@ export const MISSIONS_Y9: Mission[] = [
     skillSummary: { zh: '相似比求未知边', en: 'Use similarity ratio for unknown sides' },
     story: { zh: '赵云要为阵前制作一面巨型战旗。原图只有手掌大小，必须按比例放大——形状不能走样，尺寸必须精准。', en: 'Zhao Yun needs a massive battle flag for the front line. The design is palm-sized and must be scaled up perfectly — same shape, bigger dimensions.' },
     description: { zh: '求大旗的宽 $x$。', en: 'Find the width $x$ of the large flag.' },
+    discoverSteps: [
+      {
+        prompt: { zh: '一面大旗和一面小旗，形状完全一样，只是大小不同。\n大旗底边 $8$ 米，小旗底边 $4$ 米。\n如果小旗的高是 $6$ 米，大旗的高是多少？', en: 'A big flag and a small flag — same shape, different size.\nBig flag base: $8$m, small flag base: $4$m.\nIf the small flag is $6$m tall, how tall is the big flag?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$12$ 米（放大了2倍，高也×2）', en: '$12$m (scaled up 2×, height also ×2)' },
+          { zh: '$10$ 米（$6 + 4$）', en: '$10$m ($6 + 4$)' },
+          { zh: '$14$ 米（$6 + 8$）', en: '$14$m ($6 + 8$)' },
+        ],
+        onCorrect: { zh: '你发现了关键：底边从 $4→8$，放大了 $2$ 倍。高也要 $×2$：$6×2=12$。\n\n形状一样、大小不同的图形叫"相似图形"。\n对应边的比值（这里是 $2$）叫"比例因子"。', en: 'You found the key: base went from $4→8$, scaled by $2$. Height also $×2$: $6×2=12$.\n\nSame shape, different size = "similar figures".\nThe ratio of corresponding sides ($2$ here) is the "scale factor".' },
+        onWrong: { zh: '相似图形不是加法关系——是乘法！\n底边 $4→8$，乘了 $2$ 倍。所以高也乘 $2$：$6×2=12$。\n这个 $2$ 叫"比例因子"。', en: 'Similar figures use multiplication, not addition!\nBase $4→8$ = multiplied by $2$. Height also ×$2$: $6×2=12$.\nThis $2$ is the "scale factor".' },
+        onSkip: { zh: '底边 $4→8$，比值 $= 8÷4 = 2$。高 $= 6×2 = 12$。\n相似图形：形状相同，对应边成比例。', en: 'Base $4→8$, ratio $= 8÷4 = 2$. Height $= 6×2 = 12$.\nSimilar figures: same shape, corresponding sides proportional.' },
+      },
+    ],
     data: { a: 6, b: 2, c: 3, generatorType: 'SIMILARITY_RANDOM' }, difficulty: 'Medium', reward: 200,
     kpId: 'kp-4.4-01', sectionId: 'geometry',
     tutorialSteps: [
@@ -414,6 +428,19 @@ export const MISSIONS_Y9: Mission[] = [
     skillSummary: { zh: '比例 a:b 求未知项', en: 'Find unknown in ratio a:b' },
     story: { zh: '曹操下令：前锋营和后勤营的粮草按 {a}:{b} 配给。根据前锋营已领的量，算出后勤营应领多少。分少了后勤罢工，分多了前锋挨饿。', en: 'Cao Cao orders: vanguard and logistics camps share grain at {a}:{b} ratio. Given the vanguard\'s amount, calculate how much logistics should receive. Too little and they revolt, too much and the vanguard starves.' },
     description: { zh: '求所需粮草 $y$（即 $1000:y = 2:5$）。', en: 'Find grain $y$ (i.e., $1000:y = 2:5$).' },
+    discoverSteps: [
+      {
+        prompt: { zh: '做饭时，米和水的比例是 $1:2$。\n如果用了 $3$ 杯米，需要多少杯水？', en: 'When cooking rice, the ratio of rice to water is $1:2$.\nIf you use $3$ cups of rice, how many cups of water?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$6$ 杯（米×2）', en: '$6$ cups (rice × 2)' },
+          { zh: '$5$ 杯（$3 + 2$）', en: '$5$ cups ($3 + 2$)' },
+        ],
+        onCorrect: { zh: '对！比例 $1:2$ 意思是"水永远是米的2倍"。\n$3$ 杯米 → $3×2=6$ 杯水。\n\n比例就是"倍数关系"。知道比例和一个量，就能算另一个。', en: 'Right! Ratio $1:2$ means "water is always 2× rice".\n$3$ cups rice → $3×2=6$ cups water.\n\nRatio = a multiplying relationship. Know the ratio and one amount, find the other.' },
+        onWrong: { zh: '比例不是加法——是倍数关系。\n$1:2$ = 水是米的2倍。$3$ 杯米 → $6$ 杯水。', en: 'Ratio is not addition — it\'s a multiplying relationship.\n$1:2$ = water is 2× rice. $3$ cups → $6$ cups water.' },
+        onSkip: { zh: '比例 $1:2$：每1份米配2份水。$3$ 份米 → $6$ 份水。\n比例 = 倍数关系。', en: 'Ratio $1:2$: 1 part rice to 2 parts water. $3$ parts rice → $6$ parts water.\nRatio = multiplying relationship.' },
+      },
+    ],
     data: { a: 2, b: 5, generatorType: 'RATIO_RANDOM' }, difficulty: 'Medium', reward: 240,
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
@@ -630,6 +657,19 @@ export const MISSIONS_Y9: Mission[] = [
     skillSummary: { zh: 'a(bx + c) = abx + ac', en: 'a(bx + c) = abx + ac' },
     story: { zh: '铁匠铺要给 {a} 支小队锻造装备。每队需要刀和弓，展开计算总量。', en: 'The forge supplies {a} squads with weapons. Each squad needs swords and bows — expand to find totals.' },
     description: { zh: '展开 ${a}({b}x + {c})$，$x$ 的系数是多少？', en: 'Expand ${a}({b}x + {c})$. What is the coefficient of $x$?' },
+    discoverSteps: [
+      {
+        prompt: { zh: '一个包裹里有 $2$ 个苹果和 $3$ 个橘子。\n你买了 $4$ 个这样的包裹。\n总共有多少苹果？多少橘子？', en: 'A pack contains $2$ apples and $3$ oranges.\nYou buy $4$ packs.\nHow many apples total? How many oranges?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '苹果 $4×2=8$，橘子 $4×3=12$', en: 'Apples $4×2=8$, oranges $4×3=12$' },
+          { zh: '总共 $4+2+3=9$ 个水果', en: 'Total $4+2+3=9$ fruits' },
+        ],
+        onCorrect: { zh: '你已经会"展开括号"了！\n$4(2+3) = 4×2 + 4×3 = 8 + 12 = 20$\n\n外面的数要分别乘以括号里的每一项。这叫分配律。', en: 'You already know how to "expand brackets"!\n$4(2+3) = 4×2 + 4×3 = 8 + 12 = 20$\n\nThe number outside multiplies EACH term inside. This is the distributive law.' },
+        onWrong: { zh: '不是加在一起——4个包裹，每个有2苹果和3橘子。\n苹果 $4×2=8$，橘子 $4×3=12$。\n$4(2+3) = 8+12 = 20$。外面的数乘以里面的每一项。', en: 'Not adding together — 4 packs, each with 2 apples and 3 oranges.\nApples $4×2=8$, oranges $4×3=12$.\n$4(2+3) = 8+12 = 20$. Outside number × each term inside.' },
+        onSkip: { zh: '$4$ 个包裹 × $(2+3)$ 个水果 = $4×2 + 4×3 = 8+12 = 20$。\n这就是展开括号。', en: '$4$ packs × $(2+3)$ fruits = $4×2 + 4×3 = 8+12 = 20$.\nThis is expanding brackets.' },
+      },
+    ],
     data: { a: 3, b: 2, c: 5, generatorType: 'EXPAND_RANDOM' }, difficulty: 'Easy', reward: 140,
     kpId: 'kp-2.2-01', sectionId: 'algebra',
     tutorialSteps: [

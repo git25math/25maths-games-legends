@@ -162,6 +162,7 @@ export const MapScreen = ({
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showProgressReport, setShowProgressReport] = useState(false);
   const [showJoinClass, setShowJoinClass] = useState(false);
+  const [showMoreItems, setShowMoreItems] = useState(false);
   const [showMyHomework, setShowMyHomework] = useState(false);
 
   // Auto-open homework from deep link (?hw=1)
@@ -1309,48 +1310,33 @@ export const MapScreen = ({
             >
               {/* Handle bar */}
               <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4" />
-              <p className="text-white/40 text-[10px] font-bold tracking-widest text-center mb-3 uppercase">
-                {lang === 'en' ? 'Quick Access' : '快捷入口'}
-              </p>
-              <div className="grid grid-cols-4 gap-2">
-                {/* 我的作业 */}
-                <button onClick={() => { onMobileMenuClose?.(); setShowMyHomework(true); }}
-                  className="flex flex-col items-center gap-1 py-3 bg-rose-500/10 rounded-xl border border-rose-500/20 text-rose-300 active:bg-rose-500/20">
-                  <span className="text-xl">📝</span>
-                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Homework' : '作业'}</span>
-                </button>
-                {/* 加入班级 */}
+              {/* ═══ Core items (always visible) ═══ */}
+              <div className="grid grid-cols-3 gap-3 mb-3">
                 <button onClick={() => { onMobileMenuClose?.(); setShowJoinClass(true); }}
-                  className="flex flex-col items-center gap-1 py-3 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-300 active:bg-indigo-500/20">
-                  <span className="text-xl">🏫</span>
-                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Join' : '加入班级'}</span>
+                  className="flex flex-col items-center gap-1.5 py-4 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-300 active:bg-indigo-500/20">
+                  <span className="text-2xl">🏫</span>
+                  <span className="text-xs font-bold">{lang === 'en' ? 'Join Class' : '加入班级'}</span>
                 </button>
-                {/* 背包 */}
-                <button onClick={() => { onMobileMenuClose?.(); setShowInventory(true); }}
-                  className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
-                  <span className="text-xl">🎒</span>
-                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Pack' : '背包'}</span>
+                <button onClick={() => { onMobileMenuClose?.(); setShowProgressReport(true); }}
+                  className="flex flex-col items-center gap-1.5 py-4 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-300 active:bg-blue-500/20">
+                  <span className="text-2xl">📊</span>
+                  <span className="text-xs font-bold">{lang === 'en' ? 'Report' : '学习报告'}</span>
                 </button>
-                {/* 商店 */}
-                {onBuyItem && (
-                  <button onClick={() => { onMobileMenuClose?.(); setShowShop(true); }}
-                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
-                    <span className="text-xl">🏪</span>
-                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Shop' : '商店'}</span>
+                {onStartExpedition && (
+                  <button onClick={() => { onMobileMenuClose?.(); const exps = getExpeditionsForGrade(profile.grade!); if (exps.length > 0 && onStartExpedition) onStartExpedition(exps[0].id); }}
+                    className="flex flex-col items-center gap-1.5 py-4 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-300 active:bg-amber-500/20">
+                    <span className="text-2xl">⚔️</span>
+                    <span className="text-xs font-bold">{lang === 'en' ? 'Quest' : '远征'}</span>
                   </button>
                 )}
-                {/* 兵法宝典 */}
-                <button onClick={() => { onMobileMenuClose?.(); setShowScrolls(true); }}
-                  className="flex flex-col items-center gap-1 py-3 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-300 active:bg-amber-500/20">
-                  <span className="text-xl">📜</span>
-                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Strategy' : '兵法'}</span>
-                </button>
-                {/* 成长手册 */}
-                <button onClick={() => { onMobileMenuClose?.(); setShowBattlePass(true); }}
-                  className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
-                  <span className="text-xl">📔</span>
-                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Handbook' : '手册'}</span>
-                </button>
+              </div>
+
+              {/* ══�� More items (collapsed) ═══ */}
+              <button onClick={() => setShowMoreItems(!showMoreItems)} className="w-full text-center text-white/30 text-[10px] font-bold mb-2">
+                {showMoreItems ? (lang === 'en' ? '▲ Less' : '▲ 收起') : (lang === 'en' ? '▼ More tools' : '▼ 更多工具')}
+              </button>
+              {showMoreItems && (
+              <div className="grid grid-cols-4 gap-2">
                 {/* 科技树 */}
                 {onTechTree && (
                   <button onClick={() => { onMobileMenuClose?.(); onTechTree(); }}
@@ -1413,6 +1399,7 @@ export const MapScreen = ({
                   </button>
                 )}
               </div>
+              )}
               <div className="h-4" /> {/* safe area spacer above BottomNav */}
             </motion.div>
           </motion.div>
