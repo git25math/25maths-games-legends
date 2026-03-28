@@ -825,7 +825,7 @@ export const PracticeScreen = ({
             <motion.button
               {...buttonBase}
               onClick={onCancel}
-              className="w-full py-2 text-ink/50 hover:text-ink text-xs font-bold transition-colors flex items-center justify-center gap-1"
+              className="w-full py-3 min-h-[44px] text-ink/50 hover:text-ink text-xs font-bold transition-colors flex items-center justify-center gap-1"
             >
               <ChevronLeft size={14} />
               {t.backToMap}

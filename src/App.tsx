@@ -76,7 +76,7 @@ class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; er
             <XCircle size={64} className="text-rose-500 mx-auto mb-6" />
             <h2 className="text-2xl font-black text-white mb-4">系统错误 / System Error</h2>
             <p className="text-slate-400 mb-8">出错了，请稍后再试。/ Something went wrong. Please try again.</p>
-            <button onClick={() => window.location.reload()} className="px-8 py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-all">
+            <button onClick={() => window.location.reload()} className="px-8 py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-all min-h-[48px]">
               刷新页面 / Refresh
             </button>
           </div>
