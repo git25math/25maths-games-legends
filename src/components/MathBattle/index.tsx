@@ -557,6 +557,10 @@ export const MathBattle = ({
             }
           }}
           onWrongAnswerContinue={handleWrongAnswerContinue}
+          mcResult={mcResult}
+          mcSelectedIndex={mcSelectedIndex}
+          mcCorrectIndex={mcCorrectIndex}
+          onMcSelect={handleMcSelect}
         />
 
         <BattleEffects

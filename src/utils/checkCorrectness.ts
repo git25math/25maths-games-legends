@@ -33,6 +33,12 @@ function gcd(a: number, b: number): number {
 export function checkAnswer(mission: Mission, inputs: { [key: string]: string }): CheckResult {
   const { type, data, topic } = mission;
 
+  // Generic multiple-choice: data.choices + data.correctChoice
+  if (data?.choices && data?.correctChoice !== undefined) {
+    const isCorrect = String(inputs.ans || '').trim() === String(data.correctChoice).trim();
+    return { correct: isCorrect, expected: { ans: String(data.correctChoice) } };
+  }
+
   if (type === 'SIMPLE_EQ') {
     return { correct: parse(inputs.x || '') === data.x, expected: { x: String(data.x) } };
   }
