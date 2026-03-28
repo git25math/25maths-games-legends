@@ -460,7 +460,7 @@ export const MapScreen = ({
                   return hasBadges ? (
                     <div className="flex items-center gap-1.5 mb-3 flex-wrap">
                       {isAssigned && !isCompleted && (
-                        <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-black rounded-full border border-purple-200 flex items-center gap-0.5">
+                        <span className="px-2.5 py-1 bg-purple-500 text-white text-[10px] font-black rounded-full flex items-center gap-1 animate-pulse shadow-sm">
                           <ClipboardList size={10} /> {lt({ zh: '作业', en: 'HW' }, lang)}
                         </span>
                       )}
