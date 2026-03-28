@@ -16,6 +16,7 @@
 import type { ErrorType } from './diagnoseError';
 import type { MistakeRecord } from './errorMemory';
 import { getDominantPattern } from './errorMemory';
+import { getKPPrereqs, getKPLeadsTo, getPrereqChain, getForwardChain, type KPEdge } from '../data/curriculum/kp-graph';
 
 // ── Types ──
 
@@ -806,4 +807,77 @@ export function getDeepRemediationPath(
 
   recurse(topicId, errorType, 0);
   return path;
+}
+
+// ═══════════════════════════════════════════════════════════
+// KP-Level Remediation (v10.5 — fine-grained knowledge graph)
+// ═══════════════════════════════════════════════════════════
+
+export type KPRemediationResult = {
+  kpId: string;
+  prereqs: { kpId: string; strength: 'hard' | 'soft'; reason: { zh: string; en: string } }[];
+  leadsTo: { kpId: string; reason: { zh: string; en: string } }[];
+  prereqChain: string[];   // deepest root → immediate prereq (ordered)
+  forwardChain: string[];  // what this KP unlocks (BFS order)
+};
+
+/**
+ * Get the full KP-level prerequisite + forward context for a knowledge point.
+ * Used by RepairScreen and PracticeScreen to show "where you're stuck" and "what this unlocks".
+ */
+export function getKPContext(kpId: string): KPRemediationResult {
+  const prereqs = getKPPrereqs(kpId).map(e => ({
+    kpId: e.from, strength: e.strength, reason: e.reason,
+  }));
+  const leadsTo = getKPLeadsTo(kpId).map(e => ({
+    kpId: e.to, reason: e.reason,
+  }));
+  return {
+    kpId,
+    prereqs,
+    leadsTo,
+    prereqChain: getPrereqChain(kpId),
+    forwardChain: getForwardChain(kpId),
+  };
+}
+
+/**
+ * Find the weakest prerequisite KP for a given KP, based on student mistake data.
+ * Returns the prerequisite with the highest error count — the "root cause" of struggle.
+ */
+export function findWeakestPrereq(
+  kpId: string,
+  mistakes: Record<string, MistakeRecord>,
+  missionTopicMap: Map<string, number[]>,
+): { kpId: string; reason: { zh: string; en: string } } | null {
+  const chain = getPrereqChain(kpId);
+  if (chain.length === 0) return null;
+
+  let weakest: { kpId: string; reason: { zh: string; en: string }; errorCount: number } | null = null;
+
+  for (const prereqKp of chain) {
+    // Find topic for this KP
+    const topicMatch = prereqKp.match(/^kp-(\d+\.\d+)/);
+    if (!topicMatch) continue;
+    const topicId = topicMatch[1];
+
+    // Count errors in this topic's missions
+    const missionIds = missionTopicMap.get(topicId) ?? [];
+    let totalErrors = 0;
+    for (const mid of missionIds) {
+      const rec = mistakes[String(mid)];
+      if (rec) totalErrors += rec.count;
+    }
+
+    if (totalErrors > 0 && (!weakest || totalErrors > weakest.errorCount)) {
+      const edge = getKPPrereqs(kpId).find(e => e.from === prereqKp);
+      weakest = {
+        kpId: prereqKp,
+        reason: edge?.reason ?? { zh: '前置知识薄弱', en: 'Prerequisite skill weak' },
+        errorCount: totalErrors,
+      };
+    }
+  }
+
+  return weakest ? { kpId: weakest.kpId, reason: weakest.reason } : null;
 }
