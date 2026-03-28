@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v9.10.0 (2026-03-28)
+> **最后更新**: v10.4.0 (2026-03-28)
 
 ---
 
@@ -12,8 +12,8 @@
 Step 1: npm run build         → 必须零错误，否则不能改任何代码
 Step 2: 读 docs/CONTRIBUTING.md → 唯一权威规范（金标准/反模式/审查标准）
 Step 3: 读 docs/DEVELOPMENT-PLAN.md → 版本历程 + 下一步计划
-Step 4: 读本文件第三章"当前状态快照" → 226 关卡/已完成/遗留
-Step 5: npm test -- --run     → 2339 测试必须全通过
+Step 4: 读本文件第三章"当前状态快照" → 241 关卡/已完成/遗留
+Step 5: npm test -- --run     → 2389 测试必须全通过
 ```
 
 ---
@@ -25,9 +25,9 @@ Step 5: npm test -- --run     → 2339 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.10.0 (2026-03-28) |
+| **当前版本** | v10.4.0 (2026-03-28) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
-| **测试框架** | Vitest (2339 tests, `npm test -- --run`) |
+| **测试框架** | Vitest (2389 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
@@ -51,7 +51,7 @@ Step 5: npm test -- --run     → 2339 测试必须全通过
 | Y11 | 29 | ✅ 全达标 | ✅ 全达标 | ✅ 全达标 | **金标准** ← +4 Season 2 |
 | Y12 | 9 | ✅ 全达标 | ✅ 全达标 | ✅ 全达标 | **金标准** ← +4 Season 2 |
 
-**结论**: Y7-Y12 全部 233 关卡均达金标准（自动化审计 233/233 = 100%）。
+**结论**: Y7-Y12 全部 241 关卡均达金标准（自动化审计 241/241 = 100%）。
 
 ### 本轮完成（v8.5→v8.9.3, 2026-03-26）
 
@@ -366,7 +366,10 @@ for mid, steps_raw in missions:
 | ~~LOW~~ | ~~COORD_3D~~ | ✅ Y10 id=1066/1067，三维中点(含负坐标)，midpoint+distance modes |
 | ~~MEDIUM~~ | ~~VECTOR_3D~~ | ✅ Y12 id=1241/1242，三维向量加法(含负分量)，6步教程 |
 | ~~LOW~~ | ~~INTEGRAL_AREA~~ | ✅ Y12 id=1251/1252，定积分求面积，用现有INTEGRATION类型 |
-| LOW | **missions.ts 拆分已完成** | ✅ 已按年级拆分 |
+| ~~LOW~~ | ~~missions.ts 拆分~~ | ✅ 已按年级拆分 |
+| MEDIUM | **Season 2 上线** | season2.ts 数据就绪，tracker 已重构，改 ACTIVE_SEASON 索引即可切换 |
+| LOW | **DiscoverStep 互动教学** | types.ts 已加 DiscoverStep 类型，需实现渲染组件+关卡配置 |
+| FUTURE | **Phase 5** | 章节地图 + 视频三位一体 + 离线支持 |
 | FUTURE | **班级远征** | 多人协作通关 |
 
 ---
@@ -397,7 +400,7 @@ grep -A 20 'id: 1211' src/data/missions.ts | grep -c 'text:'
 
 **预期输出**:
 - Build: `✓ built in X.XXs`（无 ERROR）
-- Tests: `2339 passed`
+- Tests: `2389 passed`
 - 重复ID: 空输出
 - 关卡数: ~210
 - Y12 步骤: ≥6（当前已完成）
