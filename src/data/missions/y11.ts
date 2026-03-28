@@ -146,7 +146,14 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '求等比数列第 $n$ 项：$a_n = a \\times r^{n-1}$。', en: 'Find the nth term: $a_n = a \\times r^{n-1}$.' },
     data: { a: 2, r: 3, n: 6, seqType: 'geometric', generatorType: 'SEQUENCE_NTH_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '司马懿："为什么等比数列增长惊人？\n等差数列每月加一样多——像走路。\n等比数列每月乘一样多——像滚雪球！\n$2, 6, 18, 54, 162, \\ldots$ 几个月就从 2 金飙到几百金，这就是指数增长的威力。"', en: 'Sima Yi: "Why does geometric growth seem unbelievable?\nArithmetic adds the same each month — like walking.\nGeometric multiplies each month — like a snowball!\n$2, 6, 18, 54, 162, \\ldots$ goes from 2 gold to hundreds in months. That\'s exponential power."' }, highlightField: 'ans' },
+      { text: { zh: '司马懿："等比通项公式\n$$a_n = a \\times r^{n-1}$$\n$a$ = 首项（第 1 月赏金），$r$ = 公比（每月翻倍数），$n$ = 第几项。\n注意：指数是 $n-1$ 不是 $n$！第 1 月不翻倍。"', en: 'Sima Yi: "Geometric nth term formula\n$$a_n = a \\times r^{n-1}$$\n$a$ = first term, $r$ = common ratio (multiplier), $n$ = which term.\nNote: exponent is $n-1$, not $n$! Month 1 has no multiplication yet."' }, highlightField: 'ans' },
+      { text: { zh: '司马懿："代入\n$a = 2$，$r = 3$，$n = 6$\n$a_6 = 2 \\times 3^{6-1} = 2 \\times 3^5$"', en: 'Sima Yi: "Substitute\n$a = 2$, $r = 3$, $n = 6$\n$a_6 = 2 \\times 3^{6-1} = 2 \\times 3^5$"' }, highlightField: 'ans' },
+      { text: { zh: '司马懿："计算 $3^5$\n$3^1 = 3$，$3^2 = 9$，$3^3 = 27$，$3^4 = 81$，$3^5 = 243$\n$a_6 = 2 \\times 243 = 486$"', en: 'Sima Yi: "Calculate $3^5$\n$3^1 = 3$, $3^2 = 9$, $3^3 = 27$, $3^4 = 81$, $3^5 = 243$\n$a_6 = 2 \\times 243 = 486$"' }, highlightField: 'ans' },
+      { text: { zh: '司马懿："答案\n第 6 月赏金 $= 486$ 金！\n从 2 金到 486 金——只用了 5 次翻倍。"', en: 'Sima Yi: "Answer\nMonth 6 bounty $= 486$ gold!\nFrom 2 gold to 486 — just 5 multiplications."' }, highlightField: 'ans' },
+      { text: { zh: '司马懿："验算\n$a_5 = 2 \\times 3^4 = 2 \\times 81 = 162$\n$a_6 / a_5 = 486 / 162 = 3 = r$ ✓\n相邻两项之比等于公比——等比数列验证通过！"', en: 'Sima Yi: "Verify\n$a_5 = 2 \\times 3^4 = 2 \\times 81 = 162$\n$a_6 / a_5 = 486 / 162 = 3 = r$ ✓\nRatio of consecutive terms equals the common ratio — geometric sequence verified!"' }, highlightField: 'ans' },
+    ],
     secret: { concept: { zh: '等比数列第n项 = 首项 × 公比^(n−1)，指数增长不可小觑。', en: 'Geometric nth term = first × ratio^(n−1). Never underestimate exponential growth.' }, formula: '$a_n = a \\times r^{n-1}$', tips: [{ zh: '司马懿提示：数列虽短，赏金暴涨——这就是指数的力量。', en: 'Sima Yi Tip: Short sequence, skyrocketing bounty — that\'s the power of exponents.' }] },
     storyConsequence: { correct: { zh: '军饷翻倍——等比数列精准！做得漂亮！', en: 'Doubling Wages — Geometric sequence nailed!' }, wrong: { zh: '指数计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
