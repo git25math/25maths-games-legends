@@ -25,7 +25,7 @@ type Props = {
 
 export function BottomNav({ activeTab, onTabChange, lang, badge = {} }: Props) {
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-white/10 safe-area-pb">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-slate-900/95 backdrop-blur-md border-t border-white/10 safe-area-pb">
       <div className="flex items-center justify-around h-14">
         {TABS.map(tab => {
           const Icon = tab.icon;

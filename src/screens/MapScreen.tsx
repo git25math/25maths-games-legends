@@ -1288,7 +1288,7 @@ export const MapScreen = ({
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 32 }}
-              className="absolute bottom-0 left-0 right-0 bg-[#161226] rounded-t-2xl border-t border-white/10 p-4 pb-20 max-h-[70vh] overflow-y-auto"
+              className="absolute bottom-0 left-0 right-0 bg-[#161226] rounded-t-2xl border-t border-white/10 p-4 pb-24 max-h-[75vh] overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
               {/* Handle bar */}
