@@ -149,10 +149,10 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-gradient-to-br from-amber-900/40 to-slate-800/60 border border-amber-600/20 rounded-xl p-4 overflow-hidden"
+        className="bg-slate-800 border border-amber-500/30 rounded-xl p-5 overflow-hidden"
       >
-        <div className="text-amber-300 text-xs font-black mb-2">{narrator}</div>
-        <div className="text-white text-[15px] leading-relaxed whitespace-pre-line break-words [overflow-wrap:anywhere]">
+        <div className="text-amber-400 text-sm font-black mb-3">{narrator}</div>
+        <div className="text-white text-base leading-7 whitespace-pre-line break-words [overflow-wrap:anywhere]">
           <LatexText text={promptText} />
         </div>
       </motion.div>
@@ -174,10 +174,10 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
                     key={`${stepIdx}-${i}`}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleChoice(item.originalIdx, i)}
-                    className={`w-full py-3 px-4 min-h-[48px] border rounded-xl text-[15px] text-left transition-all break-words [overflow-wrap:anywhere] ${
+                    className={`w-full py-4 px-5 min-h-[52px] border-2 rounded-xl text-base text-left transition-all break-words [overflow-wrap:anywhere] ${
                       selectedIdx === i
-                        ? 'bg-amber-500/20 border-amber-500/60 text-white'
-                        : 'bg-white/10 hover:bg-white/15 border-white/15 hover:border-amber-500/40 text-white'
+                        ? 'bg-amber-600 border-amber-400 text-white font-bold'
+                        : 'bg-slate-700 hover:bg-slate-600 border-slate-500 text-white'
                     }`}
                   >
                     <LatexText text={lt(item.choice, lang)} />
@@ -209,7 +209,7 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
             {/* Hint request — warm, not shameful */}
             <button
               onClick={handleHint}
-              className="w-full mt-3 py-2 text-amber-400/30 text-xs hover:text-amber-400/60 transition-colors"
+              className="w-full mt-3 py-2 text-slate-400 text-sm hover:text-white/70 transition-colors"
             >
               {lang === 'en' ? "Give me a hint" : lang === 'zh_TW' ? '給我提示' : '给我提示'}
             </button>
@@ -220,17 +220,17 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25 }}
-            className={`rounded-xl p-4 border overflow-hidden ${
-              feedback.type === 'correct' ? 'bg-emerald-900/30 border-emerald-500/30' :
-              feedback.type === 'wrong' ? 'bg-amber-900/30 border-amber-500/30' :
-              'bg-slate-800/50 border-amber-500/10'
+            className={`rounded-xl p-5 border-2 overflow-hidden ${
+              feedback.type === 'correct' ? 'bg-emerald-900 border-emerald-500' :
+              feedback.type === 'wrong' ? 'bg-amber-900 border-amber-500' :
+              'bg-slate-800 border-slate-500'
             }`}
           >
             {/* Feedback header */}
-            <div className={`text-xs font-black mb-2 ${
-              feedback.type === 'correct' ? 'text-emerald-300' :
-              feedback.type === 'wrong' ? 'text-amber-300' :
-              'text-white/50'
+            <div className={`text-sm font-black mb-3 ${
+              feedback.type === 'correct' ? 'text-emerald-200' :
+              feedback.type === 'wrong' ? 'text-amber-200' :
+              'text-white/70'
             }`}>
               {feedback.type === 'correct'
                 ? (lang === 'en' ? 'You got it!' : '你发现了！')
@@ -239,7 +239,7 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
                 : (lang === 'en' ? 'No problem — let me show you:' : '没关系——我来带你看：')}
             </div>
 
-            <div className="text-white text-[15px] leading-relaxed whitespace-pre-line break-words [overflow-wrap:anywhere]">
+            <div className="text-white text-base leading-7 whitespace-pre-line break-words [overflow-wrap:anywhere]">
               <LatexText text={feedback.text} />
             </div>
 
@@ -248,7 +248,7 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
               onClick={advance}
-              className="mt-4 w-full py-3 min-h-[48px] bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-colors text-sm"
+              className="mt-4 w-full py-3 min-h-[52px] bg-slate-600 hover:bg-slate-500 text-white font-black rounded-xl transition-colors text-base"
             >
               {stepIdx + 1 >= steps.length
                 ? (lang === 'en' ? 'I\'m ready — show me the method →' : '我准备好了——教我方法 →')
