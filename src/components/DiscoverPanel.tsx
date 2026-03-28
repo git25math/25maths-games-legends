@@ -7,7 +7,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import type { DiscoverStep, Language } from '../types';
 import { lt } from '../i18n/resolveText';
-import { MathView } from './MathView';
+import { LatexText } from './MathView';
 import { logAttempt } from '../utils/logAttempt';
 
 type Props = {
@@ -124,7 +124,7 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-4"
+      className="space-y-4 min-w-0 overflow-hidden"
     >
       {/* Step indicator + narrator */}
       <div className="flex items-center justify-between mb-1">
@@ -149,10 +149,12 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-gradient-to-br from-amber-900/40 to-slate-800/60 border border-amber-600/20 rounded-xl p-4"
+        className="bg-gradient-to-br from-amber-900/40 to-slate-800/60 border border-amber-600/20 rounded-xl p-4 overflow-hidden"
       >
-        <div className="text-amber-400/70 text-[11px] font-bold mb-2">{narrator}</div>
-        <MathView tex={promptText} className="text-white/90 text-sm leading-relaxed whitespace-pre-line" />
+        <div className="text-amber-300 text-xs font-black mb-2">{narrator}</div>
+        <div className="text-white text-[15px] leading-relaxed whitespace-pre-line break-words [overflow-wrap:anywhere]">
+          <LatexText text={promptText} />
+        </div>
       </motion.div>
 
       {/* Interaction area */}
@@ -172,13 +174,13 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
                     key={`${stepIdx}-${i}`}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleChoice(item.originalIdx, i)}
-                    className={`w-full py-3 px-4 min-h-[48px] border rounded-xl text-sm text-left transition-all ${
+                    className={`w-full py-3 px-4 min-h-[48px] border rounded-xl text-[15px] text-left transition-all break-words [overflow-wrap:anywhere] ${
                       selectedIdx === i
                         ? 'bg-amber-500/20 border-amber-500/60 text-white'
-                        : 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-amber-500/40 text-white/80'
+                        : 'bg-white/10 hover:bg-white/15 border-white/15 hover:border-amber-500/40 text-white'
                     }`}
                   >
-                    <MathView tex={lt(item.choice, lang)} className="inline" />
+                    <LatexText text={lt(item.choice, lang)} />
                   </motion.button>
                 ))}
               </div>
@@ -218,17 +220,17 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25 }}
-            className={`rounded-xl p-4 border ${
+            className={`rounded-xl p-4 border overflow-hidden ${
               feedback.type === 'correct' ? 'bg-emerald-900/30 border-emerald-500/30' :
               feedback.type === 'wrong' ? 'bg-amber-900/30 border-amber-500/30' :
               'bg-slate-800/50 border-amber-500/10'
             }`}
           >
             {/* Feedback header */}
-            <div className={`text-[11px] font-bold mb-2 ${
-              feedback.type === 'correct' ? 'text-emerald-400' :
-              feedback.type === 'wrong' ? 'text-amber-400' :
-              'text-white/40'
+            <div className={`text-xs font-black mb-2 ${
+              feedback.type === 'correct' ? 'text-emerald-300' :
+              feedback.type === 'wrong' ? 'text-amber-300' :
+              'text-white/50'
             }`}>
               {feedback.type === 'correct'
                 ? (lang === 'en' ? 'You got it!' : '你发现了！')
@@ -237,7 +239,9 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
                 : (lang === 'en' ? 'No problem — let me show you:' : '没关系——我来带你看：')}
             </div>
 
-            <MathView tex={feedback.text} className="text-white/90 text-sm leading-relaxed whitespace-pre-line" />
+            <div className="text-white text-[15px] leading-relaxed whitespace-pre-line break-words [overflow-wrap:anywhere]">
+              <LatexText text={feedback.text} />
+            </div>
 
             <motion.button
               initial={{ opacity: 0 }}
