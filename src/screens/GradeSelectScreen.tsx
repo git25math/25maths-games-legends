@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import type { Language } from '../types';
 import { translations } from '../i18n/translations';
-import { buttonBase, INPUT_FOCUS_CLASS } from '../utils/animationPresets';
+import { buttonBase } from '../utils/animationPresets';
+import { JoinClassModal } from '../components/JoinClassModal';
 
 export const GradeSelectScreen = ({
   lang,
@@ -13,20 +14,14 @@ export const GradeSelectScreen = ({
 }) => {
   const t = translations[lang];
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
-  const [className, setClassName] = useState('');
+  const [showJoinModal, setShowJoinModal] = useState(false);
 
   const LABELS = {
-    zh: { classPrompt: '你的班级是？', placeholder: '如 7B（可跳过）', confirm: '确认', skip: '跳过' },
-    zh_TW: { classPrompt: '你的班級是？', placeholder: '如 7B（可跳過）', confirm: '確認', skip: '跳過' },
-    en: { classPrompt: 'What is your class?', placeholder: 'e.g. 7B (optional)', confirm: 'Confirm', skip: 'Skip' },
+    zh: { classPrompt: '你有老师给的邀请码吗？', hasCode: '有邀请码', noCode: '暂时跳过，稍后加入', joinedHint: '没有邀请码也可以先玩——随时可以在设置中加入班级。' },
+    zh_TW: { classPrompt: '你有老師給的邀請碼嗎？', hasCode: '有邀請碼', noCode: '暫時跳過，稍後加入', joinedHint: '沒有邀請碼也可以先玩——隨時可以在設定中加入班級。' },
+    en: { classPrompt: 'Do you have a class invite code from your teacher?', hasCode: 'I have a code', noCode: 'Skip for now', joinedHint: 'No code? No worries — you can join a class anytime from settings.' },
   };
   const l = LABELS[lang] || LABELS.zh;
-
-  const handleConfirm = () => {
-    if (selectedGrade) {
-      onSelect(selectedGrade, className.trim() || undefined);
-    }
-  };
 
   return (
     <motion.div key="grade-select" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl mx-auto text-center space-y-12 py-20">
@@ -53,7 +48,7 @@ export const GradeSelectScreen = ({
         ))}
       </div>
 
-      {/* Class name input — appears after grade is selected */}
+      {/* Invite code prompt — replaces manual class input */}
       {selectedGrade && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -61,32 +56,38 @@ export const GradeSelectScreen = ({
           className="flex flex-col items-center gap-4"
         >
           <p className="text-lg font-bold text-white/80">{l.classPrompt}</p>
-          <input
-            type="text"
-            value={className}
-            onChange={e => setClassName(e.target.value.toUpperCase())}
-            placeholder={l.placeholder}
-            className={`bg-white/10 border-2 border-white/20 rounded-xl px-6 py-3 text-center text-white text-xl font-bold w-full max-w-[12rem] placeholder:text-white/30 transition-colors ${INPUT_FOCUS_CLASS}`}
-            autoFocus
-            onKeyDown={e => e.key === 'Enter' && handleConfirm()}
-          />
-          <div className="flex gap-3">
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <motion.button
+              {...buttonBase}
+              onClick={() => setShowJoinModal(true)}
+              className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl text-sm hover:bg-indigo-500 transition-all min-w-[10rem]"
+            >
+              🎟️ {l.hasCode}
+            </motion.button>
             <motion.button
               {...buttonBase}
               onClick={() => onSelect(selectedGrade)}
-              className="px-6 py-2 bg-white/10 border border-white/20 text-white/60 font-bold rounded-xl text-sm hover:bg-white/20 transition-all"
+              className="px-6 py-3 bg-white/10 border border-white/20 text-white/60 font-bold rounded-xl text-sm hover:bg-white/20 transition-all"
             >
-              {l.skip}
-            </motion.button>
-            <motion.button
-              {...buttonBase}
-              onClick={handleConfirm}
-              className="px-8 py-2 bg-indigo-600 text-white font-bold rounded-xl text-sm hover:bg-indigo-500 transition-all"
-            >
-              {l.confirm}
+              {l.noCode}
             </motion.button>
           </div>
+
+          <p className="text-xs text-white/30 max-w-xs">{l.joinedHint}</p>
         </motion.div>
+      )}
+
+      {/* Join Class Modal */}
+      {showJoinModal && selectedGrade && (
+        <JoinClassModal
+          lang={lang}
+          onJoined={(cls) => {
+            setShowJoinModal(false);
+            onSelect(selectedGrade, cls);
+          }}
+          onClose={() => setShowJoinModal(false)}
+        />
       )}
     </motion.div>
   );
