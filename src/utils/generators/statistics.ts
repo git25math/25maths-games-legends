@@ -236,7 +236,17 @@ export function generateStatsMeanMission(template: Mission, tier: DifficultyTier
   return {
     ...template,
     description,
-    data: { values, mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' },
+    data: {
+      values, mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM',
+      choices: (() => {
+        const r = meanRounded;
+        const distractors = [sum, Math.round(sum / (count + 1) * 100) / 100, Math.round((r + Math.max(...values)) / 2 * 100) / 100]
+          .filter(v => v !== r && v > 0);
+        const opts = [r, ...distractors.slice(0, 3)].sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(meanRounded),
+    },
     tutorialSteps,
   };
 }
@@ -314,7 +324,18 @@ export function generateStatsMedianMission(template: Mission, tier: DifficultyTi
   return {
     ...template,
     description,
-    data: { values: sorted, mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM' },
+    data: {
+      values: sorted, mode: 'median', generatorType: 'STATISTICS_MEDIAN_RANDOM',
+      choices: (() => {
+        const m = median;
+        const mean = Math.round(sorted.reduce((s, v) => s + v, 0) / sorted.length);
+        const distractors = [sorted[mid - 1], sorted[mid + 1] ?? sorted[mid - 2], mean]
+          .filter(v => v !== undefined && v !== m);
+        const unique = [...new Set([m, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return unique.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(median),
+    },
     tutorialSteps,
   };
 }
@@ -388,7 +409,18 @@ export function generateStatsRangeMission(template: Mission, tier: DifficultyTie
   return {
     ...template,
     description,
-    data: { values: sorted, mode: 'range', generatorType: 'STATISTICS_RANGE_RANDOM' },
+    data: {
+      values: sorted, mode: 'range', generatorType: 'STATISTICS_RANGE_RANDOM',
+      choices: (() => {
+        const r = answer;
+        const maxV = sorted[sorted.length - 1];
+        const minV = sorted[0];
+        const distractors = [maxV, minV, Math.round((maxV + minV) / 2)].filter(v => v !== r);
+        const opts = [...new Set([r, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
@@ -487,7 +519,15 @@ export function generateStatsModeMission(template: Mission, tier: DifficultyTier
   return {
     ...template,
     description,
-    data: { values: sorted, mode: 'mode', modeValue, modeCount, generatorType: 'STATISTICS_MODE_RANDOM' },
+    data: {
+      values: sorted, mode: 'mode', modeValue, modeCount, generatorType: 'STATISTICS_MODE_RANDOM',
+      choices: (() => {
+        const distractors = freqEntries.filter(e => e.val !== modeValue).slice(0, 3).map(e => e.val);
+        const opts = [modeValue, ...distractors].sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(modeValue),
+    },
     tutorialSteps,
   };
 }

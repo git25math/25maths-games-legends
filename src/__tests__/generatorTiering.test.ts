@@ -31,10 +31,13 @@ describe('generator tiering', () => {
     const hard = withRandomSequence([0, 0, 0], () => generateMission(template, 3));
 
     expect(easy.data?.angles).toHaveLength(2);
-    expect(checkAnswer(easy, {}).expected.x).toBe('300');
+    // MC-enabled generators use generic checker → expected.ans (not .x)
+    const easyExpected = checkAnswer(easy, {}).expected;
+    expect(easyExpected.ans ?? easyExpected.x).toBe('300');
 
     expect(hard.data?.angles).toHaveLength(3);
-    expect(checkAnswer(hard, {}).expected.x).toBe('270');
+    const hardExpected = checkAnswer(hard, {}).expected;
+    expect(hardExpected.ans ?? hardExpected.x).toBe('270');
   });
 
   it('uses the requested tier for number/statistics-style pool selection', () => {
