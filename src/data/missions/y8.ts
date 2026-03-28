@@ -15,7 +15,7 @@ export const MISSIONS_Y8: Mission[] = [
     story: { zh: '各路诸侯讨伐董卓。还记得坐标系吗？联军从坐标 $({x1},{y1})$ 出发，经过 $({x2},{y2})$ 向虎牢关挺进。', en: 'Coalition forces march against Dong Zhuo. Remember the coordinate system? They march from $({x1},{y1})$ through $({x2},{y2})$ towards Hulao Pass.' },
     description: { zh: '求行军路线 $y = mx + c$', en: 'Find the march route $y = mx + c$' },
     data: { points: [[0, 2], [1, 5]], x1: 0, y1: 2, x2: 1, y2: 5, generatorType: 'LINEAR_RANDOM' },
-    difficulty: 'Medium', reward: 150, kpId: 'kp-2.5-01', sectionId: 'functions',
+    difficulty: 'Medium', reward: 150, kpId: 'kp-3.2-01', sectionId: 'functions',
     tutorialSteps: [
       { text: { zh: '关羽：为什么要学直线方程？\n行军路线不是随便走的——知道出发点和方向，就能用 $y = mx + c$ 精确描述整条路线。\n两个坐标点就能确定一条直线！', en: 'Guan Yu: "Why learn linear equations?\nA march route is not random — knowing the start and direction, you can describe the entire path with $y = mx + c$.\nTwo coordinate points determine a straight line!"' }, highlightField: 'm' },
       { text: { zh: '关羽：斜率和截距\n斜率 $m = \\frac{y_2 - y_1}{x_2 - x_1}$（每走 1 步升多高）\n截距 $c$ = 起点高度（$x = 0$ 时的 $y$ 值）', en: 'Guan Yu: "Gradient and intercept\nGradient $m = \\frac{y_2 - y_1}{x_2 - x_1}$ (how much you rise per step)\nIntercept $c$ = starting height (the $y$ value when $x = 0$)"' }, highlightField: 'm' },
@@ -59,7 +59,7 @@ export const MISSIONS_Y8: Mission[] = [
     story: { zh: '关羽、张飞分兵合围，路线经过 $({x1},{y1})$ 和 $({x2},{y2})$。', en: 'Guan Yu and Zhang Fei split forces. Route through $({x1},{y1})$ and $({x2},{y2})$.' },
     description: { zh: '求合围路线 $y = mx + c$', en: 'Find the encirclement route $y = mx + c$' },
     data: { points: [[2, 10], [4, 18]], x1: 2, y1: 10, x2: 4, y2: 18, generatorType: 'LINEAR_RANDOM' },
-    difficulty: 'Medium', reward: 170, kpId: 'kp-2.5-01', sectionId: 'functions',
+    difficulty: 'Medium', reward: 170, kpId: 'kp-3.2-01', sectionId: 'functions',
     tutorialSteps: [
       { text: { zh: '关羽：为什么两个点就能画一条线？\n想象你站在一个点，朝另一个点走——你走的就是一条直线。\n两个坐标确定唯一的直线方程 $y = mx + c$！', en: 'Guan Yu: "Why can two points draw a line?\nImagine standing at one point and walking toward another — your path is a straight line.\nTwo coordinates determine a unique equation $y = mx + c$!"' }, highlightField: 'm' },
       { text: { zh: '关羽：求斜率的核心\n$$m = \\frac{\\text{垂直变化}}{\\text{水平变化}} = \\frac{y_2 - y_1}{x_2 - x_1}$$\n斜率越大，路越陡。', en: 'Guan Yu: "The key to gradient\n$$m = \\frac{\\text{vertical change}}{\\text{horizontal change}} = \\frac{y_2 - y_1}{x_2 - x_1}$$\nLarger gradient means steeper route."' }, highlightField: 'm' },
@@ -724,7 +724,7 @@ export const MISSIONS_Y8: Mission[] = [
     story: { zh: '刘备治荆州，税收增长趋势经过 $({x1},{y1})$ 和 $({x2},{y2})$。', en: 'Liu Bei governs Jingzhou. Tax growth passes through $({x1},{y1})$ and $({x2},{y2})$.' },
     description: { zh: '求税收增长方程 $y = mx + c$', en: 'Find the tax growth equation $y = mx + c$' },
     data: { points: [[1, 100], [3, 200]], x1: 1, y1: 100, x2: 3, y2: 200, generatorType: 'LINEAR_RANDOM' },
-    difficulty: 'Medium', reward: 180, kpId: 'kp-2.5-01', sectionId: 'functions',
+    difficulty: 'Medium', reward: 180, kpId: 'kp-3.2-01', sectionId: 'functions',
     tutorialSteps: [
       { text: { zh: '荀彧：为什么税收路线是直线？\n税收和人口成正比——人口越多，收税越多。\n这种正比关系画在坐标系上就是一条直线！', en: 'Xun Yu: "Why is the tax route a straight line?\nTax revenue is directly proportional to population — more people, more tax.\nThis direct proportion appears as a straight line on a graph!"' }, highlightField: 'm' },
       { text: { zh: '荀彧：$y = mx + c$\n$m$ = 税率（每人收多少），$c$ = 基础税收。', en: 'Xun Yu: "$y = mx + c$\n$m$ = tax rate (how much per person), $c$ = base tax revenue."' }, highlightField: 'm' },
@@ -746,7 +746,7 @@ export const MISSIONS_Y8: Mission[] = [
     story: { zh: '荆州人口每年稳定增长，今年数据点经过 $({x1},{y1})$ 和 $({x2},{y2})$。', en: 'Jingzhou population grows steadily, passing through $({x1},{y1})$ and $({x2},{y2})$.' },
     description: { zh: '求人口增长方程', en: 'Find the population growth equation' },
     data: { points: [[0, 500], [5, 750]], x1: 0, y1: 500, x2: 5, y2: 750, generatorType: 'LINEAR_RANDOM' },
-    difficulty: 'Hard', reward: 200, kpId: 'kp-2.5-01', sectionId: 'functions',
+    difficulty: 'Hard', reward: 200, kpId: 'kp-3.2-01', sectionId: 'functions',
     tutorialSteps: [
       { text: { zh: '荀彧：为什么人口增长是直线？\n每年固定增加一定人数——这就是线性增长。\n两个年份的数据就能预测未来！', en: 'Xun Yu: "Why is population growth a straight line?\nA fixed number of people added each year — that is linear growth.\nTwo years of data is enough to predict the future!"' }, highlightField: 'm' },
       { text: { zh: '荀彧：两点求直线\n$m = \\frac{y_2 - y_1}{x_2 - x_1}$\n$c = y_1 - m \\times x_1$', en: 'Xun Yu: "Finding a line from two points\n$m = \\frac{y_2 - y_1}{x_2 - x_1}$\n$c = y_1 - m \\times x_1$"' }, highlightField: 'm' },
