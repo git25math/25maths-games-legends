@@ -389,6 +389,14 @@ export const MISSIONS_Y8: Mission[] = [
         onWrong: { zh: '平均不是找最大或最小——是把所有的加起来，再均匀分。\n$100 + 200 + 300 = 600$，$600 ÷ 3 = 200$。\n每座营平均 200 人。', en: 'The mean is not the max or min — add everything up and distribute evenly.\n$100 + 200 + 300 = 600$, $600 ÷ 3 = 200$.\nAverage: 200 per camp.' },
         onSkip: { zh: '平均数 = 总和 ÷ 个数。$600 ÷ 3 = 200$。就像把所有士兵重新均匀分配。', en: 'Mean = total ÷ count. $600 ÷ 3 = 200$. Like redistributing all soldiers evenly.' },
       },
+      {
+        prompt: { zh: '四座敌营分别有 $10, 20, 30, 40$ 人。\n平均每营多少人？输入你的答案。', en: 'Four enemy camps have $10, 20, 30, 40$ soldiers.\nWhat is the mean? Type your answer.' },
+        type: 'input',
+        acceptPattern: '^25$',
+        onCorrect: { zh: '正确！$(10+20+30+40) \\div 4 = 100 \\div 4 = 25$。\n你掌握了平均数的计算方法！', en: 'Correct! $(10+20+30+40) \\div 4 = 100 \\div 4 = 25$.\nYou have mastered the mean calculation!' },
+        onWrong: { zh: '加起来：$10+20+30+40 = 100$。\n个数：$4$。\n平均数 = $100 \\div 4 = 25$。', en: 'Add up: $10+20+30+40 = 100$.\nCount: $4$.\nMean = $100 \\div 4 = 25$.' },
+        onSkip: { zh: '$(10+20+30+40) \\div 4 = 100 \\div 4 = 25$。平均每营 25 人。', en: '$(10+20+30+40) \\div 4 = 100 \\div 4 = 25$. Average: 25 per camp.' },
+      },
     ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要算平均兵力？\n知道各城驻军的平均值，才能判断总体实力。\n平均数 = 总和 ÷ 个数。', en: '诸葛亮：为什么要算平均兵力？\n知道各城驻军的平均值，才能判断总体实力。\n平均数 = 总和 ÷ 个数。' }, highlightField: 'ans' },
