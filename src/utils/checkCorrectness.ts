@@ -449,6 +449,7 @@ const PARTIAL_CREDIT_TYPES = new Set([
   'ARITHMETIC', 'ESTIMATION', 'SQUARE_CUBE', 'SQUARE_ROOT',
   'INTEGER_ADD', 'INTEGER_MUL', 'HCF', 'LCM',
   'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES', 'TREE_DIAGRAM', 'SEQUENCE_NTH', 'COORD_3D', 'VECTOR_3D',
+  'ROOTS', 'VENN',
 ]);
 
 // Types that NEVER get partial credit (boolean/discrete answers)
