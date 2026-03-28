@@ -8,6 +8,7 @@ import { translations } from '../../i18n/translations';
 import { lt, resolveFormula } from '../../i18n/resolveText';
 import { LatexText, MathView } from '../MathView';
 import { getTopicForKp } from '../../data/curriculum/kp-registry';
+import { getKPPrereqs } from '../../data/curriculum/kp-graph';
 import { InputFields } from './InputFields';
 import { MultipleChoice } from './MultipleChoice';
 import type { ChoiceOption } from './MultipleChoice';
@@ -157,6 +158,13 @@ export function BattleContent({
             lang={lang}
             onContinue={onWrongAnswerContinue}
             storyText={!partialCreditInfo && mission.storyConsequence ? lt(mission.storyConsequence.wrong, lang) : undefined}
+            prereqHint={(() => {
+              if (!currentQuestion.kpId) return null;
+              const prereqs = getKPPrereqs(currentQuestion.kpId);
+              if (prereqs.length === 0) return null;
+              const hard = prereqs.find(e => e.strength === 'hard') ?? prereqs[0];
+              return { kpId: hard.from, reason: hard.reason };
+            })()}
             isPartial={!!partialCreditInfo}
             partialScore={partialCreditInfo?.score}
           />

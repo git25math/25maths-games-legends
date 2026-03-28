@@ -9,6 +9,7 @@ import type { Language } from '../../types';
 import type { StudentRow, KPProgressRow } from './types';
 import { supabase } from '../../supabase';
 import { getExamHubLessonUrl, getLessonId } from '../../utils/lessonMap';
+import { getKPPrereqs } from '../../data/curriculum/kp-graph';
 
 type AggregatedKP = {
   kpId: string;
@@ -247,8 +248,8 @@ export function KPWeaknessPanel({
               )}
             </div>
             {idx < 3 && kp.weakStudentNames.length > 0 && (
-              <div className="mx-4 mb-1 px-3 py-2 bg-amber-50 border border-amber-100 rounded-lg">
-                <p className="text-[11px] text-amber-800 font-bold mb-1">
+              <div className="mx-4 mb-1 px-3 py-2 bg-amber-50 border border-amber-100 rounded-lg space-y-1">
+                <p className="text-[11px] text-amber-800 font-bold">
                   {lang === 'en'
                     ? `${kp.weakStudentNames.length} student${kp.weakStudentNames.length > 1 ? 's' : ''} struggling:`
                     : `${kp.weakStudentNames.length} 名学生薄弱：`}
@@ -256,6 +257,19 @@ export function KPWeaknessPanel({
                 <p className="text-[10px] text-amber-700">
                   {kp.weakStudentNames.join('、')}
                 </p>
+                {/* KP prerequisite chain hint for teachers */}
+                {(() => {
+                  const prereqs = getKPPrereqs(kp.kpId);
+                  const hardPrereq = prereqs.find(e => e.strength === 'hard');
+                  if (!hardPrereq) return null;
+                  return (
+                    <p className="text-[10px] text-indigo-600 italic">
+                      {lang === 'en'
+                        ? `→ Root cause may be: ${hardPrereq.reason.en} (${hardPrereq.from})`
+                        : `→ 可能根因：${hardPrereq.reason.zh}（${hardPrereq.from}）`}
+                    </p>
+                  );
+                })()}
               </div>
             )}
             </div>
