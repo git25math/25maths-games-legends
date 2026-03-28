@@ -114,15 +114,22 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
                     <p className="text-xs text-slate-500 mb-2">{a.description}</p>
                   )}
 
-                  {/* Deadline */}
-                  {a.deadline && (
-                    <div className={`flex items-center gap-1 text-[10px] mb-2 ${overdue && !allDone ? 'text-rose-500 font-bold' : 'text-slate-400'}`}>
-                      <Clock size={10} />
-                      {overdue && !allDone
-                        ? (en ? 'Overdue' : '已过期')
-                        : (en ? 'Due: ' : '截止：') + new Date(a.deadline).toLocaleDateString(en ? 'en-GB' : 'zh-CN')}
-                    </div>
-                  )}
+                  {/* Deadline with countdown */}
+                  {a.deadline && (() => {
+                    const daysLeft = Math.ceil((new Date(a.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+                    const label = overdue && !allDone
+                      ? (en ? 'Overdue' : '已过期')
+                      : daysLeft === 0 ? (en ? 'Due today!' : '今天截止！')
+                      : daysLeft === 1 ? (en ? 'Due tomorrow' : '明天截止')
+                      : (en ? `${daysLeft} days left` : `还剩 ${daysLeft} 天`);
+                    const urgent = !allDone && daysLeft <= 1;
+                    return (
+                      <div className={`flex items-center gap-1 text-xs mb-2 ${overdue && !allDone ? 'text-rose-500 font-bold' : urgent ? 'text-amber-600 font-bold' : 'text-slate-400'}`}>
+                        <Clock size={10} />
+                        {label}
+                      </div>
+                    );
+                  })()}
 
                   {/* Progress bar */}
                   <div className="flex items-center gap-2 mb-3">

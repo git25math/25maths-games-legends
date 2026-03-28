@@ -246,6 +246,14 @@ export default function App() {
     }
   }, [activeRoom?.status]);
 
+  // Check URL for homework deep link (?hw=1)
+  const [pendingHomework, setPendingHomework] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('hw') === '1';
+    } catch { return false; }
+  });
+
   // Persist state across page refresh
   useEffect(() => {
     saveAppState(gameState, selectedCharId, isGuest, activeMission?.id);
@@ -1059,6 +1067,8 @@ export default function App() {
                   selectedChar={selectedChar}
                   learnerMode={learnerMode}
                   onLearnerModeChange={handleSetLearnerMode}
+                  autoOpenHomework={pendingHomework}
+                  onHomeworkOpened={() => { setPendingHomework(false); window.history.replaceState({}, '', window.location.pathname); }}
                   onMissionStart={handleMissionStart}
                   onPracticeStart={handlePracticeStart}
                   onGradeChange={() => updateProfile({ grade: null })}

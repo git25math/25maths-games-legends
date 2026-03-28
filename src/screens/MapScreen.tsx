@@ -89,6 +89,8 @@ export const MapScreen = ({
   selectedChar,
   learnerMode = 'practice' as import('../types').LearnerMode,
   onLearnerModeChange,
+  autoOpenHomework,
+  onHomeworkOpened,
   onMissionStart,
   onPracticeStart,
   onGradeChange,
@@ -120,6 +122,8 @@ export const MapScreen = ({
   selectedChar: Character | undefined;
   learnerMode?: import('../types').LearnerMode;
   onLearnerModeChange?: (mode: import('../types').LearnerMode) => void;
+  autoOpenHomework?: boolean;
+  onHomeworkOpened?: () => void;
   onMissionStart: (mission: Mission) => void;
   onPracticeStart: (mission: Mission) => void;
   onGradeChange: () => void;
@@ -159,6 +163,14 @@ export const MapScreen = ({
   const [showProgressReport, setShowProgressReport] = useState(false);
   const [showJoinClass, setShowJoinClass] = useState(false);
   const [showMyHomework, setShowMyHomework] = useState(false);
+
+  // Auto-open homework from deep link (?hw=1)
+  useEffect(() => {
+    if (autoOpenHomework) {
+      setShowMyHomework(true);
+      onHomeworkOpened?.();
+    }
+  }, [autoOpenHomework]);
   const [expandedCompletedUnit, setExpandedCompletedUnit] = useState<string | null>(null);
 
   // Daily challenge countdown

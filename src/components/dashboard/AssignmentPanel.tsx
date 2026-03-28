@@ -5,7 +5,7 @@
  */
 import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ClipboardList, Plus, Archive, Calendar, CheckCircle2, Clock, ChevronDown, ChevronRight, X } from 'lucide-react';
+import { ClipboardList, Plus, Archive, Calendar, CheckCircle2, Clock, ChevronDown, ChevronRight, X, Link2, Check } from 'lucide-react';
 import type { Language, Mission } from '../../types';
 import type { StudentRow, UnitEntry } from './types';
 import { supabase } from '../../supabase';
@@ -34,6 +34,7 @@ type Props = {
 
 export function AssignmentPanel({ lang, grade, filterTag, students, units }: Props) {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [copiedAssignmentId, setCopiedAssignmentId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
@@ -233,6 +234,20 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
                       <span className="text-[10px] text-slate-400 font-bold">
                         {stats.completedStudents}/{stats.totalStudents}
                       </span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const url = `${window.location.origin}${window.location.pathname}?hw=1`;
+                          navigator.clipboard.writeText(url).then(() => {
+                            setCopiedAssignmentId(a.id);
+                            setTimeout(() => setCopiedAssignmentId(null), 2000);
+                          });
+                        }}
+                        className="p-1 text-slate-300 hover:text-indigo-500 transition-colors"
+                        title={lang === 'en' ? 'Copy homework link' : '复制作业链接'}
+                      >
+                        {copiedAssignmentId === a.id ? <Check size={14} className="text-emerald-500" /> : <Link2 size={14} />}
+                      </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); archiveAssignment(a.id); }}
                         className="p-1 text-slate-300 hover:text-rose-400 transition-colors"
