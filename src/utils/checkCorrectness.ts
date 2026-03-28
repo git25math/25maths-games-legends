@@ -393,6 +393,25 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     }
     return { correct: Math.abs(parse(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
   }
+  // 3D Coordinates: midpoint or distance
+  if (type === 'COORD_3D') {
+    const { x1, y1, z1, x2, y2, z2, mode: cMode } = data;
+    if (cMode === 'distance') {
+      const dist = Math.sqrt(
+        Math.pow((x2 as number) - (x1 as number), 2) +
+        Math.pow((y2 as number) - (y1 as number), 2) +
+        Math.pow((z2 as number) - (z1 as number), 2)
+      );
+      const r = Math.round(dist * 100) / 100;
+      return { correct: Math.abs(parse(inputs.x || '') - r) < 0.01, expected: { x: round(r) } };
+    }
+    // midpoint
+    const mx = ((x1 as number) + (x2 as number)) / 2;
+    const my = ((y1 as number) + (y2 as number)) / 2;
+    const mz = ((z1 as number) + (z2 as number)) / 2;
+    const ok = parse(inputs.x || '') === mx && parse(inputs.y || '') === my && parse(inputs.z || '') === mz;
+    return { correct: ok, expected: { x: String(mx), y: String(my), z: String(mz) } };
+  }
   // Probability tree: compound probability (P(A∩B), P(exactly one), P(≥1))
   if (type === 'PROBABILITY_TREE') {
     const { p1, p2, mode } = data;
@@ -423,7 +442,7 @@ const PARTIAL_CREDIT_TYPES = new Set([
   'FACTORISE', 'INEQUALITY', 'FDP_CONVERT', 'BODMAS', 'SIMPLIFY',
   'ARITHMETIC', 'ESTIMATION', 'SQUARE_CUBE', 'SQUARE_ROOT',
   'INTEGER_ADD', 'INTEGER_MUL', 'HCF', 'LCM',
-  'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES', 'TREE_DIAGRAM', 'SEQUENCE_NTH',
+  'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES', 'TREE_DIAGRAM', 'SEQUENCE_NTH', 'COORD_3D',
 ]);
 
 // Types that NEVER get partial credit (boolean/discrete answers)

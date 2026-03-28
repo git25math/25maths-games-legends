@@ -65,7 +65,8 @@ export type QuestionType =
   | 'PROBABILITY_TREE'
   | 'SIMILAR_TRIANGLES'
   | 'TREE_DIAGRAM'
-  | 'SEQUENCE_NTH';
+  | 'SEQUENCE_NTH'
+  | 'COORD_3D';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 

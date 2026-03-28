@@ -213,4 +213,8 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'ans', label: '第n项的值', placeholder: 'a_n = ?' }],
     en: [{ id: 'ans', label: 'Value of nth term', placeholder: 'a_n = ?' }],
   },
+  COORD_3D: {
+    zh: [{ id: 'x', label: 'x', placeholder: 'x = ?' }, { id: 'y', label: 'y', placeholder: 'y = ?' }, { id: 'z', label: 'z', placeholder: 'z = ?' }],
+    en: [{ id: 'x', label: 'x', placeholder: 'x = ?' }, { id: 'y', label: 'y', placeholder: 'y = ?' }, { id: 'z', label: 'z', placeholder: 'z = ?' }],
+  },
 };

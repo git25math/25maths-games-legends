@@ -1860,3 +1860,89 @@ export function generateSequenceNthMission(template: Mission, tier: DifficultyTi
   };
 }
 
+/* ══════════════════════════════════════════════════════════
+   COORD_3D generator: 3D midpoint
+   Given two 3D points, find the midpoint M = ((x1+x2)/2, (y1+y2)/2, (z1+z2)/2)
+   Uses COORD_3D type with x/y/z answer fields
+   ══════════════════════════════════════════════════════════ */
+
+export function generateCoord3DMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  const pools: Record<number, number[]> = {
+    1: [0, 1, 2, 3, 4, 5, 6],
+    2: [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8],
+    3: [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  };
+  const pick = () => pickRandom(pools[tier]);
+
+  // Ensure even sums for clean midpoints
+  let x1: number, y1: number, z1: number, x2: number, y2: number, z2: number;
+  do {
+    x1 = pick(); y1 = pick(); z1 = pick();
+    x2 = pick(); y2 = pick(); z2 = pick();
+  } while ((x1 + x2) % 2 !== 0 || (y1 + y2) % 2 !== 0 || (z1 + z2) % 2 !== 0
+    || (x1 === x2 && y1 === y2 && z1 === z2));
+
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  const mz = (z1 + z2) / 2;
+
+  const narrator = pickRandom(['诸葛亮', '马良', '费祎']);
+
+  const description: BilingualText = {
+    zh: `求 $A(${x1}, ${y1}, ${z1})$ 和 $B(${x2}, ${y2}, ${z2})$ 的中点坐标。`,
+    en: `Find the midpoint of $A(${x1}, ${y1}, ${z1})$ and $B(${x2}, ${y2}, ${z2})$.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么需要三维坐标？\n两军对峙时，战场不是平面——有山坡、有城楼。三维坐标 $(x, y, z)$ 能精确定位空间中的任何一点。\n中点就是"两人各走一半就能汇合的地方"——战场上的最佳会师点！`,
+        en: `${narrator}: "Why 3D coordinates?\nBattlefields aren't flat — there are hills and towers. 3D coordinates $(x, y, z)$ locate any point in space.\nThe midpoint is where two people each walk halfway to meet — the perfect rendezvous on the battlefield!"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：三维中点公式\n$$M = \\left(\\frac{x_1+x_2}{2},\\; \\frac{y_1+y_2}{2},\\; \\frac{z_1+z_2}{2}\\right)$$\n每个坐标分别取平均——和二维一样，只是多了 $z$！`,
+        en: `${narrator}: "3D midpoint formula\n$$M = \\left(\\frac{x_1+x_2}{2},\\; \\frac{y_1+y_2}{2},\\; \\frac{z_1+z_2}{2}\\right)$$\nAverage each coordinate — same as 2D, just with an extra $z$!"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：代入坐标\n$x_M = \\frac{${x1} + ${x2}}{2} = \\frac{${x1 + x2}}{2} = ${mx}$\n$y_M = \\frac{${y1} + ${y2}}{2} = \\frac{${y1 + y2}}{2} = ${my}$`,
+        en: `${narrator}: "Substitute coordinates\n$x_M = \\frac{${x1} + ${x2}}{2} = \\frac{${x1 + x2}}{2} = ${mx}$\n$y_M = \\frac{${y1} + ${y2}}{2} = \\frac{${y1 + y2}}{2} = ${my}$"`,
+      },
+      highlightField: 'y',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算 $z$ 坐标\n$z_M = \\frac{${z1} + ${z2}}{2} = \\frac{${z1 + z2}}{2} = ${mz}$`,
+        en: `${narrator}: "Calculate $z$\n$z_M = \\frac{${z1} + ${z2}}{2} = \\frac{${z1 + z2}}{2} = ${mz}$"`,
+      },
+      highlightField: 'z',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n中点 $M = (${mx}, ${my}, ${mz})$`,
+        en: `${narrator}: "Answer\nMidpoint $M = (${mx}, ${my}, ${mz})$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n从 $M$ 到 $A$ 和从 $M$ 到 $B$ 的距离应相等。\n各坐标检查：$M_x$ 在 $A_x$ 和 $B_x$ 正中间 ✓\n三个方向都居中——会师点确认！`,
+        en: `${narrator}: "Verify\nDistance from $M$ to $A$ should equal distance from $M$ to $B$.\nCheck: $M_x$ is exactly between $A_x$ and $B_x$ ✓\nCentered in all three directions — rendezvous confirmed!"`,
+      },
+      highlightField: 'x',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { x1, y1, z1, x2, y2, z2, mode: 'midpoint', generatorType: 'COORD_3D_RANDOM' },
+    tutorialSteps,
+  };
+}
+
