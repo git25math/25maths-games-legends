@@ -301,6 +301,41 @@ export function renderDiagram(
     );
   }
 
+  // ── Similar Triangles → two triangles side by side ──
+  if (mission.type === 'SIMILAR_TRIANGLES' && d.p !== undefined) {
+    const p = d.p as number, q = d.q as number, r = d.r as number;
+    const scale = r / p;
+    const xVal = Math.round(q * scale * 100) / 100;
+    // Small triangle △ABC: base=p (bottom), right=q (right), hyp=left
+    // Large triangle △DEF: base=r (bottom), right=x (right), hyp=left
+    const sA = { x: 20, y: 80 }, sB = { x: 20 + p * 8, y: 80 }, sC = { x: 20 + p * 8, y: 80 - q * 8 };
+    const lA = { x: 130, y: 80 }, lB = { x: 130 + r * 8, y: 80 }, lC = { x: 130 + r * 8, y: 80 - xVal * 8 };
+    const pts = (v: {x:number,y:number}[]) => v.map(p => `${p.x},${p.y}`).join(' ');
+    const mid = (a: {x:number,y:number}, b: {x:number,y:number}) => ({ x: (a.x+b.x)/2, y: (a.y+b.y)/2 });
+    return (
+      <svg viewBox="0 0 260 100" className="w-full max-w-xs mx-auto">
+        {/* Small triangle */}
+        <polygon points={pts([sA,sB,sC])} fill="none" stroke="#2980b9" strokeWidth="1.5"/>
+        {/* Labels small */}
+        <text x={mid(sA,sB).x} y={mid(sA,sB).y+12} textAnchor="middle" fontSize="10" fill="#2980b9">{p}</text>
+        <text x={mid(sB,sC).x+8} y={mid(sB,sC).y} textAnchor="middle" fontSize="10" fill="#2980b9">{q}</text>
+        <text x={sA.x-5} y={sA.y+10} textAnchor="end" fontSize="9" fill="#555">A</text>
+        <text x={sB.x+4} y={sB.y+10} textAnchor="start" fontSize="9" fill="#555">B</text>
+        <text x={sC.x+4} y={sC.y-2} textAnchor="start" fontSize="9" fill="#555">C</text>
+        {/* Large triangle */}
+        <polygon points={pts([lA,lB,lC])} fill="none" stroke="#c0392b" strokeWidth="1.5"/>
+        {/* Labels large */}
+        <text x={mid(lA,lB).x} y={mid(lA,lB).y+12} textAnchor="middle" fontSize="10" fill="#c0392b">{r}</text>
+        <text x={mid(lB,lC).x+8} y={mid(lB,lC).y} textAnchor="middle" fontSize="10" fill="#c0392b">x</text>
+        <text x={lA.x-5} y={lA.y+10} textAnchor="end" fontSize="9" fill="#555">D</text>
+        <text x={lB.x+4} y={lB.y+10} textAnchor="start" fontSize="9" fill="#555">E</text>
+        <text x={lC.x+4} y={lC.y-2} textAnchor="start" fontSize="9" fill="#555">F</text>
+        {/* Similar marker */}
+        <text x="120" y="50" textAnchor="middle" fontSize="10" fill="#888">~</text>
+      </svg>
+    );
+  }
+
   // ── Area triangle ──
   if (mission.type === 'AREA' && gen === 'AREA_TRIANGLE_RANDOM' && d.base !== undefined) {
     return <AreaShape shape="triangle" base={d.base as number} height={d.height as number} />;

@@ -470,6 +470,28 @@ export const MISSIONS_Y10: Mission[] = [
     storyConsequence: { correct: { zh: '瞭望塔占地——圆的计算完美！做得漂亮！', en: 'Watchtower Footprint — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
+    id: 1065, grade: 10, unitId: 6, order: 5,
+    unitTitle: { zh: "Unit 6: 荆州丈量·田亩清册", en: "Unit 6: Jingzhou Survey — Land Registry" },
+    topic: 'Geometry', type: 'SIMILAR_TRIANGLES',
+    title: { zh: '田界测量', en: 'Field Boundary Survey' },
+    skillName: { zh: '相似三角形术', en: 'Similar Triangles' },
+    skillSummary: { zh: '相似三角形对应边成比例，用已知边求未知边', en: 'Corresponding sides proportional — use known sides to find unknown' },
+    story: { zh: '马良测量荆州田界，发现两块相似三角形田地。△ABC 两边 {p} 丈和 {q} 丈，△DEF 对应边 {r} 丈，求 $x$。', en: 'Ma Liang surveys Jingzhou boundaries, finding two similar triangular plots. △ABC: sides {p} and {q} zhang. △DEF: corresponding side {r} zhang. Find $x$.' },
+    description: { zh: '△ABC ~ △DEF，$AB={p}$，$BC={q}$，$DE={r}$，求 $EF=x$。', en: '△ABC ~ △DEF, $AB={p}$, $BC={q}$, $DE={r}$. Find $EF=x$.' },
+    data: { p: 5, q: 9, r: 15, generatorType: 'SIMILAR_TRIANGLES_RANDOM' }, difficulty: 'Hard', reward: 480,
+    kpId: 'kp-4.4-02', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '马良："为什么相似三角形是测量神器？\n\n荆州田界错综复杂，无法直接量到对角。但只要两块田形状相同、大小按比例——就能用「相似三角形」。\n已知小田的两边，再量大田的一条边，就能算出大田的另一条边。省时省力！"', en: 'Ma Liang: "Why are similar triangles the ultimate surveying tool?\n\nJingzhou boundaries are complex — you can\'t measure every diagonal directly. But if two plots have the same shape in different sizes — use similar triangles!\nKnow two sides of the small plot, measure one side of the large plot, and you can find the other side. Efficient!"' }, highlightField: 'x' },
+      { text: { zh: '马良："相似三角形的核心：对应边成比例\n△ABC ~ △DEF 意思是：\n• 角度完全对应（AA/SAS/SSS 相似条件之一成立）\n• 每对对应边的比值都相同：$\\frac{AB}{DE} = \\frac{BC}{EF} = \\frac{CA}{FD} = k$\n$k$ 叫做**相似比（scale factor）**。"', en: 'Ma Liang: "Core of similar triangles: corresponding sides are proportional.\n△ABC ~ △DEF means:\n• Angles match perfectly (one of AA/SAS/SSS similarity conditions holds)\n• Each pair of corresponding sides has the same ratio: $\\frac{AB}{DE} = \\frac{BC}{EF} = \\frac{CA}{FD} = k$\n$k$ is called the **scale factor**."' }, highlightField: 'x' },
+      { text: { zh: '马良："读取数据\n小田 △ABC：$AB = 5$ 丈，$BC = 9$ 丈\n大田 △DEF：$DE = 15$ 丈（对应 AB），$EF = x$（对应 BC，待求）\n\n要用 AB 和 DE 算出 $k$，再用 $k$ 算 $EF$。"', en: 'Ma Liang: "Read the data\nSmall plot △ABC: $AB = 5$, $BC = 9$\nLarge plot △DEF: $DE = 15$ (corresponds to AB), $EF = x$ (corresponds to BC, unknown)\n\nUse AB and DE to find $k$, then use $k$ to find $EF$."' }, highlightField: 'x' },
+      { text: { zh: '马良："第一步——求相似比\n$AB$ 对应 $DE$：\n$$k = \\frac{DE}{AB} = \\frac{15}{5} = 3$$\n大田 △DEF 是小田 △ABC 的 3 倍大。"', en: 'Ma Liang: "Step 1 — find the scale factor\n$AB$ corresponds to $DE$:\n$$k = \\frac{DE}{AB} = \\frac{15}{5} = 3$$\nThe large plot △DEF is 3 times bigger than the small plot △ABC."' }, highlightField: 'x' },
+      { text: { zh: '马良："第二步——用相似比求未知边\n$BC = 9$ 对应 $EF = x$，用同一个 scale factor：\n$$x = EF = BC \\times k = 9 \\times 3 = 27$$\n答案：$x = 27$。"', en: 'Ma Liang: "Step 2 — use scale factor to find the unknown side\n$BC = 9$ corresponds to $EF = x$, use the same scale factor:\n$$x = EF = BC \\times k = 9 \\times 3 = 27$$\nAnswer: $x = 27$."' }, highlightField: 'x' },
+      { text: { zh: '马良："验算——两对对应边的比值应该相等\n$$\\frac{DE}{AB} = \\frac{15}{5} = 3 \\checkmark$$\n$$\\frac{EF}{BC} = \\frac{27}{9} = 3 \\checkmark$$\n比值一致！田界测量完毕，荆州土地清册成功归档！"', en: 'Ma Liang: "Verify — both pairs of corresponding sides should have the same ratio\n$$\\frac{DE}{AB} = \\frac{15}{5} = 3 \\checkmark$$\n$$\\frac{EF}{BC} = \\frac{27}{9} = 3 \\checkmark$$\nRatios match! Survey complete — Jingzhou land registry archived!"' }, highlightField: 'x' },
+    ],
+    secret: { concept: { zh: '相似三角形对应边成比例：找 scale factor，再乘以对应边。△ABC~△DEF → AB/DE = BC/EF = k。', en: 'Similar triangles: corresponding sides proportional. Find scale factor, multiply. △ABC~△DEF → AB/DE = BC/EF = k.' }, formula: '$k = \\frac{DE}{AB},\\quad EF = BC \\times k$', tips: [{ zh: '马良提示：先求 k，再乘——两步搞定所有对应边！', en: 'Ma Liang Tip: Find k first, then multiply — two steps for all corresponding sides!' }] },
+    storyConsequence: { correct: { zh: '田界测量——相似三角形完美！做得漂亮！', en: 'Field Boundary Survey — Similar triangles perfect! Well done!' }, wrong: { zh: '相似比算错了…再试一次！', en: 'Similar triangle ratio wrong... Try again!' } }
+  },
+  {
     id: 1071, grade: 10, unitId: 7, order: 1,
     unitTitle: { zh: "Unit 7: 粮仓体积·城防工事", en: "Unit 7: Granary Volume — Fortifications" },
     topic: 'Geometry', type: 'VOLUME',
