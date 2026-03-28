@@ -229,54 +229,38 @@ export const StudentDetailCard = ({
           </button>
         </div>
 
-        {/* Radar Chart */}
-        <div className="bg-slate-50 rounded-2xl p-3 mb-2">
-          {loading ? (
-            <div className="h-[200px] flex items-center justify-center text-slate-300 text-sm">{lang === 'en' ? 'Loading...' : '加载中...'}</div>
-          ) : (
-            <RadarChart values={dims} labels={radarLabels} compareValues={classAverageDims} />
-          )}
-        </div>
+        {/* ═══ REORDERED: action-first, analysis-later ═══ */}
 
-        {/* Radar legend */}
-        {!loading && classAverageDims && (
-          <div className="flex items-center gap-4 px-1 mb-1">
-            <span className="flex items-center gap-1.5 text-[9px] text-indigo-600 font-bold">
-              <span className="w-3 h-0.5 bg-indigo-500 rounded inline-block" /> {lang === 'en' ? 'This student' : '该学生'}
-            </span>
-            <span className="flex items-center gap-1.5 text-[9px] text-slate-400 font-bold">
-              <span className="w-3 h-0.5 bg-slate-400 rounded inline-block border-dashed" style={{ borderTop: '1.5px dashed #94a3b8', height: 0 }} /> {lang === 'en' ? 'Class average' : '班级平均'}
-            </span>
+        {/* 1. Assignments FIRST — "did they do their homework?" */}
+        {assignments.length > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center gap-1.5 mb-2">
+              <ClipboardList size={14} className="text-indigo-400" />
+              <span className="text-xs font-bold text-slate-600">{lang === 'en' ? 'Homework Status' : '作业完成情况'}</span>
+            </div>
+            <div className="space-y-1.5">
+              {assignments.map(a => {
+                const allDone = a.missionsDone === a.missionsTotal;
+                const deadlineDays = a.deadline ? Math.ceil((new Date(a.deadline).getTime() - Date.now()) / 86400000) : null;
+                return (
+                  <div key={a.id} className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-[10px] ${allDone ? 'bg-emerald-50 border-emerald-100' : 'bg-indigo-50 border-indigo-100'}`}>
+                    <span className={`font-bold flex-1 truncate ${allDone ? 'text-emerald-700' : 'text-indigo-700'}`}>{a.title}</span>
+                    <span className={`font-bold ${allDone ? 'text-emerald-500' : 'text-indigo-500'}`}>{a.missionsDone}/{a.missionsTotal}</span>
+                    {deadlineDays !== null && !allDone && (
+                      <span className={`flex items-center gap-0.5 ${deadlineDays <= 1 ? 'text-rose-500' : 'text-slate-400'}`}>
+                        <Clock size={9} />
+                        {deadlineDays <= 0 ? (lang === 'en' ? 'overdue' : '逾期') : `${deadlineDays}d`}
+                      </span>
+                    )}
+                    {allDone && <span className="text-emerald-500">✓</span>}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 
-        {/* Dimension legend */}
-        {!loading && (
-          <div className="flex flex-wrap gap-x-3 gap-y-1 mb-2 px-1">
-            {radarLabels.map((label, i) => (
-              <span key={i} className="text-[9px] text-slate-400" title={lang === 'en' ? DIMENSION_TIPS[i].en : DIMENSION_TIPS[i].zh}>
-                <span className="font-bold text-slate-500">{label}</span> {Math.round(dims[i] * 100)}%
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Actionable suggestion */}
-        {!loading && (
-          <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-3 py-2 mb-4">
-            <p className="text-[11px] font-bold text-indigo-700">
-              💡 {lang === 'en' ? SUGGESTIONS[weakestIdx].en : SUGGESTIONS[weakestIdx].zh}
-            </p>
-            <p className="text-[9px] text-indigo-400 mt-0.5">
-              {lang === 'en'
-                ? `Weakest area: ${radarLabels[weakestIdx]} (${Math.round(dims[weakestIdx] * 100)}%) — ${DIMENSION_TIPS[weakestIdx].en}`
-                : `最薄弱: ${radarLabels[weakestIdx]} (${Math.round(dims[weakestIdx] * 100)}%) — ${DIMENSION_TIPS[weakestIdx].zh}`
-              }
-            </p>
-          </div>
-        )}
-
-        {/* Stats Grid */}
+        {/* 2. Stats Grid */}
         {battles.length === 0 && !loading ? (
           <div className="bg-slate-50 rounded-xl p-3 mb-4 text-center">
             <p className="text-xs text-slate-400 font-bold">{lang === 'en' ? 'No battle data yet — student hasn\'t played any missions' : '暂无对局数据——学生尚未完成任何关卡'}</p>
@@ -323,32 +307,19 @@ export const StudentDetailCard = ({
           </div>
         )}
 
-        {/* Current Assignments */}
-        {assignments.length > 0 && (
-          <div className="mb-4">
-            <div className="flex items-center gap-1.5 mb-2">
-              <ClipboardList size={14} className="text-indigo-400" />
-              <span className="text-xs font-bold text-slate-600">{lang === 'en' ? 'Active Assignments' : '当前任务'}</span>
-            </div>
-            <div className="space-y-1.5">
-              {assignments.map(a => {
-                const allDone = a.missionsDone === a.missionsTotal;
-                const deadlineDays = a.deadline ? Math.ceil((new Date(a.deadline).getTime() - Date.now()) / 86400000) : null;
-                return (
-                  <div key={a.id} className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-[10px] ${allDone ? 'bg-emerald-50 border-emerald-100' : 'bg-indigo-50 border-indigo-100'}`}>
-                    <span className={`font-bold flex-1 truncate ${allDone ? 'text-emerald-700' : 'text-indigo-700'}`}>{a.title}</span>
-                    <span className={`font-bold ${allDone ? 'text-emerald-500' : 'text-indigo-500'}`}>{a.missionsDone}/{a.missionsTotal}</span>
-                    {deadlineDays !== null && !allDone && (
-                      <span className={`flex items-center gap-0.5 ${deadlineDays <= 1 ? 'text-rose-500' : 'text-slate-400'}`}>
-                        <Clock size={9} />
-                        {deadlineDays <= 0 ? (lang === 'en' ? 'overdue' : '逾期') : `${deadlineDays}d`}
-                      </span>
-                    )}
-                    {allDone && <span className="text-emerald-500">✓</span>}
-                  </div>
-                );
-              })}
-            </div>
+        {/* Radar Chart + Suggestion (analysis — moved down from top) */}
+        <div className="bg-slate-50 rounded-2xl p-3 mb-2">
+          {loading ? (
+            <div className="h-[200px] flex items-center justify-center text-slate-300 text-sm">{lang === 'en' ? 'Loading...' : '加载中...'}</div>
+          ) : (
+            <RadarChart values={dims} labels={radarLabels} compareValues={classAverageDims} />
+          )}
+        </div>
+        {!loading && (
+          <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-3 py-2 mb-4">
+            <p className="text-[11px] font-bold text-indigo-700">
+              💡 {lang === 'en' ? SUGGESTIONS[weakestIdx].en : SUGGESTIONS[weakestIdx].zh}
+            </p>
           </div>
         )}
 

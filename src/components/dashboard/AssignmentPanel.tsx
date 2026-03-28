@@ -452,6 +452,7 @@ function CreateAssignmentModal({
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
   const [selectedMissions, setSelectedMissions] = useState<Set<number>>(new Set());
+  const [missionSearch, setMissionSearch] = useState('');
   const [expandedUnit, setExpandedUnit] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -591,8 +592,15 @@ function CreateAssignmentModal({
                 {selectedMissions.size} {lang === 'en' ? 'selected' : '已选'}
               </span>
             </div>
+            <input
+              type="text"
+              value={missionSearch}
+              onChange={e => setMissionSearch(e.target.value)}
+              placeholder={lang === 'en' ? 'Search by topic name...' : '搜索知识点名称...'}
+              className="w-full px-3 py-2 mb-2 text-xs border border-slate-200 rounded-lg focus:border-indigo-400 focus:outline-none"
+            />
             <div className="space-y-2 max-h-48 overflow-y-auto rounded-xl border border-slate-100 p-2">
-              {units.map(([uid, u]) => {
+              {units.filter(([, u]) => !missionSearch || u.title.toLowerCase().includes(missionSearch.toLowerCase()) || u.missions.some(m => (m.title?.zh || '').includes(missionSearch) || (m.title?.en || '').toLowerCase().includes(missionSearch.toLowerCase()) || m.type.toLowerCase().includes(missionSearch.toLowerCase()))).map(([uid, u]) => {
                 const allSelected = u.missions.every(m => selectedMissions.has(m.id));
                 const someSelected = u.missions.some(m => selectedMissions.has(m.id));
                 const expanded = expandedUnit === uid;
