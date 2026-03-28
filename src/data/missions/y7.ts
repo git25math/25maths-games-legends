@@ -40,7 +40,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { n: 24, factors: [1, 2, 3, 4, 6, 8, 12, 24], answer: 8, generatorType: 'FACTORS_LIST_RANDOM' }, difficulty: 'Easy', reward: 35,
     kpId: 'kp-1.1-02', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '刘备：24 个新兵怎么分成人数相等的小队？\n\n"因数"就是能把 24 平均分开的数。比如 $24 \div 3 = 8$ 整除，说明 3 是因数。找出**所有**因数，就能知道所有可能的分法！', en: 'Liu Bei: How to divide 24 recruits into equal-sized teams?\n\nA "factor" is a number that divides 24 exactly. For example $24 \div 3 = 8$ exactly, so 3 is a factor. Find **all** factors to know every possible team size!' }, highlightField: 'ans' },
+      { text: { zh: '刘备：为什么将军要知道"有几种分队方式"？\n\n打仗时阵型要灵活变换——24 个兵能分成 2 人小组、3 人小组还是 4 人小组？分法越多，战术就越灵活。找因数就是在找所有"整除分法"，这就是组织与调度的基础！', en: 'Liu Bei: Why does a general need to know "how many ways to split the troops"?\n\nIn battle, formations must change flexibly — can 24 soldiers be grouped in 2s, 3s, or 4s? More groupings mean more tactics. Finding factors means finding every "even split" — the foundation of organization and planning!' }, highlightField: 'ans' },
       { text: { zh: '刘备：系统找因数——用配对法\n因数成对出现：若 $a$ 是因数，则 $24 \div a$ 也是因数。\n从 $1$ 开始，逐一试除，直到两个因数相遇！', en: 'Liu Bei: Find factors systematically — use pairing\nFactors come in pairs: if $a$ is a factor, then $24 \div a$ is also a factor.\nStart from $1$, test each divisor until the two factors meet!' }, highlightField: 'ans' },
       { text: { zh: '刘备：枚举配对\n$1 \times 24 = 24$ ✓\n$2 \times 12 = 24$ ✓\n$3 \times 8 = 24$ ✓\n$4 \times 6 = 24$ ✓\n$5 \times ? = 24$：$24 \div 5$ 不整除 ✗', en: 'Liu Bei: List the pairs\n$1 \\times 24 = 24$ ✓\n$2 \\times 12 = 24$ ✓\n$3 \\times 8 = 24$ ✓\n$4 \\times 6 = 24$ ✓\n$5 \\times ? = 24$: $24 \div 5$ not exact ✗' }, highlightField: 'ans' },
       { text: { zh: '刘备：收集所有因数\n$\\{1, 2, 3, 4, 6, 8, 12, 24\\}$\n\n共 $8$ 个因数。', en: 'Liu Bei: Collect all factors\n$\\{1, 2, 3, 4, 6, 8, 12, 24\\}$\n\n$8$ factors in total.' }, highlightField: 'ans' },
@@ -84,7 +84,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { n: 24, primeCount: 4, generatorType: 'FACTOR_TREE_RANDOM' }, difficulty: 'Easy', reward: 40,
     kpId: 'kp-1.1-08', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '诸葛亮：质因数分解——拆成最小战斗单元\n\n质数是不可再分的原子单位。任何合数都能被拆成质数的乘积——就像把 24 名新兵拆成最小战斗小组，每组都不可再分！', en: 'Zhuge Liang: Prime factorisation — break down to smallest units\n\nPrimes are indivisible atomic units. Any composite can be broken into a product of primes — like splitting 24 recruits into the smallest possible unbreakable squads!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么要把一个数拆到"最底层"？\n\n就像化学家把物质分解成原子，数学家把数字分解成质数——这是每个数的"DNA"。知道了 DNA，就能轻松求最大公因数、最小公倍数、化简分数。质因数分解是一切的基础！', en: 'Zhuge Liang: Why break a number down to its very core?\n\nJust like a chemist breaks matter into atoms, mathematicians break numbers into primes — it\'s a number\'s "DNA". Knowing the DNA makes finding HCF, LCM, and simplifying fractions easy. Prime factorisation is the foundation of everything!' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：因数树法\n从最小质数 $2$ 开始，能整除就拆开，直到所有末端都是质数。\n$$24 \to 2 \times 12 \to 2 \times 2 \times 6 \to 2 \times 2 \times 2 \times 3$$', en: 'Zhuge Liang: Factor tree method\nStart from the smallest prime $2$; if it divides evenly, split it; repeat until all end nodes are prime.\n$$24 \\to 2 \\times 12 \\to 2 \\times 2 \\times 6 \\to 2 \\times 2 \\times 2 \\times 3$$' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：第一步——从 2 开始\n$24 \div 2 = 12$（整除！）\n记下 $2$，继续对 $12$ 分解。', en: 'Zhuge Liang: Step 1 — start with 2\n$24 \div 2 = 12$ (exact!)\nWrite down $2$, continue factorising $12$.' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：继续拆\n$12 \div 2 = 6$ → 记下 $2$\n$6 \div 2 = 3$ → 记下 $2$\n$3$ 是质数 → 停！', en: 'Zhuge Liang: Continue splitting\n$12 \div 2 = 6$ → write $2$\n$6 \div 2 = 3$ → write $2$\n$3$ is prime → stop!' }, highlightField: 'ans' },
@@ -106,7 +106,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { numbers: [24, 36], generatorType: 'HCF_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-1.1-08', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '刘备：最大公因数（HCF）——找最大的共同分法\n\n两营分别有 24 和 36 人，要分成人数**相同**的小队。最多能每队几人？最大公因数就是最大的"共同因数"！', en: 'Liu Bei: HCF — find the largest common divisor\n\nTwo battalions: 24 and 36 soldiers, to be split into equal teams. What\'s the maximum team size? HCF is the largest number that divides both!' }, highlightField: 'ans' },
+      { text: { zh: '刘备：为什么要找"最大的共同分法"？\n\n两个班级一起上体育课，一个班 24 人一个班 36 人。老师要把所有人混编成人数相同的小组——每组越大，管理越方便。HCF 找的就是最大的"通用编组单位"！', en: 'Liu Bei: Why find the "largest common grouping"?\n\nTwo classes do PE together — one has 24, one has 36 students. The teacher needs mixed groups of equal size — bigger groups are easier to manage. HCF finds the largest "universal group size" that works for both!' }, highlightField: 'ans' },
       { text: { zh: '刘备："先对 24 做质因数分解：$24 = 2^3 \times 3$"', en: 'Liu Bei: "First factorise 24: $24 = 2^3 \\times 3$"' }, highlightField: 'ans' },
       { text: { zh: '刘备："再对 36 做质因数分解：$36 = 2^2 \times 3^2$"', en: 'Liu Bei: "Then factorise 36: $36 = 2^2 \\times 3^2$"' }, highlightField: 'ans' },
       { text: { zh: '刘备："找共有的质因数，取较小的次幂，乘起来：$2^2 \times 3 = 12$"\n\n$2$ 的较小次幂：$\\min(3, 2) = 2$，$3$ 的较小次幂：$\\min(1, 2) = 1$', en: 'Liu Bei: "Find shared primes, take the smaller power, multiply: $2^2 \\times 3 = 12$"\n\n$2$: smaller power $\\min(3,2) = 2$; $3$: smaller power $\\min(1,2) = 1$' }, highlightField: 'ans' },
@@ -128,7 +128,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { numbers: [6, 8], generatorType: 'LCM_RANDOM' }, difficulty: 'Easy', reward: 55,
     kpId: 'kp-1.1-09', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '关羽：最小公倍数（LCM）——找最早重合的时刻\n\n我每 6 天巡营，张飞每 8 天。什么时候同时巡营？最小公倍数就是两个数的"最小共同倍数"！', en: 'Guan Yu: LCM — find the earliest they coincide\n\nI patrol every 6 days, Zhang Fei every 8. When do we patrol together? LCM is the smallest number that is a multiple of both!' }, highlightField: 'ans' },
+      { text: { zh: '关羽：为什么要找"最早重合的时刻"？\n\n你每 6 天去奶奶家，你表弟每 8 天去。你们什么时候能在奶奶家碰面？生活中很多事情按不同节奏发生——LCM 帮你找到它们第一次"对齐"的时间点！', en: 'Guan Yu: Why find when events first line up together?\n\nYou visit grandma every 6 days, your cousin every 8 days. When will you meet at grandma\'s? Many things in life run on different cycles — LCM finds the first moment they all align!' }, highlightField: 'ans' },
       { text: { zh: '关羽："先对 6 做质因数分解：$6 = 2 \times 3$"', en: 'Guan Yu: "Factorise 6: $6 = 2 \\times 3$"' }, highlightField: 'ans' },
       { text: { zh: '关羽："再对 8 做质因数分解：$8 = 2^3$"', en: 'Guan Yu: "Factorise 8: $8 = 2^3$"' }, highlightField: 'ans' },
       { text: { zh: '关羽："每个质因数取大的那个，乘起来：$2^3 \times 3 = 24$"\n\n$2$ 的较大次幂：$\\max(1, 3) = 3$，$3$ 的较大次幂：$\\max(1, 0) = 1$', en: 'Guan Yu: "For each prime, take the larger power, multiply: $2^3 \\times 3 = 24$"\n\n$2$: larger power $\\max(1,3) = 3$; $3$: larger power $\\max(1,0) = 1$' }, highlightField: 'ans' },
@@ -150,7 +150,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { numbers: [48, 60], generatorType: 'HCF_RANDOM' }, difficulty: 'Medium', reward: 65,
     kpId: 'kp-1.1-08', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '张飞：最大公因数再练！\n\n有 48 袋粮和 60 把刀，要**平均**分给每个村（每村数量相同）。最多能分给几个村？答案就是 48 和 60 的最大公因数（HCF）！', en: 'Zhang Fei: HCF practice again!\n\n48 grain bags and 60 swords, to be distributed equally to each village. Maximum number of villages? That\'s the HCF of 48 and 60!' }, highlightField: 'ans' },
+      { text: { zh: '张飞：为什么"公平分配"离不开 HCF？\n\n48 块饼干和 60 颗糖，要装成礼包送人——每个礼包里饼干一样多、糖也一样多、不能有剩余。怎么让礼包数最多？HCF 就是解决"公平均分多种东西"的利器！', en: 'Zhang Fei: Why does "fair sharing" rely on HCF?\n\n48 biscuits and 60 sweets need to be packed into gift bags — each bag gets the same number of biscuits and sweets, nothing left over. How to maximise bags? HCF is the tool for "fairly dividing multiple things"!' }, highlightField: 'ans' },
       { text: { zh: '张飞："$48 = 2^4 \times 3$"', en: 'Zhang Fei: "$48 = 2^4 \\times 3$"' }, highlightField: 'ans' },
       { text: { zh: '张飞："$60 = 2^2 \times 3 \times 5$"', en: 'Zhang Fei: "$60 = 2^2 \\times 3 \\times 5$"' }, highlightField: 'ans' },
       { text: { zh: '张飞："公共质因数：2 和 3。取最低次幂：$2^2 \times 3 = 12$"\n\n（$5$ 只出现在 60 的分解中，不是公因数）', en: 'Zhang Fei: "Shared primes: 2 and 3. Take lower powers: $2^2 \\times 3 = 12$"\n\n($5$ only appears in 60\'s factorisation, so not a shared prime)' }, highlightField: 'ans' },
@@ -173,7 +173,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { a: 50, b: -30, op: '+', answer: 20, generatorType: 'INTEGER_ADD_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-1.6-01', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '诸葛亮：正加负数——粮仓盈亏问题\n\n补给进来是正，消耗出去是负。$50 + (-30)$ 就是"进 50 袋，出 30 袋"。加一个负数，等于减去它的绝对值！', en: 'Zhuge Liang: Positive plus negative — warehouse balance\n\nSupply coming in is positive, consumption is negative. $50 + (-30)$ means "50 bags in, 30 bags out". Adding a negative equals subtracting its absolute value!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么数学需要"负数"？\n\n生活中到处都是"减少"——银行卡消费、温度零下、海拔低于海平面。正数代表"得到"，负数代表"失去"。有了正负数，数学才能描述真实世界里有增有减的变化！', en: 'Zhuge Liang: Why does maths need "negative numbers"?\n\nEveryday life is full of "decreases" — spending from your bank account, below-zero temperatures, altitude below sea level. Positive means "gain", negative means "loss". With both, maths can describe real-world changes that go up AND down!' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：规则\n$$a + (-b) = a - b$$\n\n异号相加 = 绝对值相减，符号跟绝对值大的那个！', en: 'Zhuge Liang: Rule\n$$a + (-b) = a - b$$\n\nAdding different signs = subtract absolute values; sign follows the larger absolute value!' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：读取数据\n$$50 + (-30)$$\n\n正数 $50$，负数 $-30$——异号！', en: 'Zhuge Liang: Read the problem\n$$50 + (-30)$$\n\nPositive $50$, negative $-30$ — different signs!' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：转换——加负数变减法\n$$50 + (-30) = 50 - 30$$', en: 'Zhuge Liang: Convert — adding negative becomes subtraction\n$$50 + (-30) = 50 - 30$$' }, highlightField: 'ans' },
@@ -195,7 +195,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { a: -20, b: -15, op: '+', answer: -35, generatorType: 'INTEGER_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-1.6-01', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '曹操：双重损失——两个负数相加\n\n先损 20 人（$-20$），又损 15 人（$-15$）。两次都是减少——负加负，越来越少！两个负数相加，结果更负！', en: 'Cao Cao: Double loss — adding two negatives\n\nFirst lost 20 ($-20$), then 15 more ($-15$). Both are reductions — negative plus negative means even more negative!' }, highlightField: 'ans' },
+      { text: { zh: '曹操：为什么两笔损失叠加后更严重？\n\n这个月信用卡扣了 20 元，下个月又扣了 15 元——你的余额不会变好，只会更少。两次"失去"加在一起，亏损当然更深。理解负加负，才能算清总账！', en: 'Cao Cao: Why do two losses combined hit even harder?\n\nYour phone plan charges 20 coins this month and 15 coins next month — your balance only gets worse. Two "losses" stacked together go deeper into the red. Understanding neg + neg is how you track the true total damage!' }, highlightField: 'ans' },
       { text: { zh: '曹操：规则\n$$(-a) + (-b) = -(a + b)$$\n\n同号相加：绝对值相加，符号不变（都是负的）。', en: 'Cao Cao: Rule\n$$(-a) + (-b) = -(a + b)$$\n\nSame signs added: add the absolute values, keep the sign (both negative).' }, highlightField: 'ans' },
       { text: { zh: '曹操：读取数据\n$$(-20) + (-15)$$\n\n两个都是负数——同号！', en: 'Cao Cao: Read the problem\n$$(-20) + (-15)$$\n\nBoth negative — same signs!' }, highlightField: 'ans' },
       { text: { zh: '曹操：同号相加\n绝对值相加：$20 + 15 = 35$\n\n结果保持负号：$-(35) = -35$', en: 'Cao Cao: Same signs — add absolute values\nAbsolute values: $20 + 15 = 35$\n\nKeep the negative sign: $-(35) = -35$' }, highlightField: 'ans' },
@@ -217,7 +217,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { a: 40, b: 60, op: '-', answer: -20, generatorType: 'INTEGER_ADD_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-1.6-02', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '关羽：得少失多——结果变负！\n\n战后 40 人投诚（$+40$），60 人离去（$-60$）。得少失多，净结果是负的——损失比收获大！$40 - 60 < 0$。', en: 'Guan Yu: Gained less than lost — result goes negative!\n\n40 joined ($+40$), 60 left ($-60$). Lost more than gained — net result is negative! $40 - 60 < 0$.' }, highlightField: 'ans' },
+      { text: { zh: '关羽：为什么"赚的没有花的多"时结果会变负？\n\n你攒了 40 元零花钱，但买了 60 元的东西——钱不够，差了 20 元，你就"欠"了 20 元。当减去的比拥有的多，结果自然变成负数——这就是生活中"透支"的数学原理！', en: 'Guan Yu: Why does the result go negative when you spend more than you earn?\n\nYou saved 40 coins but bought something for 60 — not enough, short by 20, so you "owe" 20. When you subtract more than you have, the result naturally goes negative — that\'s the maths behind going "overdrawn"!' }, highlightField: 'ans' },
       { text: { zh: '关羽：规则——减去更大的数\n$$40 - 60 = -(60 - 40)$$\n\n大减小得正，小减大得负！', en: 'Guan Yu: Rule — subtracting a larger number\n$$40 - 60 = -(60 - 40)$$\n\nLarger minus smaller is positive; smaller minus larger is negative!' }, highlightField: 'ans' },
       { text: { zh: '关羽：读取数据\n$$40 - 60$$\n\n$40 < 60$，所以 $40 - 60$ 是负数。', en: 'Guan Yu: Read the problem\n$$40 - 60$$\n\n$40 < 60$, so $40 - 60$ is negative.' }, highlightField: 'ans' },
       { text: { zh: '关羽：计算绝对值的差\n$$60 - 40 = 20$$\n\n加上负号：$40 - 60 = -20$', en: 'Guan Yu: Calculate the difference of absolute values\n$$60 - 40 = 20$$\n\nAdd the negative sign: $40 - 60 = -20$' }, highlightField: 'ans' },
@@ -290,7 +290,7 @@ export const MISSIONS_Y7: Mission[] = [
     difficulty: 'Easy', reward: 30,
     kpId: 'kp-1.4-01', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '刘备：什么是分数？\n想象一块大饼——切成 4 等份。\n$\\frac{1}{4}$ 就是"切 4 份取 1 份"。\n\n分母（下面）= 切几份，分子（上面）= 拿几份。就这么简单！', en: 'Liu Bei: "What is a fraction?\nImagine a big flatbread — cut into 4 equal pieces.\n$\\frac{1}{4}$ means \'cut into 4, take 1\'.\n\nDenominator (bottom) = how many slices, Numerator (top) = how many you take. That simple!"' }, highlightField: 'ans' },
+      { text: { zh: '刘备：为什么整数不够用？\n\n你和朋友分一块披萨，不可能每人都拿"整块"。生活里到处都是"不到一个"的量——半杯水、四分之一小时、三分之二的路。分数就是为了描述这些"不完整"而发明的！', en: 'Liu Bei: Why aren\'t whole numbers enough?\n\nYou and a friend share a pizza — you can\'t each take a "whole" one. Life is full of "less than one" amounts — half a cup, a quarter hour, two-thirds of the way. Fractions were invented to describe these "incomplete" quantities!' }, highlightField: 'ans' },
       { text: { zh: '刘备：分数的大小怎么看？\n$\\frac{1}{4}$ 比 $\\frac{1}{2}$ 小——因为同一块饼，切 4 份每份比切 2 份的小！\n$\\frac{3}{4}$ 比 $\\frac{1}{4}$ 大——同样切 4 份，拿 3 份比拿 1 份多。\n\n分母越大每份越小，分子越大拿得越多。', en: 'Liu Bei: "How to compare fractions?\n$\\frac{1}{4}$ is less than $\\frac{1}{2}$ — same pie, 4 slices are smaller than 2!\n$\\frac{3}{4}$ is more than $\\frac{1}{4}$ — same slicing, 3 pieces > 1 piece.\n\nBigger denominator = smaller pieces, bigger numerator = more pieces."' }, highlightField: 'ans' },
       { text: { zh: '刘备：同分母加法——超简单！\n两个人都从同一块饼（切 4 份）里拿：\n刘备拿 $\\frac{1}{4}$（1 份），关羽拿 $\\frac{1}{4}$（1 份）。\n\n切法一样（分母相同），直接加分子：$1 + 1 = 2$ 份。', en: 'Liu Bei: "Same denominator addition — super easy!\nBoth take from the same pie (cut into 4):\nLiu Bei takes $\\frac{1}{4}$ (1 piece), Guan Yu takes $\\frac{1}{4}$ (1 piece).\n\nSame slicing (same denominator), just add numerators: $1 + 1 = 2$ pieces."' }, highlightField: 'ans' },
       { text: { zh: '刘备：$\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}$\n\n但 $\\frac{2}{4}$ 能化简吗？$2$ 和 $4$ 都能被 $2$ 整除：\n$\\frac{2 \\div 2}{4 \\div 2} = \\frac{1}{2}$\n\n拿了半块饼！', en: 'Liu Bei: "$\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}$\n\nCan $\\frac{2}{4}$ be simplified? Both $2$ and $4$ divide by $2$:\n$\\frac{2 \\div 2}{4 \\div 2} = \\frac{1}{2}$\n\nHalf the pie!"' }, highlightField: 'ans' },
@@ -312,7 +312,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { n1: 1, d1: 3, n2: 1, d2: 4, op: '+', ansNum: 7, ansDen: 12, generatorType: 'FRAC_ADD_RANDOM' }, difficulty: 'Easy', reward: 50,
     kpId: 'kp-1.4-01', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '关羽：合并粮草——分母不同怎么加？\n\n$\\frac{1}{3}$ 和 $\\frac{1}{4}$ 就像"三等份"和"四等份"——大小不同，不能直接加！必须先换成**同样大小的份数**（通分），才能相加。', en: 'Guan Yu: Combining grain — how to add with different denominators?\n\n$\\frac{1}{3}$ and $\\frac{1}{4}$ are like "thirds" and "quarters" — different unit sizes, cannot add directly! Must convert to the same unit size (common denominator) first.' }, highlightField: 'ans' },
+      { text: { zh: '关羽：为什么"切法不同的饼"不能直接合在一起算？\n\n就像人民币和美元不能直接相加——必须先换成同一种货币。$\\frac{1}{3}$ 和 $\\frac{1}{4}$ 的"单位大小"不同，直接加分子是错的。先统一单位（通分），才能正确合并！', en: 'Guan Yu: Why can\'t you just add slices cut in different ways?\n\nLike adding yuan and dollars — you must convert to the same currency first. $\\frac{1}{3}$ and $\\frac{1}{4}$ have different "unit sizes"; adding numerators directly is wrong. Find a common unit (common denominator) first, then combine!' }, highlightField: 'ans' },
       { text: { zh: '关羽：通分步骤\n1. 找分母的最小公倍数（LCM）\n2. 每个分数的分子分母同乘倍数\n3. 再加分子，分母不变', en: 'Guan Yu: Steps to find common denominator\n1. Find the LCM of the denominators\n2. Multiply numerator and denominator of each fraction by the needed factor\n3. Add the numerators; denominator stays the same' }, highlightField: 'ans' },
       { text: { zh: '关羽："分母不同，要先通分。3 和 4 的最小公倍数是 12"', en: 'Guan Yu: "Different denominators — find common denominator. LCM(3,4) = 12"' }, highlightField: 'ans' },
       { text: { zh: '关羽："$\\frac{1}{3} = \\frac{4}{12}$，$\\frac{1}{4} = \\frac{3}{12}$"\n\n$\\frac{1}{3}$：$3 \times 4 = 12$，分子也乘 4；$\\frac{1}{4}$：$4 \times 3 = 12$，分子也乘 3', en: 'Guan Yu: "$\\frac{1}{3} = \\frac{4}{12}$, $\\frac{1}{4} = \\frac{3}{12}$"\n\n$\\frac{1}{3}$: $3 \times 4 = 12$, multiply numerator by $4$; $\\frac{1}{4}$: $4 \times 3 = 12$, multiply numerator by $3$' }, highlightField: 'ans' },
@@ -334,7 +334,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { n1: 3, d1: 4, n2: 1, d2: 6, op: '-', ansNum: 7, ansDen: 12, generatorType: 'FRAC_ADD_RANDOM' }, difficulty: 'Easy', reward: 55,
     kpId: 'kp-1.4-01', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '诸葛亮：分数减法——先通分，再减\n\n粮仓 $\\frac{3}{4}$ 满，消耗了 $\\frac{1}{6}$。分母不同（4 和 6），不能直接相减！和加法一样，先找公分母！', en: 'Zhuge Liang: Fraction subtraction — common denominator first, then subtract\n\nStorehouse is $\\frac{3}{4}$ full; consumed $\\frac{1}{6}$. Different denominators (4 and 6) — cannot subtract directly! Same as addition: find common denominator first!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么减法也需要"统一单位"？\n\n你跑了全程的 $\\frac{3}{4}$，休息后又走了 $\\frac{1}{6}$——想知道差多少，但"四分之"和"六分之"大小不同，没法直接比。减法和加法一样，必须先把两个分数换成同样大小的格子！', en: 'Zhuge Liang: Why does subtraction also need a "common unit"?\n\nYou ran $\\frac{3}{4}$ of a track, then walked $\\frac{1}{6}$ — to find the difference, "quarters" and "sixths" are different sizes, you can\'t compare directly. Just like addition, subtraction needs both fractions in the same-sized pieces first!' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：找公分母\n$\\text{LCM}(4, 6) = ?$\n$4 = 2^2$，$6 = 2 \times 3$\n$\\text{LCM} = 2^2 \times 3 = 12$', en: 'Zhuge Liang: Find common denominator\n$\\text{LCM}(4, 6) = ?$\n$4 = 2^2$, $6 = 2 \\times 3$\n$\\text{LCM} = 2^2 \\times 3 = 12$' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：通分\n$\\frac{3}{4} = \\frac{9}{12}$\n$\\frac{1}{6} = \\frac{2}{12}$', en: 'Zhuge Liang: Convert to common denominator\n$\\frac{3}{4} = \\frac{9}{12}$\n$\\frac{1}{6} = \\frac{2}{12}$' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：减法\n$$\\frac{9}{12} - \\frac{2}{12} = \\frac{9-2}{12} = \\frac{7}{12}$$', en: 'Zhuge Liang: Subtract\n$$\\frac{9}{12} - \\frac{2}{12} = \\frac{9-2}{12} = \\frac{7}{12}$$' }, highlightField: 'ans' },
@@ -404,7 +404,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { n1: 2, d1: 3, n2: 3, d2: 5, op: 'mul', ansNum: 2, ansDen: 5, generatorType: 'FRAC_MUL_RANDOM' }, difficulty: 'Easy', reward: 55,
     kpId: 'kp-1.4-02', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '张飞：分数乘法——"几分之几的几分之几"是多少？\n\n$\\frac{2}{3}$ 的粮草，再取其中的 $\\frac{3}{5}$——就是取一部分的一部分。分数乘法就是"缩小再缩小"！分子乘分子，分母乘分母。', en: 'Zhang Fei: Fraction multiplication — "what fraction of a fraction"?\n\nTake $\\frac{3}{5}$ of $\\frac{2}{3}$ — taking a part of a part. Fraction multiplication is "shrinking twice"! Numerator times numerator, denominator times denominator.' }, highlightField: 'ans' },
+      { text: { zh: '张飞：为什么"一部分的一部分"会变得更小？\n\n半块蛋糕再切一半，只剩四分之一了——对不对？当你拿走"一部分"的"一部分"，结果肯定比原来还少。分数乘法就是在描述这个"越分越少"的过程，生活中比例分配全靠它！', en: 'Zhang Fei: Why does "a part of a part" get even smaller?\n\nHalf a cake cut in half again leaves only a quarter — right? When you take "a fraction" of "a fraction", the result is always smaller. Fraction multiplication describes this "shrinking" process — essential for every proportional calculation in life!' }, highlightField: 'ans' },
       { text: { zh: '张飞：乘法公式\n$$\\frac{a}{b} \times \\frac{c}{d} = \\frac{a \times c}{b \times d}$$\n\n分子分母分别相乘，然后约分到最简！', en: 'Zhang Fei: Multiplication formula\n$$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$$\n\nMultiply numerators and denominators separately, then simplify!' }, highlightField: 'ans' },
       { text: { zh: '张飞：读取数据\n$$\\frac{2}{3} \times \\frac{3}{5}$$\n\n分子：$2 \times 3 = 6$，分母：$3 \times 5 = 15$', en: 'Zhang Fei: Read the data\n$$\\frac{2}{3} \\times \\frac{3}{5}$$\n\nNumerator: $2 \\times 3 = 6$, denominator: $3 \\times 5 = 15$' }, highlightField: 'ans' },
       { text: { zh: '张飞：计算\n$$\\frac{2 \times 3}{3 \times 5} = \\frac{6}{15}$$\n\n能约分吗？$\\gcd(6, 15) = 3$', en: 'Zhang Fei: Calculate\n$$\\frac{2 \\times 3}{3 \\times 5} = \\frac{6}{15}$$\n\nCan simplify? $\\gcd(6, 15) = 3$' }, highlightField: 'ans' },
@@ -516,7 +516,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { n: 49, answer: 7, mode: 'sqrt', generatorType: 'SQUARE_ROOT_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-1.3-03', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '关羽：侦察敌阵——从总人数反推每行几人！\n\n已知方阵共 $49$ 人，正方形方阵每行每列相同。问：每行几人？这就是求**平方根** $\\sqrt{49}$——平方的反操作！', en: 'Guan Yu: Scouting the enemy formation — find the side length from total soldiers!\n\nA square formation of $49$ soldiers, equal rows and columns. Question: how many per row? That\'s the square root $\\sqrt{49}$ — the inverse of squaring!' }, highlightField: 'ans' },
+      { text: { zh: '关羽：为什么知道了面积还要"反推"边长？\n\n你买了 49 块方砖要铺成正方形地板——一共 49 块，每行该放几块？平方告诉你"边长→面积"，但现实中我们经常需要反过来"面积→边长"。平方根就是平方的"逆操作"！', en: 'Guan Yu: Why do you need to "work backwards" from the area to the side?\n\nYou bought 49 tiles to make a square floor — 49 total, how many per row? Squaring goes from "side to area", but in real life we often need "area to side". The square root is the "reverse" of squaring!' }, highlightField: 'ans' },
       { text: { zh: '关羽：平方根的含义\n$$\\sqrt{n} = x \\iff x^2 = n$$\n\n"$x$ 是 $n$ 的平方根"意思是"$x$ 的平方等于 $n$"。', en: 'Guan Yu: What square root means\n$$\\sqrt{n} = x \\iff x^2 = n$$\n\n"$x$ is the square root of $n$" means "$x$ squared equals $n$".' }, highlightField: 'ans' },
       { text: { zh: '关羽：读题\n$$\\sqrt{49} = ?$$\n\n问：哪个数的平方等于 $49$？', en: 'Guan Yu: Read the problem\n$$\\sqrt{49} = ?$$\n\nQuestion: which number squared equals $49$?' }, highlightField: 'ans' },
       { text: { zh: '关羽：找答案\n试 $7$：$7^2 = 49$ ✓\n\n$$\\sqrt{49} = 7$$', en: 'Guan Yu: Find the answer\nTry $7$: $7^2 = 49$ ✓\n\n$$\\sqrt{49} = 7$$' }, highlightField: 'ans' },
@@ -538,7 +538,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { n: 64, answer: 8, mode: 'mixed', op: 'sqrt', generatorType: 'SQUARE_ROOT_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-1.3-03', sectionId: 'number',
         tutorialSteps: [
-      { text: { zh: '诸葛亮：综合考核——平方根还是立方根？\n\n$\\sqrt{64}$ 还是 $\\sqrt[3]{64}$？符号不同，答案不同！看清符号是关键——$\\sqrt{\\ }$ 是平方根，$\\sqrt[3]{\\ }$ 是立方根。', en: 'Zhuge Liang: Combined test — square root or cube root?\n\n$\\sqrt{64}$ or $\\sqrt[3]{64}$? Different symbols, different answers! Reading the symbol is key — $\\sqrt{}$ = square root, $\\sqrt[3]{}$ = cube root.' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么平方根和立方根的答案不一样？\n\n铺地砖是平面问题（$8 \\times 8 = 64$），装箱子是立体问题（$4 \\times 4 \\times 4 = 64$）。同样是 64，2D 和 3D 的"边长"完全不同！认清是平面还是立体，才能选对工具。', en: 'Zhuge Liang: Why do square roots and cube roots give different answers?\n\nTiling a floor is a 2D problem ($8 \\times 8 = 64$), packing a cube is 3D ($4 \\times 4 \\times 4 = 64$). Same 64, but the "side length" differs in 2D vs 3D! Recognise flat vs solid to pick the right tool.' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：两种根的含义\n$\\sqrt{n}$：哪个数的平方等于 $n$？→ $x^2 = n$\n$\\sqrt[3]{n}$：哪个数的立方等于 $n$？→ $x^3 = n$', en: 'Zhuge Liang: Two types of roots\n$\\sqrt{n}$: which number squared equals $n$? → $x^2 = n$\n$\\sqrt[3]{n}$: which number cubed equals $n$? → $x^3 = n$' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：读题\n$$\\sqrt{64} = ?$$\n\n问：哪个数的平方等于 $64$？', en: 'Zhuge Liang: Read the problem\n$$\\sqrt{64} = ?$$\n\nQuestion: which number squared equals $64$?' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：试验\n试 $8$：$8^2 = 64$ ✓\n\n（对比：$\\sqrt[3]{64} = 4$，因为 $4^3 = 64$）', en: 'Zhuge Liang: Test\nTry $8$: $8^2 = 64$ ✓\n\n(Comparison: $\\sqrt[3]{64} = 4$ because $4^3 = 64$)' }, highlightField: 'ans' },
@@ -593,7 +593,7 @@ export const MISSIONS_Y7: Mission[] = [
       },
     ],
     tutorialSteps: [
-      { text: { zh: '诸葛亮：$2 + 3 \\times 4 = ?$ 你认为是 20 还是 14？\n\n很多人从左到右算：$(2+3) \\times 4 = 20$。但数学规定：乘法比加法优先！正确答案是 $14$，不是 $20$。', en: 'Zhuge Liang: $2 + 3 \\times 4 = ?$ — 20 or 14?\n\nMany people calculate left to right: $(2+3) \\times 4 = 20$. But maths rules: multiplication beats addition! The correct answer is $14$, not $20$.' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么算数也要有"规矩"？\n\n想象你在食堂点餐——"2 碗饭加 3 份菜每份 4 元"。如果没有运算顺序，每个人算出来的价格都不一样，账目全乱了！数学需要一个全世界统一的计算规矩，这就是 BODMAS。', en: 'Zhuge Liang: Why do calculations need a set of rules?\n\nImagine ordering lunch — "2 bowls of rice plus 3 dishes at 4 coins each". Without a standard order, everyone gets a different total and the books are chaos! Maths needs one universal rule for calculation order — that\'s BODMAS.' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：口诀 BODMAS（无括号时）\n乘除 → 加减\n\n遇到加法和乘法混合，先做乘法！', en: 'Zhuge Liang: BODMAS when there are no brackets\nDivision/Multiplication → Addition/Subtraction\n\nWhen addition and multiplication mix, do the multiplication first!' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：读懂表达式\n$$2 + 3 \\times 4$$\n\n没有括号，但有乘法。先找到乘法部分：$3 \\times 4$', en: 'Zhuge Liang: Read the expression\n$$2 + 3 \\times 4$$\n\nNo brackets, but there is multiplication. Find the multiplication part first: $3 \\times 4$' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：第一步——先算乘法\n$$3 \\times 4 = 12$$\n\n表达式变成：$2 + 12$', en: 'Zhuge Liang: Step 1 — do the multiplication first\n$$3 \\times 4 = 12$$\n\nExpression becomes: $2 + 12$' }, highlightField: 'ans' },
@@ -719,7 +719,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { x: 5, a: 3, b: 4, result: 19, left: '3x + 4', right: '19', generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM' }, difficulty: 'Medium', reward: 65,
     kpId: 'kp-2.5-02', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：攻城有两层门——两步解方程！\n\n$3x + 4 = 19$，$x$ 被"乘以 3"和"加 4"两层保护。要找到 $x$，必须一层一层拆开——先拆外层（$+4$），再拆内层（$\\times 3$）！', en: 'Zhuge Liang: Two gates to storm — solve in two steps!\n\n$3x + 4 = 19$: $x$ is protected by "multiply by 3" and "add 4". To find $x$, peel off one layer at a time — outer first ($+4$), then inner ($\\times 3$)!' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮：为什么真实问题需要两步才能解？\n\n生活中很多问题不是一步就能算出来的——比如"买了 3 件同样的商品，又付了 4 元运费，一共花了 19 元，每件多少钱？"一层一层剥开，才能找到藏在最里面的答案。', en: 'Zhuge Liang: Why do real-world problems need two steps to solve?\n\nMany everyday problems can\'t be solved in one step — like "I bought 3 identical items plus 4 coins shipping, total 19 coins. How much per item?" You must peel off layers one at a time to find the hidden answer.' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：方程的黄金法则\n等式两边做**相同操作**，等号不变。\n加了就减，乘了就除——用反操作！', en: 'Zhuge Liang: The golden rule of equations\nDo the same operation to both sides, and equality holds.\nAdded? Subtract. Multiplied? Divide — use inverse operations!' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：读题\n$$3x + 4 = 19$$\n\n外层：$+4$，内层：$\\times 3$', en: 'Zhuge Liang: Read the equation\n$$3x + 4 = 19$$\n\nOuter layer: $+4$, inner layer: $\\times 3$' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：第一步——拆外层 $+4$\n$$3x + 4 - 4 = 19 - 4$$\n$$3x = 15$$', en: 'Zhuge Liang: Step 1 — remove outer layer $+4$\n$$3x + 4 - 4 = 19 - 4$$\n$$3x = 15$$' }, highlightField: 'x' },
