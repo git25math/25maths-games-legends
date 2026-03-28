@@ -269,8 +269,13 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
                         {copiedAssignmentId === a.id ? <Check size={14} className="text-emerald-500" /> : <Link2 size={14} />}
                       </button>
                       <button
-                        onClick={(e) => { e.stopPropagation(); archiveAssignment(a.id); }}
-                        className="p-2 text-slate-300 hover:text-indigo-500 transition-colors"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (window.confirm(lang === 'en' ? `Archive "${a.title}"? Students won't see it anymore.` : `归档「${a.title}」？学生将看不到此作业。`)) {
+                            archiveAssignment(a.id);
+                          }
+                        }}
+                        className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
                         title={lang === 'en' ? 'Archive' : '归档'}
                       >
                         <Archive size={14} />
@@ -306,14 +311,15 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
                         </div>
                         {/* Per-student progress */}
                         {(() => {
-                          const incomplete = stats.perStudent.filter(ps => ps.done < ps.total);
-                          return incomplete.length > 0 ? (
-                            <div className="flex items-center gap-2 mb-2 text-[10px]">
-                              <span className="font-bold text-rose-500">{incomplete.length} {lang === 'en' ? 'incomplete' : '人未完成'}</span>
-                              <span className="text-slate-300">|</span>
-                              <span className="font-bold text-emerald-500">{stats.completedStudents} {lang === 'en' ? 'done' : '人已完成'}</span>
+                          const notStarted = stats.perStudent.filter(ps => ps.done === 0);
+                          const inProgress = stats.perStudent.filter(ps => ps.done > 0 && ps.done < ps.total);
+                          return (
+                            <div className="flex items-center gap-2 mb-2 text-[10px] flex-wrap">
+                              {notStarted.length > 0 && <span className="font-bold text-rose-500">{notStarted.length} {lang === 'en' ? 'not started' : '人未开始'}</span>}
+                              {inProgress.length > 0 && <><span className="text-slate-300">|</span><span className="font-bold text-amber-500">{inProgress.length} {lang === 'en' ? 'in progress' : '人进行中'}</span></>}
+                              {stats.completedStudents > 0 && <><span className="text-slate-300">|</span><span className="font-bold text-emerald-500">{stats.completedStudents} {lang === 'en' ? 'done' : '人已完成'}</span></>}
                             </div>
-                          ) : null;
+                          );
                         })()}
                         <div className="space-y-1.5 max-h-48 overflow-y-auto">
                           {stats.perStudent
@@ -611,16 +617,27 @@ function CreateAssignmentModal({
             <input
               type="datetime-local"
               value={deadline}
+              min={new Date().toISOString().slice(0, 16)}
               onChange={(e) => setDeadline(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
             />
+            {deadline && new Date(deadline) < new Date() && (
+              <p className="text-[10px] text-rose-500 mt-1">{lang === 'en' ? '⚠ This deadline is in the past' : '⚠ 此截止日期已过'}</p>
+            )}
           </label>
 
           {/* Class + Grade info */}
-          <div className="flex items-center gap-2 mb-4 text-[10px] font-bold text-slate-400">
+          <div className="flex items-center gap-2 mb-2 text-[10px] font-bold text-slate-400">
             <span className="px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full">Y{grade}</span>
             <span className="px-2 py-0.5 bg-sky-50 text-sky-600 rounded-full">{filterTag}</span>
           </div>
+          {weakStudentNames && weakStudentNames.length > 0 && (
+            <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl">
+              <p className="text-[10px] font-bold text-amber-800">
+                {lang === 'en' ? `Targeted for: ${weakStudentNames.join(', ')}` : `专项针对：${weakStudentNames.join('、')}`}
+              </p>
+            </div>
+          )}
 
           {/* Mission selector */}
           <div className="mb-4">
@@ -672,7 +689,7 @@ function CreateAssignmentModal({
                               type="checkbox"
                               checked={selectedMissions.has(m.id)}
                               onChange={() => toggleMission(m.id)}
-                              className="w-3.5 h-3.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                              className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                             />
                             <span className="text-[11px] text-slate-600 truncate">{lt(m.title, lang)}</span>
                           </label>
@@ -701,7 +718,7 @@ function CreateAssignmentModal({
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50"
+              className="flex-1 py-3 min-h-[44px] rounded-xl bg-indigo-600 text-white text-sm font-black hover:bg-indigo-700 transition-colors disabled:opacity-50"
             >
               {submitting
                 ? (lang === 'en' ? 'Creating...' : '创建中...')
