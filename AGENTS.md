@@ -12,8 +12,8 @@
 Step 1: npm run build         → 必须零错误，否则不能改任何代码
 Step 2: 读 docs/CONTRIBUTING.md → 唯一权威规范（金标准/反模式/审查标准）
 Step 3: 读 docs/DEVELOPMENT-PLAN.md → 版本历程 + 下一步计划
-Step 4: 读本文件第三章"当前状态快照" → 212 关卡/已完成/遗留
-Step 5: npm test -- --run     → 2264 测试必须全通过
+Step 4: 读本文件第三章"当前状态快照" → 214 关卡/已完成/遗留
+Step 5: npm test -- --run     → 2289 测试必须全通过
 ```
 
 ---
@@ -27,7 +27,7 @@ Step 5: npm test -- --run     → 2264 测试必须全通过
 | **仓库** | `git25math/25maths-games-legends` |
 | **当前版本** | v9.8.0 (2026-03-28) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
-| **测试框架** | Vitest (2264 tests, `npm test -- --run`) |
+| **测试框架** | Vitest (2289 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
@@ -149,11 +149,13 @@ Step 5: npm test -- --run     → 2264 测试必须全通过
 - **Y7 全量升级**: 45关教程 1-5步 → 全部≥6步金标准（BODMAS/分数/整数/代入/合并同类项/百分比/比例/质因数/HCF/LCM/数列/估算/几何/坐标/统计）
 - 测试: 2214 → 2264（+50 测试）
 
-#### v9.8.0 — 三币经济完整闭环
+#### v9.8.0 — 三币经济完整闭环 + SIMILAR_TRIANGLES 新题型
 - **军粮消费**: `ration_pack`（补给包📦）— 修复力 20，售价 25 军粮，inventory.ts 新增 `supply` 类型
 - **gameBalance.ts**: SHOP_PRICES 接入 rations 定价
-- **ShopPanel.tsx**: 新增 supply 绿色配色 + 底部提示更新（告知玩家如何用军粮）
-- **确认已完成遗留**: Bundle 拆分（已有 manualChunks，最大 chunk 364 kB）+ SIMILARITY 题型（y9.ts id 931/932 已有 6步教程）
+- **ShopPanel.tsx**: supply 绿色卡片 + 底部提示更新
+- **SIMILAR_TRIANGLES 新题型**: QuestionType + 生成器（geometry.ts，p/q/r参数，3叙述者对，动态6步教程）+ checker（cross-multiply校验）+ inputConfig + translations（三语）
+- **Y9 新关卡**: id 933（影子量旗，赵云，静态6步，Medium）+ id 934（塔楼测高，诸葛亮，动态生成，Hard）
+- 测试: 2264 → 2289（+25）
 
 ### 已知遗留问题
 
@@ -370,7 +372,7 @@ grep -A 20 'id: 1211' src/data/missions.ts | grep -c 'text:'
 
 **预期输出**:
 - Build: `✓ built in X.XXs`（无 ERROR）
-- Tests: `2264 passed`
+- Tests: `2289 passed`
 - 重复ID: 空输出
 - 关卡数: ~210
 - Y12 步骤: ≥6（当前已完成）
