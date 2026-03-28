@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle, ClipboardList, MoreHorizontal, X } from 'lucide-react';
-import type { Language, UserProfile, Mission, Character } from '../types';
+import type { Language, UserProfile, Mission, Character, CompletedMissions } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import { MathView, LatexText } from '../components/MathView';
@@ -1371,6 +1371,17 @@ export const MapScreen = ({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {showProgressReport && (
+        <ProgressReport
+          lang={lang}
+          displayName={profile.display_name || (lang === 'en' ? 'Student' : '学生')}
+          grade={profile.grade || 7}
+          totalScore={profile.total_score || 0}
+          completedMissions={(profile.completed_missions || {}) as CompletedMissions}
+          onClose={() => setShowProgressReport(false)}
+        />
+      )}
     </motion.div>
   );
 };
