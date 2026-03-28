@@ -35,9 +35,9 @@ Step 5: npm test -- --run     → 2289 测试必须全通过
 ## 三、当前状态快照（v9.8.0, 2026-03-28）
 
 ### 规模
-- **217 missions** 分布: Y7(57) + Y8(40) + Y9(44) + Y10(44) + Y11(27) + Y12(5)
-- **74 个活跃 generatorType**（新增 PROB_TREE_RANDOM + SEQUENCE_FORMULA_RANDOM），100% 覆盖
-- **2,264 个 Vitest 用例**（全通过）
+- **216 missions** 分布: Y7(57) + Y8(40) + Y9(45) + Y10(45) + Y11(27) + Y12(5)（含 SIMILAR_TRIANGLES: Y9 id=933, Y10 id=1065）
+- **74 个活跃 generatorType**（含 SIMILAR_TRIANGLES_RANDOM），100% 覆盖
+- **2,289 个 Vitest 用例**（全通过）
 
 ### 教程质量覆盖率（截至 v8.9.3）
 
@@ -149,12 +149,15 @@ Step 5: npm test -- --run     → 2289 测试必须全通过
 - **Y7 全量升级**: 45关教程 1-5步 → 全部≥6步金标准（BODMAS/分数/整数/代入/合并同类项/百分比/比例/质因数/HCF/LCM/数列/估算/几何/坐标/统计）
 - 测试: 2214 → 2264（+50 测试）
 
-#### v9.8.0 — 三币经济完整闭环 + SIMILAR_TRIANGLES 新题型
+#### v9.8.0 — 三币经济完整闭环 + SIMILAR_TRIANGLES 新题型 + story插值修复
 - **军粮消费**: `ration_pack`（补给包📦）— 修复力 20，售价 25 军粮，inventory.ts 新增 `supply` 类型
 - **gameBalance.ts**: SHOP_PRICES 接入 rations 定价
 - **ShopPanel.tsx**: supply 绿色卡片 + 底部提示更新
 - **SIMILAR_TRIANGLES 新题型**: QuestionType + 生成器（geometry.ts，p/q/r参数，3叙述者对，动态6步教程）+ checker（cross-multiply校验）+ inputConfig + translations（三语）
-- **Y9 新关卡**: id 933（影子量旗，赵云，静态6步，Medium）+ id 934（塔楼测高，诸葛亮，动态生成，Hard）
+- **Y9 新关卡**: id 933（影子量旗，赵云，静态6步，Medium）
+- **Y10 新关卡**: id 1065（田界测量，马良，静态6步，Hard/480）
+- **SVG图**: renderDiagram.tsx SIMILAR_TRIANGLES → 两三角形并列图（蓝△ABC/红△DEF，标注p/q/r/x）
+- **16处story插值修复**: Y7(7处) + Y9(7处) + Y10(1处) + Y11(1处)，所有硬编码数字改为 `{key}` 占位符
 - 测试: 2264 → 2289（+25）
 
 ### 已知遗留问题
@@ -163,7 +166,7 @@ Step 5: npm test -- --run     → 2289 测试必须全通过
 |--------|------|------|------|
 | LOW | 道具修复 `applyRepair` 用 lastMasteredAt 反向计算，忽略 error penalty 项，health 略估高 | App.tsx `onRepairWithItem` | 可接受，完整修复需在 KPEquipment 加 `healthBonus` 字段 |
 | LOW | RepairDialog onRepair 关闭前无动画等待（1.2s toast 后直接关闭） | MapScreen repairDialogTarget | 后续可监听 RepairDialog success 状态 |
-| MEDIUM | 军粮(rations) 只展示不发放 | currency.ts CURRENCY_REWARDS | 可从每日任务完成触发 |
+| ~~MEDIUM~~ | ~~军粮(rations) 只展示不发放~~ | ~~currency.ts CURRENCY_REWARDS~~ | ✅ 已修复：App.tsx 每日任务/远征完成均调用 awardCurrency rations |
 
 > **v9.1.1 CRITICAL 全清零**：浅拷贝竞态（规则 J）+ async XP 丢失（规则 K）+ techTree TDZ 崩溃（规则 L）。规则 J/K/L 已入 BUG-POSTMORTEM.md + CONTRIBUTING.md。全项目 `var` 清零。
 
@@ -338,10 +341,11 @@ for mid, steps_raw in missions:
 
 | 优先级 | 任务 | 说明 |
 |--------|------|------|
-| HIGH | **Y8 教程质量审查** | 部分 Y8 关卡教程仍为 3-5 步，需升级到 6 步金标准（参考 Y7 已完成的模式） |
+| HIGH | **TREE_DIAGRAM 新题型** | Y9/Y10 树形图概率，生成器+checker+2关卡（Season 2 核心内容） |
+| HIGH | **SEQUENCE_NTH 新题型** | Y10/Y11 等差等比数列第n项，公式代入类题型 |
 | MEDIUM | **新远征·蜀道** | expeditions.ts 新增蜀道远征（8节点），配合赛季2主题 |
+| LOW | **3D_COORD 新题型** | Y10 三维坐标题（Season 2 Y10内容） |
 | LOW | **missions.ts 拆分已完成** | ✅ 已按年级拆分（y7-y12.ts），manualChunks 已配置，最大 chunk 364 kB |
-| LOW | **SIMILARITY 题型已完成** | ✅ y9.ts id 931/932 已有 6步金标准教程（赵云/诸葛亮） |
 | FUTURE | **班级远征** | 多人协作通关 |
 
 ---
