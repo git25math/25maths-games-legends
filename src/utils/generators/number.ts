@@ -1440,7 +1440,16 @@ export function generateHcfMission(template: Mission, tier: DifficultyTier = 2):
   return {
     ...template,
     description,
-    data: { numbers: [a, b], generatorType: 'HCF_RANDOM', sdA: a, sdB: b, sdSteps: sd.steps, sdBottomA: sd.bottomA, sdBottomB: sd.bottomB },
+    data: {
+      numbers: [a, b], generatorType: 'HCF_RANDOM', sdA: a, sdB: b, sdSteps: sd.steps, sdBottomA: sd.bottomA, sdBottomB: sd.bottomB,
+      choices: (() => {
+        const lcm = a * b / h;
+        const distractors = [h * 2, lcm, Math.max(a, b), h - 1].filter(v => v > 0 && v !== h);
+        const opts = [...new Set([h, ...distractors])].slice(0, 4).sort((x, y) => x - y);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(h),
+    },
     tutorialSteps,
   };
 }
@@ -1668,7 +1677,17 @@ export function generateLcmMission(template: Mission, tier: DifficultyTier = 2):
   return {
     ...template,
     description,
-    data: { numbers: [a, b], generatorType: 'LCM_RANDOM', sdA: a, sdB: b, sdSteps: sdL.steps, sdBottomA: sdL.bottomA, sdBottomB: sdL.bottomB },
+    data: {
+      numbers: [a, b], generatorType: 'LCM_RANDOM', sdA: a, sdB: b, sdSteps: sdL.steps, sdBottomA: sdL.bottomA, sdBottomB: sdL.bottomB,
+      choices: (() => {
+        const hcfVal = gcdCalc(a, b);
+        const product = a * b;
+        const distractors = [hcfVal, product, lcm * 2, Math.max(a, b)].filter(v => v > 0 && v !== lcm);
+        const opts = [...new Set([lcm, ...distractors])].slice(0, 4).sort((x, y) => x - y);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(lcm),
+    },
     tutorialSteps,
   };
 }
