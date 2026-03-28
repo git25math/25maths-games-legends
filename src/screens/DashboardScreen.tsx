@@ -126,14 +126,24 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const unitMap = useMemo(() => getUnitMap(grade), [grade]);
   const units: UnitEntry[] = useMemo(() => [...unitMap.entries()], [unitMap]);
 
-  // Collect all unique tags: from students + hardcoded presets
+  // Collect tags filtered by current grade: Y7 → only 7A/7B/7C, Y8 → 8A/8B/8C, etc.
   const allTags = useMemo(() => {
-    const tags = new Set<string>(ALL_CLASSES);
+    const prefix = String(grade);
+    const tags = new Set<string>();
+    // Add grade-matched presets
+    for (const c of CLASS_GROUPS.homeroom) {
+      if (c.startsWith(prefix)) tags.add(c);
+    }
+    // Always include cross-grade programme tags
+    for (const c of CLASS_GROUPS.programme) tags.add(c);
+    // Add any custom tags from students that match this grade
     for (const s of students) {
-      for (const t of (s.class_tags || [])) tags.add(t);
+      for (const t of (s.class_tags || [])) {
+        if (t.startsWith(prefix) || CLASS_GROUPS.programme.includes(t)) tags.add(t);
+      }
     }
     return [...tags].sort();
-  }, [students]);
+  }, [students, grade]);
 
   // Guard: suppress realtime updates while a full fetch is in-flight
   const fetchingRef = useRef(false);
@@ -425,7 +435,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
         <div className="flex items-center gap-3">
           <select
             value={grade}
-            onChange={e => setGrade(Number(e.target.value))}
+            onChange={e => { setGrade(Number(e.target.value)); setFilterTag(''); }}
             className={`bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-900 shadow-sm transition-shadow ${INPUT_FOCUS_CLASS}`}
           >
             {[7, 8, 9, 10, 11].map(g => <option key={g} value={g}>Y{g}</option>)}
