@@ -2903,7 +2903,15 @@ export function generateSpeedMission(template: Mission, tier: DifficultyTier = 2
   return {
     ...template,
     description,
-    data: { speed, distance, time, mode, answer, x: answer, generatorType: 'SPEED_RANDOM' },
+    data: {
+      speed, distance, time, mode, answer, x: answer, generatorType: 'SPEED_RANDOM',
+      choices: (() => {
+        const distractors = [speed + time, distance + time, answer * 2, Math.round(answer / 2)].filter(v => v !== answer && v > 0);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
@@ -3018,7 +3026,16 @@ export function generateVennMission(template: Mission, tier: DifficultyTier = 2)
   return {
     ...template,
     description,
-    data: { total, setA, setB, aOnly, both, bOnly, neither, union, answer, mode, generatorType: 'VENN_RANDOM' },
+    data: {
+      total, setA, setB, aOnly, both, bOnly, neither, union, answer, mode, generatorType: 'VENN_RANDOM',
+      choices: (() => {
+        const distractors = [total, setA, setB, both, aOnly, union].filter(v => v !== answer && v >= 0);
+        const unique = [...new Set(distractors)].slice(0, 3);
+        const opts = [...new Set([answer, ...unique])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
