@@ -992,6 +992,19 @@ export const MISSIONS_Y9: Mission[] = [
     skillSummary: { zh: 'sin θ = 对边/斜边', en: 'sin θ = opposite/hypotenuse' },
     story: { zh: '赤壁大战前夜，周瑜派人上瞭望塔测量曹军船队的距离。用正弦比就能算出来！', en: 'The night before Red Cliffs, Zhou Yu sends scouts up the watchtower to measure Cao Cao\'s fleet distance. Sine ratio makes it possible!' },
     description: { zh: '用 sin 求三角形的未知边。', en: 'Use sin to find an unknown side of a triangle.' },
+    discoverSteps: [
+      {
+        prompt: { zh: '站在地面看 $10$ 米高的城墙，你和城墙底部距离 $10$ 米。\n抬头仰角大概是多少度？', en: 'You look up at a $10$m wall from $10$m away.\nWhat\'s the angle you look up at?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$45°$（高度=距离，所以是等腰直角）', en: '$45°$ (height = distance, so isoceles right triangle)' },
+          { zh: '$90°$（因为城墙是垂直的）', en: '$90°$ (because the wall is vertical)' },
+        ],
+        onCorrect: { zh: '直觉很准！高 $10$ = 距离 $10$，比值 $= 1$，角度 $= 45°$。\n\n你刚才用的就是"三角比"：$\\tan(\\theta) = \\frac{\\text{对边}}{\\text{邻边}} = \\frac{10}{10} = 1$。\n$\\tan(45°) = 1$。三角学就是用边长的比值来求角度。', en: 'Good instinct! Height $10$ = distance $10$, ratio $= 1$, angle $= 45°$.\n\nYou just used a "trig ratio": $\\tan(\\theta) = \\frac{\\text{opposite}}{\\text{adjacent}} = \\frac{10}{10} = 1$.\n$\\tan(45°) = 1$. Trigonometry uses side ratios to find angles.' },
+        onWrong: { zh: '$90°$ 是城墙本身的角度，不是你抬头的角度。\n你的仰角 $= \\arctan(\\frac{10}{10}) = \\arctan(1) = 45°$。\n三角学就是用"对边÷邻边"来算角度。', en: '$90°$ is the wall\'s angle, not your viewing angle.\nYour angle $= \\arctan(\\frac{10}{10}) = \\arctan(1) = 45°$.\nTrig uses "opposite ÷ adjacent" to find angles.' },
+        onSkip: { zh: '仰角 $= \\arctan(\\frac{高}{距}) = \\arctan(\\frac{10}{10}) = 45°$。\n三角学核心：$\\tan = \\frac{对边}{邻边}$。', en: 'Angle $= \\arctan(\\frac{height}{distance}) = \\arctan(\\frac{10}{10}) = 45°$.\nTrig core: $\\tan = \\frac{opposite}{adjacent}$.' },
+      },
+    ],
     data: { angle: 30, hyp: 20, generatorType: 'TRIGONOMETRY_RANDOM', func: 'sin' }, difficulty: 'Easy', reward: 160,
     kpId: 'kp-6.1-01', sectionId: 'geometry',
     tutorialSteps: [
@@ -1128,6 +1141,19 @@ export const MISSIONS_Y9: Mission[] = [
     skillSummary: { zh: '消元法解二元一次方程组', en: 'Solve simultaneous linear equations by elimination' },
     story: { zh: '赤壁大战前，孙权和刘备秘密谈判——两个条件缺一不可。$x$ 万精兵 + $y$ 万石粮草，总兵力 $x + y = 8$，兵力差 $x - y = 2$。', en: 'Before Red Cliffs, Sun Quan and Liu Bei negotiate in secret — two conditions, both required. $x$ elite troops + $y$ grain supplies, total $x + y = 8$, difference $x - y = 2$.' },
     description: { zh: '求 $x$ 和 $y$。', en: 'Find $x$ and $y$.' },
+    discoverSteps: [
+      {
+        prompt: { zh: '买了 $2$ 把剑和 $1$ 面盾，花了 $50$ 金。\n买了 $1$ 把剑和 $1$ 面盾，花了 $30$ 金。\n一把剑多少金？', en: 'Bought $2$ swords + $1$ shield for $50$ gold.\nBought $1$ sword + $1$ shield for $30$ gold.\nHow much is one sword?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$20$ 金（两单相减，多出的1把剑 = $50-30$）', en: '$20$ gold (subtract: the extra sword = $50-30$)' },
+          { zh: '$25$ 金（$50÷2$）', en: '$25$ gold ($50÷2$)' },
+        ],
+        onCorrect: { zh: '聪明！两次购买都有1面盾，所以差价 $50-30=20$ 就是多的那把剑。\n\n你刚才用的就是"消元法"——让一个未知数消掉，只剩另一个。\n这就是联立方程的核心思路。', en: 'Smart! Both purchases include 1 shield, so the difference $50-30=20$ is the extra sword.\n\nYou just used "elimination" — cancel one unknown, solve the other.\nThis is the core idea of simultaneous equations.' },
+        onWrong: { zh: '$50÷2$ 忽略了盾的价格。\n正确方法：两单都有1盾，减掉后：$50-30=20$ = 多的1把剑。\n然后 $30-20=10$ = 1面盾。这就是联立方程。', en: '$50÷2$ ignores the shield price.\nCorrect: both have 1 shield, subtract: $50-30=20$ = the extra sword.\nThen $30-20=10$ = 1 shield. This is simultaneous equations.' },
+        onSkip: { zh: '等式1: $2剑+1盾=50$\n等式2: $1剑+1盾=30$\n相减：$1剑=20$，所以$1盾=10$。\n这就是联立方程——两个等式解两个未知数。', en: 'Eq1: $2s+1h=50$\nEq2: $1s+1h=30$\nSubtract: $1s=20$, so $1h=10$.\nThis is simultaneous equations — two equations, two unknowns.' },
+      },
+    ],
     data: { x: 5, y: 3, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Medium', reward: 200,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
     tutorialSteps: [
