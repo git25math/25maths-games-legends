@@ -118,6 +118,28 @@ export const StudentDetailCard = ({
     ? ['Progress', 'Mastery', 'Activity', 'Accuracy', 'Streak', 'Balance', 'Growth']
     : ['进度', '掌握', '活跃', '正确率', '坚持', '均衡', '成长'];
 
+  const DIMENSION_TIPS: { zh: string; en: string }[] = [
+    { zh: '已通关数 ÷ 总关卡数', en: 'Missions completed / total' },
+    { zh: 'KP 掌握数（满10封顶）', en: 'KPs mastered (capped at 10)' },
+    { zh: '近7天对局数（20局=满分）', en: 'Battles in last 7 days (20=full)' },
+    { zh: '对局胜率', en: 'Battle win rate' },
+    { zh: '最佳连续登录天数（30天=满分）', en: 'Best login streak (30d=full)' },
+    { zh: '各模块学习均匀程度', en: 'Balance across subjects' },
+    { zh: '本周获得 XP（500=满分）', en: 'XP earned this week (500=full)' },
+  ];
+
+  // Find the weakest dimension for actionable suggestion
+  const weakestIdx = dims.indexOf(Math.min(...dims));
+  const SUGGESTIONS: { zh: string; en: string }[] = [
+    { zh: '建议多做新关卡，扩展学习范围', en: 'Try more new missions to broaden coverage' },
+    { zh: '建议重做薄弱 KP 的关卡，加深理解', en: 'Revisit weak KP missions to deepen understanding' },
+    { zh: '建议每天至少玩一局，保持节奏', en: 'Play at least 1 battle daily to stay active' },
+    { zh: '建议放慢速度，仔细审题再作答', en: 'Slow down, read questions carefully before answering' },
+    { zh: '建议坚持每天登录，哪怕只做一题', en: 'Log in daily, even just one question counts' },
+    { zh: '建议尝试不同单元，不要只做擅长的', en: 'Try different units, not just your strengths' },
+    { zh: '建议本周多挑战几局，积累经验值', en: 'Challenge more battles this week to earn XP' },
+  ];
+
   const login = (student.completed_missions as any)?._login as { streak?: number; bestStreak?: number; lastDate?: string } | undefined;
   const mistakes = (student.completed_missions as any)?._mistakes as Record<string, { count?: number; patterns?: Record<string, number> }> | undefined;
 
@@ -183,13 +205,39 @@ export const StudentDetailCard = ({
         </div>
 
         {/* Radar Chart */}
-        <div className="bg-slate-50 rounded-2xl p-3 mb-4">
+        <div className="bg-slate-50 rounded-2xl p-3 mb-2">
           {loading ? (
             <div className="h-[200px] flex items-center justify-center text-slate-300 text-sm">{lang === 'en' ? 'Loading...' : '加载中...'}</div>
           ) : (
             <RadarChart values={dims} labels={radarLabels} />
           )}
         </div>
+
+        {/* Dimension legend */}
+        {!loading && (
+          <div className="flex flex-wrap gap-x-3 gap-y-1 mb-2 px-1">
+            {radarLabels.map((label, i) => (
+              <span key={i} className="text-[9px] text-slate-400" title={lang === 'en' ? DIMENSION_TIPS[i].en : DIMENSION_TIPS[i].zh}>
+                <span className="font-bold text-slate-500">{label}</span> {Math.round(dims[i] * 100)}%
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Actionable suggestion */}
+        {!loading && (
+          <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-3 py-2 mb-4">
+            <p className="text-[11px] font-bold text-indigo-700">
+              💡 {lang === 'en' ? SUGGESTIONS[weakestIdx].en : SUGGESTIONS[weakestIdx].zh}
+            </p>
+            <p className="text-[9px] text-indigo-400 mt-0.5">
+              {lang === 'en'
+                ? `Weakest area: ${radarLabels[weakestIdx]} (${Math.round(dims[weakestIdx] * 100)}%) — ${DIMENSION_TIPS[weakestIdx].en}`
+                : `最薄弱: ${radarLabels[weakestIdx]} (${Math.round(dims[weakestIdx] * 100)}%) — ${DIMENSION_TIPS[weakestIdx].zh}`
+              }
+            </p>
+          </div>
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-3 gap-2 mb-4">

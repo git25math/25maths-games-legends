@@ -6,7 +6,7 @@
  */
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag, Download, ArrowUpDown } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag, Download, ArrowUpDown, Filter } from 'lucide-react';
 import type { Language, Mission } from '../types';
 import { supabase } from '../supabase';
 import { SkeletonRow } from '../components/SkeletonRow';
@@ -93,8 +93,15 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [showBatchAssign, setShowBatchAssign] = useState(false);
   const [batchTag, setBatchTag] = useState('');
   const [selectedStudent, setSelectedStudent] = useState<StudentRow | null>(null);
-  const [sortKey, setSortKey] = useState<'score' | 'progress' | 'kp' | 'name'>('score');
-  const [sortAsc, setSortAsc] = useState(false);
+  const [alertOnly, setAlertOnly] = useState(false);
+
+  // Persist sort preference in localStorage
+  const [sortKey, setSortKey] = useState<'score' | 'progress' | 'kp' | 'name'>(() => {
+    try { return (localStorage.getItem('dashboard_sortKey') as any) || 'score'; } catch { return 'score'; }
+  });
+  const [sortAsc, setSortAsc] = useState(() => {
+    try { return localStorage.getItem('dashboard_sortAsc') === 'true'; } catch { return false; }
+  });
 
   const unitMap = useMemo(() => getUnitMap(grade), [grade]);
   const units: UnitEntry[] = useMemo(() => [...unitMap.entries()], [unitMap]);
@@ -265,23 +272,34 @@ export function DashboardScreen({ lang, onClose }: Props) {
       }, () => {});
   }, [grade, filterTag]);
 
-  // CSV export
+  // CSV export — enriched with grade, unit breakdown, last active
   const exportCSV = () => {
-    const header = ['Name', 'Class Tags', 'Score', 'Progress %', 'KP Mastered'];
+    const unitNames = units.map(([, u]) => u.title.replace(/Unit \d+:\s*/, '').split('·')[0].trim());
+    const header = ['Name', 'Grade', 'Class Tags', 'Score', 'Progress %', 'KP Mastered', 'Last Active', ...unitNames];
     const rows = [...students]
       .sort((a, b) => (b.total_score || 0) - (a.total_score || 0))
       .map(s => {
         const overall = getStudentOverall(s);
         const pct = totalMissions > 0 ? Math.round((overall / totalMissions) * 100) : 0;
+        const login = (s.completed_missions as any)?._login as { lastDate?: string } | undefined;
+        const lastActive = login?.lastDate ? new Date(login.lastDate).toLocaleDateString() : '-';
+        const unitCols = units.map(([, u]) => {
+          const p = getStudentUnitProgress(s, u.missions);
+          return `${p.green}/${p.total}`;
+        });
         return [
           s.display_name || 'Anonymous',
+          `Y${grade}`,
           (s.class_tags || []).join('; '),
           String(s.total_score || 0),
           `${pct}%`,
           String(kpMasteryMap.get(s.user_id) ?? 0),
+          lastActive,
+          ...unitCols,
         ];
       });
-    const csv = [header, ...rows].map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n');
+    const meta = `# Y${grade}${filterTag ? ' ' + filterTag : ''} Dashboard Export — ${new Date().toLocaleDateString()} — ${students.length} students`;
+    const csv = [meta, header, ...rows].map(r => (typeof r === 'string' ? r : r.map(c => `"${c.replace(/"/g, '""')}"`).join(','))).join('\n');
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -291,15 +309,22 @@ export function DashboardScreen({ lang, onClose }: Props) {
     URL.revokeObjectURL(url);
   };
 
-  // Sort handler
+  // Sort handler — persists to localStorage
   const handleSort = (key: typeof sortKey) => {
-    if (sortKey === key) setSortAsc(!sortAsc);
-    else { setSortKey(key); setSortAsc(false); }
+    const nextAsc = sortKey === key ? !sortAsc : false;
+    const nextKey = key;
+    setSortKey(nextKey);
+    setSortAsc(nextAsc);
+    try { localStorage.setItem('dashboard_sortKey', nextKey); localStorage.setItem('dashboard_sortAsc', String(nextAsc)); } catch {}
   };
 
-  // Sorted students
+  // Alerts
+  const alerts = useMemo(() => computeAlerts(students, units, totalMissions), [students, units, totalMissions]);
+
+  // Sorted students (optionally filtered to alert-only)
   const sortedStudents = useMemo(() => {
-    const list = [...students];
+    const alertUserIds = alertOnly ? new Set(alerts.map(a => a.userId)) : null;
+    const list = alertUserIds ? students.filter(s => alertUserIds.has(s.user_id)) : [...students];
     const dir = sortAsc ? 1 : -1;
     return list.sort((a, b) => {
       if (sortKey === 'name') return dir * (a.display_name || '').localeCompare(b.display_name || '');
@@ -308,10 +333,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
       if (sortKey === 'kp') return dir * ((kpMasteryMap.get(a.user_id) ?? 0) - (kpMasteryMap.get(b.user_id) ?? 0));
       return 0;
     });
-  }, [students, sortKey, sortAsc, kpMasteryMap]);
-
-  // Alerts
-  const alerts = useMemo(() => computeAlerts(students, units, totalMissions), [students, units, totalMissions]);
+  }, [students, sortKey, sortAsc, kpMasteryMap, alertOnly, alerts]);
 
   const LABELS = {
     zh: {
@@ -383,7 +405,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
       )}
 
       {/* ═══ Alert Panel (v8.0) ═══ */}
-      <AlertPanel lang={lang} alerts={alerts} onStudentClick={(uid) => {
+      <AlertPanel lang={lang} alerts={alerts} alertOnly={alertOnly} onToggleAlertOnly={() => setAlertOnly(!alertOnly)} onStudentClick={(uid) => {
         const s = students.find(st => st.user_id === uid);
         if (s) setSelectedStudent(s);
       }} />
@@ -498,7 +520,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
               <th className="sticky left-8 bg-slate-50 z-20 px-3 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[140px] cursor-pointer hover:text-indigo-600 select-none" onClick={() => handleSort('name')}>
                 {t.student} {sortKey === 'name' && <ArrowUpDown size={10} className="inline ml-0.5" />}
               </th>
-              <th className="px-2 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[100px]">{t.tags}</th>
+              <th className="hidden sm:table-cell px-2 py-2.5 text-left font-bold text-slate-700 whitespace-nowrap min-w-[100px]">{t.tags}</th>
               <th className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap min-w-[60px] cursor-pointer hover:text-indigo-600 select-none" onClick={() => handleSort('score')}>
                 <div className="flex items-center justify-center gap-1"><Trophy size={12} className="text-amber-500" /> {t.score} {sortKey === 'score' && <ArrowUpDown size={10} />}</div>
               </th>
@@ -509,7 +531,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                 KP {sortKey === 'kp' && <ArrowUpDown size={10} className="inline ml-0.5" />}
               </th>
               {units.map(([uid, u]) => (
-                <th key={uid} className="px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap border-l border-slate-100" title={u.title}>
+                <th key={uid} className="hidden md:table-cell px-2 py-2.5 text-center font-bold text-slate-700 whitespace-nowrap border-l border-slate-100" title={u.title}>
                   <div className="text-[10px] leading-tight max-w-[80px] mx-auto truncate">{u.title.replace(/Unit \d+:\s*/, '').split('·')[0]}</div>
                   <div className="text-[8px] text-slate-400 mt-0.5">{u.missions.length} 关</div>
                 </th>
@@ -519,12 +541,25 @@ export function DashboardScreen({ lang, onClose }: Props) {
           <tbody>
             {students.length === 0 && (
               <tr>
-                <td colSpan={6 + units.length} className="text-center py-8 text-slate-400 text-sm">
+                <td colSpan={6 + units.length} className="text-center py-8">
                   {loading ? (
                     <div className="flex flex-col gap-2 p-4">
                       {Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} columns={5 + units.length} />)}
                     </div>
-                  ) : t.noStudents}
+                  ) : (
+                    <div className="px-6 py-4">
+                      <Users size={28} className="text-slate-200 mx-auto mb-2" />
+                      <p className="text-sm font-bold text-slate-500 mb-1">
+                        {lang === 'en' ? 'No students yet' : '暂无学生数据'}
+                      </p>
+                      <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
+                        {lang === 'en'
+                          ? 'Students appear here after they sign in at play.25maths.com and select their year group. Use the tag system above to organize them into classes.'
+                          : '学生在 play.25maths.com 登录并选择年级后会自动出现。用上方标签系统将他们分入班级。'
+                        }
+                      </p>
+                    </div>
+                  )}
                 </td>
               </tr>
             )}
@@ -549,14 +584,27 @@ export function DashboardScreen({ lang, onClose }: Props) {
                      <span className="text-xs font-bold text-slate-400">{rank}</span>}
                   </td>
                   <td className="sticky left-8 bg-inherit z-10 px-3 py-2 font-bold text-slate-800 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-[11px] font-black text-white shadow-sm">
-                        {(s.display_name || '?')[0].toUpperCase()}
-                      </div>
-                      <span className="text-xs">{s.display_name || 'Anonymous'}</span>
-                    </div>
+                    {(() => {
+                      const login = (s.completed_missions as any)?._login as { lastDate?: string } | undefined;
+                      const daysSince = login?.lastDate ? Math.floor((Date.now() - new Date(login.lastDate).getTime()) / 86400000) : -1;
+                      const dotColor = daysSince < 0 ? 'bg-slate-300' : daysSince <= 1 ? 'bg-emerald-400' : daysSince <= 3 ? 'bg-amber-400' : 'bg-rose-400';
+                      const dotTitle = daysSince < 0 ? (lang === 'en' ? 'Never active' : '从未活跃')
+                        : daysSince === 0 ? (lang === 'en' ? 'Active today' : '今天活跃')
+                        : (lang === 'en' ? `${daysSince}d ago` : `${daysSince}天前`);
+                      return (
+                        <div className="flex items-center gap-2">
+                          <div className="relative">
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-[11px] font-black text-white shadow-sm">
+                              {(s.display_name || '?')[0].toUpperCase()}
+                            </div>
+                            <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${dotColor}`} title={dotTitle} />
+                          </div>
+                          <span className="text-xs">{s.display_name || 'Anonymous'}</span>
+                        </div>
+                      );
+                    })()}
                   </td>
-                  <td className="px-2 py-2" onClick={e => e.stopPropagation()}>
+                  <td className="hidden sm:table-cell px-2 py-2" onClick={e => e.stopPropagation()}>
                     <div className="flex items-center gap-1 flex-wrap">
                       {(s.class_tags || []).map(tag => (
                         <TagBadge key={tag} tag={tag} onRemove={() => removeStudentTag(s.user_id, tag)} />
@@ -605,7 +653,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                   {units.map(([uid, u]) => {
                     const p = getStudentUnitProgress(s, u.missions);
                     return (
-                      <td key={uid} className="px-2 py-2 border-l border-slate-100">
+                      <td key={uid} className="hidden md:table-cell px-2 py-2 border-l border-slate-100">
                         <div className="flex items-center justify-center gap-0.5">
                           <Dot done={p.green === p.total} color="text-emerald-500" />
                           <Dot done={p.amber === p.total} color="text-amber-400" />

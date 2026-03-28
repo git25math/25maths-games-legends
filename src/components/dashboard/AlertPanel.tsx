@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { AlertTriangle, Clock, TrendingDown, ChevronDown, ChevronUp } from 'lucide-react';
+import { AlertTriangle, Clock, TrendingDown, ChevronDown, ChevronUp, Filter } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, StudentAlert, UnitEntry } from './types';
 import { countGreenMissions } from './types';
@@ -68,10 +68,14 @@ export function computeAlerts(
 export const AlertPanel = ({
   lang,
   alerts,
+  alertOnly,
+  onToggleAlertOnly,
   onStudentClick,
 }: {
   lang: Language;
   alerts: StudentAlert[];
+  alertOnly: boolean;
+  onToggleAlertOnly: () => void;
   onStudentClick: (userId: string) => void;
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -102,6 +106,20 @@ export const AlertPanel = ({
             {critical.length} {lang === 'en' ? 'urgent' : '紧急'}
           </span>
         )}
+        <button
+          onClick={onToggleAlertOnly}
+          className={`ml-auto flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all ${
+            alertOnly
+              ? 'bg-rose-600 text-white border-rose-600 shadow-sm'
+              : 'bg-white/80 text-rose-600 border-rose-200 hover:bg-rose-100'
+          }`}
+        >
+          <Filter size={10} />
+          {alertOnly
+            ? (lang === 'en' ? 'Show all' : '显示全部')
+            : (lang === 'en' ? 'Filter table' : '只看预警')
+          }
+        </button>
       </div>
 
       <div className="flex flex-wrap gap-2">
