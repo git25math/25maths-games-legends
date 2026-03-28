@@ -38,6 +38,7 @@ import { getInventory, getTotalItems } from '../utils/inventory';
 import type { CharacterProgression } from '../types';
 import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completionState';
 import { getCurrency, CURRENCY_LABELS } from '../utils/currency';
+import { ProgressReport } from '../components/ProgressReport';
 
 
 const CHAPTER_IMAGES = [
@@ -149,6 +150,7 @@ export const MapScreen = ({
   const [showScrolls, setShowScrolls] = useState(false);
   const [repairDialogTarget, setRepairDialogTarget] = useState<number | null>(null);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [showProgressReport, setShowProgressReport] = useState(false);
   const [expandedCompletedUnit, setExpandedCompletedUnit] = useState<string | null>(null);
 
   // Daily challenge countdown
@@ -897,6 +899,9 @@ export const MapScreen = ({
                         🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
                       </button>
                     )}
+                    <button onClick={() => { setShowProgressReport(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-blue-600/20 border border-blue-500/30 rounded-lg text-xs text-blue-300">
+                      📊 {lang === 'en' ? 'Report' : '学习报告'}
+                    </button>
                     {onAchievements && (
                       <button onClick={() => { onAchievements(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300">
                         {lang === 'en' ? 'Achievements' : '成就墙'}
