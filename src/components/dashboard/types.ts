@@ -30,6 +30,8 @@ export type StudentAlert = {
   level: AlertLevel;
   reason: string;
   reasonEn: string;
+  suggestion?: string;
+  suggestionEn?: string;
 };
 
 export type UnitEntry = [number, { title: string; missions: Mission[] }];
