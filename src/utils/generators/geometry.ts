@@ -351,7 +351,16 @@ export function generateParallelAnglesMission(template: Mission, tier: Difficult
   return {
     ...template,
     description,
-    data: { givenAngle, angleType, answer, parallel: true, highlight: angleType === 'co-interior' ? 'cointerior' : angleType, total: angleType === 'co-interior' ? 180 : undefined, angle: givenAngle, generatorType: 'PARALLEL_ANGLES_RANDOM' },
+    data: {
+      givenAngle, angleType, answer, parallel: true, highlight: angleType === 'co-interior' ? 'cointerior' : angleType, total: angleType === 'co-interior' ? 180 : undefined, angle: givenAngle, generatorType: 'PARALLEL_ANGLES_RANDOM',
+      choices: (() => {
+        const complement = 180 - answer;
+        const distractors = [givenAngle, complement, answer + 10, 360 - answer].filter(v => v > 0 && v < 360 && v !== answer);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}°$`, en: `$${v}°$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
@@ -1342,7 +1351,15 @@ export function generateCircleTheoremMission(template: Mission, tier: Difficulty
     return {
       ...template,
       description,
-      data: { knownAngle, answer, theoremType: 'semicircle', generatorType: 'CIRCLE_THEOREM_RANDOM' },
+      data: {
+        knownAngle, answer, theoremType: 'semicircle', generatorType: 'CIRCLE_THEOREM_RANDOM',
+        choices: (() => {
+          const distractors = [180 - answer, knownAngle, 90, answer * 2].filter(v => v > 0 && v < 360 && v !== answer);
+          const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+          return opts.map(v => ({ label: { zh: `$${v}°$`, en: `$${v}°$` }, value: String(v), isLatex: true }));
+        })(),
+        correctChoice: String(answer),
+      },
       tutorialSteps,
     };
   } else {
@@ -1416,7 +1433,15 @@ export function generateCircleTheoremMission(template: Mission, tier: Difficulty
     return {
       ...template,
       description,
-      data: { knownAngle, answer, isGivenCentral, inscribedAngle, centralAngle, theoremType: 'center_double', generatorType: 'CIRCLE_THEOREM_RANDOM' },
+      data: {
+        knownAngle, answer, isGivenCentral, inscribedAngle, centralAngle, theoremType: 'center_double', generatorType: 'CIRCLE_THEOREM_RANDOM',
+        choices: (() => {
+          const distractors = [knownAngle, answer * 2, Math.round(answer / 2), 180 - answer].filter(v => v > 0 && v < 360 && v !== answer);
+          const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+          return opts.map(v => ({ label: { zh: `$${v}°$`, en: `$${v}°$` }, value: String(v), isLatex: true }));
+        })(),
+        correctChoice: String(answer),
+      },
       tutorialSteps,
     };
   }

@@ -72,7 +72,18 @@ export function generateProbSimpleMission(template: Mission, tier: DifficultyTie
   return {
     ...template,
     description,
-    data: { ...template.data, total, target, generatorType: 'PROBABILITY_SIMPLE_RANDOM' },
+    data: {
+      ...template.data, total, target, generatorType: 'PROBABILITY_SIMPLE_RANDOM',
+      choices: (() => {
+        const correct = pDisplay;
+        const wrong1 = Math.round((total - target) / total * 10000) / 10000; // complement
+        const wrong2 = Math.round(target / (total + 1) * 10000) / 10000;
+        const wrong3 = Math.round((target + 1) / total * 10000) / 10000;
+        const opts = [...new Set([correct, wrong1, wrong2, wrong3].filter(v => v >= 0 && v <= 1))].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(pDisplay),
+    },
     tutorialSteps,
   };
 }
