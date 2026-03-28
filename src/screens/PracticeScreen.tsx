@@ -633,7 +633,7 @@ export const PracticeScreen = ({
                     lang={lang}
                     missionId={mission.id}
                     kpId={mission.kpId}
-                    characterName={character.name[lang === 'en' ? 'en' : 'zh']}
+                    characterName={mission.tutorialSteps?.[0]?.narrator || character.name[lang === 'en' ? 'en' : 'zh']}
                     onComplete={() => {
                       logAttempt({ questionId: `${mission.id}-discover-complete`, nodeId: mission.kpId || mission.type, isCorrect: true, sourceMode: 'practice', durationMs: Date.now() - questionStartRef.current });
                       advancePhase();
