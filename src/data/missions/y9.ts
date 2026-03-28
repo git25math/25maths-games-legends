@@ -1215,4 +1215,48 @@ export const MISSIONS_Y9: Mission[] = [
     secret: { concept: { zh: '独立两阶段事件：沿树形图路径相乘，各路径概率之和为 1。', en: 'Independent two-stage events: multiply along tree paths; all paths sum to 1.' }, formula: '$P(A \\cap B) = P(A) \\times P(B)$', tips: [{ zh: '荀彧提示：树的每一层概率之和为 1，出错必能自我检验。', en: 'Xun Yu Tip: Each level of the tree sums to 1 — errors are self-checking.' }] },
     storyConsequence: { correct: { zh: '二阶兵符——概率树形图运用完美！做得漂亮！', en: 'Two-Stage Token — Well done!' }, wrong: { zh: '概率计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
+  {
+    id: 9148, grade: 9, unitId: 14, order: 8,
+    unitTitle: { zh: "Unit 14: 赤壁前奏·数据与变换", en: "Unit 14: Red Cliffs Prelude — Data & Transformations" },
+    topic: 'Statistics', type: 'TREE_DIAGRAM',
+    title: { zh: '不放回抽签', en: 'Draw Without Replacement' },
+    skillName: { zh: '条件概率树', en: 'Conditional Probability Tree' },
+    skillSummary: { zh: '不放回两阶段树形图条件概率', en: 'Two-stage conditional probability without replacement' },
+    story: { zh: '赤壁决战前，诸葛亮备了 $5$ 个红色兵符和 $3$ 个蓝色兵符（共 $8$ 个）。不放回连抽两个，两个都是红色的概率是多少？', en: 'Before Red Cliffs, Zhuge Liang prepared $5$ red tokens and $3$ blue tokens ($8$ total). Two are drawn without replacement. What is the probability that both are red?' },
+    description: { zh: '不放回从 $8$ 枚兵符中连取两枚，求两枚都是红色的概率。', en: 'Draw two tokens without replacement from $8$ total ($5$ red, $3$ blue). Find P(both red).' },
+    data: { total: 8, red: 5, blue: 3, mode: 'both_red', generatorType: 'TREE_DIAGRAM_RANDOM' }, difficulty: 'Medium', reward: 300,
+    kpId: 'kp-9.2-02', sectionId: 'statistics',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮："为什么"不放回"改变概率？\n普通独立事件（放回），每次抽取条件一样。但"不放回"意味着第一枚取走后，袋里的数目变了——第二次的概率因此改变。\n这就是条件概率：$P(B|A)$ ≠ $P(B)$。', en: 'Zhuge Liang: "Why does without replacement change probabilities?\nWith replacement (independent), conditions reset each time. But without replacement, removing one token changes what remains — the second draw\'s probability shifts.\nThis is conditional probability: $P(B|A) \\neq P(B)$."' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："标注第一次的树枝\n袋中 5 红 3 蓝，共 8 枚：\n• 第一次红：$P(R_1) = \\frac{5}{8}$\n• 第一次蓝：$P(B_1) = \\frac{3}{8}$', en: 'Zhuge Liang: "Label the first branches\n5 red, 3 blue, total 8:\n• First red: $P(R_1) = \\frac{5}{8}$\n• First blue: $P(B_1) = \\frac{3}{8}$"' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："第一枚是红色之后，袋中剩余\n取走 1 红，剩 4 红 3 蓝，共 7 枚：\n• 第二次红：$P(R_2|R_1) = \\frac{4}{7}$\n• 第二次蓝：$P(B_2|R_1) = \\frac{3}{7}$', en: 'Zhuge Liang: "After first draw is red, the bag has\n4 red + 3 blue = 7 remaining:\n• Second red: $P(R_2|R_1) = \\frac{4}{7}$\n• Second blue: $P(B_2|R_1) = \\frac{3}{7}$"' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："沿「红→红」路径相乘\n$P(R_1 \\cap R_2) = P(R_1) \\times P(R_2|R_1) = \\frac{5}{8} \\times \\frac{4}{7} = \\frac{20}{56} = \\frac{5}{14}$', en: 'Zhuge Liang: "Multiply along the red→red path\n$P(R_1 \\cap R_2) = P(R_1) \\times P(R_2|R_1) = \\frac{5}{8} \\times \\frac{4}{7} = \\frac{20}{56} = \\frac{5}{14}$"' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："答案\n$P(\\text{两枚都红}) = \\frac{5}{14}$', en: 'Zhuge Liang: "Answer\n$P(\\text{both red}) = \\frac{5}{14}$"' }, highlightField: 'p' },
+      { text: { zh: '诸葛亮："验算\n$\\frac{5}{14} \\approx 0.357$，在 $[0,1]$ 内 ✓\n注意：分母是 $8 \\times 7 = 56$，化简后 $\\frac{20}{56} = \\frac{5}{14}$ ✓\n不放回后概率降低了，合乎常识！', en: 'Zhuge Liang: "Verify\n$\\frac{5}{14} \\approx 0.357$, within $[0,1]$ ✓\nDenominator: $8 \\times 7 = 56$, simplified: $\\frac{20}{56} = \\frac{5}{14}$ ✓\nWithout replacement reduces probability — makes intuitive sense!"' }, highlightField: 'p' },
+    ],
+    secret: { concept: { zh: '不放回条件概率：P(A∩B) = P(A) × P(B|A)，第二次概率分子分母都减 1。', en: 'Conditional probability without replacement: P(A∩B) = P(A) × P(B|A) — both numerator and denominator decrease after first draw.' }, formula: '$P(R_1 \\cap R_2) = \\frac{r}{n} \\times \\frac{r-1}{n-1}$', tips: [{ zh: '诸葛亮提示：不放回后，从第二次分子和分母各减一（如果第一次取到同色）。', en: 'Zhuge Liang Tip: Without replacement, subtract 1 from both numerator and denominator when same colour drawn first.' }] },
+    storyConsequence: { correct: { zh: '不放回抽签——条件概率运用精准！', en: 'Draw Without Replacement — Conditional probability mastered!' }, wrong: { zh: '注意：第二次概率分母变成 7 了！', en: 'Careful: after the first draw, the denominator becomes 7!' } }
+  },
+  {
+    id: 9149, grade: 9, unitId: 14, order: 9,
+    unitTitle: { zh: "Unit 14: 赤壁前奏·数据与变换", en: "Unit 14: Red Cliffs Prelude — Data & Transformations" },
+    topic: 'Statistics', type: 'TREE_DIAGRAM',
+    title: { zh: '颜色配对', en: 'Colour Pairs' },
+    skillName: { zh: '条件概率树', en: 'Conditional Probability Tree' },
+    skillSummary: { zh: '不放回树形图——两枚同色或异色', en: 'Probability tree without replacement — same or different colours' },
+    story: { zh: '军营布袋中有 $4$ 个红色令牌和 $2$ 个蓝色令牌，共 $6$ 个。不放回取两枚，求两枚颜色相同的概率。', en: 'A camp bag contains $4$ red tokens and $2$ blue tokens ($6$ total). Two are drawn without replacement. Find the probability that both are the same colour.' },
+    description: { zh: '不放回从 $6$ 枚中连取两枚，求两枚同色的概率。', en: 'Draw two tokens without replacement from $6$ ($4$ red, $2$ blue). Find P(same colour).' },
+    data: { total: 6, red: 4, blue: 2, mode: 'both_same', generatorType: 'TREE_DIAGRAM_RANDOM' }, difficulty: 'Hard', reward: 360,
+    kpId: 'kp-9.2-02', sectionId: 'statistics',
+    tutorialSteps: [
+      { text: { zh: '周瑜："多路径求和——加法原则\n"同色"有两种可能：红红 或 蓝蓝。每种可能是一条树路径，沿路径乘，再把路径加起来。\n$P(\\text{同色}) = P(RR) + P(BB)$', en: 'Zhou Yu: "Multiple paths — Addition rule\n\"Same colour\" has two possibilities: red-red OR blue-blue. Each is one tree path. Multiply along each path, then add them.\n$P(\\text{same colour}) = P(RR) + P(BB)$"' }, highlightField: 'p' },
+      { text: { zh: '周瑜："标注第一次概率\n共 6 枚，4 红 2 蓝：\n• $P(R_1) = \\frac{4}{6} = \\frac{2}{3}$\n• $P(B_1) = \\frac{2}{6} = \\frac{1}{3}$', en: 'Zhou Yu: "First draw probabilities\n6 total, 4 red, 2 blue:\n• $P(R_1) = \\frac{4}{6} = \\frac{2}{3}$\n• $P(B_1) = \\frac{2}{6} = \\frac{1}{3}$"' }, highlightField: 'p' },
+      { text: { zh: '周瑜："第二次条件概率（不放回）\n若第一次红（剩 3 红 2 蓝，共 5）：$P(R_2|R_1) = \\frac{3}{5}$\n若第一次蓝（剩 4 红 1 蓝，共 5）：$P(B_2|B_1) = \\frac{1}{5}$', en: 'Zhou Yu: "Second draw conditional (no replacement)\nIf first was red (3 red, 2 blue left, total 5): $P(R_2|R_1) = \\frac{3}{5}$\nIf first was blue (4 red, 1 blue left, total 5): $P(B_2|B_1) = \\frac{1}{5}$"' }, highlightField: 'p' },
+      { text: { zh: '周瑜："计算两条同色路径\n$P(RR) = \\frac{4}{6} \\times \\frac{3}{5} = \\frac{12}{30}$\n$P(BB) = \\frac{2}{6} \\times \\frac{1}{5} = \\frac{2}{30}$\n$P(\\text{同色}) = \\frac{12}{30} + \\frac{2}{30} = \\frac{14}{30} = \\frac{7}{15}$', en: 'Zhou Yu: "Calculate both same-colour paths\n$P(RR) = \\frac{4}{6} \\times \\frac{3}{5} = \\frac{12}{30}$\n$P(BB) = \\frac{2}{6} \\times \\frac{1}{5} = \\frac{2}{30}$\n$P(\\text{same}) = \\frac{12}{30} + \\frac{2}{30} = \\frac{14}{30} = \\frac{7}{15}$"' }, highlightField: 'p' },
+      { text: { zh: '周瑜："答案\n$P(\\text{两枚同色}) = \\frac{7}{15}$', en: 'Zhou Yu: "Answer\n$P(\\text{same colour}) = \\frac{7}{15}$"' }, highlightField: 'p' },
+      { text: { zh: '周瑜："验算\n$P(\\text{异色}) = 1 - \\frac{7}{15} = \\frac{8}{15}$，$\\frac{7}{15} + \\frac{8}{15} = 1$ ✓\n对立事件之和为 1——树形图自验算完成！', en: 'Zhou Yu: "Verify\n$P(\\text{different}) = 1 - \\frac{7}{15} = \\frac{8}{15}$, $\\frac{7}{15} + \\frac{8}{15} = 1$ ✓\nComplementary events sum to 1 — tree diagram self-check complete!"' }, highlightField: 'p' },
+    ],
+    secret: { concept: { zh: '多路径条件概率：沿每条满足条件的路径相乘，再求各路径概率之和。', en: 'Multi-path conditional probability: multiply along each qualifying path, then sum all qualifying paths.' }, formula: '$P(\\text{same}) = P(RR) + P(BB)$', tips: [{ zh: '周瑜提示：先画全部 4 条路径，再只取"满足条件"的路径相加。', en: 'Zhou Yu Tip: Draw all 4 paths first, then pick only the qualifying ones to add.' }] },
+    storyConsequence: { correct: { zh: '颜色配对——条件概率加法运用完美！', en: 'Colour Pairs — Multi-path conditional probability mastered!' }, wrong: { zh: '记住：同色有两条路径（RR 和 BB）需要相加！', en: 'Remember: same colour has two paths (RR and BB) to add!' } }
+  },
 ];

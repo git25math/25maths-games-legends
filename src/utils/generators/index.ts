@@ -15,7 +15,7 @@ import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission
 
 import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission, generateCircleTheoremMission, generateSimilarTrianglesMission } from './geometry';
 
-import { generateProbSimpleMission, generateProbIndMission, generateStatsMeanMission, generateStatsMedianMission, generateStatsRangeMission, generateStatsModeMission, generateCumFreqMission, generateProbTreeMission } from './statistics';
+import { generateProbSimpleMission, generateProbIndMission, generateStatsMeanMission, generateStatsMedianMission, generateStatsRangeMission, generateStatsModeMission, generateCumFreqMission, generateProbTreeMission, generateTreeDiagramMission } from './statistics';
 
 import { generateSymmetryMission, generateRotationMission, generateEnlargementMission, generateVectorAddMission, generateDerivativeMission, generateIntegrationMission, generateRatioMission, generateRatioY7Mission, generateRatioY8Mission } from './advanced';
 
@@ -48,7 +48,8 @@ export type GeneratorType =
   | 'CIRCLE_THEOREM_RANDOM'
   | 'PROB_TREE_RANDOM'
   | 'SEQUENCE_FORMULA_RANDOM'
-  | 'SIMILAR_TRIANGLES_RANDOM';
+  | 'SIMILAR_TRIANGLES_RANDOM'
+  | 'TREE_DIAGRAM_RANDOM';
 
 /* ── Generator dispatch map ── */
 
@@ -122,6 +123,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   PROBABILITY_SIMPLE_RANDOM: generateProbSimpleMission,
   PROBABILITY_IND_RANDOM: generateProbIndMission,
   PROB_TREE_RANDOM: generateProbTreeMission,
+  TREE_DIAGRAM_RANDOM: generateTreeDiagramMission,
   STATISTICS_MEAN_RANDOM: generateStatsMeanMission,
   STATISTICS_MEDIAN_RANDOM: generateStatsMedianMission,
   STATISTICS_RANGE_RANDOM: generateStatsRangeMission,

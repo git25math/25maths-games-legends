@@ -362,6 +362,24 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const okQ = parse(inputs.q || '') === expectedQ;
     return { correct: okP && okQ, expected: { p: String(expectedP), q: String(expectedQ) } };
   }
+  // Tree diagram: conditional probability (without replacement)
+  if (type === 'TREE_DIAGRAM') {
+    const { total, red, mode } = data;
+    if (!total || total < 2) return { correct: false, expected: { p: '0' } };
+    const blue = (total as number) - (red as number);
+    const r = red as number, t = total as number, b = blue;
+    let val: number;
+    if (mode === 'both_red') {
+      val = (r / t) * ((r - 1) / (t - 1));
+    } else if (mode === 'both_same') {
+      val = (r / t) * ((r - 1) / (t - 1)) + (b / t) * ((b - 1) / (t - 1));
+    } else {
+      // diff: one red one blue (in any order)
+      val = (r / t) * (b / (t - 1)) + (b / t) * (r / (t - 1));
+    }
+    val = Math.round(val * 10000) / 10000;
+    return { correct: Math.abs(parse(inputs.p || '') - val) < 0.01, expected: { p: toFraction(val) } };
+  }
   // Probability tree: compound probability (P(A∩B), P(exactly one), P(≥1))
   if (type === 'PROBABILITY_TREE') {
     const { p1, p2, mode } = data;
@@ -392,7 +410,7 @@ const PARTIAL_CREDIT_TYPES = new Set([
   'FACTORISE', 'INEQUALITY', 'FDP_CONVERT', 'BODMAS', 'SIMPLIFY',
   'ARITHMETIC', 'ESTIMATION', 'SQUARE_CUBE', 'SQUARE_ROOT',
   'INTEGER_ADD', 'INTEGER_MUL', 'HCF', 'LCM',
-  'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES',
+  'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES', 'TREE_DIAGRAM',
 ]);
 
 // Types that NEVER get partial credit (boolean/discrete answers)

@@ -205,4 +205,8 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'p', label: '概率 P', placeholder: 'P = ?' }],
     en: [{ id: 'p', label: 'Probability P', placeholder: 'P = ?' }],
   },
+  TREE_DIAGRAM: {
+    zh: [{ id: 'p', label: '概率 P（分数或小数）', placeholder: 'P = ?' }],
+    en: [{ id: 'p', label: 'Probability P (fraction or decimal)', placeholder: 'P = ?' }],
+  },
 };

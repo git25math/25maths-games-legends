@@ -698,6 +698,157 @@ export function generateProbTreeMission(template: Mission, tier: DifficultyTier 
 }
 
 /* ══════════════════════════════════════════════════════════
+   TREE_DIAGRAM generator: conditional probability (without replacement)
+   Two picks from a mixed bag — each event depends on previous pick
+   Uses TREE_DIAGRAM type
+   ══════════════════════════════════════════════════════════ */
+
+export function generateTreeDiagramMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  // Pool of (total, red) combos that yield clean fractions after two picks
+  const pools: Record<number, { total: number; red: number }[]> = {
+    1: [{ total: 5, red: 2 }, { total: 5, red: 3 }, { total: 4, red: 1 }, { total: 4, red: 3 }],
+    2: [{ total: 6, red: 2 }, { total: 6, red: 4 }, { total: 8, red: 3 }, { total: 10, red: 4 }, { total: 10, red: 6 }],
+    3: [{ total: 12, red: 5 }, { total: 15, red: 6 }, { total: 20, red: 8 }, { total: 10, red: 3 }],
+  };
+
+  const { total, red } = pickRandom(pools[tier]);
+  const blue = total - red;
+
+  // Choose mode
+  const modePool = tier === 1 ? ['both_red'] : tier === 2 ? ['both_red', 'both_same', 'diff'] : ['both_same', 'diff'];
+  const mode = pickRandom(modePool) as 'both_red' | 'both_same' | 'diff';
+
+  // Compute answer (conditional, no replacement)
+  let answerVal: number;
+  if (mode === 'both_red') {
+    answerVal = (red / total) * ((red - 1) / (total - 1));
+  } else if (mode === 'both_same') {
+    answerVal = (red / total) * ((red - 1) / (total - 1)) + (blue / total) * ((blue - 1) / (total - 1));
+  } else {
+    answerVal = (red / total) * (blue / (total - 1)) + (blue / total) * (red / (total - 1));
+  }
+  answerVal = Math.round(answerVal * 10000) / 10000;
+
+  // Express as fraction
+  function gcd(a: number, b: number): number { return b === 0 ? a : gcd(b, a % b); }
+  function toFrac(n: number, d: number): string {
+    const g = gcd(Math.abs(n), d);
+    const rn = n / g, rd = d / g;
+    return rd === 1 ? `${rn}` : `${rn}/${rd}`;
+  }
+  const denominator = total * (total - 1);
+  const numerator = Math.round(answerVal * denominator);
+  const answerFrac = toFrac(numerator, denominator);
+
+  const narrator = pickRandom(['诸葛亮', '周瑜', '曹操']);
+
+  // Scenario: draws tokens from a bag
+  const itemName = pickRandom([
+    { zh: '红色兵符', en: 'red token' },
+    { zh: '红玉令', en: 'red jade token' },
+  ]);
+
+  const questionZh =
+    mode === 'both_red'
+      ? `两次都取到${itemName.zh}的概率`
+      : mode === 'both_same'
+      ? '两次取到同色的概率'
+      : '两次取到不同颜色的概率';
+  const questionEn =
+    mode === 'both_red'
+      ? `probability both draws are ${itemName.en}`
+      : mode === 'both_same'
+      ? 'probability both draws are the same colour'
+      : 'probability the two draws are different colours';
+
+  const description: BilingualText = {
+    zh: `布袋中有 $${red}$ 个${itemName.zh}和 $${blue}$ 个蓝色兵符（共 $${total}$ 个）。不放回连取两个，求${questionZh}。`,
+    en: `A bag contains $${red}$ ${itemName.en}s and $${blue}$ blue tokens ($${total}$ total). Two tokens are drawn without replacement. Find the ${questionEn}.`,
+  };
+
+  // Branch fractions for tutorial
+  const p1rZh = `\\frac{${red}}{${total}}`;
+  const p1bZh = `\\frac{${blue}}{${total}}`;
+  const p2r_r = `\\frac{${red - 1}}{${total - 1}}`;
+  const p2b_r = `\\frac{${blue}}{${total - 1}}`;
+  const p2r_b = `\\frac{${red}}{${total - 1}}`;
+  const p2b_b = `\\frac{${blue - 1}}{${total - 1}}`;
+
+  const branchZh =
+    mode === 'both_red'
+      ? `第一次取红（$${p1rZh}$）→ 第二次也红（$${p2r_r}$）`
+      : mode === 'both_same'
+      ? `路径1：红→红 $${p1rZh} \\times ${p2r_r}$\n路径2：蓝→蓝 $${p1bZh} \\times ${p2b_b}$`
+      : `路径1：红→蓝 $${p1rZh} \\times ${p2b_r}$\n路径2：蓝→红 $${p1bZh} \\times ${p2r_b}$`;
+  const branchEn =
+    mode === 'both_red'
+      ? `First draw red ($${p1rZh}$) → Second also red ($${p2r_r}$)`
+      : mode === 'both_same'
+      ? `Path 1: red→red $${p1rZh} \\times ${p2r_r}$\nPath 2: blue→blue $${p1bZh} \\times ${p2b_b}$`
+      : `Path 1: red→blue $${p1rZh} \\times ${p2b_r}$\nPath 2: blue→red $${p1bZh} \\times ${p2r_b}$`;
+
+  const calcZh =
+    mode === 'both_red'
+      ? `$P = ${p1rZh} \\times ${p2r_r} = ${answerFrac}$`
+      : mode === 'both_same'
+      ? `$P = ${p1rZh} \\times ${p2r_r} + ${p1bZh} \\times ${p2b_b} = ${answerFrac}$`
+      : `$P = ${p1rZh} \\times ${p2b_r} + ${p1bZh} \\times ${p2r_b} = ${answerFrac}$`;
+  const calcEn = calcZh;
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么树形图需要"条件概率"？\n普通树形图假设两次抽取**独立**（放回去）。但战场上"不放回"更真实：抽走一枚令牌，袋中剩余数目变了，第二次概率也随之改变。\n这就是**条件概率**：$P(B|A)$，在 A 已发生的条件下，B 的概率。`,
+        en: `${narrator}: "Why do tree diagrams need 'conditional probability'?\nA basic tree assumes draws are **independent** (with replacement). But without replacement, taking one token changes what remains — the second probability depends on the first.\nThis is **conditional probability**: $P(B|A)$ — the probability of B given A has occurred."`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：不放回的关键变化\n第一次取红后，袋中红色变为 $${red}-1 = ${red - 1}$，总数变为 $${total}-1 = ${total - 1}$。\n所以：$P(\\text{第二次红} | \\text{第一次红}) = ${p2r_r}$\n与独立情况不同！这正是"条件"的含义。`,
+        en: `${narrator}: "Key change without replacement\nAfter taking one red token, $${red}-1 = ${red - 1}$ red remain, total becomes $${total}-1 = ${total - 1}$.\nSo $P(\\text{2nd red} | \\text{1st red}) = ${p2r_r}$\nDifferent from independent case — that's the 'conditional' part!"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：画出树形图的各分支\n${branchZh}`,
+        en: `${narrator}: "Draw the tree diagram branches\n${branchEn}"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：沿路径相乘，多路径相加\n$P(A \\cap B) = P(A) \\times P(B|A)$\n需要的路径概率相乘，再把所有满足条件的路径相加。\n${calcZh}`,
+        en: `${narrator}: "Multiply along paths, add across paths\n$P(A \\cap B) = P(A) \\times P(B|A)$\nMultiply along each required path, then add all qualifying paths.\n${calcEn}"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案\n所求概率 $= ${answerFrac}$`,
+        en: `${narrator}: "Answer\nRequired probability $= ${answerFrac}$"`,
+      },
+      highlightField: 'p',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算\n所有分支概率之和必须 = 1（树形图自验算）。\n且 $0 \\leq ${answerFrac} \\leq 1$ ✓\n把答案化成最简分数或精确小数作为最终答案。`,
+        en: `${narrator}: "Verify\nAll branch probabilities must sum to 1 (tree diagram self-check).\nAlso $0 \\leq ${answerFrac} \\leq 1$ ✓\nExpress your answer as a simplified fraction or exact decimal."`,
+      },
+      highlightField: 'p',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { total, red, blue, mode, generatorType: 'TREE_DIAGRAM_RANDOM' },
+    tutorialSteps,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════
    SECTOR generator: arc length or sector area
    Uses CIRCLE type with answer field
    ══════════════════════════════════════════════════════════ */

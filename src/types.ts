@@ -63,7 +63,8 @@ export type QuestionType =
   | 'SYMMETRY'
   | 'SEQUENCE_FORMULA'
   | 'PROBABILITY_TREE'
-  | 'SIMILAR_TRIANGLES';
+  | 'SIMILAR_TRIANGLES'
+  | 'TREE_DIAGRAM';
 
 export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' | 'Statistics';
 
