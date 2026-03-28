@@ -263,14 +263,14 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
                             setTimeout(() => setCopiedAssignmentId(null), 2000);
                           });
                         }}
-                        className="p-1 text-slate-300 hover:text-indigo-500 transition-colors"
+                        className="p-2 text-slate-300 hover:text-indigo-500 transition-colors"
                         title={lang === 'en' ? 'Copy homework link' : '复制作业链接'}
                       >
                         {copiedAssignmentId === a.id ? <Check size={14} className="text-emerald-500" /> : <Link2 size={14} />}
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); archiveAssignment(a.id); }}
-                        className="p-1 text-slate-300 hover:text-rose-400 transition-colors"
+                        className="p-2 text-slate-300 hover:text-indigo-500 transition-colors"
                         title={lang === 'en' ? 'Archive' : '归档'}
                       >
                         <Archive size={14} />

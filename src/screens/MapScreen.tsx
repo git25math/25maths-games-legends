@@ -718,10 +718,10 @@ export const MapScreen = ({
             <div className="flex flex-wrap items-center gap-2 mt-1">
               <p className="text-indigo-400 font-bold text-sm">{selectedChar ? lt(selectedChar.name, lang) : ''}</p>
               <span className="text-white/20">|</span>
-              <button onClick={onGradeChange} className="px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors">
+              <button onClick={onGradeChange} className="px-3 py-1.5 min-h-[36px] bg-amber-600/20 border border-amber-500/30 rounded-xl text-xs text-amber-300 hover:bg-amber-600/40 transition-colors">
                 {t.year} {profile.grade}
               </button>
-              <button onClick={onCharChange} className="px-2 py-0.5 bg-indigo-600/20 border border-indigo-500/30 rounded text-xs text-indigo-300 hover:bg-indigo-600/40 transition-colors">
+              <button onClick={onCharChange} className="px-3 py-1.5 min-h-[36px] bg-indigo-600/20 border border-indigo-500/30 rounded-xl text-xs text-indigo-300 hover:bg-indigo-600/40 transition-colors">
                 {t.switchChar}
               </button>
               {streakTokens > 0 && (
