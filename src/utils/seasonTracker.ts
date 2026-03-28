@@ -22,7 +22,7 @@ const SEASONS: SeasonConfig[] = [
 ];
 
 /** Active season — change this single line to switch seasons */
-const ACTIVE_SEASON: SeasonConfig = SEASONS[0];
+const ACTIVE_SEASON: SeasonConfig = SEASONS[1];
 
 /** Get the active season's tasks */
 export function getActiveSeasonTasks(): SeasonTask[] {
