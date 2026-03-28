@@ -1290,9 +1290,30 @@ export default function App() {
                         sp = sp2; }
                       const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
                       cm._season = updatedProgress;
-                      // Recovery session: advance step if active (use ref to avoid stale closure)
+                      // Recovery session: advance step + heal prereq topic
                       const currentRecovery = recoverySessionRef.current;
                       if (currentRecovery) {
+                        // Heal the current step's prereq topic health + clear mistakes
+                        const currentStep = getCurrentStep(currentRecovery);
+                        if (currentStep) {
+                          const stepTopicId = currentStep.topicId;
+                          // Restore health via Resilience Engine API (mutate cm in-place)
+                          const stepHealth = getSkillHealth(cm as Record<string, unknown>, stepTopicId);
+                          if (stepHealth.corruptionLevel !== 'none') {
+                            const healed = processRecoveryComplete(stepHealth);
+                            const updated = setSkillHealth(cm as Record<string, unknown>, stepTopicId, healed);
+                            Object.assign(cm, updated);
+                          }
+                          // Clear mistakes for all missions in this prereq topic
+                          if (cm._mistakes) {
+                            for (const [mid] of Object.entries(cm._mistakes)) {
+                              const m = missions.find(mission => mission.id === Number(mid));
+                              if (m?.kpId?.startsWith(`kp-${stepTopicId}`)) {
+                                (cm._mistakes as any)[mid] = { count: 0, lastWrong: '', patterns: {} };
+                              }
+                            }
+                          }
+                        }
                         const advanced = advanceRecoveryStep(currentRecovery);
                         if (isRecoveryComplete(advanced)) {
                           delete cm._recovery;
@@ -1421,13 +1442,28 @@ export default function App() {
                   }}
                   onStartRecovery={(topicId) => {
                     if (!profile) return;
-                    // Launch Repair Mode with the topic's dominant error pattern
                     const healthMap = getSkillHealthMap(profile.completed_missions as Record<string, unknown>);
                     const health = healthMap[topicId];
                     const patternId = health?.dominantPatternId ?? null;
-                    setRepairTopicId(topicId);
-                    setRepairPatternId(patternId);
-                    setGameState('repair');
+                    const errorType = (patternId ?? 'method') as import('./utils/diagnoseError').ErrorType;
+
+                    // Try multi-step recovery path first
+                    const mistakes = getMistakesMap(profile.completed_missions as Record<string, unknown>);
+                    const recoveryPath = buildRecoveryPath(topicId, errorType, mistakes, missions);
+
+                    if (recoveryPath && recoveryPath.steps.length > 1) {
+                      // Multi-step: persist session and show RecoveryPathPanel
+                      setRecoverySession(recoveryPath);
+                      const cm = structuredClone(profile.completed_missions) as any;
+                      cm._recovery = recoveryPath;
+                      updateProfile({ completed_missions: cm });
+                      // Stay on tech tree — RecoveryPathPanel will render
+                    } else {
+                      // Single-topic fallback: direct to RepairScreen
+                      setRepairTopicId(topicId);
+                      setRepairPatternId(patternId);
+                      setGameState('repair');
+                    }
                   }}
                   recoverySession={recoverySession}
                   onRecoveryStepStart={(missionId) => {

@@ -40,6 +40,7 @@ import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completion
 import { getCurrency, CURRENCY_LABELS } from '../utils/currency';
 import { ProgressReport } from '../components/ProgressReport';
 import { JoinClassModal } from '../components/JoinClassModal';
+import { MyAssignments } from '../components/MyAssignments';
 
 
 const CHAPTER_IMAGES = [
@@ -157,6 +158,7 @@ export const MapScreen = ({
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showProgressReport, setShowProgressReport] = useState(false);
   const [showJoinClass, setShowJoinClass] = useState(false);
+  const [showMyHomework, setShowMyHomework] = useState(false);
   const [expandedCompletedUnit, setExpandedCompletedUnit] = useState<string | null>(null);
 
   // Daily challenge countdown
@@ -1299,6 +1301,12 @@ export const MapScreen = ({
                 {lang === 'en' ? 'Quick Access' : '快捷入口'}
               </p>
               <div className="grid grid-cols-4 gap-2">
+                {/* 我的作业 */}
+                <button onClick={() => { onMobileMenuClose?.(); setShowMyHomework(true); }}
+                  className="flex flex-col items-center gap-1 py-3 bg-rose-500/10 rounded-xl border border-rose-500/20 text-rose-300 active:bg-rose-500/20">
+                  <span className="text-xl">📝</span>
+                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Homework' : '作业'}</span>
+                </button>
                 {/* 加入班级 */}
                 <button onClick={() => { onMobileMenuClose?.(); setShowJoinClass(true); }}
                   className="flex flex-col items-center gap-1 py-3 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-300 active:bg-indigo-500/20">
@@ -1407,6 +1415,16 @@ export const MapScreen = ({
           totalScore={profile.total_score || 0}
           completedMissions={(profile.completed_missions || {}) as CompletedMissions}
           onClose={() => setShowProgressReport(false)}
+        />
+      )}
+
+      {showMyHomework && (
+        <MyAssignments
+          lang={lang}
+          missions={missions}
+          completedMissions={(profile.completed_missions || {}) as CompletedMissions}
+          onMissionStart={onPracticeStart}
+          onClose={() => setShowMyHomework(false)}
         />
       )}
 

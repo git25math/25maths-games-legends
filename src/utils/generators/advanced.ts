@@ -1,5 +1,5 @@
 // Auto-extracted from generateMission.ts
-import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
+import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, gcdCalc, buildNumericMC, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
 
 export function generateSymmetryMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const coordPools = { 1: [1, 2, 3, 4, 5], 2: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5], 3: [-8, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 8] };
@@ -728,7 +728,7 @@ export function generateRatioMission(template: Mission, tier: DifficultyTier = 2
   return {
     ...template,
     description,
-    data: { a, b, answer: answerValue, generatorType: 'RATIO_RANDOM' },
+    data: { a, b, answer: answerValue, generatorType: 'RATIO_RANDOM', ...buildNumericMC(answerValue, [a * multiplier, answerValue + a, answerValue - b, b]) },
     tutorialSteps,
   };
 }

@@ -75,3 +75,21 @@ export function gcdCalc(a: number, b: number): number {
 
 /** Generator function signature */
 export type GeneratorFn = (template: Mission, tier?: DifficultyTier) => Mission;
+
+/* ── Multiple Choice helper ── */
+
+export type MCChoice = { label: { zh: string; en: string }; value: string; isLatex?: boolean };
+
+/**
+ * Build 4 MC choices from a correct answer and distractor values.
+ * Deduplicates, sorts numerically, formats with $ delimiters for LaTeX.
+ */
+export function buildNumericMC(correct: number, distractors: number[]): { choices: MCChoice[]; correctChoice: string } {
+  const filtered = distractors.filter(v => v !== correct && Number.isFinite(v));
+  const unique = [...new Set(filtered)].slice(0, 3);
+  const opts = [correct, ...unique].sort((a, b) => a - b);
+  return {
+    choices: opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true })),
+    correctChoice: String(correct),
+  };
+}

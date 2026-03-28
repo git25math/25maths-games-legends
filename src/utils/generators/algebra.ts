@@ -1,5 +1,5 @@
 // Auto-extracted from generateMission.ts
-import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, gcdCalc, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
+import { pickRandom, randInt, signTerm, coeffStr, signCoeff, eqStr, linearExpr, safeRetry, gcdCalc, buildNumericMC, type Mission, type BilingualText, type DifficultyTier, type GeneratorFn } from './shared';
 
 export function generateSimpleEqMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const aPools = { 1: [2, 3, 4, 5], 2: [2, 3, 4, 5, 6, 7, 8, 9], 3: [3, 5, 7, 8, 9, 11, 12, 15] };
@@ -23,7 +23,7 @@ export function generateSimpleEqMission(template: Mission, tier: DifficultyTier 
   return {
     ...template,
     description,
-    data: { ...template.data, x, a, result, left: `${a}x`, right: `${result}`, generatorType: 'SIMPLE_EQ_RANDOM', tutorialEquationSteps },
+    data: { ...template.data, x, a, result, left: `${a}x`, right: `${result}`, generatorType: 'SIMPLE_EQ_RANDOM', tutorialEquationSteps, ...buildNumericMC(x, [x + a, result, x - 1, x + 1]) },
   };
 }
 
@@ -55,7 +55,7 @@ export function generateAddEqMission(template: Mission, tier: DifficultyTier = 2
   return {
     ...template,
     description,
-    data: { ...template.data, x, a, result, left: `x+${a}`, right: `${result}`, generatorType: 'SIMPLE_EQ_ADD_RANDOM', tutorialEquationSteps },
+    data: { ...template.data, x, a, result, left: `x+${a}`, right: `${result}`, generatorType: 'SIMPLE_EQ_ADD_RANDOM', tutorialEquationSteps, ...buildNumericMC(x, [result, a, x + 1, x - 1]) },
   };
 }
 
@@ -146,7 +146,7 @@ export function generateTwoStepEqMission(template: Mission, tier: DifficultyTier
   return {
     ...template,
     description,
-    data: { ...template.data, x, a, b, result, left: `${a}x + ${b}`, right: `${result}`, generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM', tutorialEquationSteps },
+    data: { ...template.data, x, a, b, result, left: `${a}x + ${b}`, right: `${result}`, generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM', tutorialEquationSteps, ...buildNumericMC(x, [(result - b), result / a, x + 1, x - 1]) },
     tutorialSteps,
   };
 }
@@ -224,7 +224,7 @@ export function generateExpandMission(template: Mission, tier: DifficultyTier = 
   return {
     ...template,
     description,
-    data: { a, b, c, ab, ac, answer, generatorType: 'EXPAND_RANDOM' },
+    data: { a, b, c, ab, ac, answer, generatorType: 'EXPAND_RANDOM', ...buildNumericMC(answer, [a * b, a * c, answer + a, answer - a]) },
     tutorialSteps,
   };
 }
@@ -291,7 +291,7 @@ export function generateExpandNegMission(template: Mission, tier: DifficultyTier
   return {
     ...template,
     description,
-    data: { a, b, c, coeff, constant, answer: coeff, generatorType: 'EXPAND_NEG_RANDOM' },
+    data: { a, b, c, coeff, constant, answer: coeff, generatorType: 'EXPAND_NEG_RANDOM', ...buildNumericMC(coeff, [-coeff, coeff + 1, coeff - 1, a * b]) },
     tutorialSteps,
   };
 }
@@ -373,7 +373,7 @@ export function generateFactoriseMission(template: Mission, tier: DifficultyTier
   return {
     ...template,
     description,
-    data: { factor, p, q, a, b, answer, generatorType: 'FACTORISE_RANDOM' },
+    data: { factor, p, q, a, b, answer, generatorType: 'FACTORISE_RANDOM', ...buildNumericMC(answer, [answer * 2, p, q, answer + 1]) },
     tutorialSteps,
   };
 }
@@ -455,7 +455,7 @@ export function generateSimplifyMission(template: Mission, tier: DifficultyTier 
   return {
     ...template,
     description,
-    data: { a, b, c, answer, expr, simplified, generatorType: 'SIMPLIFY_RANDOM' },
+    data: { a, b, c, answer, expr, simplified, generatorType: 'SIMPLIFY_RANDOM', ...buildNumericMC(answer, [a + b, a - b, answer + c, answer * 2]) },
     tutorialSteps,
   };
 }
@@ -543,7 +543,7 @@ export function generateInequalityMission(template: Mission, tier: DifficultyTie
     ...template,
     story,
     description,
-    data: { a, b, c, op, answer, generatorType: 'INEQUALITY_RANDOM' },
+    data: { a, b, c, op, answer, generatorType: 'INEQUALITY_RANDOM', ...buildNumericMC(answer, [-answer, answer + 1, answer - 1, c]) },
     tutorialSteps,
   };
 }
@@ -681,7 +681,7 @@ export function generateSubstitutionMission(template: Mission, tier: DifficultyT
     ...template,
     story,
     description,
-    data: { a, b, x, answer, mode, expr, generatorType: 'SUBSTITUTION_RANDOM' },
+    data: { a, b, x, answer, mode, expr, generatorType: 'SUBSTITUTION_RANDOM', ...buildNumericMC(answer, [a * x, b * x, answer + b, -answer]) },
     tutorialSteps,
   };
 }
@@ -1347,7 +1347,7 @@ export function generateArithmeticMission(template: Mission, tier: DifficultyTie
   return {
     ...template,
     description,
-    data: { ...template.data, a1, d, n, generatorType: 'ARITHMETIC_RANDOM' },
+    data: { ...template.data, a1, d, n, generatorType: 'ARITHMETIC_RANDOM', ...buildNumericMC(ans, [a1 + n * d, a1 + d, ans + d, ans - d]) },
     tutorialSteps,
   };
 }
