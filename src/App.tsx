@@ -172,6 +172,14 @@ export default function App() {
     return 'en';
   });
   const setLang = (l: Language) => { setLangState(l); try { localStorage.setItem('gl_lang', l); } catch {} };
+  const [learnerMode, setLearnerMode] = useState<import('./types').LearnerMode>(() => {
+    try { const s = localStorage.getItem('gl_learner_mode'); if (s === 'explore' || s === 'practice' || s === 'exam') return s; } catch {}
+    return 'practice';
+  });
+  const handleSetLearnerMode = (m: import('./types').LearnerMode) => {
+    setLearnerMode(m);
+    try { localStorage.setItem('gl_learner_mode', m); } catch {}
+  };
   const [gameState, setGameState] = useState<GameState>(persisted.gameState);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(persisted.charId);
   const [activeMission, setActiveMission] = useState<Mission | null>(null);
@@ -1011,6 +1019,8 @@ export default function App() {
                   profile={profile}
                   missions={missions}
                   selectedChar={selectedChar}
+                  learnerMode={learnerMode}
+                  onLearnerModeChange={handleSetLearnerMode}
                   onMissionStart={handleMissionStart}
                   onPracticeStart={handlePracticeStart}
                   onGradeChange={() => updateProfile({ grade: null })}
@@ -1125,6 +1135,7 @@ export default function App() {
                   mission={activeMission}
                   character={selectedChar}
                   lang={lang}
+                  learnerMode={learnerMode}
                   phaseCompletions={profile?.completed_missions[String(activeMission.id)] as any}
                   onEarnXP={handlePracticeEarnXP}
                   onRecordError={handleRecordError}

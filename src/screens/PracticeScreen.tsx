@@ -32,14 +32,12 @@ type PracticePhase = 'discover' | 'green' | 'amber' | 'red' | 'battle';
 
 const PHASE_ORDER: PracticePhase[] = ['discover', 'green', 'amber', 'red', 'battle'];
 
-/** Correct answers required to advance from each phase */
-const PHASE_REQUIRED: Record<PracticePhase, number> = {
-  discover: 0, // interactive exploration — manual advance
-  green: 0,    // manual advance after tutorial
-  amber: 1,    // 1 guided question
-  red: 3,      // 3 independent questions
-  battle: 10,  // 10 battle questions
-};
+/** Correct answers required to advance from each phase — varies by learner mode */
+function getPhaseRequired(mode: import('../types').LearnerMode): Record<PracticePhase, number> {
+  if (mode === 'explore') return { discover: 0, green: 0, amber: 1, red: 2, battle: 5 };
+  if (mode === 'exam') return { discover: 0, green: 0, amber: 1, red: 5, battle: 10 };
+  return { discover: 0, green: 0, amber: 1, red: 3, battle: 10 };
+}
 
 export const PracticeScreen = ({
   mission,
@@ -54,6 +52,7 @@ export const PracticeScreen = ({
   onEarnXP,
   onRecordError,
   onRepairIntercept,
+  learnerMode = 'practice' as import('../types').LearnerMode,
 }: {
   mission: Mission;
   character: Character;
@@ -72,6 +71,8 @@ export const PracticeScreen = ({
   onRecordError?: (errorType: import('../utils/diagnoseError').ErrorType) => void;
   /** v5.0: Called when repair intercept triggered — enter repair mode for same mission */
   onRepairIntercept?: () => void;
+  /** Learner mode: explore (discover-heavy), practice (balanced), exam (skip tutorials) */
+  learnerMode?: import('../types').LearnerMode;
 }) => {
   const t = translations[lang];
 
@@ -87,6 +88,7 @@ export const PracticeScreen = ({
   } = usePracticePersistedState(mission.id);
 
   const currentPhase = repairMode ? 'red' as const : persistedPhase;
+  const PHASE_REQUIRED = getPhaseRequired(learnerMode);
 
   // Auto-skip discover phase if mission has no discoverSteps
   useEffect(() => {
@@ -94,6 +96,18 @@ export const PracticeScreen = ({
       setCurrentPhase('green');
     }
   }, [currentPhase, mission.discoverSteps, setCurrentPhase]);
+
+  // Exam mode: auto-skip phases already completed (go straight to Red or Battle)
+  useEffect(() => {
+    if (learnerMode !== 'exam' || repairMode) return;
+    if (currentPhase === 'discover' && phaseCompletions?.green) {
+      setCurrentPhase('red');
+    } else if (currentPhase === 'green' && phaseCompletions?.green) {
+      setCurrentPhase(phaseCompletions?.red ? 'battle' : 'red');
+    } else if (currentPhase === 'amber' && phaseCompletions?.amber) {
+      setCurrentPhase(phaseCompletions?.red ? 'battle' : 'red');
+    }
+  }, [learnerMode, currentPhase, phaseCompletions, repairMode, setCurrentPhase]);
 
   const [currentMission, setCurrentMission] = useState<Mission>(() => generateMission(mission, adaptiveTier));
   const [inputs, setInputs] = useState<Record<string, string>>({});

@@ -73,6 +73,9 @@ export type KnowledgePoint = 'Algebra' | 'Geometry' | 'Functions' | 'Calculus' |
 
 export type DifficultyMode = 'green' | 'amber' | 'red';
 
+/** Student learning mode — determines pacing and phase requirements */
+export type LearnerMode = 'explore' | 'practice' | 'exam';
+
 export type TutorialStep = {
   narrator?: string;
   dialogue?: BilingualText;
