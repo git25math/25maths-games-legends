@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Copy, Check, Archive } from 'lucide-react';
 import type { Language } from '../../types';
 import { createClass, getMyClasses, archiveClass, type TeacherClass } from '../../utils/classInvite';
+import { toTraditional } from '../../i18n/zhHantMap';
 
 type StudentInfo = { display_name: string; class_tags: string[] };
 
@@ -21,7 +22,7 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
   const [expandedClassId, setExpandedClassId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const en = lang === 'en';
+  const txt = (zh: string, en: string) => lang === 'en' ? en : lang === 'zh_TW' ? toTraditional(zh) : zh;
 
   useEffect(() => {
     getMyClasses().then(setClasses);
@@ -59,14 +60,14 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
     <div className="bg-white/60 backdrop-blur rounded-2xl border border-slate-100 p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-black text-slate-700">
-          {en ? 'My Classes' : '我的班级'}
+          {txt('我的班级', 'My Classes')}
         </h3>
         <button
           onClick={() => setShowCreate(!showCreate)}
           className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors"
         >
           <Plus size={12} />
-          {en ? 'New Class' : '创建班级'}
+          {txt('创建班级', 'New Class')}
         </button>
       </div>
 
@@ -79,7 +80,7 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
               value={newName}
               onChange={e => setNewName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleCreate()}
-              placeholder={en ? 'Class name (e.g., 7A Math)' : '班级名称（如 7A 数学）'}
+              placeholder={txt('班级名称（如 7A 数学）', 'Class name (e.g., 7A Math)')}
               className="flex-1 px-3 py-2 text-sm border border-indigo-300 rounded-lg focus:outline-none focus:border-indigo-500"
               autoFocus
             />
@@ -88,13 +89,11 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
               disabled={creating || !newName.trim()}
               className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 disabled:opacity-50 transition-colors"
             >
-              {creating ? '...' : en ? 'Create' : '创建'}
+              {creating ? '...' : txt('创建', 'Create')}
             </button>
           </div>
           <p className="text-[10px] text-indigo-500 mt-2">
-            {en
-              ? 'Students will use the invite code to join this class.'
-              : '学生将使用邀请码加入这个班级。'}
+            {txt('学生将使用邀请码加入这个班级。', 'Students will use the invite code to join this class.')}
           </p>
         </div>
       )}
@@ -102,7 +101,7 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
       {/* Class list */}
       {activeClasses.length === 0 ? (
         <p className="text-xs text-slate-400 text-center py-2">
-          {en ? 'No classes yet. Create one to get an invite code.' : '还没有班级。创建一个来获取邀请码。'}
+          {txt('还没有班级。创建一个来获取邀请码。', 'No classes yet. Create one to get an invite code.')}
         </p>
       ) : (
         <div className="space-y-2">
@@ -116,7 +115,7 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold text-slate-700">{cls.name}</span>
                       <span className="px-1.5 py-0.5 bg-slate-200 text-slate-600 text-[10px] font-bold rounded">
-                        {members.length} {en ? 'students' : '人'}
+                        {members.length} {txt('人', 'students')}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
@@ -134,14 +133,14 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
                   <button
                     onClick={() => handleArchive(cls.id)}
                     className="text-slate-300 hover:text-rose-500 transition-colors ml-2"
-                    title={en ? 'Archive' : '归档'}
+                    title={txt('归档', 'Archive')}
                   >
                     <Archive size={14} />
                   </button>
                 </div>
                 {isExpanded && members.length > 0 && (
                   <div className="px-3 pb-3 border-t border-slate-200">
-                    <p className="text-[10px] text-slate-400 font-bold mt-2 mb-1">{en ? 'Members' : '成员'}</p>
+                    <p className="text-[10px] text-slate-400 font-bold mt-2 mb-1">{txt('成员', 'Members')}</p>
                     <div className="flex flex-wrap gap-1">
                       {members.map((m, i) => (
                         <span key={i} className="px-2 py-0.5 bg-white text-slate-600 text-[10px] rounded border border-slate-200">
@@ -153,7 +152,7 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
                 )}
                 {isExpanded && members.length === 0 && (
                   <div className="px-3 pb-3 border-t border-slate-200">
-                    <p className="text-[10px] text-slate-400 mt-2">{en ? 'No students yet. Share the code!' : '还没有学生，快分享邀请码！'}</p>
+                    <p className="text-[10px] text-slate-400 mt-2">{txt('还没有学生，快分享邀请码！', 'No students yet. Share the code!')}</p>
                   </div>
                 )}
               </div>

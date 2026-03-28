@@ -4,14 +4,16 @@
  * callers fall back to procedural synthesis (zero degradation).
  */
 
-export type SampleId = 'guqin' | 'drum' | 'gong' | 'suona' | 'muyu';
+export type SampleId = 'guqin' | 'drum' | 'gong' | 'suona' | 'muyu' | 'bgm_map' | 'bgm_battle';
 
 const SAMPLE_URLS: Record<SampleId, string> = {
-  guqin: './audio/guqin.mp3',
-  drum:  './audio/drum.mp3',
-  gong:  './audio/gong.mp3',
-  suona: './audio/suona.mp3',
-  muyu:  './audio/muyu.mp3',
+  guqin:      './audio/guqin.mp3',
+  drum:       './audio/drum.mp3',
+  gong:       './audio/gong.mp3',
+  suona:      './audio/suona.mp3',
+  muyu:       './audio/muyu.mp3',
+  bgm_map:    './audio/bgm_map.mp3',
+  bgm_battle: './audio/bgm_battle.mp3',
 };
 
 const cache = new Map<SampleId, AudioBuffer>();
@@ -40,7 +42,7 @@ export function getSample(id: SampleId): AudioBuffer | undefined {
  * Non-blocking: failures are silently ignored (synthesis fallback).
  * Set SAMPLES_ENABLED to true once .mp3 files are added to public/audio/.
  */
-const SAMPLES_ENABLED = false;
+const SAMPLES_ENABLED = true;
 
 export function preloadSamples(ctx: AudioContext): Promise<void> {
   if (loadPromise) return loadPromise;

@@ -9,6 +9,7 @@ import { BookOpen, Clock, CheckCircle2, AlertTriangle, X } from 'lucide-react';
 import type { Language, Mission, CompletedMissions } from '../types';
 import { supabase } from '../supabase';
 import { lt } from '../i18n/resolveText';
+import { toTraditional } from '../i18n/zhHantMap';
 
 type AssignmentData = {
   id: string;
@@ -30,7 +31,7 @@ type Props = {
 export function MyAssignments({ lang, missions, completedMissions, onMissionStart, onClose }: Props) {
   const [assignments, setAssignments] = useState<AssignmentData[]>([]);
   const [loading, setLoading] = useState(true);
-  const en = lang === 'en';
+  const txt = (zh: string, en: string) => lang === 'en' ? en : lang === 'zh_TW' ? toTraditional(zh) : zh;
 
   useEffect(() => {
     supabase.rpc('get_my_assignments').then(({ data }) => {
@@ -66,7 +67,7 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
           <div className="flex items-center gap-2">
             <BookOpen size={18} className="text-indigo-600" />
             <h2 className="text-base font-black text-slate-800">
-              {en ? 'My Homework' : '我的作业'}
+              {txt('我的作业', 'My Homework')}
             </h2>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
@@ -78,16 +79,16 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
         <div className="p-4 space-y-3 max-h-[65vh] overflow-y-auto">
           {loading ? (
             <p className="text-sm text-slate-400 text-center py-8">
-              {en ? 'Loading...' : '加载中...'}
+              {txt('加载中...', 'Loading...')}
             </p>
           ) : assignments.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-3xl mb-2">📭</p>
               <p className="text-sm text-slate-400">
-                {en ? 'No homework assigned yet.' : '还没有作业。'}
+                {txt('还没有作业。', 'No homework assigned yet.')}
               </p>
               <p className="text-xs text-slate-300 mt-1">
-                {en ? 'Join a class to receive assignments from your teacher.' : '加入一个班级后，老师会在这里布置作业。'}
+                {txt('加入一个班级后，老师会在这里布置作业。', 'Join a class to receive assignments from your teacher.')}
               </p>
             </div>
           ) : (
@@ -118,10 +119,10 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
                   {a.deadline && (() => {
                     const daysLeft = Math.ceil((new Date(a.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
                     const label = overdue && !allDone
-                      ? (en ? 'Overdue' : '已过期')
-                      : daysLeft === 0 ? (en ? 'Due today!' : '今天截止！')
-                      : daysLeft === 1 ? (en ? 'Due tomorrow' : '明天截止')
-                      : (en ? `${daysLeft} days left` : `还剩 ${daysLeft} 天`);
+                      ? txt('已过期', 'Overdue')
+                      : daysLeft === 0 ? txt('今天截止！', 'Due today!')
+                      : daysLeft === 1 ? txt('明天截止', 'Due tomorrow')
+                      : txt(`还剩 ${daysLeft} 天`, `${daysLeft} days left`);
                     const urgent = !allDone && daysLeft <= 1;
                     return (
                       <div className={`flex items-center gap-1 text-xs mb-2 ${overdue && !allDone ? 'text-rose-500 font-bold' : urgent ? 'text-amber-600 font-bold' : 'text-slate-400'}`}>

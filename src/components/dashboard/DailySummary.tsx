@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { Users, CheckCircle2, AlertTriangle, TrendingUp } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow } from './types';
+import { toTraditional } from '../../i18n/zhHantMap';
 
 type Props = {
   lang: Language;
@@ -15,7 +16,7 @@ type Props = {
 };
 
 export function DailySummary({ lang, students, assignmentCompletionRate, totalAssignments }: Props) {
-  const en = lang === 'en';
+  const txt = (zh: string, en: string) => lang === 'en' ? en : lang === 'zh_TW' ? toTraditional(zh) : zh;
 
   const stats = useMemo(() => {
     const now = Date.now();
@@ -45,25 +46,25 @@ export function DailySummary({ lang, students, assignmentCompletionRate, totalAs
   const cards = [
     {
       icon: <Users size={18} />,
-      label: en ? 'Active yesterday' : '昨日活跃',
+      label: txt('昨日活跃', 'Active yesterday'),
       value: `${stats.activeYesterday}/${stats.total}`,
       color: stats.activeYesterday > stats.total * 0.5 ? 'text-emerald-600 bg-emerald-50' : 'text-amber-600 bg-amber-50',
     },
     {
       icon: <CheckCircle2 size={18} />,
-      label: en ? 'Homework done' : '作业完成',
+      label: txt('作业完成', 'Homework done'),
       value: totalAssignments > 0 ? `${assignmentCompletionRate}%` : '—',
       color: assignmentCompletionRate >= 70 ? 'text-emerald-600 bg-emerald-50' : assignmentCompletionRate >= 40 ? 'text-amber-600 bg-amber-50' : 'text-rose-600 bg-rose-50',
     },
     {
       icon: <AlertTriangle size={18} />,
-      label: en ? 'Need attention' : '需要关注',
+      label: txt('需要关注', 'Need attention'),
       value: String(stats.inactive3days),
       color: stats.inactive3days > 0 ? 'text-rose-600 bg-rose-50' : 'text-emerald-600 bg-emerald-50',
     },
     {
       icon: <TrendingUp size={18} />,
-      label: en ? 'Class avg score' : '班级平均分',
+      label: txt('班级平均分', 'Class avg score'),
       value: String(stats.avgScore),
       color: 'text-indigo-600 bg-indigo-50',
     },

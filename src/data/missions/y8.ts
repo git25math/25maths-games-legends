@@ -120,6 +120,20 @@ export const MISSIONS_Y8: Mission[] = [
     description: { zh: '求平行线截角 $x$', en: 'Find the angle $x$ between parallel lines' },
     data: { givenAngle: 55, angleType: 'alternate', answer: 55, parallel: true, highlight: 'alternate', angle: 55, generatorType: 'PARALLEL_ANGLES_RANDOM' },
     difficulty: 'Easy', reward: 140, kpId: 'kp-4.6-03', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: '火车铁轨是平行的。一条路斜穿铁轨。\n路和左边铁轨的夹角是 $55°$。\n你觉得路和右边铁轨的夹角是多少？', en: 'Train tracks are parallel. A road crosses them diagonally.\nThe road makes $55°$ with the left track.\nWhat angle does it make with the right track?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '也是 $55°$（平行线，对应角相等）', en: 'Also $55°$ (parallel lines, corresponding angles equal)' },
+          { zh: '$125°$（$180° - 55°$）', en: '$125°$ ($180° - 55°$)' },
+          { zh: '无法确定', en: 'Cannot determine' },
+        ],
+        onCorrect: { zh: '你有直觉了！平行线被一条线穿过时，"Z形"位置的角相等。\n这叫"内错角"——$55° = 55°$。\n平行线截角有三种配对：同位角(F形)、内错角(Z形)、同旁内角(C形)。', en: 'Good instinct! When a line crosses parallel lines, "Z-shaped" angles are equal.\nThese are "alternate angles" — $55° = 55°$.\nParallel line angles come in 3 pairs: corresponding(F), alternate(Z), co-interior(C).' },
+        onWrong: { zh: '$125°$ 也出现在这个图里——但那是另一对角（C形同旁内角）。\nZ形位置的角是相等的：$55° = 55°$。\n平行线的秘密：同位角(F)相等、内错角(Z)相等、同旁内角(C)互补。', en: '$125°$ does appear — but that\'s a different pair (C-shape co-interior).\nZ-shaped angles are equal: $55° = 55°$.\nParallel line secret: corresponding(F) equal, alternate(Z) equal, co-interior(C) supplementary.' },
+        onSkip: { zh: '平行线被截线穿过时：\n• Z形的角相等（内错角）\n• F形的角相等（同位角）\n• C形的角互补（加起来 $180°$）\n所以左 $55°$ → 右也 $55°$（Z形）。', en: 'When a transversal crosses parallel lines:\n• Z-shape angles equal (alternate)\n• F-shape angles equal (corresponding)\n• C-shape angles supplementary (sum $180°$)\nSo left $55°$ → right $55°$ (Z-shape).' },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '曹操：为什么要学平行线截角？\n城墙上两道平行的防线被敌人一箭射穿——这条箭就是截线。\n截线与平行线产生成对的角，知道一个就能算出所有！', en: 'Cao Cao: "Why learn parallel line angles?\nTwo parallel defense lines on the wall — an arrow pierces both. That arrow is the transversal.\nA transversal creates paired angles: know one and you can find them all!"' }, highlightField: 'x' },
       { text: { zh: '曹操：三种角的关系\n同位角：位置相同 → 相等\n内错角：对角 → 相等\n同旁内角：同侧 → 加起来 180°', en: 'Cao Cao: "Three angle relationships\nCorresponding angles: same position → equal\nAlternate angles: opposite sides → equal\nCo-interior angles: same side → sum to 180°"' }, highlightField: 'x' },

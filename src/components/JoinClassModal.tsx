@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import type { Language } from '../types';
 import { joinClassByCode } from '../utils/classInvite';
+import { toTraditional } from '../i18n/zhHantMap';
 
 export function JoinClassModal({ lang, onJoined, onClose }: {
   lang: Language;
@@ -16,12 +17,12 @@ export function JoinClassModal({ lang, onJoined, onClose }: {
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const en = lang === 'en';
+  const txt = (zh: string, en: string) => lang === 'en' ? en : lang === 'zh_TW' ? toTraditional(zh) : zh;
 
   const handleJoin = async () => {
     const trimmed = code.trim().toUpperCase();
     if (trimmed.length < 4) {
-      setError(en ? 'Code must be at least 4 characters' : '邀请码至少 4 个字符');
+      setError(txt('邀请码至少 4 个字符', 'Code must be at least 4 characters'));
       return;
     }
     setJoining(true);
@@ -35,7 +36,7 @@ export function JoinClassModal({ lang, onJoined, onClose }: {
         onClose();
       }, 1500);
     } else {
-      setError(result.error || (en ? 'Invalid code' : '无效邀请码'));
+      setError(result.error || txt('无效邀请码', 'Invalid code'));
     }
   };
 
@@ -51,19 +52,19 @@ export function JoinClassModal({ lang, onJoined, onClose }: {
           <div className="text-center py-4">
             <div className="text-4xl mb-3">🎉</div>
             <h2 className="text-lg font-black text-slate-800">
-              {en ? 'Joined!' : '加入成功！'}
+              {txt('加入成功！', 'Joined!')}
             </h2>
             <p className="text-sm text-slate-500 mt-1">
-              {en ? `You are now in "${success}"` : `你已加入「${success}」`}
+              {txt(`你已加入「${success}」`, `You are now in "${success}"`)}
             </p>
           </div>
         ) : (
           <>
             <h2 className="text-lg font-black text-slate-800 text-center mb-1">
-              {en ? 'Join a Class' : '加入班级'}
+              {txt('加入班级', 'Join a Class')}
             </h2>
             <p className="text-xs text-slate-400 text-center mb-4">
-              {en ? 'Enter the code your teacher gave you' : '输入老师给你的邀请码'}
+              {txt('输入老师给你的邀请码', 'Enter the code your teacher gave you')}
             </p>
 
             <input
@@ -86,14 +87,14 @@ export function JoinClassModal({ lang, onJoined, onClose }: {
               disabled={joining || code.trim().length < 4}
               className="w-full mt-4 py-3 min-h-[48px] bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-black rounded-xl transition-colors"
             >
-              {joining ? '...' : en ? 'Join Class' : '加入班级'}
+              {joining ? '...' : txt('加入班级', 'Join Class')}
             </button>
 
             <button
               onClick={onClose}
               className="w-full mt-2 py-2 text-slate-400 text-sm hover:text-slate-600 transition-colors"
             >
-              {en ? 'Cancel' : '取消'}
+              {txt('取消', 'Cancel')}
             </button>
           </>
         )}

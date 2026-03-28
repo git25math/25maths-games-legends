@@ -7,6 +7,7 @@ import { Lightbulb } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow } from './types';
 import type { StudentAlert } from './types';
+import { toTraditional } from '../../i18n/zhHantMap';
 
 type Props = {
   lang: Language;
@@ -18,7 +19,7 @@ type Props = {
 type Suggestion = { icon: string; text: string; priority: number };
 
 export function SmartSuggestions({ lang, students, alerts, weakestKP }: Props) {
-  const en = lang === 'en';
+  const txt = (zh: string, en: string) => lang === 'en' ? en : lang === 'zh_TW' ? toTraditional(zh) : zh;
 
   const suggestions = useMemo(() => {
     const tips: Suggestion[] = [];
@@ -34,12 +35,10 @@ export function SmartSuggestions({ lang, students, alerts, weakestKP }: Props) {
     });
     if (inactive.length > 0) {
       const names = inactive.slice(0, 3).map(s => s.display_name || '?').join('、');
-      const more = inactive.length > 3 ? (en ? ` +${inactive.length - 3} more` : ` 等${inactive.length}人`) : '';
+      const more = inactive.length > 3 ? txt(` 等${inactive.length}人`, ` +${inactive.length - 3} more`) : '';
       tips.push({
         icon: '⚠️',
-        text: en
-          ? `${names}${more} haven't logged in for 5+ days. Consider reaching out.`
-          : `${names}${more} 已超过 5 天未登录，建议联系了解情况。`,
+        text: txt(`${names}${more} 已超过 5 天未登录，建议联系了解情况。`, `${names}${more} haven't logged in for 5+ days. Consider reaching out.`),
         priority: 90,
       });
     }
@@ -48,9 +47,7 @@ export function SmartSuggestions({ lang, students, alerts, weakestKP }: Props) {
     if (weakestKP && weakestKP.failureRate > 30) {
       tips.push({
         icon: '📊',
-        text: en
-          ? `${weakestKP.kpId} has ${weakestKP.failureRate}% failure rate (${weakestKP.count} students). Consider reviewing this topic in class.`
-          : `${weakestKP.kpId} 失败率 ${weakestKP.failureRate}%（${weakestKP.count} 人），建议课堂重点讲解。`,
+        text: txt(`${weakestKP.kpId} 失败率 ${weakestKP.failureRate}%（${weakestKP.count} 人），建议课堂重点讲解。`, `${weakestKP.kpId} has ${weakestKP.failureRate}% failure rate (${weakestKP.count} students). Consider reviewing this topic in class.`),
         priority: 80,
       });
     }
@@ -61,9 +58,7 @@ export function SmartSuggestions({ lang, students, alerts, weakestKP }: Props) {
     if (topStudent && (topStudent.total_score || 0) > 200) {
       tips.push({
         icon: '🌟',
-        text: en
-          ? `${topStudent.display_name || 'Top student'} leads with ${topStudent.total_score} pts. Consider giving them a challenge task.`
-          : `${topStudent.display_name || '领先学生'} 以 ${topStudent.total_score} 分领跑，可以给他/她安排挑战题。`,
+        text: txt(`${topStudent.display_name || '领先学生'} 以 ${topStudent.total_score} 分领跑，可以给他/她安排挑战题。`, `${topStudent.display_name || 'Top student'} leads with ${topStudent.total_score} pts. Consider giving them a challenge task.`),
         priority: 50,
       });
     }
@@ -78,9 +73,7 @@ export function SmartSuggestions({ lang, students, alerts, weakestKP }: Props) {
     if (rate < 50 && students.length > 3) {
       tips.push({
         icon: '📢',
-        text: en
-          ? `Only ${rate}% of students were active this week. Try sending a homework link to boost engagement.`
-          : `本周只有 ${rate}% 的学生活跃，建议发送作业链接提升参与度。`,
+        text: txt(`本周只有 ${rate}% 的学生活跃，建议发送作业链接提升参与度。`, `Only ${rate}% of students were active this week. Try sending a homework link to boost engagement.`),
         priority: 70,
       });
     }
@@ -94,7 +87,7 @@ export function SmartSuggestions({ lang, students, alerts, weakestKP }: Props) {
     <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4">
       <div className="flex items-center gap-2 mb-3">
         <Lightbulb size={16} className="text-amber-600" />
-        <h3 className="text-sm font-black text-amber-800">{en ? 'This Week\'s Suggestions' : '本周建议'}</h3>
+        <h3 className="text-sm font-black text-amber-800">{txt('本周建议', 'This Week\'s Suggestions')}</h3>
       </div>
       <div className="space-y-2">
         {suggestions.map((s, i) => (
