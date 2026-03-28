@@ -95,11 +95,14 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
     };
   };
 
-  // Archive handler
+  // Archive handler — checks return value (false = not your assignment)
   const archiveAssignment = async (id: string) => {
-    const { error } = await supabase.rpc('archive_assignment', { p_assignment_id: id });
-    if (!error) {
+    const { data, error } = await supabase.rpc('archive_assignment', { p_assignment_id: id });
+    if (!error && data !== false) {
       setAssignments(prev => prev.map(a => a.id === id ? { ...a, archived_at: new Date().toISOString() } : a));
+    } else {
+      setToast(lang === 'en' ? 'Could not archive — you may not be the creator' : '归档失败——可能不是您创建的任务');
+      setTimeout(() => setToast(null), 3000);
     }
   };
 
@@ -108,7 +111,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
 
   const isOverdue = (deadline: string | null) => {
     if (!deadline) return false;
-    return new Date(deadline) < new Date();
+    return new Date(deadline).getTime() < Date.now();
   };
 
   const formatDeadline = (deadline: string | null) => {

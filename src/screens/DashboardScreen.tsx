@@ -243,11 +243,15 @@ export function DashboardScreen({ lang, onClose }: Props) {
 
   const getStudentUnitProgress = (student: StudentRow, unitMissions: Mission[]) => {
     let green = 0, amber = 0, red = 0;
+    const cm = student.completed_missions;
+    if (!cm || typeof cm !== 'object') return { green: 0, amber: 0, red: 0, total: unitMissions.length };
     for (const m of unitMissions) {
-      const c = student.completed_missions?.[String(m.id)];
-      if (c?.green) green++;
-      if (c?.amber) amber++;
-      if (c?.red) red++;
+      const c = (cm as any)[String(m.id)];
+      if (c && typeof c === 'object') {
+        if (c.green === true) green++;
+        if (c.amber === true) amber++;
+        if (c.red === true) red++;
+      }
     }
     return { green, amber, red, total: unitMissions.length };
   };
@@ -286,12 +290,18 @@ export function DashboardScreen({ lang, onClose }: Props) {
   }, [grade, filterTag]);
 
   // CSV export — enriched with grade, unit breakdown, last active
+  // Sanitize CSV field: escape quotes + prevent formula injection (=, +, -, @, \t, \r)
+  const csvSafe = (v: string) => {
+    let s = String(v).replace(/"/g, '""');
+    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; // prefix to neutralize formula
+    return `"${s}"`;
+  };
+
+  // CSV export — uses sortedStudents (respects current filter + sort) + formula injection protection
   const exportCSV = () => {
     const unitNames = units.map(([, u]) => u.title.replace(/Unit \d+:\s*/, '').split('·')[0].trim());
     const header = ['Name', 'Grade', 'Class Tags', 'Score', 'Progress %', 'KP Mastered', 'Last Active', ...unitNames];
-    const rows = [...students]
-      .sort((a, b) => (b.total_score || 0) - (a.total_score || 0))
-      .map(s => {
+    const rows = sortedStudents.map(s => {
         const overall = getStudentOverall(s);
         const pct = totalMissions > 0 ? Math.round((overall / totalMissions) * 100) : 0;
         const login = (s.completed_missions as any)?._login as { lastDate?: string } | undefined;
@@ -311,8 +321,8 @@ export function DashboardScreen({ lang, onClose }: Props) {
           ...unitCols,
         ];
       });
-    const meta = `# Y${grade}${filterTag ? ' ' + filterTag : ''} Dashboard Export — ${new Date().toLocaleDateString()} — ${students.length} students`;
-    const csv = [meta, header, ...rows].map(r => (typeof r === 'string' ? r : r.map(c => `"${c.replace(/"/g, '""')}"`).join(','))).join('\n');
+    const meta = `# Y${grade}${filterTag ? ' ' + filterTag : ''} Dashboard Export — ${new Date().toLocaleDateString()} — ${sortedStudents.length} students`;
+    const csv = [meta, header.map(csvSafe).join(','), ...rows.map(r => r.map(csvSafe).join(','))].join('\n');
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -363,7 +373,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
       if (sortKey === 'kp') return dir * ((kpMasteryMap.get(a.user_id) ?? 0) - (kpMasteryMap.get(b.user_id) ?? 0));
       return 0;
     });
-  }, [students, sortKey, sortAsc, kpMasteryMap, alertOnly, alerts]);
+  }, [students, sortKey, sortAsc, kpMasteryMap, alertOnly, alerts, studentOverallMap]);
 
   const LABELS = {
     zh: {
@@ -637,7 +647,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                         <div className="flex items-center gap-2">
                           <div className="relative">
                             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-[11px] font-black text-white shadow-sm">
-                              {(s.display_name || '?')[0].toUpperCase()}
+                              {((s.display_name && s.display_name.trim()) || '?')[0].toUpperCase()}
                             </div>
                             <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${dotColor}`} title={dotTitle} />
                           </div>

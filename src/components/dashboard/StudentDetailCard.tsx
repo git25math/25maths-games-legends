@@ -78,7 +78,10 @@ function compute7Dimensions(
   }
   const growth = Math.min(weekXP / 500, 1); // 500 XP/week = 100%
 
-  return [progress, mastery, activity, errorControl, streak, balance, growth];
+  // Clamp all dimensions to [0, 1] — guards against negative scores or corrupted data
+  return [progress, mastery, activity, errorControl, streak, balance, growth].map(v =>
+    Math.max(0, Math.min(Number.isFinite(v) ? v : 0, 1))
+  );
 }
 
 type StudentAssignment = {
