@@ -11,6 +11,20 @@ export const MISSIONS_Y9: Mission[] = [
     skillSummary: { zh: '同底数幂相乘，指数相加', en: 'Same base: multiply → add exponents' },
     story: { zh: '官渡之战前夕，曹操囤积粮草。第一年产粮 ${base}^{e1}$ 斛，第二年产粮是第一年的 ${base}^{e2}$ 倍。', en: "Before Guandu, Cao Cao stores grain. Year 1 yields ${base}^{e1}$, Year 2 is ${base}^{e2}$ times that." },
     description: { zh: '计算总产量：${base}^{e1} \\times {base}^{e2} = {base}^x$，求 $x$。', en: 'Calculate total: ${base}^{e1} \\times {base}^{e2} = {base}^x$, find $x$.' },
+    discoverSteps: [
+      {
+        prompt: { zh: '$2 \\times 2 = 4$，$2 \\times 2 \\times 2 = 8$。\n\n如果我把"连乘"写成幂：$2^2 = 4$，$2^3 = 8$。\n那 $2^2 \\times 2^3$ 等于多少？', en: '$2 \\times 2 = 4$, $2 \\times 2 \\times 2 = 8$.\n\nWritten as powers: $2^2 = 4$, $2^3 = 8$.\nWhat is $2^2 \\times 2^3$?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$32$（也就是 $2^5$）', en: '$32$ (which is $2^5$)' },
+          { zh: '$12$（$4 + 8$）', en: '$12$ ($4 + 8$)' },
+          { zh: '$64$（也就是 $2^6$）', en: '$64$ (which is $2^6$)' },
+        ],
+        onCorrect: { zh: '你算对了！$2^2 \\times 2^3 = 4 \\times 8 = 32 = 2^5$。\n\n发现了吗？指数 $2 + 3 = 5$。\n同底数相乘，指数相加——这就是指数法则的核心。', en: 'Correct! $2^2 \\times 2^3 = 4 \\times 8 = 32 = 2^5$.\n\nNotice? Exponents $2 + 3 = 5$.\nSame base × same base → add exponents. This IS the index law.' },
+        onWrong: { zh: '$2^2 = 2 \\times 2 = 4$，$2^3 = 2 \\times 2 \\times 2 = 8$。\n$4 \\times 8 = 32$。而 $32 = 2^5$。\n\n秘密：$2 + 3 = 5$——同底数相乘，指数相加！', en: '$2^2 = 2 \\times 2 = 4$, $2^3 = 2 \\times 2 \\times 2 = 8$.\n$4 \\times 8 = 32$. And $32 = 2^5$.\n\nThe secret: $2 + 3 = 5$ — same base, add exponents!' },
+        onSkip: { zh: '展开来看：$2^2 \\times 2^3 = (2 \\times 2) \\times (2 \\times 2 \\times 2) = 2^5 = 32$。\n一共乘了5个2——所以指数是 $2+3=5$。\n这就是规律：同底数相乘，指数相加。', en: 'Expand it: $2^2 \\times 2^3 = (2 \\times 2) \\times (2 \\times 2 \\times 2) = 2^5 = 32$.\n5 twos multiplied — exponent is $2+3=5$.\nThe rule: same base, multiply → add exponents.' },
+      },
+    ],
     data: { base: 3, e1: 2, e2: 3, generatorType: 'INDICES_RANDOM' }, difficulty: 'Easy', reward: 120,
     kpId: 'kp-1.7-01', sectionId: 'number',
     tutorialSteps: [

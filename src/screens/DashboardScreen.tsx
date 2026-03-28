@@ -17,6 +17,7 @@ import { AlertPanel, computeAlerts } from '../components/dashboard/AlertPanel';
 import { StudentDetailCard } from '../components/dashboard/StudentDetailCard';
 import { ClassOverview } from '../components/dashboard/ClassOverview';
 import { ClassManager } from '../components/dashboard/ClassManager';
+import { DailySummary } from '../components/dashboard/DailySummary';
 import { KPHeatmap } from '../components/dashboard/KPHeatmap';
 import { WeeklyTrend } from '../components/dashboard/WeeklyTrend';
 import { AssignmentPanel } from '../components/dashboard/AssignmentPanel';
@@ -446,6 +447,24 @@ export function DashboardScreen({ lang, onClose }: Props) {
       )}
 
       {/* ═══ Class Manager — Create classes, invite codes ═══ */}
+      {/* ═══ Daily Summary — 30-second glance ═══ */}
+      <DailySummary
+        lang={lang}
+        students={students}
+        assignmentCompletionRate={(() => {
+          const active = dashAssignments.filter(a => !a.archived_at);
+          if (active.length === 0 || students.length === 0) return 0;
+          const latest = active[0];
+          if (!latest) return 0;
+          const done = students.filter(s => {
+            const cm = s.completed_missions as Record<string, any> | null;
+            return latest.mission_ids.every((mid: number) => cm?.[String(mid)]?.green);
+          }).length;
+          return Math.round((done / students.length) * 100);
+        })()}
+        totalAssignments={dashAssignments.filter(a => !a.archived_at).length}
+      />
+
       <ClassManager lang={lang} grade={grade} onClassCreated={(name) => setFilterTag(name)} />
 
       {/* ═══ Class Overview Cards — FIRST (teacher's morning glance) ═══ */}

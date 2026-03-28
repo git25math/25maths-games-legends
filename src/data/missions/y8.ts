@@ -14,6 +14,20 @@ export const MISSIONS_Y8: Mission[] = [
     skillSummary: { zh: '从两个坐标点求直线方程 y=mx+c', en: 'Find y=mx+c from two coordinate points' },
     story: { zh: '各路诸侯讨伐董卓。还记得坐标系吗？联军从坐标 $({x1},{y1})$ 出发，经过 $({x2},{y2})$ 向虎牢关挺进。', en: 'Coalition forces march against Dong Zhuo. Remember the coordinate system? They march from $({x1},{y1})$ through $({x2},{y2})$ towards Hulao Pass.' },
     description: { zh: '求行军路线 $y = mx + c$', en: 'Find the march route $y = mx + c$' },
+    discoverSteps: [
+      {
+        prompt: { zh: '联军每天行军30里。第1天走了30里，第2天共走了60里，第3天共走了90里。\n\n如果用 $y$ 表示总路程，$x$ 表示天数，你觉得 $y$ 和 $x$ 是什么关系？', en: 'The army marches 30 li per day. Day 1: 30 li total, Day 2: 60 li, Day 3: 90 li.\n\nIf $y$ = total distance and $x$ = days, what\'s the relationship between $y$ and $x$?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$y = 30x$（每天加30）', en: '$y = 30x$ (add 30 each day)' },
+          { zh: '$y = x + 30$（加30一次）', en: '$y = x + 30$ (add 30 once)' },
+          { zh: '不确定', en: 'Not sure' },
+        ],
+        onCorrect: { zh: '你抓住了核心！$y = 30x$——每多一天，总路程就多30里。\n\n这里的30就是"斜率"$m$——它描述的是"变化的速度"。\n直线方程 $y = mx + c$ 就是在说：起点 $c$，每走一步变化 $m$。', en: 'You got the key! $y = 30x$ — each extra day adds 30 li.\n\nThis 30 is the "gradient" $m$ — it describes the rate of change.\nThe line equation $y = mx + c$ says: start at $c$, change by $m$ each step.' },
+        onWrong: { zh: '来看一下规律：30, 60, 90... 每天加30。\n所以 $y = 30 \\times x$——这个30叫"斜率"$m$。\n直线方程 $y = mx + c$ 就是：起点 $c$，每一步变化 $m$。', en: 'Let\'s see the pattern: 30, 60, 90... adding 30 each day.\nSo $y = 30 \\times x$ — this 30 is the "gradient" $m$.\nLine equation $y = mx + c$: start at $c$, change by $m$ each step.' },
+        onSkip: { zh: '30, 60, 90——每天增加30。这就是 $y = 30x$。\n30 这个数叫"斜率"——它告诉你每一步走多远。\n所有直线都能写成 $y = mx + c$：$m$ 是斜率，$c$ 是起点。', en: '30, 60, 90 — adding 30 each day. This gives $y = 30x$.\n30 is called the "gradient" — it tells you how much each step covers.\nAll straight lines are $y = mx + c$: $m$ = gradient, $c$ = starting point.' },
+      },
+    ],
     data: { points: [[0, 2], [1, 5]], x1: 0, y1: 2, x2: 1, y2: 5, generatorType: 'LINEAR_RANDOM' },
     difficulty: 'Medium', reward: 150, kpId: 'kp-3.2-01', sectionId: 'functions',
     tutorialSteps: [

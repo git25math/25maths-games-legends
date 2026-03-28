@@ -15,11 +15,12 @@ type AggregatedKP = {
   totalAttempts: number;
   totalWins: number;
   failureRate: number;
-  studentCount: number;         // students who attempted
-  strugglingCount: number;      // students with attempts>2 and wins===0
-  blockedCount: number;         // students with blocked/critical corruption (Resilience Engine)
+  studentCount: number;
+  strugglingCount: number;
+  blockedCount: number;
   hasLesson: boolean;
   lessonUrl: string | null;
+  weakStudentNames: string[];   // names of students struggling on this KP
 };
 
 export function KPWeaknessPanel({
@@ -80,13 +81,18 @@ export function KPWeaknessPanel({
           blockedCount: 0,
           hasLesson: !!getLessonId(row.kp_id),
           lessonUrl: getExamHubLessonUrl(row.kp_id),
+          weakStudentNames: [],
         });
       }
       const kp = kpMap.get(row.kp_id)!;
       kp.totalAttempts += row.attempts;
       kp.totalWins += row.wins;
       kp.studentCount += 1;
-      if (row.attempts > 2 && row.wins === 0) kp.strugglingCount += 1;
+      if (row.attempts > 2 && row.wins === 0) {
+        kp.strugglingCount += 1;
+        const stu = students.find(s => s.user_id === row.user_id);
+        if (stu) kp.weakStudentNames.push(stu.display_name || 'Anonymous');
+      }
     }
 
     // Merge Resilience Engine blocked counts
@@ -223,12 +229,15 @@ export function KPWeaknessPanel({
                 <div className="w-[42px]" />
               )}
             </div>
-            {idx < 3 && kp.strugglingCount + kp.blockedCount > 0 && (
-              <div className="mx-4 mb-1 px-3 py-1.5 bg-amber-50 border border-amber-100 rounded-lg">
-                <p className="text-[10px] text-amber-700">
+            {idx < 3 && kp.weakStudentNames.length > 0 && (
+              <div className="mx-4 mb-1 px-3 py-2 bg-amber-50 border border-amber-100 rounded-lg">
+                <p className="text-[11px] text-amber-800 font-bold mb-1">
                   {lang === 'en'
-                    ? `→ ${kp.strugglingCount + kp.blockedCount} student${(kp.strugglingCount + kp.blockedCount) > 1 ? 's' : ''} need extra practice. Consider assigning 5 targeted questions this week.`
-                    : `→ ${kp.strugglingCount + kp.blockedCount} 名学生需要加强。建议本周布置 5 道专项练习。`}
+                    ? `${kp.weakStudentNames.length} student${kp.weakStudentNames.length > 1 ? 's' : ''} struggling:`
+                    : `${kp.weakStudentNames.length} 名学生薄弱：`}
+                </p>
+                <p className="text-[10px] text-amber-700">
+                  {kp.weakStudentNames.join('、')}
                 </p>
               </div>
             )}
