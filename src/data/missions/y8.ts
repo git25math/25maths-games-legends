@@ -222,6 +222,20 @@ export const MISSIONS_Y8: Mission[] = [
     skillSummary: { zh: '面积 = 长 × 宽', en: 'Area = length × width' },
     story: { zh: '曹操在官渡安营，需要一个长 {length} 丈、宽 {width} 丈的矩形营地。', en: 'Cao Cao camps at Guandu. Needs a rectangular camp: length {length}, width {width}.' },
     description: { zh: '计算营地面积', en: 'Calculate the camp area' },
+    discoverSteps: [
+      {
+        prompt: { zh: '你的房间是 $4$ 米长、$3$ 米宽。\n地板需要铺 $1 \\times 1$ 米的地砖。\n需要多少块地砖？', en: 'Your room is $4$ meters long, $3$ meters wide.\nYou need $1 \\times 1$ meter tiles for the floor.\nHow many tiles do you need?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$12$ 块（$4 \\times 3$）', en: '$12$ tiles ($4 \\times 3$)' },
+          { zh: '$7$ 块（$4 + 3$）', en: '$7$ tiles ($4 + 3$)' },
+          { zh: '$14$ 块（$4 \\times 3 + 2$）', en: '$14$ tiles ($4 \\times 3 + 2$)' },
+        ],
+        onCorrect: { zh: '就是这样！$4 \\times 3 = 12$ 块地砖——这就是"面积"。\n\n面积 = 长 × 宽。单位是"平方米"（$\\text{m}^2$）。\n你数的那些地砖，每块 $1 \\text{m}^2$，总共 $12 \\text{m}^2$。', en: 'That\'s it! $4 \\times 3 = 12$ tiles — this IS "area".\n\nArea = length × width. Unit: "square metres" ($\\text{m}^2$).\nEach tile is $1 \\text{m}^2$, total = $12 \\text{m}^2$.' },
+        onWrong: { zh: '加法给的是"围一圈的长度"（周长），不是面积。\n面积是铺满地板需要多少块砖：每排 $4$ 块，$3$ 排 → $4 \\times 3 = 12$。\n面积 = 长 × 宽 = $12 \\text{m}^2$。', en: 'Addition gives "distance around" (perimeter), not area.\nArea is how many tiles to cover the floor: $4$ per row, $3$ rows → $4 \\times 3 = 12$.\nArea = length × width = $12 \\text{m}^2$.' },
+        onSkip: { zh: '面积 = 铺满需要多少块 $1 \\times 1$ 的砖。\n$4$ 米长 × $3$ 米宽 = $12$ 块 = $12 \\text{m}^2$。\n公式：面积 = 长 × 宽。', en: 'Area = how many $1 \\times 1$ tiles to cover the floor.\n$4$ long × $3$ wide = $12$ tiles = $12 \\text{m}^2$.\nFormula: Area = length × width.' },
+      },
+    ],
     data: { length: 20, width: 15, generatorType: 'AREA_RECT_RANDOM' },
     difficulty: 'Easy', reward: 100, kpId: 'kp-5.2-01', sectionId: 'geometry',
     tutorialSteps: [
