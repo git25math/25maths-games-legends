@@ -359,7 +359,7 @@ for mid, steps_raw in missions:
 | ~~HIGH~~ | ~~SEQUENCE_NTH~~ | ✅ Y10 id=1055/1056 + Y11 id=1133，等差+等比第n项 |
 | ~~MEDIUM~~ | ~~蜀道远征~~ | ✅ 8节点(荆州→成都)，Y8-10，expeditions.ts |
 | ~~LOW~~ | ~~COORD_3D~~ | ✅ Y10 id=1066/1067，三维中点(含负坐标)，midpoint+distance modes |
-| MEDIUM | **VECTOR_3D 新题型** | Y12 三维向量（Season 2 Y12内容） |
+| ~~MEDIUM~~ | ~~VECTOR_3D~~ | ✅ Y12 id=1241/1242，三维向量加法(含负分量)，6步教程 |
 | LOW | **INTEGRAL_AREA 新题型** | Y12 积分求面积 |
 | LOW | **missions.ts 拆分已完成** | ✅ 已按年级拆分 |
 | FUTURE | **班级远征** | 多人协作通关 |
