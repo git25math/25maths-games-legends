@@ -1469,7 +1469,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { values: [3, 5, 5, 5, 7, 8, 12], mode: 'mode', modeValue: 5, modeCount: 3, generatorType: 'STATISTICS_MODE_RANDOM' }, difficulty: 'Easy', reward: 40,
     kpId: 'kp-9.3-01', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '张飞：哪种兵器最常见？\n\n战场上缴获的兵器有很多种，但哪种最多？最常见的那个数值叫**众数**（Mode）——它是数据里的"人气王"！对于战场补给来说，最常见的最重要。', en: 'Zhang Fei: Which weapon type is most common?\n\nMany types of weapons were captured, but which type appears most? The most frequent value is called the **mode** — it\'s the "most popular" in the data! For battlefield supply, the most common item matters most.' }, highlightField: 'ans' },
+      { text: { zh: '张飞：为什么要找众数？\n采购补给时，最常用的兵器要多备——众数告诉你"大多数人用什么"。\n数据里的"人气王"就是众数。补给物资按众数备，最不容易出错！', en: 'Zhang Fei: Which weapon type is most common?\n\nMany types of weapons were captured, but which type appears most? The most frequent value is called the **mode** — it\'s the "most popular" in the data! For battlefield supply, the most common item matters most.' }, highlightField: 'ans' },
       { text: { zh: '张飞：求众数的方法\n逐一统计每个数值出现的次数，找出次数最多的那个。\n\n数据少时可以直接数；数据多时先排序再数！', en: 'Zhang Fei: How to find the mode\nCount how many times each value appears; find the one with the highest count.\n\nFor small datasets, count directly; for large ones, sort first then count!' }, highlightField: 'ans' },
       { text: { zh: '张飞：读取数据\n$\\{3, 5, 5, 5, 7, 8, 12\\}$\n\n共 $7$ 个数据，开始统计！', en: 'Zhang Fei: Read the data\n$\\{3, 5, 5, 5, 7, 8, 12\\}$\n\n$7$ data values total, start counting!' }, highlightField: 'ans' },
       { text: { zh: '张飞：统计次数\n$3$ → $1$ 次，$5$ → $3$ 次，$7$ → $1$ 次，$8$ → $1$ 次，$12$ → $1$ 次\n\n$5$ 出现了 $3$ 次，最多！', en: 'Zhang Fei: Count frequencies\n$3$ → $1$ time, $5$ → $3$ times, $7$ → $1$ time, $8$ → $1$ time, $12$ → $1$ time\n\n$5$ appears $3$ times — the most!' }, highlightField: 'ans' },
@@ -1491,7 +1491,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { values: [8, 12, 15, 10, 5], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-9.3-01', sectionId: 'statistics',
     tutorialSteps: [
-      { text: { zh: '曹操：哪个营整体战力最强？\n\n各营战斗力不一样，用**平均数**（Mean）代表整体水平最公平。平均数就是把所有的值"匀平"——如果每个人都一样，那个"一样"的值就是平均数。', en: 'Cao Cao: Which battalion has the strongest overall combat power?\n\nBattalion strengths vary; the **mean** (average) fairly represents the overall level. The mean is the "even-out" value — if everyone were equal, that equal value is the mean.' }, highlightField: 'ans' },
+      { text: { zh: '曹操：为什么要算平均数？\n个体有强有弱，平均数让你用一个数字概括整体水平。\n"哪个营最强？"——比人数没用，比最强个人也不公平，平均数最客观。', en: 'Cao Cao: Which battalion has the strongest overall combat power?\n\nBattalion strengths vary; the **mean** (average) fairly represents the overall level. The mean is the "even-out" value — if everyone were equal, that equal value is the mean.' }, highlightField: 'ans' },
       { text: { zh: '曹操：平均数公式\n$$\\overline{x} = \\frac{\\text{总和}}{\\text{个数}}$$\n\n第一步求和，第二步除以数据个数。', en: 'Cao Cao: Mean formula\n$$\\overline{x} = \\frac{\\text{sum}}{\\text{count}}$$\n\nStep 1: sum all values; Step 2: divide by the count.' }, highlightField: 'ans' },
       { text: { zh: '曹操：读取数据\n各营战斗力：$\\{8, 12, 15, 10, 5\\}$\n\n共 $5$ 个营，开始求和！', en: 'Cao Cao: Read the data\nBattalion strengths: $\\{8, 12, 15, 10, 5\\}$\n\n$5$ battalions, start adding!' }, highlightField: 'ans' },
       { text: { zh: '曹操：第一步——求和\n$$8 + 12 + 15 + 10 + 5 = 50$$', en: 'Cao Cao: Step 1 — find the sum\n$$8 + 12 + 15 + 10 + 5 = 50$$' }, highlightField: 'ans' },
