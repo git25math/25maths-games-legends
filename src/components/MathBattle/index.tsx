@@ -262,7 +262,7 @@ export const MathBattle = ({
     const rawResult = checkAnswer(currentQuestion, inputs);
     const result = checkPartialCredit(currentQuestion, inputs, rawResult);
     const qDurationMs = Date.now() - questionStartRef.current;
-    const firstVal = Object.values(inputs)[0] || '';
+    const firstVal = (Object.values(inputs)[0] as string) || '';
 
     if (result.correct) {
       logAttempt({ questionId: `${mission.id}-battle-${currentQIdx}`, nodeId: mission.kpId || mission.type, isCorrect: true, rawAnswer: firstVal, sourceMode: 'practice', durationMs: qDurationMs });

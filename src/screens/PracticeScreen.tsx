@@ -178,7 +178,7 @@ export const PracticeScreen = ({
     playClick();
     const result = checkAnswer(currentMission, inputs);
     const attemptDurationMs = Date.now() - questionStartRef.current;
-    const attemptFirstField = Object.values(inputs)[0] || '';
+    const attemptFirstField = (Object.values(inputs)[0] as string) || '';
     if (result.correct) {
       logAttempt({ questionId: `${mission.id}-${createQuestionFingerprint(currentMission)}`, nodeId: mission.kpId || mission.type, isCorrect: true, rawAnswer: attemptFirstField, sourceMode: repairMode ? 'recovery' : 'practice', durationMs: attemptDurationMs });
       playSuccess();
@@ -471,6 +471,7 @@ export const PracticeScreen = ({
                     discover: 'bg-amber-900', green: 'bg-emerald-900', amber: 'bg-amber-900', red: 'bg-rose-900', battle: 'bg-indigo-900',
                   };
                   const phaseLabels: Record<PracticePhase, Record<string, string>> = {
+                    discover: { zh: '\u63a2\u7d22', en: 'Discover' },
                     green: { zh: '\u6559\u5b66', en: 'Tutorial' },
                     amber: { zh: '\u8ddf\u7ec3', en: 'Guided' },
                     red: { zh: '\u72ec\u7acb', en: 'Solo' },

@@ -28,6 +28,6 @@ export function logAttempt(event: AttemptEvent): void {
       primary_error_pattern_id: event.errorPatternId || null,
       source_mode: event.sourceMode,
       recovery_pack_id: null,
-    }).then(() => {/* silent */}).catch(() => {/* silent */});
+    }).then(() => {/* silent */}, () => {/* silent */});
   }).catch(() => {/* silent */});
 }

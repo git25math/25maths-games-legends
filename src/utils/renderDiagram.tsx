@@ -47,7 +47,7 @@ import { FDPTriangle } from '../components/diagrams/FDPTriangle';
 import { ExpressionOrder } from '../components/diagrams/ExpressionOrder';
 import { SimplifyFlow } from '../components/diagrams/SimplifyFlow';
 
-type Phase = 'green' | 'amber' | 'red';
+type Phase = 'discover' | 'green' | 'amber' | 'red';
 
 /**
  * Returns the SVG diagram element for the given mission, or null if no diagram matches.
