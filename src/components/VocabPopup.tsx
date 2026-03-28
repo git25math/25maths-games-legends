@@ -68,13 +68,54 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
 
         {/* L1: Word Meaning — always visible */}
         <div className="px-5 pb-3">
-          <h3 className="text-2xl font-black text-slate-800 mb-1">{word.en}</h3>
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="text-2xl font-black text-slate-800">{word.en}</h3>
+            {/* Exam frequency badge */}
+            {word.examFreq && word.examFreq.tier === 'core' && (
+              <span className="px-1.5 py-0.5 bg-red-100 text-red-600 text-[9px] font-black rounded">🔥 {en ? 'CORE' : '核心'}</span>
+            )}
+            {word.examFreq && word.examFreq.tier === 'high' && (
+              <span className="px-1.5 py-0.5 bg-amber-100 text-amber-600 text-[9px] font-black rounded">⭐ {en ? 'HIGH' : '高频'}</span>
+            )}
+          </div>
           <p className="text-lg text-indigo-600 font-bold mb-2">{word.zh}</p>
           {word.desc && (
             <p className="text-sm text-slate-600 leading-relaxed bg-slate-50 rounded-lg p-3">
               {word.desc}
             </p>
           )}
+
+          {/* Multiple senses (一词多义) */}
+          {word.senses && word.senses.length > 0 && (
+            <div className="mt-2 space-y-1">
+              <p className="text-[10px] font-bold text-purple-500 uppercase">{en ? 'Multiple meanings' : '一词多义'}</p>
+              {word.senses.map((s, i) => (
+                <div key={i} className="text-xs text-slate-600 bg-purple-50 rounded px-2 py-1">
+                  <span className="font-bold">{s.meaning.zh}</span> — {s.meaning.en}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Exam phrases (真题句式) */}
+          {word.examPhrases && word.examPhrases.length > 0 && (
+            <div className="mt-2">
+              <p className="text-[10px] font-bold text-emerald-500 uppercase mb-1">{en ? 'In exam questions' : '真题句式'}</p>
+              {word.examPhrases.slice(0, 2).map((p, i) => (
+                <p key={i} className="text-[11px] text-slate-500 italic leading-relaxed">"{p.en}"</p>
+              ))}
+            </div>
+          )}
+
+          {/* Exam frequency stat */}
+          {word.examFreq && word.examFreq.paperCount > 0 && (
+            <p className="text-[10px] text-slate-300 mt-2">
+              {en
+                ? `Appeared in ${word.examFreq.paperCount}/228 papers (${word.examFreq.paperPct}%)`
+                : `出现在 ${word.examFreq.paperCount}/228 套卷中 (${word.examFreq.paperPct}%)`}
+            </p>
+          )}
+
           {kpId && topicName && (
             <p className="text-[10px] text-slate-400 mt-2">
               {en ? `Appears in: ${topicName}` : `出现在：${topicName}`}
