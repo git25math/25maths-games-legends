@@ -259,4 +259,19 @@ export const MISSIONS_Y12: Mission[] = [
     secret: { concept: { zh: '$\\int 3x^2\\,dx = x^3$：系数和幂的积分抵消，巧妙至极。', en: '$\\int 3x^2\\,dx = x^3$: the coefficient and power integration cancel beautifully.' }, formula: '$\\int_0^3 3x^2\\,dx = [x^3]_0^3 = 27$', tips: [{ zh: '司马炎提示：积分后求导应该还原原函数——这是最可靠的验算方法。', en: 'Sima Yan Tip: Differentiating the integral should give back the original — the most reliable check.' }] },
     storyConsequence: { correct: { zh: '城墙曲面——多项式积分精准！做得漂亮！', en: 'Curved Rampart — Polynomial integration mastered!' }, wrong: { zh: '积分公式用错了…再试一次！', en: 'Integration formula error... Try again!' } }
   },
+  {
+    id: 1253, grade: 12, unitId: 5, order: 3,
+    unitTitle: { zh: "Unit 5: 天下计量·积分面积", en: "Unit 5: Grand Measurement — Integral Area" },
+    topic: 'Calculus', type: 'INTEGRATION',
+    title: { zh: '四次幂堆积', en: 'Quartic Accumulation' },
+    skillName: { zh: '高次积分术', en: 'Higher Power Integration' },
+    skillSummary: { zh: '$\\int 4x^3\\,dx = x^4$', en: '$\\int 4x^3\\,dx = x^4$' },
+    story: { zh: '城防加固的材料消耗率为 $4x^3$。从起点到终点的总消耗量是多少？', en: 'Fortification material consumption rate is $4x^3$. Find total consumption from start to end.' },
+    description: { zh: '求 $\\int_0^b 4x^3\\,dx$ 的值。', en: 'Evaluate $\\int_0^b 4x^3\\,dx$.' },
+    data: { lower: 0, upper: 3, func: '4x^3', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 620,
+    kpId: 'kp-2.12-02', sectionId: 'calculus',
+    tutorialSteps: [],
+    secret: { concept: { zh: '$\\int 4x^3\\,dx = x^4 + C$。四次幂增长极快——幂规则照样适用。', en: '$\\int 4x^3\\,dx = x^4 + C$. Fourth powers grow rapidly — power rule still applies.' }, formula: '$\\int 4x^3\\,dx = x^4 + C$', tips: [{ zh: '司马炎提示：$4 \\div 4 = 1$，系数正好抵消！', en: 'Sima Yan Tip: $4 \\div 4 = 1$, the coefficient cancels perfectly!' }] },
+    storyConsequence: { correct: { zh: '四次幂堆积——高次积分完成！', en: 'Quartic Accumulation — Higher integration done!' }, wrong: { zh: '高次积分公式有误…再试一次！', en: 'Higher power integration error... Try again!' } }
+  },
 ];

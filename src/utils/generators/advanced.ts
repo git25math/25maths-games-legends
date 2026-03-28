@@ -372,15 +372,33 @@ export function generateDerivativeMission(template: Mission, tier: DifficultyTie
     return { ...template, description, data: { x, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
   }
 
-  // Default: y = x², slope k = 2x at point x
-  const xPools = { 1: [1, 2, 3], 2: [1, 2, 3, 4, 5, -1, -2, -3], 3: [-5, -3, 3, 5, 7, 8] };
+  // Pick from multiple slope functions based on tier/random
+  const funcVariants = tier >= 3
+    ? ['x^2', 'x^3', '2x^2+1'] as const
+    : tier >= 2
+      ? ['x^2', 'x^3'] as const
+      : ['x^2'] as const;
+  const chosenFunc = pickRandom([...funcVariants]);
+
+  const xPools = { 1: [1, 2, 3], 2: [1, 2, 3, 4, -1, -2], 3: [-3, -2, 2, 3, 4, 5] };
   const x = pickRandom(xPools[tier]);
-  const k = 2 * x;
-  const y = x * x;
+
+  let k: number, yExpr: string, dyExpr: string, calcExpr: string;
+  if (chosenFunc === 'x^3') {
+    k = 3 * x * x;
+    yExpr = 'x^3'; dyExpr = '3x^2'; calcExpr = `3 \\times ${x}^2 = 3 \\times ${x * x} = ${k}`;
+  } else if (chosenFunc === '2x^2+1') {
+    k = 4 * x;
+    yExpr = '2x^2 + 1'; dyExpr = '4x'; calcExpr = `4 \\times ${x} = ${k}`;
+  } else {
+    k = 2 * x;
+    yExpr = 'x^2'; dyExpr = '2x'; calcExpr = `2 \\times ${x} = ${k}`;
+  }
+  const y = chosenFunc === 'x^3' ? x * x * x : chosenFunc === '2x^2+1' ? 2 * x * x + 1 : x * x;
 
   const description: BilingualText = {
-    zh: `求 $y = x^2$ 在 $x = ${x}$ 处的切线斜率 $k$。`,
-    en: `Find tangent slope $k$ of $y = x^2$ at $x = ${x}$.`,
+    zh: `求 $y = ${yExpr}$ 在 $x = ${x}$ 处的切线斜率 $k$。`,
+    en: `Find tangent slope $k$ of $y = ${yExpr}$ at $x = ${x}$.`,
   };
   const tutorialSteps = [
     {
@@ -392,45 +410,45 @@ export function generateDerivativeMission(template: Mission, tier: DifficultyTie
     },
     {
       text: {
-        zh: `${narrator}：我们要求 $x = ${x}$ 处的斜率`,
-        en: `${narrator}: "We need to find the slope at $x = ${x}$"`,
+        zh: `${narrator}：对 $y = ${yExpr}$ 求导\n$$\\frac{dy}{dx} = ${dyExpr}$$\n幂规则：指数拿下来当系数，指数减 1。`,
+        en: `${narrator}: "Differentiate $y = ${yExpr}$\n$$\\frac{dy}{dx} = ${dyExpr}$$\nPower rule: bring exponent down as coefficient, reduce exponent by 1."`,
       },
       highlightField: 'k',
     },
     {
       text: {
-        zh: `${narrator}：代入公式：$k = 2 \\times ${x}$`,
-        en: `${narrator}: "Substitute into the formula: $k = 2 \\times ${x}$"`,
+        zh: `${narrator}：代入 $x = ${x}$\n$k = ${calcExpr}$`,
+        en: `${narrator}: "Substitute $x = ${x}$\n$k = ${calcExpr}$"`,
       },
       highlightField: 'k',
     },
     {
       text: {
-        zh: `${narrator}：计算：$k = ${k}$`,
-        en: `${narrator}: "Calculate: $k = ${k}$"`,
+        zh: `${narrator}：计算结果\n$k = ${k}$`,
+        en: `${narrator}: "Result\n$k = ${k}$"`,
       },
       highlightField: 'k',
     },
     {
       text: {
-        zh: `${narrator}：答案 $k = ${k}$! 在 $x = ${x}$ 处，曲线的倾斜程度是 ${k}`,
-        en: `${narrator}: "Answer: $k = ${k}$! At $x = ${x}$, the steepness of the curve is ${k}"`,
+        zh: `${narrator}：答案 $k = ${k}$\n在 $x = ${x}$ 处，曲线的倾斜程度是 ${k}。`,
+        en: `${narrator}: "Answer: $k = ${k}$\nAt $x = ${x}$, the steepness of the curve is ${k}."`,
       },
       highlightField: 'k',
     },
     {
       text: {
-        zh: `${narrator}：验算\n在 $x = ${x}$ 附近取一点 $x = ${x + 0.1}$：$y = ${((x + 0.1) * (x + 0.1)).toFixed(2)}$\n斜率 $\\approx \\frac{${((x + 0.1) * (x + 0.1)).toFixed(2)} - ${y}}{0.1} = ${(((x + 0.1) * (x + 0.1) - y) / 0.1).toFixed(1)}$，接近 $${k}$ ✓`,
-        en: `${narrator}: "Verify\nNear $x = ${x}$, try $x = ${x + 0.1}$: $y = ${((x + 0.1) * (x + 0.1)).toFixed(2)}$\nSlope $\\approx \\frac{${((x + 0.1) * (x + 0.1)).toFixed(2)} - ${y}}{0.1} = ${(((x + 0.1) * (x + 0.1) - y) / 0.1).toFixed(1)}$, close to $${k}$ ✓"`,
+        zh: `${narrator}：验算\n$x = ${x}$ 处 $y = ${y}$；取 $x = ${x + 0.1}$ 算差分斜率，应接近 $${k}$ ✓`,
+        en: `${narrator}: "Verify\nAt $x = ${x}$, $y = ${y}$; try $x = ${x + 0.1}$ for a difference quotient, should be close to $${k}$ ✓"`,
       },
       highlightField: 'k',
     },
   ];
   const story: BilingualText = {
-    zh: `山坡曲线 $y = x^2$，在 $x = ${x}$ 处修筑切线支架，斜率 $k$ 是多少？`,
-    en: `Slope curve $y = x^2$: build a tangent support at $x = ${x}$. What is the slope $k$?`,
+    zh: `曲线 $y = ${yExpr}$，在 $x = ${x}$ 处修筑切线支架，斜率 $k$ 是多少？`,
+    en: `Curve $y = ${yExpr}$: build a tangent support at $x = ${x}$. What is the slope $k$?`,
   };
-  return { ...template, story, description, data: { x, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
+  return { ...template, story, description, data: { x, func: chosenFunc, generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -561,6 +579,29 @@ export function generateIntegrationMission(template: Mission, tier: DifficultyTi
       },
     ];
     return { ...template, description, data: { lower, upper, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
+  }
+
+  if (func === '4x^3') {
+    const lower = pickRandom(lowerPools[tier]);
+    const uOffsets4 = { 1: [1, 2], 2: [1, 2, 3], 3: [2, 3] };
+    const upper = lower + pickRandom(uOffsets4[tier]);
+    const area = Math.pow(upper, 4) - Math.pow(lower, 4);
+
+    const description: BilingualText = {
+      zh: `求 $\\int_{${lower}}^{${upper}} 4x^3\\,dx$。`,
+      en: `Find $\\int_{${lower}}^{${upper}} 4x^3\\,dx$.`,
+    };
+    const fU = Math.pow(upper, 4);
+    const fL = Math.pow(lower, 4);
+    const tutorialSteps = [
+      { text: { zh: `${narrator}：为什么学 $\\int 4x^3$？\n四次幂增长极快——城墙加厚的材料成本就是这种曲线。积分帮我们算总量！`, en: `${narrator}: "Why learn $\\int 4x^3$?\nFourth powers grow rapidly — the material cost of thickening a wall follows this curve. Integration gives us the total!"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：幂规则\n$$\\int 4x^3\\,dx = \\frac{4}{3+1}x^{3+1} = x^4 + C$$\n指数加 1，再除以新指数，$4 \\div 4 = 1$。`, en: `${narrator}: "Power rule\n$$\\int 4x^3\\,dx = \\frac{4}{3+1}x^{3+1} = x^4 + C$$\nAdd 1 to exponent, divide: $4 \\div 4 = 1$."` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：代入上下界\n$F(${upper}) = ${upper}^4 = ${fU}$\n$F(${lower}) = ${lower}^4 = ${fL}$`, en: `${narrator}: "Substitute bounds\n$F(${upper}) = ${upper}^4 = ${fU}$\n$F(${lower}) = ${lower}^4 = ${fL}$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：做减法\n$${fU} - ${fL} = ${area}$`, en: `${narrator}: "Subtract\n$${fU} - ${fL} = ${area}$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：答案\n$\\int_{${lower}}^{${upper}} 4x^3\\,dx = ${area}$`, en: `${narrator}: "Answer\n$\\int_{${lower}}^{${upper}} 4x^3\\,dx = ${area}$"` }, highlightField: 'area' },
+      { text: { zh: `${narrator}：验算\n对 $x^4$ 求导得 $4x^3$ ✓ 积分和导数互为逆运算！`, en: `${narrator}: "Verify\nDifferentiate $x^4$ to get $4x^3$ ✓ Integration and differentiation are inverses!"` }, highlightField: 'area' },
+    ];
+    return { ...template, description, data: { lower, upper, func: '4x^3', generatorType: 'INTEGRATION_RANDOM' }, tutorialSteps };
   }
 
   // else: ∫ 2x dx = u² - l²

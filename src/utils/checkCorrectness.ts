@@ -77,7 +77,11 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     if (data.func === '3x^2-3') {
       return { correct: Math.abs(parse(inputs.x || '') - data.x) < 0.01, expected: { x: String(data.x) } };
     }
-    const val = 2 * data.x;
+    // Slope at a point: f'(x) evaluated at data.x
+    let val: number;
+    if (data.func === 'x^3') val = 3 * data.x * data.x;        // f'(x³) = 3x²
+    else if (data.func === '2x^2+1') val = 4 * data.x;          // f'(2x²+1) = 4x
+    else val = 2 * data.x;                                       // f'(x²) = 2x
     return { correct: Math.abs(parse(inputs.k || '') - val) < 0.01, expected: { k: round(val) } };
   }
   if (type === 'AREA') {
@@ -183,9 +187,10 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const l = lower !== undefined ? lower : a;
     const u = upper !== undefined ? upper : b;
     let val = 0;
-    if (func === 'x') val = 0.5 * (u * u - l * l);
-    else if (func === '3x^2') val = u * u * u - l * l * l;
-    else val = u * u - l * l;
+    if (func === 'x') val = 0.5 * (u * u - l * l);           // ∫x dx = x²/2
+    else if (func === '3x^2') val = u * u * u - l * l * l;    // ∫3x² dx = x³
+    else if (func === '4x^3') val = Math.pow(u, 4) - Math.pow(l, 4); // ∫4x³ dx = x⁴
+    else val = u * u - l * l;                                  // ∫2x dx = x² (default)
     return { correct: Math.abs(parse(inputs.area || '') - val) < 0.01, expected: { area: round(val) } };
   }
   if (type === 'ARITHMETIC') {
