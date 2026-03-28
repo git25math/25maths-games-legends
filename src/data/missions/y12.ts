@@ -218,7 +218,7 @@ export const MISSIONS_Y12: Mission[] = [
     story: { zh: '司马昭两路夹击蜀军：$\\vec{a}$ 从东面进攻，$\\vec{b}$ 从山上俯冲。两路合力向量是多少？', en: 'Sima Zhao attacks Shu from two directions: $\\vec{a}$ from the east, $\\vec{b}$ from above. What is the combined force vector?' },
     description: { zh: '求 $\\vec{a}+\\vec{b}$ 的三个分量（x, y, z）。', en: 'Find all three components (x, y, z) of $\\vec{a}+\\vec{b}$.' },
     data: { targetX: 7, targetY: 1, targetZ: 5, a1: 3, a2: 4, a3: 2, b1: 4, b2: -3, b3: 3, generatorType: 'VECTOR_3D_RANDOM' }, difficulty: 'Medium', reward: 500,
-    kpId: 'kp-4.11-01', sectionId: 'geometry',
+    kpId: 'kp-7.2-01', sectionId: 'geometry',
     tutorialSteps: [
       { text: { zh: '司马昭："为什么要学三维向量？\n二维向量在平地上够用了——但真实战场有高低地形。\n三维向量 $\\begin{pmatrix}x\\\\y\\\\z\\end{pmatrix}$ 多了一个分量，描述上下方向的力。\n攻山、攻城、空中投射——都需要三维思维。"', en: 'Sima Zhao: "Why 3D vectors?\n2D vectors work on flat ground — but real battlefields have elevation.\n3D vectors $\\begin{pmatrix}x\\\\y\\\\z\\end{pmatrix}$ add a component for up/down.\nAttacking hills, walls, aerial shots — all need 3D thinking."' }, highlightField: 'x' },
       { text: { zh: '司马昭："三维向量加法——和二维完全一样\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\n每个分量独立相加——$x$ 加 $x$，$y$ 加 $y$，$z$ 加 $z$。"', en: 'Sima Zhao: "3D vector addition — exactly like 2D\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\nAdd each component independently — $x$ with $x$, $y$ with $y$, $z$ with $z$."' }, highlightField: 'x' },
@@ -240,7 +240,7 @@ export const MISSIONS_Y12: Mission[] = [
     story: { zh: '姜维从两个方向发射弩箭：$\\vec{a}$ 和 $\\vec{b}$，部分分量为负（向下/后方）。合力向量是多少？', en: 'Jiang Wei fires crossbow bolts from two directions: $\\vec{a}$ and $\\vec{b}$, some components negative (downward/backward). Find the resultant.' },
     description: { zh: '求 $\\vec{a}+\\vec{b}$ 的三个分量（x, y, z）。', en: 'Find all three components (x, y, z) of $\\vec{a}+\\vec{b}$.' },
     data: { targetX: 1, targetY: -1, targetZ: 4, a1: -3, a2: 5, a3: 1, b1: 4, b2: -6, b3: 3, generatorType: 'VECTOR_3D_RANDOM' }, difficulty: 'Hard', reward: 550,
-    kpId: 'kp-4.11-01', sectionId: 'geometry',
+    kpId: 'kp-7.2-01', sectionId: 'geometry',
     tutorialSteps: [
       { text: { zh: '姜维："负分量是什么意思？\n向量 $\\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix}$ 中，$-3$ 表示向西（负 $x$ 方向）。\n正负号不改变加法规则——该加还是加，只是结果可能是负的。\n负结果意味着合力方向翻转。"', en: 'Jiang Wei: "What do negative components mean?\nIn vector $\\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix}$, $-3$ means westward (negative $x$).\nSigns don\'t change the addition rule — you still add, but the result may be negative.\nA negative result means the combined force reverses direction."' }, highlightField: 'x' },
       { text: { zh: '姜维："加法公式不变\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\n负数加正数 = 抵消；负数加负数 = 更负。关键是符号。"', en: 'Jiang Wei: "Same addition formula\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\nNeg + pos = cancel; neg + neg = more negative. Signs are the key."' }, highlightField: 'x' },

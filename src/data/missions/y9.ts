@@ -12,7 +12,7 @@ export const MISSIONS_Y9: Mission[] = [
     story: { zh: '官渡之战前夕，曹操囤积粮草。第一年产粮 ${base}^{e1}$ 斛，第二年产粮是第一年的 ${base}^{e2}$ 倍。', en: "Before Guandu, Cao Cao stores grain. Year 1 yields ${base}^{e1}$, Year 2 is ${base}^{e2}$ times that." },
     description: { zh: '计算总产量：${base}^{e1} \\times {base}^{e2} = {base}^x$，求 $x$。', en: 'Calculate total: ${base}^{e1} \\times {base}^{e2} = {base}^x$, find $x$.' },
     data: { base: 3, e1: 2, e2: 3, generatorType: 'INDICES_RANDOM' }, difficulty: 'Easy', reward: 120,
-    kpId: 'kp-1.3-02', sectionId: 'number',
+    kpId: 'kp-1.7-01', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '郭嘉："官渡决战在即，我们要合并两年的粮草。为什么不能直接把指数加起来？因为 $3^2$ 不是 $3 \\times 2$——它是 $3 \\times 3 = 9$。"', en: 'Guo Jia: "Guandu is coming — we need to combine two years of grain. Why can\'t we just add exponents? Because $3^2$ isn\'t $3 \\times 2$ — it\'s $3 \\times 3 = 9$."' },
@@ -52,7 +52,7 @@ export const MISSIONS_Y9: Mission[] = [
     story: { zh: '粮仓扩建。第一批 ${base}^{e1}$ 单位，扩建 ${base}^{e2}$ 倍。', en: 'Granary expansion. Batch 1: ${base}^{e1}$ units, expanded ${base}^{e2}$ times.' },
     description: { zh: '利用同底数幂相乘性质：$a^m \\times a^n = a^{m+n}$。', en: 'Use same-base multiplication: $a^m \\times a^n = a^{m+n}$.' },
     data: { base: 2, e1: 3, e2: 2, generatorType: 'INDICES_RANDOM' }, difficulty: 'Medium', reward: 140,
-    kpId: 'kp-1.3-02', sectionId: 'number',
+    kpId: 'kp-1.7-01', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '程昱："粮仓要扩建——为什么要学指数？因为粮食产量每年翻倍，$2^3$ 意味着连续翻了 3 次，不是简单的 $2 \\times 3$。"', en: 'Cheng Yu: "Why learn indices? Because grain doubles each year. $2^3$ means 3 doublings, not simply $2 \\times 3$."' },
@@ -92,7 +92,7 @@ export const MISSIONS_Y9: Mission[] = [
     story: { zh: '袭击袁绍粮仓。已知粮仓数量为 ${base}^{e1}$，每把火能烧毁 ${base}^{e2}$ 座。', en: "Attacking Wuchao. There are ${base}^{e1}$ granaries, each fire destroys ${base}^{e2}$." },
     description: { zh: '计算剩余粮仓：${base}^{e1} / {base}^{e2} = {base}^x$，求 $x$。', en: 'Calculate remaining: ${base}^{e1} / {base}^{e2} = {base}^x$, find $x$.' },
     data: { base: 2, e1: 8, e2: 5, op: 'div', generatorType: 'INDICES_RANDOM' }, difficulty: 'Medium', reward: 160,
-    kpId: 'kp-1.3-02', sectionId: 'number',
+    kpId: 'kp-1.7-01', sectionId: 'number',
     tutorialSteps: [
       {
         text: { zh: '曹操："乌巢一火定乾坤——为什么除法要减指数？因为除法是乘法的反操作：乘法加层，除法就是拆层。"', en: 'Cao Cao: "One fire at Wuchao changes everything — why subtract exponents for division? Because division reverses multiplication: if multiply adds layers, divide removes them."' },

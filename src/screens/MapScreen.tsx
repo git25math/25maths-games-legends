@@ -39,6 +39,7 @@ import type { CharacterProgression } from '../types';
 import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completionState';
 import { getCurrency, CURRENCY_LABELS } from '../utils/currency';
 import { ProgressReport } from '../components/ProgressReport';
+import { JoinClassModal } from '../components/JoinClassModal';
 
 
 const CHAPTER_IMAGES = [
@@ -155,6 +156,7 @@ export const MapScreen = ({
   const [repairDialogTarget, setRepairDialogTarget] = useState<number | null>(null);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showProgressReport, setShowProgressReport] = useState(false);
+  const [showJoinClass, setShowJoinClass] = useState(false);
   const [expandedCompletedUnit, setExpandedCompletedUnit] = useState<string | null>(null);
 
   // Daily challenge countdown
@@ -1297,6 +1299,12 @@ export const MapScreen = ({
                 {lang === 'en' ? 'Quick Access' : '快捷入口'}
               </p>
               <div className="grid grid-cols-4 gap-2">
+                {/* 加入班级 */}
+                <button onClick={() => { onMobileMenuClose?.(); setShowJoinClass(true); }}
+                  className="flex flex-col items-center gap-1 py-3 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-300 active:bg-indigo-500/20">
+                  <span className="text-xl">🏫</span>
+                  <span className="text-[10px] font-bold">{lang === 'en' ? 'Join' : '加入班级'}</span>
+                </button>
                 {/* 背包 */}
                 <button onClick={() => { onMobileMenuClose?.(); setShowInventory(true); }}
                   className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
@@ -1399,6 +1407,14 @@ export const MapScreen = ({
           totalScore={profile.total_score || 0}
           completedMissions={(profile.completed_missions || {}) as CompletedMissions}
           onClose={() => setShowProgressReport(false)}
+        />
+      )}
+
+      {showJoinClass && (
+        <JoinClassModal
+          lang={lang}
+          onJoined={() => { /* profile will refresh on next load */ }}
+          onClose={() => setShowJoinClass(false)}
         />
       )}
     </motion.div>

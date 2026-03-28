@@ -16,6 +16,7 @@ import { lt } from '../i18n/resolveText';
 import { AlertPanel, computeAlerts } from '../components/dashboard/AlertPanel';
 import { StudentDetailCard } from '../components/dashboard/StudentDetailCard';
 import { ClassOverview } from '../components/dashboard/ClassOverview';
+import { ClassManager } from '../components/dashboard/ClassManager';
 import { KPHeatmap } from '../components/dashboard/KPHeatmap';
 import { WeeklyTrend } from '../components/dashboard/WeeklyTrend';
 import { AssignmentPanel } from '../components/dashboard/AssignmentPanel';
@@ -443,6 +444,9 @@ export function DashboardScreen({ lang, onClose }: Props) {
       {error && (
         <div className="mb-3 px-4 py-2 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs font-bold">{error}</div>
       )}
+
+      {/* ═══ Class Manager — Create classes, invite codes ═══ */}
+      <ClassManager lang={lang} grade={grade} onClassCreated={(name) => setFilterTag(name)} />
 
       {/* ═══ Class Overview Cards — FIRST (teacher's morning glance) ═══ */}
       <ClassOverview lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} totalMissions={totalMissions} />
