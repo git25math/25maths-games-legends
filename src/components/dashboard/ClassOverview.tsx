@@ -64,7 +64,7 @@ export const ClassOverview = ({
       icon: Users,
       label: lang === 'en' ? 'Students' : '学生',
       value: String(students.length),
-      sub: `${activeCount} ${lang === 'en' ? 'active (7d)' : '人活跃'}`,
+      sub: `${activeCount} ${lang === 'en' ? 'played this week' : '人本周参与'}`,
       color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
       iconColor: 'text-indigo-400',
     },

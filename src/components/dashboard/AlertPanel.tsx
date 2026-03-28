@@ -83,7 +83,7 @@ export const AlertPanel = ({
   if (alerts.length === 0) return null;
 
   const critical = alerts.filter(a => a.level === 'critical');
-  const COLLAPSED_LIMIT = 8;
+  const COLLAPSED_LIMIT = 6;
   const hasMore = alerts.length > COLLAPSED_LIMIT;
   const visible = expanded ? alerts : alerts.slice(0, COLLAPSED_LIMIT);
 
@@ -94,7 +94,7 @@ export const AlertPanel = ({
       className="mb-4 rounded-2xl border border-rose-200 bg-gradient-to-r from-rose-50 to-amber-50 p-4"
     >
       <div className="flex items-center gap-2 mb-3">
-        <AlertTriangle size={16} className="text-rose-500" />
+        <AlertTriangle size={14} className="text-rose-500" />
         <span className="text-sm font-black text-rose-800">
           {lang === 'en'
             ? `${alerts.length} student${alerts.length > 1 ? 's' : ''} need attention`

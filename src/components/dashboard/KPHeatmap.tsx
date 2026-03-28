@@ -186,6 +186,7 @@ export const KPHeatmap = ({
             <tr className="bg-slate-50 border-t-2 border-slate-200">
               <td className="sticky left-0 bg-slate-50 z-10 px-2 py-1.5 font-black text-slate-600 whitespace-nowrap">
                 {lang === 'en' ? 'Class Avg' : '班级平均'}
+                {students.length === 1 && <span className="text-[8px] text-slate-400 font-normal ml-1">({lang === 'en' ? '1 student' : '仅1人'})</span>}
               </td>
               {visibleKPs.map(kp => {
                 const avg = kpAvg[kp] ?? 0;

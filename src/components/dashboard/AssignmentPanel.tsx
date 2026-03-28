@@ -118,8 +118,8 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
     const diffMs = d.getTime() - now.getTime();
     const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) return lang === 'en' ? `Overdue ${-diffDays}d` : `已逾期 ${-diffDays} 天`;
-    if (diffDays === 0) return lang === 'en' ? 'Due today' : '今天截止';
+    if (diffDays < 0) return lang === 'en' ? `⚠ Overdue ${-diffDays}d` : `⚠ 逾期 ${-diffDays} 天`;
+    if (diffDays === 0) return lang === 'en' ? 'Due today!' : '今天截止！';
     if (diffDays === 1) return lang === 'en' ? 'Due tomorrow' : '明天截止';
     return lang === 'en' ? `${diffDays} days left` : `剩余 ${diffDays} 天`;
   };
@@ -149,7 +149,15 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
 
       {/* Active Assignments */}
       {loading ? (
-        <div className="text-center py-8 text-slate-400 text-sm">Loading...</div>
+        <div className="bg-white/60 backdrop-blur rounded-2xl p-4 border border-slate-100 animate-pulse">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-slate-200" />
+            <div className="flex-1 space-y-2">
+              <div className="h-3 w-32 bg-slate-200 rounded" />
+              <div className="h-2 w-20 bg-slate-100 rounded" />
+            </div>
+          </div>
+        </div>
       ) : active.length === 0 ? (
         <div className="bg-white/60 backdrop-blur rounded-2xl p-6 border border-slate-100 text-center">
           <p className="text-sm text-slate-400">
@@ -171,7 +179,11 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
               >
                 {/* Assignment header */}
                 <div
-                  className="p-4 cursor-pointer hover:bg-slate-50/50 transition-colors"
+                  className="p-4 cursor-pointer hover:bg-slate-50/50 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={expanded}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedId(expanded ? null : a.id); } }}
                   onClick={() => setExpandedId(expanded ? null : a.id)}
                 >
                   <div className="flex items-start justify-between gap-3">

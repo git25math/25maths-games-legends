@@ -131,7 +131,7 @@ export function KPWeaknessPanel({
       <div className="bg-white/60 backdrop-blur rounded-2xl p-4 border border-slate-100">
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <AlertTriangle size={14} />
-          {lang === 'en' ? 'Not enough battle data yet to identify weak points.' : '对局数据不足，暂无法识别薄弱点。'}
+          {lang === 'en' ? 'Students need at least 3 attempts per topic before weak points appear here.' : '学生每个知识点需至少尝试3次，薄弱点才会显示在此。'}
         </div>
       </div>
     );

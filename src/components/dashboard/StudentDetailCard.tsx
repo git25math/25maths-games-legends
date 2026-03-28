@@ -267,20 +267,27 @@ export const StudentDetailCard = ({
         )}
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-2 mb-4">
-          <div className="bg-emerald-50 rounded-xl p-2.5 text-center">
-            <div className="text-lg font-black text-emerald-600">{winRate}%</div>
-            <div className="text-[10px] text-emerald-500 font-bold">{lang === 'en' ? 'Win Rate' : '胜率'}</div>
+        {/* Stats Grid */}
+        {battles.length === 0 && !loading ? (
+          <div className="bg-slate-50 rounded-xl p-3 mb-4 text-center">
+            <p className="text-xs text-slate-400 font-bold">{lang === 'en' ? 'No battle data yet — student hasn\'t played any missions' : '暂无对局数据——学生尚未完成任何关卡'}</p>
           </div>
-          <div className="bg-indigo-50 rounded-xl p-2.5 text-center">
-            <div className="text-lg font-black text-indigo-600">{battles.length}</div>
-            <div className="text-[10px] text-indigo-500 font-bold">{lang === 'en' ? 'Battles' : '总对局'}</div>
+        ) : (
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            <div className="bg-emerald-50 rounded-xl p-2.5 text-center">
+              <div className="text-lg font-black text-emerald-600">{winRate}%</div>
+              <div className="text-[10px] text-emerald-500 font-bold">{lang === 'en' ? 'Win Rate' : '胜率'}</div>
+            </div>
+            <div className="bg-indigo-50 rounded-xl p-2.5 text-center">
+              <div className="text-lg font-black text-indigo-600">{battles.length}</div>
+              <div className="text-[10px] text-indigo-500 font-bold">{lang === 'en' ? 'Battles' : '总对局'}</div>
+            </div>
+            <div className="bg-amber-50 rounded-xl p-2.5 text-center">
+              <div className="text-lg font-black text-amber-600">{kpRecords.filter(k => k.mastered_at).length}</div>
+              <div className="text-[10px] text-amber-500 font-bold">{lang === 'en' ? 'Topics Mastered' : '知识点已掌握'}</div>
+            </div>
           </div>
-          <div className="bg-amber-50 rounded-xl p-2.5 text-center">
-            <div className="text-lg font-black text-amber-600">{kpRecords.filter(k => k.mastered_at).length}</div>
-            <div className="text-[10px] text-amber-500 font-bold">{lang === 'en' ? 'KPs Mastered' : 'KP 已掌握'}</div>
-          </div>
-        </div>
+        )}
 
         {/* Error Patterns */}
         {errorSummary.length > 0 && (

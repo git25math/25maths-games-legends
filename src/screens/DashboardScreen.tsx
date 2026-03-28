@@ -421,7 +421,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
           <button
             onClick={exportCSV}
             disabled={students.length === 0}
-            className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-emerald-50 hover:border-emerald-200 transition-colors shadow-sm disabled:opacity-30"
+            className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-emerald-50 hover:border-emerald-200 transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-50 disabled:hover:border-slate-200"
             title={lang === 'en' ? 'Export CSV' : '导出 CSV'}
           >
             <Download size={14} />
@@ -538,9 +538,9 @@ export function DashboardScreen({ lang, onClose }: Props) {
             {t.liveHint}
           </span>
           <span className="text-slate-300">|</span>
-          <span className="flex items-center gap-1"><CheckCircle size={11} className="text-emerald-500" /> {t.green}</span>
-          <span className="flex items-center gap-1"><CheckCircle size={11} className="text-amber-500" /> {t.amber}</span>
-          <span className="flex items-center gap-1"><CheckCircle size={11} className="text-rose-500" /> {t.red}</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" /> {t.green}</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500 inline-block" /> {t.amber}</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-rose-500 inline-block" /> {t.red}</span>
         </div>
         <div className="flex items-center gap-2 text-xs text-slate-500">
           <Users size={12} />

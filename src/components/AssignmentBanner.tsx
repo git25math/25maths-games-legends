@@ -207,7 +207,4 @@ export function useMyAssignments(userId: string): {
   return { assignments, assignedMissionIds };
 }
 
-/** @deprecated Use useMyAssignments instead */
-export function useAssignedMissionIds(userId: string): Set<number> {
-  return useMyAssignments(userId).assignedMissionIds;
-}
+
