@@ -813,6 +813,19 @@ export const MISSIONS_Y7: Mission[] = [
     skillSummary: { zh: '总量除以份数得到每份', en: 'Divide total by number of parts' },
     story: { zh: '军粮分配需按比例。已知 ${a}x = {result}$，求每份军粮 $x$。', en: 'Grain must be distributed proportionally. ${a}x = {result}$, find $x$.' },
     description: { zh: '解方程 ${a}x={result}$。', en: 'Solve ${a}x={result}$.' },
+    discoverSteps: [
+      {
+        prompt: { zh: '24 袋军粮要平均分给 2 支小队。\n每队分到多少袋？', en: '24 bags of grain split equally between 2 squads.\nHow many bags per squad?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '$12$ 袋（$24 \\div 2$）', en: '$12$ bags ($24 \\div 2$)' },
+          { zh: '$22$ 袋（$24 - 2$）', en: '$22$ bags ($24 - 2$)' },
+        ],
+        onCorrect: { zh: '你刚才解的就是方程 $2x = 24$——"2份 $x$ 等于24"。\n$x = 24 \\div 2 = 12$。解方程就是找到未知数。', en: 'You just solved $2x = 24$ — "2 lots of $x$ make 24".\n$x = 24 \\div 2 = 12$. Solving equations = finding the unknown.' },
+        onWrong: { zh: '分粮要除，不是减。$24 \\div 2 = 12$。\n这就是"解方程"：$2x = 24$，$x = 12$。', en: 'Splitting means dividing. $24 \\div 2 = 12$.\nThis is "solving an equation": $2x = 24$, $x = 12$.' },
+        onSkip: { zh: '$24$ 袋分 $2$ 队 = $12$ 袋/队。方程写法：$2x = 24$，$x = 12$。', en: '$24$ bags for $2$ squads = $12$ each. As an equation: $2x = 24$, $x = 12$.' },
+      },
+    ],
     data: { x: 12, a: 2, result: 24, generatorType: 'SIMPLE_EQ_RANDOM' }, difficulty: 'Easy', reward: 70,
     kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [

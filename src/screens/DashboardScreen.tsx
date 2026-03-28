@@ -485,12 +485,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
 
       <SmartSuggestions lang={lang} students={students} alerts={alerts} />
 
-      <ClassManager lang={lang} grade={grade} students={students} onClassCreated={(name) => setFilterTag(name)} />
-
-      {/* ═══ Class Overview Cards — FIRST (teacher's morning glance) ═══ */}
-      <ClassOverview lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} totalMissions={totalMissions} />
-
-      {/* Tag filter chips */}
+      {/* ═══ Tag filter — RIGHT AFTER summary (teacher's first action: pick a class) ═══ */}
       <div className="flex items-center gap-2 mb-4 px-1 flex-wrap">
         <Tag size={14} className="text-slate-500" />
         <button
@@ -556,29 +551,17 @@ export function DashboardScreen({ lang, onClose }: Props) {
         )}
       </AnimatePresence>
 
-      {/* ═══ Alert Panel — after filters (teacher sees overview → filters → then problems) ═══ */}
+      {/* ═══ Assignments — teacher's daily tool (moved up from middle) ═══ */}
+      <AssignmentPanel lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} />
+
+      {/* ═══ Alert Panel — who needs attention ═══ */}
       <AlertPanel lang={lang} alerts={alerts} alertOnly={alertOnly} onToggleAlertOnly={() => setAlertOnly(!alertOnly)} onStudentClick={(uid) => {
         const s = students.find(st => st.user_id === uid);
         if (s) setSelectedStudent(s);
       }} />
 
-      {/* ═══ Weekly Trend (v8.2) ═══ */}
-      <WeeklyTrend lang={lang} grade={grade} filterTag={filterTag} />
-
-      {/* ═══ Assignments (v8.3) ═══ */}
-      <AssignmentPanel lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} />
-
-      {/* ═══ KP Weakness Ranking (P2) ═══ */}
+      {/* ═══ KP Weakness Ranking — what to teach ═══ */}
       <KPWeaknessPanel lang={lang} grade={grade} filterTag={filterTag} students={students} />
-
-      {/* ═══ ExamHub Cross-Platform (v8.3) ═══ */}
-      <ExamHubBridge lang={lang} students={students} />
-
-      {/* ═══ KP Heatmap (v8.1) ═══ */}
-      <KPHeatmap lang={lang} grade={grade} filterTag={filterTag} students={students} onStudentClick={(uid) => {
-        const s = students.find(st => st.user_id === uid);
-        if (s) setSelectedStudent(s);
-      }} />
 
       {/* Live indicator + stats row */}
       <div className="flex items-center justify-between mb-3 px-1">
@@ -765,6 +748,16 @@ export function DashboardScreen({ lang, onClose }: Props) {
         </table>
       </div>
       </div>
+
+      {/* ═══ Lower-priority panels (less frequently used) ═══ */}
+      <WeeklyTrend lang={lang} grade={grade} filterTag={filterTag} />
+      <ClassOverview lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} totalMissions={totalMissions} />
+      <ClassManager lang={lang} grade={grade} students={students} onClassCreated={(name) => setFilterTag(name)} />
+      <ExamHubBridge lang={lang} students={students} />
+      <KPHeatmap lang={lang} grade={grade} filterTag={filterTag} students={students} onStudentClick={(uid) => {
+        const s = students.find(st => st.user_id === uid);
+        if (s) setSelectedStudent(s);
+      }} />
 
       {/* ═══ Student Detail Card (v8.0) ═══ */}
       <AnimatePresence>
