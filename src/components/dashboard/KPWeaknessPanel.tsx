@@ -6,18 +6,9 @@
 import { useEffect, useState, useMemo } from 'react';
 import { AlertTriangle, BookOpen, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import type { Language } from '../../types';
-import type { StudentRow } from './types';
+import type { StudentRow, KPProgressRow } from './types';
 import { supabase } from '../../supabase';
 import { getExamHubLessonUrl, getLessonId } from '../../utils/lessonMap';
-
-type KPProgressRow = {
-  user_id: string;
-  display_name: string;
-  kp_id: string;
-  wins: number;
-  attempts: number;
-  mastered_at: string | null;
-};
 
 type AggregatedKP = {
   kpId: string;
@@ -47,19 +38,21 @@ export function KPWeaknessPanel({
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
 
+  const studentIdSet = useMemo(() => new Set(students.map(s => s.user_id)), [students]);
+
   useEffect(() => {
     setLoading(true);
-    const studentIds = students.map(s => s.user_id);
+    const ids = [...studentIdSet];
     Promise.all([
       supabase.rpc('get_class_kp_progress', {
         p_grade: grade,
         p_class: filterTag || null,
       }),
       // Fetch Resilience Engine health data for blocked/critical nodes
-      studentIds.length > 0
+      ids.length > 0
         ? supabase.from('user_skill_health')
             .select('user_id, node_id, corruption_level')
-            .in('user_id', studentIds)
+            .in('user_id', ids)
             .in('corruption_level', ['blocked', 'critical'])
         : Promise.resolve({ data: [] }),
     ]).then(([kpRes, healthRes]) => {
@@ -67,14 +60,13 @@ export function KPWeaknessPanel({
       setHealthData((healthRes.data as any[]) ?? []);
       setLoading(false);
     });
-  }, [grade, filterTag, students]);
+  }, [grade, filterTag, studentIdSet]);
 
   const weakestKPs = useMemo(() => {
-    const studentIds = new Set(students.map(s => s.user_id));
     const kpMap = new Map<string, AggregatedKP>();
 
     for (const row of kpData) {
-      if (!studentIds.has(row.user_id)) continue;
+      if (!studentIdSet.has(row.user_id)) continue;
       if (row.attempts === 0) continue;
 
       if (!kpMap.has(row.kp_id)) {
@@ -121,7 +113,7 @@ export function KPWeaknessPanel({
     return result
       .filter(k => k.failureRate > 0)
       .sort((a, b) => b.failureRate - a.failureRate || b.strugglingCount - a.strugglingCount);
-  }, [kpData, students]);
+  }, [kpData, studentIdSet, healthData]);
 
   if (loading) {
     return (
@@ -238,7 +230,8 @@ export function KPWeaknessPanel({
       {hasMore && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="w-full flex items-center justify-center gap-1 py-2 text-[11px] text-slate-400 hover:text-slate-600 transition-colors border-t border-slate-100"
+          aria-expanded={expanded}
+          className="w-full flex items-center justify-center gap-1 py-2 text-[11px] text-slate-400 hover:text-slate-600 transition-colors border-t border-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
         >
           {expanded
             ? <>{lang === 'en' ? 'Show less' : '收起'} <ChevronUp size={12} /></>

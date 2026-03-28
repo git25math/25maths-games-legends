@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
-import { AlertTriangle, Clock, TrendingDown } from 'lucide-react';
+import { AlertTriangle, Clock, TrendingDown, ChevronDown, ChevronUp } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, StudentAlert, UnitEntry } from './types';
 import { countGreenMissions } from './types';
@@ -73,9 +74,14 @@ export const AlertPanel = ({
   alerts: StudentAlert[];
   onStudentClick: (userId: string) => void;
 }) => {
+  const [expanded, setExpanded] = useState(false);
+
   if (alerts.length === 0) return null;
 
   const critical = alerts.filter(a => a.level === 'critical');
+  const COLLAPSED_LIMIT = 8;
+  const hasMore = alerts.length > COLLAPSED_LIMIT;
+  const visible = expanded ? alerts : alerts.slice(0, COLLAPSED_LIMIT);
 
   return (
     <motion.div
@@ -99,7 +105,7 @@ export const AlertPanel = ({
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {alerts.slice(0, 8).map((a, i) => (
+        {visible.map((a, i) => (
           <button
             key={`${a.userId}-${i}`}
             onClick={() => onStudentClick(a.userId)}
@@ -114,10 +120,16 @@ export const AlertPanel = ({
             <span className="text-[10px] opacity-70">{lang === 'en' ? a.reasonEn : a.reason}</span>
           </button>
         ))}
-        {alerts.length > 8 && (
-          <span className="px-3 py-1.5 text-xs text-slate-400 font-bold">
-            +{alerts.length - 8} {lang === 'en' ? 'more' : '更多'}
-          </span>
+        {hasMore && (
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="flex items-center gap-1 px-3 py-1.5 text-xs text-slate-500 font-bold hover:text-rose-600 transition-colors"
+          >
+            {expanded
+              ? <><ChevronUp size={12} /> {lang === 'en' ? 'Show less' : '收起'}</>
+              : <><ChevronDown size={12} /> +{alerts.length - COLLAPSED_LIMIT} {lang === 'en' ? 'more' : '更多'}</>
+            }
+          </button>
         )}
       </div>
     </motion.div>

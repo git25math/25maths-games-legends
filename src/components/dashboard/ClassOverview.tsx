@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { Users, Zap, Target, TrendingUp } from 'lucide-react';
 import type { Language } from '../../types';

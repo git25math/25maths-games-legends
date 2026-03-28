@@ -33,3 +33,13 @@ export type StudentAlert = {
 };
 
 export type UnitEntry = [number, { title: string; missions: Mission[] }];
+
+/** Shared KP progress row type — used by KPHeatmap, KPWeaknessPanel, StudentDetailCard */
+export type KPProgressRow = {
+  user_id: string;
+  display_name?: string;
+  kp_id: string;
+  wins: number;
+  attempts: number;
+  mastered_at: string | null;
+};

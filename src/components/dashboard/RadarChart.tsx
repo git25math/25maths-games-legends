@@ -30,7 +30,7 @@ export const RadarChart = ({ values, labels, size = 200, color = '#6366f1' }: Ra
   const dataPoints = values.map((v, i) => point(i, Math.min(v, 1)));
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="mx-auto">
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="mx-auto" role="img" aria-label={labels.map((l, i) => `${l}: ${Math.round(values[i] * 100)}%`).join(', ')}>
       {/* Grid rings */}
       {rings.map(scale => (
         <polygon

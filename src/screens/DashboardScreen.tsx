@@ -4,7 +4,7 @@
  * 支持多标签（如 7B + EA）：批量/单个添加、删除标签
  * v8.0: 预警面板 + 学生详情卡（7 维雷达图）
  */
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag, Download, ArrowUpDown } from 'lucide-react';
 import type { Language, Mission } from '../types';
@@ -108,10 +108,14 @@ export function DashboardScreen({ lang, onClose }: Props) {
     return [...tags].sort();
   }, [students]);
 
+  // Guard: suppress realtime updates while a full fetch is in-flight
+  const fetchingRef = useRef(false);
+
   // Fetch students
   const fetchStudents = async () => {
     setLoading(true);
     setError('');
+    fetchingRef.current = true;
     try {
       const { data, error: rpcErr } = await supabase.rpc('get_class_progress', {
         p_grade: grade,
@@ -138,6 +142,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
       setError(lang === 'en' ? 'Network error' : '网络错误');
       setStudents([]);
     }
+    fetchingRef.current = false;
     setLoading(false);
     setLastRefresh(new Date());
   };
@@ -158,10 +163,17 @@ export function DashboardScreen({ lang, onClose }: Props) {
   };
 
   const removeStudentTag = async (userId: string, tag: string) => {
+    // Optimistic update with rollback on failure
+    setStudents(prev => prev.map(s =>
+      s.user_id === userId ? { ...s, class_tags: s.class_tags.filter(t => t !== tag) } : s
+    ));
     const { error: err } = await supabase.rpc('remove_student_tag', { p_user_id: userId, p_tag: tag });
-    if (!err) {
+    if (err) {
+      // Rollback: re-add tag
       setStudents(prev => prev.map(s =>
-        s.user_id === userId ? { ...s, class_tags: s.class_tags.filter(t => t !== tag) } : s
+        s.user_id === userId && !s.class_tags.includes(tag)
+          ? { ...s, class_tags: [...s.class_tags, tag] }
+          : s
       ));
     }
   };
@@ -182,6 +194,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
     const channel = supabase
       .channel('dashboard-progress')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'gl_user_progress' }, (payload) => {
+        if (fetchingRef.current) return; // skip while full fetch is in-flight
         const updated = payload.new as StudentRow;
         if (!updated || updated.grade !== grade) return;
         if (filterTag && !(updated.class_tags || []).includes(filterTag)) return;
@@ -230,8 +243,10 @@ export function DashboardScreen({ lang, onClose }: Props) {
   };
 
   // KP mastery counts via RPC (bypasses RLS for teacher access)
+  // Only depends on grade/filterTag — NOT students (avoids refetch on every realtime update)
   const [kpMasteryMap, setKpMasteryMap] = useState<Map<string, number>>(new Map());
   useEffect(() => {
+    setKpMasteryMap(new Map()); // clear stale data on filter change
     supabase.rpc('get_class_kp_progress', { p_grade: grade, p_class: filterTag || null })
       .then(({ data, error }) => {
         if (error || !data) return;
@@ -241,7 +256,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
         }
         setKpMasteryMap(map);
       }, () => {});
-  }, [grade, filterTag, students]);
+  }, [grade, filterTag]);
 
   // CSV export
   const exportCSV = () => {

@@ -1,17 +1,8 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Grid3X3, ChevronDown, ChevronUp } from 'lucide-react';
 import type { Language } from '../../types';
-import type { StudentRow } from './types';
+import type { StudentRow, KPProgressRow } from './types';
 import { supabase } from '../../supabase';
-
-type KPProgressRow = {
-  user_id: string;
-  display_name: string;
-  kp_id: string;
-  wins: number;
-  attempts: number;
-  mastered_at: string | null;
-};
 
 type CellStatus = 'mastered' | 'learning' | 'struggling' | 'untouched';
 
@@ -163,8 +154,8 @@ export const KPHeatmap = ({
                 className="border-b border-slate-50 hover:bg-indigo-50/50 cursor-pointer transition-colors"
                 onClick={() => onStudentClick(s.user_id)}
               >
-                <td className="sticky left-0 bg-white z-10 px-2 py-1.5 font-bold text-slate-700 whitespace-nowrap">
-                  {(s.display_name || '?').slice(0, 12)}
+                <td className="sticky left-0 bg-white z-10 px-2 py-1.5 font-bold text-slate-700 whitespace-nowrap" title={s.display_name || ''}>
+                  {(s.display_name || '?').length > 12 ? (s.display_name || '?').slice(0, 11) + '…' : (s.display_name || '?')}
                 </td>
                 {visibleKPs.map(kp => {
                   const cell = matrix[s.user_id]?.[kp];
@@ -206,7 +197,8 @@ export const KPHeatmap = ({
       {kpIds.length > 15 && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1 mx-auto mt-2 px-3 py-1 text-xs text-indigo-500 font-bold hover:bg-indigo-50 rounded-lg transition-colors"
+          aria-expanded={expanded}
+          className="flex items-center gap-1 mx-auto mt-2 px-3 py-1 text-xs text-indigo-500 font-bold hover:bg-indigo-50 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
         >
           {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           {expanded

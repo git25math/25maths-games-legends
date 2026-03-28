@@ -192,7 +192,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
                     <div className="flex items-center gap-3 shrink-0">
                       {/* Completion ring */}
                       <div className="relative w-10 h-10">
-                        <svg viewBox="0 0 36 36" className="w-10 h-10 -rotate-90">
+                        <svg viewBox="0 0 36 36" className="w-10 h-10 -rotate-90" role="progressbar" aria-valuenow={stats.rate} aria-valuemin={0} aria-valuemax={100}>
                           <circle cx="18" cy="18" r="15" fill="none" stroke="#e2e8f0" strokeWidth="3" />
                           <circle cx="18" cy="18" r="15" fill="none"
                             stroke={stats.rate >= 80 ? '#10b981' : stats.rate >= 40 ? '#f59e0b' : '#ef4444'}
