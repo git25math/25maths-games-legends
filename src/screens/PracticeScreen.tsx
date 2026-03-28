@@ -288,11 +288,17 @@ export const PracticeScreen = ({
     setWrongAnswerData(null);
     setSkillImpactHint(null);
     setIsSubmitting(false);
-    // v5.0: Show deferred repair intercept after dismissing wrong answer feedback
+    // v10.5: Auto-insert recovery question on 3 consecutive same-type errors (forced, not optional)
     if (pendingIntercept) {
       setPendingIntercept(false);
-      setShowRepairIntercept(true);
-      return; // Don't regenerate — intercept card will handle next step
+      // Show narrative toast instead of modal dialog
+      setPhaseToast({
+        text: lang === 'en' ? '🛠 Quick fix — let\'s strengthen the foundation first!' : '🛠 军师紧急来报——先巩固基础再继续！',
+        phase: currentPhase,
+      });
+      setTimeout(() => setPhaseToast(null), 3000);
+      // If repair handler exists, use it (navigates to RepairScreen for deeper repair)
+      if (onRepairIntercept) { onRepairIntercept(); return; }
     }
     regenerateQuestion();
   };
