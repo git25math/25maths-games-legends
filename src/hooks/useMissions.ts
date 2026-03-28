@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { Mission } from '../types';
 
 /** Dynamically import only the grade's chunk. Returns the grade array. */
@@ -19,34 +19,38 @@ async function loadGradeMissions(grade: number): Promise<Mission[]> {
  * When grade is null/undefined, returns empty array and loading=true until grade is known.
  */
 export function useMissions(grade?: number | null) {
-  // loading=true only when a grade is known but data hasn't arrived yet
   const [missions, setMissions] = useState<Mission[]>([]);
   const [loading, setLoading] = useState(!!grade);
+  const [offline, setOffline] = useState(!navigator.onLine);
 
+  // Track online/offline status
   useEffect(() => {
-    if (!grade) {
-      // Grade not selected yet — nothing to load, not in a loading state
-      setMissions([]);
-      setLoading(false);
-      return;
+    const goOnline = () => setOffline(false);
+    const goOffline = () => setOffline(true);
+    window.addEventListener('online', goOnline);
+    window.addEventListener('offline', goOffline);
+    return () => { window.removeEventListener('online', goOnline); window.removeEventListener('offline', goOffline); };
+  }, []);
+
+  const loadData = useCallback(async (g: number, cancelled: { current: boolean }) => {
+    try {
+      const data = await loadGradeMissions(g);
+      if (!cancelled.current) setMissions(data);
+    } finally {
+      if (!cancelled.current) setLoading(false);
     }
+  }, []);
 
-    let cancelled = false;
+  // Auto-retry on reconnect
+  useEffect(() => {
+    if (!grade) { setMissions([]); setLoading(false); return; }
+
+    const cancelled = { current: false };
     setLoading(true);
+    loadData(grade, cancelled);
 
-    const load = async () => {
-      try {
-        const data = await loadGradeMissions(grade);
-        if (!cancelled) setMissions(data);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
+    return () => { cancelled.current = true; };
+  }, [grade, offline, loadData]); // re-trigger when coming back online
 
-    load();
-
-    return () => { cancelled = true; };
-  }, [grade]);
-
-  return { missions, loading };
+  return { missions, loading, offline };
 }

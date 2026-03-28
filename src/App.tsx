@@ -225,7 +225,7 @@ export default function App() {
     profile, updateProfile, recordBattleComplete,
     getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
-  const { missions, loading: missionsLoading } = useMissions(profile?.grade);
+  const { missions, loading: missionsLoading, offline } = useMissions(profile?.grade);
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
   const hasRestoredMissionRef = useRef(false);
@@ -415,7 +415,7 @@ export default function App() {
     let sp = cycleDay === 7 ? 1 : 0;
 
     const cm = structuredClone(profile.completed_missions) as any;
-    cm._login = { lastDate: todayStr, streak: newStreak, bestStreak };
+    cm._login = { lastDate: todayStr, streak: newStreak, bestStreak, sessionStart: Date.now() };
 
     // Check streak milestones (14/21/30/60/100 days)
     const claimed = (cm._streak_milestones ?? []) as string[];
@@ -1043,6 +1043,12 @@ export default function App() {
 
               {isMissionShellLoading && (
                 <ScreenLoader lang={lang} label={lang === 'en' ? 'Loading mission data' : '正在加载关卡数据'} />
+              )}
+
+              {offline && (
+                <div className="fixed top-0 left-0 right-0 z-[90] bg-amber-500 text-white text-center text-xs font-bold py-1.5">
+                  {lang === 'en' ? '⚠ Offline — progress will sync when reconnected' : '⚠ 离线模式——重新连网后自动同步进度'}
+                </div>
               )}
 
               {!isMissionShellLoading && gameState === 'map' && profile && profile.grade && (
