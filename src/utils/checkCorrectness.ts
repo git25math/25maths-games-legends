@@ -333,6 +333,22 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     const ok = parse(inputs.x || '') === data.targetX && parse(inputs.y || '') === data.targetY;
     return { correct: ok, expected: { x: String(data.targetX), y: String(data.targetY) } };
   }
+  if (type === 'COORD_3D') {
+    if (data.mode === 'distance') {
+      const dist = Math.sqrt(
+        Math.pow((data.x2 as number) - (data.x1 as number), 2) +
+        Math.pow((data.y2 as number) - (data.y1 as number), 2) +
+        Math.pow((data.z2 as number) - (data.z1 as number), 2)
+      );
+      const r = Math.round(dist * 100) / 100;
+      return { correct: Math.abs(parse(inputs.x || '') - r) < 0.01, expected: { x: round(r), y: '—', z: '—' } };
+    }
+    const mx = ((data.x1 as number) + (data.x2 as number)) / 2;
+    const my = ((data.y1 as number) + (data.y2 as number)) / 2;
+    const mz = ((data.z1 as number) + (data.z2 as number)) / 2;
+    const ok = parse(inputs.x || '') === mx && parse(inputs.y || '') === my && parse(inputs.z || '') === mz;
+    return { correct: ok, expected: { x: String(mx), y: String(my), z: String(mz) } };
+  }
   if (type === 'EXPAND') {
     return { correct: Math.abs(parse(inputs.ans || '') - data.answer) < 0.01, expected: { ans: String(data.answer) } };
   }
@@ -392,25 +408,6 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
       val = (a as number) + ((n as number) - 1) * (d as number);
     }
     return { correct: Math.abs(parse(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
-  }
-  // 3D Coordinates: midpoint or distance
-  if (type === 'COORD_3D') {
-    const { x1, y1, z1, x2, y2, z2, mode: cMode } = data;
-    if (cMode === 'distance') {
-      const dist = Math.sqrt(
-        Math.pow((x2 as number) - (x1 as number), 2) +
-        Math.pow((y2 as number) - (y1 as number), 2) +
-        Math.pow((z2 as number) - (z1 as number), 2)
-      );
-      const r = Math.round(dist * 100) / 100;
-      return { correct: Math.abs(parse(inputs.x || '') - r) < 0.01, expected: { x: round(r) } };
-    }
-    // midpoint
-    const mx = ((x1 as number) + (x2 as number)) / 2;
-    const my = ((y1 as number) + (y2 as number)) / 2;
-    const mz = ((z1 as number) + (z2 as number)) / 2;
-    const ok = parse(inputs.x || '') === mx && parse(inputs.y || '') === my && parse(inputs.z || '') === mz;
-    return { correct: ok, expected: { x: String(mx), y: String(my), z: String(mz) } };
   }
   // Probability tree: compound probability (P(A∩B), P(exactly one), P(≥1))
   if (type === 'PROBABILITY_TREE') {

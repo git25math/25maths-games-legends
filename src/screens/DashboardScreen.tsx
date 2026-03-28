@@ -95,6 +95,18 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [selectedStudent, setSelectedStudent] = useState<StudentRow | null>(null);
   const [alertOnly, setAlertOnly] = useState(false);
 
+  // Assignments (shared: AssignmentPanel renders, StudentDetailCard reads)
+  type AssignmentRecord = { id: string; mission_ids: number[]; title: string; deadline: string | null; archived_at: string | null };
+  const [dashAssignments, setDashAssignments] = useState<AssignmentRecord[]>([]);
+  useEffect(() => {
+    if (!filterTag) { setDashAssignments([]); return; }
+    supabase.rpc('get_class_assignments', { p_grade: grade, p_class_tag: filterTag })
+      .then(({ data, error: err }) => {
+        if (!err && data) setDashAssignments(data as AssignmentRecord[]);
+        else setDashAssignments([]);
+      }, () => setDashAssignments([]));
+  }, [grade, filterTag]);
+
   // Persist sort preference in localStorage
   const [sortKey, setSortKey] = useState<'score' | 'progress' | 'kp' | 'name'>(() => {
     try { return (localStorage.getItem('dashboard_sortKey') as any) || 'score'; } catch { return 'score'; }
@@ -445,6 +457,18 @@ export function DashboardScreen({ lang, onClose }: Props) {
         </button>
       </div>
 
+      {/* Active class indicator */}
+      {filterTag && (
+        <div className="flex items-center gap-2 px-3 py-1.5 mb-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg">
+          <span className="text-xs font-black text-indigo-700">
+            {lang === 'en' ? `Viewing: Y${grade} ${filterTag}` : `当前查看：Y${grade} ${filterTag}`}
+          </span>
+          <span className="text-[10px] text-indigo-400 font-bold">
+            {students.length} {lang === 'en' ? 'students' : '名学生'}
+          </span>
+        </div>
+      )}
+
       {/* Batch assign panel */}
       <AnimatePresence>
         {showBatchAssign && (
@@ -680,6 +704,10 @@ export function DashboardScreen({ lang, onClose }: Props) {
             student={selectedStudent}
             units={units}
             totalMissions={totalMissions}
+            assignments={dashAssignments.filter(a => !a.archived_at).map(a => {
+              const done = a.mission_ids.filter(mid => (selectedStudent.completed_missions as any)?.[String(mid)]?.green).length;
+              return { id: a.id, title: a.title, deadline: a.deadline, missionsDone: done, missionsTotal: a.mission_ids.length };
+            })}
             onClose={() => setSelectedStudent(null)}
           />
         )}

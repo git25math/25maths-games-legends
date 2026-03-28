@@ -188,6 +188,16 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
                         <span className="text-[10px] text-slate-400">
                           {a.mission_ids.length} {lang === 'en' ? 'missions' : '关卡'}
                         </span>
+                        {stats.totalStudents - stats.completedStudents > 0 && (
+                          <span className="text-[10px] font-bold text-rose-500">
+                            {stats.totalStudents - stats.completedStudents} {lang === 'en' ? 'incomplete' : '人未完成'}
+                          </span>
+                        )}
+                        {stats.completedStudents === stats.totalStudents && stats.totalStudents > 0 && (
+                          <span className="text-[10px] font-bold text-emerald-500">
+                            ✓ {lang === 'en' ? 'All done' : '全部完成'}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">

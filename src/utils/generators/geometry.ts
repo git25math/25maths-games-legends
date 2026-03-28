@@ -1453,3 +1453,161 @@ export function generateSimilarTrianglesMission(template: Mission, tier: Difficu
   };
 }
 
+/* ══════════════════════════════════════════════════════════
+   COORD_3D generator
+   3D coordinate problems: midpoint or distance in 3D
+   Uses COORD_3D type
+   ══════════════════════════════════════════════════════════ */
+
+export function generateCoord3DMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  const mode = (template.data?.mode as 'midpoint' | 'distance') ||
+    (tier === 1 ? 'midpoint' : pickRandom(['midpoint', 'distance'] as const));
+
+  const coordPools: Record<number, number[]> = {
+    1: [0, 1, 2, 3, 4, 5, 6],
+    2: [0, 1, 2, 3, 4, 5, 6, 8, 10, -1, -2],
+    3: [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 8],
+  };
+
+  const pick = () => pickRandom(coordPools[tier]);
+  const x1 = pick(), y1 = pick(), z1 = pick();
+  const x2 = pick(), y2 = pick(), z2 = pick();
+
+  const narrator = pickRandom(['诸葛亮', '张辽', '曹操', '周瑜']);
+
+  if (mode === 'midpoint') {
+    const mx = (x1 + x2) / 2;
+    const my = (y1 + y2) / 2;
+    const mz = (z1 + z2) / 2;
+
+    // For tier 1, ensure clean midpoints (even sums)
+    if (tier === 1 && (x1 + x2) % 2 !== 0) return safeRetry(template, generateCoord3DMission, tier);
+    if (tier === 1 && (y1 + y2) % 2 !== 0) return safeRetry(template, generateCoord3DMission, tier);
+    if (tier === 1 && (z1 + z2) % 2 !== 0) return safeRetry(template, generateCoord3DMission, tier);
+
+    const description: BilingualText = {
+      zh: `在三维空间中，$A = (${x1}, ${y1}, ${z1})$，$B = (${x2}, ${y2}, ${z2})$。\n求线段 $AB$ 的中点坐标 $M(x, y, z)$。`,
+      en: `In 3D space, $A = (${x1}, ${y1}, ${z1})$, $B = (${x2}, ${y2}, ${z2})$.\nFind the midpoint $M(x, y, z)$ of segment $AB$.`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: {
+          zh: `${narrator}："三维坐标是二维坐标的自然延伸。在二维中我们有 $(x, y)$，在三维中加了高度方向 $z$。\n中点公式同样适用于三维：每个坐标分量分别取平均值。"`,
+          en: `${narrator}: "3D coordinates are a natural extension of 2D. We add a height dimension $z$ to $(x, y)$.\nThe midpoint formula applies to each coordinate separately — take the average of each component."`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}："三维中点公式：\n$$M = \\left(\\frac{x_1+x_2}{2},\\ \\frac{y_1+y_2}{2},\\ \\frac{z_1+z_2}{2}\\right)$$\n三个分量完全独立——分别计算，再合并。"`,
+          en: `${narrator}: "3D Midpoint Formula:\n$$M = \\left(\\frac{x_1+x_2}{2},\\ \\frac{y_1+y_2}{2},\\ \\frac{z_1+z_2}{2}\\right)$$\nThree components are independent — calculate each, then combine."`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}："代入 $A(${x1}, ${y1}, ${z1})$ 和 $B(${x2}, ${y2}, ${z2})$：\n$$x = \\frac{${x1}+${x2}}{2} = \\frac{${x1 + x2}}{2} = ${mx}$$"`,
+          en: `${narrator}: "Substitute $A(${x1}, ${y1}, ${z1})$ and $B(${x2}, ${y2}, ${z2})$:\n$$x = \\frac{${x1}+${x2}}{2} = \\frac{${x1 + x2}}{2} = ${mx}$$"`,
+        },
+        highlightField: 'x',
+      },
+      {
+        text: {
+          zh: `${narrator}："$$y = \\frac{${y1}+${y2}}{2} = ${my}$$\n$$z = \\frac{${z1}+${z2}}{2} = ${mz}$$"`,
+          en: `${narrator}: "$$y = \\frac{${y1}+${y2}}{2} = ${my}$$\n$$z = \\frac{${z1}+${z2}}{2} = ${mz}$$"`,
+        },
+        highlightField: 'y',
+      },
+      {
+        text: {
+          zh: `${narrator}："答案：中点 $M = (${mx}, ${my}, ${mz})$。"`,
+          en: `${narrator}: "Answer: Midpoint $M = (${mx}, ${my}, ${mz})$."`,
+        },
+        highlightField: 'z',
+      },
+      {
+        text: {
+          zh: `${narrator}："验算：$M$ 到 $A$ 的距离 = $M$ 到 $B$ 的距离（中点定义）。\n$MA_x = ${mx}-${x1}=${mx - x1}$，$MB_x = ${x2}-${mx}=${x2 - mx}$。相等 ✓"`,
+          en: `${narrator}: "Verify: distance $M$ to $A$ = distance $M$ to $B$ (midpoint definition).\n$MA_x = ${mx}-${x1}=${mx - x1}$, $MB_x = ${x2}-${mx}=${x2 - mx}$. Equal ✓"`,
+        },
+        highlightField: 'x',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { x1, y1, z1, x2, y2, z2, mode: 'midpoint', generatorType: 'COORD_3D_RANDOM' },
+      tutorialSteps,
+    };
+  }
+
+  // Distance mode
+  const dx = x2 - x1, dy = y2 - y1, dz = z2 - z1;
+  const distSq = dx * dx + dy * dy + dz * dz;
+
+  // Ensure perfect square distance for clean answer
+  if (Math.sqrt(distSq) !== Math.floor(Math.sqrt(distSq))) {
+    return safeRetry(template, generateCoord3DMission, tier);
+  }
+  const dist = Math.sqrt(distSq);
+
+  const description: BilingualText = {
+    zh: `在三维空间中，$A = (${x1}, ${y1}, ${z1})$，$B = (${x2}, ${y2}, ${z2})$。\n求线段 $AB$ 的长度 $x$。`,
+    en: `In 3D space, $A = (${x1}, ${y1}, ${z1})$, $B = (${x2}, ${y2}, ${z2})$.\nFind the length of segment $AB$ = $x$.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}："三维距离公式是二维勾股定理的延伸。在二维中 $d = \\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}$，三维中再加一项 $z$：\n$$d = \\sqrt{(x_2-x_1)^2+(y_2-y_1)^2+(z_2-z_1)^2}$$"`,
+        en: `${narrator}: "3D distance formula extends the 2D Pythagorean theorem. In 2D: $d = \\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}$. In 3D, add the $z$ term:\n$$d = \\sqrt{(x_2-x_1)^2+(y_2-y_1)^2+(z_2-z_1)^2}$$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}："为什么是这个公式？在三维中，从 $A$ 到 $B$ 可以拆成三个方向的位移，三次使用勾股定理叠加就得到这个公式。"`,
+        en: `${narrator}: "Why this formula? In 3D, movement from $A$ to $B$ can be decomposed into three directions. Apply Pythagoras three times and you get this formula."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}："代入 $A(${x1}, ${y1}, ${z1})$ 和 $B(${x2}, ${y2}, ${z2})$：\n$$x_2-x_1 = ${x2}-${x1} = ${dx}$$\n$$y_2-y_1 = ${y2}-${y1} = ${dy}$$\n$$z_2-z_1 = ${z2}-${z1} = ${dz}$$"`,
+        en: `${narrator}: "Substitute $A(${x1}, ${y1}, ${z1})$ and $B(${x2}, ${y2}, ${z2})$:\n$$x_2-x_1 = ${x2}-${x1} = ${dx}$$\n$$y_2-y_1 = ${y2}-${y1} = ${dy}$$\n$$z_2-z_1 = ${z2}-${z1} = ${dz}$$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}："计算平方和：\n$$d^2 = ${dx}^2 + ${dy}^2 + ${dz}^2 = ${dx * dx} + ${dy * dy} + ${dz * dz} = ${distSq}$$"`,
+        en: `${narrator}: "Calculate sum of squares:\n$$d^2 = ${dx}^2 + ${dy}^2 + ${dz}^2 = ${dx * dx} + ${dy * dy} + ${dz * dz} = ${distSq}$$"`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}："取平方根：$d = \\sqrt{${distSq}} = ${dist}$。"`,
+        en: `${narrator}: "Take square root: $d = \\sqrt{${distSq}} = ${dist}$."`,
+      },
+      highlightField: 'x',
+    },
+    {
+      text: {
+        zh: `${narrator}："验算：$d^2 = ${dist}^2 = ${dist * dist}$ ✓ 与计算的 ${distSq} 相等，答案 $x = ${dist}$ 正确。"`,
+        en: `${narrator}: "Check: $d^2 = ${dist}^2 = ${dist * dist}$ ✓ Equals calculated ${distSq}. Answer $x = ${dist}$ confirmed."`,
+      },
+      highlightField: 'x',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { x1, y1, z1, x2, y2, z2, mode: 'distance', generatorType: 'COORD_3D_RANDOM' },
+    tutorialSteps,
+  };
+}
+

@@ -177,6 +177,10 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'x', label: 'x 坐标', placeholder: 'x = ?' }, { id: 'y', label: 'y 坐标', placeholder: 'y = ?' }],
     en: [{ id: 'x', label: 'x coordinate', placeholder: 'x = ?' }, { id: 'y', label: 'y coordinate', placeholder: 'y = ?' }],
   },
+  COORD_3D: {
+    zh: [{ id: 'x', label: 'x', placeholder: 'x = ?' }, { id: 'y', label: 'y', placeholder: 'y = ?' }, { id: 'z', label: 'z', placeholder: 'z = ?' }],
+    en: [{ id: 'x', label: 'x', placeholder: 'x = ?' }, { id: 'y', label: 'y', placeholder: 'y = ?' }, { id: 'z', label: 'z', placeholder: 'z = ?' }],
+  },
   EXPAND: {
     zh: [{ id: 'ans', label: '展开结果', placeholder: '= ?' }],
     en: [{ id: 'ans', label: 'Expanded form', placeholder: '= ?' }],
@@ -212,9 +216,5 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
   SEQUENCE_NTH: {
     zh: [{ id: 'ans', label: '第n项的值', placeholder: 'a_n = ?' }],
     en: [{ id: 'ans', label: 'Value of nth term', placeholder: 'a_n = ?' }],
-  },
-  COORD_3D: {
-    zh: [{ id: 'x', label: 'x', placeholder: 'x = ?' }, { id: 'y', label: 'y', placeholder: 'y = ?' }, { id: 'z', label: 'z', placeholder: 'z = ?' }],
-    en: [{ id: 'x', label: 'x', placeholder: 'x = ?' }, { id: 'y', label: 'y', placeholder: 'y = ?' }, { id: 'z', label: 'z', placeholder: 'z = ?' }],
   },
 };

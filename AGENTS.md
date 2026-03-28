@@ -35,9 +35,10 @@ Step 5: npm test -- --run     → 2339 测试必须全通过
 ## 三、当前状态快照（v9.8.0, 2026-03-28）
 
 ### 规模
-- **218 missions** 分布: Y7(57) + Y8(40) + Y9(47) + Y10(45) + Y11(27) + Y12(5)（含 SIMILAR_TRIANGLES/TREE_DIAGRAM 新题型）
-- **75 个活跃 generatorType**（含 SIMILAR_TRIANGLES_RANDOM + TREE_DIAGRAM_RANDOM），100% 覆盖
-- **2,314 个 Vitest 用例**（全通过）
+- **228 missions** 分布: Y7(57) + Y8(41) + Y9(48) + Y10(49) + Y11(28) + Y12(5)
+- **77 个活跃 generatorType**（含 SIMILAR_TRIANGLES/TREE_DIAGRAM/SEQUENCE_NTH/COORD_3D），100% 覆盖
+- **2,364 个 Vitest 用例**（全通过）
+- **4 条远征**: 桃园(Y7-8) / 赤壁(Y7-12) / 蜀道(Y8-10) / 北伐(Y10-12)
 
 ### 教程质量覆盖率（截至 v8.9.3）
 

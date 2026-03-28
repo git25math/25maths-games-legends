@@ -184,9 +184,11 @@ export const KPHeatmap = ({
                 const avg = kpAvg[kp] ?? 0;
                 return (
                   <td key={kp} className="px-0.5 py-1 text-center">
-                    <span className={`text-[9px] font-black ${avg < 50 ? 'text-rose-500' : avg < 75 ? 'text-amber-500' : 'text-emerald-500'}`}>
-                      {avg}%
-                    </span>
+                    <div className={`inline-block px-1 py-0.5 rounded-sm ${avg < 50 ? 'bg-rose-100' : avg < 75 ? 'bg-amber-50' : ''}`}>
+                      <span className={`text-[9px] font-black ${avg < 50 ? 'text-rose-600' : avg < 75 ? 'text-amber-600' : 'text-emerald-500'}`}>
+                        {avg}%
+                      </span>
+                    </div>
                   </td>
                 );
               })}

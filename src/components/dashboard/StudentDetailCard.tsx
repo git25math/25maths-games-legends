@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { X, AlertTriangle, BarChart3 } from 'lucide-react';
+import { X, AlertTriangle, BarChart3, ClipboardList, Clock } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, UnitEntry } from './types';
 import { RadarChart } from './RadarChart';
@@ -81,17 +81,27 @@ function compute7Dimensions(
   return [progress, mastery, activity, errorControl, streak, balance, growth];
 }
 
+type StudentAssignment = {
+  id: string;
+  title: string;
+  deadline: string | null;
+  missionsDone: number;
+  missionsTotal: number;
+};
+
 export const StudentDetailCard = ({
   lang,
   student,
   units,
   totalMissions,
+  assignments = [],
   onClose,
 }: {
   lang: Language;
   student: StudentRow;
   units: UnitEntry[];
   totalMissions: number;
+  assignments?: StudentAssignment[];
   onClose: () => void;
 }) => {
   useEscapeKey(onClose);
@@ -276,6 +286,35 @@ export const StudentDetailCard = ({
                       {label ? (lang === 'en' ? label.en : label.zh) : e.type}
                     </span>
                     <span className="text-[9px] text-rose-400">{e.count}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Current Assignments */}
+        {assignments.length > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center gap-1.5 mb-2">
+              <ClipboardList size={14} className="text-indigo-400" />
+              <span className="text-xs font-bold text-slate-600">{lang === 'en' ? 'Active Assignments' : '当前任务'}</span>
+            </div>
+            <div className="space-y-1.5">
+              {assignments.map(a => {
+                const allDone = a.missionsDone === a.missionsTotal;
+                const deadlineDays = a.deadline ? Math.ceil((new Date(a.deadline).getTime() - Date.now()) / 86400000) : null;
+                return (
+                  <div key={a.id} className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-[10px] ${allDone ? 'bg-emerald-50 border-emerald-100' : 'bg-indigo-50 border-indigo-100'}`}>
+                    <span className={`font-bold flex-1 truncate ${allDone ? 'text-emerald-700' : 'text-indigo-700'}`}>{a.title}</span>
+                    <span className={`font-bold ${allDone ? 'text-emerald-500' : 'text-indigo-500'}`}>{a.missionsDone}/{a.missionsTotal}</span>
+                    {deadlineDays !== null && !allDone && (
+                      <span className={`flex items-center gap-0.5 ${deadlineDays <= 1 ? 'text-rose-500' : 'text-slate-400'}`}>
+                        <Clock size={9} />
+                        {deadlineDays <= 0 ? (lang === 'en' ? 'overdue' : '逾期') : `${deadlineDays}d`}
+                      </span>
+                    )}
+                    {allDone && <span className="text-emerald-500">✓</span>}
                   </div>
                 );
               })}
