@@ -1,7 +1,8 @@
 /**
- * EquationSteps — 方程解题步骤可视化
+ * EquationSteps — 方程解题步骤可视化 (with writing animation)
  * 覆盖 KP: 2.5-01 ~ 2.5-13
  */
+import { motion } from 'motion/react';
 import { MathView } from '../MathView';
 
 type Step = {
@@ -33,18 +34,22 @@ export function EquationSteps({ steps, currentStep = steps.length - 1, highlight
         const isCurrent = i === currentStep;
 
         return (
-          <div
+          <motion.div
             key={i}
             role="listitem"
-            className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300"
+            initial={isActive ? { opacity: 0, x: -10 } : false}
+            animate={{ opacity: isActive ? 1 : 0.35, x: 0 }}
+            transition={{ duration: 0.35, delay: isCurrent ? 0.2 : 0 }}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg"
             style={{
               backgroundColor: isCurrent ? `${active}10` : 'transparent',
               borderLeft: isActive ? `3px solid ${active}` : '3px solid transparent',
-              opacity: isActive ? 1 : 0.35,
             }}
           >
             {/* Step number */}
-            <span
+            <motion.span
+              animate={{ scale: isCurrent ? [1, 1.2, 1] : 1 }}
+              transition={{ duration: 0.3 }}
               className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
               style={{
                 backgroundColor: isActive ? active : COLORS.scroll,
@@ -52,7 +57,7 @@ export function EquationSteps({ steps, currentStep = steps.length - 1, highlight
               }}
             >
               {i + 1}
-            </span>
+            </motion.span>
 
             {/* Math expression */}
             <div className="flex-1">
@@ -61,9 +66,17 @@ export function EquationSteps({ steps, currentStep = steps.length - 1, highlight
 
             {/* Annotation */}
             {step.annotation && isActive && (
-              <span className="text-xs font-medium" style={{ color: COLORS.gold }}>{step.annotation}</span>
+              <motion.span
+                initial={{ opacity: 0, x: 5 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.2 }}
+                className="text-xs font-medium"
+                style={{ color: COLORS.gold }}
+              >
+                {step.annotation}
+              </motion.span>
             )}
-          </div>
+          </motion.div>
         );
       })}
     </div>
