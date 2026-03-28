@@ -1200,7 +1200,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：读 $y$ 坐标\n从原点往上数 $5$ 格 → $y = 5$\n\n答案：坐标 $(3, 5)$，$x = 3$', en: 'Zhuge Liang: Read the $y$-coordinate\nCount $5$ units up from origin → $y = 5$\n\nAnswer: coordinate $(3, 5)$, $x = 3$' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：验算\n从 $(0,0)$ 向右 $3$ 向上 $5$ 到达标记点 ✓\n\n敌营位置锁定！', en: 'Zhuge Liang: Verify\nFrom $(0,0)$ go right $3$ up $5$ to reach the marked point ✓\n\nEnemy camp location confirmed!' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '坐标系用 (x,y) 两个数字标记位置。x 是左右，y 是上下。原点 (0,0) 是起点。', en: 'The coordinate system uses (x,y) to mark positions. x = left/right, y = up/down. Origin (0,0) is the start.' }, formula: '$(x, y)$：先横后竖', tips: [{ zh: '诸葛亮提示：读图如读兵法——坐标不准，全盘皆输！', en: 'Zhuge Liang Tip: Reading maps is like reading strategy — wrong coordinates mean total defeat!' }] },
+    secret: { concept: { zh: '坐标系用 (x,y) 两个数字标记位置。x 是左右，y 是上下。原点 (0,0) 是起点。', en: 'The coordinate system uses (x,y) to mark positions. x = left/right, y = up/down. Origin (0,0) is the start.' }, formula: '$(x, y)$', tips: [{ zh: '诸葛亮提示：读图如读兵法——坐标不准，全盘皆输！', en: 'Zhuge Liang Tip: Reading maps is like reading strategy — wrong coordinates mean total defeat!' }] },
     storyConsequence: { correct: { zh: '读图定位——坐标精准！做得漂亮！', en: 'Map Reading — Well done!' }, wrong: { zh: '位置差了一点——试试重新读一下坐标？', en: 'Not quite... Try again!' } }
   },
   {
