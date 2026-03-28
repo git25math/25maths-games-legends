@@ -24,7 +24,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '关羽：求截距\n$c = y_1 - m \\times x_1$\n答案：$y = mx + c$', en: 'Guan Yu: "Find the intercept\n$c = y_1 - m \\times x_1$\nAnswer: $y = mx + c$"' }, highlightField: 'm' },
       { text: { zh: '关羽：验算\n把第二个点代入：$m \\times x_2 + c$ 应该等于 $y_2$ ✓', en: 'Guan Yu: "Verify\nSubstitute the second point: $m \\times x_2 + c$ should equal $y_2$ ✓"' }, highlightField: 'm' },
     ],
-    secret: { concept: { zh: '斜率 $m$ 是变化率（每走 1 步升高多少），截距 $c$ 是起点高度。', en: 'Slope $m$ is rate of change, intercept $c$ is starting height.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}, \\quad c = y_1 - mx_1$', tips: [{ zh: '关羽提示：知道两个点，就能画出一条直线！', en: 'Guan Yu Tip: Two points determine a line!' }] },
+    secret: { concept: { zh: '斜率 $m$ 是变化率（每走 1 步升高多少），截距 $c$ 是起点高度。', en: 'Gradient $m$ is rate of change, intercept $c$ is starting height.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}, \\quad c = y_1 - mx_1$', tips: [{ zh: '关羽提示：知道两个点，就能画出一条直线！', en: 'Guan Yu Tip: Two points determine a line!' }] },
     storyConsequence: { correct: { zh: '联军路线精准，直奔虎牢关！', en: 'Coalition route is precise, heading straight for Hulao Pass!' }, wrong: { zh: '路线偏差，大军迷路了…', en: 'Route error — the army is lost...' } },
   },
   {
@@ -68,7 +68,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '关羽：答案\n$y = mx + c$——合围路线确定！', en: 'Guan Yu: "Answer\n$y = mx + c$ — encirclement route confirmed!"' }, highlightField: 'm' },
       { text: { zh: '关羽：验算\n把两个点分别代入：都满足方程 ✓', en: 'Guan Yu: "Verify\nSubstitute both points: both satisfy the equation ✓"' }, highlightField: 'm' },
     ],
-    secret: { concept: { zh: '斜率越大，路线越陡。', en: 'Steeper route means larger slope.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}$', tips: [{ zh: '关羽提示：斜率就是行军的陡峭程度。', en: 'Guan Yu Tip: Slope is the steepness of the march.' }] },
+    secret: { concept: { zh: '斜率越大，路线越陡。', en: 'Steeper route means larger gradient.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}$', tips: [{ zh: '关羽提示：斜率就是行军的陡峭程度。', en: 'Guan Yu Tip: Gradient is the steepness of the march.' }] },
     storyConsequence: { correct: { zh: '合围之势——直线方程搞定！做得漂亮！', en: 'Encirclement — Well done!' }, wrong: { zh: '直线方程差一步——检查一下斜率和截距？', en: 'Not quite... Try again!' } },
   },
   {
@@ -733,7 +733,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '荀彧：答案\n税收路线 $y = mx + c$ 确定！', en: 'Xun Yu: "Answer\nTax route $y = mx + c$ confirmed!"' }, highlightField: 'm' },
       { text: { zh: '荀彧：验算\n两个点都代入，都满足方程 ✓', en: 'Xun Yu: "Verify\nSubstitute both points — they should both satisfy the equation ✓"' }, highlightField: 'm' },
     ],
-    secret: { concept: { zh: '线性增长 = 每期增加固定量。斜率就是增长速度。', en: 'Linear growth = fixed increase per period. Slope = rate of growth.' }, formula: '$y = mx + c$', tips: [{ zh: '刘备提示：以德服人，荆州大治！', en: 'Liu Bei Tip: Lead with virtue — Jingzhou prospers!' }] },
+    secret: { concept: { zh: '线性增长 = 每期增加固定量。斜率就是增长速度。', en: 'Linear growth = fixed increase per period. Gradient = rate of growth.' }, formula: '$y = mx + c$', tips: [{ zh: '刘备提示：以德服人，荆州大治！', en: 'Liu Bei Tip: Lead with virtue — Jingzhou prospers!' }] },
     storyConsequence: { correct: { zh: '税收路线——直线方程搞定！做得漂亮！', en: 'Tax Revenue Route — Well done!' }, wrong: { zh: '直线方程差一步——检查一下斜率和截距？', en: 'Not quite... Try again!' } },
   },
   {
@@ -755,7 +755,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '荀彧：答案\n$y = mx + c$ 人口增长模型建立！', en: 'Xun Yu: "Answer\n$y = mx + c$ — the population growth model is established!"' }, highlightField: 'm' },
       { text: { zh: '荀彧：验算\n两个原始数据点都满足方程 ✓', en: 'Xun Yu: "Verify\nBoth original data points satisfy the equation ✓"' }, highlightField: 'm' },
     ],
-    secret: { concept: { zh: '截距 $c$ 是初始人口，斜率 $m$ 是每年增长量。', en: 'Intercept $c$ = initial population, slope $m$ = yearly growth.' }, formula: '$y = mx + c$', tips: [{ zh: '诸葛亮提示：荆州治理好了，就是北伐的根基！', en: 'Zhuge Liang Tip: A well-governed Jingzhou is the base for the northern expedition!' }] },
+    secret: { concept: { zh: '截距 $c$ 是初始人口，斜率 $m$ 是每年增长量。', en: 'Intercept $c$ = initial population, gradient $m$ = yearly growth.' }, formula: '$y = mx + c$', tips: [{ zh: '诸葛亮提示：荆州治理好了，就是北伐的根基！', en: 'Zhuge Liang Tip: A well-governed Jingzhou is the base for the northern expedition!' }] },
     storyConsequence: { correct: { zh: '荆州大治，人口增长趋势已成！', en: 'Jingzhou thrives — population growth trend established!' }, wrong: { zh: '预测失误，治理方案需要调整…', en: 'Prediction wrong — governance plan needs adjustment...' } },
   },
 

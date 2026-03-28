@@ -297,7 +297,7 @@ export const translations = {
       QUADRATIC: "Catapult Trajectory (y=ax²+c)",
       INDICES: "Supply Growth (Indices)",
       PYTHAGORAS: "Siege Ladder (Pythagoras)",
-      SIMULTANEOUS: "Army Meeting (Simultaneous)",
+      SIMULTANEOUS: "Simultaneous Equations",
       ESTIMATION: "Estimation",
       PERCENTAGE: "Percentage Growth",
       FRACTION: "Fractions",

@@ -828,7 +828,7 @@ export const MISSIONS_Y10: Mission[] = [
       { text: { zh: '诸葛亮：答案\n阵型放大完成！防御范围扩大，固若金汤！', en: 'Zhuge Liang: "Answer\nFormation enlarged! Defense range expanded — ironclad!"' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：验算\n新坐标 ÷ $k$ 应等于原坐标 ✓', en: 'Zhuge Liang: "Verify\nNew coordinates ÷ $k$ should equal original ✓"' }, highlightField: 'x' },
     ],
-    secret: { concept: { zh: '放大/缩放：从中心出发，距离乘以 k。形状不变，大小改变。', en: 'Enlargement: from center, distances multiply by k. Shape unchanged, size changes.' }, formula: '$(x,y) \\to (kx, ky)$', tips: [{ zh: '诸葛亮提示：阵型可大可小，关键在比例不变。', en: 'Zhuge Liang Tip: Formations can grow or shrink — the key is proportions stay the same.' }] },
+    secret: { concept: { zh: '放大/缩放：从中心出发，距离乘以 k。形状不变，大小改变。', en: 'Enlargement: from centre, distances multiply by k. Shape unchanged, size changes.' }, formula: '$(x,y) \\to (kx, ky)$', tips: [{ zh: '诸葛亮提示：阵型可大可小，关键在比例不变。', en: 'Zhuge Liang Tip: Formations can grow or shrink — the key is proportions stay the same.' }] },
     storyConsequence: { correct: { zh: '阵型放大——坐标精准！做得漂亮！', en: 'Formation Enlargement — Well done!' }, wrong: { zh: '位置差了一点——试试重新读一下坐标？', en: 'Not quite... Try again!' } }
   },
 
@@ -1112,7 +1112,7 @@ export const MISSIONS_Y10: Mission[] = [
     title: { zh: '圆心角定理', en: 'Central Angle Theorem' },
     skillName: { zh: '圆心角 = 2 × 圆周角', en: 'Central Angle = 2 × Inscribed Angle' },
     skillSummary: { zh: '圆心角 = 2 × 同弧圆周角', en: 'Central angle = 2 × inscribed angle on same arc' },
-    story: { zh: '诸葛亮从圆心观察军阵，圆周上的将领从边缘看——视角竟差一倍！', en: 'Zhuge Liang watches from the center; a general on the circle edge sees the same span — but only half the angle!' },
+    story: { zh: '诸葛亮从圆心观察军阵，圆周上的将领从边缘看——视角竟差一倍！', en: 'Zhuge Liang watches from the centre; a general on the circle edge sees the same span — but only half the angle!' },
     description: { zh: '已知圆心角或圆周角，求另一个角 $x$。', en: 'Given a central or inscribed angle subtending the same arc, find the other angle $x$.' },
     data: { knownAngle: 120, answer: 60, isGivenCentral: true, inscribedAngle: 60, centralAngle: 120, theoremType: 'center_double', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-5.4-02', sectionId: 'geometry',

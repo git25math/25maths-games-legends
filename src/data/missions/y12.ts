@@ -22,7 +22,7 @@ export const MISSIONS_Y12: Mission[] = [
           { zh: '试所有点看哪个最小', en: 'Try all points to see which is smallest' },
           { zh: '取函数的起点', en: 'Take the starting point of the function' },
         ],
-        onCorrect: { zh: '你已经有微积分的直觉了！\n变化速度为零 = 导数为零 = 极值点。\n就像走到山谷最底部那一刻，脚下是平的——坡度为零。', en: 'You already have calculus intuition!\nRate of change = 0 means derivative = 0 means extremum.\nLike reaching the valley floor — the ground is flat, slope is zero.' },
+        onCorrect: { zh: '你已经有微积分的直觉了！\n变化速度为零 = 导数为零 = 极值点。\n就像走到山谷最底部那一刻，脚下是平的——坡度为零。', en: 'You already have calculus intuition!\nRate of change = 0 means derivative = 0 means extremum.\nLike reaching the valley floor — the ground is flat, gradient is zero.' },
         onWrong: { zh: '试所有点太慢了——导数给了一个捷径！\n导数 = 变化的速度。当导数 = 0，变化停止 = 极值点。', en: 'Testing all points is too slow — derivatives give a shortcut!\nDerivative = rate of change. When derivative = 0, change stops = extremum.' },
         onSkip: { zh: '导数描述"变化有多快"。当导数 = 0，函数不再上升也不下降——这就是极值点。', en: 'Derivatives describe "how fast things change". When derivative = 0, the function stops rising or falling — that is the extremum.' },
       },
@@ -44,7 +44,7 @@ export const MISSIONS_Y12: Mission[] = [
         highlightField: 'x'
       },
       {
-        text: { zh: '刘禅：把图像想成一条山路\n走向谷底时，坡度会从负数慢慢变成 $0$；过了谷底，又从 $0$ 变回正数。\n所以“最低点”那一瞬间，切线会暂时变平，也就是导数 = $0$。\n先找导数为 $0$ 的位置，再确认它是不是极小值点。', en: 'Liu Shan: "Think of the graph as a mountain path\nAs you walk down into a valley, the slope goes from negative to $0$; after the valley, it changes from $0$ to positive.\nSo at the LOWEST point, the tangent briefly becomes flat, which means derivative = $0$.\nFirst find where the derivative is $0$, then confirm it is really a minimum."' },
+        text: { zh: '刘禅：把图像想成一条山路\n走向谷底时，坡度会从负数慢慢变成 $0$；过了谷底，又从 $0$ 变回正数。\n所以“最低点”那一瞬间，切线会暂时变平，也就是导数 = $0$。\n先找导数为 $0$ 的位置，再确认它是不是极小值点。', en: 'Liu Shan: "Think of the graph as a mountain path\nAs you walk down into a valley, the gradient goes from negative to $0$; after the valley, it changes from $0$ to positive.\nSo at the LOWEST point, the tangent briefly becomes flat, which means derivative = $0$.\nFirst find where the derivative is $0$, then confirm it is really a minimum."' },
         highlightField: 'x'
       },
       {
@@ -99,8 +99,8 @@ export const MISSIONS_Y12: Mission[] = [
     unitTitle: { zh: "Unit 1: 归晋与综合微积分", en: "Unit 1: Unification & Advanced Calculus" },
     topic: 'Calculus', type: 'DERIVATIVE',
     title: { zh: '攻城速率', en: 'Siege Rate' },
-    skillName: { zh: '导数求斜率术', en: 'Derivative as Slope' },
-    skillSummary: { zh: '在指定点求切线斜率', en: 'Find tangent slope at a given point' },
+    skillName: { zh: '导数求斜率术', en: 'Derivative as Gradient' },
+    skillSummary: { zh: '在指定点求切线斜率', en: 'Find tangent gradient at a given point' },
     story: { zh: '攻城进度函数 $f(x) = x^2$，求 $x = 3$ 时的推进速率。', en: 'Siege progress $f(x) = x^2$. Find the advance rate at $x = 3$.' },
     description: { zh: '求 $f(x) = x^2$ 在 $x = 3$ 处的导数值。', en: 'Find the derivative of $f(x) = x^2$ at $x = 3$.' },
     data: { x: 3, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Medium', reward: 500,
@@ -113,7 +113,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '司马炎：答案\n在 $x = 3$ 处，攻城速率为 $6$。', en: 'Sima Yan: "Answer\nAt $x = 3$, the siege rate is $6$."' }, highlightField: 'k' },
       { text: { zh: '司马炎：验算\n切线 $y = 6(x-3) + 9 = 6x - 9$\n代入 $x = 3$：$6(3) - 9 = 9 = f(3) = 3^2$ ✓', en: 'Sima Yan: "Verify\nTangent $y = 6(x-3) + 9 = 6x - 9$\nAt $x = 3$: $6(3) - 9 = 9 = f(3) = 3^2$ ✓"' }, highlightField: 'k' },
     ],
-    secret: { concept: { zh: '导数 = 切线斜率。$f(x) = x^2$ 的导数是 $f\'(x) = 2x$。', en: 'Derivative = tangent slope. For $f(x) = x^2$, $f\'(x) = 2x$.' }, formula: "$f'(x) = 2x$", tips: [{ zh: '司马炎提示：幂函数的导数——指数拿下来当系数，指数减1。', en: 'Sima Yan Tip: Power rule — bring the exponent down, reduce it by 1.' }] },
+    secret: { concept: { zh: '导数 = 切线斜率。$f(x) = x^2$ 的导数是 $f\'(x) = 2x$。', en: 'Derivative = tangent gradient. For $f(x) = x^2$, $f\'(x) = 2x$.' }, formula: "$f'(x) = 2x$", tips: [{ zh: '司马炎提示：幂函数的导数——指数拿下来当系数，指数减1。', en: 'Sima Yan Tip: Power rule — bring the exponent down, reduce it by 1.' }] },
     storyConsequence: { correct: { zh: '攻城速率——导数精准！做得漂亮！', en: 'Siege Rate — Derivative nailed!' }, wrong: { zh: '导数差一步——指数拿下来当系数，指数减 1。', en: 'Not quite... Try again!' } }
   },
   {

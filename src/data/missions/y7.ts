@@ -76,7 +76,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：答案\n$17$ 是**质数**。\n\n亲卫队 17 人，铁板一块，无法分化！', en: 'Zhuge Liang: Answer\n$17$ is prime.\n\nElite guard of 17 — unbreakable, cannot be divided!' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n$17$ 的因数只有 $1$ 和 $17$——确认是质数 ✓\n\n常见质数速记：$2, 3, 5, 7, 11, 13, 17, 19, 23, 29$', en: 'Zhuge Liang: Verify\n$17$ has only two factors: $1$ and $17$ — confirmed prime ✓\n\nCommon primes to know: $2, 3, 5, 7, 11, 13, 17, 19, 23, 29$' }, highlightField: 'ans' },
     ],
-    secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: { zh: '$\\text{质数 = 只被 1 和自己整除}$', en: '$\\text{Prime = only divisible by 1 and itself}$' }, tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorize.' }] },
+    secret: { concept: { zh: '质数是只能被 1 和自己整除的数，是所有整数的"基本零件"。', en: 'Primes are numbers divisible only by 1 and themselves — the building blocks of all integers.' }, formula: { zh: '$\\text{质数 = 只被 1 和自己整除}$', en: '$\\text{Prime = only divisible by 1 and itself}$' }, tips: [{ zh: '诸葛亮提示：质数是万数之本，先识别它们，才能做因数分解。', en: 'Zhuge Liang Tip: Primes are the foundation — identify them first, then factorise.' }] },
     storyConsequence: { correct: { zh: '选拔亲卫——质数一个不漏！做得漂亮！', en: 'Selecting Elite Guards — Well done!' }, wrong: { zh: '混进了合数…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
@@ -87,7 +87,7 @@ export const MISSIONS_Y7: Mission[] = [
     skillName: { zh: '质因数分解术', en: 'Prime Factorization' },
     skillSummary: { zh: '把一个数拆成质数的乘积', en: 'Break a number into a product of primes' },
     story: { zh: '桃园结义后要编制军队。一批新兵要拆成最小的战斗单元——每个单元只有"质数"人。', en: 'After the oath, the army needs organizing. New recruits must be split into smallest units — each with a prime number of soldiers.' },
-    description: { zh: '把这个数拆成质因数，数一数共几个。', en: 'Factorize this number into primes and count them.' },
+    description: { zh: '把这个数拆成质因数，数一数共几个。', en: 'Factorise this number into primes and count them.' },
     data: { n: 24, primeCount: 4, generatorType: 'FACTOR_TREE_RANDOM' }, difficulty: 'Easy', reward: 40,
     kpId: 'kp-1.1-08', sectionId: 'number',
         tutorialSteps: [
@@ -107,7 +107,7 @@ export const MISSIONS_Y7: Mission[] = [
     topic: 'Algebra', type: 'HCF',
     title: { zh: '整编队伍', en: 'Organizing Troops' },
     skillName: { zh: '公因数术', en: 'Common Factor' },
-    skillSummary: { zh: '最大公因数(HCF)就是两个数共有的最大因数', en: 'HCF: prime factorize, then take common primes to lowest power' },
+    skillSummary: { zh: '最大公因数(HCF)就是两个数共有的最大因数', en: 'HCF: prime factorise, then take common primes to lowest power' },
     story: { zh: '桃园结义后，刘关张三兄弟开始整编队伍。两营士兵人数不同，要分成人数相同的小队一起操练——每队最多能有几个人？', en: 'After the oath, the brothers organize troops. Two camps with different numbers must split into equal squads for training — what\'s the largest squad size?' },
     description: { zh: '求最大公因数 (HCF)。', en: 'Find the Highest Common Factor (HCF).' },
     data: { numbers: [24, 36], generatorType: 'HCF_RANDOM' }, difficulty: 'Easy', reward: 50,
@@ -129,7 +129,7 @@ export const MISSIONS_Y7: Mission[] = [
     topic: 'Algebra', type: 'LCM',
     title: { zh: '巡营排班', en: 'Patrol Schedule' },
     skillName: { zh: '公倍数术', en: 'Common Multiple' },
-    skillSummary: { zh: 'LCM：分解质因数，每个质因数取大的那个，乘起来', en: 'LCM: prime factorize, then take all primes to highest power' },
+    skillSummary: { zh: 'LCM：分解质因数，每个质因数取大的那个，乘起来', en: 'LCM: prime factorise, then take all primes to highest power' },
     story: { zh: '甲将军每隔一段时间巡营一次，乙将军也是。上次同日巡营后，下一次两人再次同日是第几天？', en: 'General A patrols at one interval, General B at another. After their last shared patrol day, when is the next time both patrol on the same day?' },
     description: { zh: '求最小公倍数 (LCM)。', en: 'Find the Least Common Multiple (LCM).' },
     data: { numbers: [6, 8], generatorType: 'LCM_RANDOM' }, difficulty: 'Easy', reward: 55,
