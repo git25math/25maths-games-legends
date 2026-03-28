@@ -1900,26 +1900,16 @@ export default function App() {
           <BottomNav
             activeTab={
               mobileMenuOpen ? 'profile'
-                : gameState === 'expedition' ? 'expedition'
-                : gameState === 'achievements' ? 'achievements'
+                : gameState === 'homework' ? 'homework'
                 : 'map'
             }
             onTabChange={(tab: BottomTab) => {
               if (tab === 'map') {
                 setMobileMenuOpen(false);
                 setGameState('map');
-              } else if (tab === 'expedition') {
+              } else if (tab === 'homework') {
                 setMobileMenuOpen(false);
-                if (profile?.grade) {
-                  const exps = getExpeditionsForGrade(profile.grade);
-                  if (exps.length > 0) {
-                    setActiveExpedition(exps[0]);
-                    setGameState('expedition');
-                  }
-                }
-              } else if (tab === 'achievements') {
-                setMobileMenuOpen(false);
-                setGameState('achievements');
+                setGameState('homework');
               } else if (tab === 'profile') {
                 setGameState('map');
                 setMobileMenuOpen(prev => !prev);
