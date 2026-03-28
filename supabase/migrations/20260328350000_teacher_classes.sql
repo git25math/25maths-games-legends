@@ -16,10 +16,12 @@ CREATE INDEX IF NOT EXISTS idx_teacher_classes_teacher ON public.teacher_classes
 ALTER TABLE public.teacher_classes ENABLE ROW LEVEL SECURITY;
 
 -- Teachers can read/write their own classes
+DROP POLICY IF EXISTS "teacher_own_classes" ON public.teacher_classes;
 CREATE POLICY "teacher_own_classes" ON public.teacher_classes
   FOR ALL USING (auth.uid() = teacher_id);
 
 -- Any authenticated user can look up a class by invite code (for joining)
+DROP POLICY IF EXISTS "lookup_by_code" ON public.teacher_classes;
 CREATE POLICY "lookup_by_code" ON public.teacher_classes
   FOR SELECT USING (is_active = true);
 

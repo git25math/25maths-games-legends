@@ -21,6 +21,7 @@ type AggregatedKP = {
   hasLesson: boolean;
   lessonUrl: string | null;
   weakStudentNames: string[];   // names of students struggling on this KP
+  weakStudentIds: string[];     // user_ids of struggling students
 };
 
 export function KPWeaknessPanel({
@@ -34,7 +35,7 @@ export function KPWeaknessPanel({
   grade: number;
   filterTag: string;
   students: StudentRow[];
-  onAssignKP?: (kpId: string, weakStudentNames: string[]) => void;
+  onAssignKP?: (kpId: string, weakStudentNames: string[], weakStudentIds: string[]) => void;
 }) {
   const [kpData, setKpData] = useState<KPProgressRow[]>([]);
   const [healthData, setHealthData] = useState<{ user_id: string; node_id: string; corruption_level: string }[]>([]);
@@ -84,6 +85,7 @@ export function KPWeaknessPanel({
           hasLesson: !!getLessonId(row.kp_id),
           lessonUrl: getExamHubLessonUrl(row.kp_id),
           weakStudentNames: [],
+          weakStudentIds: [],
         });
       }
       const kp = kpMap.get(row.kp_id)!;
@@ -92,6 +94,7 @@ export function KPWeaknessPanel({
       kp.studentCount += 1;
       if (row.attempts > 2 && row.wins === 0) {
         kp.strugglingCount += 1;
+        kp.weakStudentIds.push(row.user_id);
         const stu = students.find(s => s.user_id === row.user_id);
         if (stu) kp.weakStudentNames.push(stu.display_name || 'Anonymous');
       }
@@ -234,7 +237,7 @@ export function KPWeaknessPanel({
               {/* Assign targeted homework button */}
               {onAssignKP && filterTag && (
                 <button
-                  onClick={() => onAssignKP(kp.kpId, kp.weakStudentNames)}
+                  onClick={() => onAssignKP(kp.kpId, kp.weakStudentNames, kp.weakStudentIds)}
                   className="flex items-center gap-1 px-2 py-1 bg-indigo-100 text-indigo-700 text-[10px] font-bold rounded-lg hover:bg-indigo-200 transition-colors"
                   title={lang === 'en' ? 'Assign targeted practice for this topic' : '针对此知识点布置练习'}
                 >

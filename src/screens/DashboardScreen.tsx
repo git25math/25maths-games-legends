@@ -98,7 +98,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [newTagValue, setNewTagValue] = useState('');
   const [showBatchAssign, setShowBatchAssign] = useState(false);
   const [batchTag, setBatchTag] = useState('');
-  const [kpAssignContext, setKpAssignContext] = useState<{ kpId: string; missionIds: number[]; weakStudentNames: string[] } | null>(null);
+  const [kpAssignContext, setKpAssignContext] = useState<{ kpId: string; missionIds: number[]; weakStudentNames: string[]; weakStudentIds: string[] } | null>(null);
   const [selectedStudent, setSelectedStudent] = useState<StudentRow | null>(null);
   const [showWeeklyReport, setShowWeeklyReport] = useState(false);
   const [parentReportStudent, setParentReportStudent] = useState<StudentRow | null>(null);
@@ -602,14 +602,14 @@ export function DashboardScreen({ lang, onClose }: Props) {
 
       <KPWeaknessPanel
         lang={lang} grade={grade} filterTag={filterTag} students={students}
-        onAssignKP={(kpId, weakStudentNames) => {
+        onAssignKP={(kpId, weakStudentNames, weakStudentIds) => {
           const missionIds = getMissionIdsForKP(kpId);
           if (missionIds.length === 0) {
             setError(lang === 'en' ? `No missions found for ${kpId}` : `${kpId} 暂无对应关卡`);
             setTimeout(() => setError(''), 3000);
             return;
           }
-          setKpAssignContext({ kpId, missionIds, weakStudentNames });
+          setKpAssignContext({ kpId, missionIds, weakStudentNames, weakStudentIds });
         }}
       />
 

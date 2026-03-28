@@ -22,6 +22,7 @@ type Assignment = {
   created_by: string;
   created_at: string;
   archived_at: string | null;
+  target_user_ids: string[] | null;
 };
 
 type Props = {
@@ -31,7 +32,7 @@ type Props = {
   students: StudentRow[];
   units: UnitEntry[];
   /** Pre-fill context from KPWeaknessPanel "Assign" button */
-  kpAssignContext?: { kpId: string; missionIds: number[]; weakStudentNames: string[] } | null;
+  kpAssignContext?: { kpId: string; missionIds: number[]; weakStudentNames: string[]; weakStudentIds: string[] } | null;
   onClearKpAssignContext?: () => void;
 };
 
@@ -386,6 +387,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
             initialKpId={kpAssignContext?.kpId}
             initialMissionIds={kpAssignContext?.missionIds}
             weakStudentNames={kpAssignContext?.weakStudentNames}
+            targetStudentIds={kpAssignContext?.weakStudentIds}
             onClose={() => { setShowCreate(false); onClearKpAssignContext?.(); }}
             onCreated={(title, count, assignmentId) => {
               setShowCreate(false);
@@ -473,6 +475,7 @@ function CreateAssignmentModal({
   initialKpId?: string;
   initialMissionIds?: number[];
   weakStudentNames?: string[];
+  targetStudentIds?: string[];
 }) {
   const [title, setTitle] = useState(
     initialKpId ? (lang === 'en' ? `Targeted: ${initialKpId}` : `专项练习：${initialKpId}`) : ''
@@ -534,6 +537,7 @@ function CreateAssignmentModal({
       p_title: title.trim(),
       p_description: description.trim() || null,
       p_deadline: deadline || null,
+      p_target_user_ids: targetStudentIds?.length ? targetStudentIds : null,
     });
 
     if (rpcErr) {
