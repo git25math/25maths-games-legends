@@ -154,5 +154,10 @@ export const REGISTERED_GENERATOR_TYPES = Object.keys(GENERATOR_MAP) as Generato
 export function generateMission(template: Mission, tier: DifficultyTier = 2): Mission {
   const genType = template.data?.generatorType as GeneratorType | undefined;
   if (!genType || !GENERATOR_MAP[genType]) return template;
-  return GENERATOR_MAP[genType](template, tier);
+  try {
+    return GENERATOR_MAP[genType](template, tier);
+  } catch {
+    // Generator threw (e.g. safeRetry limit) — fall back to static template
+    return template;
+  }
 }

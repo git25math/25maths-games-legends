@@ -637,7 +637,7 @@ export const PracticeScreen = ({
                       logAttempt({ questionId: `${mission.id}-skip-tutorial`, nodeId: mission.kpId || mission.type, isCorrect: true, sourceMode: 'practice', durationMs: Date.now() - questionStartRef.current });
                       advancePhase();
                     }}
-                    className="text-white/25 text-[10px] text-center hover:text-white/50 transition-colors mb-1"
+                    className="text-white/25 text-xs text-center hover:text-white/50 transition-colors mb-1 py-2 min-h-[44px] flex items-center justify-center"
                   >
                     {lang === 'en' ? 'I know this — skip to practice →' : lang === 'zh_TW' ? '我會了——跳到練習 →' : '我会了——跳到练习 →'}
                   </button>
@@ -781,7 +781,7 @@ export const PracticeScreen = ({
                         </button>
                         <button
                           onClick={() => { setShowRepairIntercept(false); regenerateQuestion(); }}
-                          className="w-full py-2 rounded-xl text-white/30 text-[10px] hover:text-white/50 transition-colors"
+                          className="w-full py-3 min-h-[44px] rounded-xl text-white/30 text-xs hover:text-white/50 transition-colors"
                         >
                           {lang === 'en' ? 'skip for now' : lang === 'zh_TW' ? '暫時跳過' : '暂时跳过'}
                         </button>

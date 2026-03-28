@@ -154,11 +154,11 @@ export function BattleHeader({
       </div>
       <div className="flex items-center gap-2">
         {/* Mute button */}
-        <button onClick={toggleMute} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+        <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'} className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-white/10 rounded-full transition-colors">
           {muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
         </button>
         {!isMultiplayer && (
-          <button onClick={onCancel} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+          <button onClick={onCancel} aria-label="Exit battle" className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-white/10 rounded-full transition-colors">
             <XCircle size={24} />
           </button>
         )}
