@@ -24,7 +24,7 @@ export const MISSIONS_Y7: Mission[] = [
       {
         prompt: { zh: '那 12 的因数一共有几个？\n提示：从 1 开始试，1, 2, 3, 4, 6, ...', en: 'How many factors does 12 have in total?\nHint: start from 1 and try each: 1, 2, 3, 4, 6, ...' },
         type: 'input',
-        acceptPattern: '^6$',
+        acceptPattern: '^6|六|six',
         onCorrect: { zh: '厉害！12 的因数是 1, 2, 3, 4, 6, 12——一共 6 个。\n你注意到了吗？因数总是成对出现的：1×12, 2×6, 3×4。\n接下来我们学习系统地找出所有因数的方法。', en: 'Impressive! Factors of 12 are 1, 2, 3, 4, 6, 12 — that\'s 6.\nNotice anything? Factors come in pairs: 1×12, 2×6, 3×4.\nNext, we\'ll learn a systematic way to find all factors.' },
         onWrong: { zh: '接近了！我们来数一数：\n$12 ÷ 1 = 12$ ✓ → 因数：1, 12\n$12 ÷ 2 = 6$ ✓ → 因数：2, 6\n$12 ÷ 3 = 4$ ✓ → 因数：3, 4\n一共 6 个！发现了吗——它们成对出现。', en: 'Close! Let\'s count:\n$12 ÷ 1 = 12$ ✓ → factors: 1, 12\n$12 ÷ 2 = 6$ ✓ → factors: 2, 6\n$12 ÷ 3 = 4$ ✓ → factors: 3, 4\nThat\'s 6! Notice — they come in pairs.' },
         onSkip: { zh: '没关系，因数就是这样找的：\n从 1 开始一个个试，能整除就是因数。\n$1, 2, 3, 4, 6, 12$ ——一共 6 个。\n秘诀：因数总是成对的（$1×12, 2×6, 3×4$），所以只需要试到一半就够了！', en: 'No problem. Here\'s how to find factors:\nStart from 1, try each — if it divides evenly, it\'s a factor.\n$1, 2, 3, 4, 6, 12$ — that\'s 6.\nTrick: factors come in pairs ($1×12, 2×6, 3×4$), so you only need to check up to halfway!' },
@@ -272,7 +272,7 @@ export const MISSIONS_Y7: Mission[] = [
       {
         prompt: { zh: '你吃了 $\\frac{1}{4}$，你的朋友也吃了 $\\frac{1}{4}$。\n你们一共吃了多少？', en: 'You ate $\\frac{1}{4}$, your friend also ate $\\frac{1}{4}$.\nHow much did you eat together?' },
         type: 'input',
-        acceptPattern: '^(2\\/4|1\\/2|0\\.5|½)$',
+        acceptPattern: '2\\/4|1\\/2|0\\.5|½|二分之一|一半|half|two.quarter',
         onCorrect: { zh: '没错！$\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}$。\n分母一样的时候，直接把分子加起来就行！\n（$\\frac{2}{4}$ 还可以化简成 $\\frac{1}{2}$——这个以后再学。）', en: 'Yes! $\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}$.\nWhen denominators match, just add the numerators!\n($\\frac{2}{4}$ simplifies to $\\frac{1}{2}$ — we\'ll learn that later.)' },
         onWrong: { zh: '这样想：4 块里你拿了 1 块，朋友拿了 1 块。\n一共拿了 2 块——还是 4 块里面的。\n所以 $\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}$。分母不变，分子相加！', en: 'Think of it this way: out of 4 pieces, you took 1, friend took 1.\nTogether that\'s 2 pieces — still out of 4.\nSo $\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}$. Denominator stays, numerators add!' },
         onSkip: { zh: '想象 4 块饼。你拿 1 块，朋友拿 1 块。一共拿了 2 块。\n$\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}$\n规则很简单：分母相同时，只加分子！', en: 'Imagine 4 slices. You take 1, friend takes 1. Together that\'s 2.\n$\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}$\nSimple rule: same denominator → just add numerators!' },
@@ -888,7 +888,7 @@ export const MISSIONS_Y7: Mission[] = [
       {
         prompt: { zh: '那如果原价是 200 元，打七折要付多少？', en: 'Now if the original price is $200, how much after 30% off?' },
         type: 'input',
-        acceptPattern: '^140$',
+        acceptPattern: '140',
         onCorrect: { zh: '完美！200 × 0.7 = 140 元。\n不管原价多少，方法一样：原价 × 百分比 ÷ 100。\n接下来我们用这个方法解决军粮分配的问题。', en: 'Perfect! 200 × 0.7 = $140.\nSame method regardless of price: original × percent ÷ 100.\nNow let\'s use this to solve a military supply problem.' },
         onWrong: { zh: '70% 的 200 = 200 × 70 ÷ 100 = 140。\n或者更快：200 × 0.7 = 140。\n方法：原价 × 百分比 ÷ 100。简单吧？', en: '70% of 200 = 200 × 70 ÷ 100 = 140.\nOr quicker: 200 × 0.7 = 140.\nMethod: original × percent ÷ 100. Simple!' },
         onSkip: { zh: '和刚才一模一样的方法：\n200 × 70 ÷ 100 = 140 元。\n记住：百分比计算 = 数字 × 百分比 ÷ 100。', en: 'Exact same method as before:\n200 × 70 ÷ 100 = $140.\nRemember: percentage calculation = number × percent ÷ 100.' },

@@ -146,7 +146,7 @@ export const MISSIONS_Y9: Mission[] = [
       {
         prompt: { zh: '如果一个直角三角形两条短边是 6 和 8，最长边是多少？\n$a^2 + b^2 = c^2$\n$6^2 + 8^2 = ?$', en: 'If a right triangle has short sides 6 and 8, what is the longest side?\n$a^2 + b^2 = c^2$\n$6^2 + 8^2 = ?$' },
         type: 'input',
-        acceptPattern: '^10$',
+        acceptPattern: '10|十|ten',
         onCorrect: { zh: '完美！$6^2 + 8^2 = 36 + 64 = 100$，$\\sqrt{100} = 10$。\n\n你刚才用勾股定理算出了斜边！\n接下来我们用同样的方法算云梯的长度。', en: 'Perfect! $6^2 + 8^2 = 36 + 64 = 100$, $\\sqrt{100} = 10$.\n\nYou just used Pythagoras to find the hypotenuse!\nNow let\'s use the same method to calculate a siege ladder.' },
         onWrong: { zh: '一步步来：\n$6^2 = 36$\n$8^2 = 64$\n$36 + 64 = 100$\n$c = \\sqrt{100} = 10$\n\n三步：平方 → 相加 → 开方。就这样！', en: 'Step by step:\n$6^2 = 36$\n$8^2 = 64$\n$36 + 64 = 100$\n$c = \\sqrt{100} = 10$\n\nThree steps: square → add → square root. That\'s it!' },
         onSkip: { zh: '勾股定理三步走：\n① 平方：$6^2 = 36$，$8^2 = 64$\n② 相加：$36 + 64 = 100$\n③ 开方：$c = \\sqrt{100} = 10$\n\n答案是 10！现在你已经会用勾股定理了。', en: 'Pythagoras in three steps:\n① Square: $6^2 = 36$, $8^2 = 64$\n② Add: $36 + 64 = 100$\n③ Square root: $c = \\sqrt{100} = 10$\n\nAnswer is 10! You now know how to use Pythagoras.' },
@@ -641,7 +641,7 @@ export const MISSIONS_Y9: Mission[] = [
       {
         prompt: { zh: '$6x + 12$\n\n这两项——$6x$ 和 $12$——有什么共同点？', en: '$6x + 12$\n\nThese two terms — $6x$ and $12$ — what do they have in common?' },
         type: 'input',
-        acceptPattern: '^(6|都能被6整除|都有6|6是公因数)$',
+        acceptPattern: '6|都.*6|common.*6|both.*6|公因',
         onCorrect: { zh: '你看出来了！$6x = 6 \\times x$，$12 = 6 \\times 2$。\n它们都有一个共同的因数：6。\n把共同的东西"提出来"——这就是因式分解的全部！', en: 'You spotted it! $6x = 6 \\times x$, $12 = 6 \\times 2$.\nThey share a common factor: 6.\nPulling out what\'s shared — that\'s ALL factorising is!' },
         onWrong: { zh: '我来帮你拆开看：\n$6x = 6 \\times x$\n$12 = 6 \\times 2$\n看到了吗？两项都有 6！\n因式分解就是把这个共同的 6 提出来。', en: 'Let me break them apart:\n$6x = 6 \\times x$\n$12 = 6 \\times 2$\nSee it? Both have 6!\nFactorising means pulling out that shared 6.' },
         onSkip: { zh: '没关系，我们一起看。\n$6x$ 可以拆成 $6 \\times x$\n$12$ 可以拆成 $6 \\times 2$\n它们都能被 6 整除——6 就是"公因数"。\n因式分解 = 把公因数提到括号外面。', en: 'That\'s OK, let\'s look together.\n$6x$ breaks into $6 \\times x$\n$12$ breaks into $6 \\times 2$\nBoth divisible by 6 — that\'s the common factor.\nFactorising = pull the common factor outside a bracket.' },
@@ -649,7 +649,7 @@ export const MISSIONS_Y9: Mission[] = [
       {
         prompt: { zh: '把 6 提出来后，括号里剩什么？\n$6x + 12 = 6(\\text{?})$', en: 'After pulling out 6, what\'s left inside the bracket?\n$6x + 12 = 6(\\text{?})$' },
         type: 'input',
-        acceptPattern: '^(x\\+2|x \\+ 2)$',
+        acceptPattern: 'x\\s*\\+\\s*2|x加2',
         onCorrect: { zh: '完美！$6x + 12 = 6(x + 2)$\n\n你刚才做的就是因式分解：\n1. 找公因数（6）\n2. 除出来放进括号（$x + 2$）\n接下来我们练习更多例子。', en: 'Perfect! $6x + 12 = 6(x + 2)$\n\nWhat you just did IS factorising:\n1. Find the common factor (6)\n2. Divide it out into a bracket ($x + 2$)\nLet\'s practice more examples now.' },
         onWrong: { zh: '这样想：如果 6 已经提出来了，$6x ÷ 6 = x$，$12 ÷ 6 = 2$。\n所以括号里是 $x + 2$。\n$6x + 12 = 6(x + 2)$ ✓\n因式分解就两步：找公因数 → 除出来。', en: 'Think: if 6 is pulled out, $6x ÷ 6 = x$, $12 ÷ 6 = 2$.\nSo the bracket contains $x + 2$.\n$6x + 12 = 6(x + 2)$ ✓\nFactorising is just two steps: find common factor → divide it out.' },
         onSkip: { zh: '6 提出来后，每项除以 6：\n$6x ÷ 6 = x$，$12 ÷ 6 = 2$\n$6x + 12 = 6(x + 2)$\n\n就这样！因式分解 = 找最大公因数 → 提到外面 → 剩余的放括号。', en: 'After pulling out 6, divide each term by 6:\n$6x ÷ 6 = x$, $12 ÷ 6 = 2$\n$6x + 12 = 6(x + 2)$\n\nThat\'s it! Factorise = find HCF → pull out → remainder in bracket.' },

@@ -3,30 +3,69 @@
  * 2-3 micro-questions that build confidence through guided discovery.
  * No scoring, no timer, no pressure. Just curiosity.
  */
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import type { DiscoverStep, Language } from '../types';
 import { lt } from '../i18n/resolveText';
 import { MathView } from './MathView';
+import { logAttempt } from '../utils/logAttempt';
 
 type Props = {
   steps: DiscoverStep[];
   lang: Language;
+  missionId: number;
+  kpId?: string;
+  characterName?: string;
   onComplete: () => void;
 };
 
-export function DiscoverPanel({ steps, lang, onComplete }: Props) {
+function shuffleWithTracking(choices: { zh: string; en: string }[]) {
+  const indexed = choices.map((c, i) => ({ choice: c, originalIdx: i }));
+  for (let i = indexed.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indexed[i], indexed[j]] = [indexed[j], indexed[i]];
+  }
+  return indexed;
+}
+
+export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onComplete }: Props) {
   const [stepIdx, setStepIdx] = useState(0);
   const [input, setInput] = useState('');
   const [feedback, setFeedback] = useState<{ text: string; type: 'correct' | 'wrong' | 'skip' } | null>(null);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const startTimeRef = useState(() => Date.now())[0];
 
-  if (stepIdx >= steps.length) return null;
-  const step = steps[stepIdx];
+  const step = stepIdx < steps.length ? steps[stepIdx] : null;
+
+  // Re-shuffle choices when step changes
+  const shuffledChoices = useMemo(() => {
+    if (!step?.choices || step.choices.length === 0) return [];
+    return shuffleWithTracking(step.choices);
+  }, [stepIdx]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Reset state on step change
+  useEffect(() => {
+    setInput('');
+    setFeedback(null);
+    setSelectedIdx(null);
+  }, [stepIdx]);
+
+  if (!step) return null;
   const promptText = lt(step.prompt, lang);
+  const narrator = characterName || (lang === 'en' ? 'Guide' : '引路人');
+
+  const logStep = (action: string, isCorrect: boolean) => {
+    logAttempt({
+      questionId: `${missionId}-discover-${stepIdx}-${action}`,
+      nodeId: kpId || 'discover',
+      isCorrect,
+      rawAnswer: action,
+      sourceMode: 'practice',
+      durationMs: Date.now() - startTimeRef,
+    });
+  };
 
   const advance = () => {
-    setFeedback(null);
-    setInput('');
     if (stepIdx + 1 >= steps.length) {
       onComplete();
     } else {
@@ -34,45 +73,41 @@ export function DiscoverPanel({ steps, lang, onComplete }: Props) {
     }
   };
 
-  const handleChoice = (choiceIdx: number) => {
+  const showFeedback = (type: 'correct' | 'wrong' | 'skip', answer?: string) => {
+    const text = lt(
+      type === 'correct' ? step.onCorrect : type === 'wrong' ? step.onWrong : step.onSkip,
+      lang,
+    );
+    setFeedback({ text, type });
+    logStep(answer || type, type === 'correct');
+  };
+
+  const handleChoice = (originalIdx: number, displayIdx: number) => {
     if (feedback) return;
-    // For choice type, first choice is always correct (author puts correct answer first)
-    const isCorrect = choiceIdx === 0;
-    const text = lt(isCorrect ? step.onCorrect : step.onWrong, lang);
-    setFeedback({ text, type: isCorrect ? 'correct' : 'wrong' });
+    setSelectedIdx(displayIdx);
+    // Brief delay to show selection highlight before feedback
+    setTimeout(() => {
+      const isCorrect = originalIdx === 0;
+      showFeedback(isCorrect ? 'correct' : 'wrong', `choice-${originalIdx}`);
+    }, 300);
   };
 
   const handleInputSubmit = () => {
     if (feedback) return;
-    const trimmed = input.trim().toLowerCase();
+    const trimmed = input.trim();
     if (!trimmed) {
-      const text = lt(step.onSkip, lang);
-      setFeedback({ text, type: 'skip' });
+      showFeedback('skip');
       return;
     }
     const pattern = step.acceptPattern || '';
     const isCorrect = pattern ? new RegExp(pattern, 'i').test(trimmed) : false;
-    const text = lt(isCorrect ? step.onCorrect : step.onWrong, lang);
-    setFeedback({ text, type: isCorrect ? 'correct' : 'wrong' });
+    showFeedback(isCorrect ? 'correct' : 'wrong', trimmed);
   };
 
-  const handleSkip = () => {
+  const handleHint = () => {
     if (feedback) return;
-    const text = lt(step.onSkip, lang);
-    setFeedback({ text, type: 'skip' });
+    showFeedback('skip', 'hint-requested');
   };
-
-  // Shuffle choices but track which index was originally 0 (correct)
-  const [shuffledChoices] = useState(() => {
-    if (!step.choices || step.choices.length === 0) return [];
-    const indexed = step.choices.map((c, i) => ({ choice: c, originalIdx: i }));
-    // Fisher-Yates shuffle
-    for (let i = indexed.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indexed[i], indexed[j]] = [indexed[j], indexed[i]];
-    }
-    return indexed;
-  });
 
   return (
     <motion.div
@@ -80,37 +115,60 @@ export function DiscoverPanel({ steps, lang, onComplete }: Props) {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-4"
     >
-      {/* Step indicator */}
-      <div className="flex items-center gap-2 mb-2">
-        <div className="flex gap-1">
-          {steps.map((_, i) => (
-            <div key={i} className={`w-2 h-2 rounded-full ${i === stepIdx ? 'bg-amber-400' : i < stepIdx ? 'bg-emerald-500' : 'bg-white/20'}`} />
-          ))}
+      {/* Step indicator + narrator */}
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1.5">
+            {steps.map((_, i) => (
+              <div key={i} className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                i === stepIdx ? 'bg-amber-400 ring-2 ring-amber-400/30' :
+                i < stepIdx ? 'bg-emerald-500' : 'bg-white/15'
+              }`} />
+            ))}
+          </div>
+          <span className="text-amber-400/60 text-[10px] font-bold tracking-wider uppercase">
+            {lang === 'en' ? 'Discover' : '探索'}
+          </span>
         </div>
-        <span className="text-white/30 text-[10px]">
-          {lang === 'en' ? 'Discover' : '探索'}
-        </span>
       </div>
 
-      {/* Prompt */}
-      <div className="bg-gradient-to-br from-amber-900/40 to-slate-800/60 border border-amber-600/20 rounded-xl p-4">
+      {/* Prompt card with narrator */}
+      <motion.div
+        key={`prompt-${stepIdx}`}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+        className="bg-gradient-to-br from-amber-900/40 to-slate-800/60 border border-amber-600/20 rounded-xl p-4"
+      >
+        <div className="text-amber-400/70 text-[11px] font-bold mb-2">{narrator}</div>
         <MathView tex={promptText} className="text-white/90 text-sm leading-relaxed whitespace-pre-line" />
-      </div>
+      </motion.div>
 
       {/* Interaction area */}
       <AnimatePresence mode="wait">
         {!feedback ? (
-          <motion.div key="input" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div
+            key={`input-${stepIdx}`}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+          >
             {step.type === 'choice' && shuffledChoices.length > 0 && (
               <div className="space-y-2">
                 {shuffledChoices.map((item, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleChoice(item.originalIdx)}
-                    className="w-full py-3 px-4 min-h-[48px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-500/40 rounded-xl text-white/80 text-sm text-left transition-all"
+                  <motion.button
+                    key={`${stepIdx}-${i}`}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleChoice(item.originalIdx, i)}
+                    className={`w-full py-3 px-4 min-h-[48px] border rounded-xl text-sm text-left transition-all ${
+                      selectedIdx === i
+                        ? 'bg-amber-500/20 border-amber-500/60 text-white'
+                        : 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-amber-500/40 text-white/80'
+                    }`}
                   >
                     <MathView tex={lt(item.choice, lang)} className="inline" />
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             )}
@@ -135,35 +193,52 @@ export function DiscoverPanel({ steps, lang, onComplete }: Props) {
               </div>
             )}
 
-            {/* Skip option */}
+            {/* Hint request — warm, not shameful */}
             <button
-              onClick={handleSkip}
-              className="w-full mt-2 text-white/20 text-[10px] hover:text-white/40 transition-colors"
+              onClick={handleHint}
+              className="w-full mt-3 py-2 text-amber-400/30 text-xs hover:text-amber-400/60 transition-colors"
             >
-              {lang === 'en' ? "I'm not sure..." : '我不确定...'}
+              {lang === 'en' ? "Give me a hint" : lang === 'zh_TW' ? '給我提示' : '给我提示'}
             </button>
           </motion.div>
         ) : (
           <motion.div
-            key="feedback"
-            initial={{ opacity: 0, y: 5 }}
+            key={`feedback-${stepIdx}`}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
             className={`rounded-xl p-4 border ${
               feedback.type === 'correct' ? 'bg-emerald-900/30 border-emerald-500/30' :
               feedback.type === 'wrong' ? 'bg-amber-900/30 border-amber-500/30' :
-              'bg-slate-800/50 border-white/10'
+              'bg-slate-800/50 border-amber-500/10'
             }`}
           >
+            {/* Feedback header */}
+            <div className={`text-[11px] font-bold mb-2 ${
+              feedback.type === 'correct' ? 'text-emerald-400' :
+              feedback.type === 'wrong' ? 'text-amber-400' :
+              'text-white/40'
+            }`}>
+              {feedback.type === 'correct'
+                ? (lang === 'en' ? 'You got it!' : '你发现了！')
+                : feedback.type === 'wrong'
+                ? (lang === 'en' ? 'Not quite — here\'s the key insight:' : '差一点——关键在这里：')
+                : (lang === 'en' ? 'No problem — let me show you:' : '没关系——我来带你看：')}
+            </div>
+
             <MathView tex={feedback.text} className="text-white/90 text-sm leading-relaxed whitespace-pre-line" />
 
-            <button
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
               onClick={advance}
-              className="mt-3 w-full py-3 min-h-[48px] bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-colors text-sm"
+              className="mt-4 w-full py-3 min-h-[48px] bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-colors text-sm"
             >
               {stepIdx + 1 >= steps.length
-                ? (lang === 'en' ? 'Got it — let\'s learn the method →' : '明白了——来学方法 →')
+                ? (lang === 'en' ? 'I\'m ready — show me the method →' : '我准备好了——教我方法 →')
                 : (lang === 'en' ? 'Next →' : '继续 →')}
-            </button>
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
