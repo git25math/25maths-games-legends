@@ -382,16 +382,19 @@ export const PracticeScreen = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto p-4 bg-slate-900/95 backdrop-blur-md">
     <div className="min-h-full flex items-center justify-center py-4">
-      <CalculatorWidget
-        lang={lang}
-        onUseResult={(val) => {
-          const fieldConfig = INPUT_FIELDS[currentMission.type];
-          const langKey = lang === 'en' ? 'en' : lang === 'zh_TW' ? 'zh_TW' : 'zh';
-          const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
-          const targetId = fields.find(f => !inputs[f.id])?.id ?? fields[0]?.id;
-          if (targetId) setInputs(prev => ({ ...prev, [targetId]: val }));
-        }}
-      />
+      {/* Hide calculator during Discover phase (no input needed) */}
+      {currentPhase !== 'discover' && (
+        <CalculatorWidget
+          lang={lang}
+          onUseResult={(val) => {
+            const fieldConfig = INPUT_FIELDS[currentMission.type];
+            const langKey = lang === 'en' ? 'en' : lang === 'zh_TW' ? 'zh_TW' : 'zh';
+            const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
+            const targetId = fields.find(f => !inputs[f.id])?.id ?? fields[0]?.id;
+            if (targetId) setInputs(prev => ({ ...prev, [targetId]: val }));
+          }}
+        />
+      )}
 
       {/* Correct answer flash overlay */}
       <AnimatePresence>
