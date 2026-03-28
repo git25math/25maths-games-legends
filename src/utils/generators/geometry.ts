@@ -422,7 +422,16 @@ export function generateAreaRectMission(template: Mission, tier: DifficultyTier 
   return {
     ...template,
     description,
-    data: { ...template.data, length, width, generatorType: 'AREA_RECT_RANDOM' },
+    data: {
+      ...template.data, length, width, answer: area, generatorType: 'AREA_RECT_RANDOM',
+      choices: (() => {
+        const perimeter = 2 * (length + width);
+        const distractors = [perimeter, length * width * 2, area + length].filter(v => v !== area);
+        const opts = [...new Set([area, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(area),
+    },
     tutorialSteps,
   };
 }
@@ -498,7 +507,16 @@ export function generateAreaTrapMission(template: Mission, tier: DifficultyTier 
   return {
     ...template,
     description,
-    data: { ...template.data, a, b, h, generatorType: 'AREA_TRAP_RANDOM' },
+    data: {
+      ...template.data, a, b, h, answer: areaVal, generatorType: 'AREA_TRAP_RANDOM',
+      choices: (() => {
+        const noHalf = (a + b) * h; // forgot ÷2
+        const distractors = [noHalf, a * h, b * h].filter(v => v !== areaVal);
+        const opts = [...new Set([areaVal, ...distractors])].slice(0, 4).sort((x, y) => x - y);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(areaVal),
+    },
     tutorialSteps,
   };
 }
@@ -570,7 +588,16 @@ export function generateAreaTriangleMission(template: Mission, tier: DifficultyT
   return {
     ...template,
     description,
-    data: { base, height, answer, generatorType: 'AREA_TRIANGLE_RANDOM' },
+    data: {
+      base, height, answer, generatorType: 'AREA_TRIANGLE_RANDOM',
+      choices: (() => {
+        const noHalf = base * height; // forgot ÷2
+        const distractors = [noHalf, answer + base, answer + height].filter(v => v !== answer && v > 0);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
@@ -640,7 +667,17 @@ export function generatePerimeterRectMission(template: Mission, tier: Difficulty
   return {
     ...template,
     description,
-    data: { length, width, answer, generatorType: 'PERIMETER_RECT_RANDOM' },
+    data: {
+      length, width, answer, generatorType: 'PERIMETER_RECT_RANDOM',
+      choices: (() => {
+        const area = length * width;
+        const halfP = length + width;
+        const distractors = [area, halfP, answer + length].filter(v => v !== answer && v > 0);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
