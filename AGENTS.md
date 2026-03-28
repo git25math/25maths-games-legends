@@ -35,9 +35,9 @@ Step 5: npm test -- --run     → 2339 测试必须全通过
 ## 三、当前状态快照（v9.8.0, 2026-03-28）
 
 ### 规模
-- **228 missions** 分布: Y7(57) + Y8(41) + Y9(48) + Y10(49) + Y11(28) + Y12(5)
-- **77 个活跃 generatorType**（含 SIMILAR_TRIANGLES/TREE_DIAGRAM/SEQUENCE_NTH/COORD_3D），100% 覆盖
-- **2,364 个 Vitest 用例**（全通过）
+- **232 missions** 分布: Y7(57) + Y8(41) + Y9(48) + Y10(49) + Y11(28) + Y12(9)
+- **78 个活跃 generatorType**（含 SIMILAR_TRIANGLES/TREE_DIAGRAM/SEQUENCE_NTH/COORD_3D/VECTOR_3D），100% 覆盖
+- **2,389 个 Vitest 用例**（全通过）
 - **4 条远征**: 桃园(Y7-8) / 赤壁(Y7-12) / 蜀道(Y8-10) / 北伐(Y10-12)
 
 ### 教程质量覆盖率（截至 v8.9.3）
@@ -149,6 +149,11 @@ Step 5: npm test -- --run     → 2339 测试必须全通过
 - **Y10 修复**: missions 10141/10142 空 tutorialSteps → 6步金标准（圆周角+圆心角定理，诸葛亮/周瑜叙事）
 - **Y7 全量升级**: 45关教程 1-5步 → 全部≥6步金标准（BODMAS/分数/整数/代入/合并同类项/百分比/比例/质因数/HCF/LCM/数列/估算/几何/坐标/统计）
 - 测试: 2214 → 2264（+50 测试）
+
+#### v10.3.0 — Y12 VECTOR_3D 金标准教程 + 积分面积
+- **Y12 VECTOR_3D 教程修复**: id=1241（司马昭6步）+ id=1242（姜维6步，含负分量��解）
+- **Y12 积分面积**: id=1251（屯田面积，∫₀⁶ x dx = 18，三角形验算）+ id=1252（城墙曲面，∫₀³ 3x² dx = 27，导数反验证）
+- Y12 关卡: 7 → 9（+2），全部金标准教程
 
 #### v10.1.0 — COORD_3D 新题型 + 蜀道远征
 - **COORD_3D**: 7文件全流程（types/translations/inputConfig/checkCorrectness/geometry.ts/index.ts/y10.ts）
@@ -360,7 +365,7 @@ for mid, steps_raw in missions:
 | ~~MEDIUM~~ | ~~蜀道远征~~ | ✅ 8节点(荆州→成都)，Y8-10，expeditions.ts |
 | ~~LOW~~ | ~~COORD_3D~~ | ✅ Y10 id=1066/1067，三维中点(含负坐标)，midpoint+distance modes |
 | ~~MEDIUM~~ | ~~VECTOR_3D~~ | ✅ Y12 id=1241/1242，三维向量加法(含负分量)，6步教程 |
-| LOW | **INTEGRAL_AREA 新题型** | Y12 积分求面积 |
+| ~~LOW~~ | ~~INTEGRAL_AREA~~ | ✅ Y12 id=1251/1252，定积分求面积，用现有INTEGRATION类型 |
 | LOW | **missions.ts 拆分已完成** | ✅ 已按年级拆分 |
 | FUTURE | **班级远征** | 多人协作通关 |
 
