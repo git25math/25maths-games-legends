@@ -44,7 +44,7 @@ export const MISSIONS_Y12: Mission[] = [
       }
     ],
     secret: { concept: { zh: '先令一阶导数等于 0 找候选点，再用二阶导数判断是极大还是极小。', en: 'First set the first derivative to 0 to find candidate points, then use the second derivative to decide maximum or minimum.' }, formula: "$f'(x) = 3x^2 - 3 = 0 \\Rightarrow x = 1,\\quad f''(1) = 6 > 0$", tips: [{ zh: "刘禅提示：导数先找转折点，二阶导数再确认是不是最低点。", en: "Liu Shan Tip: Use the first derivative to find the turning point, then the second derivative to confirm it is the lowest point." }] },
-    storyConsequence: { correct: { zh: '最后的防线——导数精准！做得漂亮！', en: 'The Final Stand — Well done!' }, wrong: { zh: '导数计算有误…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '最后的防线——导数精准！做得漂亮！', en: 'The Final Stand — Well done!' }, wrong: { zh: '导数差一步——指数拿下来当系数，指数减 1。', en: 'Not quite... Try again!' } }
   },
   {
     id: 1221, grade: 12, unitId: 2, order: 1,
@@ -66,7 +66,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '司马炎：验算\n$P(全胜)$ 应该小于单场胜率（$0.49 < 0.7$）✓\n$P(全败) = 0.3 \\times 0.3 = 0.09$\n$P(全胜) + P(至少一败) = 1$ ✓', en: 'Sima Yan: "Verify\n$P(\\text{win all})$ should be less than single win rate ($0.49 < 0.7$) ✓\n$P(\\text{lose all}) = 0.3 \\times 0.3 = 0.09$\n$P(\\text{win all}) + P(\\text{at least one loss}) = 1$ ✓"' }, highlightField: 'p' },
     ],
     secret: { concept: { zh: '独立事件联合概率 = 各自概率相乘。P(A且B) = P(A)×P(B)。', en: 'Joint probability of independent events = multiply individual probabilities.' }, formula: '$P(A \\cap B) = P(A) \\times P(B)$', tips: [{ zh: '司马炎提示：独立相乘——天下大势的数学。', en: 'Sima Yan Tip: Independent events multiply — the mathematics of destiny.' }] },
-    storyConsequence: { correct: { zh: '胜率评估——概率算准！做得漂亮！', en: 'Win Rate Assessment — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '胜率评估——概率算准！做得漂亮！', en: 'Win Rate Assessment — Well done!' }, wrong: { zh: '概率差了一点——记住目标数 ÷ 总数。', en: 'Not quite... Try again!' } }
   },
 
   {
@@ -89,7 +89,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '司马炎：验算\n切线 $y = 6(x-3) + 9 = 6x - 9$\n代入 $x = 3$：$6(3) - 9 = 9 = f(3) = 3^2$ ✓', en: 'Sima Yan: "Verify\nTangent $y = 6(x-3) + 9 = 6x - 9$\nAt $x = 3$: $6(3) - 9 = 9 = f(3) = 3^2$ ✓"' }, highlightField: 'k' },
     ],
     secret: { concept: { zh: '导数 = 切线斜率。$f(x) = x^2$ 的导数是 $f\'(x) = 2x$。', en: 'Derivative = tangent slope. For $f(x) = x^2$, $f\'(x) = 2x$.' }, formula: "$f'(x) = 2x$", tips: [{ zh: '司马炎提示：幂函数的导数——指数拿下来当系数，指数减1。', en: 'Sima Yan Tip: Power rule — bring the exponent down, reduce it by 1.' }] },
-    storyConsequence: { correct: { zh: '攻城速率——导数精准！做得漂亮！', en: 'Siege Rate — Derivative nailed!' }, wrong: { zh: '导数算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '攻城速率——导数精准！做得漂亮！', en: 'Siege Rate — Derivative nailed!' }, wrong: { zh: '导数差一步——指数拿下来当系数，指数减 1。', en: 'Not quite... Try again!' } }
   },
   {
     id: 1222, grade: 12, unitId: 2, order: 2,
@@ -111,7 +111,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '司马炎：验算\n$56.7 \\times 3 = 170.1 \\approx 170$ ✓\n所有仓加起来 $40 + 50 + 80 = 170$ ✓', en: 'Sima Yan: "Verify\n$56.7 \\times 3 = 170.1 \\approx 170$ ✓\nAll granaries: $40 + 50 + 80 = 170$ ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '加权平均考虑每个数据的"重要程度"。不是简单平均！', en: 'Weighted mean accounts for how important each data point is. Not a simple average!' }, formula: '$\\bar{x} = \\frac{\\sum f_i x_i}{\\sum f_i}$', tips: [{ zh: '司马炎提示：大仓多算，小仓少算——加权平均更公平。', en: 'Sima Yan Tip: Big granaries count more — weighted average is fairer.' }] },
-    storyConsequence: { correct: { zh: '军粮盘点——统计精准！做得漂亮！', en: 'Grain Stocktake — Well done!' }, wrong: { zh: '平均值算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '军粮盘点——统计精准！做得漂亮！', en: 'Grain Stocktake — Well done!' }, wrong: { zh: '平均值差一点——总和 ÷ 个数，再算算？', en: 'Not quite... Try again!' } }
   },
 
   // --- Y12 Unit 3: 综合应用 · 三分归晋 (Synthesis) ---
@@ -135,7 +135,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '司马炎：验算\n两个值代入两个方程，两个方程都要满足 ✓', en: 'Sima Yan: "Verify\nSubstitute both values into BOTH equations — both must be satisfied ✓"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '联立方程：两个方程两个未知数。消元法：配平→相减→回代。', en: 'Simultaneous: 2 equations, 2 unknowns. Elimination: balance → subtract → back-substitute.' }, formula: '$\\begin{cases} 2x+y=100 \\\\ x+3y=110 \\end{cases}$', tips: [{ zh: '司马炎提示：消元 = 让一个未知数消失。', en: 'Sima Yan Tip: Elimination = make one unknown vanish.' }] },
-    storyConsequence: { correct: { zh: '三国均势——联立方程求解成功！做得漂亮！', en: 'Balance of Power — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '三国均势——联立方程求解成功！做得漂亮！', en: 'Balance of Power — Well done!' }, wrong: { zh: '联立方程差一步——试试重新检查每步运算？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1232, grade: 12, unitId: 3, order: 2,
@@ -157,7 +157,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '司马炎：验算\n用计算器验证：$2 \\times 25 = 50$，$50 - 15 = 35$，$35 + 1 = 36$ ✓', en: 'Sima Yan: "Verify\nCalculator check: $2 \\times 25 = 50$, $50 - 15 = 35$, $35 + 1 = 36$ ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '函数求值：把 x 的值代入每一项，按运算顺序计算。', en: 'Function evaluation: substitute x into each term, follow order of operations.' }, formula: '$f(x) = ax^2 + bx + c$', tips: [{ zh: '司马炎提示：x 换数字，一项一项算。', en: 'Sima Yan Tip: Replace x with the number, calculate term by term.' }] },
-    storyConsequence: { correct: { zh: '国力函数——函数值正确！做得漂亮！', en: 'National Power Function — Well done!' }, wrong: { zh: '函数值代入有误…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '国力函数——函数值正确！做得漂亮！', en: 'National Power Function — Well done!' }, wrong: { zh: '代入的时候有个小差错——逐步代入试试？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1233, grade: 12, unitId: 3, order: 3,
@@ -179,7 +179,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '司马炎：验算\n$\\frac{{answer}}{{adj}} = \\tan {angle}°$ ✓\n\n"天下大势，合久必分，分久必合。"\n—— 你的数学之旅，才刚刚开始。', en: 'Sima Yan: "Verify\n$\\frac{{answer}}{{adj}} = \\tan {angle}°$ ✓\n\n"The world unites after division, divides after union."\n— Your math journey has just begun."' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: 'tan θ = 对边/邻边。三国故事结束，数学旅途永远在路上。', en: 'tan θ = opp/adj. The Three Kingdoms end, but the math journey continues forever.' }, formula: '$\\tan\\theta = \\frac{\\text{opp}}{\\text{adj}}$', tips: [{ zh: '司马炎提示：天下大势，合久必分，分久必合。你的数学之路，永远不会结束。', en: 'Sima Yan Tip: The world unites and divides. Your math journey never ends.' }] },
-    storyConsequence: { correct: { zh: '最终防线——三角精准！做得漂亮！', en: 'The Final Defense — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '最终防线——三角精准！做得漂亮！', en: 'The Final Defense — Well done!' }, wrong: { zh: '三角函数有点棘手——检查一下用的是 sin 还是 cos？', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 12 Unit 4: 三维战场·向量 ---
@@ -203,7 +203,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '司马昭："验算\n$7 - 4 = 3 = a_1$ ✓\n$1 - (-3) = 4 = a_2$ ✓\n$5 - 3 = 2 = a_3$ ✓\n合力减去 $\\vec{b}$ 应该等于 $\\vec{a}$——三个分量全对！"', en: 'Sima Zhao: "Verify\n$7 - 4 = 3 = a_1$ ✓\n$1 - (-3) = 4 = a_2$ ✓\n$5 - 3 = 2 = a_3$ ✓\nResultant minus $\\vec{b}$ should equal $\\vec{a}$ — all three match!"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '三维向量加法：分量分别相加，和二维一模一样。', en: '3D vector addition: add components separately, just like 2D.' }, formula: '$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$', tips: [{ zh: '司马昭提示：三维也不过是多加一个分量而已。', en: 'Sima Zhao Tip: 3D is just one more component to add.' }] },
-    storyConsequence: { correct: { zh: '空间行军——三维向量精准！做得漂亮！', en: 'Spatial March — 3D vectors nailed!' }, wrong: { zh: '分量加错了…再试一次！', en: 'Component error... Try again!' } }
+    storyConsequence: { correct: { zh: '空间行军——三维向量精准！做得漂亮！', en: 'Spatial March — 3D vectors nailed!' }, wrong: { zh: '分量差了一个——x/y/z 分别加对了吗？', en: 'Component error... Try again!' } }
   },
   {
     id: 1242, grade: 12, unitId: 4, order: 2,
@@ -225,7 +225,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '姜维："验算\n$\\begin{pmatrix}1\\\\-1\\\\4\\end{pmatrix} - \\begin{pmatrix}4\\\\-6\\\\3\\end{pmatrix} = \\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix} = \\vec{a}$ ✓\n合力减去 $\\vec{b}$ 还原 $\\vec{a}$——三个分量全对！"', en: 'Jiang Wei: "Verify\n$\\begin{pmatrix}1\\\\-1\\\\4\\end{pmatrix} - \\begin{pmatrix}4\\\\-6\\\\3\\end{pmatrix} = \\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix} = \\vec{a}$ ✓\nResultant minus $\\vec{b}$ gives back $\\vec{a}$ — all three match!"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '负分量表示反方向。加法时正负抵消，方向由符号决定。', en: 'Negative components mean opposite direction. Addition cancels positives with negatives.' }, formula: '$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$', tips: [{ zh: '姜维提示：正负号决定方向——算错方向，弩箭就射到自己人了。', en: 'Jiang Wei Tip: Signs determine direction — get it wrong and you hit your own troops.' }] },
-    storyConsequence: { correct: { zh: '炮火交叉——三维向量运用自如！', en: 'Crossfire Vectors — 3D mastery!' }, wrong: { zh: '正负号算错了…再试一次！', en: 'Sign error... Try again!' } }
+    storyConsequence: { correct: { zh: '炮火交叉——三维向量运用自如！', en: 'Crossfire Vectors — 3D mastery!' }, wrong: { zh: '正负号有点绕——标记每个数的符号再试？', en: 'Sign error... Try again!' } }
   },
 
   // --- Year 12 Unit 5: 积分面积 · 天下计量 ---
@@ -271,7 +271,7 @@ export const MISSIONS_Y12: Mission[] = [
       { text: { zh: '司马炎："验算\n反向验证：$(x^3)\' = 3x^2$ ✓ （反导数的导数 = 原函数）\n$27 > 0$ ✓ （面积为正）\n积分完成——洛阳城墙重修方案确定！"', en: 'Sima Yan: "Verify\nReverse check: $(x^3)\' = 3x^2$ ✓ (derivative of antiderivative = original function)\n$27 > 0$ ✓ (area is positive)\nIntegration done — Luoyang wall reconstruction plan confirmed!"' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '$\\int 3x^2\\,dx = x^3$：系数和幂的积分抵消，巧妙至极。', en: '$\\int 3x^2\\,dx = x^3$: the coefficient and power integration cancel beautifully.' }, formula: '$\\int_0^3 3x^2\\,dx = [x^3]_0^3 = 27$', tips: [{ zh: '司马炎提示：积分后求导应该还原原函数——这是最可靠的验算方法。', en: 'Sima Yan Tip: Differentiating the integral should give back the original — the most reliable check.' }] },
-    storyConsequence: { correct: { zh: '城墙曲面——多项式积分精准！做得漂亮！', en: 'Curved Rampart — Polynomial integration mastered!' }, wrong: { zh: '积分公式用错了…再试一次！', en: 'Integration formula error... Try again!' } }
+    storyConsequence: { correct: { zh: '城墙曲面——多项式积分精准！做得漂亮！', en: 'Curved Rampart — Polynomial integration mastered!' }, wrong: { zh: '积分差一步——指数加 1，再除以新指数。', en: 'Integration formula error... Try again!' } }
   },
   {
     id: 1253, grade: 12, unitId: 5, order: 3,

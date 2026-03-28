@@ -181,7 +181,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：验算\n$20 + 30 = 50$ ✓（把消耗加回去还原）\n\n粮草盈余 $20$ 袋，后勤无忧！', en: 'Zhuge Liang: Verify\n$20 + 30 = 50$ ✓ (add consumption back to restore original)\n\n$20$ bags surplus — logistics secure!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '加一个负数就是减去它；结果的正负取决于谁的数字更大。', en: 'Adding a negative = subtracting it; the sign depends on which number is larger.' }, formula: '$a + (-b) = a - b$', tips: [{ zh: '诸葛亮提示：知彼知己，粮草先行。', en: 'Zhuge Liang Tip: Know your supplies before you march.' }] },
-    storyConsequence: { correct: { zh: '粮草盈亏——正负运算无误！做得漂亮！', en: 'Grain Surplus & Loss — Well done!' }, wrong: { zh: '正负号搞混了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '粮草盈亏——正负运算无误！做得漂亮！', en: 'Grain Surplus & Loss — Well done!' }, wrong: { zh: '正负号容易搞混——标记一下每个数的符号再试？', en: 'Not quite... Try again!' } }
   },
   {
     id: 705, grade: 7, unitId: 0, order: 5,
@@ -203,7 +203,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '曹操：验算\n$-35 + 15 = -20$ ✓（倒推：减少的补回 15，还是原来那次的损失）\n\n本相已知己知彼，厉兵秣马！', en: 'Cao Cao: Verify\n$-35 + 15 = -20$ ✓ (reverse: add back $15$ to get first loss)\n\nI know both sides — time to replenish and prepare!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '负数加负数，绝对值相加，符号取负。', en: 'Negative plus negative: add absolute values, keep negative sign.' }, formula: '$(-a) + (-b) = -(a+b)$', tips: [{ zh: '曹操提示：胜败乃兵家常事，关键是算清损失。', en: 'Cao Cao Tip: Victory and defeat are normal — the key is counting your losses.' }] },
-    storyConsequence: { correct: { zh: '连续损失——正负运算无误！做得漂亮！', en: 'Consecutive Losses — Well done!' }, wrong: { zh: '正负号搞混了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '连续损失——正负运算无误！做得漂亮！', en: 'Consecutive Losses — Well done!' }, wrong: { zh: '正负号容易搞混——标记一下每个数的符号再试？', en: 'Not quite... Try again!' } }
   },
   {
     id: 706, grade: 7, unitId: 0, order: 6,
@@ -225,7 +225,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '关羽：验算\n$-20 + 60 = 40$ ✓（补充 60 人后变回初始的 40 人投诚）\n\n净损 $20$ 人确认！', en: 'Guan Yu: Verify\n$-20 + 60 = 40$ ✓ (add 60 back to restore the initial 40 gained)\n\nNet loss of $20$ confirmed!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '减去比自己大的数，结果为负。', en: 'Subtracting more than you have gives a negative.' }, formula: '$a - b = -(b - a)$ when $b > a$', tips: [{ zh: '关羽提示：胜败之间，一算便知。', en: 'Guan Yu Tip: Between victory and defeat, the numbers tell all.' }] },
-    storyConsequence: { correct: { zh: '攻守得失——正负运算无误！做得漂亮！', en: 'Gains and Losses — Well done!' }, wrong: { zh: '正负号搞混了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '攻守得失——正负运算无误！做得漂亮！', en: 'Gains and Losses — Well done!' }, wrong: { zh: '正负号容易搞混——标记一下每个数的符号再试？', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 0A 续: 整数乘除 ---
   {
@@ -298,7 +298,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '刘备：验算——半块饼对吗？\n4 份里拿了 2 份 = $\\frac{2}{4}$ = 一半 ✓\n\n记住口诀：同分母加法 = 分母不变，分子相加！\n下一关开始异分母——那才是真正的挑战！做得好！', en: 'Liu Bei: "Verify — is half right?\n2 out of 4 pieces = $\\frac{2}{4}$ = half ✓\n\nRemember: same denominator = keep denominator, add numerators!\nNext mission: different denominators — the real challenge! Well done!"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '分数 = 把整体平均分成几份，取其中几份。$\\frac{1}{4}$ = 切 4 份取 1 份。同分母加法：分母不变，分子相加。', en: 'Fraction = divide whole into equal parts, take some. $\\frac{1}{4}$ = cut into 4, take 1. Same denominator: keep denominator, add numerators.' }, formula: '$\\frac{a}{n} + \\frac{b}{n} = \\frac{a+b}{n}$', tips: [{ zh: '刘备提示：分母是切法，分子是拿法——切法一样才能直接加！', en: 'Liu Bei Tip: Denominator is how you cut, numerator is how much you take — same cut means just add!' }] },
-    storyConsequence: { correct: { zh: '大饼分好了！兄弟们第一顿饭吃得开心！', en: 'Pie shared perfectly! Brothers enjoy their first meal together!' }, wrong: { zh: '饼分错了，有人多吃有人少吃…', en: 'Pie shared unevenly — someone got more, someone less...' } },
+    storyConsequence: { correct: { zh: '大饼分好了！兄弟们第一顿饭吃得开心！', en: 'Pie shared perfectly! Brothers enjoy their first meal together!' }, wrong: { zh: '分数还不太对——通分再试试？', en: 'Pie shared unevenly — someone got more, someone less...' } },
   },
   {
     id: 707, grade: 7, unitId: 0, order: 7,
@@ -388,7 +388,7 @@ export const MISSIONS_Y7: Mission[] = [
     ],
     storyConsequence: {
       correct: { zh: '诸葛亮：2 整箱 + 3 份散装，装车出发！', en: 'Zhuge Liang: "2 full crates + 3 loose — load up and march!"' },
-      wrong: { zh: '诸葛亮：装错了！粮草对不上数...重新清点！', en: 'Zhuge Liang: "Wrong count! Grain doesn\'t match... recount!"' },
+      wrong: { zh: '诸葛亮：数目还差一点——不急，重新清点一次。', en: 'Zhuge Liang: "Wrong count! Grain doesn\'t match... recount!"' },
     },
     secret: { concept: { zh: '假分数化带分数：做除法，商=整数，余数=分子，分母不变。', en: 'Improper to mixed: divide, quotient = whole, remainder = numerator.' }, formula: '$\\frac{n}{d} = (n \\div d)\\frac{n \\bmod d}{d}$', tips: [{ zh: '诸葛亮提示：散装装箱，做除法就对了！', en: 'Zhuge Liang Tip: Repacking = division!' }] }
   },
@@ -480,7 +480,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '刘备：验算\n$49 \div 7 = 7$ ✓\n\n前 10 个平方数速查：$1, 4, 9, 16, 25, 36, 49, 64, 81, 100$', en: 'Liu Bei: Verify\n$49 \div 7 = 7$ ✓\n\nFirst 10 perfect squares: $1, 4, 9, 16, 25, 36, 49, 64, 81, 100$' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '平方就是一个数乘以自己，写作 $n^2$。来源于正方形面积公式。', en: 'Squaring means multiplying a number by itself, written $n^2$. Named after the area of a square.' }, formula: '$n^2 = n \\times n$', tips: [{ zh: '刘备提示：方阵排兵，行列相同，总数就是边长的平方！', en: 'Liu Bei Tip: In a square formation, rows equal columns — total is the side length squared!' }] },
-    storyConsequence: { correct: { zh: '方阵操练——幂次全对！做得漂亮！', en: 'Square Formation Drill — Well done!' }, wrong: { zh: '幂次算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '方阵操练——幂次全对！做得漂亮！', en: 'Square Formation Drill — Well done!' }, wrong: { zh: '幂次有点绕——底数和指数分别检查一下？', en: 'Not quite... Try again!' } }
   },
   {
     id: 714, grade: 7, unitId: 0, order: 12,
@@ -502,7 +502,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '张飞：验算\n$27 \div 3 = 9$，$9 \div 3 = 3$ ✓\n\n前 5 个立方数：$1, 8, 27, 64, 125$', en: 'Zhang Fei: Verify\n$27 \div 3 = 9$, $9 \div 3 = 3$ ✓\n\nFirst 5 perfect cubes: $1, 8, 27, 64, 125$' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '立方就是一个数乘三次，写作 $n^3$。来源于正方体体积公式。', en: 'Cubing means multiplying a number by itself three times, written $n^3$. Named after the volume of a cube.' }, formula: '$n^3 = n \\times n \\times n$', tips: [{ zh: '张飞提示：码粮箱，三个方向都一样长，总数就是边长的立方！', en: 'Zhang Fei Tip: Stacking crates — same length in all three directions, total is the side cubed!' }] },
-    storyConsequence: { correct: { zh: '粮箱码垛——幂次全对！做得漂亮！', en: 'Stacking Supply Crates — Well done!' }, wrong: { zh: '幂次算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '粮箱码垛——幂次全对！做得漂亮！', en: 'Stacking Supply Crates — Well done!' }, wrong: { zh: '幂次有点绕——底数和指数分别检查一下？', en: 'Not quite... Try again!' } }
   },
   {
     id: 715, grade: 7, unitId: 0, order: 13,
@@ -546,7 +546,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：验算\n$8^2 = 64 \\checkmark$\n\n综合考核通过！符号识别是关键！', en: 'Zhuge Liang: Verify\n$8^2 = 64 \\checkmark$\n\nCombined test passed! Symbol recognition is key!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '平方根和立方根分别是平方和立方的逆运算。看清根号上的小数字！', en: 'Square root and cube root are the inverses of squaring and cubing. Watch the index on the radical!' }, formula: '$\\sqrt{n^2} = n,\\quad \\sqrt[3]{n^3} = n$', tips: [{ zh: '诸葛亮提示：方阵用平方根，粮仓用立方根——看清题目再下笔！', en: 'Zhuge Liang Tip: Formations use square root, warehouses use cube root — read carefully before answering!' }] },
-    storyConsequence: { correct: { zh: '方阵和粮仓的尺寸全算对了！诸葛亮：孺子可教！', en: 'Formation and warehouse dimensions all correct! Zhuge Liang: "A worthy student!"' }, wrong: { zh: '算错了尺寸，方阵排不齐…', en: 'Wrong dimensions — the formation is uneven...' } },
+    storyConsequence: { correct: { zh: '方阵和粮仓的尺寸全算对了！诸葛亮：孺子可教！', en: 'Formation and warehouse dimensions all correct! Zhuge Liang: "A worthy student!"' }, wrong: { zh: '尺寸差了一点——再量量？', en: 'Wrong dimensions — the formation is uneven...' } },
   },
   // --- Year 7 Unit 1 前置: 运算顺序 BODMAS ---
   {
@@ -601,7 +601,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：验算\n从左到右会得 $20$，正确顺序得 $14$。\n$$14 = 2 + 12 = 2 + 3 \\times 4 \\checkmark$$', en: 'Zhuge Liang: Verify\nLeft-to-right gives $20$; correct order gives $14$.\n$$14 = 2 + 12 = 2 + 3 \\times 4 \\checkmark$$' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '运算顺序：括号最先，然后幂，再乘除，最后加减。不是从左到右！', en: 'Order of operations: Brackets first, then powers, then multiply/divide, finally add/subtract. NOT left to right!' }, formula: '$\\text{B → O → DM → AS}$', tips: [{ zh: '诸葛亮提示：军令如山，顺序错了全盘皆输！', en: 'Zhuge Liang Tip: Like military orders — wrong sequence means total defeat!' }] },
-    storyConsequence: { correct: { zh: '军令如山——运算顺序完全正确！做得漂亮！', en: 'Orders of Command — Well done!' }, wrong: { zh: '运算顺序搞错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '军令如山——运算顺序完全正确！做得漂亮！', en: 'Orders of Command — Well done!' }, wrong: { zh: '运算顺序有个小陷阱——记住乘除先、加减后。', en: 'Not quite... Try again!' } }
   },
   {
     id: 691, grade: 7, unitId: 1, order: 0.5,
@@ -623,7 +623,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：验算——没有括号会怎样？\n$$3 + 4 \\times 5 = 3 + 20 = 23 \\ne 35$$\n\n括号改变了答案！所以括号优先至关重要。', en: 'Zhuge Liang: Verify — what if there were no brackets?\n$$3 + 4 \\times 5 = 3 + 20 = 23 \\ne 35$$\n\nBrackets changed the answer! That\'s why bracket priority is critical.' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '括号改变运算顺序——括号内的永远最先算。有括号先算括号，没括号先算乘除。', en: 'Brackets change the order — inside brackets is always first. With brackets: brackets first. Without: multiply/divide first.' }, formula: '$\\text{B → O → DM → AS}$', tips: [{ zh: '诸葛亮提示：括号就像军令状——盖了印的优先执行！', en: 'Zhuge Liang Tip: Brackets are like sealed orders — they take priority!' }] },
-    storyConsequence: { correct: { zh: '括号将令——运算顺序完全正确！做得漂亮！', en: 'Brackets Override — Well done!' }, wrong: { zh: '运算顺序搞错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '括号将令——运算顺序完全正确！做得漂亮！', en: 'Brackets Override — Well done!' }, wrong: { zh: '运算顺序有个小陷阱——记住乘除先、加减后。', en: 'Not quite... Try again!' } }
   },
   // --- Year 7: The Peach Garden Oath (Foundations) ---
   {
@@ -664,7 +664,7 @@ export const MISSIONS_Y7: Mission[] = [
       }
     ],
     secret: { concept: { zh: '等式两边同时加减同一个数，等式依然成立。', en: 'Adding or subtracting the same number from both sides keeps the equation balanced.' }, formula: '$x + a = b \\Rightarrow x = b - a$', tips: [{ zh: '刘备提示：兄弟同心，其利断金。', en: 'Liu Tip: Unity is strength.' }] },
-    storyConsequence: { correct: { zh: '桃园结义——方程完美求解！做得漂亮！', en: 'Oath in the Garden — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '桃园结义——方程完美求解！做得漂亮！', en: 'Oath in the Garden — Well done!' }, wrong: { zh: '方程差一步——试试重新检查每步运算？', en: 'Not quite... Try again!' } }
   },
   {
     id: 712, grade: 7, unitId: 1, order: 2,
@@ -704,7 +704,7 @@ export const MISSIONS_Y7: Mission[] = [
       }
     ],
     secret: { concept: { zh: '等式两边同时乘除同一个非零数，等式依然成立。', en: 'Multiplying or dividing both sides by the same non-zero number keeps the equation balanced.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '关羽提示：买东西一定要算清楚！', en: 'Guan Yu Tip: Always count correctly when shopping!' }] },
-    storyConsequence: { correct: { zh: '招兵买马——方程完美求解！做得漂亮！', en: 'Recruiting Soldiers — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '招兵买马——方程完美求解！做得漂亮！', en: 'Recruiting Soldiers — Well done!' }, wrong: { zh: '方程差一步——试试重新检查每步运算？', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 1 续: 两步方程 ---
   {
@@ -727,7 +727,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：验算——代回原式\n$$3(5) + 4 = 15 + 4 = 19 \\checkmark$$\n\n城门攻破！$x = 5$', en: 'Zhuge Liang: Verify — substitute back\n$$3(5) + 4 = 15 + 4 = 19 \\checkmark$$\n\nGate stormed! $x = 5$' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '两步方程：先去掉加减（外层），再去掉乘除（内层）。顺序不能反！', en: 'Two-step equations: remove add/sub (outer) first, then mul/div (inner). Order matters!' }, formula: '$ax + b = c \\Rightarrow x = \\frac{c - b}{a}$', tips: [{ zh: '诸葛亮提示：攻城先破外门，解方程先去外层！', en: 'Zhuge Liang Tip: Siege the outer gate first, solve outer operations first!' }] },
-    storyConsequence: { correct: { zh: '攻城双关——方程完美求解！做得漂亮！', en: 'Two-Gate Siege — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '攻城双关——方程完美求解！做得漂亮！', en: 'Two-Gate Siege — Well done!' }, wrong: { zh: '方程差一步——试试重新检查每步运算？', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 1 续: 代入求值 ---
   {
@@ -750,7 +750,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：验算\n$$3(4) + 5 = 12 + 5 = 17 \\checkmark$$\n\n密码解出！任务完成。', en: 'Zhuge Liang: Verify\n$$3(4) + 5 = 12 + 5 = 17 \\checkmark$$\n\nCode cracked! Mission complete.' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '代入就是用具体数值替换变量，然后按运算顺序计算。', en: 'Substitution means replacing variables with values, then computing step by step.' }, formula: { zh: '$\\text{代入 } x \\text{ 的值，按顺序计算}$', en: '$\\text{Substitute } x \\text{, then compute in order}$' }, tips: [{ zh: '诸葛亮提示：先乘除，后加减！', en: 'Zhuge Liang Tip: Multiply/divide first, then add/subtract!' }] },
-    storyConsequence: { correct: { zh: '军情密码——代入精准！做得漂亮！', en: 'Military Code — Well done!' }, wrong: { zh: '代入算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '军情密码——代入精准！做得漂亮！', en: 'Military Code — Well done!' }, wrong: { zh: '代入的时候有个小差错——一步步来，不急。', en: 'Not quite... Try again!' } }
   },
   {
     id: 718, grade: 7, unitId: 1, order: 4,
@@ -772,7 +772,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '赵云：验算\n$$2(3)^2 + 3 = 2(9) + 3 = 18 + 3 = 21 \\checkmark$$\n\n射程精确，投石车参数设置完毕！', en: 'Zhao Yun: Verify\n$$2(3)^2 + 3 = 2(9) + 3 = 18 + 3 = 21 \\checkmark$$\n\nRange confirmed, catapult parameters set!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '运算顺序：幂 → 乘除 → 加减。代入后要严格按顺序计算。', en: 'Order of operations: Powers → Multiply/Divide → Add/Subtract.' }, formula: '$\\text{Powers} \\rightarrow \\times\\div \\rightarrow +\\,-$', tips: [{ zh: '赵云提示：先算指数，才能射得准！', en: 'Zhao Yun Tip: Powers first for accurate aim!' }] },
-    storyConsequence: { correct: { zh: '投石车射程——代入精准！做得漂亮！', en: 'Catapult Range — Well done!' }, wrong: { zh: '代入算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '投石车射程——代入精准！做得漂亮！', en: 'Catapult Range — Well done!' }, wrong: { zh: '代入的时候有个小差错——一步步来，不急。', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 1 续: 化简同类项 ---
   {
@@ -795,7 +795,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：验算（令 $x = 1$）\n$$3(1) + 2(1) = 5 = 5(1) \\checkmark$$\n\n合并同类项结果正确！', en: 'Zhuge Liang: Verify (let $x = 1$)\n$$3(1) + 2(1) = 5 = 5(1) \\checkmark$$\n\nCollecting like terms is correct!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '同类项（字母和指数完全相同）可以合并，只需把系数相加减。', en: 'Like terms (same letter and power) can be combined by adding/subtracting coefficients.' }, formula: '$ax + bx = (a+b)x$', tips: [{ zh: '诸葛亮提示：合兵一处，势如破竹！', en: 'Zhuge Liang Tip: United forces are unstoppable!' }] },
-    storyConsequence: { correct: { zh: '合兵一处，势如破竹！代数入门完成！', en: 'Forces combined — unstoppable! Algebra intro complete!' }, wrong: { zh: '步兵骑兵混编失败，阵型大乱…', en: 'Infantry-cavalry mix-up — formation chaos...' } },
+    storyConsequence: { correct: { zh: '合兵一处，势如破竹！代数入门完成！', en: 'Forces combined — unstoppable! Algebra intro complete!' }, wrong: { zh: '编队还不太对——重新按比例分配试试？', en: 'Infantry-cavalry mix-up — formation chaos...' } },
   },
   {
     id: 721, grade: 7, unitId: 2, order: 1,
@@ -835,7 +835,7 @@ export const MISSIONS_Y7: Mission[] = [
       }
     ],
     secret: { concept: { zh: '比例关系建模：总量 = 份数 x 每份，再用除法求每份。', en: 'Proportional modeling: total = parts x each, use division to find each part.' }, formula: '$ax = b \\Rightarrow x = b/a$', tips: [{ zh: '曹操提示：公平分配，方能稳定军心。', en: 'Cao Cao Tip: Fair distribution keeps the army stable.' }] },
-    storyConsequence: { correct: { zh: '分配军粮——方程完美求解！做得漂亮！', en: 'Distributing Grain — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '分配军粮——方程完美求解！做得漂亮！', en: 'Distributing Grain — Well done!' }, wrong: { zh: '方程差一步——试试重新检查每步运算？', en: 'Not quite... Try again!' } }
   },
   {
     id: 722, grade: 7, unitId: 2, order: 2,
@@ -875,7 +875,7 @@ export const MISSIONS_Y7: Mission[] = [
       }
     ],
     secret: { concept: { zh: '除法是乘法的逆运算：知道总量和份数，就能求每份。', en: 'Division is the inverse of multiplication: knowing total and parts, find each part.' }, formula: '$x = \\frac{b}{a}$', tips: [{ zh: '张飞提示：算清楚，才公平！', en: 'Zhang Fei Tip: Count right, keep it fair!' }] },
-    storyConsequence: { correct: { zh: '征调民夫——方程完美求解！做得漂亮！', en: 'Drafting Laborers — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '征调民夫——方程完美求解！做得漂亮！', en: 'Drafting Laborers — Well done!' }, wrong: { zh: '方程差一步——试试重新检查每步运算？', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 2 续: 百分比 ---
   {
@@ -894,17 +894,17 @@ export const MISSIONS_Y7: Mission[] = [
           { zh: '付 30 元', en: 'Pay $30' },
         ],
         acceptPattern: '',
-        onCorrect: { zh: '对！打七折 = 付原价的 70% = 100 × 0.7 = 70 元。\n"百分比"就是"每一百里面取多少"。70% = 每 100 取 70。', en: 'Right! 30% off means you pay 70% = 100 × 0.7 = $70.\n"Percent" literally means "per hundred". 70% = 70 out of every 100.' },
-        onWrong: { zh: '"七折"的意思是付原价的十分之七。\n100 的十分之七 = 100 × 0.7 = 70 元。\n"百分比"就是"每一百里面取多少"——70% 就是每 100 取 70。', en: '"30% off" means you pay 70% of the original.\n70% of 100 = 100 × 0.7 = $70.\nPercent means "per hundred" — 70% = 70 out of every 100.' },
-        onSkip: { zh: '没关系！百分比其实就是"每 100 里取几个"。\n70% 就是每 100 取 70。所以 100 元的 70% = 70 元。\n打七折 = 付 70%。就这么简单。', en: 'No worries! Percent just means "out of every 100".\n70% means take 70 out of 100. So 70% of $100 = $70.\n30% off = pay 70%. That\'s all there is to it.' },
+        onCorrect: { zh: '你已经理解"打折"的本质了——七折 = 付原价的 70% = 100 × 0.7 = 70 元。\n"百分比"就是"每一百里面取多少"。70% = 每 100 取 70。感觉到了吗？', en: 'You spotted it — 30% off means you keep 70%, so 100 × 0.7 = $70.\n"Percent" literally means "per hundred". 70% = 70 out of every 100. See how natural that was?' },
+        onWrong: { zh: '你在想"30 元"——说明你注意到了"30%"这个数字，方向是对的。\n来验证一下：30% 是去掉的部分，你付的是剩下的 70%。\n100 × 0.7 = 70 元。"百分比"就是"每一百里面取多少"——70% 就是每 100 取 70。', en: 'You were thinking about the "30" part — that shows you noticed the key number, which is a good start.\nLet\'s check: 30% is what\'s removed, you pay the remaining 70%.\n70% of 100 = 100 × 0.7 = $70. Percent means "per hundred" — 70% = 70 out of every 100.' },
+        onSkip: { zh: '不确定是正常的——"打折"和"百分比"混在一起确实容易绕。\n一起来理清：百分比就是"每 100 里取几个"。\n70% 就是每 100 取 70。所以 100 元的 70% = 70 元。\n打七折 = 付 70%。就这么简单。', en: 'Not being sure is normal — discounts and percentages together can be confusing.\nLet me walk through it: percent just means "out of every 100".\n70% means take 70 out of 100. So 70% of $100 = $70.\n30% off = pay 70%. That\'s all there is to it.' },
       },
       {
         prompt: { zh: '那如果原价是 200 元，打七折要付多少？', en: 'Now if the original price is $200, how much after 30% off?' },
         type: 'input',
         acceptPattern: '140',
-        onCorrect: { zh: '完美！200 × 0.7 = 140 元。\n不管原价多少，方法一样：原价 × 百分比 ÷ 100。\n接下来我们用这个方法解决军粮分配的问题。', en: 'Perfect! 200 × 0.7 = $140.\nSame method regardless of price: original × percent ÷ 100.\nNow let\'s use this to solve a military supply problem.' },
-        onWrong: { zh: '70% 的 200 = 200 × 70 ÷ 100 = 140。\n或者更快：200 × 0.7 = 140。\n方法：原价 × 百分比 ÷ 100。简单吧？', en: '70% of 200 = 200 × 70 ÷ 100 = 140.\nOr quicker: 200 × 0.7 = 140.\nMethod: original × percent ÷ 100. Simple!' },
-        onSkip: { zh: '和刚才一模一样的方法：\n200 × 70 ÷ 100 = 140 元。\n记住：百分比计算 = 数字 × 百分比 ÷ 100。', en: 'Exact same method as before:\n200 × 70 ÷ 100 = $140.\nRemember: percentage calculation = number × percent ÷ 100.' },
+        onCorrect: { zh: '你发现了——方法完全一样，只是数字变大了：200 × 0.7 = 140 元。\n你的判断力很稳：原价 × 百分比 ÷ 100，不管原价多少都通用。感觉到了吗？', en: 'You spotted it — same method, just bigger numbers: 200 × 0.7 = $140.\nSharp thinking: original × percent ÷ 100 works no matter the price. See how natural that was?' },
+        onWrong: { zh: '你的直觉是在用乘法——方向完全正确。\n来验证一下：70% 的 200 = 200 × 70 ÷ 100 = 140。\n或者更快：200 × 0.7 = 140。\n方法：原价 × 百分比 ÷ 100。', en: 'Your instinct was to multiply — that\'s exactly the right direction.\nLet\'s check: 70% of 200 = 200 × 70 ÷ 100 = 140.\nOr quicker: 200 × 0.7 = 140.\nMethod: original × percent ÷ 100.' },
+        onSkip: { zh: '这个问题需要动手算一算——和刚才一模一样的方法。\n一起来：200 × 70 ÷ 100 = 140 元。\n记住：百分比计算 = 数字 × 百分比 ÷ 100。', en: 'This needs trying — exact same method as before.\nLet me walk through it: 200 × 70 ÷ 100 = $140.\nRemember: percentage calculation = number × percent ÷ 100.' },
       },
     ],
     story: { zh: '曹操治军严明：本月军粮总计 {n} 石，前锋营立了战功，按规矩可以优先领取总粮草的 {pct}%。司库问曹操：到底拨多少石给前锋？', en: 'Cao Cao rules with discipline: this month\'s total grain is {n} units. The vanguard earned merit and gets {pct}% of the total supply first. The treasurer asks: how much goes to the vanguard?' },
@@ -920,7 +920,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '曹操：验算\n$50$ 是 $200$ 的多少？$\\frac{50}{200} = 0.25 = 25\\% \\checkmark$\n\n前锋营的粮草分配完毕！', en: 'Cao Cao: Verify\nWhat fraction of $200$ is $50$? $\\frac{50}{200} = 0.25 = 25\\% \\checkmark$\n\nVanguard grain allocation complete!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '百分比就是"每百份中的份数"。求 p% of n，用 n × p ÷ 100。', en: 'Percentage means "parts per hundred". To find p% of n, use n × p ÷ 100.' }, formula: '$p\\% \\text{ of } n = n \\times \\frac{p}{100}$', tips: [{ zh: '曹操提示：百分比是商业和军事的通用语言！', en: 'Cao Cao Tip: Percentages are the universal language of business and warfare!' }] },
-    storyConsequence: { correct: { zh: '军饷提成——百分比算得好！做得漂亮！', en: 'Military Stipend — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '军饷提成——百分比算得好！做得漂亮！', en: 'Military Stipend — Well done!' }, wrong: { zh: '百分比差一点——记住要除以 100 再乘哦。', en: 'Not quite... Try again!' } }
   },
   {
     id: 724, grade: 7, unitId: 2, order: 4,
@@ -935,7 +935,7 @@ export const MISSIONS_Y7: Mission[] = [
     kpId: 'kp-1.12-03', sectionId: 'number',
     storyConsequence: {
       correct: { zh: '曹操：算得好！知道了新价格，本相可以从容调度——从南方走水路运粮，成本更低！', en: 'Cao Cao: "Well calculated! Knowing the new price, I can reroute supplies by river from the south — cheaper!"' },
-      wrong: { zh: '曹操：算错了？军国大事岂能儿戏！重新算来！', en: 'Cao Cao: "Wrong?! Military affairs are no game! Calculate again!"' },
+      wrong: { zh: '曹操：差一点——仔细检查每一步，再来一次。', en: 'Cao Cao: "Wrong?! Military affairs are no game! Calculate again!"' },
     },
     tutorialSteps: [
       { text: { zh: '曹操：涨价了！为什么增加 20% 要乘以 1.2？\n\n原价是"100%"，涨了 20% 后变成"120%"。所以新价格 $=$ 原价 $\\times 120\\% =$ 原价 $\\times 1.2$。乘以 $1.2$ 比先求增加量再相加更快捷！', en: 'Cao Cao: Prices rose! Why does a 20% increase mean multiply by 1.2?\n\nThe original price is "100%"; after a 20% rise it becomes "120%". So new price $=$ original $\\times 120\\% =$ original $\\times 1.2$. Multiplying by $1.2$ is faster than finding the increase then adding!' }, highlightField: 'ans' },
@@ -968,7 +968,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '荀彧：验算\n$3 \\times 4 = 12$ ✓，$2 \\times 4 = 8$ ✓\n$3$ 和 $2$ 的公因数只有 $1$——已是最简 ✓\n\n丞相，比例化简完毕！', en: 'Xun Yu: Verify\n$3 \\times 4 = 12$ ✓, $2 \\times 4 = 8$ ✓\n$3$ and $2$ share no common factor other than $1$ — fully simplified ✓\n\nMy lord, the ratio is simplified!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '化简比 = 两项同除以最大公因数。和约分原理完全相同！', en: 'Simplify ratio = divide both by HCF. Exact same principle as simplifying fractions!' }, formula: '$a:b = \\frac{a}{\\text{HCF}}:\\frac{b}{\\text{HCF}}$', tips: [{ zh: '荀彧提示：化简比和约分是一回事——Unit 0 学的 HCF 在这里又用上了！', en: 'Xun Yu Tip: Simplifying ratios IS simplifying fractions — the HCF from Unit 0 comes back!' }] },
-    storyConsequence: { correct: { zh: '精简军令——比例搞定！做得漂亮！', en: 'Simplify Orders — Well done!' }, wrong: { zh: '比例没算对…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '精简军令——比例搞定！做得漂亮！', en: 'Simplify Orders — Well done!' }, wrong: { zh: '比例差一点——试试交叉相乘？', en: 'Not quite... Try again!' } }
   },
   {
     id: 726, grade: 7, unitId: 2, order: 6,
@@ -1090,7 +1090,7 @@ export const MISSIONS_Y7: Mission[] = [
       }
     ],
     secret: { concept: { zh: '余角之和为 $90^\\circ$。', en: 'Complementary angles sum to $90^\\circ$.' }, formula: '$x + y = 90^\\circ$', tips: [{ zh: '高顺提示：陷阵营，角度必争！', en: 'Gao Shun Tip: For the Camp Crushers, every angle counts!' }] },
-    storyConsequence: { correct: { zh: '交叉火力——角度完美！做得漂亮！', en: 'Crossfire — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '交叉火力——角度完美！做得漂亮！', en: 'Crossfire — Well done!' }, wrong: { zh: '角度差了一点——再看看是补角还是余角？', en: 'Not quite... Try again!' } }
   },
   {
     id: 733, grade: 7, unitId: 3, order: 3,
@@ -1130,7 +1130,7 @@ export const MISSIONS_Y7: Mission[] = [
       }
     ],
     secret: { concept: { zh: '补角的实际应用：方向角合成一条直线，互为补角。', en: 'Practical use of supplementary angles: direction angles forming a straight line are supplementary.' }, formula: '$x = 180° - y$', tips: [{ zh: '诸葛亮提示：阵法变幻，皆在术数。', en: 'Zhuge Tip: The changes in the formation are all in the numbers.' }] },
-    storyConsequence: { correct: { zh: '八卦阵位——角度完美！做得漂亮！', en: 'Eight Trigrams Position — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '八卦阵位——角度完美！做得漂亮！', en: 'Eight Trigrams Position — Well done!' }, wrong: { zh: '角度差了一点——再看看是补角还是余角？', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 3 续: 三角形内角 & 周角 ---
   {
@@ -1153,7 +1153,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '关羽：验算\n$$60° + 50° + 70° = 180° \\checkmark$$\n\n三角旗阵完美！', en: 'Guan Yu: Verify\n$$60° + 50° + 70° = 180° \\checkmark$$\n\nTriangular banner perfect!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '三角形内角和定理：任何三角形的三个内角之和 = 180°。', en: 'Triangle angle sum theorem: the three interior angles of any triangle sum to 180°.' }, formula: '$a + b + c = 180°$', tips: [{ zh: '关羽提示：三角旗阵，角度精准才能列阵如山！', en: 'Guan Yu Tip: Precise angles make an immovable formation!' }] },
-    storyConsequence: { correct: { zh: '三角旗阵——角度完美！做得漂亮！', en: 'Triangular Banner — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '三角旗阵——角度完美！做得漂亮！', en: 'Triangular Banner — Well done!' }, wrong: { zh: '角度差了一点——再看看是补角还是余角？', en: 'Not quite... Try again!' } }
   },
   {
     id: 735, grade: 7, unitId: 3, order: 5,
@@ -1167,7 +1167,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { angle: 260, total: 360, angles: [120, 140], generatorType: 'ANGLES_POINT_RANDOM' }, difficulty: 'Easy', reward: 50,
     storyConsequence: {
       correct: { zh: '诸葛亮：好！$x$ 度方向正是敌军来路——立刻派赵云镇守此方！全方位无死角！', en: 'Zhuge Liang: "That $x°$ direction is the enemy\'s approach — send Zhao Yun to guard it immediately! Full 360° coverage, no blind spots!"' },
-      wrong: { zh: '诸葛亮：角度算错了...那个方向留出了漏洞，敌军趁夜偷袭！重新计算！', en: 'Zhuge Liang: "Wrong angle... that gap left a blind spot. The enemy attacked at night! Recalculate!"' },
+      wrong: { zh: '诸葛亮：角度差了一点…重新量量，这次一定能算对。', en: 'Zhuge Liang: "Wrong angle... that gap left a blind spot. The enemy attacked at night! Recalculate!"' },
     },
     kpId: 'kp-4.3-02', sectionId: 'geometry',
         tutorialSteps: [
@@ -1201,7 +1201,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：验算\n从 $(0,0)$ 向右 $3$ 向上 $5$ 到达标记点 ✓\n\n敌营位置锁定！', en: 'Zhuge Liang: Verify\nFrom $(0,0)$ go right $3$ up $5$ to reach the marked point ✓\n\nEnemy camp location confirmed!' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '坐标系用 (x,y) 两个数字标记位置。x 是左右，y 是上下。原点 (0,0) 是起点。', en: 'The coordinate system uses (x,y) to mark positions. x = left/right, y = up/down. Origin (0,0) is the start.' }, formula: '$(x, y)$：先横后竖', tips: [{ zh: '诸葛亮提示：读图如读兵法——坐标不准，全盘皆输！', en: 'Zhuge Liang Tip: Reading maps is like reading strategy — wrong coordinates mean total defeat!' }] },
-    storyConsequence: { correct: { zh: '读图定位——坐标精准！做得漂亮！', en: 'Map Reading — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '读图定位——坐标精准！做得漂亮！', en: 'Map Reading — Well done!' }, wrong: { zh: '位置差了一点——试试重新读一下坐标？', en: 'Not quite... Try again!' } }
   },
   {
     id: 746, grade: 7, unitId: 3, order: 7,
@@ -1215,7 +1215,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { targetX: -3, targetY: 4, mode: 'negative', generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-3.1-02', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '赵云：四象限侦察——负坐标代表什么方向？\n\n坐标轴把地图分成四个象限。$x < 0$ 表示**左**，$y > 0$ 表示**上**。点 $(-3, 4)$ 在左上方的第二象限——这是包抄的最佳位置！', en: 'Zhao Yun: Four-quadrant scouting — what direction do negative coordinates mean?\n\nThe axes divide the map into four quadrants. $x < 0$ means **left**, $y > 0$ means **up**. Point $(-3, 4)$ is in the upper-left second quadrant — perfect position for flanking!' }, highlightField: 'x' },
+      { text: { zh: '赵云：为什么坐标有正有负？\n地图不只有右上角——敌人可能在你左后方！\n负坐标代表反方向，四个象限覆盖全部方位。不懂负坐标，一半的战场你就看不到。', en: 'Zhao Yun: Four-quadrant scouting — what direction do negative coordinates mean?\n\nThe axes divide the map into four quadrants. $x < 0$ means **left**, $y > 0$ means **up**. Point $(-3, 4)$ is in the upper-left second quadrant — perfect position for flanking!' }, highlightField: 'x' },
       { text: { zh: '赵云：四象限速记\n第一象限：$(+, +)$ 右上\n第二象限：$(-, +)$ 左上\n第三象限：$(-, -)$ 左下\n第四象限：$(+, -)$ 右下', en: 'Zhao Yun: Four quadrants quick reference\nQ1: $(+, +)$ upper right\nQ2: $(-, +)$ upper left\nQ3: $(-, -)$ lower left\nQ4: $(+, -)$ lower right' }, highlightField: 'x' },
       { text: { zh: '赵云：读取图形\n找到图上标记的点，先判断在哪个象限，再数格子。', en: 'Zhao Yun: Read from the graph\nFind the marked point; identify the quadrant first, then count squares.' }, highlightField: 'x' },
       { text: { zh: '赵云：读 $x$ 坐标\n点在原点**左边** $3$ 格 → $x = -3$\n（向左 = 负方向）', en: 'Zhao Yun: Read the $x$-coordinate\nPoint is $3$ squares to the **left** of origin → $x = -3$\n(Going left = negative direction)' }, highlightField: 'x' },
@@ -1241,7 +1241,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { a1: 3, d: 4, n: 5, mode: 'next', generatorType: 'SEQUENCE_Y7_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
         tutorialSteps: [
-      { text: { zh: '刘备：增兵步伐——这是等差数列！\n\n每天比前天多招 $4$ 人，就是"公差 $d = 4$"的等差数列。数列的每一项都比上一项多一个固定值——这个固定值就是"公差"。', en: 'Liu Bei: Growing army — this is an arithmetic sequence!\n\nRecruiting 4 more each day than the day before means the common difference $d = 4$. Each term is exactly one fixed value more than the previous — that fixed value is the "common difference".' }, highlightField: 'ans' },
+      { text: { zh: '刘备：为什么要学数列？\n现实中很多变化有规律——每天多招 $4$ 人，第 10 天招多少？\n找到规律就能预测未来，不用逐天去数。数列就是"有规律的数字队伍"。', en: 'Liu Bei: Growing army — this is an arithmetic sequence!\n\nRecruiting 4 more each day than the day before means the common difference $d = 4$. Each term is exactly one fixed value more than the previous — that fixed value is the "common difference".' }, highlightField: 'ans' },
       { text: { zh: '刘备：等差数列识别方法\n计算相邻两项的差：$a_2 - a_1 = a_3 - a_2 = \\ldots = d$\n\n差值恒定 → 等差数列！', en: 'Liu Bei: How to identify arithmetic sequences\nCalculate differences between consecutive terms: $a_2 - a_1 = a_3 - a_2 = \\ldots = d$\n\nConstant difference → arithmetic sequence!' }, highlightField: 'ans' },
       { text: { zh: '刘备：读取数据\n每天增加的人数相同，差值 $d = 4$。\n\n写出数列：$a_1, a_1+4, a_1+8, \\ldots$', en: 'Liu Bei: Read the data\nThe same number of recruits added each day, difference $d = 4$.\n\nSequence: $a_1, a_1+4, a_1+8, \\ldots$' }, highlightField: 'ans' },
       { text: { zh: '刘备：验证公差\n连续几天之差都等于 $4$——确认是公差！', en: 'Liu Bei: Verify common difference\nDifferences between consecutive days all equal $4$ — confirmed common difference!' }, highlightField: 'ans' },
@@ -1249,7 +1249,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '刘备：验算\n用通项公式验证第 $n$ 项：$a_n = a_1 + (n-1) \times 4$\n\n如果 $a_1 = 5$，第 3 天 $= 5 + 2 \times 4 = 13$，确实比第 2 天（$9$）多 $4$ ✓', en: 'Liu Bei: Verify\nUse nth term formula to verify: $a_n = a_1 + (n-1) \\times 4$\n\nIf $a_1 = 5$, day 3 $= 5 + 2 \\times 4 = 13$, indeed $4$ more than day 2 ($9$) ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '等差数列：每项与前一项的差（公差）恒定。下一项 = 最后一项 + 公差。', en: 'Arithmetic sequence: the difference between consecutive terms is constant. Next = last + common difference.' }, formula: { zh: '$\\text{下一项} = \\text{末项} + d$', en: '$\\text{Next term} = \\text{Last term} + d$' }, tips: [{ zh: '刘备提示：找到规律，就能预见未来！', en: 'Liu Bei Tip: Find the pattern, predict the future!' }] },
-    storyConsequence: { correct: { zh: '增兵步伐——数列过关！做得漂亮！', en: 'Troop Buildup Pattern — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '增兵步伐——数列过关！做得漂亮！', en: 'Troop Buildup Pattern — Well done!' }, wrong: { zh: '数列规律没抓准——试试多写几项看看？', en: 'Not quite... Try again!' } }
   },
   {
     id: 742, grade: 7, unitId: 4, order: 2,
@@ -1263,7 +1263,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { a1: 5, d: 3, n: 8, mode: 'nth', generatorType: 'SEQUENCE_Y7_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-2.7-02', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '赵云：远征第 8 天要多少补给？\n\n如果每天数出来，要数 8 次——太麻烦！通项公式让我们直接跳到第 $n$ 天。规律是：每天补给等差增加，这叫**等差数列**。', en: 'Zhao Yun: How much supply is needed on day 8 of the expedition?\n\nCounting day by day takes 8 steps — too slow! The nth term formula lets us jump directly to day $n$. The pattern: supplies increase by a fixed amount each day — this is an **arithmetic sequence**.' }, highlightField: 'ans' },
+      { text: { zh: '赵云：为什么要学通项公式？\n逐天数到第 100 天？太慢了！\n通项公式让你一步跳到任意一天的答案。掌握公式 = 拥有预知未来的能力。', en: 'Zhao Yun: How much supply is needed on day 8 of the expedition?\n\nCounting day by day takes 8 steps — too slow! The nth term formula lets us jump directly to day $n$. The pattern: supplies increase by a fixed amount each day — this is an **arithmetic sequence**.' }, highlightField: 'ans' },
       { text: { zh: '赵云：等差数列通项公式\n$$a_n = a_1 + (n-1) \\times d$$\n其中：$a_1$ = 第 1 项，$d$ = 公差（每次增加的量），$n$ = 项数\n\n代入一次，直接得答案！', en: 'Zhao Yun: Arithmetic sequence nth term formula\n$$a_n = a_1 + (n-1) \\times d$$\nWhere: $a_1$ = first term, $d$ = common difference, $n$ = term number\n\nSubstitute once, get the answer directly!' }, highlightField: 'ans' },
       { text: { zh: '赵云：读取数据\n首项 $a_1 = 5$，公差 $d = 3$，求第 $n = 8$ 项。\n\n每天比前一天多 $3$ 石。', en: 'Zhao Yun: Read the data\nFirst term $a_1 = 5$, common difference $d = 3$, find term $n = 8$.\n\nEach day adds 3 more units than the day before.' }, highlightField: 'ans' },
       { text: { zh: '赵云：代入公式\n$$a_8 = 5 + (8-1) \\times 3 = 5 + 7 \\times 3$$', en: 'Zhao Yun: Substitute into formula\n$$a_8 = 5 + (8-1) \\times 3 = 5 + 7 \\times 3$$' }, highlightField: 'ans' },
@@ -1271,7 +1271,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '赵云：验算（逐项列举）\n$5, 8, 11, 14, 17, 20, 23, 26$\n第 8 项 $= 26 \\checkmark$\n\n远征补给计划完成！', en: 'Zhao Yun: Verify (list the terms)\n$5, 8, 11, 14, 17, 20, 23, 26$\nTerm 8 $= 26 \\checkmark$\n\nExpedition supply plan complete!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '通项公式让你不必逐项数，直接跳到第 n 项。', en: 'The nth term formula lets you jump directly to any term without counting one by one.' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '赵云提示：兵贵神速，公式比逐个数快！', en: 'Zhao Yun Tip: Speed matters — formulas beat counting one by one!' }] },
-    storyConsequence: { correct: { zh: '远征推算——数列过关！做得漂亮！', en: 'Expedition Projection — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '远征推算——数列过关！做得漂亮！', en: 'Expedition Projection — Well done!' }, wrong: { zh: '数列规律没抓准——试试多写几项看看？', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 4 续: 递减数列（跨单元：负数+数列）---
   {
@@ -1286,7 +1286,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { a1: 30, d: -3, n: 10, mode: 'nth', generatorType: 'SEQUENCE_Y7_RANDOM' }, difficulty: 'Medium', reward: 55,
     kpId: 'kp-2.7-03', sectionId: 'algebra',
     tutorialSteps: [
-      { text: { zh: '赵云：军粮每天减少——这也是等差数列！\n\n不只有增加的数列，减少也是等差。公差 $d < 0$ 时数列递减。第 10 天还剩多少粮？倒计时开始！', en: 'Zhao Yun: Grain depletes daily — this is also an arithmetic sequence!\n\nSequences don\'t only increase; decreasing is arithmetic too. When $d < 0$, the sequence decreases. How much grain on day 10? The countdown begins!' }, highlightField: 'ans' },
+      { text: { zh: '赵云：为什么递减也算数列？\n消耗和增长一样有规律。粮草每天少固定量，第几天耗尽？\n掌握递减数列，才能提前预判危机。公差为负，意味着倒计时已经开始。', en: 'Zhao Yun: Grain depletes daily — this is also an arithmetic sequence!\n\nSequences don\'t only increase; decreasing is arithmetic too. When $d < 0$, the sequence decreases. How much grain on day 10? The countdown begins!' }, highlightField: 'ans' },
       { text: { zh: '赵云：递减数列公式——完全一样！\n$$a_n = a_1 + (n-1) \\times d$$\n\n只是 $d$ 是负数。每天"加"一个负数就是减少。', en: 'Zhao Yun: Decreasing sequence — same formula!\n$$a_n = a_1 + (n-1) \\times d$$\n\nJust with $d$ as a negative number. Adding a negative each day means decreasing.' }, highlightField: 'ans' },
       { text: { zh: '赵云：读取数据\n首日 $a_1 = 30$ 石，每天减少 $d = -3$ 石，求第 $n = 10$ 天。', en: 'Zhao Yun: Read the data\nDay 1: $a_1 = 30$ units, daily change: $d = -3$ units, find term $n = 10$.' }, highlightField: 'ans' },
       { text: { zh: '赵云：代入公式\n$$a_{10} = 30 + (10-1) \\times (-3) = 30 + 9 \\times (-3)$$', en: 'Zhao Yun: Substitute into formula\n$$a_{10} = 30 + (10-1) \\times (-3) = 30 + 9 \\times (-3)$$' }, highlightField: 'ans' },
@@ -1362,7 +1362,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '刘备：验算（绕一圈）\n$$12 + 8 + 12 + 8 = 40 \\checkmark$$\n\n栅栏准备 $40$ 米，营寨安全！', en: 'Liu Bei: Verify (go around once)\n$$12 + 8 + 12 + 8 = 40 \\checkmark$$\n\nPrepare $40$ m of fencing — camp is secure!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '周长是图形一圈的总长度。长方形：P = 2(l+w)。', en: 'Perimeter is the total distance around a shape. Rectangle: P = 2(l+w).' }, formula: '$P = 2(l + w)$', tips: [{ zh: '刘备提示：围栅不够长，敌人就攻进来了！', en: 'Liu Bei Tip: If the fence is too short, the enemy gets in!' }] },
-    storyConsequence: { correct: { zh: '围栅建营——周长无误！做得漂亮！', en: 'Building the Camp Fence — Well done!' }, wrong: { zh: '周长算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '围栅建营——周长无误！做得漂亮！', en: 'Building the Camp Fence — Well done!' }, wrong: { zh: '周长差一点——四条边都加上了吗？', en: 'Not quite... Try again!' } }
   },
   {
     id: 762, grade: 7, unitId: 6, order: 2,
@@ -1384,7 +1384,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '张飞：验算\n$10 \\times 8 = 80$，$5 \\times 8 = 40$，$80 + 40 = 120 \\checkmark$\n\n营地规划完毕！', en: 'Zhang Fei: Verify\n$10 \\times 8 = 80$, $5 \\times 8 = 40$, $80 + 40 = 120 \\checkmark$\n\nCamp layout complete!' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '面积是图形内部的大小。长方形面积 = 长 × 宽。', en: 'Area is the space inside a shape. Rectangle area = length × width.' }, formula: '$A = l \\times w$', tips: [{ zh: '张飞提示：营地够大，才能屯兵万千！', en: 'Zhang Fei Tip: A big camp holds a big army!' }] },
-    storyConsequence: { correct: { zh: '营地面积——面积正确！做得漂亮！', en: 'Camp Ground Area — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '营地面积——面积正确！做得漂亮！', en: 'Camp Ground Area — Well done!' }, wrong: { zh: '面积数值偏了——再看看长和宽代入对了吗？', en: 'Not quite... Try again!' } }
   },
   {
     id: 763, grade: 7, unitId: 6, order: 3,
@@ -1406,7 +1406,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '赵云：验算\n同底同高长方形面积 $= 60$，三角形 $= \\frac{60}{2} = 30 \\checkmark$\n\n军旗制作完毕！', en: 'Zhao Yun: Verify\nSame base and height rectangle area $= 60$, triangle $= \\frac{60}{2} = 30 \\checkmark$\n\nBanner fabrication complete!' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '三角形面积 = 底 × 高 ÷ 2。可以理解为长方形面积的一半。', en: 'Triangle area = base × height ÷ 2. It\'s half the area of a rectangle.' }, formula: '$A = \\frac{b \\times h}{2}$', tips: [{ zh: '赵云提示：旗帜虽小，面积公式却大有用处！', en: 'Zhao Yun Tip: Small banner, big formula!' }] },
-    storyConsequence: { correct: { zh: '三角旗帜——面积正确！做得漂亮！', en: 'Triangular Banner — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '三角旗帜——面积正确！做得漂亮！', en: 'Triangular Banner — Well done!' }, wrong: { zh: '面积数值偏了——再看看长和宽代入对了吗？', en: 'Not quite... Try again!' } }
   },
   // --- Year 7 Unit 6 续: 跨单元应用（方程+周长，代入+面积）---
   {
@@ -1477,7 +1477,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '张飞：验算\n没有任何数值比 $5$（$3$ 次）出现得更多。\n其他所有值只出现 $1$ 次。\n众数 $= 5 \\checkmark$', en: 'Zhang Fei: Verify\nNo other value appears more than $5$ (which appears $3$ times).\nAll other values appear only $1$ time.\nMode $= 5 \\checkmark$' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '众数是出现频率最高的值。一组数据可以有多个众数，也可以没有众数。', en: 'Mode is the most frequent value. Data can have multiple modes or no mode.' }, formula: { zh: '$\\text{众数 = 频率最高的值}$', en: '$\\text{Mode = most frequent value}$' }, tips: [{ zh: '张飞提示：哪种兵器最多，就知道敌军的战术偏好！', en: 'Zhang Fei Tip: The most common weapon reveals the enemy\'s tactics!' }] },
-    storyConsequence: { correct: { zh: '兵器清点——数据分析到位！做得漂亮！', en: 'Weapon Inventory — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '兵器清点——数据分析到位！做得漂亮！', en: 'Weapon Inventory — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
   {
     id: 771, grade: 7, unitId: 7, order: 1,
@@ -1499,7 +1499,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '曹操：验算\n$5$ 个 $10$ 的总和 $= 5 \\times 10 = 50 \\checkmark$\n\n如果每营都是平均水平 $10$，总和还是 $50$——验算通过！', en: 'Cao Cao: Verify\n$5$ tens sum to $5 \\times 10 = 50 \\checkmark$\n\nIf every battalion were at the average level $10$, the total would still be $50$ — verified!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '平均数把总量平均分给每个数据。它代表数据的"中心水平"。', en: 'The mean shares the total equally. It represents the "center" of the data.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '曹操提示：知道全军平均水平，才能精准调度！', en: 'Cao Cao Tip: Know the average to optimize deployment!' }] },
-    storyConsequence: { correct: { zh: '平均战力——数据分析到位！做得漂亮！', en: 'Average Strength — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '平均战力——数据分析到位！做得漂亮！', en: 'Average Strength — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
   {
     id: 772, grade: 7, unitId: 7, order: 2,
@@ -1521,7 +1521,7 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '诸葛亮：验算\n左边：$3, 7$（$2$ 个比 $8$ 小）\n右边：$12, 15$（$2$ 个比 $8$ 大）\n\n两边对称，$8$ 确实是中位数 ✓', en: 'Zhuge Liang: Verify\nLeft: $3, 7$ ($2$ values less than $8$)\nRight: $12, 15$ ($2$ values greater than $8$)\n\nSymmetric on both sides — $8$ is indeed the median ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '中位数是排序后正中间的值。它不受极端值影响。', en: 'Median is the middle value after sorting. It\'s not affected by outliers.' }, formula: { zh: '$\\text{排序后取中间值}$', en: '$\\text{Middle value after sorting}$' }, tips: [{ zh: '诸葛亮提示：中位数比平均数更稳定——一个极端值不会带偏它！', en: 'Zhuge Liang Tip: Median is more stable than mean — one outlier won\'t skew it!' }] },
-    storyConsequence: { correct: { zh: '中位排名——数据分析到位！做得漂亮！', en: 'Median Rank — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '中位排名——数据分析到位！做得漂亮！', en: 'Median Rank — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
   {
     id: 773, grade: 7, unitId: 7, order: 3,
@@ -1543,6 +1543,6 @@ export const MISSIONS_Y7: Mission[] = [
       { text: { zh: '张飞：验算\n$20 - 5 = 15 \\checkmark$\n数据跨度从 $5$ 到 $20$，宽度 $15$。\n\n该练练了，差距太大！', en: 'Zhang Fei: Verify\n$20 - 5 = 15 \\checkmark$\nData spans from $5$ to $20$, width $15$.\n\nTime for training — the gap is too big!' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '极差衡量数据的"分散程度"——差越大，数据越分散。', en: 'Range measures how spread out the data is — bigger range means more spread.' }, formula: '$\\text{Range} = \\text{Max} - \\text{Min}$', tips: [{ zh: '张飞提示：差距太大就要整训，差距小说明水平齐整！', en: 'Zhang Fei Tip: Big gap means more training needed!' }] },
-    storyConsequence: { correct: { zh: '战力差距一目了然！张飞：整训计划安排上了！', en: 'Strength gap crystal clear! Zhang Fei: Training plan is set!' }, wrong: { zh: '数据分析有误，整训方向搞错了…', en: 'Data analysis wrong — training focus is off...' } },
+    storyConsequence: { correct: { zh: '战力差距一目了然！张飞：整训计划安排上了！', en: 'Strength gap crystal clear! Zhang Fei: Training plan is set!' }, wrong: { zh: '数据差了一点——再仔细看看每个数字？', en: 'Data analysis wrong — training focus is off...' } },
   },
 ];

@@ -36,7 +36,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '诸葛亮：验算\n$f(3) = -9 + 24 = 15 < 16$ ✓\n$f(5) = -25 + 40 = 15 < 16$ ✓ 两侧都小，确认最大值！', en: 'Zhuge Liang: "Verify\n$f(3) = 15 < 16$ ✓\n$f(5) = 15 < 16$ ✓ Both sides less, confirmed max!"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '导数为零的点可能是函数的极值点。', en: 'Points where derivative is zero can be extrema.' }, formula: "$f'(x) = 0$", tips: [{ zh: '诸葛亮提示：鞠躬尽瘁，死而后已。运输之利，在于精微。', en: 'Zhuge Tip: Devoted to the end. The key to transport is precision.' }] },
-    storyConsequence: { correct: { zh: '出师北伐——二次方程迎刃而解！做得漂亮！', en: 'Northern Expedition — Well done!' }, wrong: { zh: '二次方程算岔了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '出师北伐——二次方程迎刃而解！做得漂亮！', en: 'Northern Expedition — Well done!' }, wrong: { zh: '差一步——试试用求根公式再算一次？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1112, grade: 11, unitId: 1, order: 2,
@@ -58,7 +58,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '姜维：验算\n切线 $y = 4x - 4$，代入 $(2,4)$：$4(2)-4 = 4$ ✓', en: 'Jiang Wei: "Verify\nTangent $y = 4x - 4$, at $(2,4)$: $4(2)-4 = 4$ ✓"' }, highlightField: 'k' },
     ],
     secret: { concept: { zh: '导数代表曲线在某一点的切线斜率。', en: 'Derivative is the slope of the tangent at a point.' }, formula: "$(x^n)' = nx^{n-1}$", tips: [{ zh: '姜维提示：栈道险峻，支架必须稳固。', en: 'Jiang Wei Tip: The plank road is steep, the support must be stable.' }] },
-    storyConsequence: { correct: { zh: '剑阁栈道——导数精准！做得漂亮！', en: 'Jiange Pass — Well done!' }, wrong: { zh: '导数计算有误…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '剑阁栈道——导数精准！做得漂亮！', en: 'Jiange Pass — Well done!' }, wrong: { zh: '导数差一步——指数拿下来当系数，指数减 1。', en: 'Not quite... Try again!' } }
   },
   {
     id: 1113, grade: 11, unitId: 1, order: 3,
@@ -102,7 +102,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '邓艾：验算\n三角形底 4 高 4，$\\frac{1}{2} \\times 4 \\times 4 = 8$ ✓ 积分与几何一致！', en: 'Deng Ai: "Verify\nTriangle base 4, height 4: $\\frac{1}{2} \\times 4 \\times 4 = 8$ ✓ Matches geometry!"' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '定积分可以计算曲线下的面积。', en: 'Definite integral calculates the area under a curve.' }, formula: '$\\int x dx = \\frac{1}{2}x^2$', tips: [{ zh: '邓艾提示：屯田之计，在于地利。', en: "Deng Ai Tip: The plan for farming lies in the advantage of the land." }] },
-    storyConsequence: { correct: { zh: '测量农田——积分完成！做得漂亮！', en: 'Surveying Farmland — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '测量农田——积分完成！做得漂亮！', en: 'Surveying Farmland — Well done!' }, wrong: { zh: '积分差一步——检查上下界代入了吗？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1122, grade: 11, unitId: 2, order: 2,
@@ -124,7 +124,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '钟会：验算\n$(t^3)\' = 3t^2 = v(t)$ ✓ 导回去得原函数！', en: 'Zhong Hui: "Verify\n$(t^3)\' = 3t^2 = v(t)$ ✓ Differentiating back gives original!"' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '积分是导数的逆运算。', en: 'Integration is the inverse of differentiation.' }, formula: '$\\int x^2 dx = \\frac{1}{3}x^3$', tips: [{ zh: '钟会提示：水流湍急，需精确计算。', en: 'Zhong Hui Tip: The water is swift, precise calculation is needed.' }] },
-    storyConsequence: { correct: { zh: '河道流量——积分完成！做得漂亮！', en: 'River Flow — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '河道流量——积分完成！做得漂亮！', en: 'River Flow — Well done!' }, wrong: { zh: '积分差一步——检查上下界代入了吗？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1123, grade: 11, unitId: 2, order: 3,
@@ -146,7 +146,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '邓艾：验算\n三角形面积 $= \\frac{1}{2} \\times 6 \\times 6 = 18$ ✓\n积分结果与几何面积完全吻合！', en: 'Deng Ai: "Verify\nTriangle area $= \\frac{1}{2} \\times 6 \\times 6 = 18$ ✓\nIntegration matches geometric area perfectly!"' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '$\\int x\\,dx = \\frac{1}{2}x^2$。线性函数的积分就是三角形面积。', en: '$\\int x\\,dx = \\frac{1}{2}x^2$. Area under a linear function is a triangle.' }, formula: '$\\int_0^b x\\,dx = \\frac{b^2}{2}$', tips: [{ zh: '邓艾提示：三角面积公式和积分殊途同归。', en: 'Deng Ai Tip: Triangle area formula and integration give the same answer.' }] },
-    storyConsequence: { correct: { zh: '屯田丈量——积分精准！', en: 'Field Measurement — Integration correct!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '屯田丈量——积分精准！', en: 'Field Measurement — Integration correct!' }, wrong: { zh: '积分差一步——检查上下界代入了吗？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1131, grade: 11, unitId: 3, order: 1,
@@ -168,7 +168,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '费祎：验算\n$a_9 = 100 + 8 \\times 50 = 500$\n$550 - 500 = 50 = d$ ✓', en: 'Fei Yi: "Verify\n$a_9 = 100 + 8 \\times 50 = 500$\n$550 - 500 = 50 = d$ ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '等差数列通项公式：$a_n = a_1 + (n-1)d$。', en: 'Arithmetic sequence formula: $a_n = a_1 + (n-1)d$.' }, formula: '$a_{10} = 100 + 9 \\times 50$', tips: [{ zh: '费祎提示：粮草充足，军心方稳。', en: "Fei Yi Tip: With sufficient supplies, the army's morale is stable." }] },
-    storyConsequence: { correct: { zh: '运粮序列——数列过关！做得漂亮！', en: 'Supply Line — Well done!' }, wrong: { zh: '数列公式用错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '运粮序列——数列过关！做得漂亮！', en: 'Supply Line — Well done!' }, wrong: { zh: '数列规律没抓准——试试多写几项看看？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1132, grade: 11, unitId: 3, order: 2,
@@ -190,7 +190,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '费祎："验算：$n=1$: ${d}+{q} = {a1}$ ✓，$n=2$: $2\\times{d}+{q} = {a2}$ ✓。公式可靠，屯粮有序！"', en: 'Fei Yi: "Check: $n=1$: ${d}+{q}={a1}$ ✓, $n=2$: $2\\times{d}+{q}={a2}$ ✓. Formula reliable, stockpiling in order!"' }, highlightField: 'p' },
     ],
     secret: { concept: { zh: '通项公式 $pn+q$：$p$ = 公差，$q = a_1 - d$。', en: 'nth term $pn+q$: $p$ = common difference, $q = a_1 - d$.' }, formula: '$a_n = pn + q,\\; p=d,\\; q=a_1-d$', tips: [{ zh: '费祎提示：$p$ 就是公差——差多少加多少。', en: 'Fei Yi Tip: $p$ is the common difference — how much it grows each step.' }] },
-    storyConsequence: { correct: { zh: '屯粮通项——公式推导完美！做得漂亮！', en: 'Stockpile nth Term — Well done!' }, wrong: { zh: '通项公式推错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '屯粮通项——公式推导完美！做得漂亮！', en: 'Stockpile nth Term — Well done!' }, wrong: { zh: '通项公式差一步——先找公差，再用 n=1 验证。', en: 'Not quite... Try again!' } }
   },
 
   {
@@ -237,7 +237,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '司马炎：验算\n平均数 × 个数 应该等于总和 ✓', en: 'Sima Yan: "Verify\nMean × count should equal the sum ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '平均数 = 总和 ÷ 个数。反映数据的"中心水平"。', en: 'Mean = sum ÷ count. Reflects the "central level" of the data.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '司马炎提示：天下大势，分久必合，合久必分。', en: 'Sima Yan Tip: The world\'s trend — unite after long division, divide after long union.' }] },
-    storyConsequence: { correct: { zh: '各郡粮产——数据分析到位！做得漂亮！', en: 'Prefecture Grain Yield — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '各郡粮产——数据分析到位！做得漂亮！', en: 'Prefecture Grain Yield — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1142, grade: 11, unitId: 4, order: 2,
@@ -259,7 +259,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '杜预：验算\n中位数左边和右边的数据个数应该相等 ✓', en: 'Du Yu: "Verify\nEqual number of values on each side of the median ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '中位数 = 排序后中间的值。不受极端值影响，反映"典型水平"。', en: 'Median = middle value after sorting. Not affected by extremes, reflects "typical level".' }, formula: '$\\text{排序后取中间}$', tips: [{ zh: '杜预提示：中位数比平均数更"稳"。', en: 'Du Yu Tip: The median is more "stable" than the mean.' }] },
-    storyConsequence: { correct: { zh: '驻军兵力——数据分析到位！做得漂亮！', en: 'Garrison Strength — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '驻军兵力——数据分析到位！做得漂亮！', en: 'Garrison Strength — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1143, grade: 11, unitId: 4, order: 3,
@@ -281,7 +281,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '杜预：验算\n确认众数的出现次数确实比其他值多 ✓', en: 'Du Yu: "Verify\nConfirm the mode\'s frequency is indeed the highest ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '众数 = 出现次数最多的值。一组数据可以有多个众数，也可以没有。', en: 'Mode = most frequently occurring value. A dataset can have multiple modes or none.' }, formula: '$\\text{频率最高} = \\text{众数}$', tips: [{ zh: '杜预提示：众数就是"人气王"——出现最多次的那个。', en: 'Du Yu Tip: The mode is the \'crowd favorite\' — appears most often.' }] },
-    storyConsequence: { correct: { zh: '常用兵器——数据分析到位！做得漂亮！', en: 'Most Common Weapon — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '常用兵器——数据分析到位！做得漂亮！', en: 'Most Common Weapon — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1144, grade: 11, unitId: 4, order: 4,
@@ -303,7 +303,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '司马炎：验算\n最小值 + 极差 = 最大值 ✓', en: 'Sima Yan: "Verify\nMin + range = max ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '极差 = 最大值 - 最小值。衡量数据的离散程度，越大越分散。', en: 'Range = max - min. Measures data spread — larger range means more dispersed.' }, formula: '$R = x_{\\max} - x_{\\min}$', tips: [{ zh: '司马炎提示：极差大说明天下未稳，极差小说明太平盛世。', en: 'Sima Yan Tip: Large range = unstable realm, small range = peaceful times.' }] },
-    storyConsequence: { correct: { zh: '战损极差——数据分析到位！做得漂亮！', en: 'Casualty Range — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '战损极差——数据分析到位！做得漂亮！', en: 'Casualty Range — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1151, grade: 11, unitId: 5, order: 1,
@@ -325,7 +325,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '杜预：验算\n概率 × 总次数 应该等于有利事件数 ✓', en: 'Du Yu: "Verify\nProbability × total should equal favorable count ✓"' }, highlightField: 'p' },
     ],
     secret: { concept: { zh: '概率 = 有利事件 ÷ 总事件。基于历史数据的频率估计。', en: 'Probability = favorable ÷ total. Frequency-based estimation from historical data.' }, formula: '$P = \\frac{f}{n}$', tips: [{ zh: '杜预提示：知己知彼，百战不殆。', en: 'Du Yu Tip: Know yourself and your enemy — never lose.' }] },
-    storyConsequence: { correct: { zh: '攻城胜算——概率算准！做得漂亮！', en: 'Siege Probability — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '攻城胜算——概率算准！做得漂亮！', en: 'Siege Probability — Well done!' }, wrong: { zh: '概率差了一点——记住目标数 ÷ 总数。', en: 'Not quite... Try again!' } }
   },
   {
     id: 1152, grade: 11, unitId: 5, order: 2,
@@ -347,7 +347,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '司马炎：验算\n结果应该小于两个概率中较小的那个 ✓\n（两件事同时发生肯定比只发生一件更难）', en: 'Sima Yan: "Verify\nResult should be less than the smaller of the two probabilities ✓\n(Both happening is harder than just one)"' }, highlightField: 'p' },
     ],
     secret: { concept: { zh: '独立事件：P(A且B) = P(A) × P(B)。互不影响的事件概率相乘。', en: 'Independent events: P(A and B) = P(A) × P(B). Multiply probabilities of events that don\'t affect each other.' }, formula: '$P(A \\cap B) = P(A) \\cdot P(B)$', tips: [{ zh: '司马炎提示：天下归一，每一步都要算准概率。', en: 'Sima Yan Tip: To unify the realm, calculate every probability.' }] },
-    storyConsequence: { correct: { zh: '双路夹击——概率算准！做得漂亮！', en: 'Two-Pronged Attack — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '双路夹击——概率算准！做得漂亮！', en: 'Two-Pronged Attack — Well done!' }, wrong: { zh: '概率差了一点——记住目标数 ÷ 总数。', en: 'Not quite... Try again!' } }
   },
   {
     id: 1153, grade: 11, unitId: 5, order: 3,
@@ -369,7 +369,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '司马炎：验算\n四个区域之和 = 总人数 ✓ 无人遗漏！', en: 'Sima Yan: "Verify\nSum of four regions = total ✓ No one missed!"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '韦恩图：两个圆圈的交叠表示交集，合在一起表示并集，圈外表示补集。', en: 'Venn diagram: overlap = intersection, combined = union, outside = complement.' }, formula: '$|A \\cup B| = |A| + |B| - |A \\cap B|$', tips: [{ zh: '司马炎提示：四个区域加起来等于总数——这是验算的金标准。', en: 'Sima Yan Tip: Four regions sum to total — the gold standard for verification.' }] },
-    storyConsequence: { correct: { zh: '将领履历——集合理清！做得漂亮！', en: 'Generals\' Records — Well done!' }, wrong: { zh: '集合关系理错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '将领履历——集合理清！做得漂亮！', en: 'Generals\' Records — Well done!' }, wrong: { zh: '集合关系有点绕——画个韦恩图理理？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1154, grade: 11, unitId: 5, order: 4,
@@ -415,7 +415,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '姜维：验算\n总向量减去第二段应等于第一段 ✓', en: 'Jiang Wei: "Verify\nTotal minus second segment should equal first ✓"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '向量加法：分量分别相加。几何上是首尾相接。', en: 'Vector addition: add components separately. Geometrically, end-to-end.' }, formula: '$\\vec{a}+\\vec{b} = \\binom{a_1+b_1}{a_2+b_2}$', tips: [{ zh: '姜维提示：两段路合一段——向量加法就这么直白。', en: 'Jiang Wei Tip: Two paths become one — vector addition is that straightforward.' }] },
-    storyConsequence: { correct: { zh: '两段行军——坐标精准！做得漂亮！', en: 'Two-Stage March — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '两段行军——坐标精准！做得漂亮！', en: 'Two-Stage March — Well done!' }, wrong: { zh: '位置差了一点——试试重新读一下坐标？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1162, grade: 11, unitId: 6, order: 2,
@@ -437,7 +437,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '姜维：验算\n新向量 ÷ $k$ 应等于原向量 ✓', en: 'Jiang Wei: "Verify\nNew vector ÷ $k$ should equal original ✓"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '标量乘法：向量每个分量乘以标量。方向不变，长度缩放。', en: 'Scalar multiplication: multiply each component by the scalar. Direction unchanged, length scales.' }, formula: '$k\\vec{v} = \\binom{kv_1}{kv_2}$', tips: [{ zh: '姜维提示：标量乘法 = 方向不变，走远走近。', en: 'Jiang Wei Tip: Scalar multiplication = same direction, different distance.' }] },
-    storyConsequence: { correct: { zh: '补给倍增——坐标精准！做得漂亮！', en: 'Supply Route Scaling — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '补给倍增——坐标精准！做得漂亮！', en: 'Supply Route Scaling — Well done!' }, wrong: { zh: '位置差了一点——试试重新读一下坐标？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1163, grade: 11, unitId: 6, order: 3,
@@ -459,7 +459,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '姜维：验算\n$|\\vec{v}|^2$ 应等于 $v_1^2 + v_2^2$ ✓', en: 'Jiang Wei: "Verify\n$|\\vec{v}|^2$ should equal $v_1^2 + v_2^2$ ✓"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '向量模 = √(x² + y²)，本质就是勾股定理。', en: 'Vector magnitude = √(x² + y²), essentially Pythagoras.' }, formula: '$|\\vec{v}| = \\sqrt{v_1^2 + v_2^2}$', tips: [{ zh: '姜维提示：向量模 = 勾股定理的又一次登场。', en: 'Jiang Wei Tip: Vector magnitude = Pythagoras strikes again.' }] },
-    storyConsequence: { correct: { zh: '行军总距离——坐标精准！做得漂亮！', en: 'Total March Distance — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '行军总距离——坐标精准！做得漂亮！', en: 'Total March Distance — Well done!' }, wrong: { zh: '位置差了一点——试试重新读一下坐标？', en: 'Not quite... Try again!' } }
   },
 
   // --- Year 11 Unit 7: Advanced Statistics — Charts & Cumulative Frequency ---
@@ -483,7 +483,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '司马炎：验算\n估计均值应该在最小组中值和最大组中值之间 ✓', en: 'Sima Yan: "Verify\nEstimated mean should be between smallest and largest midpoints ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '分组数据估计均值：用组中值代替每个数据，再算加权平均。', en: 'Estimated mean from grouped data: replace each value with class midpoint, then weighted average.' }, formula: '$\\bar{x} \\approx \\frac{\\sum f \\cdot x_m}{\\sum f}$', tips: [{ zh: '司马炎提示：分组数据只能"估计"——精确值已经丢失了。', en: 'Sima Yan Tip: Grouped data can only be \'estimated\' — exact values are lost.' }] },
-    storyConsequence: { correct: { zh: '分组均值——数据分析到位！做得漂亮！', en: 'Grouped Mean — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '分组均值——数据分析到位！做得漂亮！', en: 'Grouped Mean — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1172, grade: 11, unitId: 7, order: 2,
@@ -505,7 +505,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '杜预：验算\n中位数应该在中位数所在组的范围内 ✓', en: 'Du Yu: "Verify\nMedian should fall within the median class range ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '累积频率 = 逐组累加。中位数在累积频率 = 总数/2 的位置。', en: 'Cumulative frequency = running total. Median at cumulative = total/2.' }, formula: '$\\text{中位数位置} = \\frac{n}{2}$', tips: [{ zh: '杜预提示：累积频率是"跑步记分牌"——看什么时候过半。', en: 'Du Yu Tip: Cumulative frequency is a \'running scoreboard\' — see when it passes halfway.' }] },
-    storyConsequence: { correct: { zh: '战损累积——数据分析到位！做得漂亮！', en: 'Cumulative Casualties — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '战损累积——数据分析到位！做得漂亮！', en: 'Cumulative Casualties — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
   {
     id: 1173, grade: 11, unitId: 7, order: 3,
@@ -527,7 +527,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '司马炎：验算\n中位数左边和右边的数据个数应该相等 ✓', en: 'Sima Yan: "Verify\nEqual count of values on each side of median ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '四分位数将数据分为四等份。IQR = Q3 - Q1 衡量中间 50% 的离散度。', en: 'Quartiles divide data into four equal parts. IQR = Q3 - Q1 measures spread of middle 50%.' }, formula: '$IQR = Q3 - Q1$', tips: [{ zh: '司马炎提示：四分位——把天下分为四份来分析。', en: 'Sima Yan Tip: Quartiles — analyze the realm in four parts.' }] },
-    storyConsequence: { correct: { zh: '四分位分析——数据分析到位！做得漂亮！', en: 'Quartile Analysis — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '四分位分析——数据分析到位！做得漂亮！', en: 'Quartile Analysis — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } }
   },
 
   // --- Y11 Unit 8: 微积分深化 · 六出祁山 (Calculus Extension) ---
@@ -551,7 +551,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '诸葛亮：验算\n对导数再积分，应该回到原函数（加常数）✓', en: 'Zhuge Liang: "Verify\nIntegrate the derivative back — should return to original (plus constant) ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '微分 = 求变化率。幂规则：指数下来乘，指数减1。', en: 'Differentiation = rate of change. Power rule: bring down power, reduce by 1.' }, formula: '$\\frac{d}{dx}(ax^n) = nax^{n-1}$', tips: [{ zh: '诸葛亮提示：指数搬下来，再减1。', en: 'Zhuge Liang Tip: Bring the power down, reduce by 1.' }] },
-    storyConsequence: { correct: { zh: '行军速率——导数精准！做得漂亮！', en: 'March Rate — Well done!' }, wrong: { zh: '导数计算有误…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '行军速率——导数精准！做得漂亮！', en: 'March Rate — Well done!' }, wrong: { zh: '导数差一步——指数拿下来当系数，指数减 1。', en: 'Not quite... Try again!' } }
   },
   {
     id: 1182, grade: 11, unitId: 8, order: 2,
@@ -573,7 +573,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '诸葛亮：验算\n对结果求导，应该得到原函数 ✓', en: 'Zhuge Liang: "Verify\nDifferentiate the result — should give back the original ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '积分 = 微分的逆操作。幂规则：指数加1，除以新指数。', en: 'Integration = reverse of differentiation. Power rule: add 1 to power, divide by new power.' }, formula: '$\\int ax^n dx = \\frac{a}{n+1}x^{n+1} + C$', tips: [{ zh: '诸葛亮提示：指数加1再除——积分口诀。', en: 'Zhuge Liang Tip: Add 1 then divide — integration mantra.' }] },
-    storyConsequence: { correct: { zh: '粮草总量——积分完成！做得漂亮！', en: 'Total Supplies — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '粮草总量——积分完成！做得漂亮！', en: 'Total Supplies — Well done!' }, wrong: { zh: '积分差一步——检查上下界代入了吗？', en: 'Not quite... Try again!' } }
   },
 
   {
@@ -596,7 +596,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '诸葛亮：验算\n$(t^2)\' = 2t = v(t)$ ✓ 导回原函数！\n三角面积 $\\frac{1}{2}(5)(10) = 25$ ✓ 完全吻合。', en: 'Zhuge Liang: "Verify\n$(t^2)\' = 2t = v(t)$ ✓ Differentiates back!\nTriangle area $\\frac{1}{2}(5)(10) = 25$ ✓ Matches."' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '$\\int 2x\\,dx = x^2 + C$。代入上下界做减法。', en: '$\\int 2x\\,dx = x^2 + C$. Substitute bounds and subtract.' }, formula: '$\\int_0^b 2x\\,dx = b^2$', tips: [{ zh: '诸葛亮提示：积分口诀——指数加1再除。', en: 'Zhuge Liang Tip: Integration mantra — add 1, divide.' }] },
-    storyConsequence: { correct: { zh: '行军补给——积分精准！', en: 'March Resupply — Integration correct!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '行军补给——积分精准！', en: 'March Resupply — Integration correct!' }, wrong: { zh: '积分差一步——检查上下界代入了吗？', en: 'Not quite... Try again!' } }
   },
 
   // --- Y11 Unit 9: 向量运算 · 八阵图 (Vector Operations) ---
@@ -620,7 +620,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '诸葛亮：验算\n$(\\vec{a}+\\vec{b}) - \\vec{b}$ 应等于 $\\vec{a}$ ✓', en: 'Zhuge Liang: "Verify\n$(\\vec{a}+\\vec{b}) - \\vec{b}$ should equal $\\vec{a}$ ✓"' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '向量加法：分量分别相加。合力方向 = 各分力之和。', en: 'Vector addition: add components separately. Resultant = sum of individual vectors.' }, formula: '$\\vec{a}+\\vec{b} = (a_1+b_1, a_2+b_2)$', tips: [{ zh: '诸葛亮提示：x加x，y加y——向量加法就这样。', en: 'Zhuge Liang Tip: x plus x, y plus y — that\'s vector addition.' }] },
-    storyConsequence: { correct: { zh: '阵法向量——坐标精准！做得漂亮！', en: 'Formation Vectors — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '阵法向量——坐标精准！做得漂亮！', en: 'Formation Vectors — Well done!' }, wrong: { zh: '位置差了一点——试试重新读一下坐标？', en: 'Not quite... Try again!' } }
   },
 
   {
@@ -667,7 +667,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '周瑜：验算\n三角形三角之和 = $180°$ ✓\n结果代回正弦定理，等式两边应该相等 ✓', en: 'Zhou Yu: "Verify\nAngles sum to 180° ✓\nSubstitute back into sine rule — both sides should be equal ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '正弦定理：a/sinA = b/sinB = c/sinC。适用于所有三角形。', en: 'Sine rule: a/sinA = b/sinB = c/sinC. Works for ALL triangles.' }, formula: '$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$', tips: [{ zh: '周瑜提示：边配角，角配边——正弦定理万能。', en: 'Zhou Yu Tip: Side pairs with angle — sine rule is universal.' }] },
-    storyConsequence: { correct: { zh: '斜岸测量——三角精准！做得漂亮！', en: 'Oblique Shore Survey — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '斜岸测量——三角精准！做得漂亮！', en: 'Oblique Shore Survey — Well done!' }, wrong: { zh: '三角函数有点棘手——检查一下用的是 sin 还是 cos？', en: 'Not quite... Try again!' } }
   },
   {
     id: 11102, grade: 11, unitId: 10, order: 2,
@@ -689,7 +689,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '周瑜：验算\n当角度 = $90°$ 时，$\\cos 90° = 0$，公式变回勾股定理 ✓', en: 'Zhou Yu: "Verify\nWhen angle = 90°, $\\cos 90° = 0$, formula becomes Pythagoras ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '余弦定理：a² = b² + c² - 2bc·cosA。勾股定理的通用版。', en: 'Cosine rule: a² = b² + c² - 2bc·cosA. Generalized Pythagoras.' }, formula: '$a^2 = b^2 + c^2 - 2bc\\cos A$', tips: [{ zh: '周瑜提示：两边夹角→余弦定理。三边→也是余弦定理。', en: 'Zhou Yu Tip: Two sides + angle → cosine rule. Three sides → also cosine rule.' }] },
-    storyConsequence: { correct: { zh: '夹角攻防——三角精准！做得漂亮！', en: 'Included Angle Battle — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '夹角攻防——三角精准！做得漂亮！', en: 'Included Angle Battle — Well done!' }, wrong: { zh: '三角函数有点棘手——检查一下用的是 sin 还是 cos？', en: 'Not quite... Try again!' } }
   },
 
   {
@@ -712,7 +712,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '周瑜：验算\n$\\frac{17.3}{20} = 0.865 \\approx \\cos 30°$ ✓\n也可检查：$\\sin 30° = 0.5$，对边 $= 20 \\times 0.5 = 10$\n$10^2 + 17.3^2 \\approx 400 = 20^2$ ✓ 勾股验证通过！', en: 'Zhou Yu: "Verify\n$\\frac{17.3}{20} = 0.865 \\approx \\cos 30°$ ✓\nAlso: $\\sin 30° = 0.5$, opposite $= 10$\n$10^2 + 17.3^2 \\approx 400 = 20^2$ ✓ Pythagoras check passed!"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: 'cos θ = 邻边/斜边，所以邻边 = 斜边 × cos θ。', en: 'cos θ = adjacent/hypotenuse, so adjacent = hyp × cos θ.' }, formula: '$\\text{adj} = \\text{hyp} \\times \\cos\\theta$', tips: [{ zh: '周瑜提示：cos 找邻边，sin 找对边。', en: 'Zhou Yu Tip: cos finds the adjacent, sin finds the opposite.' }] },
-    storyConsequence: { correct: { zh: '战场测距——三角精准！', en: 'Battlefield Range — Trig correct!' }, wrong: { zh: '三角比算错了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '战场测距——三角精准！', en: 'Battlefield Range — Trig correct!' }, wrong: { zh: '三角比差一步——对边、邻边、斜边认对了吗？', en: 'Not quite... Try again!' } }
   },
 
   // --- Y11 Unit 11: 函数图像 · 隆中对策 (Function Graphs) ---
@@ -736,7 +736,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '诸葛亮：验算\n顶点左右各代一个 $x$，$y$ 值应该更小（因为 $a < 0$）✓', en: 'Zhuge Liang: "Verify\nSub one $x$ to the left and right of vertex — $y$ should be smaller (since $a < 0$) ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '顶点公式：x = -b/(2a)，再代回求 y。是抛物线的最高/低点。', en: 'Vertex: x = -b/(2a), sub back for y. It\'s the max/min of the parabola.' }, formula: '$x = -\\frac{b}{2a}$', tips: [{ zh: '诸葛亮提示：-b/2a 一步到位，不用配方。', en: 'Zhuge Liang Tip: -b/2a gives x directly, no completing the square needed.' }] },
-    storyConsequence: { correct: { zh: '抛物线顶点——二次方程迎刃而解！做得漂亮！', en: 'Parabola Vertex — Well done!' }, wrong: { zh: '二次方程算岔了…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '抛物线顶点——二次方程迎刃而解！做得漂亮！', en: 'Parabola Vertex — Well done!' }, wrong: { zh: '差一步——试试用求根公式再算一次？', en: 'Not quite... Try again!' } }
   },
   {
     id: 11112, grade: 11, unitId: 11, order: 2,
@@ -758,7 +758,7 @@ export const MISSIONS_Y11: Mission[] = [
       { text: { zh: '诸葛亮：验算\n把每个根代回原式，结果应为 $0$ ✓', en: 'Zhuge Liang: "Verify\nSub each root back — result should be 0 ✓"' }, highlightField: 'x1' },
     ],
     secret: { concept: { zh: '求根公式：x = (-b±√(b²-4ac))/2a。判别式决定根的个数。', en: 'Quadratic formula: x = (-b±√(b²-4ac))/2a. Discriminant determines number of roots.' }, formula: '$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$', tips: [{ zh: '诸葛亮提示：记住公式，判别式先算。', en: 'Zhuge Liang Tip: Memorize the formula, calculate discriminant first.' }] },
-    storyConsequence: { correct: { zh: '函数零点——根找到了！做得漂亮！', en: 'Function Zeros — Well done!' }, wrong: { zh: '方程的根没找对…再试一次！', en: 'Not quite... Try again!' } }
+    storyConsequence: { correct: { zh: '函数零点——根找到了！做得漂亮！', en: 'Function Zeros — Well done!' }, wrong: { zh: '根差了一点——代回原式检查一下？', en: 'Not quite... Try again!' } }
   },
   {
     id: 11113, grade: 11, unitId: 11, order: 3,

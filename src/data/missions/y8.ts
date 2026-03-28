@@ -47,7 +47,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '张飞：验算\n反推：$(y - b) \\div m$ 应该等于 $x$ ✓', en: '张飞：验算\n反推：$(y - b) \\div m$ 应该等于 $x$ ✓' }, highlightField: 'y' },
     ],
     secret: { concept: { zh: '函数就像一台机器：输入 $x$，输出 $y$。', en: 'A function is like a machine: input $x$, output $y$.' }, formula: '$y = mx + b$', tips: [{ zh: '张飞提示：代入就是把数字塞进去算！', en: 'Zhang Fei Tip: Substitution means plugging in the number!' }] },
-    storyConsequence: { correct: { zh: '追击哨兵——函数值正确！做得漂亮！', en: 'Intercepting Scouts — Well done!' }, wrong: { zh: '函数值代入有误…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '追击哨兵——函数值正确！做得漂亮！', en: 'Intercepting Scouts — Well done!' }, wrong: { zh: '代入的时候有个小差错——逐步代入试试？', en: 'Not quite... Try again!' } },
   },
   {
     id: 813, grade: 8, unitId: 1, order: 3,
@@ -69,7 +69,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '关羽：验算\n把两个点分别代入：都满足方程 ✓', en: '关羽：验算\n把两个点分别代入：都满足方程 ✓' }, highlightField: 'm' },
     ],
     secret: { concept: { zh: '斜率越大，路线越陡。', en: 'Steeper route means larger slope.' }, formula: '$m = \\frac{y_2 - y_1}{x_2 - x_1}$', tips: [{ zh: '关羽提示：斜率就是行军的陡峭程度。', en: 'Guan Yu Tip: Slope is the steepness of the march.' }] },
-    storyConsequence: { correct: { zh: '合围之势——直线方程搞定！做得漂亮！', en: 'Encirclement — Well done!' }, wrong: { zh: '直线方程有误…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '合围之势——直线方程搞定！做得漂亮！', en: 'Encirclement — Well done!' }, wrong: { zh: '直线方程差一步——检查一下斜率和截距？', en: 'Not quite... Try again!' } },
   },
   {
     id: 814, grade: 8, unitId: 1, order: 4,
@@ -115,7 +115,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '曹操：验算\n检查：两个同旁内角加起来 = 180° ✓', en: '曹操：验算\n检查：两个同旁内角加起来 = 180° ✓' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '两条平行线被截线切过，产生同位角(F)、内错角(Z)、同旁内角(C)。', en: 'A transversal cutting parallel lines creates corresponding(F), alternate(Z), co-interior(C) angles.' }, formula: '$\\text{Alternate} = \\text{equal}, \\quad \\text{Co-interior} + \\text{given} = 180°$', tips: [{ zh: '关羽提示：记住 F、Z、C 三个字母形状！', en: 'Guan Yu Tip: Remember the F, Z, C letter shapes!' }] },
-    storyConsequence: { correct: { zh: '城墙角度——角度完美！做得漂亮！', en: 'Wall Angles — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '城墙角度——角度完美！做得漂亮！', en: 'Wall Angles — Well done!' }, wrong: { zh: '角度差了一点——再看看是补角还是余角？', en: 'Not quite... Try again!' } },
   },
   {
     id: 822, grade: 8, unitId: 2, order: 2,
@@ -137,7 +137,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '曹操：验算\n对应角的关系是否满足平行线性质 ✓', en: '曹操：验算\n对应角的关系是否满足平行线性质 ✓' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '同位角在截线同侧、平行线同方向，一定相等。', en: 'Corresponding angles: same side of transversal, same direction — always equal.' }, formula: '$\\text{Corresponding angles are equal}$', tips: [{ zh: '关羽提示：F字形一看就知道是同位角！', en: 'Guan Yu Tip: F-shape = corresponding angles!' }] },
-    storyConsequence: { correct: { zh: '箭塔射角——角度完美！做得漂亮！', en: 'Arrow Tower Angle — Well done!' }, wrong: { zh: '角度算错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '箭塔射角——角度完美！做得漂亮！', en: 'Arrow Tower Angle — Well done!' }, wrong: { zh: '角度差了一点——再看看是补角还是余角？', en: 'Not quite... Try again!' } },
   },
   {
     id: 823, grade: 8, unitId: 2, order: 3,
@@ -159,7 +159,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '刘备：验算\n$a^2 + b^2 = c^2$？代入检查 ✓', en: '刘备：验算\n$a^2 + b^2 = c^2$？代入检查 ✓' }, highlightField: 'c' },
     ],
     secret: { concept: { zh: '直角三角形中，斜边的平方等于两条直角边的平方之和。', en: 'In a right triangle, hypotenuse² = sum of the other two sides².' }, formula: '$c = \\sqrt{a^2 + b^2}$', tips: [{ zh: '关羽提示：攻城梯太短搭不上去，太长又会倒！', en: 'Guan Yu Tip: Ladder too short won\'t reach; too long will topple!' }] },
-    storyConsequence: { correct: { zh: '攻城梯长度刚好！士兵成功攀上城头！', en: 'Ladder length is perfect! Soldiers scale the wall!' }, wrong: { zh: '梯子长度不对，攻城失败…', en: 'Wrong ladder length — siege fails...' } },
+    storyConsequence: { correct: { zh: '攻城梯长度刚好！士兵成功攀上城头！', en: 'Ladder length is perfect! Soldiers scale the wall!' }, wrong: { zh: '长度还差一点——检查公式里的数字对不对？', en: 'Wrong ladder length — siege fails...' } },
   },
   {
     id: 824, grade: 8, unitId: 2, order: 4,
@@ -205,7 +205,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '曹操：验算\n$A \\div \\text{长} = \\text{宽}$ ✓', en: '曹操：验算\n$A \\div \\text{长} = \\text{宽}$ ✓' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '矩形面积 = 长 × 宽，单位是"平方"。', en: 'Rectangle area = length × width, in "square" units.' }, formula: '$A = l \\times w$', tips: [{ zh: '曹操提示：营地规划是战争的基础。', en: 'Cao Cao Tip: Camp planning is the foundation of war.' }] },
-    storyConsequence: { correct: { zh: '安营扎寨——面积正确！做得漂亮！', en: 'Setting Camp — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '安营扎寨——面积正确！做得漂亮！', en: 'Setting Camp — Well done!' }, wrong: { zh: '面积数值偏了——再看看长和宽代入对了吗？', en: 'Not quite... Try again!' } },
   },
   {
     id: 832, grade: 8, unitId: 3, order: 2,
@@ -227,7 +227,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '曹操：验算\n$A \\times 2 \\div h = a + b$ ✓', en: '曹操：验算\n$A \\times 2 \\div h = a + b$ ✓' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '梯形可以看成"两个三角形"或"一个平行四边形的一半"。', en: 'A trapezoid can be seen as two triangles or half a parallelogram.' }, formula: '$A = \\frac{(a+b) \\times h}{2}$', tips: [{ zh: '袁绍提示：点将台要宏伟壮观！', en: 'Yuan Shao Tip: The platform must be magnificent!' }] },
-    storyConsequence: { correct: { zh: '点将台——面积正确！做得漂亮！', en: 'Command Platform — Well done!' }, wrong: { zh: '面积不对…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '点将台——面积正确！做得漂亮！', en: 'Command Platform — Well done!' }, wrong: { zh: '面积数值偏了——再看看长和宽代入对了吗？', en: 'Not quite... Try again!' } },
   },
   {
     id: 833, grade: 8, unitId: 3, order: 3,
@@ -249,7 +249,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '诸葛亮：验算\n面积反推：$\\sqrt{A / \\pi}$ 应等于 $r$ ✓', en: '诸葛亮：验算\n面积反推：$\\sqrt{A / \\pi}$ 应等于 $r$ ✓' }, highlightField: 'area' },
     ],
     secret: { concept: { zh: '$\\pi$ 是周长与直径的比值，约 3.14。圆越大，$\\pi$ 不变。', en: '$\\pi$ is the ratio of circumference to diameter, ≈3.14. Same for all circles.' }, formula: '$C = 2\\pi r, \\quad A = \\pi r^2$', tips: [{ zh: '曹操提示：圆形结构最稳固！', en: 'Cao Cao Tip: Circular structures are the most stable!' }] },
-    storyConsequence: { correct: { zh: '圆形瞭望塔——圆的计算完美！做得漂亮！', en: 'Circular Watchtower — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '圆形瞭望塔——圆的计算完美！做得漂亮！', en: 'Circular Watchtower — Well done!' }, wrong: { zh: '圆的数字有点偏——检查一下公式里有没有用 π？', en: 'Not quite... Try again!' } },
   },
   {
     id: 834, grade: 8, unitId: 3, order: 4,
@@ -271,7 +271,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '诸葛亮：验算\n$C \\div (2\\pi)$ 应等于 $r$ ✓', en: '诸葛亮：验算\n$C \\div (2\\pi)$ 应等于 $r$ ✓' }, highlightField: 'c' },
     ],
     secret: { concept: { zh: '周长 = 绕一圈的总长度。直径 × $\\pi$ 就是周长。', en: 'Circumference = distance around once. Diameter × $\\pi$ = circumference.' }, formula: '$C = 2\\pi r = \\pi d$', tips: [{ zh: '曹操提示：围栏不够长，马就跑了！', en: 'Cao Cao Tip: Not enough fence and the horses escape!' }] },
-    storyConsequence: { correct: { zh: '围栏长度——圆的计算完美！做得漂亮！', en: 'Fence Length — Well done!' }, wrong: { zh: '圆的计算有误…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '围栏长度——圆的计算完美！做得漂亮！', en: 'Fence Length — Well done!' }, wrong: { zh: '圆的数字有点偏——检查一下公式里有没有用 π？', en: 'Not quite... Try again!' } },
   },
   {
     id: 835, grade: 8, unitId: 3, order: 5,
@@ -317,7 +317,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '曹操：验算\n$\\text{结果} \\div \\text{原值} \\times 100$ 应等于百分比 ✓', en: '曹操：验算\n$\\text{结果} \\div \\text{原值} \\times 100$ 应等于百分比 ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '"百分之"就是"每一百份中"。$40\\% = \\frac{40}{100} = 0.4$', en: '"Percent" means "per hundred". $40\\% = \\frac{40}{100} = 0.4$' }, formula: '$\\text{Total} = P \\times (1 + r)$', tips: [{ zh: '荀彧提示：屯田之策，乃强兵之本。', en: 'Xun Yu Tip: The tuntian policy is the foundation of a strong army.' }] },
-    storyConsequence: { correct: { zh: '征收粮税——百分比算得好！做得漂亮！', en: 'Collecting Grain Tax — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '征收粮税——百分比算得好！做得漂亮！', en: 'Collecting Grain Tax — Well done!' }, wrong: { zh: '百分比差一点——记住要除以 100 再乘哦。', en: 'Not quite... Try again!' } },
   },
   {
     id: 842, grade: 8, unitId: 4, order: 2,
@@ -339,7 +339,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '曹操：验算\n$\\text{折后价} \\div \\text{原价} \\times 100$% 应等于 $(100 - p)$% ✓', en: '曹操：验算\n$\\text{折后价} \\div \\text{原价} \\times 100$% 应等于 $(100 - p)$% ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '折扣是"减少"的百分比。打八五折 = 减15% = × 0.85。', en: 'Discount is the percentage "off". 15% off = ×0.85.' }, formula: '$\\text{Sale price} = P \\times (1 - r)$', tips: [{ zh: '曹操提示：精打细算，方能持久作战。', en: 'Cao Cao Tip: Careful budgeting supports prolonged campaigns.' }] },
-    storyConsequence: { correct: { zh: '军备折扣——百分比算得好！做得漂亮！', en: 'Armament Discount — Well done!' }, wrong: { zh: '百分比算差了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '军备折扣——百分比算得好！做得漂亮！', en: 'Armament Discount — Well done!' }, wrong: { zh: '百分比差一点——记住要除以 100 再乘哦。', en: 'Not quite... Try again!' } },
   },
   {
     id: 843, grade: 8, unitId: 4, order: 3,
@@ -407,7 +407,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '诸葛亮：验算\n$\\bar{x} \\times n$ 应等于总和 ✓', en: '诸葛亮：验算\n$\\bar{x} \\times n$ 应等于总和 ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '平均数 = 把所有数加起来，再平均分。', en: 'Mean = add all values, then share equally.' }, formula: '$\\bar{x} = \\frac{\\sum x}{n}$', tips: [{ zh: '曹操提示：知己知彼，百战不殆。', en: 'Cao Cao Tip: Know your enemy and yourself, win every battle.' }] },
-    storyConsequence: { correct: { zh: '敌军平均兵力——数据分析到位！做得漂亮！', en: 'Enemy Average Strength — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '敌军平均兵力——数据分析到位！做得漂亮！', en: 'Enemy Average Strength — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } },
   },
   {
     id: 852, grade: 8, unitId: 5, order: 2,
@@ -429,7 +429,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '诸葛亮：验算\n中位数左边和右边的数据个数应该相等 ✓', en: '诸葛亮：验算\n中位数左边和右边的数据个数应该相等 ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '中位数不受极端值影响，比平均数更"稳定"。', en: 'Median is not affected by outliers — more "stable" than mean.' }, formula: '$\\text{Median} = \\text{middle value after sorting}$', tips: [{ zh: '荀彧提示：极端数据会骗人，中位数更可靠！', en: 'Xun Yu Tip: Extreme data deceives — median is more reliable!' }] },
-    storyConsequence: { correct: { zh: '中位情报——数据分析到位！做得漂亮！', en: 'Median Intelligence — Well done!' }, wrong: { zh: '数据分析出错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '中位情报——数据分析到位！做得漂亮！', en: 'Median Intelligence — Well done!' }, wrong: { zh: '数字有点不对——没关系，再仔细看看数据？', en: 'Not quite... Try again!' } },
   },
   {
     id: 853, grade: 8, unitId: 5, order: 3,
@@ -451,7 +451,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '诸葛亮：验算\n$P \\times \\text{总数}$ 应等于目标数 ✓', en: '诸葛亮：验算\n$P \\times \\text{总数}$ 应等于目标数 ✓' }, highlightField: 'p' },
     ],
     secret: { concept: { zh: '概率在 0 到 1 之间。0 = 不可能，1 = 一定发生。', en: 'Probability is between 0 and 1. 0 = impossible, 1 = certain.' }, formula: '$P = \\frac{\\text{favourable}}{\\text{total}}$', tips: [{ zh: '曹操提示：概率越大，胜算越高！', en: 'Cao Cao Tip: Higher probability = better odds!' }] },
-    storyConsequence: { correct: { zh: '许攸献计，火烧乌巢！概率算对了！', en: 'Xu You\'s plan — burn Wuchao! Probability was right!' }, wrong: { zh: '概率算错，奇袭失败…', en: 'Wrong probability — the raid fails...' } },
+    storyConsequence: { correct: { zh: '许攸献计，火烧乌巢！概率算对了！', en: 'Xu You\'s plan — burn Wuchao! Probability was right!' }, wrong: { zh: '概率差一点——目标数 ÷ 总数，再算算？', en: 'Wrong probability — the raid fails...' } },
   },
   {
     id: 854, grade: 8, unitId: 5, order: 4,
@@ -510,7 +510,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '曹操：验算\n因式分解回去：$abx + ac = a(bx + c)$ ✓', en: '曹操：验算\n因式分解回去：$abx + ac = a(bx + c)$ ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '展开就是"分配"——外面的数要分给括号里的每一项。', en: 'Expanding = "distributing" — the outside number is given to each term inside.' }, formula: '$a(b + c) = ab + ac$', tips: [{ zh: '诸葛亮提示：分配律是代数的基石！', en: 'Zhuge Liang Tip: Distributive law is the cornerstone of algebra!' }] },
-    storyConsequence: { correct: { zh: '兵力展开——展开无误！做得漂亮！', en: 'Force Deployment — Well done!' }, wrong: { zh: '展开出错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '兵力展开——展开无误！做得漂亮！', en: 'Force Deployment — Well done!' }, wrong: { zh: '展开差一步——外面的数要乘里面的每一项哦。', en: 'Not quite... Try again!' } },
   },
   {
     id: 862, grade: 8, unitId: 6, order: 2,
@@ -532,7 +532,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '曹操：验算\n提取公因数，应该变回原来的形式 ✓', en: '曹操：验算\n提取公因数，应该变回原来的形式 ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '展开后检查：代入一个数，左右两边应该相等。', en: 'After expanding, check: substitute a number, both sides should match.' }, formula: '$a(bx+c) = abx + ac$', tips: [{ zh: '诸葛亮提示：代入 $x=1$ 是最快的验算方法。', en: 'Zhuge Liang Tip: Substituting $x=1$ is the fastest way to verify.' }] },
-    storyConsequence: { correct: { zh: '粮草分配——展开无误！做得漂亮！', en: 'Supply Distribution — Well done!' }, wrong: { zh: '展开出错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '粮草分配——展开无误！做得漂亮！', en: 'Supply Distribution — Well done!' }, wrong: { zh: '展开差一步——外面的数要乘里面的每一项哦。', en: 'Not quite... Try again!' } },
   },
   {
     id: 863, grade: 8, unitId: 6, order: 3,
@@ -554,7 +554,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '诸葛亮：验算\n展开回去：$6(x + 2) = 6x + 12$ ✓', en: '诸葛亮：验算\n展开回去：$6(x + 2) = 6x + 12$ ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '因式分解是展开的反操作：$ab + ac = a(b+c)$', en: 'Factorising reverses expanding: $ab + ac = a(b+c)$' }, formula: '$ab + ac = a(b+c)$', tips: [{ zh: '诸葛亮提示：归纳就是找出共同规律！', en: 'Zhuge Liang Tip: Summarising means finding the common pattern!' }] },
-    storyConsequence: { correct: { zh: '情报归纳——因式分解完成！做得漂亮！', en: 'Intelligence Summary — Well done!' }, wrong: { zh: '因式分解不完全…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '情报归纳——因式分解完成！做得漂亮！', en: 'Intelligence Summary — Well done!' }, wrong: { zh: '分解还没到底——继续拆拆看？', en: 'Not quite... Try again!' } },
   },
   {
     id: 864, grade: 8, unitId: 6, order: 4,
@@ -644,7 +644,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '张飞：验算\n$S \\times T = D$ ✓', en: '张飞：验算\n$S \\times T = D$ ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '速度、距离、时间三者互相关联。知道两个就能算第三个。', en: 'Speed, distance, time are linked. Know any two, find the third.' }, formula: '$S = \\frac{D}{T}, \\quad D = S \\times T, \\quad T = \\frac{D}{S}$', tips: [{ zh: '诸葛亮提示：兵贵神速，速度决定战局！', en: 'Zhuge Liang Tip: Speed is everything in war!' }] },
-    storyConsequence: { correct: { zh: '急行军速度——方程完美求解！做得漂亮！', en: 'March Speed — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '急行军速度——方程完美求解！做得漂亮！', en: 'March Speed — Well done!' }, wrong: { zh: '方程差一步——试试重新检查每步运算？', en: 'Not quite... Try again!' } },
   },
   {
     id: 872, grade: 8, unitId: 7, order: 2,
@@ -666,7 +666,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '张飞：验算\n$D \\div T$ 应等于 $S$ ✓', en: '张飞：验算\n$D \\div T$ 应等于 $S$ ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '距离 = 速度 × 时间，单位要统一！', en: 'Distance = Speed × Time. Keep units consistent!' }, formula: '$D = S \\times T$', tips: [{ zh: '赵云提示：一骑当千，速度就是力量！', en: 'Zhao Yun Tip: One rider worth a thousand — speed is power!' }] },
-    storyConsequence: { correct: { zh: '追击距离——方程完美求解！做得漂亮！', en: 'Pursuit Distance — Well done!' }, wrong: { zh: '方程解错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '追击距离——方程完美求解！做得漂亮！', en: 'Pursuit Distance — Well done!' }, wrong: { zh: '方程差一步——试试重新检查每步运算？', en: 'Not quite... Try again!' } },
   },
   {
     id: 873, grade: 8, unitId: 7, order: 3,
@@ -734,7 +734,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '荀彧：验算\n两个点都代入，都满足方程 ✓', en: '荀彧：验算\n两个点都代入，都满足方程 ✓' }, highlightField: 'm' },
     ],
     secret: { concept: { zh: '线性增长 = 每期增加固定量。斜率就是增长速度。', en: 'Linear growth = fixed increase per period. Slope = rate of growth.' }, formula: '$y = mx + c$', tips: [{ zh: '刘备提示：以德服人，荆州大治！', en: 'Liu Bei Tip: Lead with virtue — Jingzhou prospers!' }] },
-    storyConsequence: { correct: { zh: '税收路线——直线方程搞定！做得漂亮！', en: 'Tax Revenue Route — Well done!' }, wrong: { zh: '直线方程有误…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '税收路线——直线方程搞定！做得漂亮！', en: 'Tax Revenue Route — Well done!' }, wrong: { zh: '直线方程差一步——检查一下斜率和截距？', en: 'Not quite... Try again!' } },
   },
   {
     id: 882, grade: 8, unitId: 8, order: 2,
@@ -780,7 +780,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '诸葛亮：验算\n把答案代入两个方程，都满足 ✓', en: '诸葛亮：验算\n把答案代入两个方程，都满足 ✓' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '代入法：把一个方程"塞进"另一个，化为一元方程。', en: 'Substitution: "plug" one equation into the other to get a single-variable equation.' }, formula: '$y = ax + b \\to cx + dy = e$', tips: [{ zh: '曹操提示：兵分两路，合而为一——代入法的精髓！', en: 'Cao Cao Tip: Divide forces, then unite — the essence of substitution!' }] },
-    storyConsequence: { correct: { zh: '粮草与兵力——联立方程求解成功！做得漂亮！', en: 'Supplies & Forces — Well done!' }, wrong: { zh: '联立方程解错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '粮草与兵力——联立方程求解成功！做得漂亮！', en: 'Supplies & Forces — Well done!' }, wrong: { zh: '联立方程差一步——试试重新检查每步运算？', en: 'Not quite... Try again!' } },
   },
   {
     id: 886, grade: 8, unitId: 5, order: 6,
@@ -826,7 +826,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '诸葛亮：验算\n变换两次应该回到原点 ✓', en: '诸葛亮：验算\n变换两次应该回到原点 ✓' }, highlightField: 'x' },
     ],
     secret: { concept: { zh: '线对称：图形沿对称轴翻折后完全重合。坐标轴反射有简单规则。', en: 'Line symmetry: a shape folds exactly onto itself along the line of symmetry. Axis reflections have simple rules.' }, formula: '$(x,y) \\to (-x,y)$ / $(x,-y)$', tips: [{ zh: '诸葛亮提示：左右对称，阵法无懈可击！', en: 'Zhuge Liang Tip: Symmetrical formations are unbreakable!' }] },
-    storyConsequence: { correct: { zh: '阵法镜像——对称正确！做得漂亮！', en: 'Formation Mirror — Well done!' }, wrong: { zh: '对称变换搞错了…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '阵法镜像——对称正确！做得漂亮！', en: 'Formation Mirror — Well done!' }, wrong: { zh: '对称方向有点偏——先确认是关于哪条轴对称？', en: 'Not quite... Try again!' } },
   },
   {
     id: 888, grade: 8, unitId: 6, order: 8,
@@ -872,7 +872,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '荀彧：验算\n$y_2 \\div x_2$ 应等于 $k$ ✓', en: '荀彧：验算\n$y_2 \\div x_2$ 应等于 $k$ ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '正比例：一个量变大，另一个也等比例变大。比值 $\\frac{y}{x} = k$ 恒定。', en: 'Direct proportion: as one quantity increases, the other increases at the same rate. The ratio $\\frac{y}{x} = k$ stays constant.' }, formula: '$y = kx$', tips: [{ zh: '刘备提示：人多则税丰，治国之基！', en: 'Liu Bei Tip: More people, more revenue — the foundation of governance!' }] },
-    storyConsequence: { correct: { zh: '粮草正比例——比例搞定！做得漂亮！', en: 'Direct Proportion of Supplies — Well done!' }, wrong: { zh: '比例没算对…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '粮草正比例——比例搞定！做得漂亮！', en: 'Direct Proportion of Supplies — Well done!' }, wrong: { zh: '比例差一点——试试交叉相乘？', en: 'Not quite... Try again!' } },
   },
   {
     id: 892, grade: 8, unitId: 7, order: 6,
@@ -918,7 +918,7 @@ export const MISSIONS_Y8: Mission[] = [
       { text: { zh: '荀彧：验算\n检查比例关系是否一致 ✓', en: '荀彧：验算\n检查比例关系是否一致 ✓' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '比例分配：先算总份数，再用每份的值乘以对应份数。', en: 'Ratio sharing: find total parts first, then multiply each part\'s value.' }, formula: '$\\text{share} = \\frac{a}{a+b} \\times \\text{total}$', tips: [{ zh: '刘备提示：军民并重，荆州方能长治久安！', en: 'Liu Bei Tip: Balance military and civilian — Jingzhou will thrive!' }] },
-    storyConsequence: { correct: { zh: '税收分配——比例搞定！做得漂亮！', en: 'Tax Distribution — Well done!' }, wrong: { zh: '比例没算对…再试一次！', en: 'Not quite... Try again!' } },
+    storyConsequence: { correct: { zh: '税收分配——比例搞定！做得漂亮！', en: 'Tax Distribution — Well done!' }, wrong: { zh: '比例差一点——试试交叉相乘？', en: 'Not quite... Try again!' } },
   },
   {
     id: 896, grade: 8, unitId: 8, order: 4,
