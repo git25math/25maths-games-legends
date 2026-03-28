@@ -613,10 +613,10 @@ export const MISSIONS_Y8: Mission[] = [
     difficulty: 'Hard', reward: 200, kpId: 'kp-2.6-01', sectionId: 'algebra',
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么粮草有底线？\n$2x + 10 \\geq 50$——粮草不能低于 50 石！\n解不等式找出 $x$ 的最小值，就是粮草底线。', en: 'Zhuge Liang: Why is there a supply floor?\n$2x + 10 \\geq 50$ — supplies cannot drop below 50!\nSolve the inequality to find the minimum value of $x$ — that is the supply floor.' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：解不等式\n和解方程一样，逐步移项简化。\n关键：乘/除负数时翻转不等号！', en: 'Zhuge Liang: "解不等式\n和解方程一样, 逐步移项简化.\n关键: 乘/除负数时翻转不等号!"' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：移项\n把含 $x$ 的项移到一边，常数移到另一边。', en: 'Zhuge Liang: "移项\n把含 $x$ 的项移到一边, 常数移到另一边."' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：计算\n$x$ 的范围。', en: 'Zhuge Liang: "计算\n$x$ 的范围."' }, highlightField: 'ans' },
-      { text: { zh: '诸葛亮：答案\n粮草底线确定！', en: 'Zhuge Liang: "答案\n粮草底线确定!"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：解不等式\n和解方程一样，逐步移项简化。\n关键：乘/除负数时翻转不等号！', en: 'Zhuge Liang: Solve the inequality\nSame as solving an equation — rearrange step by step.\nKey rule: flip the sign when multiplying or dividing by a negative!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：移项\n把含 $x$ 的项移到一边，常数移到另一边。', en: 'Zhuge Liang: Rearrange\nMove terms with $x$ to one side and constants to the other.' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：计算\n$x$ 的范围。', en: 'Zhuge Liang: Calculate\nFind the range of $x$.' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：答案\n粮草底线确定！', en: 'Zhuge Liang: Answer\nThe supply floor is confirmed!' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：验算\n取边界值代入原式，应该刚好满足 ✓', en: 'Zhuge Liang: "验算\n取边界值代入原式, 应该刚好满足 ✓"' }, highlightField: 'ans' },
     ],
     secret: { concept: { zh: '$x > 5$ 是"至少要 5 以上"——是底线，不是上限。', en: '$x > 5$ means "at least above 5" — a floor, not a ceiling.' }, formula: '$ax + b > c \\Rightarrow x > \\frac{c-b}{a}$', tips: [{ zh: '诸葛亮提示：底线不可突破，否则全军崩溃！', en: 'Zhuge Liang Tip: The floor must hold — otherwise the army collapses!' }] },
@@ -636,7 +636,7 @@ export const MISSIONS_Y8: Mission[] = [
     data: { speed: 10, distance: 60, time: 6, mode: 'speed', answer: 10, x: 10, generatorType: 'SPEED_RANDOM' },
     difficulty: 'Easy', reward: 140, kpId: 'kp-1.12-01', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '张飞：为什么要算行军速度？\n急行军！迟到一刻就被包围。速度 = 距离 ÷ 时间。\n三个量知道两个就能求第三个！', en: 'Zhang Fei: "为什么要算行军速度?\n急行军!迟到一刻就被包围.速度 = 距离 ÷ 时间.\n三个量知道两个就能求第三个!"' }, highlightField: 'ans' },
+      { text: { zh: '张飞：为什么要算行军速度？\n急行军！迟到一刻就被包围。速度 = 距离 ÷ 时间。\n三个量知道两个就能求第三个！', en: 'Zhang Fei: "Why calculate march speed?\nForced march! One moment late and you're surrounded. Speed = Distance ÷ Time.\nKnow any two and you can find the third!"' }, highlightField: 'ans' },
       { text: { zh: '张飞：速度三角形\n$S = D \\div T$\n$D = S \\times T$\n$T = D \\div S$\n覆盖法：盖住要求的量，剩下的就是公式。', en: 'Zhang Fei: "速度三角形\n$S = D \\div T$\n$D = S \\times T$\n$T = D \\div S$\n覆盖法: 盖住要求的量, 剩下的就是公式."' }, highlightField: 'ans' },
       { text: { zh: '张飞：代入已知量\n确定要求的是速度、距离还是时间。', en: 'Zhang Fei: "代入已知量\n确定要求的是速度, 距离还是时间."' }, highlightField: 'ans' },
       { text: { zh: '张飞：计算\n除法或乘法，一步搞定。', en: 'Zhang Fei: "计算\n除法或乘法, 一步搞定."' }, highlightField: 'ans' },
