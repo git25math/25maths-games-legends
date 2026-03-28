@@ -330,4 +330,63 @@ export const MISSIONS_Y12: Mission[] = [
     secret: { concept: { zh: '$\\int 4x^3\\,dx = x^4 + C$。四次幂增长极快——幂规则照样适用。', en: '$\\int 4x^3\\,dx = x^4 + C$. Fourth powers grow rapidly — power rule still applies.' }, formula: '$\\int 4x^3\\,dx = x^4 + C$', tips: [{ zh: '司马炎提示：$4 \\div 4 = 1$，系数正好抵消！', en: 'Sima Yan Tip: $4 \\div 4 = 1$, the coefficient cancels perfectly!' }] },
     storyConsequence: { correct: { zh: '四次幂堆积——高次积分完成！', en: 'Quartic Accumulation — Higher integration done!' }, wrong: { zh: '高次积分公式有误…再试一次！', en: 'Higher power integration error... Try again!' } }
   },
+
+  // --- Year 12 Unit 6: 轨迹与作图 (Topic 4.8 Constructions and Loci) ---
+  {
+    id: 1261, grade: 12, unitId: 6, order: 1,
+    unitTitle: { zh: 'Unit 6: 轨迹与作图', en: 'Unit 6: Constructions & Loci' },
+    topic: 'Geometry', type: 'ESTIMATION',
+    title: { zh: '安全区域', en: 'Safe Zone' },
+    skillName: { zh: '等距轨迹术', en: 'Equidistant Loci' },
+    skillSummary: { zh: '距定点等距=圆，距定线等距=平行线', en: 'Equidistant from point = circle, from line = parallel lines' },
+    story: { zh: '瞭望塔为圆心，安全区域是半径 $5$ 公里的圆。敌军在距塔 $8$ 公里处。是否在安全区内？(1=是,2=否)', en: 'Watchtower is the centre. Safe zone: radius $5$km circle. Enemy is $8$km away. Inside? (1=yes, 2=no)' },
+    description: { zh: '距定点 $5$ 公里以内为安全区。$8$ 公里是否安全？', en: 'Within $5$km of the point is safe. Is $8$km safe?' },
+    data: { answer: 2 }, difficulty: 'Medium', reward: 600,
+    kpId: 'kp-4.8-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: '系一根 $5$ 米长的绳子，一端固定在地上的钉子。\n拉直绳子，绕钉子走一圈。你走出的路径是什么形状？', en: 'Tie a $5$m rope to a stake in the ground.\nPull it taut and walk around. What shape do you trace?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '圆形（到钉子距离始终是5米）', en: 'A circle (always 5m from the stake)' },
+          { zh: '正方形', en: 'A square' },
+        ],
+        onCorrect: { zh: '对！"距一点固定距离的所有点"画出一个圆。\n\n这就是"轨迹"——满足某个条件的所有点组成的图形。\n距一点等距 → 圆。距一条线等距 → 两条平行线。', en: 'Right! "All points a fixed distance from one point" form a circle.\n\nThis is a "locus" — the shape formed by all points satisfying a condition.\nEqual distance from a point → circle. From a line → two parallel lines.' },
+        onWrong: { zh: '绳子长度固定，所以到钉子的距离始终相同 → 画出圆。\n轨迹 = 满足条件的所有点的集合。', en: 'Rope length is fixed, distance to stake is constant → traces a circle.\nLocus = set of all points satisfying a condition.' },
+        onSkip: { zh: '到定点等距的轨迹是圆。到定线等距的轨迹是两条平行线。', en: 'Equidistant from a point = circle. From a line = two parallel lines.' },
+      },
+    ],
+    tutorialSteps: [
+      { text: { zh: '司马昭："为什么要学轨迹？\n安全区域、信号覆盖范围、水管铺设路径——都是满足某个距离条件的所有位置。\n轨迹就是用数学精确描述这些区域。"', en: 'Sima Zhao: "Why learn loci?\nSafe zones, signal coverage, pipe routes — all are locations satisfying a distance condition.\nLoci precisely describe these regions with maths."' }, highlightField: 'ans' },
+      { text: { zh: '司马昭："核心概念\n距一点等距的轨迹 = 以该点为圆心的圆\n距一条线等距的轨迹 = 两条平行线"', en: 'Sima Zhao: "Core concept\nLocus equidistant from a point = circle centred at that point\nLocus equidistant from a line = two parallel lines"' }, highlightField: 'ans' },
+      { text: { zh: '司马昭："代入条件\n安全区：距塔 $\\leq 5$ km → 半径 $5$ km 的圆内\n敌军距塔 $8$ km"', en: 'Sima Zhao: "Apply the condition\nSafe zone: distance from tower $\\leq 5$km → inside circle of radius $5$km\nEnemy is $8$km from tower"' }, highlightField: 'ans' },
+      { text: { zh: '司马昭："判断\n$8 > 5$ → 敌军在圆外"', en: 'Sima Zhao: "Judge\n$8 > 5$ → enemy is outside the circle"' }, highlightField: 'ans' },
+      { text: { zh: '司马昭："答案\n不在安全区内（选2）"', en: 'Sima Zhao: "Answer\nNot in safe zone (option 2)"' }, highlightField: 'ans' },
+      { text: { zh: '司马昭："验算\n安全区边界=5km，敌军=8km，$8-5=3$ km 在区域外 ✓"', en: 'Sima Zhao: "Verify\nSafe zone boundary = 5km, enemy = 8km, $8-5=3$km outside ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '轨迹是满足某条件的所有点的集合。距点等距→圆，距线等距→平行线。', en: 'A locus is the set of all points satisfying a condition. Equal distance from point → circle, from line → parallel lines.' }, formula: '$|PA| = r \\Rightarrow \\text{circle}$', tips: [{ zh: '司马昭提示：系根绳子绕一圈——这就是轨迹！', en: 'Sima Zhao Tip: Tie a rope and walk around — that\'s a locus!' }] },
+    storyConsequence: { correct: { zh: '安全区域判断精准——轨迹概念到位！', en: 'Safe zone analysis correct — locus concept solid!' }, wrong: { zh: '距离比较需要更仔细——再想想圆的判定？', en: 'Distance comparison needs care — rethink the circle condition?' } }
+  },
+  {
+    id: 1262, grade: 12, unitId: 6, order: 2,
+    unitTitle: { zh: 'Unit 6: 轨迹与作图', en: 'Unit 6: Constructions & Loci' },
+    topic: 'Geometry', type: 'ESTIMATION',
+    title: { zh: '两城等距', en: 'Equidistant Border' },
+    skillName: { zh: '区域交集术', en: 'Intersection of Loci' },
+    skillSummary: { zh: '两条件交集=满足所有条件的区域', en: 'Intersection of loci = region satisfying all conditions' },
+    story: { zh: '两座城堡 $A$ 和 $B$ 相距 $10$ 公里。边界线在两城正中间。边界线到 $A$ 的距离是？', en: 'Two castles $A$ and $B$ are $10$km apart. The border is the perpendicular bisector. Distance from border to $A$?' },
+    description: { zh: '两点的垂直平分线到两点的距离相等。$AB=10$，中点到 $A$ 的距离=?', en: 'Perpendicular bisector is equidistant from both points. $AB=10$, distance from midpoint to $A$?' },
+    data: { answer: 5 }, difficulty: 'Hard', reward: 650,
+    kpId: 'kp-4.8-02', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '司马炎："为什么要学区域交集？\n两座城各有势力范围。边界在哪？就在到两城距离相等的地方。\n这条线叫垂直平分线——它是两点等距轨迹。"', en: 'Sima Yan: "Why learn locus intersections?\nTwo cities each have territory. Where is the border? Where distance to both is equal.\nThis line is the perpendicular bisector — the locus equidistant from two points."' }, highlightField: 'ans' },
+      { text: { zh: '司马炎："等距轨迹\n到两点等距的轨迹 = 连线的垂直平分线\n它过中点，与连线垂直"', en: 'Sima Yan: "Equidistant locus\nLocus equidistant from two points = perpendicular bisector of the line segment\nPasses through midpoint, perpendicular to the segment"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎："代入\n$AB = 10$ km\n中点 $M$ 在 $A$ 和 $B$ 正中间"', en: 'Sima Yan: "Substitute\n$AB = 10$km\nMidpoint $M$ is exactly between $A$ and $B$"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎："计算\n$AM = AB \\div 2 = 10 \\div 2 = 5$ km"', en: 'Sima Yan: "Calculate\n$AM = AB \\div 2 = 10 \\div 2 = 5$km"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎："答案\n边界线到 $A$ 的距离 $= 5$ km"', en: 'Sima Yan: "Answer\nDistance from border to $A$ $= 5$km"' }, highlightField: 'ans' },
+      { text: { zh: '司马炎："验算\n$AM = MB = 5$，$AM + MB = 10 = AB$ ✓\n中点等分线段——定义成立。"', en: 'Sima Yan: "Verify\n$AM = MB = 5$, $AM + MB = 10 = AB$ ✓\nMidpoint bisects the segment — definition holds."' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '到两点等距的轨迹是连线的垂直平分线。两条轨迹的交集是同时满足两个条件的区域。', en: 'Locus equidistant from two points is the perpendicular bisector. Intersection of loci satisfies all conditions simultaneously.' }, formula: '$AM = MB = \\frac{AB}{2}$', tips: [{ zh: '司马炎提示：垂直平分线——最公平的边界！', en: 'Sima Yan Tip: Perpendicular bisector — the fairest border!' }] },
+    storyConsequence: { correct: { zh: '两城等距——垂直平分线完美！', en: 'Equidistant Border — perpendicular bisector perfect!' }, wrong: { zh: '中点距离算偏了——AB÷2试试？', en: 'Midpoint distance off — try AB÷2?' } }
+  },
 ];
