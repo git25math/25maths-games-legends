@@ -13,6 +13,20 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '求 $f(x)$ 达到最大值时的 $x$（即导数为0的点）。', en: 'Find $x$ where $f(x)$ is maximum (derivative is 0).' },
     data: { p1: [0, 0], p2: [4, 16], generatorType: 'QUADRATIC_RANDOM' }, difficulty: 'Hard', reward: 800,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: '一支箭射出后，高度先升后降。\n你觉得哪一刻箭飞到了最高点？', en: 'An arrow rises then falls after being shot.\nAt what moment does it reach the highest point?' },
+        type: 'choice',
+        choices: [
+          { zh: '上升速度减到零的那一刻', en: 'The moment the rising speed becomes zero' },
+          { zh: '射出的瞬间', en: 'The instant it is shot' },
+          { zh: '落地的瞬间', en: 'The instant it lands' },
+        ],
+        onCorrect: { zh: '你抓住了导数的本质！\n"上升速度 = 0"用数学语言说就是"导数 = 0"。\n导数描述的是变化的速度。导数为零 = 变化停止 = 到达最高/最低点。', en: 'You caught the essence of derivatives!\n"Rising speed = 0" in math means "derivative = 0".\nDerivatives describe the rate of change. Derivative = 0 means change stops = peak/trough.' },
+        onWrong: { zh: '想象抛球——球到最高点那一瞬间，速度刚好为零（不再上升，还没下降）。\n导数就是"变化的速度"。最高点 = 变化速度为零。', en: 'Imagine throwing a ball — at the peak, speed is exactly zero (not rising, not yet falling).\nDerivative = rate of change. Peak = rate of change is zero.' },
+        onSkip: { zh: '箭到最高点时，"上升速度"变为零。这就是导数的意义——衡量变化的快慢。\n导数 = 0 → 极值点（最高或最低）。', en: 'At the peak, the "upward speed" becomes zero. That is what derivatives measure — the rate of change.\nDerivative = 0 → extremum (max or min).' },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要找最优解？\n六出祁山，粮草运输是生命线。路径太短补给不足，太长损耗太大——\n必须找到效率最高的最优点！', en: 'Zhuge Liang: "Why find the optimal solution?\nSix expeditions — supply routes are lifelines. Too short = insufficient, too long = excessive loss —\nMust find the peak efficiency point!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：二次函数最值\n$f(x) = -x^2 + 8x$，$a < 0$，开口朝下——有最大值！\n最大值在顶点：$x = \\frac{-b}{2a}$', en: 'Zhuge Liang: "Quadratic maximum\n$f(x) = -x^2 + 8x$, $a < 0$, opens down — has maximum!\nMax at vertex: $x = \\frac{-b}{2a}$"' }, highlightField: 'x' },

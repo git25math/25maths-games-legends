@@ -554,6 +554,30 @@ export const MISSIONS_Y7: Mission[] = [
     description: { zh: '按正确顺序计算。', en: 'Calculate in the correct order.' },
     data: { answer: 14, expr: '2 + 3 \\times 4', generatorType: 'BODMAS_RANDOM' }, difficulty: 'Easy', reward: 40,
     kpId: 'kp-1.6-03', sectionId: 'number',
+    discoverSteps: [
+      {
+        prompt: { zh: '$2 + 3 \\times 4 = ?$\n\n你觉得答案是多少？', en: '$2 + 3 \\times 4 = ?$\n\nWhat do you think the answer is?' },
+        type: 'choice',
+        choices: [
+          { zh: '14（先算乘法 $3 \\times 4$，再加 $2$）', en: '14 (multiply $3 \\times 4$ first, then add $2$)' },
+          { zh: '20（从左到右 $2 + 3 = 5$，再 $\\times 4$）', en: '20 (left to right: $2 + 3 = 5$, then $\\times 4$)' },
+        ],
+        onCorrect: { zh: '你发现了！乘法要比加法先算——就像军令有优先级，数学运算也有。\n这叫"运算顺序"（BODMAS）。', en: 'You got it! Multiplication comes before addition — just like military orders have priority levels.\nThis is called "Order of Operations" (BODMAS).' },
+        onWrong: { zh: '很多人都选 20——这是最常见的错误！\n秘密是：乘法比加法优先。先算 $3 \\times 4 = 12$，再算 $2 + 12 = 14$。\n记住：乘除先，加减后。', en: 'Many people choose 20 — it is the most common mistake!\nThe secret: multiplication has higher priority than addition. $3 \\times 4 = 12$ first, then $2 + 12 = 14$.\nRemember: multiply/divide first, add/subtract after.' },
+        onSkip: { zh: '没关系，我来带你看。\n$2 + 3 \\times 4$——先做乘法：$3 \\times 4 = 12$，再做加法：$2 + 12 = 14$。\n答案是 14，不是 20。', en: 'No worries, let me show you.\n$2 + 3 \\times 4$ — multiplication first: $3 \\times 4 = 12$, then addition: $2 + 12 = 14$.\nThe answer is 14, not 20.' },
+      },
+      {
+        prompt: { zh: '那 $(2 + 3) \\times 4$ 呢？括号改变了什么？', en: 'What about $(2 + 3) \\times 4$? What do brackets change?' },
+        type: 'choice',
+        choices: [
+          { zh: '括号里最先算，所以 $= 5 \\times 4 = 20$', en: 'Brackets are calculated first, so $= 5 \\times 4 = 20$' },
+          { zh: '括号没有用，还是 14', en: 'Brackets do nothing, still 14' },
+        ],
+        onCorrect: { zh: '完美！括号就像"紧急军令"——无论里面是什么运算，都最优先执行。\nBODMAS 第一个字母 B = Brackets（括号）！', en: 'Perfect! Brackets are like "urgent orders" — whatever is inside gets done first.\nBODMAS — the B stands for Brackets!' },
+        onWrong: { zh: '括号的威力很大！括号内的运算永远最先执行。\n$(2+3) = 5$，然后 $5 \\times 4 = 20$。', en: 'Brackets are powerful! Whatever is inside always goes first.\n$(2+3) = 5$, then $5 \\times 4 = 20$.' },
+        onSkip: { zh: '括号 = 最高优先级。$(2+3)$ 先算 → $5$，再 $\\times 4 = 20$。', en: 'Brackets = highest priority. $(2+3)$ first → $5$, then $\\times 4 = 20$.' },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：$2 + 3 \\times 4 = ?$ 你认为是 20 还是 14？\n\n很多人从左到右算：$(2+3) \\times 4 = 20$。但数学规定：乘法比加法优先！正确答案是 $14$，不是 $20$。', en: 'Zhuge Liang: $2 + 3 \\times 4 = ?$ — 20 or 14?\n\nMany people calculate left to right: $(2+3) \\times 4 = 20$. But maths rules: multiplication beats addition! The correct answer is $14$, not $20$.' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：口诀 BODMAS（无括号时）\n乘除 → 加减\n\n遇到加法和乘法混合，先做乘法！', en: 'Zhuge Liang: BODMAS when there are no brackets\nDivision/Multiplication → Addition/Subtraction\n\nWhen addition and multiplication mix, do the multiplication first!' }, highlightField: 'ans' },
@@ -973,6 +997,20 @@ export const MISSIONS_Y7: Mission[] = [
       wrong: { zh: '角度偏差，箭阵出现盲区...敌军趁虚而入，需要重新布防！', en: 'Angle miscalculated, a gap in the arrow coverage... the enemy breaks through! Reposition needed!' },
     },
     kpId: 'kp-4.6-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: '站在城墙上看——城墙是一条直线。\n你觉得一条直线展开是多少度？', en: 'Standing on the wall — the wall is a straight line.\nHow many degrees is a straight line?' },
+        type: 'choice',
+        choices: [
+          { zh: '$180°$（半圈）', en: '$180°$ (half turn)' },
+          { zh: '$360°$（一整圈）', en: '$360°$ (full turn)' },
+          { zh: '$90°$（直角）', en: '$90°$ (right angle)' },
+        ],
+        onCorrect: { zh: '你发现了！一条直线 = $180°$。\n如果城墙一侧是 $120°$，那另一侧就是 $180° - 120° = 60°$。\n两个角加起来 = $180°$，这就叫"补角"。', en: 'You got it! A straight line = $180°$.\nIf one side of the wall is $120°$, the other is $180° - 120° = 60°$.\nTwo angles summing to $180°$ are called "supplementary".' },
+        onWrong: { zh: '想一想：一整圈是 $360°$，半圈就是 $180°$。\n直线就是"刚好走了半圈"，所以是 $180°$。', en: 'Think: a full turn is $360°$, half is $180°$.\nA straight line is "exactly half a turn", so $180°$.' },
+        onSkip: { zh: '没关系——一条直线 = $180°$。记住这个，后面就好办了。', en: 'No worries — a straight line = $180°$. Remember this and the rest is easy.' },
+      },
+    ],
     tutorialSteps: [
       {
         text: { zh: '吕布：城墙是一条直线。先搞清楚——一条直线是多少度？', en: 'Lu Bu: "The wall is a straight line. First — how many degrees is a straight line?"' },
