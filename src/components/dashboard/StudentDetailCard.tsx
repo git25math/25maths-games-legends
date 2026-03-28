@@ -203,7 +203,7 @@ export const StudentDetailCard = ({
         initial={{ scale: 0.9, y: 30 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 30 }}
-        className="bg-white rounded-3xl p-5 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200"
+        className="bg-white rounded-2xl p-5 max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl"
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-4">

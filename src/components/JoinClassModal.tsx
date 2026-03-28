@@ -45,7 +45,7 @@ export function JoinClassModal({ lang, onJoined, onClose }: {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6"
+        className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
         onClick={e => e.stopPropagation()}
       >
         {success ? (
