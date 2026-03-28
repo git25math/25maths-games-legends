@@ -85,6 +85,8 @@ export const MapScreen = ({
   profile,
   missions,
   selectedChar,
+  learnerMode = 'practice' as import('../types').LearnerMode,
+  onLearnerModeChange,
   onMissionStart,
   onPracticeStart,
   onGradeChange,
@@ -114,6 +116,8 @@ export const MapScreen = ({
   profile: UserProfile;
   missions: Mission[];
   selectedChar: Character | undefined;
+  learnerMode?: import('../types').LearnerMode;
+  onLearnerModeChange?: (mode: import('../types').LearnerMode) => void;
   onMissionStart: (mission: Mission) => void;
   onPracticeStart: (mission: Mission) => void;
   onGradeChange: () => void;
@@ -902,6 +906,21 @@ export const MapScreen = ({
                     <button onClick={() => { setShowProgressReport(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-blue-600/20 border border-blue-500/30 rounded-lg text-xs text-blue-300">
                       📊 {lang === 'en' ? 'Report' : '学习报告'}
                     </button>
+                    {onLearnerModeChange && (
+                      <div className="flex gap-1">
+                        {([['explore', '🌱', '探索'], ['practice', '📖', '练习'], ['exam', '🎯', '备考']] as const).map(([mode, icon, label]) => (
+                          <button
+                            key={mode}
+                            onClick={() => { onLearnerModeChange(mode); setShowMoreMenu(false); }}
+                            className={`px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                              learnerMode === mode ? 'bg-white/20 text-white ring-1 ring-white/30' : 'bg-white/5 text-white/40 hover:text-white/70'
+                            }`}
+                          >
+                            {icon} {lang === 'en' ? mode : label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                     {onAchievements && (
                       <button onClick={() => { onAchievements(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300">
                         {lang === 'en' ? 'Achievements' : '成就墙'}
