@@ -29,7 +29,17 @@ function shuffleWithTracking(choices: { zh: string; en: string }[]) {
 }
 
 export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onComplete }: Props) {
-  const [stepIdx, setStepIdx] = useState(0);
+  const [stepIdx, setStepIdx] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`gl_discover_${missionId}_step`);
+      return saved ? Math.min(Number(saved), steps.length - 1) : 0;
+    } catch { return 0; }
+  });
+  // Persist discover step progress
+  const setStepIdxPersist = (idx: number) => {
+    setStepIdx(idx);
+    try { localStorage.setItem(`gl_discover_${missionId}_step`, String(idx)); } catch { /* */ }
+  };
   const [input, setInput] = useState('');
   const [feedback, setFeedback] = useState<{ text: string; type: 'correct' | 'wrong' | 'skip' } | null>(null);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
@@ -67,9 +77,10 @@ export function DiscoverPanel({ steps, lang, missionId, kpId, characterName, onC
 
   const advance = () => {
     if (stepIdx + 1 >= steps.length) {
+      try { localStorage.removeItem(`gl_discover_${missionId}_step`); } catch { /* */ }
       onComplete();
     } else {
-      setStepIdx(stepIdx + 1);
+      setStepIdxPersist(stepIdx + 1);
     }
   };
 

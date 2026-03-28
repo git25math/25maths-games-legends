@@ -25,19 +25,43 @@ export function ProgressReport({ lang, displayName, grade, totalScore, completed
     const missionIds = Object.keys(completedMissions).filter(k => !k.startsWith('_'));
     const totalMissions = missionIds.length;
 
-    // This week's battles
-    const weekBattles = battleResults.filter(b => new Date(b.created_at).getTime() > weekAgo);
-    const weekAttempts = weekBattles.length;
-    const weekCorrect = weekBattles.filter(b => b.success).length;
-    const weekAccuracy = weekAttempts > 0 ? Math.round((weekCorrect / weekAttempts) * 100) : 0;
-    const weekScore = weekBattles.reduce((sum, b) => sum + (b.score || 0), 0);
+    // Try Supabase battle results first; fall back to localStorage practice timestamps
+    if (battleResults.length > 0) {
+      const weekBattles = battleResults.filter(b => new Date(b.created_at).getTime() > weekAgo);
+      const weekAttempts = weekBattles.length;
+      const weekCorrect = weekBattles.filter(b => b.success).length;
+      const weekAccuracy = weekAttempts > 0 ? Math.round((weekCorrect / weekAttempts) * 100) : 0;
+      const weekScore = weekBattles.reduce((sum, b) => sum + (b.score || 0), 0);
+      const weekDates = new Set(weekBattles.map(b => new Date(b.created_at).toDateString()));
+      return { totalMissions, weekAttempts, weekCorrect, weekAccuracy, weekScore, sessions: weekDates.size };
+    }
 
-    // Sessions (unique dates)
-    const weekDates = new Set(weekBattles.map(b => new Date(b.created_at).toDateString()));
-    const sessions = weekDates.size;
-
-    return { totalMissions, weekAttempts, weekCorrect, weekAccuracy, weekScore, sessions };
-  }, [completedMissions, battleResults]);
+    // Fallback for guest users: count practice timestamps from localStorage
+    let sessions = 0;
+    const practiceDates = new Set<string>();
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('gl_practice_') && key.endsWith('_ts')) {
+        try {
+          const ts = Number(localStorage.getItem(key));
+          if (ts > weekAgo) practiceDates.add(new Date(ts).toDateString());
+        } catch { /* ignore */ }
+      }
+    }
+    sessions = practiceDates.size;
+    // Estimate attempts from missions that have any practice state
+    let weekAttempts = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('gl_practice_') && key.endsWith('_pc')) {
+        try {
+          const ts = Number(localStorage.getItem(key.replace('_pc', '_ts')));
+          if (ts > weekAgo) weekAttempts += Number(localStorage.getItem(key)) || 0;
+        } catch { /* ignore */ }
+      }
+    }
+    return { totalMissions, weekAttempts, weekCorrect: 0, weekAccuracy: 0, weekScore: totalScore, sessions };
+  }, [completedMissions, battleResults, totalScore]);
 
   const en = lang === 'en';
 
