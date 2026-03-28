@@ -150,6 +150,13 @@ Step 5: npm test -- --run     → 2339 测试必须全通过
 - **Y7 全量升级**: 45关教程 1-5步 → 全部≥6步金标准（BODMAS/分数/整数/代入/合并同类项/百分比/比例/质因数/HCF/LCM/数列/估算/几何/坐标/统计）
 - 测试: 2214 → 2264（+50 测试）
 
+#### v10.1.0 — COORD_3D 新题型 + 蜀道远征
+- **COORD_3D**: 7文件全流程（types/translations/inputConfig/checkCorrectness/geometry.ts/index.ts/y10.ts）
+- **generateCoord3DMission**: midpoint+distance 两种模式，3档位，6步金标准动态教程
+- **Y10 新关卡**: id=1066（城楼会师，正坐标，Medium/480）+ id=1067（烽火定位，含负坐标，Hard/520）
+- **蜀道行军远征**: 8节点（荆州→成都），Y8-10，起始军粮5，李白蜀道难引语
+- 测试: 2339 → 2364（+25）
+
 #### v9.9.0 — TREE_DIAGRAM 新题型（条件概率不放回）
 - **7 文件全流程**: types/translations(3语)/inputConfig/checkCorrectness/statistics.ts/index.ts/y9.ts
 - **generateTreeDiagramMission**: 3 模式（both_red/both_same/diff）× 3 档位，P(B|A) 条件概率，6步金标准动态教程
@@ -348,11 +355,13 @@ for mid, steps_raw in missions:
 
 | 优先级 | 任务 | 说明 |
 |--------|------|------|
-| ~~HIGH~~ | ~~TREE_DIAGRAM 新题型~~ | ✅ 完成：Y9 id=9148/9149，7文件全流程，2314 tests |
-| ~~HIGH~~ | ~~SEQUENCE_NTH 新题型~~ | ✅ 完成：Y10 id=1055/1056 + Y11 id=1133（等差+等比第n项），基础设施+3关，2339 tests |
-| MEDIUM | **新远征·蜀道** | expeditions.ts 新增蜀道远征（8节点），配合赛季2主题 |
-| LOW | **3D_COORD 新题型** | Y10 三维坐标题（Season 2 Y10内容） |
-| LOW | **missions.ts 拆分已完成** | ✅ 已按年级拆分（y7-y12.ts），manualChunks 已配置，最大 chunk 364 kB |
+| ~~HIGH~~ | ~~TREE_DIAGRAM~~ | ✅ Y9 id=9148/9149，条件概率不放回 |
+| ~~HIGH~~ | ~~SEQUENCE_NTH~~ | ✅ Y10 id=1055/1056 + Y11 id=1133，等差+等比第n项 |
+| ~~MEDIUM~~ | ~~蜀道远征~~ | ✅ 8节点(荆州→成都)，Y8-10，expeditions.ts |
+| ~~LOW~~ | ~~COORD_3D~~ | ✅ Y10 id=1066/1067，三维中点(含负坐标)，midpoint+distance modes |
+| MEDIUM | **VECTOR_3D 新题型** | Y12 三维向量（Season 2 Y12内容） |
+| LOW | **INTEGRAL_AREA 新题型** | Y12 积分求面积 |
+| LOW | **missions.ts 拆分已完成** | ✅ 已按年级拆分 |
 | FUTURE | **班级远征** | 多人协作通关 |
 
 ---

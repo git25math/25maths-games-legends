@@ -157,7 +157,14 @@ export const KPHeatmap = ({
                 onClick={() => onStudentClick(s.user_id)}
               >
                 <td className="sticky left-0 bg-white z-10 px-2 py-1.5 font-bold text-slate-700 whitespace-nowrap" title={s.display_name || ''}>
-                  <span className="inline-block max-w-[100px] truncate align-bottom">{s.display_name || '?'}</span>
+                  <span className="inline-flex items-center gap-1">
+                    <span className="inline-block max-w-[80px] truncate">{s.display_name || '?'}</span>
+                    {(s.display_name || '').includes(' ') && (
+                      <span className="text-[8px] text-slate-400 font-bold shrink-0">
+                        {(s.display_name || '').split(' ').pop()?.[0]}
+                      </span>
+                    )}
+                  </span>
                 </td>
                 {visibleKPs.map(kp => {
                   const cell = matrix[s.user_id]?.[kp];

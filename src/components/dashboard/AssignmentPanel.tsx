@@ -298,25 +298,33 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
 
       {/* Archived toggle */}
       {archived.length > 0 && (
-        <button
-          onClick={() => setShowArchived(!showArchived)}
-          className="text-[10px] text-slate-400 font-bold hover:text-slate-500 transition-colors"
-        >
-          {showArchived
-            ? (lang === 'en' ? 'Hide archived' : '隐藏归档')
-            : (lang === 'en' ? `Show ${archived.length} archived` : `显示 ${archived.length} 个归档任务`)
-          }
-        </button>
-      )}
-      {showArchived && archived.map(a => (
-        <div key={a.id} className="bg-slate-50/50 rounded-xl p-3 border border-slate-100 opacity-60">
-          <div className="flex items-center gap-2">
-            <Archive size={12} className="text-slate-400" />
-            <span className="text-xs text-slate-500 font-bold">{a.title}</span>
-            <span className="text-[10px] text-slate-400">{a.mission_ids.length} {lang === 'en' ? 'missions' : '关卡'}</span>
-          </div>
+        <div className="mt-3 border-t border-slate-100 pt-3">
+          <button
+            onClick={() => setShowArchived(!showArchived)}
+            aria-expanded={showArchived}
+            className="w-full text-left flex items-center gap-2 px-3 py-2 text-[10px] text-slate-400 font-bold hover:text-slate-500 hover:bg-slate-50 rounded-lg transition-colors"
+          >
+            {showArchived ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+            {showArchived
+              ? (lang === 'en' ? 'Hide archived' : '隐藏归档')
+              : (lang === 'en' ? `Show ${archived.length} archived` : `显示 ${archived.length} 个归档任务`)
+            }
+          </button>
+          {showArchived && (
+            <div className="max-h-40 overflow-y-auto space-y-2 mt-2 pl-1">
+              {archived.map(a => (
+                <div key={a.id} className="bg-slate-50/50 rounded-xl p-3 border border-slate-100 opacity-60">
+                  <div className="flex items-center gap-2">
+                    <Archive size={12} className="text-slate-400" />
+                    <span className="text-xs text-slate-500 font-bold">{a.title}</span>
+                    <span className="text-[10px] text-slate-400">{a.mission_ids.length} {lang === 'en' ? 'missions' : '关卡'}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      ))}
+      )}
 
       {/* Create Assignment Modal */}
       <AnimatePresence>
