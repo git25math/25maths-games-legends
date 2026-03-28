@@ -535,6 +535,29 @@ export const MISSIONS_Y11: Mission[] = [
     storyConsequence: { correct: { zh: '阵法向量——坐标精准！做得漂亮！', en: 'Formation Vectors — Well done!' }, wrong: { zh: '坐标定位有误…再试一次！', en: 'Not quite... Try again!' } }
   },
 
+  {
+    id: 1192, grade: 11, unitId: 9, order: 2,
+    unitTitle: { zh: "Unit 9: 八阵图·向量运算", en: "Unit 9: Eight Formations — Vector Ops" },
+    topic: 'Geometry', type: 'COORDINATES',
+    title: { zh: '突围位移', en: 'Breakout Displacement' },
+    skillName: { zh: '向量减法术', en: 'Vector Subtraction' },
+    skillSummary: { zh: '$\\vec{AB} = \\vec{b} - \\vec{a}$', en: '$\\vec{AB} = \\vec{b} - \\vec{a}$' },
+    story: { zh: '从阵点 A$(a_1,a_2)$ 突围到阵点 B$(b_1,b_2)$，需要的位移向量 $\\vec{AB}$ 是多少？向量减法！', en: 'Break out from point A$(a_1,a_2)$ to B$(b_1,b_2)$. What displacement vector $\\vec{AB}$ is needed? Vector subtraction!' },
+    description: { zh: '求从 A 到 B 的位移向量分量。', en: 'Find the displacement vector components from A to B.' },
+    data: { a1: 5, a2: 2, b1: -1, b2: 6, targetX: -6, targetY: 4, generatorType: 'VECTOR_ADD_RANDOM' }, difficulty: 'Hard', reward: 520,
+    kpId: 'kp-7.4-01', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮："为什么要学向量减法？\n\n你在A点，友军在B点。要突围过去——需要知道「从A到B」的精确位移。\n位移 = 终点 - 起点：$\\vec{AB} = B - A$。\n向量减法就是「求方向差」。"', en: 'Zhuge Liang: "Why learn vector subtraction?\n\nYou are at A, allies at B. To break through — you need the exact displacement from A to B.\nDisplacement = endpoint − start: $\\vec{AB} = B - A$.\nVector subtraction finds the direction difference."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮："减法规则：分量分别相减。\n$$\\vec{AB} = B - A = (b_1 - a_1,\\; b_2 - a_2)$$\n和加法一样——$x$ 减 $x$，$y$ 减 $y$。"', en: 'Zhuge Liang: "Subtraction rule: subtract components separately.\n$$\\vec{AB} = B - A = (b_1 - a_1,\\; b_2 - a_2)$$\nJust like addition — $x$ minus $x$, $y$ minus $y$."' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮："代入\nA = $(5, 2)$，B = $(-1, 6)$\n$\\vec{AB} = (-1 - 5,\\; 6 - 2)$"', en: 'Zhuge Liang: "Substitute\nA = $(5, 2)$, B = $(-1, 6)$\n$\\vec{AB} = (-1 - 5,\\; 6 - 2)$"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮："计算\n$x$: $-1 - 5 = -6$\n$y$: $6 - 2 = 4$"', en: 'Zhuge Liang: "Calculate\n$x$: $-1 - 5 = -6$\n$y$: $6 - 2 = 4$"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮："答案：$\\vec{AB} = (-6, 4)$\n向左 6 步，向上 4 步——突围方向确定！"', en: 'Zhuge Liang: "Answer: $\\vec{AB} = (-6, 4)$\nLeft 6, up 4 — breakout direction confirmed!"' }, highlightField: 'x' },
+      { text: { zh: '诸葛亮："验算\n$A + \\vec{AB} = (5, 2) + (-6, 4) = (-1, 6) = B$ ✓\n起点加位移等于终点，完美！"', en: 'Zhuge Liang: "Verify\n$A + \\vec{AB} = (5, 2) + (-6, 4) = (-1, 6) = B$ ✓\nStart + displacement = endpoint, perfect!"' }, highlightField: 'x' },
+    ],
+    secret: { concept: { zh: '位移向量 = 终点坐标 - 起点坐标。向量减法 = 分量分别相减。', en: 'Displacement = endpoint − start. Vector subtraction = subtract components.' }, formula: '$\\vec{AB} = B - A = (b_1 - a_1, b_2 - a_2)$', tips: [{ zh: '诸葛亮提示：终点减起点——永远记住顺序！', en: 'Zhuge Liang Tip: Endpoint minus start — never forget the order!' }] },
+    storyConsequence: { correct: { zh: '突围位移——向量减法精准！做得漂亮！', en: 'Breakout Displacement — Vector subtraction nailed!' }, wrong: { zh: '减法方向搞反了…再试一次！', en: 'Subtraction direction reversed... Try again!' } }
+  },
+
   // --- Y11 Unit 10: 高级三角 · 赤壁遗策 (Advanced Trigonometry) ---
   {
     id: 11101, grade: 11, unitId: 10, order: 1,
