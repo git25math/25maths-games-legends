@@ -7,6 +7,7 @@ import type { Mission, Character, Language, DifficultyMode } from '../../types';
 import { translations } from '../../i18n/translations';
 import { lt, resolveFormula } from '../../i18n/resolveText';
 import { LatexText, MathView } from '../MathView';
+import { getTopicForKp } from '../../data/curriculum/kp-registry';
 import { InputFields } from './InputFields';
 import { VisualData } from './VisualData';
 import { AnimatedTutorial } from './AnimatedTutorial';
@@ -52,10 +53,18 @@ export function BattleContent({
       {/* Left: Question area — compact on mobile */}
       <div className="bg-parchment-dark rounded-lg p-3 sm:p-4 md:p-6 border-2 border-ink/20 shadow-inner">
         {/* Header — hidden on mobile to save space */}
-        <div className="hidden sm:flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
+        <div className="hidden sm:flex items-center gap-2 mb-1 text-ink font-bold">
           <MapIcon size={18} />
           <span>{t.calculating}</span>
         </div>
+        {currentQuestion.kpId && (() => {
+          const topic = getTopicForKp(currentQuestion.kpId);
+          return topic ? (
+            <div className="hidden sm:block text-[10px] text-ink/40 mb-3 pb-2 border-b border-ink/10">
+              CIE 0580 · {topic.id} {lang === 'en' ? topic.title : topic.titleZh}
+            </div>
+          ) : null;
+        })()}
 
         <div className="bg-white/40 p-2 sm:p-3 rounded-lg mb-2 sm:mb-4 italic text-xs text-ink-light border-l-4 border-[#8b0000]">
           <LatexText text={storyText} />

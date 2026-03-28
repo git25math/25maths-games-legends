@@ -565,10 +565,18 @@ export const PracticeScreen = ({
               animate={{ opacity: 1, y: 0 }}
               className="bg-[#e8d5a7] rounded-lg p-3 md:p-6 border-2 border-[#3d2b1f]/20 shadow-inner"
             >
-            <div className="flex items-center gap-2 mb-4 text-ink font-bold border-b border-ink/10 pb-2">
+            <div className="flex items-center gap-2 mb-1 text-ink font-bold">
               <MapIcon size={18} />
               <span>{t.practicePhase[currentPhase]}</span>
             </div>
+            {currentMission.kpId && (() => {
+              const topic = getTopicForKp(currentMission.kpId);
+              return topic ? (
+                <div className="text-[10px] text-ink/40 mb-3 pb-2 border-b border-ink/10">
+                  CIE 0580 · {topic.id} {lang === 'en' ? topic.title : topic.titleZh}
+                </div>
+              ) : null;
+            })()}
 
             {/* Story text */}
             <div className="bg-white/40 p-3 rounded-lg mb-4 italic text-xs text-ink-light border-l-4 border-[#8b0000]">
