@@ -1085,7 +1085,19 @@ export function generateFactorTreeMission(template: Mission, tier: DifficultyTie
   return {
     ...template,
     description,
-    data: { n, primeCount, tree, leaves, generatorType: 'FACTOR_TREE_RANDOM' },
+    data: {
+      n, primeCount, tree, leaves, generatorType: 'FACTOR_TREE_RANDOM',
+      choices: (() => {
+        // Generate 4 choices: correct + 3 distractors (±1, ±2)
+        const distractors = new Set<number>();
+        for (const d of [primeCount - 1, primeCount + 1, primeCount - 2, primeCount + 2]) {
+          if (d > 0 && d !== primeCount) distractors.add(d);
+        }
+        const opts = [primeCount, ...[...distractors].slice(0, 3)].sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `${v} 个`, en: `${v}` }, value: String(v) }));
+      })(),
+      correctChoice: String(primeCount),
+    },
     tutorialSteps,
   };
 }
@@ -2131,7 +2143,19 @@ export function generateFdpConvertMission(template: Mission, tier: DifficultyTie
   return {
     ...template,
     description,
-    data: { ...chosen, dir, answer, generatorType: 'FDP_CONVERT_RANDOM' },
+    data: {
+      ...chosen, dir, answer, generatorType: 'FDP_CONVERT_RANDOM',
+      choices: (() => {
+        // Generate 4 choices from nearby fdpSet values
+        const others = fdpSets.filter(s => (dir === 'frac_to_pct' ? s.pct : dir === 'pct_to_dec' ? s.dec : s.pct) !== answer);
+        const shuffled = others.sort(() => Math.random() - 0.5).slice(0, 3);
+        const wrongVals = shuffled.map(s => dir === 'frac_to_pct' ? s.pct : dir === 'pct_to_dec' ? s.dec : s.pct);
+        const allOpts = [answer, ...wrongVals].sort((a, b) => a - b);
+        const suffix = dir === 'pct_to_dec' ? '' : '%';
+        return allOpts.map(v => ({ label: { zh: `$${v}${suffix}$`, en: `$${v}${suffix}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
@@ -2661,7 +2685,18 @@ export function generateEstimationRoundMission(template: Mission, tier: Difficul
   return {
     ...template,
     description,
-    data: { n, place, answer, generatorType: 'ESTIMATION_ROUND_RANDOM' },
+    data: {
+      n, place, answer, generatorType: 'ESTIMATION_ROUND_RANDOM',
+      choices: (() => {
+        // roundDown and roundUp are always plausible; add one more distractor
+        const opts = new Set([roundDown, roundUp, roundDown - place, roundUp + place]);
+        opts.delete(answer); // remove correct from distractors
+        const distractors = [...opts].filter(v => v >= 0).slice(0, 3);
+        const allOpts = [answer, ...distractors].sort((a, b) => a - b);
+        return allOpts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
