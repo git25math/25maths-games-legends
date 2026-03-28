@@ -126,6 +126,12 @@ export const MathBattle = ({
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 2;
   const [streakMilestone, setStreakMilestone] = useState<number | null>(null);
+
+  // Multiple-choice state
+  const [mcResult, setMcResult] = useState<'correct' | 'wrong' | null>(null);
+  const [mcSelectedIndex, setMcSelectedIndex] = useState<number | null>(null);
+  const [mcCorrectIndex, setMcCorrectIndex] = useState<number | undefined>(undefined);
+  const isMultipleChoice = !!currentQuestion.data?.choices;
   const [partialCreditInfo, setPartialCreditInfo] = useState<{ score: number } | null>(null);
   const [shakeKey, setShakeKey] = useState(0);
   const shaking = shakeKey > 0;
@@ -245,6 +251,31 @@ export const MathBattle = ({
     }, VICTORY_TIMING.skillBadge);
   };
 
+  // Multiple-choice handler: set inputs + auto-submit
+  const handleMcSelect = (value: string, index: number) => {
+    if (isSubmitting || showResult !== 'none' || mcResult) return;
+    const correctIdx = (currentQuestion.data.choices as any[]).findIndex((c: any) => String(c.value) === String(currentQuestion.data.correctChoice));
+    setMcSelectedIndex(index);
+    setMcCorrectIndex(correctIdx);
+    // Set the answer in inputs so checkAnswer works via normal path
+    setInputs({ ans: value });
+    const isCorrect = String(value) === String(currentQuestion.data.correctChoice);
+    setMcResult(isCorrect ? 'correct' : 'wrong');
+    playClick();
+    // Delay then process via normal submit flow
+    setTimeout(() => {
+      if (isCorrect) {
+        // Simulate correct answer processing
+        setInputs({ ans: value });
+        handleSubmit();
+      } else {
+        // Simulate wrong answer processing
+        setInputs({ ans: value });
+        handleSubmit();
+      }
+    }, 600); // Show visual feedback before advancing
+  };
+
   const handleSubmit = () => {
     if (isSubmitting || showResult !== 'none') return;
     // Validate: all fields must have content
@@ -304,6 +335,7 @@ export const MathBattle = ({
         } else {
           advanceTimerRef.current = window.setTimeout(() => {
             setInputs({}); setWrongAnswerData(null); setPartialCreditInfo(null); setIsSubmitting(false);
+            setMcResult(null); setMcSelectedIndex(null); setMcCorrectIndex(undefined);
             setCurrentQIdx(prev => prev + 1);
           }, BATTLE_TIMING.advance);
         }
@@ -350,6 +382,7 @@ export const MathBattle = ({
   const handleWrongAnswerContinue = () => {
     const wasPartial = !!partialCreditInfo;
     setWrongAnswerData(null); setInputs({}); setPartialCreditInfo(null); setIsSubmitting(false);
+    setMcResult(null); setMcSelectedIndex(null); setMcCorrectIndex(undefined);
 
     if (wasPartial) {
       if (isMultiQuestion) {

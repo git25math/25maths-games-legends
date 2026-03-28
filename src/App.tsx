@@ -88,16 +88,40 @@ class ErrorBoundary extends Component<{ children: any }, { hasError: boolean; er
 }
 
 function ScreenLoader({ lang, label }: { lang: Language; label: string }) {
+  const [timedOut, setTimedOut] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setTimedOut(true), 8000);
+    return () => clearTimeout(t);
+  }, []);
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-6">
       <div className="rounded-3xl border border-white/15 bg-slate-900/70 px-8 py-6 text-center shadow-2xl backdrop-blur-xl">
-        <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-white/15 border-t-emerald-400" />
-        <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-300">
-          {label}
-        </p>
-        <p className="mt-2 text-xs text-white/45">
-          {lang === 'en' ? 'Please wait a moment.' : '请稍等片刻。'}
-        </p>
+        {!timedOut ? (
+          <>
+            <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-white/15 border-t-emerald-400" />
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-300">
+              {label}
+            </p>
+            <p className="mt-2 text-xs text-white/45">
+              {lang === 'en' ? 'Please wait a moment.' : '请稍等片刻。'}
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="text-sm font-bold text-rose-400 mb-2">
+              {lang === 'en' ? 'Connection seems slow.' : '连接似乎有点慢。'}
+            </p>
+            <p className="text-xs text-white/50 mb-4">
+              {lang === 'en' ? 'Please check your internet and try again.' : '请检查网络连接后重试。'}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition-colors"
+            >
+              {lang === 'en' ? 'Retry' : '重试'}
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -141,7 +165,11 @@ export default function App() {
   const persisted = persistedRef.current;
   const [lang, setLangState] = useState<Language>(() => {
     try { const s = localStorage.getItem('gl_lang'); if (s === 'zh' || s === 'zh_TW' || s === 'en') return s; } catch {}
-    return 'zh';
+    // Auto-detect from browser language
+    const browserLang = (navigator.language || '').toLowerCase();
+    if (browserLang.startsWith('zh-tw') || browserLang.startsWith('zh-hant')) return 'zh_TW';
+    if (browserLang.startsWith('zh')) return 'zh';
+    return 'en';
   });
   const setLang = (l: Language) => { setLangState(l); try { localStorage.setItem('gl_lang', l); } catch {} };
   const [gameState, setGameState] = useState<GameState>(persisted.gameState);

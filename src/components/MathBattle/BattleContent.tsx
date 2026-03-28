@@ -9,6 +9,8 @@ import { lt, resolveFormula } from '../../i18n/resolveText';
 import { LatexText, MathView } from '../MathView';
 import { getTopicForKp } from '../../data/curriculum/kp-registry';
 import { InputFields } from './InputFields';
+import { MultipleChoice } from './MultipleChoice';
+import type { ChoiceOption } from './MultipleChoice';
 import { VisualData } from './VisualData';
 import { AnimatedTutorial } from './AnimatedTutorial';
 import { WrongAnswerPanel } from './WrongAnswerPanel';
@@ -36,6 +38,11 @@ type Props = {
   onTutorialPrev: () => void;
   onTutorialNext: () => void;
   onWrongAnswerContinue: () => void;
+  // Multiple-choice state
+  mcResult?: 'correct' | 'wrong' | null;
+  mcSelectedIndex?: number | null;
+  mcCorrectIndex?: number;
+  onMcSelect?: (value: string, index: number) => void;
 };
 
 export function BattleContent({
@@ -44,6 +51,7 @@ export function BattleContent({
   isTutorial, tutorialStep, inputs, setInputs,
   wrongAnswerData, partialCreditInfo, skillCard, currentQIdx, isSubmitting,
   onSubmit, onTutorialPrev, onTutorialNext, onWrongAnswerContinue,
+  mcResult, mcSelectedIndex, mcCorrectIndex, onMcSelect,
 }: Props) {
   const t = translations[lang];
   const p = currentQuestion.data ?? {};
@@ -112,15 +120,31 @@ export function BattleContent({
           />
         )}
 
-        <InputFields
-          mission={currentQuestion}
-          inputs={inputs}
-          setInputs={setInputs}
-          difficultyMode={difficultyMode}
-          tutorialStep={tutorialStep}
-          isTutorial={isTutorial}
-          lang={lang}
-        />
+        {/* Input: Multiple Choice OR Text Fields */}
+        {currentQuestion.data?.choices && onMcSelect ? (
+          <MultipleChoice
+            choices={currentQuestion.data.choices as ChoiceOption[]}
+            onSelect={(value) => {
+              const idx = (currentQuestion.data.choices as ChoiceOption[]).findIndex((c: ChoiceOption) => c.value === value);
+              onMcSelect(value, idx);
+            }}
+            disabled={!!wrongAnswerData || isSubmitting || mcResult !== null && mcResult !== undefined}
+            lang={lang}
+            result={mcResult ?? null}
+            selectedIndex={mcSelectedIndex ?? null}
+            correctIndex={mcCorrectIndex}
+          />
+        ) : (
+          <InputFields
+            mission={currentQuestion}
+            inputs={inputs}
+            setInputs={setInputs}
+            difficultyMode={difficultyMode}
+            tutorialStep={tutorialStep}
+            isTutorial={isTutorial}
+            lang={lang}
+          />
+        )}
 
         {/* Wrong answer review panel */}
         {wrongAnswerData && (
@@ -138,7 +162,8 @@ export function BattleContent({
           />
         )}
 
-        {isTutorial ? (
+        {/* Hide Attack button for multiple-choice (selection auto-submits) */}
+        {currentQuestion.data?.choices ? null : isTutorial ? (
           <div className="flex gap-2">
             {tutorialStep > 0 && (
               <button

@@ -13,6 +13,31 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求函数的极小值点 $x$（$x > 0$）。', en: 'Find the local minimum point $x$ ($x > 0$).' },
     data: { x: 1, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Hard', reward: 1000,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: '城墙受力不是处处一样——有的地方压力大，有的压力小。\n你觉得怎么找到"压力最小的转折点"？', en: 'Wall stress is not the same everywhere — some spots take more, some less.\nHow would you find the "turning point with least stress"?' },
+        type: 'choice',
+        choices: [
+          { zh: '找变化速度为零的点（导数 = 0）', en: 'Find where the rate of change is zero (derivative = 0)' },
+          { zh: '试所有点看哪个最小', en: 'Try all points to see which is smallest' },
+          { zh: '取函数的起点', en: 'Take the starting point of the function' },
+        ],
+        onCorrect: { zh: '你已经有微积分的直觉了！\n变化速度为零 = 导数为零 = 极值点。\n就像走到山谷最底部那一刻，脚下是平的——坡度为零。', en: 'You already have calculus intuition!\nRate of change = 0 means derivative = 0 means extremum.\nLike reaching the valley floor — the ground is flat, slope is zero.' },
+        onWrong: { zh: '试所有点太慢了——导数给了一个捷径！\n导数 = 变化的速度。当导数 = 0，变化停止 = 极值点。', en: 'Testing all points is too slow — derivatives give a shortcut!\nDerivative = rate of change. When derivative = 0, change stops = extremum.' },
+        onSkip: { zh: '导数描述"变化有多快"。当导数 = 0，函数不再上升也不下降——这就是极值点。', en: 'Derivatives describe "how fast things change". When derivative = 0, the function stops rising or falling — that is the extremum.' },
+      },
+      {
+        prompt: { zh: '导数为零找到了转折点。但怎么知道它是"最高点"还是"最低点"？\n$f\'\'(x) > 0$ 意味着什么？', en: 'Derivative = 0 finds the turning point. But how to know if it is a max or min?\nWhat does $f\'\'(x) > 0$ mean?' },
+        type: 'choice',
+        choices: [
+          { zh: '曲线在该点向上弯——是最低点', en: 'The curve bends upward — it is a minimum' },
+          { zh: '曲线在该点向下弯——是最高点', en: 'The curve bends downward — it is a maximum' },
+        ],
+        onCorrect: { zh: '对！$f\'\'(x) > 0$ = 曲线凹上 = 碗形 = 最低点（极小值）。\n$f\'\'(x) < 0$ 则相反，像倒碗 = 最高点（极大值）。\n一阶导数找候选，二阶导数当裁判！', en: 'Yes! $f\'\'(x) > 0$ = concave up = bowl shape = minimum.\n$f\'\'(x) < 0$ = opposite, inverted bowl = maximum.\nFirst derivative finds candidates, second derivative judges!' },
+        onWrong: { zh: '想象 $f\'\'(x) > 0$ 意味着斜率在增加——从负变正，像从下坡走到上坡。\n中间的那个点就是谷底——最低点！', en: 'Think: $f\'\'(x) > 0$ means the slope is increasing — going from negative to positive.\nThe point in between is the valley floor — the minimum!' },
+        onSkip: { zh: '$f\'\'(x) > 0$ → 凹上（碗形）→ 最低点。$f\'\'(x) < 0$ → 凹下（倒碗）→ 最高点。', en: '$f\'\'(x) > 0$ → concave up (bowl) → minimum. $f\'\'(x) < 0$ → concave down (inverted bowl) → maximum.' },
+      },
+    ],
     tutorialSteps: [
       {
         text: { zh: '刘禅：为什么要找“最稳的防线”？\n城墙受力不会处处一样——有的地方压力大，有的地方压力最小。\n补强材料要先送到“压力最低的转折点”，才能用最少兵力守住成都。\n导数就是帮我们找到这个关键位置的工具。', en: 'Liu Shan: "Why find the most stable part of the wall?\nThe stress on the wall is not the same everywhere — some spots take more pressure, some take the least.\nReinforcements must go to the turning point with the LOWEST stress, so Chengdu can be defended with the least cost.\nDerivatives help us find that key position."' },
