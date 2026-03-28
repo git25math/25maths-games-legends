@@ -1,14 +1,16 @@
 /**
  * ResultOverlay — Victory (5-phase) + Defeat screens (v8.4 refactor)
  */
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { XCircle, Trophy, Heart, CheckCircle2, BookOpen } from 'lucide-react';
+import { XCircle, Trophy, Heart, CheckCircle2, BookOpen, Share2 } from 'lucide-react';
 import type { Mission, Character, Language } from '../../types';
 import { translations } from '../../i18n/translations';
 import { lt, resolveFormula } from '../../i18n/resolveText';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { AnimatedCounter } from '../AnimatedCounter';
 import { SkillBadgeCard } from '../SkillBadgeCard';
+import { ShareCard } from '../ShareCard';
 import type { BattleMode } from '../BattleModeSelector';
 import { getExamHubLessonUrl } from '../../utils/lessonMap';
 
@@ -38,6 +40,8 @@ type Props = {
   onDiagnose?: () => void;
   hotTopicMultiplier?: number;
   isDailyChallenge?: boolean;
+  peakStreak?: number;
+  grade?: number;
 };
 
 export function ResultOverlay({
@@ -47,7 +51,9 @@ export function ResultOverlay({
   encouragement, onAchievementClose, onRetry,
   canRetry = true, retryCount = 0, maxRetries = 2, onGiveUp, onDiagnose,
   hotTopicMultiplier = 1, isDailyChallenge = false,
+  peakStreak = 0, grade = 7,
 }: Props) {
+  const [showShareCard, setShowShareCard] = useState(false);
   if (showResult === 'none') return null;
 
   const t = translations[lang];
@@ -222,17 +228,48 @@ export function ResultOverlay({
               </motion.button>
             )}
 
-            {/* Phase E: Return Button */}
+            {/* Phase E: Return + Share Buttons */}
             {victoryPhase >= 5 && (
-              <motion.button
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                onClick={onAchievementClose}
-                className="absolute bottom-8 px-12 py-5 bg-indigo-600 text-white font-black text-xl rounded-2xl shadow-xl hover:bg-indigo-500 transition-colors z-30"
+                className="absolute bottom-8 flex gap-3 z-30"
               >
-                {t.backToMap}
-              </motion.button>
+                <button
+                  onClick={() => setShowShareCard(true)}
+                  className="px-6 py-5 bg-amber-600 text-white font-black text-lg rounded-2xl shadow-xl hover:bg-amber-500 transition-colors flex items-center gap-2"
+                >
+                  <Share2 size={20} />
+                  {lang === 'en' ? 'Share' : '分享'}
+                </button>
+                <button
+                  onClick={onAchievementClose}
+                  className="px-12 py-5 bg-indigo-600 text-white font-black text-xl rounded-2xl shadow-xl hover:bg-indigo-500 transition-colors"
+                >
+                  {t.backToMap}
+                </button>
+              </motion.div>
             )}
+
+            {/* Share Card Modal */}
+            <AnimatePresence>
+              {showShareCard && (
+                <ShareCard
+                  missionTitle={mission.title}
+                  skillName={mission.skillName}
+                  characterId={character.id}
+                  characterName={character.name}
+                  score={finalScore}
+                  duration={finalDuration}
+                  streak={peakStreak}
+                  isFirstClear={isFirstClear}
+                  isPerfect={willBePerfect}
+                  grade={grade}
+                  lang={lang}
+                  onClose={() => setShowShareCard(false)}
+                />
+              )}
+            </AnimatePresence>
           </>
         ) : (
           <motion.div initial={{ y: 50 }} animate={{ y: 0 }}>

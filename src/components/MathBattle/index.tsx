@@ -590,6 +590,8 @@ export const MathBattle = ({
           onDiagnose={onDiagnose}
           hotTopicMultiplier={hotTopicMultiplier}
           isDailyChallenge={isDailyChallenge}
+          peakStreak={peakStreak}
+          grade={mission.grade}
         />
       </motion.div>
     </div>
