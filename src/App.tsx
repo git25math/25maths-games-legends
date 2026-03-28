@@ -151,7 +151,7 @@ function loadPersistedState(): PersistedState {
 function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
     // Battle/onboarding/expedition can't be restored → save as map
-    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'expedition' || gameState === 'leaderboard' || gameState === 'achievements' || gameState === 'pk_setup' || gameState === 'tech_tree' || gameState === 'repair') ? 'map' : gameState;
+    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'modeSelect' || gameState === 'expedition' || gameState === 'leaderboard' || gameState === 'achievements' || gameState === 'pk_setup' || gameState === 'tech_tree' || gameState === 'repair') ? 'map' : gameState;
     const safeMission = safeState === 'practice' ? missionId : null;
     localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
@@ -1005,8 +1005,40 @@ export default function App() {
               {gameState === 'onboarding' && (
                 <OnboardingScreen
                   lang={lang}
-                  onComplete={() => setGameState('map')}
+                  onComplete={() => setGameState('modeSelect')}
                 />
+              )}
+
+              {gameState === 'modeSelect' && (
+                <div className="min-h-[80vh] flex items-center justify-center px-6">
+                  <div className="max-w-md w-full space-y-4">
+                    <h2 className="text-center text-lg font-black text-white mb-1">
+                      {lang === 'en' ? 'How would you like to learn?' : '你想怎么学？'}
+                    </h2>
+                    <p className="text-center text-xs text-white/40 mb-4">
+                      {lang === 'en' ? 'You can change this anytime in the menu.' : '以后可以随时在菜单里切换。'}
+                    </p>
+                    {([
+                      { mode: 'explore' as const, icon: '🌱', zh: '慢慢来，我想从基础开始', en: 'Take it slow — start from the basics', sub_zh: '每个知识点都有探索环节，节奏更轻松', sub_en: 'Each topic has a discovery phase, at a relaxed pace', color: 'from-emerald-900/40 to-emerald-800/20 border-emerald-600/30 hover:border-emerald-500/50' },
+                      { mode: 'practice' as const, icon: '📖', zh: '正常练习', en: 'Regular practice', sub_zh: '标准学习路径，适合大多数同学', sub_en: 'Standard learning path, works for most students', color: 'from-blue-900/40 to-blue-800/20 border-blue-600/30 hover:border-blue-500/50' },
+                      { mode: 'exam' as const, icon: '🎯', zh: '我在备考，帮我抓重点', en: 'I\'m preparing for exams — focus on key areas', sub_zh: '跳过已学内容，集中训练薄弱环节', sub_en: 'Skip what you know, drill what you don\'t', color: 'from-amber-900/40 to-amber-800/20 border-amber-600/30 hover:border-amber-500/50' },
+                    ]).map(opt => (
+                      <button
+                        key={opt.mode}
+                        onClick={() => { handleSetLearnerMode(opt.mode); setGameState('map'); }}
+                        className={`w-full text-left p-4 rounded-xl border bg-gradient-to-r ${opt.color} transition-all`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{opt.icon}</span>
+                          <div>
+                            <div className="text-sm font-bold text-white">{lang === 'en' ? opt.en : opt.zh}</div>
+                            <div className="text-[10px] text-white/40 mt-0.5">{lang === 'en' ? opt.sub_en : opt.sub_zh}</div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
 
               {isMissionShellLoading && (

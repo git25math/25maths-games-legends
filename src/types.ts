@@ -178,7 +178,7 @@ export type BattleResult = {
   hp_remaining: number;
 };
 
-export type GameState = 'welcome' | 'onboarding' | 'map' | 'battle' | 'lobby' | 'practice' | 'dashboard' | 'expedition' | 'leaderboard' | 'achievements' | 'pk_setup' | 'tech_tree' | 'repair';
+export type GameState = 'welcome' | 'onboarding' | 'modeSelect' | 'map' | 'battle' | 'lobby' | 'practice' | 'dashboard' | 'expedition' | 'leaderboard' | 'achievements' | 'pk_setup' | 'tech_tree' | 'repair';
 
 // --- v7.0 Phase 2: Skill Tree ---
 
