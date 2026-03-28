@@ -772,6 +772,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
             })}
             classAverageDims={classAvgDims}
             onClose={() => setSelectedStudent(null)}
+            onParentReport={() => { setParentReportStudent(selectedStudent); }}
           />
         )}
       </AnimatePresence>
