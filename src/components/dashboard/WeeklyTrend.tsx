@@ -124,7 +124,7 @@ export const WeeklyTrend = ({
   }, [grade, filterTag]);
 
   if (loading) return (
-    <div className="mb-4 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm animate-pulse">
+    <div className="mb-4 bg-white rounded-2xl border border-slate-100 p-4 shadow-sm animate-pulse">
       <div className="h-3 w-32 bg-slate-200 rounded mb-3" />
       <div className="grid grid-cols-2 gap-3">
         <div className="h-8 bg-slate-100 rounded" />
@@ -135,11 +135,11 @@ export const WeeklyTrend = ({
   if (thisWeek.battles === 0 && lastWeek.battles === 0) return null;
 
   return (
-    <div className="mb-4 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+    <div className="mb-4 bg-white rounded-2xl border border-slate-100 p-4 shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <TrendingUp size={14} className="text-indigo-500" />
-          <span className="text-xs font-black text-slate-700">
+          <span className="text-sm font-black text-slate-700">
             {lang === 'en' ? 'Weekly Comparison' : '周报对比'}
           </span>
         </div>

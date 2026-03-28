@@ -491,7 +491,7 @@ export const PracticeScreen = ({
                     discover: 'bg-amber-400', green: 'bg-emerald-500', amber: 'bg-amber-500', red: 'bg-rose-500', battle: 'bg-indigo-500',
                   };
                   const dimColors: Record<PracticePhase, string> = {
-                    discover: 'bg-amber-900', green: 'bg-emerald-900', amber: 'bg-amber-900', red: 'bg-rose-900', battle: 'bg-indigo-900',
+                    discover: 'bg-amber-700/30', green: 'bg-emerald-700/30', amber: 'bg-amber-700/30', red: 'bg-rose-700/30', battle: 'bg-indigo-700/30',
                   };
                   const phaseLabels: Record<PracticePhase, Record<string, string>> = {
                     discover: { zh: '\u63a2\u7d22', en: 'Discover' },
@@ -509,7 +509,7 @@ export const PracticeScreen = ({
                           isCurrent || isCompleted ? colors[phase] : dimColors[phase]
                         } ${isCurrent ? 'ring-2 ring-white/50' : ''}`}
                       />
-                      <span className={`text-[9px] font-bold uppercase ${isCurrent ? 'text-white' : 'text-white/40'}`}>
+                      <span className={`text-[9px] font-bold uppercase ${isCurrent ? 'text-white' : isCompleted ? 'text-white/60' : 'text-white/50'}`}>
                         {phaseLabels[phase][lang === 'en' ? 'en' : 'zh']}
                       </span>
                     </div>

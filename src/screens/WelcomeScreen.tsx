@@ -102,7 +102,7 @@ export const WelcomeScreen = ({
             disabled={!selectedCharId || !isLoggedIn}
             onClick={() => { playTap(); onStart(); }}
             className={`px-16 py-6 rounded-3xl text-3xl font-black transition-all shadow-2xl ${
-              selectedCharId && isLoggedIn ? 'bg-yellow-400 text-slate-900' : 'bg-slate-800 text-slate-600 cursor-not-allowed'
+              selectedCharId && isLoggedIn ? 'bg-amber-500 text-white' : 'bg-slate-800 text-slate-600 cursor-not-allowed'
             }`}
             {...(selectedCharId && isLoggedIn ? { ...tapScale, ...hoverGlow } : {})}
           >
