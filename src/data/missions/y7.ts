@@ -1331,7 +1331,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { n: 3847, place: 100, answer: 3800, generatorType: 'ESTIMATION_ROUND_RANDOM' }, difficulty: 'Medium', reward: 50,
     kpId: 'kp-1.9-02', sectionId: 'number',
     tutorialSteps: [
-      { text: { zh: '诸葛亮：大军压境——百位精度够用！\n\n双方兵力 $3847$ 和 $3800$ 在战略上没区别。四舍五入到百位，方便快速比较。数字越大，需要的精度越低——战场决策要快！', en: 'Zhuge Liang: Massive army approaching — nearest hundred is precise enough!\n\nForce sizes of $3847$ and $3800$ are strategically equivalent. Rounding to the nearest hundred enables quick comparison. Larger numbers need less precision — battlefield decisions must be fast!' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮：为什么有时候不需要精确数字？\n战略决策要的是速度。$3847$ 和 $3800$ 在战场上没区别。\n快速估算比慢慢精算更有价值——四舍五入让你决策快人一步。', en: 'Zhuge Liang: Massive army approaching — nearest hundred is precise enough!\n\nForce sizes of $3847$ and $3800$ are strategically equivalent. Rounding to the nearest hundred enables quick comparison. Larger numbers need less precision — battlefield decisions must be fast!' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：四舍五入到百位\n关键：看**十位**（百位右边那一位）\n十位 $0{-}4$ → 百位不变，后面变 $0$\n十位 $5{-}9$ → 百位进 $1$，后面变 $0$', en: 'Zhuge Liang: Rounding to the nearest hundred\nKey: look at the **tens digit** (the digit to the right of hundreds)\nTens $0{-}4$ → hundreds stays, rest become $0$\nTens $5{-}9$ → hundreds increases by $1$, rest become $0$' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：读取数据\n$3847$，四舍五入到**百位**。\n\n定位各位：千位$3$，百位$8$，十位$4$，个位$7$。', en: 'Zhuge Liang: Read the data\n$3847$, round to the nearest **hundred**.\n\nIdentify digits: thousands $3$, hundreds $8$, tens $4$, ones $7$.' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：判断——十位是 4\n$$3\\underbrace{8}_{\\text{百位}}\\underbrace{4}_{\\text{十位}}7$$\n十位 $4 < 5$ → **四舍**，百位保持 $8$', en: 'Zhuge Liang: Check — tens digit is 4\n$$3\\underbrace{8}_{\\text{hundreds}}\\underbrace{4}_{\\text{tens}}7$$\nTens digit $4 < 5$ → **round down**, hundreds stays at $8$' }, highlightField: 'ans' },
@@ -1354,7 +1354,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { length: 12, width: 8, answer: 40, generatorType: 'PERIMETER_RECT_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-4.5-01', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '刘备：围营寨需要多少栅栏？\n\n营寨是长方形，要围起来就需要四条边的总长度——这就是"周长"。周长就是绕形状一圈的距离。长方形有两对等长的边！', en: 'Liu Bei: How much fencing to surround the camp?\n\nThe camp is a rectangle; to fence it we need the total of all four sides — that\'s the "perimeter". Perimeter is the total distance around a shape. A rectangle has two pairs of equal sides!' }, highlightField: 'ans' },
+      { text: { zh: '刘备：为什么要学周长？\n围栏、绳子、边框——都是"绕一圈"的问题。\n不算周长就不知道要买多少材料。周长 = 形状边界的总长度，建营第一步！', en: 'Liu Bei: How much fencing to surround the camp?\n\nThe camp is a rectangle; to fence it we need the total of all four sides — that\'s the "perimeter". Perimeter is the total distance around a shape. A rectangle has two pairs of equal sides!' }, highlightField: 'ans' },
       { text: { zh: '刘备：长方形周长公式\n$$\\text{周长} = 2 \\times (\\text{长} + \\text{宽})$$\n\n为什么 $\\times 2$？因为对面两条边相等，各出现两次！', en: 'Liu Bei: Rectangle perimeter formula\n$$\\text{Perimeter} = 2 \\times (\\text{length} + \\text{width})$$\n\nWhy $\\times 2$? Because opposite sides are equal, each appearing twice!' }, highlightField: 'ans' },
       { text: { zh: '刘备：读取数据\n长 $= 12$ 米，宽 $= 8$ 米\n\n四条边：$12, 8, 12, 8$', en: 'Liu Bei: Read the data\nLength $= 12$ m, width $= 8$ m\n\nFour sides: $12, 8, 12, 8$' }, highlightField: 'ans' },
       { text: { zh: '刘备：第一步——括号内先加\n$$12 + 8 = 20$$', en: 'Liu Bei: Step 1 — add inside brackets first\n$$12 + 8 = 20$$' }, highlightField: 'ans' },
@@ -1376,7 +1376,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { length: 15, width: 8, generatorType: 'AREA_RECT_RANDOM' }, difficulty: 'Easy', reward: 45,
     kpId: 'kp-4.5-02', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '张飞：营地有多大？\n\n周长告诉我们边界有多长，面积告诉我们内部有多大。想象在地面铺 $1 \\times 1$ 米的方格，数数能铺多少块——这就是面积！长方形面积 $=$ 长 $\\times$ 宽（横向方格数 × 纵向方格数）。', en: 'Zhang Fei: How big is the camp ground?\n\nPerimeter tells us the boundary length; area tells us the interior size. Imagine tiling the ground with $1 \\times 1$ m squares — count how many fit. That\'s area! Rectangle area $=$ length $\\times$ width (columns × rows of squares).' }, highlightField: 'area' },
+      { text: { zh: '张飞：为什么面积和周长不一样？\n同样长的栅栏可以围出不同大小的营地！\n周长管"边界多长"，面积管"里面多大"。搞混了，你的营地可能只有巴掌大。', en: 'Zhang Fei: How big is the camp ground?\n\nPerimeter tells us the boundary length; area tells us the interior size. Imagine tiling the ground with $1 \\times 1$ m squares — count how many fit. That\'s area! Rectangle area $=$ length $\\times$ width (columns × rows of squares).' }, highlightField: 'area' },
       { text: { zh: '张飞：长方形面积公式\n$$\\text{面积} = \\text{长} \\times \\text{宽}$$\n\n面积用平方单位（如 $\\text{m}^2$）——"二维"的测量！', en: 'Zhang Fei: Rectangle area formula\n$$\\text{Area} = \\text{length} \\times \\text{width}$$\n\nArea uses square units (e.g. $\\text{m}^2$) — a "two-dimensional" measurement!' }, highlightField: 'area' },
       { text: { zh: '张飞：读取数据\n长 $= 15$ 米，宽 $= 8$ 米\n\n准备计算面积。', en: 'Zhang Fei: Read the data\nLength $= 15$ m, width $= 8$ m\n\nReady to calculate area.' }, highlightField: 'area' },
       { text: { zh: '张飞：拆分计算（更容易）\n$$15 \\times 8 = (10 + 5) \\times 8 = 80 + 40 = 120$$', en: 'Zhang Fei: Split to calculate (easier)\n$$15 \\times 8 = (10 + 5) \\times 8 = 80 + 40 = 120$$' }, highlightField: 'area' },
@@ -1421,7 +1421,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { x: 8, a: 12, result: 40, generatorType: 'SIMPLE_EQ_TWOSTEP_RANDOM' }, difficulty: 'Medium', reward: 60,
     kpId: 'kp-4.5-01', sectionId: 'geometry',
     tutorialSteps: [
-      { text: { zh: '刘备：围栅反推——已知周长，求边长！\n\n已知营寨周长 $40$ 米、宽 $12$ 米，求**长**。把周长公式变成方程求解——代数解决几何问题！', en: 'Liu Bei: Reverse the fence problem — find side length from perimeter!\n\nKnown: camp perimeter $= 40$ m, width $= 12$ m, find the **length**. Turn the perimeter formula into an equation — algebra solves a geometry problem!' }, highlightField: 'x' },
+      { text: { zh: '刘备：为什么要反推边长？\n实际中常常是材料定了求尺寸——栅栏只有 40 米，能建多长的营？\n把公式反过来用就是解方程。代数和几何在这里握手了！', en: 'Liu Bei: Reverse the fence problem — find side length from perimeter!\n\nKnown: camp perimeter $= 40$ m, width $= 12$ m, find the **length**. Turn the perimeter formula into an equation — algebra solves a geometry problem!' }, highlightField: 'x' },
       { text: { zh: '刘备：公式与方程\n$$P = 2(l + w)$$\n\n已知 $P = 40$，$w = 12$，代入求 $l$。', en: 'Liu Bei: Formula to equation\n$$P = 2(l + w)$$\n\nKnown: $P = 40$, $w = 12$; substitute and find $l$.' }, highlightField: 'x' },
       { text: { zh: '刘备：代入已知量\n$$40 = 2(l + 12)$$', en: 'Liu Bei: Substitute known values\n$$40 = 2(l + 12)$$' }, highlightField: 'x' },
       { text: { zh: '刘备：第一步——两边除以 2\n$$40 \\div 2 = l + 12$$\n$$20 = l + 12$$', en: 'Liu Bei: Step 1 — divide both sides by 2\n$$40 \\div 2 = l + 12$$\n$$20 = l + 12$$' }, highlightField: 'x' },
