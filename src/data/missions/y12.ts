@@ -265,6 +265,16 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $\\int_0^6 x\\,dx$ 的值。', en: 'Evaluate $\\int_0^6 x\\,dx$.' },
     data: { lower: 0, upper: 6, func: 'x', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Medium', reward: 550,
     kpId: 'kp-2.12-02', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: '一块三角形的田，底 $6$，高也是 $6$。面积你会算吗？', en: 'A triangular field: base $6$, height $6$. Can you find its area?' },
+        type: 'input',
+        acceptPattern: '^18$',
+        onCorrect: { zh: '对！$\\frac{1}{2} \\times 6 \\times 6 = 18$。\n现在告诉你一个秘密：$\\int_0^6 x\\,dx$ 也等于 $18$！\n积分算的就是这个三角形的面积——微积分和几何在这里完美统一。', en: 'Yes! $\\frac{1}{2} \\times 6 \\times 6 = 18$.\nNow here is a secret: $\\int_0^6 x\\,dx$ also equals $18$!\nIntegration calculates this triangle\'s area — calculus and geometry unite here.' },
+        onWrong: { zh: '三角形面积 = $\\frac{1}{2} \\times$ 底 $\\times$ 高 = $\\frac{1}{2} \\times 6 \\times 6 = 18$。\n巧妙的是，$\\int_0^6 x\\,dx$ 也给出同样的答案——积分就是精确版的面积公式。', en: 'Triangle area = $\\frac{1}{2} \\times$ base $\\times$ height = $\\frac{1}{2} \\times 6 \\times 6 = 18$.\nThe beauty is that $\\int_0^6 x\\,dx$ gives the same answer — integration is the precision version of area formulas.' },
+        onSkip: { zh: '$\\frac{1}{2} \\times 6 \\times 6 = 18$。积分 $\\int_0^6 x\\,dx$ 也等于 18——几何和微积分的美妙联结。', en: '$\\frac{1}{2} \\times 6 \\times 6 = 18$. The integral $\\int_0^6 x\\,dx$ also equals 18 — a beautiful connection between geometry and calculus.' },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎："为什么积分能算面积？\n面积 = 无数条极细的竖线加起来。每条线高度 $f(x)$，宽度 $dx$。\n$\\int_a^b f(x)\\,dx$ 就是把所有这些极细矩形加起来——这就是积分的几何含义。\n积分不是抽象公式，它是精确测量不规则形状面积的工具！"', en: 'Sima Yan: "Why does integration calculate area?\nArea = sum of infinitely thin vertical strips. Each strip has height $f(x)$ and width $dx$.\n$\\int_a^b f(x)\\,dx$ adds all these infinitesimal rectangles — that\'s the geometric meaning of integration.\nIntegration isn\'t abstract — it precisely measures areas of irregular shapes!"' }, highlightField: 'area' },
       { text: { zh: '司马炎："积分步骤：先求反导数\n$f(x) = x$ 的反导数（不定积分）：\n$$\\int x\\,dx = \\frac{x^2}{2} + C$$\n"反导数"就是"谁的导数等于 $x$？"——答案是 $\\frac{x^2}{2}$。"', en: 'Sima Yan: "Integration step 1: find the antiderivative\nThe antiderivative of $f(x) = x$:\n$$\\int x\\,dx = \\frac{x^2}{2} + C$$\n\'Antiderivative\' means \'whose derivative gives $x$?\' — the answer is $\\frac{x^2}{2}$."' }, highlightField: 'area' },
