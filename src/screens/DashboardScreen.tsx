@@ -459,8 +459,42 @@ export function DashboardScreen({ lang, onClose }: Props) {
         <div className="mb-3 px-4 py-2 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs font-bold">{error}</div>
       )}
 
+      {/* ═══ STEP 0: Pick your class FIRST ═══ */}
+      <div className="flex items-center gap-2 px-1 flex-wrap">
+        <Tag size={14} className="text-slate-500" />
+        <button
+          onClick={() => setFilterTag('')}
+          className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
+            !filterTag ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          {t.all}
+        </button>
+        {allTags.map(tag => (
+          <button
+            key={tag}
+            onClick={() => setFilterTag(filterTag === tag ? '' : tag)}
+            className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
+              filterTag === tag ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' : 'bg-white text-indigo-700 border-indigo-200 hover:bg-indigo-50'
+            }`}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+      {filterTag && (
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg">
+          <span className="text-xs font-black text-indigo-700">
+            {lang === 'en' ? `Viewing: Y${grade} ${filterTag}` : `当前查看：Y${grade} ${filterTag}`}
+          </span>
+          <span className="text-[10px] text-indigo-400 font-bold">
+            {students.length} {lang === 'en' ? 'students' : '名学生'}
+          </span>
+        </div>
+      )}
+
       {/* ╔══════════════════════════════════════════╗
-         ║  ZONE 1: 今天怎么样？（一眼扫完）        ║
+         ║  ZONE 1: 今天怎么样？（选完班级再看）    ║
          ╚══════════════════════════════════════════╝ */}
       {loading && students.length === 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -487,48 +521,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
 
       <SmartSuggestions lang={lang} students={students} alerts={alerts} />
 
-      {/* ═══ Tag filter — RIGHT AFTER summary (teacher's first action: pick a class) ═══ */}
-      <div className="flex items-center gap-2 mb-4 px-1 flex-wrap">
-        <Tag size={14} className="text-slate-500" />
-        <button
-          onClick={() => setFilterTag('')}
-          className={`px-3 py-1 rounded-full text-xs font-bold border transition-all ${
-            !filterTag ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-          }`}
-        >
-          {t.all}
-        </button>
-        {allTags.map(tag => (
-          <button
-            key={tag}
-            onClick={() => setFilterTag(filterTag === tag ? '' : tag)}
-            className={`px-3 py-1 rounded-full text-xs font-bold border transition-all ${
-              filterTag === tag ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' : 'bg-white text-indigo-700 border-indigo-200 hover:bg-indigo-50'
-            }`}
-          >
-            {tag}
-          </button>
-        ))}
-        <button
-          onClick={() => setShowBatchAssign(!showBatchAssign)}
-          className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border border-dashed border-indigo-300 text-indigo-500 hover:bg-indigo-50 transition-all"
-        >
-          <UserPlus size={11} />
-          {t.batchAssign}
-        </button>
-      </div>
-
-      {/* Active class indicator */}
-      {filterTag && (
-        <div className="flex items-center gap-2 px-3 py-1.5 mb-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg">
-          <span className="text-xs font-black text-indigo-700">
-            {lang === 'en' ? `Viewing: Y${grade} ${filterTag}` : `当前查看：Y${grade} ${filterTag}`}
-          </span>
-          <span className="text-[10px] text-indigo-400 font-bold">
-            {students.length} {lang === 'en' ? 'students' : '名学生'}
-          </span>
-        </div>
-      )}
+      {/* (tag filter moved to top of page) */}
 
       {/* Batch assign panel */}
       <AnimatePresence>

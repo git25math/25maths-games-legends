@@ -40,6 +40,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
   const [showArchived, setShowArchived] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [sharePrompt, setSharePrompt] = useState<{ title: string; url: string } | null>(null);
 
   // All missions for current grade, grouped by unit
   const gradeMissions = useMemo(() => {
@@ -365,14 +366,11 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
             filterTag={filterTag}
             units={units}
             onClose={() => setShowCreate(false)}
-            onCreated={(title, count) => {
+            onCreated={(title, count, assignmentId) => {
               setShowCreate(false);
               fetchAssignments();
-              const msg = lang === 'en'
-                ? `"${title}" assigned (${count} missions → ${students.length} students). Click 🔗 to copy share link.`
-                : `"${title}" 已布置（${count} 关 → ${students.length} 名学生）。点 🔗 复制链接发到班级群。`;
-              setToast(msg);
-              setTimeout(() => setToast(null), 4000);
+              const url = `${window.location.origin}${window.location.pathname}?hw=${assignmentId || '1'}`;
+              setSharePrompt({ title, url });
             }}
           />
         )}
@@ -392,6 +390,48 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Share prompt after creating assignment */}
+      <AnimatePresence>
+        {sharePrompt && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+            onClick={() => setSharePrompt(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="text-3xl mb-3">🎉</div>
+              <h3 className="text-lg font-black text-slate-800 mb-1">
+                {lang === 'en' ? 'Assignment Created!' : '作业已创建！'}
+              </h3>
+              <p className="text-sm text-slate-500 mb-4">"{sharePrompt.title}"</p>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(sharePrompt.url);
+                  setCopiedAssignmentId('share-prompt');
+                  setTimeout(() => { setCopiedAssignmentId(null); setSharePrompt(null); }, 1500);
+                }}
+                className="w-full py-3 min-h-[48px] bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-xl transition-colors text-base"
+              >
+                {copiedAssignmentId === 'share-prompt' ? (lang === 'en' ? '✓ Copied!' : '✓ 已复制！') : (lang === 'en' ? '📋 Copy Link to Share' : '📋 复制链接发到班级群')}
+              </button>
+              <button
+                onClick={() => setSharePrompt(null)}
+                className="w-full mt-2 py-2 text-slate-400 text-sm"
+              >
+                {lang === 'en' ? 'Later' : '稍后'}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -406,7 +446,7 @@ function CreateAssignmentModal({
   filterTag: string;
   units: UnitEntry[];
   onClose: () => void;
-  onCreated: (title: string, missionCount: number) => void;
+  onCreated: (title: string, missionCount: number, assignmentId?: string) => void;
 }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -465,7 +505,7 @@ function CreateAssignmentModal({
       return;
     }
 
-    onCreated(title.trim(), selectedMissions.size);
+    onCreated(title.trim(), selectedMissions.size, data as string | undefined);
   };
 
   return (
