@@ -69,6 +69,37 @@ export const MISSIONS_Y12: Mission[] = [
     storyConsequence: { correct: { zh: '胜率评估——概率算准！做得漂亮！', en: 'Win Rate Assessment — Well done!' }, wrong: { zh: '概率算偏了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
+  {
+    id: 1212, grade: 12, unitId: 1, order: 2,
+    unitTitle: { zh: "Unit 1: 归晋与综合微积分", en: "Unit 1: Unification & Advanced Calculus" },
+    topic: 'Calculus', type: 'DERIVATIVE',
+    title: { zh: '攻城速率', en: 'Siege Rate' },
+    skillName: { zh: '导数求斜率术', en: 'Derivative as Slope' },
+    skillSummary: { zh: '在指定点求切线斜率', en: 'Find tangent slope at a given point' },
+    story: { zh: '攻城进度函数 $f(x) = x^2$，求 $x = 3$ 时的推进速率。', en: 'Siege progress $f(x) = x^2$. Find the advance rate at $x = 3$.' },
+    description: { zh: '求 $f(x) = x^2$ 在 $x = 3$ 处的导数值。', en: 'Find the derivative of $f(x) = x^2$ at $x = 3$.' },
+    data: { x: 3, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Medium', reward: 500,
+    kpId: 'kp-2.12-01', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '导数 = 切线斜率。$f(x) = x^2$ 的导数是 $f\'(x) = 2x$。', en: 'Derivative = tangent slope. For $f(x) = x^2$, $f\'(x) = 2x$.' }, formula: "$f'(x) = 2x$", tips: [{ zh: '司马炎提示：幂函数的导数——指数拿下来当系数，指数减1。', en: 'Sima Yan Tip: Power rule — bring the exponent down, reduce it by 1.' }] },
+    storyConsequence: { correct: { zh: '攻城速率——导数精准！做得漂亮！', en: 'Siege Rate — Derivative nailed!' }, wrong: { zh: '导数算错了…再试一次！', en: 'Not quite... Try again!' } }
+  },
+  {
+    id: 1222, grade: 12, unitId: 2, order: 2,
+    unitTitle: { zh: "Unit 2: 战后统计", en: "Unit 2: Post-War Statistics" },
+    topic: 'Statistics', type: 'STATISTICS',
+    title: { zh: '军粮盘点', en: 'Grain Stocktake' },
+    skillName: { zh: '加权平均术', en: 'Weighted Mean' },
+    skillSummary: { zh: '加权平均 = Σ(值×权重) ÷ Σ权重', en: 'Weighted mean = Σ(value×weight) ÷ Σweights' },
+    story: { zh: '三郡粮仓容量不同，求加权平均存粮。', en: 'Three prefectures have different granary sizes. Find the weighted average grain stock.' },
+    description: { zh: '计算加权平均值。', en: 'Calculate the weighted mean.' },
+    data: { values: [40, 50, 80], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Medium', reward: 480,
+    kpId: 'kp-8.2-01', sectionId: 'statistics',
+    tutorialSteps: [],
+    secret: { concept: { zh: '加权平均考虑每个数据的"重要程度"。不是简单平均！', en: 'Weighted mean accounts for how important each data point is. Not a simple average!' }, formula: '$\\bar{x} = \\frac{\\sum f_i x_i}{\\sum f_i}$', tips: [{ zh: '司马炎提示：大仓多算，小仓少算——加权平均更公平。', en: 'Sima Yan Tip: Big granaries count more — weighted average is fairer.' }] },
+    storyConsequence: { correct: { zh: '军粮盘点——统计精准！做得漂亮！', en: 'Grain Stocktake — Well done!' }, wrong: { zh: '平均值算错了…再试一次！', en: 'Not quite... Try again!' } }
+  },
+
   // --- Y12 Unit 3: 综合应用 · 三分归晋 (Synthesis) ---
   {
     id: 1231, grade: 12, unitId: 3, order: 1,

@@ -47,6 +47,21 @@ export const MISSIONS_Y11: Mission[] = [
     storyConsequence: { correct: { zh: '剑阁栈道——导数精准！做得漂亮！', en: 'Jiange Pass — Well done!' }, wrong: { zh: '导数计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
+    id: 1113, grade: 11, unitId: 1, order: 3,
+    unitTitle: { zh: "Unit 1: 出师表与微分优化", en: "Unit 1: Memorial & Differentiation" },
+    topic: 'Calculus', type: 'DERIVATIVE',
+    title: { zh: '粮仓极值', en: 'Granary Optimization' },
+    skillName: { zh: '极值判断术', en: 'Extremum Analysis' },
+    skillSummary: { zh: '二阶导数判断极大极小', en: 'Second derivative test for max/min' },
+    story: { zh: '粮仓容积函数 $V(x) = x^3 - 3x$，求使容积最大的 $x$ 值。', en: 'Granary volume $V(x) = x^3 - 3x$. Find $x$ that maximizes volume.' },
+    description: { zh: '求极值点 $x$（$x > 0$）。', en: 'Find the critical point $x$ ($x > 0$).' },
+    data: { x: 1, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Hard', reward: 580,
+    kpId: 'kp-2.12-01', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '极值点：一阶导=0，二阶导判正负。', en: 'Critical point: first derivative = 0, second derivative test.' }, formula: "$f'(x)=0,\\; f''(x)>0 \\Rightarrow \\text{min}$", tips: [{ zh: '诸葛亮提示：导数为零只是候选——二阶导才是裁判。', en: 'Zhuge Liang Tip: Zero derivative is just a candidate — second derivative is the judge.' }] },
+    storyConsequence: { correct: { zh: '粮仓极值——微分优化完美！', en: 'Granary Optimization — Perfect!' }, wrong: { zh: '极值判断有误…再试一次！', en: 'Not quite... Try again!' } }
+  },
+  {
     id: 1121, grade: 11, unitId: 2, order: 1,
     unitTitle: { zh: "Unit 2: 屯田与定积分", en: "Unit 2: Farming & Integration" },
     topic: 'Calculus', type: 'INTEGRATION',
@@ -89,6 +104,21 @@ export const MISSIONS_Y11: Mission[] = [
     ],
     secret: { concept: { zh: '积分是导数的逆运算。', en: 'Integration is the inverse of differentiation.' }, formula: '$\\int x^2 dx = \\frac{1}{3}x^3$', tips: [{ zh: '钟会提示：水流湍急，需精确计算。', en: 'Zhong Hui Tip: The water is swift, precise calculation is needed.' }] },
     storyConsequence: { correct: { zh: '河道流量——积分完成！做得漂亮！', en: 'River Flow — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
+  },
+  {
+    id: 1123, grade: 11, unitId: 2, order: 3,
+    unitTitle: { zh: "Unit 2: 屯田与定积分", en: "Unit 2: Farming & Integration" },
+    topic: 'Calculus', type: 'INTEGRATION',
+    title: { zh: '屯田丈量', en: 'Field Measurement' },
+    skillName: { zh: '线性函数积分', en: 'Linear Function Integration' },
+    skillSummary: { zh: '$\\int_a^b x\\,dx = \\frac{1}{2}(b^2 - a^2)$', en: '$\\int_a^b x\\,dx = \\frac{1}{2}(b^2 - a^2)$' },
+    story: { zh: '良田宽度随位置线性增长。计算从 $0$ 到 $b$ 的总面积。', en: 'The field width grows linearly. Find total area from $0$ to $b$.' },
+    description: { zh: '求定积分 $\\int_0^b x\\,dx$。', en: 'Evaluate $\\int_0^b x\\,dx$.' },
+    data: { lower: 0, upper: 6, func: 'x', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Medium', reward: 480,
+    kpId: 'kp-2.12-02', sectionId: 'calculus',
+    tutorialSteps: [],
+    secret: { concept: { zh: '$\\int x\\,dx = \\frac{1}{2}x^2$。线性函数的积分就是三角形面积。', en: '$\\int x\\,dx = \\frac{1}{2}x^2$. Area under a linear function is a triangle.' }, formula: '$\\int_0^b x\\,dx = \\frac{b^2}{2}$', tips: [{ zh: '邓艾提示：三角面积公式和积分殊途同归。', en: 'Deng Ai Tip: Triangle area formula and integration give the same answer.' }] },
+    storyConsequence: { correct: { zh: '屯田丈量——积分精准！', en: 'Field Measurement — Integration correct!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
   },
   {
     id: 1131, grade: 11, unitId: 3, order: 1,
@@ -518,6 +548,22 @@ export const MISSIONS_Y11: Mission[] = [
     storyConsequence: { correct: { zh: '粮草总量——积分完成！做得漂亮！', en: 'Total Supplies — Well done!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
   },
 
+  {
+    id: 1183, grade: 11, unitId: 8, order: 3,
+    unitTitle: { zh: "Unit 8: 六出祁山·微积分篇", en: "Unit 8: Six Campaigns — Calculus" },
+    topic: 'Calculus', type: 'INTEGRATION',
+    title: { zh: '行军补给', en: 'March Resupply' },
+    skillName: { zh: '二次函数积分', en: 'Quadratic Integration' },
+    skillSummary: { zh: '$\\int 2x\\,dx = x^2$', en: '$\\int 2x\\,dx = x^2$' },
+    story: { zh: '补给消耗率 $v(t) = 2t$。求从 $t=0$ 到 $t=b$ 的总消耗量。', en: 'Supply consumption rate $v(t) = 2t$. Find total consumption from $t=0$ to $t=b$.' },
+    description: { zh: '求 $\\int_0^b 2t\\,dt$。', en: 'Evaluate $\\int_0^b 2t\\,dt$.' },
+    data: { lower: 0, upper: 5, func: '2x', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Medium', reward: 520,
+    kpId: 'kp-2.12-02', sectionId: 'calculus',
+    tutorialSteps: [],
+    secret: { concept: { zh: '$\\int 2x\\,dx = x^2 + C$。代入上下界做减法。', en: '$\\int 2x\\,dx = x^2 + C$. Substitute bounds and subtract.' }, formula: '$\\int_0^b 2x\\,dx = b^2$', tips: [{ zh: '诸葛亮提示：积分口诀——指数加1再除。', en: 'Zhuge Liang Tip: Integration mantra — add 1, divide.' }] },
+    storyConsequence: { correct: { zh: '行军补给——积分精准！', en: 'March Resupply — Integration correct!' }, wrong: { zh: '积分结果不对…再试一次！', en: 'Not quite... Try again!' } }
+  },
+
   // --- Y11 Unit 9: 向量运算 · 八阵图 (Vector Operations) ---
   {
     id: 1191, grade: 11, unitId: 9, order: 1,
@@ -611,6 +657,22 @@ export const MISSIONS_Y11: Mission[] = [
     storyConsequence: { correct: { zh: '夹角攻防——三角精准！做得漂亮！', en: 'Included Angle Battle — Well done!' }, wrong: { zh: '三角函数算错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
+  {
+    id: 11103, grade: 11, unitId: 10, order: 3,
+    unitTitle: { zh: "Unit 10: 赤壁遗策·高级三角", en: "Unit 10: Legacy of Red Cliffs — Advanced Trig" },
+    topic: 'Geometry', type: 'TRIGONOMETRY',
+    title: { zh: '战场测距', en: 'Battlefield Range' },
+    skillName: { zh: '三角求边术', en: 'Trig Side Finding' },
+    skillSummary: { zh: 'SOH-CAH-TOA 求未知边', en: 'SOH-CAH-TOA for unknown side' },
+    story: { zh: '赤壁遗址上，从瞭望台观测敌营。已知角度和一条边，求另一条边。', en: 'From a watchtower at Red Cliffs, observe the enemy. Given an angle and one side, find another.' },
+    description: { zh: '用三角比求未知边。', en: 'Use trigonometric ratios to find an unknown side.' },
+    data: { angle: 30, hyp: 20, generatorType: 'TRIGONOMETRY_RANDOM', func: 'cos' }, difficulty: 'Medium', reward: 500,
+    kpId: 'kp-6.3-01', sectionId: 'geometry',
+    tutorialSteps: [],
+    secret: { concept: { zh: 'cos θ = 邻边/斜边，所以邻边 = 斜边 × cos θ。', en: 'cos θ = adjacent/hypotenuse, so adjacent = hyp × cos θ.' }, formula: '$\\text{adj} = \\text{hyp} \\times \\cos\\theta$', tips: [{ zh: '周瑜提示：cos 找邻边，sin 找对边。', en: 'Zhou Yu Tip: cos finds the adjacent, sin finds the opposite.' }] },
+    storyConsequence: { correct: { zh: '战场测距——三角精准！', en: 'Battlefield Range — Trig correct!' }, wrong: { zh: '三角比算错了…再试一次！', en: 'Not quite... Try again!' } }
+  },
+
   // --- Y11 Unit 11: 函数图像 · 隆中对策 (Function Graphs) ---
   {
     id: 11111, grade: 11, unitId: 11, order: 1,
@@ -655,5 +717,20 @@ export const MISSIONS_Y11: Mission[] = [
     ],
     secret: { concept: { zh: '求根公式：x = (-b±√(b²-4ac))/2a。判别式决定根的个数。', en: 'Quadratic formula: x = (-b±√(b²-4ac))/2a. Discriminant determines number of roots.' }, formula: '$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$', tips: [{ zh: '诸葛亮提示：记住公式，判别式先算。', en: 'Zhuge Liang Tip: Memorize the formula, calculate discriminant first.' }] },
     storyConsequence: { correct: { zh: '函数零点——根找到了！做得漂亮！', en: 'Function Zeros — Well done!' }, wrong: { zh: '方程的根没找对…再试一次！', en: 'Not quite... Try again!' } }
+  },
+  {
+    id: 11113, grade: 11, unitId: 11, order: 3,
+    unitTitle: { zh: "Unit 11: 隆中对策·函数图像", en: "Unit 11: Longzhong Strategy — Function Graphs" },
+    topic: 'Functions', type: 'FUNC_VAL',
+    title: { zh: '军需函数', en: 'Supply Function' },
+    skillName: { zh: '函数代入术', en: 'Function Substitution' },
+    skillSummary: { zh: '将 x 值代入函数表达式求 f(x)', en: 'Substitute x into the function to find f(x)' },
+    story: { zh: '军需预算函数 $f(x) = 2x^2 + 3x - 5$。代入指定 $x$ 值求预算。', en: 'Supply budget function $f(x) = 2x^2 + 3x - 5$. Substitute given $x$ to find the budget.' },
+    description: { zh: '求 $f(x)$ 的值。', en: 'Find the value of $f(x)$.' },
+    data: { expression: '2x^2+3x-5', x: 4, generatorType: 'FUNC_VAL_RANDOM' }, difficulty: 'Medium', reward: 500,
+    kpId: 'kp-3.1-01', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '函数代入：把 x 的值逐一替换到表达式中。先算幂，再乘，最后加减。', en: 'Function substitution: replace x step by step. Powers first, then multiply, then add/subtract.' }, formula: '$f(4) = 2(4)^2 + 3(4) - 5$', tips: [{ zh: '诸葛亮提示：代入时不要忘了指数要先算！', en: 'Zhuge Liang Tip: When substituting, remember powers come first!' }] },
+    storyConsequence: { correct: { zh: '军需函数——代入精准！做得漂亮！', en: 'Supply Function — Well done!' }, wrong: { zh: '代入计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
 ];
