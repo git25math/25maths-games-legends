@@ -95,6 +95,7 @@ export const StudentDetailCard = ({
   units,
   totalMissions,
   assignments = [],
+  classAverageDims,
   onClose,
 }: {
   lang: Language;
@@ -102,6 +103,7 @@ export const StudentDetailCard = ({
   units: UnitEntry[];
   totalMissions: number;
   assignments?: StudentAssignment[];
+  classAverageDims?: number[];
   onClose: () => void;
 }) => {
   useEscapeKey(onClose);

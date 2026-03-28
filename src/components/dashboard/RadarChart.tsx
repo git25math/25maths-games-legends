@@ -6,6 +6,8 @@ type RadarProps = {
   labels: string[];
   size?: number;
   color?: string;
+  compareValues?: number[]; // optional overlay (e.g., class average)
+  compareColor?: string;
 };
 
 export const RadarChart = memo(function RadarChart({ values, labels, size = 200, color = '#6366f1' }: RadarProps) {
