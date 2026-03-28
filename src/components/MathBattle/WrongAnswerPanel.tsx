@@ -78,6 +78,8 @@ type Props = {
   isPartial?: boolean;
   /** Partial credit score earned */
   partialScore?: number;
+  /** KP prerequisite hint — what foundation skill may be weak */
+  prereqHint?: { kpId: string; reason: { zh: string; en: string } } | null;
 };
 
 export function WrongAnswerPanel({
@@ -92,6 +94,7 @@ export function WrongAnswerPanel({
   storyText,
   isPartial = false,
   partialScore,
+  prereqHint,
 }: Props) {
   const t = LABELS[lang];
   const fc = INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || { zh: [], en: [] };
@@ -170,6 +173,28 @@ export function WrongAnswerPanel({
           </div>
         );
       })()}
+
+      {/* Prerequisite root cause hint — KP-level intelligence */}
+      {prereqHint && !isPartial && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="bg-indigo-50 border border-indigo-200 rounded-lg p-3"
+        >
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="text-base">🔍</span>
+            <span className="text-[10px] font-black text-indigo-600 uppercase tracking-wider">
+              {lang === 'en' ? 'Root Cause' : '根因分析'}
+            </span>
+          </div>
+          <p className="text-xs text-indigo-700 leading-relaxed">
+            {lang === 'en'
+              ? `This might be tricky because of: ${prereqHint.reason.en}. Strengthening ${prereqHint.kpId} could help.`
+              : `可能卡在这里的原因：${prereqHint.reason.zh}。巩固 ${prereqHint.kpId} 会有帮助。`}
+          </p>
+        </motion.div>
+      )}
 
       {/* Answer comparison */}
       <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-2">

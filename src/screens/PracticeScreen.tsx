@@ -13,6 +13,7 @@ import { INPUT_FIELDS } from '../components/MathBattle/inputConfig';
 import { VisualData } from '../components/MathBattle/VisualData';
 import { AnimatedTutorial } from '../components/MathBattle/AnimatedTutorial';
 import { WrongAnswerPanel } from '../components/MathBattle/WrongAnswerPanel';
+import { getKPPrereqs, getKPLeadsTo } from '../data/curriculum/kp-graph';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { SkillBadgeCard } from '../components/SkillBadgeCard';
 import { CalculatorWidget } from '../components/Calculator';
@@ -197,6 +198,20 @@ export const PracticeScreen = ({
       logAttempt({ questionId: `${mission.id}-${createQuestionFingerprint(currentMission)}`, nodeId: mission.kpId || mission.type, isCorrect: true, rawAnswer: attemptFirstField, sourceMode: repairMode ? 'recovery' : 'practice', durationMs: attemptDurationMs });
       playSuccess();
       setShowCorrectFlash(true);
+      // Show "what this unlocks" hint (KP forward links)
+      if (currentMission.kpId && !repairMode) {
+        const fwd = getKPLeadsTo(currentMission.kpId);
+        if (fwd.length > 0) {
+          const nextKP = fwd[0];
+          setPhaseToast({
+            text: lang === 'en'
+              ? `✨ This unlocks: ${nextKP.reason.en}`
+              : `✨ 你解锁了：${nextKP.reason.zh}`,
+            phase: currentPhase,
+          });
+          setTimeout(() => setPhaseToast(null), 3000);
+        }
+      }
       // Adaptive: track consecutive correct, level up after 3
       const newCorrect = consecutiveCorrect + 1;
       setConsecutiveCorrect(newCorrect);
@@ -768,6 +783,13 @@ export const PracticeScreen = ({
                       lang={lang}
                       onContinue={handleWrongAnswerContinue}
                       continueLabel={t.gotItNextQuestion}
+                      prereqHint={(() => {
+                        if (!currentMission.kpId) return null;
+                        const prereqs = getKPPrereqs(currentMission.kpId);
+                        if (prereqs.length === 0) return null;
+                        const hardPrereq = prereqs.find(e => e.strength === 'hard') ?? prereqs[0];
+                        return { kpId: hardPrereq.from, reason: hardPrereq.reason };
+                      })()}
                     />
                     {skillImpactHint && (
                       <motion.div
