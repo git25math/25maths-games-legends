@@ -143,25 +143,36 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
                     <span className="text-xs font-bold text-slate-500">{done}/{total}</span>
                   </div>
 
-                  {/* Mission list */}
-                  <div className="space-y-1">
-                    {a.mission_ids.map(mid => {
-                      const mission = missions.find(m => m.id === mid);
+                  {/* Celebration when all done */}
+                  {allDone && (
+                    <div className="text-center py-2 mb-2">
+                      <p className="text-emerald-600 text-sm font-black">
+                        {txt('全部完成！做得漂亮！', 'All done! Great work!')} 🎉
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Mission list — undone first */}
+                  <div className="space-y-1.5">
+                    {a.mission_ids
+                      .map(mid => ({ mid, mission: missions.find(m => m.id === mid), isDone: !!(completedMissions[String(mid)] as any)?.green }))
+                      .sort((a, b) => (a.isDone ? 1 : 0) - (b.isDone ? 1 : 0))
+                      .map(({ mid, mission, isDone }) => {
                       if (!mission) return null;
-                      const isDone = !!(completedMissions[String(mid)] as any)?.green;
                       return (
                         <button
                           key={mid}
-                          onClick={() => { onClose(); onMissionStart(mission); }}
+                          onClick={() => { if (!isDone) { onClose(); onMissionStart(mission); } }}
                           disabled={isDone}
-                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-xs transition-all ${
+                          className={`w-full flex items-center gap-3 px-4 py-3 min-h-[44px] rounded-xl text-left text-sm transition-all ${
                             isDone
-                              ? 'bg-emerald-50 text-emerald-600 line-through opacity-60'
-                              : 'bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700'
+                              ? 'bg-emerald-50 text-emerald-600 line-through opacity-50'
+                              : 'bg-indigo-50 hover:bg-indigo-100 text-slate-800 border border-indigo-200 font-bold'
                           }`}
                         >
-                          {isDone ? <CheckCircle2 size={12} /> : <BookOpen size={12} />}
+                          {isDone ? <CheckCircle2 size={16} /> : <BookOpen size={16} className="text-indigo-500" />}
                           <span className="truncate">{lt(mission.title, lang)}</span>
+                          {!isDone && <span className="ml-auto text-indigo-400 text-xs">→</span>}
                         </button>
                       );
                     })}
