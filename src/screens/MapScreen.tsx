@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle, ClipboardList, MoreHorizontal, X } from 'lucide-react';
+import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle, ClipboardList, MoreHorizontal, X, Sparkles } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character, CompletedMissions } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
@@ -32,6 +32,7 @@ import { getNextMilestone } from '../data/streakMilestones';
 import { getWeakMissions, getMistakes, rankByWeakness, getDominantPattern } from '../utils/errorMemory';
 import type { MistakeRecord } from '../utils/errorMemory';
 import { AssignmentBanner, useMyAssignments } from '../components/AssignmentBanner';
+import { LearningTimeline } from '../components/LearningTimeline';
 import { StaminaBar } from '../components/StaminaBar';
 import { getStamina, getRemainingAttempts } from '../utils/stamina';
 import { getInventory, getTotalItems } from '../utils/inventory';
@@ -161,6 +162,7 @@ export const MapScreen = ({
   const [repairDialogTarget, setRepairDialogTarget] = useState<number | null>(null);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showProgressReport, setShowProgressReport] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(false);
   const [showJoinClass, setShowJoinClass] = useState(false);
   const [showMoreItems, setShowMoreItems] = useState(false);
   const [showMyHomework, setShowMyHomework] = useState(false);
@@ -898,6 +900,9 @@ export const MapScreen = ({
                     <button onClick={() => { setShowProgressReport(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-blue-600/20 border border-blue-500/30 rounded-lg text-xs text-blue-300">
                       📊 {lang === 'en' ? 'Report' : '学习报告'}
                     </button>
+                    <button onClick={() => { setShowTimeline(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-amber-600/20 border border-amber-500/30 rounded-lg text-xs text-amber-300">
+                      ✨ {lang === 'en' ? 'My Journey' : '成长轨迹'}
+                    </button>
                     {onLearnerModeChange && (
                       <div className="flex gap-1">
                         {([['explore', '🌱', '探索'], ['practice', '📖', '练习'], ['exam', '🎯', '备考']] as const).map(([mode, icon, label]) => (
@@ -1391,6 +1396,17 @@ export const MapScreen = ({
           onClose={() => setShowProgressReport(false)}
         />
       )}
+
+      {/* Learning Timeline */}
+      <AnimatePresence>
+        {showTimeline && (
+          <LearningTimeline
+            lang={lang}
+            profile={profile}
+            onClose={() => setShowTimeline(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {showMyHomework && (
         <MyAssignments
