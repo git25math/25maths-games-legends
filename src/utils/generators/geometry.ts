@@ -1698,3 +1698,70 @@ export function generateCoord3DMission(template: Mission, tier: DifficultyTier =
   };
 }
 
+/* ══════════════════════════════════════════════════════════
+   SINE_COSINE generator: non-right-angled triangles
+   Uses TRIGONOMETRY type with mode 'sine_rule' or 'cosine_rule'
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSineCosineMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  const narrator = pickRandom(['诸葛亮', '姜维', '马良']);
+  const mode = (template.data?.mode as 'sine_rule' | 'cosine_rule') || pickRandom(['sine_rule', 'cosine_rule'] as const);
+
+  if (mode === 'sine_rule') {
+    // Given: angle A, side a opposite to A, angle B. Find side b.
+    // sine rule: a/sinA = b/sinB → b = a × sinB/sinA
+    const anglePools = { 1: [30, 45, 60], 2: [30, 40, 50, 60, 70], 3: [25, 35, 42, 55, 65, 75] };
+    const sidePools = { 1: [10, 12, 15, 20], 2: [8, 10, 12, 15, 18, 20], 3: [7, 9, 11, 14, 17, 22] };
+    const A = pickRandom(anglePools[tier]);
+    let B = pickRandom(anglePools[tier]);
+    while (B === A || A + B >= 170) B = pickRandom(anglePools[tier]);
+    const a = pickRandom(sidePools[tier]);
+    const sinA = Math.sin(A * Math.PI / 180);
+    const sinB = Math.sin(B * Math.PI / 180);
+    const b = Math.round(a * sinB / sinA * 100) / 100;
+
+    const description: BilingualText = {
+      zh: `三角形中，$A = ${A}°$, $a = ${a}$, $B = ${B}°$。用正弦定理求 $b$（保留2位小数）。`,
+      en: `In a triangle, $A = ${A}°$, $a = ${a}$, $B = ${B}°$. Use the sine rule to find $b$ (2 d.p.).`,
+    };
+
+    const tutorialSteps = [
+      { text: { zh: `${narrator}："为什么需要正弦定理？\n直角三角形有 SOHCAHTOA，但非直角三角形呢？\n正弦定理让你用任意角和对边求解——不需要直角！"`, en: `${narrator}: "Why the sine rule?\nRight triangles have SOHCAHTOA, but what about non-right triangles?\nThe sine rule lets you use any angle and its opposite side — no right angle needed!"` }, highlightField: 'c' },
+      { text: { zh: `${narrator}："正弦定理\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$\n每条边除以对角的正弦值——三个比值相等。"`, en: `${narrator}: "The Sine Rule\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$\nEach side divided by the sine of its opposite angle — all three ratios are equal."` }, highlightField: 'c' },
+      { text: { zh: `${narrator}："代入已知\n$\\frac{${a}}{\\sin ${A}°} = \\frac{b}{\\sin ${B}°}$"`, en: `${narrator}: "Substitute known values\n$\\frac{${a}}{\\sin ${A}°} = \\frac{b}{\\sin ${B}°}$"` }, highlightField: 'c' },
+      { text: { zh: `${narrator}："求 b\n$b = ${a} × \\frac{\\sin ${B}°}{\\sin ${A}°} = ${a} × \\frac{${Math.round(sinB*1000)/1000}}{${Math.round(sinA*1000)/1000}}$"`, en: `${narrator}: "Solve for b\n$b = ${a} × \\frac{\\sin ${B}°}{\\sin ${A}°} = ${a} × \\frac{${Math.round(sinB*1000)/1000}}{${Math.round(sinA*1000)/1000}}$"` }, highlightField: 'c' },
+      { text: { zh: `${narrator}："答案\n$b ≈ ${b}$"`, en: `${narrator}: "Answer\n$b ≈ ${b}$"` }, highlightField: 'c' },
+      { text: { zh: `${narrator}："验算\n$\\frac{${a}}{\\sin ${A}°} ≈ ${Math.round(a/sinA*100)/100}$，$\\frac{${b}}{\\sin ${B}°} ≈ ${Math.round(b/sinB*100)/100}$\n两个比值应相等 ✓"`, en: `${narrator}: "Verify\n$\\frac{${a}}{\\sin ${A}°} ≈ ${Math.round(a/sinA*100)/100}$, $\\frac{${b}}{\\sin ${B}°} ≈ ${Math.round(b/sinB*100)/100}$\nBoth ratios should be equal ✓"` }, highlightField: 'c' },
+    ];
+
+    return { ...template, description, data: { ...template.data, opposite: b, adjacent: a, angle: B, func: 'sin', generatorType: 'SINE_COSINE_RANDOM', mode: 'sine_rule' }, tutorialSteps };
+  }
+
+  // Cosine rule: find side c given a, b, angle C
+  // c² = a² + b² - 2ab·cosC
+  const anglePools = { 1: [60, 90, 120], 2: [45, 60, 75, 90, 120], 3: [30, 50, 70, 100, 110, 130] };
+  const sidePools = { 1: [5, 8, 10, 12], 2: [6, 8, 10, 12, 15], 3: [7, 9, 11, 13, 16] };
+  const C = pickRandom(anglePools[tier]);
+  const a = pickRandom(sidePools[tier]);
+  const b = pickRandom(sidePools[tier]);
+  const cosC = Math.cos(C * Math.PI / 180);
+  const cSquared = a*a + b*b - 2*a*b*cosC;
+  const c = Math.round(Math.sqrt(cSquared) * 100) / 100;
+
+  const description: BilingualText = {
+    zh: `三角形中，$a = ${a}$, $b = ${b}$, $C = ${C}°$。用余弦定理求 $c$（保留2位小数）。`,
+    en: `In a triangle, $a = ${a}$, $b = ${b}$, $C = ${C}°$. Use the cosine rule to find $c$ (2 d.p.).`,
+  };
+
+  const tutorialSteps = [
+    { text: { zh: `${narrator}："为什么需要余弦定理？\n当你知道两边和它们的夹角，正弦定理用不了——因为没有"角对边"配对。\n余弦定理专门处理这种情况：SAS（边-角-边）。"`, en: `${narrator}: "Why the cosine rule?\nWhen you know two sides and the included angle, the sine rule won't work — no angle-opposite-side pair.\nThe cosine rule handles this: SAS (Side-Angle-Side)."` }, highlightField: 'c' },
+    { text: { zh: `${narrator}："余弦定理\n$$c^2 = a^2 + b^2 - 2ab\\cos C$$\n像勾股定理的'升级版'——多了一个修正项 $-2ab\\cos C$。"`, en: `${narrator}: "The Cosine Rule\n$$c^2 = a^2 + b^2 - 2ab\\cos C$$\nLike an 'upgraded Pythagoras' — with a correction term $-2ab\\cos C$."` }, highlightField: 'c' },
+    { text: { zh: `${narrator}："代入\n$c^2 = ${a}^2 + ${b}^2 - 2(${a})(${b})\\cos ${C}°$\n$= ${a*a} + ${b*b} - ${2*a*b} × ${Math.round(cosC*1000)/1000}$"`, en: `${narrator}: "Substitute\n$c^2 = ${a}^2 + ${b}^2 - 2(${a})(${b})\\cos ${C}°$\n$= ${a*a} + ${b*b} - ${2*a*b} × ${Math.round(cosC*1000)/1000}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}："计算\n$c^2 = ${Math.round(cSquared*100)/100}$\n$c = \\sqrt{${Math.round(cSquared*100)/100}} ≈ ${c}$"`, en: `${narrator}: "Calculate\n$c^2 = ${Math.round(cSquared*100)/100}$\n$c = \\sqrt{${Math.round(cSquared*100)/100}} ≈ ${c}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}："答案\n$c ≈ ${c}$"`, en: `${narrator}: "Answer\n$c ≈ ${c}$"` }, highlightField: 'c' },
+    { text: { zh: `${narrator}："验算\n当 $C=90°$ 时，$\\cos 90° = 0$，公式变回 $c^2=a^2+b^2$（勾股定理）✓"`, en: `${narrator}: "Verify\nWhen $C=90°$, $\\cos 90° = 0$, formula becomes $c^2=a^2+b^2$ (Pythagoras) ✓"` }, highlightField: 'c' },
+  ];
+
+  return { ...template, description, data: { ...template.data, opposite: c, adjacent: a, angle: C, func: 'sin', generatorType: 'SINE_COSINE_RANDOM', mode: 'cosine_rule' }, tutorialSteps };
+}
+

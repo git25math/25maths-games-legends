@@ -782,4 +782,344 @@ export const MISSIONS_Y11: Mission[] = [
     secret: { concept: { zh: '函数代入：把 x 的值逐一替换到表达式中。先算幂，再乘，最后加减。', en: 'Function substitution: replace x step by step. Powers first, then multiply, then add/subtract.' }, formula: '$f(4) = 2(4)^2 + 3(4) - 5$', tips: [{ zh: '诸葛亮提示：代入时不要忘了指数要先算！', en: 'Zhuge Liang Tip: When substituting, remember powers come first!' }] },
     storyConsequence: { correct: { zh: '军需函数——代入精准！做得漂亮！', en: 'Supply Function — Well done!' }, wrong: { zh: '代入计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
+
+  // ═══════════════════════════════════════════════════════
+  // Unit 12: 正弦余弦定理 (Topic 6.5) — 4 missions
+  // ═══════════════════════════════════════════════════════
+  {
+    id: 11201, grade: 11, unitId: 12, order: 1,
+    unitTitle: { zh: 'Unit 12: 正弦余弦定理', en: 'Unit 12: Sine & Cosine Rules' },
+    topic: 'Geometry', type: 'TRIGONOMETRY',
+    title: { zh: '正弦定理·求边', en: 'Sine Rule — Find Side' },
+    skillName: { zh: '正弦定理求边术', en: 'Sine Rule Side-Finding' },
+    skillSummary: { zh: 'a/sinA = b/sinB', en: 'a/sinA = b/sinB' },
+    story: { zh: '蜀军探哨需测量河对岸敌营距离。已知两个角度和一条边，正弦定理是唯一的武器！', en: 'Shu scouts must measure the distance to the enemy camp across the river. With two angles and one side, the sine rule is the only weapon!' },
+    description: { zh: '三角形中，$A = 45°$, $a = 10$, $B = 60°$。用正弦定理求 $b$（保留2位小数）。', en: 'In a triangle, $A = 45°$, $a = 10$, $B = 60°$. Use the sine rule to find $b$ (2 d.p.).' },
+    data: { opposite: 10, adjacent: 8, angle: 45, func: 'sin', generatorType: 'SINE_COSINE_RANDOM', mode: 'sine_rule' }, difficulty: 'Hard', reward: 800,
+    kpId: 'kp-6.5-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: '直角三角形有 sin/cos/tan，但如果三角形没有直角呢？\n你觉得还能用三角函数吗？', en: 'Right triangles have sin/cos/tan, but what if the triangle has no right angle?\nCan you still use trig functions?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '可以——正弦定理把任意角和对边联系起来', en: 'Yes — the sine rule connects any angle to its opposite side' },
+          { zh: '不行——三角函数只能用于直角三角形', en: 'No — trig functions only work for right triangles' },
+          { zh: '可以——但必须先构造一个直角', en: 'Yes — but you must first construct a right angle' },
+        ],
+        onCorrect: { zh: '正确！正弦定理突破了直角的限制：\n$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$\n只要有"角+对边"配对，就能求其他边！', en: 'Correct! The sine rule breaks free of right angles:\n$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$\nWith an angle-opposite side pair, you can find other sides!' },
+        onWrong: { zh: '其实可以！正弦定理不需要直角：\n$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$\n三个比值永远相等——这就是非直角三角形的"SOHCAHTOA"。', en: 'Actually you can! The sine rule needs no right angle:\n$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$\nAll three ratios are always equal — this is the "SOHCAHTOA" for non-right triangles.' },
+        onSkip: { zh: '正弦定理：每条边除以对角的 sin 值，三个比值相等。\n不需要直角，只需要一对"角+对边"就能开始求解。', en: 'Sine rule: each side divided by the sin of its opposite angle — all equal.\nNo right angle needed, just one angle-opposite side pair to start solving.' },
+      },
+    ],
+    tutorialSteps: [
+      { text: { zh: '诸葛亮："为什么需要正弦定理？\n直角三角形有 SOHCAHTOA，但非直角三角形呢？\n正弦定理让你用任意角和对边求解——不需要直角！"', en: 'Zhuge Liang: "Why the sine rule?\nRight triangles have SOHCAHTOA, but what about non-right triangles?\nThe sine rule lets you use any angle and its opposite side — no right angle needed!"' }, highlightField: 'c' },
+      { text: { zh: '诸葛亮："正弦定理\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$\n每条边除以对角的正弦值——三个比值相等。"', en: 'Zhuge Liang: "The Sine Rule\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$\nEach side divided by the sine of its opposite angle — all three ratios are equal."' }, highlightField: 'c' },
+      { text: { zh: '诸葛亮："代入已知\n$\\frac{10}{\\sin 45°} = \\frac{b}{\\sin 60°}$"', en: 'Zhuge Liang: "Substitute known values\n$\\frac{10}{\\sin 45°} = \\frac{b}{\\sin 60°}$"' }, highlightField: 'c' },
+      { text: { zh: '诸葛亮："求 b\n$b = 10 × \\frac{\\sin 60°}{\\sin 45°} = 10 × \\frac{0.866}{0.707}$"', en: 'Zhuge Liang: "Solve for b\n$b = 10 × \\frac{\\sin 60°}{\\sin 45°} = 10 × \\frac{0.866}{0.707}$"' }, highlightField: 'c' },
+      { text: { zh: '诸葛亮："答案\n$b \\approx 12.25$"', en: 'Zhuge Liang: "Answer\n$b \\approx 12.25$"' }, highlightField: 'c' },
+      { text: { zh: '诸葛亮："验算\n$\\frac{10}{\\sin 45°} \\approx 14.14$，$\\frac{12.25}{\\sin 60°} \\approx 14.14$ ✓ 两个比值相等！"', en: 'Zhuge Liang: "Verify\n$\\frac{10}{\\sin 45°} \\approx 14.14$, $\\frac{12.25}{\\sin 60°} \\approx 14.14$ ✓ Both ratios equal!"' }, highlightField: 'c' },
+    ],
+    secret: { concept: { zh: '正弦定理：a/sinA = b/sinB = c/sinC，用于非直角三角形。', en: 'Sine rule: a/sinA = b/sinB = c/sinC, for non-right triangles.' }, formula: '$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$', tips: [{ zh: '诸葛亮提示：正弦定理需要"角-对边"配对。', en: 'Zhuge Liang Tip: Sine rule needs an angle-opposite side pair.' }] },
+    storyConsequence: { correct: { zh: '正弦定理——河对岸距离精准测量！做得漂亮！', en: 'Sine Rule — River distance measured precisely! Well done!' }, wrong: { zh: '差一步——检查角度和对边是否配对正确？', en: 'Not quite... Check angle-side pairing?' } }
+  },
+  {
+    id: 11202, grade: 11, unitId: 12, order: 2,
+    unitTitle: { zh: 'Unit 12: 正弦余弦定理', en: 'Unit 12: Sine & Cosine Rules' },
+    topic: 'Geometry', type: 'TRIGONOMETRY',
+    title: { zh: '余弦定理·求边', en: 'Cosine Rule — Find Side' },
+    skillName: { zh: '余弦定理求边术', en: 'Cosine Rule Side-Finding' },
+    skillSummary: { zh: 'c² = a² + b² - 2ab·cosC', en: 'c² = a² + b² - 2ab·cosC' },
+    story: { zh: '两支蜀军分头行军，路径夹角已知。需要计算两军最终距离，余弦定理是关键！', en: 'Two Shu armies march separately at a known angle. Calculate their final distance — the cosine rule is key!' },
+    description: { zh: '三角形中，$a = 8$, $b = 10$, $C = 60°$。用余弦定理求 $c$（保留2位小数）。', en: 'In a triangle, $a = 8$, $b = 10$, $C = 60°$. Use the cosine rule to find $c$ (2 d.p.).' },
+    data: { opposite: 10, adjacent: 8, angle: 60, func: 'sin', generatorType: 'SINE_COSINE_RANDOM', mode: 'cosine_rule' }, difficulty: 'Hard', reward: 800,
+    kpId: 'kp-6.5-02', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '姜维："为什么需要余弦定理？\n当你知道两边和夹角（SAS），正弦定理用不了——没有角对边配对。\n余弦定理专门解决这种情况！"', en: 'Jiang Wei: "Why the cosine rule?\nWhen you know two sides and the included angle (SAS), the sine rule won\'t work — no angle-side pair.\nThe cosine rule solves exactly this!"' }, highlightField: 'c' },
+      { text: { zh: '姜维："余弦定理\n$$c^2 = a^2 + b^2 - 2ab\\cos C$$\n像勾股定理加了一个修正项。当 $C=90°$，$\\cos 90°=0$，变回勾股！"', en: 'Jiang Wei: "The Cosine Rule\n$$c^2 = a^2 + b^2 - 2ab\\cos C$$\nLike Pythagoras with a correction. When $C=90°$, $\\cos 90°=0$, it becomes Pythagoras!"' }, highlightField: 'c' },
+      { text: { zh: '姜维："代入\n$c^2 = 8^2 + 10^2 - 2(8)(10)\\cos 60°$\n$= 64 + 100 - 160 \\times 0.5$"', en: 'Jiang Wei: "Substitute\n$c^2 = 8^2 + 10^2 - 2(8)(10)\\cos 60°$\n$= 64 + 100 - 160 \\times 0.5$"' }, highlightField: 'c' },
+      { text: { zh: '姜维："计算\n$c^2 = 164 - 80 = 84$\n$c = \\sqrt{84} \\approx 9.17$"', en: 'Jiang Wei: "Calculate\n$c^2 = 164 - 80 = 84$\n$c = \\sqrt{84} \\approx 9.17$"' }, highlightField: 'c' },
+      { text: { zh: '姜维："答案\n$c \\approx 9.17$"', en: 'Jiang Wei: "Answer\n$c \\approx 9.17$"' }, highlightField: 'c' },
+      { text: { zh: '姜维："验算\n$\\sqrt{84} = \\sqrt{4 \\times 21} = 2\\sqrt{21} \\approx 9.17$ ✓"', en: 'Jiang Wei: "Verify\n$\\sqrt{84} = \\sqrt{4 \\times 21} = 2\\sqrt{21} \\approx 9.17$ ✓"' }, highlightField: 'c' },
+    ],
+    secret: { concept: { zh: '余弦定理：c²=a²+b²-2ab·cosC，适用于SAS（边角边）。', en: 'Cosine rule: c²=a²+b²-2ab·cosC, for SAS (side-angle-side).' }, formula: '$c^2 = a^2 + b^2 - 2ab\\cos C$', tips: [{ zh: '姜维提示：没有角对边配对时，用余弦定理。', en: 'Jiang Wei Tip: No angle-side pair? Use the cosine rule.' }] },
+    storyConsequence: { correct: { zh: '余弦定理——两军距离精准计算！做得漂亮！', en: 'Cosine Rule — Distance calculated! Well done!' }, wrong: { zh: '差一步——cos值代入正确了吗？', en: 'Not quite... Did you substitute cos correctly?' } }
+  },
+  {
+    id: 11203, grade: 11, unitId: 12, order: 3,
+    unitTitle: { zh: 'Unit 12: 正弦余弦定理', en: 'Unit 12: Sine & Cosine Rules' },
+    topic: 'Geometry', type: 'ESTIMATION',
+    title: { zh: '余弦定理·求角', en: 'Cosine Rule — Find Angle' },
+    skillName: { zh: '余弦定理求角术', en: 'Cosine Rule Angle-Finding' },
+    skillSummary: { zh: 'cosC = (a²+b²-c²)/(2ab)', en: 'cosC = (a²+b²-c²)/(2ab)' },
+    story: { zh: '蜀军三处营寨形成三角形，三边已知。需要求出夹角来布防！', en: 'Three Shu camps form a triangle with known sides. Find the angle for defense positioning!' },
+    description: { zh: '已知三边 $a=5$, $b=7$, $c=8$，求角 $C$（保留2位小数）。', en: 'Given sides $a=5$, $b=7$, $c=8$, find angle $C$ (2 d.p.).' },
+    data: { answer: 81.79 }, difficulty: 'Hard', reward: 850,
+    kpId: 'kp-6.5-03', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '马良："为什么要用余弦定理求角？\n三边都知道了，但角度未知。正弦定理需要已知角——用不了。\n余弦定理的变形公式专门求角！"', en: 'Ma Liang: "Why use the cosine rule for angles?\nAll three sides are known, but no angle. Sine rule needs a known angle — can\'t use it.\nThe rearranged cosine rule finds angles!"' }, highlightField: 'ans' },
+      { text: { zh: '马良："余弦定理变形\n$$\\cos C = \\frac{a^2 + b^2 - c^2}{2ab}$$\n把原公式移项——把 $\\cos C$ 单独放到一边。"', en: 'Ma Liang: "Rearranged Cosine Rule\n$$\\cos C = \\frac{a^2 + b^2 - c^2}{2ab}$$\nRearrange the original formula — isolate $\\cos C$."' }, highlightField: 'ans' },
+      { text: { zh: '马良："代入\n$\\cos C = \\frac{5^2 + 7^2 - 8^2}{2 \\times 5 \\times 7} = \\frac{25 + 49 - 64}{70}$"', en: 'Ma Liang: "Substitute\n$\\cos C = \\frac{5^2 + 7^2 - 8^2}{2 \\times 5 \\times 7} = \\frac{25 + 49 - 64}{70}$"' }, highlightField: 'ans' },
+      { text: { zh: '马良："计算\n$\\cos C = \\frac{10}{70} = \\frac{1}{7} \\approx 0.1429$"', en: 'Ma Liang: "Calculate\n$\\cos C = \\frac{10}{70} = \\frac{1}{7} \\approx 0.1429$"' }, highlightField: 'ans' },
+      { text: { zh: '马良："答案\n$C = \\cos^{-1}(\\frac{1}{7}) \\approx 81.79°$"', en: 'Ma Liang: "Answer\n$C = \\cos^{-1}(\\frac{1}{7}) \\approx 81.79°$"' }, highlightField: 'ans' },
+      { text: { zh: '马良："验算\n$\\cos 81.79° \\approx 0.143$，$\\frac{1}{7} \\approx 0.143$ ✓ 吻合！"', en: 'Ma Liang: "Verify\n$\\cos 81.79° \\approx 0.143$, $\\frac{1}{7} \\approx 0.143$ ✓ Match!"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '余弦定理变形：cosC = (a²+b²-c²)/(2ab)，已知三边求角。', en: 'Rearranged cosine rule: cosC = (a²+b²-c²)/(2ab), find angle from three sides.' }, formula: '$\\cos C = \\frac{a^2+b^2-c^2}{2ab}$', tips: [{ zh: '马良提示：三边已知就用余弦定理求角。', en: 'Ma Liang Tip: Three sides known? Cosine rule for angles.' }] },
+    storyConsequence: { correct: { zh: '余弦定理求角——布防角度精准！做得漂亮！', en: 'Cosine Rule angle — Defense angle precise! Well done!' }, wrong: { zh: '差一步——分子是 a²+b²-c²，注意减的是对边的平方。', en: 'Not quite... Numerator is a²+b²-c², subtract the opposite side squared.' } }
+  },
+  {
+    id: 11204, grade: 11, unitId: 12, order: 4,
+    unitTitle: { zh: 'Unit 12: 正弦余弦定理', en: 'Unit 12: Sine & Cosine Rules' },
+    topic: 'Geometry', type: 'AREA',
+    title: { zh: '三角形面积公式', en: 'Triangle Area Formula' },
+    skillName: { zh: '正弦面积术', en: 'Sine Area Formula' },
+    skillSummary: { zh: 'Area = ½ab·sinC', en: 'Area = ½ab·sinC' },
+    story: { zh: '蜀军扎营需要计算营地面积。三角形营地两边和夹角已知——用正弦面积公式！', en: 'Shu army camps need area calculation. Triangular camp with two sides and included angle — use the sine area formula!' },
+    description: { zh: '$a=6$, $b=8$, $C=30°$。用公式 Area $= \\frac{1}{2}ab\\sin C$ 求面积。', en: '$a=6$, $b=8$, $C=30°$. Use Area $= \\frac{1}{2}ab\\sin C$ to find the area.' },
+    data: { answer: 12 }, difficulty: 'Medium', reward: 700,
+    kpId: 'kp-6.5-07', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '费祎："为什么不用底×高÷2？\n普通面积公式需要知道高——但如果没有直角，高不好量！\n有两边和夹角？正弦面积公式直接算，不需要找高！"', en: 'Fei Yi: "Why not use base × height ÷ 2?\nThe normal formula needs the height — but without a right angle, height is hard to measure!\nTwo sides and included angle? Sine area formula calculates directly, no height needed!"' }, highlightField: 'area' },
+      { text: { zh: '费祎："正弦面积公式\n$$\\text{Area} = \\frac{1}{2}ab\\sin C$$\n两边乘以夹角的正弦值，再除以 2。"', en: 'Fei Yi: "Sine Area Formula\n$$\\text{Area} = \\frac{1}{2}ab\\sin C$$\nTwo sides times the sine of the included angle, divided by 2."' }, highlightField: 'area' },
+      { text: { zh: '费祎："代入\nArea $= \\frac{1}{2} \\times 6 \\times 8 \\times \\sin 30°$"', en: 'Fei Yi: "Substitute\nArea $= \\frac{1}{2} \\times 6 \\times 8 \\times \\sin 30°$"' }, highlightField: 'area' },
+      { text: { zh: '费祎："计算\n$\\sin 30° = 0.5$\nArea $= \\frac{1}{2} \\times 6 \\times 8 \\times 0.5 = \\frac{1}{2} \\times 24 = 12$"', en: 'Fei Yi: "Calculate\n$\\sin 30° = 0.5$\nArea $= \\frac{1}{2} \\times 6 \\times 8 \\times 0.5 = \\frac{1}{2} \\times 24 = 12$"' }, highlightField: 'area' },
+      { text: { zh: '费祎："答案\n面积 $= 12$ 平方单位"', en: 'Fei Yi: "Answer\nArea $= 12$ square units"' }, highlightField: 'area' },
+      { text: { zh: '费祎："验算\n$\\frac{1}{2} \\times 48 \\times 0.5 = 12$ ✓\n且 $\\sin 30° = 0.5$ 是常见特殊角值 ✓"', en: 'Fei Yi: "Verify\n$\\frac{1}{2} \\times 48 \\times 0.5 = 12$ ✓\nAnd $\\sin 30° = 0.5$ is a common special angle value ✓"' }, highlightField: 'area' },
+    ],
+    secret: { concept: { zh: '正弦面积公式：Area = ½ab·sinC，适用于已知两边和夹角。', en: 'Sine area formula: Area = ½ab·sinC, when two sides and included angle are known.' }, formula: '$\\text{Area} = \\frac{1}{2}ab\\sin C$', tips: [{ zh: '费祎提示：sin30°=0.5，是最常考的特殊角。', en: 'Fei Yi Tip: sin30°=0.5 is the most common special angle.' }] },
+    storyConsequence: { correct: { zh: '正弦面积——营地面积精准！做得漂亮！', en: 'Sine Area — Camp area calculated! Well done!' }, wrong: { zh: '差一步——sin30°=0.5，别忘了乘以½。', en: 'Not quite... sin30°=0.5, don\'t forget to multiply by ½.' } }
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // Unit 13: 三维三角 (Topic 6.6) — 2 missions
+  // ═══════════════════════════════════════════════════════
+  {
+    id: 11205, grade: 11, unitId: 13, order: 1,
+    unitTitle: { zh: 'Unit 13: 三维三角', en: 'Unit 13: 3D Trigonometry' },
+    topic: 'Geometry', type: 'PYTHAGORAS',
+    title: { zh: '三维勾股', en: '3D Pythagoras' },
+    skillName: { zh: '空间对角线术', en: 'Space Diagonal' },
+    skillSummary: { zh: '分两步：底面对角线→空间对角线', en: 'Two steps: base diagonal → space diagonal' },
+    story: { zh: '蜀军攻城，城楼是长方体。长4宽3高12。从底角到顶角对角线有多长？——这就是空间勾股！', en: 'Shu army attacks a fortress (cuboid). Length 4, width 3, height 12. How long is the space diagonal from bottom corner to top corner? — 3D Pythagoras!' },
+    description: { zh: '长方体底面对角线 $= 5$，高 $= 12$。求空间对角线长度。', en: 'Cuboid base diagonal $= 5$, height $= 12$. Find the space diagonal.' },
+    data: { a: 5, b: 12 }, difficulty: 'Hard', reward: 800,
+    kpId: 'kp-6.6-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: '一个房间的地板对角线你会算（勾股定理）。\n但如果要从地板角到天花板的对角，怎么办？', en: 'You can find a floor diagonal (Pythagoras).\nBut what about from a floor corner to the opposite ceiling corner?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '先算地板对角线，再把它当新的"底边"，和高组合再用一次勾股', en: 'First find the floor diagonal, then use it as a new "base" with height for Pythagoras again' },
+          { zh: '长+宽+高 直接加起来', en: 'Just add length + width + height' },
+          { zh: '没法算，因为不是三角形', en: 'Can\'t calculate, it\'s not a triangle' },
+        ],
+        onCorrect: { zh: '完美！3D 勾股就是用两次 2D 勾股：\n第一次：底面对角线 = √(长²+宽²)\n第二次：空间对角线 = √(底面对角线² + 高²)', en: 'Perfect! 3D Pythagoras uses 2D Pythagoras twice:\nFirst: base diagonal = √(length² + width²)\nSecond: space diagonal = √(base diagonal² + height²)' },
+        onWrong: { zh: '直接加不行——想象一条绳子从底角拉到顶角对角，不会走直线吧？\n关键：先算底面对角线（第一次勾股），再和高组合（第二次勾股）。', en: 'Adding won\'t work — imagine a rope from a bottom corner to the opposite top corner.\nKey: find base diagonal first (1st Pythagoras), then combine with height (2nd Pythagoras).' },
+        onSkip: { zh: '3D 勾股 = 两次 2D 勾股。\n第一步：底面对角线 = √(4²+3²) = 5\n第二步：空间对角线 = √(5²+12²) = 13', en: '3D Pythagoras = two rounds of 2D Pythagoras.\nStep 1: Base diagonal = √(4²+3²) = 5\nStep 2: Space diagonal = √(5²+12²) = 13' },
+      },
+    ],
+    tutorialSteps: [
+      { text: { zh: '赵云："为什么需要3D勾股？\n城楼不是平面——从地板角到天花板对角，是立体空间中的距离！\n2D 勾股只解决一个平面，3D 需要分两步。"', en: 'Zhao Yun: "Why 3D Pythagoras?\nA fortress isn\'t flat — from floor corner to ceiling corner is a spatial distance!\n2D Pythagoras solves one plane; 3D needs two steps."' }, highlightField: 'c' },
+      { text: { zh: '赵云："第一步：底面对角线\n长方体底面是个矩形，对角线用勾股：\n$d = \\sqrt{4^2 + 3^2} = \\sqrt{16+9} = \\sqrt{25} = 5$"', en: 'Zhao Yun: "Step 1: Base diagonal\nThe base is a rectangle, diagonal by Pythagoras:\n$d = \\sqrt{4^2 + 3^2} = \\sqrt{16+9} = \\sqrt{25} = 5$"' }, highlightField: 'c' },
+      { text: { zh: '赵云："第二步：空间对角线\n底面对角线 $= 5$，高 $= 12$\n$D = \\sqrt{5^2 + 12^2} = \\sqrt{25 + 144}$"', en: 'Zhao Yun: "Step 2: Space diagonal\nBase diagonal $= 5$, height $= 12$\n$D = \\sqrt{5^2 + 12^2} = \\sqrt{25 + 144}$"' }, highlightField: 'c' },
+      { text: { zh: '赵云："计算\n$D = \\sqrt{169} = 13$"', en: 'Zhao Yun: "Calculate\n$D = \\sqrt{169} = 13$"' }, highlightField: 'c' },
+      { text: { zh: '赵云："答案\n空间对角线 $= 13$\n（3-4-5 和 5-12-13，两个经典勾股数组！）"', en: 'Zhao Yun: "Answer\nSpace diagonal $= 13$\n(3-4-5 and 5-12-13, two classic Pythagorean triples!)"' }, highlightField: 'c' },
+      { text: { zh: '赵云："验算\n$13^2 = 169 = 25 + 144 = 5^2 + 12^2$ ✓\n也可以一步公式：$D = \\sqrt{4^2+3^2+12^2} = \\sqrt{169} = 13$ ✓"', en: 'Zhao Yun: "Verify\n$13^2 = 169 = 25 + 144 = 5^2 + 12^2$ ✓\nOne-step formula: $D = \\sqrt{4^2+3^2+12^2} = \\sqrt{169} = 13$ ✓"' }, highlightField: 'c' },
+    ],
+    secret: { concept: { zh: '3D勾股：先算底面对角线，再和高做第二次勾股。', en: '3D Pythagoras: find base diagonal first, then combine with height.' }, formula: '$D = \\sqrt{l^2 + w^2 + h^2}$', tips: [{ zh: '赵云提示：3-4-5 和 5-12-13 是最经典的勾股数组。', en: 'Zhao Yun Tip: 3-4-5 and 5-12-13 are the most classic Pythagorean triples.' }] },
+    storyConsequence: { correct: { zh: '空间对角线——攻城距离精准！做得漂亮！', en: '3D Diagonal — Siege distance precise! Well done!' }, wrong: { zh: '差一步——先算底面对角线再用一次勾股。', en: 'Not quite... Find base diagonal first, then apply Pythagoras again.' } }
+  },
+  {
+    id: 11206, grade: 11, unitId: 13, order: 2,
+    unitTitle: { zh: 'Unit 13: 三维三角', en: 'Unit 13: 3D Trigonometry' },
+    topic: 'Geometry', type: 'TRIGONOMETRY',
+    title: { zh: '三维仰角', en: '3D Elevation Angle' },
+    skillName: { zh: '空间仰角术', en: '3D Elevation Angle' },
+    skillSummary: { zh: 'tanθ = 高/底面对角线', en: 'tanθ = height / base diagonal' },
+    story: { zh: '从城楼底面对角线看向顶角，仰角是多少？底面对角线13，高8。', en: 'Looking from the base diagonal to the top corner — what is the elevation angle? Base diagonal 13, height 8.' },
+    description: { zh: '底面对角线 $= 13$，高 $= 8$。求 $\\tan\\theta$（保留4位小数）。', en: 'Base diagonal $= 13$, height $= 8$. Find $\\tan\\theta$ (4 d.p.).' },
+    data: { opposite: 8, adjacent: 13 }, difficulty: 'Hard', reward: 800,
+    kpId: 'kp-6.6-02', sectionId: 'geometry',
+    tutorialSteps: [
+      { text: { zh: '赵云："为什么用 tan？\n仰角问题就是直角三角形：对边=高，邻边=底面对角线。\ntan = 对边/邻边，这是最直接的比值！"', en: 'Zhao Yun: "Why tan?\nElevation angles form right triangles: opposite = height, adjacent = base diagonal.\ntan = opposite/adjacent, the most direct ratio!"' }, highlightField: 'tan' },
+      { text: { zh: '赵云："识别直角三角形\n底面对角线（水平）和高（竖直）形成直角。\n仰角 $\\theta$ 就是这个直角三角形的锐角。"', en: 'Zhao Yun: "Identify the right triangle\nBase diagonal (horizontal) and height (vertical) form a right angle.\nElevation angle $\\theta$ is the acute angle of this right triangle."' }, highlightField: 'tan' },
+      { text: { zh: '赵云："代入公式\n$\\tan\\theta = \\frac{\\text{对边}}{\\text{邻边}} = \\frac{8}{13}$"', en: 'Zhao Yun: "Substitute\n$\\tan\\theta = \\frac{\\text{opposite}}{\\text{adjacent}} = \\frac{8}{13}$"' }, highlightField: 'tan' },
+      { text: { zh: '赵云："计算\n$\\tan\\theta = \\frac{8}{13} \\approx 0.6154$"', en: 'Zhao Yun: "Calculate\n$\\tan\\theta = \\frac{8}{13} \\approx 0.6154$"' }, highlightField: 'tan' },
+      { text: { zh: '赵云："答案\n$\\tan\\theta \\approx 0.6154$\n（若需角度：$\\theta = \\tan^{-1}(0.6154) \\approx 31.6°$）"', en: 'Zhao Yun: "Answer\n$\\tan\\theta \\approx 0.6154$\n(For angle: $\\theta = \\tan^{-1}(0.6154) \\approx 31.6°$)"' }, highlightField: 'tan' },
+      { text: { zh: '赵云："验算\n$0.6154 \\times 13 = 8.0$ ✓ 对边还原正确！"', en: 'Zhao Yun: "Verify\n$0.6154 \\times 13 = 8.0$ ✓ Opposite side restored correctly!"' }, highlightField: 'tan' },
+    ],
+    secret: { concept: { zh: '3D仰角：在立体图形中找到直角三角形，用tanθ=对边/邻边。', en: '3D elevation: find the right triangle in the 3D shape, use tanθ = opp/adj.' }, formula: '$\\tan\\theta = \\frac{h}{d}$', tips: [{ zh: '赵云提示：3D题的关键——找到隐藏的直角三角形。', en: 'Zhao Yun Tip: Key to 3D problems — find the hidden right triangle.' }] },
+    storyConsequence: { correct: { zh: '三维仰角——空间感觉精准！做得漂亮！', en: '3D Elevation — Spatial sense precise! Well done!' }, wrong: { zh: '差一步——tan = 对边/邻边 = 高/底面对角线。', en: 'Not quite... tan = opposite/adjacent = height/base diagonal.' } }
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // Unit 14: 指数增减与根式 (Topics 1.17 + 1.18) — 2 missions
+  // ═══════════════════════════════════════════════════════
+  {
+    id: 11207, grade: 11, unitId: 14, order: 1,
+    unitTitle: { zh: 'Unit 14: 指数增减与根式', en: 'Unit 14: Exponential Growth & Surds' },
+    topic: 'Algebra', type: 'PERCENTAGE',
+    title: { zh: '指数增长', en: 'Exponential Growth' },
+    skillName: { zh: '指数增长术', en: 'Exponential Growth' },
+    skillSummary: { zh: 'N = N₀ × rⁿ', en: 'N = N₀ × rⁿ' },
+    story: { zh: '蜀军粮仓中的虫害每小时翻倍。初始100只，5小时后有多少只？指数增长的威力！', en: 'Pests in the Shu granary double every hour. Starting with 100, how many after 5 hours? The power of exponential growth!' },
+    description: { zh: '细菌每小时翻倍，初始100个，5小时后有多少？', en: 'Bacteria double every hour, starting at 100. How many after 5 hours?' },
+    data: { answer: 3200 }, difficulty: 'Medium', reward: 700,
+    kpId: 'kp-1.17-01', sectionId: 'number',
+    discoverSteps: [
+      {
+        prompt: { zh: '把一张纸对折一次厚度翻倍。对折50次会有多厚？\n你觉得结果是什么量级？', en: 'Fold a paper once, thickness doubles. Fold it 50 times — what order of magnitude?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: '超过地球到太阳的距离', en: 'More than the Earth-Sun distance' },
+          { zh: '大概一栋楼那么高', en: 'About as tall as a building' },
+          { zh: '大概一座山那么高', en: 'About as tall as a mountain' },
+        ],
+        onCorrect: { zh: '没错！$2^{50} \\approx 1.13 \\times 10^{15}$——超过1亿公里！\n这就是指数增长的恐怖：每步翻倍，很快就失控。\n从100开始每小时翻倍，5小时后就是 $100 \\times 2^5$。', en: 'Yes! $2^{50} \\approx 1.13 \\times 10^{15}$ — over 100 million km!\nThis is the terror of exponential growth: doubling each step, it quickly spirals.\nFrom 100, doubling hourly, after 5 hours: $100 \\times 2^5$.' },
+        onWrong: { zh: '直觉容易低估指数增长！$2^{50}$ 其实超过 $10^{15}$——比地球到太阳的距离还远！\n关键：$\\times 2$ 重复50次不是 $\\times 100$，而是一个天文数字。', en: 'Intuition underestimates exponential growth! $2^{50}$ exceeds $10^{15}$ — further than Earth to Sun!\nKey: multiplying by 2 fifty times isn\'t ×100, it\'s astronomical.' },
+        onSkip: { zh: '指数增长 = 每步乘以固定倍数。看起来慢，实际上爆炸式增长。\n公式：$N = N_0 \\times r^n$（初始量 × 倍率的n次方）', en: 'Exponential growth = multiply by a fixed ratio each step. Seems slow, actually explosive.\nFormula: $N = N_0 \\times r^n$ (initial × ratio to the power n)' },
+      },
+    ],
+    tutorialSteps: [
+      { text: { zh: '诸葛亮："为什么要学指数增长？\n线性增长是+100, +100, +100——可预测。\n指数增长是×2, ×2, ×2——像野火一样失控！\n理解指数增长，才能预判危险。"', en: 'Zhuge Liang: "Why learn exponential growth?\nLinear is +100, +100, +100 — predictable.\nExponential is ×2, ×2, ×2 — spirals like wildfire!\nUnderstanding exponential growth helps predict danger."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："指数增长公式\n$$N = N_0 \\times r^n$$\n$N_0 = $ 初始量，$r = $ 每次的倍率，$n = $ 次数"', en: 'Zhuge Liang: "Exponential growth formula\n$$N = N_0 \\times r^n$$\n$N_0 = $ initial amount, $r = $ multiplier, $n = $ number of periods"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："代入\n$N = 100 \\times 2^5$\n初始100，每小时翻倍（$r=2$），5小时（$n=5$）"', en: 'Zhuge Liang: "Substitute\n$N = 100 \\times 2^5$\nStart 100, double hourly ($r=2$), 5 hours ($n=5$)"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："计算\n$2^5 = 32$\n$N = 100 \\times 32 = 3200$"', en: 'Zhuge Liang: "Calculate\n$2^5 = 32$\n$N = 100 \\times 32 = 3200$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："答案\n5小时后有 $3200$ 只！\n从100到3200，仅仅5次翻倍。"', en: 'Zhuge Liang: "Answer\n$3200$ after 5 hours!\nFrom 100 to 3200 in just 5 doublings."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："验算\n逐步验证：100→200→400→800→1600→3200 ✓\n每步确实是前一步的2倍！"', en: 'Zhuge Liang: "Verify\nStep by step: 100→200→400→800→1600→3200 ✓\nEach step is indeed double the previous!"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '指数增长：N = N₀ × rⁿ，每步乘以固定倍率。', en: 'Exponential growth: N = N₀ × rⁿ, multiply by fixed ratio each step.' }, formula: '$N = N_0 \\times r^n$', tips: [{ zh: '诸葛亮提示：指数增长像野火——初期不明显，后期失控。', en: 'Zhuge Liang Tip: Exponential growth is like wildfire — slow at first, explosive later.' }] },
+    storyConsequence: { correct: { zh: '指数增长——虫害预测精准！做得漂亮！', en: 'Exponential Growth — Pest prediction precise! Well done!' }, wrong: { zh: '差一步——2⁵=32，不是10。', en: 'Not quite... 2⁵=32, not 10.' } }
+  },
+  {
+    id: 11208, grade: 11, unitId: 14, order: 2,
+    unitTitle: { zh: 'Unit 14: 指数增减与根式', en: 'Unit 14: Exponential Growth & Surds' },
+    topic: 'Algebra', type: 'SQUARE_ROOT',
+    title: { zh: '根式化简', en: 'Simplifying Surds' },
+    skillName: { zh: '根式化简术', en: 'Surd Simplification' },
+    skillSummary: { zh: '√(ab) = √a × √b', en: '√(ab) = √a × √b' },
+    story: { zh: '蜀军测量斜面长度得到 $\\sqrt{50}$。化简根式——让结果更简洁！', en: 'Shu army measures a slope length as $\\sqrt{50}$. Simplify the surd — make it cleaner!' },
+    description: { zh: '$\\sqrt{50}$ 化简为 $a\\sqrt{b}$，求 $a$ 的值。', en: 'Simplify $\\sqrt{50}$ to $a\\sqrt{b}$. Find $a$.' },
+    data: { answer: 5 }, difficulty: 'Medium', reward: 600,
+    kpId: 'kp-1.18-01', sectionId: 'number',
+    tutorialSteps: [
+      { text: { zh: '马良："为什么要化简根式？\n$\\sqrt{50}$ 很难直观理解——它到底多大？\n化简后 $5\\sqrt{2}$ 就清楚了：5个$\\sqrt{2}$，约5×1.414。\n化简让运算更简洁、结果更精确。"', en: 'Ma Liang: "Why simplify surds?\n$\\sqrt{50}$ is hard to grasp — how big is it?\nSimplified: $5\\sqrt{2}$ is clear — five $\\sqrt{2}$\'s, about 5×1.414.\nSimplification makes calculation cleaner and more exact."' }, highlightField: 'ans' },
+      { text: { zh: '马良："化简法则\n$$\\sqrt{ab} = \\sqrt{a} \\times \\sqrt{b}$$\n关键：找到最大的完全平方因子！"', en: 'Ma Liang: "Simplification rule\n$$\\sqrt{ab} = \\sqrt{a} \\times \\sqrt{b}$$\nKey: find the largest perfect square factor!"' }, highlightField: 'ans' },
+      { text: { zh: '马良："分解\n$50 = 25 \\times 2$\n25是最大的完全平方因子（$5^2 = 25$）"', en: 'Ma Liang: "Factor\n$50 = 25 \\times 2$\n25 is the largest perfect square factor ($5^2 = 25$)"' }, highlightField: 'ans' },
+      { text: { zh: '马良："化简\n$\\sqrt{50} = \\sqrt{25 \\times 2} = \\sqrt{25} \\times \\sqrt{2} = 5\\sqrt{2}$"', en: 'Ma Liang: "Simplify\n$\\sqrt{50} = \\sqrt{25 \\times 2} = \\sqrt{25} \\times \\sqrt{2} = 5\\sqrt{2}$"' }, highlightField: 'ans' },
+      { text: { zh: '马良："答案\n$a = 5$（$\\sqrt{50} = 5\\sqrt{2}$）"', en: 'Ma Liang: "Answer\n$a = 5$ ($\\sqrt{50} = 5\\sqrt{2}$)"' }, highlightField: 'ans' },
+      { text: { zh: '马良："验算\n$(5\\sqrt{2})^2 = 25 \\times 2 = 50$ ✓\n也可以算：$5 \\times 1.414 \\approx 7.07$，$\\sqrt{50} \\approx 7.07$ ✓"', en: 'Ma Liang: "Verify\n$(5\\sqrt{2})^2 = 25 \\times 2 = 50$ ✓\nAlso: $5 \\times 1.414 \\approx 7.07$, $\\sqrt{50} \\approx 7.07$ ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '根式化简：找最大完全平方因子，提到根号外面。', en: 'Surd simplification: find the largest perfect square factor, take it outside.' }, formula: '$\\sqrt{ab} = \\sqrt{a} \\cdot \\sqrt{b}$', tips: [{ zh: '马良提示：先试除以4、9、16、25——找最大完全平方因子。', en: 'Ma Liang Tip: Try dividing by 4, 9, 16, 25 — find the largest perfect square factor.' }] },
+    storyConsequence: { correct: { zh: '根式化简——斜面长度化简完成！做得漂亮！', en: 'Surd simplified — Slope length simplified! Well done!' }, wrong: { zh: '差一步——50 = 25 × 2，√25 = 5。', en: 'Not quite... 50 = 25 × 2, √25 = 5.' } }
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // Unit 15: 曲线草图与垂直线 (Topics 2.11 + 3.7) — 3 missions
+  // ═══════════════════════════════════════════════════════
+  {
+    id: 11209, grade: 11, unitId: 15, order: 1,
+    unitTitle: { zh: 'Unit 15: 曲线草图与垂直线', en: 'Unit 15: Curve Sketching & Perpendicular Lines' },
+    topic: 'Algebra', type: 'ESTIMATION',
+    title: { zh: '渐近线识别', en: 'Identifying Asymptotes' },
+    skillName: { zh: '渐近线识别术', en: 'Asymptote Recognition' },
+    skillSummary: { zh: 'y=1/x 在 x=0 处有渐近线', en: 'y=1/x has asymptote at x=0' },
+    story: { zh: '蜀军分析敌军补给函数 $y = 1/x$。当 $x$ 接近0时，函数值趋向无穷——这是渐近线！', en: 'Shu army analyzes enemy supply function $y = 1/x$. As $x$ approaches 0, the function goes to infinity — an asymptote!' },
+    description: { zh: '$y = 1/x$ 在 $x = 0$ 处有什么？（1=渐近线，2=交点）', en: '$y = 1/x$ at $x = 0$: what does it have? (1=asymptote, 2=intersection)' },
+    data: { answer: 1 }, difficulty: 'Medium', reward: 600,
+    kpId: 'kp-2.11-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: '想象你沿着 $y = 1/x$ 的曲线走。\n当 $x$ 越来越接近 0 时，$y$ 会怎样？', en: 'Imagine walking along the curve $y = 1/x$.\nAs $x$ gets closer and closer to 0, what happens to $y$?' },
+        type: 'choice' as const,
+        choices: [
+          { zh: 'y 冲向无穷大——永远碰不到 x=0 这条线', en: 'y shoots to infinity — never touches the line x=0' },
+          { zh: 'y 变成 0', en: 'y becomes 0' },
+          { zh: 'y 保持不变', en: 'y stays the same' },
+        ],
+        onCorrect: { zh: '正确！$1/0.001 = 1000$，$1/0.0001 = 10000$...\n$y$ 越来越大但永远不会"到达"$x=0$。\n这条"靠近但碰不到"的线就叫渐近线（asymptote）。', en: 'Correct! $1/0.001 = 1000$, $1/0.0001 = 10000$...\n$y$ keeps growing but never "reaches" $x=0$.\nThis line you approach but never touch is an asymptote.' },
+        onWrong: { zh: '$1/0.1 = 10$，$1/0.01 = 100$，$1/0.001 = 1000$...\nx 越接近 0，y 就越大——趋向无穷！\n但永远碰不到 $x=0$，这就是"渐近线"。', en: '$1/0.1 = 10$, $1/0.01 = 100$, $1/0.001 = 1000$...\nAs x approaches 0, y grows — towards infinity!\nBut never touches $x=0$, that\'s an "asymptote".' },
+        onSkip: { zh: '渐近线 = 曲线无限接近但永远碰不到的线。\n$y = 1/x$ 有两条渐近线：$x = 0$（竖直）和 $y = 0$（水平）。', en: 'Asymptote = a line the curve approaches but never touches.\n$y = 1/x$ has two asymptotes: $x = 0$ (vertical) and $y = 0$ (horizontal).' },
+      },
+    ],
+    tutorialSteps: [
+      { text: { zh: '姜维："为什么要识别渐近线？\n不是所有函数都"正常"——有些在某些点会爆炸。\n渐近线告诉你：这里是禁区，函数值会冲向无穷！\n画图、理解函数行为都离不开它。"', en: 'Jiang Wei: "Why identify asymptotes?\nNot all functions behave normally — some explode at certain points.\nAsymptotes warn you: danger zone, function heads to infinity!\nEssential for graphing and understanding function behavior."' }, highlightField: 'ans' },
+      { text: { zh: '姜维："什么是渐近线？\n曲线无限接近但永远碰不到的直线。\n像磁铁同极——越近排斥力越大，永远贴不上。"', en: 'Jiang Wei: "What is an asymptote?\nA line the curve approaches infinitely but never touches.\nLike same-pole magnets — the closer you get, the stronger the repulsion."' }, highlightField: 'ans' },
+      { text: { zh: '姜维："分析 $y = 1/x$\n当 $x \\to 0^+$：$y \\to +\\infty$\n当 $x \\to 0^-$：$y \\to -\\infty$\n$x = 0$ 处函数无定义——是竖直渐近线！"', en: 'Jiang Wei: "Analyze $y = 1/x$\nAs $x \\to 0^+$: $y \\to +\\infty$\nAs $x \\to 0^-$: $y \\to -\\infty$\n$x = 0$ is undefined — vertical asymptote!"' }, highlightField: 'ans' },
+      { text: { zh: '姜维："判断\n$x = 0$ 处：$y = 1/0$——无定义！\n不是交点（交点需要有确定的 $y$ 值），是渐近线。"', en: 'Jiang Wei: "Determine\nAt $x = 0$: $y = 1/0$ — undefined!\nNot an intersection (needs a definite $y$ value), it\'s an asymptote."' }, highlightField: 'ans' },
+      { text: { zh: '姜维："答案\n$x = 0$ 处是渐近线（选1）。"', en: 'Jiang Wei: "Answer\n$x = 0$ has an asymptote (choose 1)."' }, highlightField: 'ans' },
+      { text: { zh: '姜维："验算\n代入接近0的值：$x=0.01$，$y=100$；$x=0.001$，$y=1000$\ny 确实趋向无穷——渐近线确认 ✓"', en: 'Jiang Wei: "Verify\nSubstitute near-zero values: $x=0.01$, $y=100$; $x=0.001$, $y=1000$\n$y$ indeed approaches infinity — asymptote confirmed ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '渐近线：曲线无限接近但永远碰不到的直线。y=1/x 在 x=0 处有竖直渐近线。', en: 'Asymptote: a line the curve approaches but never touches. y=1/x has a vertical asymptote at x=0.' }, formula: '$y = \\frac{1}{x}$', tips: [{ zh: '姜维提示：分母为0的地方往往有渐近线。', en: 'Jiang Wei Tip: Where the denominator is 0, there\'s often an asymptote.' }] },
+    storyConsequence: { correct: { zh: '渐近线识别——函数行为看透！做得漂亮！', en: 'Asymptote identified — Function behavior mastered! Well done!' }, wrong: { zh: '差一步——x=0 时 y=1/0 无定义，不是交点。', en: 'Not quite... At x=0, y=1/0 is undefined, not an intersection.' } }
+  },
+  {
+    id: 11210, grade: 11, unitId: 15, order: 2,
+    unitTitle: { zh: 'Unit 15: 曲线草图与垂直线', en: 'Unit 15: Curve Sketching & Perpendicular Lines' },
+    topic: 'Algebra', type: 'ESTIMATION',
+    title: { zh: '函数平移', en: 'Function Translation' },
+    skillName: { zh: '函数平移术', en: 'Function Translation' },
+    skillSummary: { zh: 'f(x)+k 向上平移 k 个单位', en: 'f(x)+k shifts up by k units' },
+    story: { zh: '城防函数需要调整：$y = f(x)$ 向上移3个单位。平移了多少？', en: 'Defense function needs adjustment: $y = f(x)$ shifts up 3 units. How much did it shift?' },
+    description: { zh: '$y = f(x) + 3$ 相比 $y = f(x)$ 向上移动了几个单位？', en: '$y = f(x) + 3$ compared to $y = f(x)$ shifts up by how many units?' },
+    data: { answer: 3 }, difficulty: 'Medium', reward: 600,
+    kpId: 'kp-2.11-02', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '费祎："为什么要学函数平移？\n调整函数位置是图形变换的基础——\n城墙加高3米，就是整条防线上移3！\n$+3$ 在函数外面，所以是竖直移动。"', en: 'Fei Yi: "Why learn function translation?\nAdjusting function position is the basis of graph transformations —\nRaise the wall 3m = shift the entire defense line up 3!\n$+3$ outside the function means vertical shift."' }, highlightField: 'ans' },
+      { text: { zh: '费祎："平移规则\n$y = f(x) + k$：向上移 $k$ 单位（$k > 0$）\n$y = f(x) - k$：向下移 $k$ 单位\n加在函数外面 = 上下移动！"', en: 'Fei Yi: "Translation rules\n$y = f(x) + k$: shift up $k$ units ($k > 0$)\n$y = f(x) - k$: shift down $k$ units\nAdded outside the function = vertical shift!"' }, highlightField: 'ans' },
+      { text: { zh: '费祎："分析\n$y = f(x) + 3$\n$+3$ 在函数外面\n方向：向上"', en: 'Fei Yi: "Analyze\n$y = f(x) + 3$\n$+3$ is outside the function\nDirection: upward"' }, highlightField: 'ans' },
+      { text: { zh: '费祎："每个点的变化\n原来的 $(x, y)$ 变成 $(x, y+3)$\n$x$ 不变，$y$ 加3——整条曲线上移3个单位。"', en: 'Fei Yi: "Change for every point\nOriginal $(x, y)$ becomes $(x, y+3)$\n$x$ unchanged, $y$ plus 3 — entire curve shifts up 3 units."' }, highlightField: 'ans' },
+      { text: { zh: '费祎："答案\n向上移动 $3$ 个单位。"', en: 'Fei Yi: "Answer\nShifts up by $3$ units."' }, highlightField: 'ans' },
+      { text: { zh: '费祎："验算\n取一个特殊点：若 $f(0) = 2$，则 $f(0)+3 = 5$\n从 $(0,2)$ 移到 $(0,5)$，确实上移了3 ✓"', en: 'Fei Yi: "Verify\nTake a point: if $f(0) = 2$, then $f(0)+3 = 5$\nFrom $(0,2)$ to $(0,5)$, indeed shifted up 3 ✓"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '函数平移：f(x)+k 整体上移 k 单位，f(x+k) 整体左移 k 单位。', en: 'Translation: f(x)+k shifts up k units, f(x+k) shifts left k units.' }, formula: '$y = f(x) + k$', tips: [{ zh: '费祎提示：加在外面=上下移，加在里面=左右移（且方向相反）。', en: 'Fei Yi Tip: Outside = vertical shift, inside = horizontal shift (and opposite direction).' }] },
+    storyConsequence: { correct: { zh: '函数平移——城防调整完成！做得漂亮！', en: 'Function Translation — Defense adjusted! Well done!' }, wrong: { zh: '差一步——+3 在函数外面，就是上移3个单位。', en: 'Not quite... +3 outside means shift up 3 units.' } }
+  },
+  {
+    id: 11211, grade: 11, unitId: 15, order: 3,
+    unitTitle: { zh: 'Unit 15: 曲线草图与垂直线', en: 'Unit 15: Curve Sketching & Perpendicular Lines' },
+    topic: 'Algebra', type: 'ESTIMATION',
+    title: { zh: '垂直线斜率', en: 'Perpendicular Line Gradient' },
+    skillName: { zh: '垂直线斜率术', en: 'Perpendicular Gradient' },
+    skillSummary: { zh: 'm₁ × m₂ = -1', en: 'm₁ × m₂ = -1' },
+    story: { zh: '蜀军修路 $y = 2x + 1$。需要修一条垂直的岔路——垂直线的斜率是多少？', en: 'Shu army builds a road $y = 2x + 1$. A perpendicular branch road is needed — what is its gradient?' },
+    description: { zh: '$y = 2x + 1$ 的垂直线斜率 $= ?$', en: 'Gradient of line perpendicular to $y = 2x + 1 = ?$' },
+    data: { answer: -0.5 }, difficulty: 'Medium', reward: 600,
+    kpId: 'kp-3.7-01', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '马良："为什么垂直线斜率有规律？\n两条线垂直时，一条上升另一条下降——\n而且它们的斜率关系是固定的：乘积 $= -1$。\n知道一条线的斜率，就能立刻求出垂直线的斜率！"', en: 'Ma Liang: "Why do perpendicular gradients have a pattern?\nWhen two lines are perpendicular, one rises and the other falls —\nTheir gradient relationship is fixed: product $= -1$.\nKnow one gradient, instantly find the perpendicular one!"' }, highlightField: 'ans' },
+      { text: { zh: '马良："垂直线斜率法则\n$$m_1 \\times m_2 = -1$$\n所以 $m_2 = -\\frac{1}{m_1}$\n取负数，再取倒数！"', en: 'Ma Liang: "Perpendicular gradient rule\n$$m_1 \\times m_2 = -1$$\nSo $m_2 = -\\frac{1}{m_1}$\nNegate and reciprocate!"' }, highlightField: 'ans' },
+      { text: { zh: '马良："读出斜率\n$y = 2x + 1$，斜率 $m_1 = 2$"', en: 'Ma Liang: "Read the gradient\n$y = 2x + 1$, gradient $m_1 = 2$"' }, highlightField: 'ans' },
+      { text: { zh: '马良："求垂直线斜率\n$m_2 = -\\frac{1}{m_1} = -\\frac{1}{2} = -0.5$"', en: 'Ma Liang: "Find perpendicular gradient\n$m_2 = -\\frac{1}{m_1} = -\\frac{1}{2} = -0.5$"' }, highlightField: 'ans' },
+      { text: { zh: '马良："答案\n垂直线斜率 $= -0.5$（或 $-\\frac{1}{2}$）"', en: 'Ma Liang: "Answer\nPerpendicular gradient $= -0.5$ (or $-\\frac{1}{2}$)"' }, highlightField: 'ans' },
+      { text: { zh: '马良："验算\n$2 \\times (-0.5) = -1$ ✓\n乘积为 $-1$，确认垂直！"', en: 'Ma Liang: "Verify\n$2 \\times (-0.5) = -1$ ✓\nProduct is $-1$, confirmed perpendicular!"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '垂直线斜率：m₁ × m₂ = -1，即 m₂ = -1/m₁。', en: 'Perpendicular gradients: m₁ × m₂ = -1, so m₂ = -1/m₁.' }, formula: '$m_1 \\times m_2 = -1$', tips: [{ zh: '马良提示：取负倒数——符号变反、上下翻转。', en: 'Ma Liang Tip: Negative reciprocal — flip the sign and invert.' }] },
+    storyConsequence: { correct: { zh: '垂直线斜率——岔路方向确定！做得漂亮！', en: 'Perpendicular gradient — Branch road direction set! Well done!' }, wrong: { zh: '差一步——2 的负倒数是 -1/2 = -0.5。', en: 'Not quite... Negative reciprocal of 2 is -1/2 = -0.5.' } }
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // Unit 16: 高级比例 (Topic 2.8 advanced) — 1 mission
+  // ═══════════════════════════════════════════════════════
+  {
+    id: 11212, grade: 11, unitId: 16, order: 1,
+    unitTitle: { zh: 'Unit 16: 高级比例', en: 'Unit 16: Advanced Proportion' },
+    topic: 'Algebra', type: 'RATIO',
+    title: { zh: '幂次比例', en: 'Power Proportion' },
+    skillName: { zh: '幂次比例术', en: 'Power Proportion' },
+    skillSummary: { zh: 'y ∝ √x → y = k√x', en: 'y ∝ √x → y = k√x' },
+    story: { zh: '蜀军弩箭射程 $y$ 与弓弦张力 $x$ 的平方根成正比。$x=4$ 时 $y=6$，$x=16$ 时 $y=?$', en: 'Shu crossbow range $y$ is proportional to $\\sqrt{x}$ (string tension). When $x=4$, $y=6$. Find $y$ when $x=16$.' },
+    description: { zh: '$y \\propto \\sqrt{x}$。$x=4$ 时 $y=6$。求 $x=16$ 时的 $y$。', en: '$y \\propto \\sqrt{x}$. When $x=4$, $y=6$. Find $y$ when $x=16$.' },
+    data: { answer: 12 }, difficulty: 'Medium', reward: 700,
+    kpId: 'kp-2.8-02', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '诸葛亮："为什么不是简单的正比？\n现实中很多关系不是线性的——弩箭射程和弓弦张力的关系就是根号关系。\n$y \\propto \\sqrt{x}$ 意味着 $x$ 乘以4，$y$ 只乘以2。"', en: 'Zhuge Liang: "Why not simple proportion?\nMany real relationships aren\'t linear — crossbow range and tension follow a square root law.\n$y \\propto \\sqrt{x}$ means if $x$ quadruples, $y$ only doubles."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："比例到方程\n$y \\propto \\sqrt{x}$ → $y = k\\sqrt{x}$\n先用已知条件求常数 $k$。"', en: 'Zhuge Liang: "Proportion to equation\n$y \\propto \\sqrt{x}$ → $y = k\\sqrt{x}$\nFirst find the constant $k$ using known values."' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："求 k\n$6 = k\\sqrt{4} = k \\times 2$\n$k = 3$"', en: 'Zhuge Liang: "Find k\n$6 = k\\sqrt{4} = k \\times 2$\n$k = 3$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："代入 x=16\n$y = 3\\sqrt{16} = 3 \\times 4 = 12$"', en: 'Zhuge Liang: "Substitute x=16\n$y = 3\\sqrt{16} = 3 \\times 4 = 12$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："答案\n$y = 12$"', en: 'Zhuge Liang: "Answer\n$y = 12$"' }, highlightField: 'ans' },
+      { text: { zh: '诸葛亮："验算\n$x$ 从4变到16（×4），$\\sqrt{x}$ 从2变到4（×2）\n$y$ 从6变到12（×2）✓ 符合根号比例关系！"', en: 'Zhuge Liang: "Verify\n$x$ from 4 to 16 (×4), $\\sqrt{x}$ from 2 to 4 (×2)\n$y$ from 6 to 12 (×2) ✓ Follows square root proportion!"' }, highlightField: 'ans' },
+    ],
+    secret: { concept: { zh: '幂次比例：y ∝ √x → y = k√x，先求 k 再代入。', en: 'Power proportion: y ∝ √x → y = k√x, find k first then substitute.' }, formula: '$y = k\\sqrt{x}$', tips: [{ zh: '诸葛亮提示：x乘以4时√x只乘以2——根号"减速"了增长。', en: 'Zhuge Liang Tip: When x quadruples, √x only doubles — square root "slows" growth.' }] },
+    storyConsequence: { correct: { zh: '幂次比例——弩箭射程精准！做得漂亮！', en: 'Power Proportion — Crossbow range precise! Well done!' }, wrong: { zh: '差一步——先求 k=3，再代入 3×√16=12。', en: 'Not quite... Find k=3 first, then 3×√16=12.' } }
+  },
 ];

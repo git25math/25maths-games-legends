@@ -164,6 +164,11 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     return { correct: Math.abs(parse(inputs.v || '') - val) < 0.01, expected: { v: round(val) } };
   }
   if (type === 'TRIGONOMETRY') {
+    // Sine/Cosine rule generator: data.opposite IS the pre-computed answer
+    if (data.generatorType === 'SINE_COSINE_RANDOM') {
+      const val = data.opposite;
+      return { correct: Math.abs(parse(inputs.c || '') - val) < 0.01, expected: { c: round(val) } };
+    }
     if (data.func === 'sin') {
       const sinVal = data.angle === 30 ? 0.5 : Math.sin(data.angle * Math.PI / 180);
       if (sinVal === 0) return { correct: false, expected: { c: 'undefined' } };

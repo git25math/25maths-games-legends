@@ -13,7 +13,7 @@ import { generateIntegerAddMission, generateIntegerMulMission, generateFracAddSa
 
 import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateExpandNegMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission, generateSequenceFormulaMission, generateSequenceNthMission } from './algebra';
 
-import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission, generateCircleTheoremMission, generateSimilarTrianglesMission, generateCoord3DMission } from './geometry';
+import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission, generateCircleTheoremMission, generateSimilarTrianglesMission, generateCoord3DMission, generateSineCosineMission } from './geometry';
 
 import { generateProbSimpleMission, generateProbIndMission, generateStatsMeanMission, generateStatsMedianMission, generateStatsRangeMission, generateStatsModeMission, generateCumFreqMission, generateProbTreeMission, generateTreeDiagramMission } from './statistics';
 
@@ -52,7 +52,8 @@ export type GeneratorType =
   | 'TREE_DIAGRAM_RANDOM'
   | 'SEQUENCE_NTH_RANDOM'
   | 'COORD_3D_RANDOM'
-  | 'VECTOR_3D_RANDOM';
+  | 'VECTOR_3D_RANDOM'
+  | 'SINE_COSINE_RANDOM';
 
 /* ── Generator dispatch map ── */
 
@@ -123,6 +124,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   VOLUME_Y8_RANDOM: generateVolumeY8Mission,
   SECTOR_RANDOM: generateSectorMission,
   CIRCLE_THEOREM_RANDOM: generateCircleTheoremMission,
+  SINE_COSINE_RANDOM: generateSineCosineMission,
 
   // Statistics (CH8+CH9)
   PROBABILITY_SIMPLE_RANDOM: generateProbSimpleMission,
