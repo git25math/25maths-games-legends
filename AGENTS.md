@@ -368,8 +368,15 @@ for mid, steps_raw in missions:
 | ~~MEDIUM~~ | ~~VECTOR_3D~~ | ✅ Y12 id=1241/1242，三维向量加法(含负分量)，6步教程 |
 | ~~LOW~~ | ~~INTEGRAL_AREA~~ | ✅ Y12 id=1251/1252，定积分求面积，用现有INTEGRATION类型 |
 | ~~LOW~~ | ~~missions.ts 拆分~~ | ✅ 已按年级拆分 |
-| MEDIUM | **Season 2 上线** | season2.ts 数据就绪，tracker 已重构，改 ACTIVE_SEASON 索引即可切换 |
-| LOW | **DiscoverStep 互动教学** | types.ts 已加 DiscoverStep 类型，需实现渲染组件+关卡配置 |
+| ~~LOW~~ | ~~DiscoverStep 互动教学~~ | ✅ DiscoverPanel + 14关 discoverSteps + PracticeScreen集成 |
+| HOLD | **Season 2 上线** | 数据就绪，改 ACTIVE_SEASON[0]→[1] 即可。等用户测试后再切换 |
+| DONE | **LearnerMode 三模式** | ✅ explore/practice/exam 模式 + MapScreen选择器 + 阶段门槛差异化 |
+| DONE | **Multiple Choice** | ✅ MC组件 + 通用checker + ANGLES/AREA/STATISTICS 生成器已加MC干扰项 |
+| DONE | **课纲可见性** | ✅ Practice/Battle 显示 CIE 0580 topic 标签 |
+| DONE | **家长周报** | ✅ ProgressReport.tsx（3统计+鼓励语+MapScreen入口）|
+| DONE | **教师行动建议** | ✅ AlertPanel 5类建议 + KPWeaknessPanel top-3建议 |
+| DONE | **ARIA无障碍** | ✅ 5文件 dialog/alert/input/button |
+| NEXT | **用户测试 (Phase 1)** | 找5个学生做30分钟试用，见 USER-TEST-PLAYBOOK.md |
 | FUTURE | **Phase 5** | 章节地图 + 视频三位一体 + 离线支持 |
 | FUTURE | **班级远征** | 多人协作通关 |
 
