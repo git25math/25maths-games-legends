@@ -1446,7 +1446,7 @@ export const MISSIONS_Y7: Mission[] = [
     data: { a: 2, b: 3, x: 4, answer: 55, mode: 'linear', expr: '2x + 3', generatorType: 'SUBSTITUTION_RANDOM' }, difficulty: 'Medium', reward: 60,
     kpId: 'kp-2.2-01', sectionId: 'algebra',
         tutorialSteps: [
-      { text: { zh: '赵云：营地蓝图——两步应用题！\n\n先用代入法求"长"（代入给定值算表达式），再用面积公式算面积。这是代数与几何的结合——先求边长，再求面积！', en: 'Zhao Yun: Camp blueprint — two-step application!\n\nFirst use substitution to find the "length" (substitute given value into expression), then use area formula. This combines algebra and geometry — find side length first, then area!' }, highlightField: 'ans' },
+      { text: { zh: '赵云：为什么代数和几何要结合？\n真实问题往往不是一步能解决的——先算边长，再算面积。\n代入 + 面积公式串联起来，就是工程师画蓝图的方式。', en: 'Zhao Yun: Camp blueprint — two-step application!\n\nFirst use substitution to find the "length" (substitute given value into expression), then use area formula. This combines algebra and geometry — find side length first, then area!' }, highlightField: 'ans' },
       { text: { zh: '赵云：第一步——代入求长\n把给定的 $x$ 值代入长度表达式，得到具体长度。', en: 'Zhao Yun: Step 1 — substitution to find length\nSubstitute the given value of $x$ into the length expression to get the specific length.' }, highlightField: 'ans' },
       { text: { zh: '赵云：第二步——面积公式\n$$\\text{面积} = \\text{长} \times \\text{宽}$$\n\n用第一步求出的长，乘以已知的宽。', en: 'Zhao Yun: Step 2 — area formula\n$$\\text{Area} = \\text{length} \\times \\text{width}$$\n\nUse the length from step 1, multiply by the given width.' }, highlightField: 'ans' },
       { text: { zh: '赵云：代入计算\n若长 $= 2x + 1$，$x = 4$：\n$$2(4) + 1 = 9$$\n\n长 $= 9$ 米', en: 'Zhao Yun: Substitute and calculate\nIf length $= 2x + 1$, $x = 4$:\n$$2(4) + 1 = 9$$\n\nLength $= 9$ m' }, highlightField: 'ans' },
