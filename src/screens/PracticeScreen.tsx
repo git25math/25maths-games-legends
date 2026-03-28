@@ -14,6 +14,7 @@ import { VisualData } from '../components/MathBattle/VisualData';
 import { AnimatedTutorial } from '../components/MathBattle/AnimatedTutorial';
 import { WrongAnswerPanel } from '../components/MathBattle/WrongAnswerPanel';
 import { getKPPrereqs, getKPLeadsTo } from '../data/curriculum/kp-graph';
+import { TappableText } from '../components/TappableText';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { SkillBadgeCard } from '../components/SkillBadgeCard';
 import { CalculatorWidget } from '../components/Calculator';
@@ -621,9 +622,21 @@ export const PracticeScreen = ({
               <LatexText text={storyText} />
             </div>
 
-            {/* Description text */}
+            {/* Description text — with tappable vocabulary in English mode */}
             <div className="text-ink-light text-sm font-bold mb-6 leading-relaxed">
-              <LatexText text={descText} />
+              {lang === 'en' ? (
+                <TappableText
+                  text={descText}
+                  lang={lang}
+                  kpId={currentMission.kpId}
+                  missionDesc={currentMission.description}
+                  onVocabTap={(wordId, level) => {
+                    logAttempt({ questionId: `${mission.id}-vocab-${wordId}-L${level}`, nodeId: currentMission.kpId || currentMission.type, isCorrect: true, sourceMode: 'practice' });
+                  }}
+                />
+              ) : (
+                <LatexText text={descText} />
+              )}
             </div>
 
             {/* Visual diagram — rendered by renderDiagram or fallback to VisualData */}
