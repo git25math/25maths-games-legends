@@ -149,7 +149,14 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $\\vec{a}+\\vec{b}$ 的三个分量（x, y, z）。', en: 'Find all three components (x, y, z) of $\\vec{a}+\\vec{b}$.' },
     data: { targetX: 7, targetY: 1, targetZ: 5, a1: 3, a2: 4, a3: 2, b1: 4, b2: -3, b3: 3, generatorType: 'VECTOR_3D_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-4.11-01', sectionId: 'geometry',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '司马昭："为什么要学三维向量？\n二维向量在平地上够用了——但真实战场有高低地形。\n三维向量 $\\begin{pmatrix}x\\\\y\\\\z\\end{pmatrix}$ 多了一个分量，描述上下方向的力。\n攻山、攻城、空中投射——都需要三维思维。"', en: 'Sima Zhao: "Why 3D vectors?\n2D vectors work on flat ground — but real battlefields have elevation.\n3D vectors $\\begin{pmatrix}x\\\\y\\\\z\\end{pmatrix}$ add a component for up/down.\nAttacking hills, walls, aerial shots — all need 3D thinking."' }, highlightField: 'x' },
+      { text: { zh: '司马昭："三维向量加法——和二维完全一样\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\n每个分量独立相加——$x$ 加 $x$，$y$ 加 $y$，$z$ 加 $z$。"', en: 'Sima Zhao: "3D vector addition — exactly like 2D\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\nAdd each component independently — $x$ with $x$, $y$ with $y$, $z$ with $z$."' }, highlightField: 'x' },
+      { text: { zh: '司马昭："代入分量\n$\\vec{a} = \\begin{pmatrix}3\\\\4\\\\2\\end{pmatrix}$，$\\vec{b} = \\begin{pmatrix}4\\\\-3\\\\3\\end{pmatrix}$\n$x$：$3 + 4 = 7$\n$y$：$4 + (-3) = 1$"', en: 'Sima Zhao: "Substitute components\n$\\vec{a} = \\begin{pmatrix}3\\\\4\\\\2\\end{pmatrix}$, $\\vec{b} = \\begin{pmatrix}4\\\\-3\\\\3\\end{pmatrix}$\n$x$: $3 + 4 = 7$\n$y$: $4 + (-3) = 1$"' }, highlightField: 'y' },
+      { text: { zh: '司马昭："计算 z 分量\n$z$：$2 + 3 = 5$"', en: 'Sima Zhao: "Calculate z component\n$z$: $2 + 3 = 5$"' }, highlightField: 'z' },
+      { text: { zh: '司马昭："答案\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}7\\\\1\\\\5\\end{pmatrix}$$"', en: 'Sima Zhao: "Answer\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}7\\\\1\\\\5\\end{pmatrix}$$"' }, highlightField: 'x' },
+      { text: { zh: '司马昭："验算\n$7 - 4 = 3 = a_1$ ✓\n$1 - (-3) = 4 = a_2$ ✓\n$5 - 3 = 2 = a_3$ ✓\n合力减去 $\\vec{b}$ 应该等于 $\\vec{a}$——三个分量全对！"', en: 'Sima Zhao: "Verify\n$7 - 4 = 3 = a_1$ ✓\n$1 - (-3) = 4 = a_2$ ✓\n$5 - 3 = 2 = a_3$ ✓\nResultant minus $\\vec{b}$ should equal $\\vec{a}$ — all three match!"' }, highlightField: 'x' },
+    ],
     secret: { concept: { zh: '三维向量加法：分量分别相加，和二维一模一样。', en: '3D vector addition: add components separately, just like 2D.' }, formula: '$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$', tips: [{ zh: '司马昭提示：三维也不过是多加一个分量而已。', en: 'Sima Zhao Tip: 3D is just one more component to add.' }] },
     storyConsequence: { correct: { zh: '空间行军——三维向量精准！做得漂亮！', en: 'Spatial March — 3D vectors nailed!' }, wrong: { zh: '分量加错了…再试一次！', en: 'Component error... Try again!' } }
   },
@@ -164,8 +171,61 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $\\vec{a}+\\vec{b}$ 的三个分量（x, y, z）。', en: 'Find all three components (x, y, z) of $\\vec{a}+\\vec{b}$.' },
     data: { targetX: 1, targetY: -1, targetZ: 4, a1: -3, a2: 5, a3: 1, b1: 4, b2: -6, b3: 3, generatorType: 'VECTOR_3D_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-4.11-01', sectionId: 'geometry',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '姜维："负分量是什么意思？\n向量 $\\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix}$ 中，$-3$ 表示向西（负 $x$ 方向）。\n正负号不改变加法规则——该加还是加，只是结果可能是负的。\n负结果意味着合力方向翻转。"', en: 'Jiang Wei: "What do negative components mean?\nIn vector $\\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix}$, $-3$ means westward (negative $x$).\nSigns don\'t change the addition rule — you still add, but the result may be negative.\nA negative result means the combined force reverses direction."' }, highlightField: 'x' },
+      { text: { zh: '姜维："加法公式不变\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\n负数加正数 = 抵消；负数加负数 = 更负。关键是符号。"', en: 'Jiang Wei: "Same addition formula\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\nNeg + pos = cancel; neg + neg = more negative. Signs are the key."' }, highlightField: 'x' },
+      { text: { zh: '姜维："计算 x 和 y\n$x$：$(-3) + 4 = 1$\n$y$：$5 + (-6) = -1$\n注意：$y$ 分量为负，说明合力向南。"', en: 'Jiang Wei: "Calculate x and y\n$x$: $(-3) + 4 = 1$\n$y$: $5 + (-6) = -1$\nNote: $y$ is negative, meaning combined force goes south."' }, highlightField: 'y' },
+      { text: { zh: '姜维："计算 z\n$z$：$1 + 3 = 4$"', en: 'Jiang Wei: "Calculate z\n$z$: $1 + 3 = 4$"' }, highlightField: 'z' },
+      { text: { zh: '姜维："答案\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}1\\\\-1\\\\4\\end{pmatrix}$$\n合力向东偏南，高度方向分量最大——弩箭从高处射出！"', en: 'Jiang Wei: "Answer\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}1\\\\-1\\\\4\\end{pmatrix}$$\nResultant goes east and slightly south, with the strongest component upward — bolts fired from elevation!"' }, highlightField: 'x' },
+      { text: { zh: '姜维："验算\n$\\begin{pmatrix}1\\\\-1\\\\4\\end{pmatrix} - \\begin{pmatrix}4\\\\-6\\\\3\\end{pmatrix} = \\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix} = \\vec{a}$ ✓\n合力减去 $\\vec{b}$ 还原 $\\vec{a}$——三个分量全对！"', en: 'Jiang Wei: "Verify\n$\\begin{pmatrix}1\\\\-1\\\\4\\end{pmatrix} - \\begin{pmatrix}4\\\\-6\\\\3\\end{pmatrix} = \\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix} = \\vec{a}$ ✓\nResultant minus $\\vec{b}$ gives back $\\vec{a}$ — all three match!"' }, highlightField: 'x' },
+    ],
     secret: { concept: { zh: '负分量表示反方向。加法时正负抵消，方向由符号决定。', en: 'Negative components mean opposite direction. Addition cancels positives with negatives.' }, formula: '$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$', tips: [{ zh: '姜维提示：正负号决定方向——算错方向，弩箭就射到自己人了。', en: 'Jiang Wei Tip: Signs determine direction — get it wrong and you hit your own troops.' }] },
     storyConsequence: { correct: { zh: '炮火交叉——三维向量运用自如！', en: 'Crossfire Vectors — 3D mastery!' }, wrong: { zh: '正负号算错了…再试一次！', en: 'Sign error... Try again!' } }
-  }
+  },
+
+  // --- Year 12 Unit 5: 积分面积 · 天下计量 ---
+  {
+    id: 1251, grade: 12, unitId: 5, order: 1,
+    unitTitle: { zh: "Unit 5: 天下计量·积分面积", en: "Unit 5: Grand Measurement — Integral Area" },
+    topic: 'Calculus', type: 'INTEGRATION',
+    title: { zh: '屯田面积', en: 'Farm Area' },
+    skillName: { zh: '定积分求面积', en: 'Definite Integral for Area' },
+    skillSummary: { zh: '$\\int_a^b f(x)\\,dx$ 求曲线下面积', en: '$\\int_a^b f(x)\\,dx$ for area under curve' },
+    story: { zh: '天下归一后，司马炎重新丈量蜀地良田。一块田的边界由 $f(x) = x$ 描述，从 $x = 0$ 到 $x = 6$。用积分求面积。', en: 'After reunification, Sima Yan resurveys Shu farmland. A field boundary follows $f(x) = x$ from $x = 0$ to $x = 6$. Find the area using integration.' },
+    description: { zh: '求 $\\int_0^6 x\\,dx$ 的值。', en: 'Evaluate $\\int_0^6 x\\,dx$.' },
+    data: { lower: 0, upper: 6, func: 'x', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Medium', reward: 550,
+    kpId: 'kp-2.12-02', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '司马炎："为什么积分能算面积？\n面积 = 无数条极细的竖线加起来。每条线高度 $f(x)$，宽度 $dx$。\n$\\int_a^b f(x)\\,dx$ 就是把所有这些极细矩形加起来——这就是积分的几何含义。\n积分不是抽象公式，它是精确测量不规则形状面积的工具！"', en: 'Sima Yan: "Why does integration calculate area?\nArea = sum of infinitely thin vertical strips. Each strip has height $f(x)$ and width $dx$.\n$\\int_a^b f(x)\\,dx$ adds all these infinitesimal rectangles — that\'s the geometric meaning of integration.\nIntegration isn\'t abstract — it precisely measures areas of irregular shapes!"' }, highlightField: 'area' },
+      { text: { zh: '司马炎："积分步骤：先求反导数\n$f(x) = x$ 的反导数（不定积分）：\n$$\\int x\\,dx = \\frac{x^2}{2} + C$$\n"反导数"就是"谁的导数等于 $x$？"——答案是 $\\frac{x^2}{2}$。"', en: 'Sima Yan: "Integration step 1: find the antiderivative\nThe antiderivative of $f(x) = x$:\n$$\\int x\\,dx = \\frac{x^2}{2} + C$$\n\'Antiderivative\' means \'whose derivative gives $x$?\' — the answer is $\\frac{x^2}{2}$."' }, highlightField: 'area' },
+      { text: { zh: '司马炎："代入上下界\n$$\\int_0^6 x\\,dx = \\left[\\frac{x^2}{2}\\right]_0^6 = \\frac{6^2}{2} - \\frac{0^2}{2}$$"', en: 'Sima Yan: "Substitute the bounds\n$$\\int_0^6 x\\,dx = \\left[\\frac{x^2}{2}\\right]_0^6 = \\frac{6^2}{2} - \\frac{0^2}{2}$$"' }, highlightField: 'area' },
+      { text: { zh: '司马炎："计算\n$= \\frac{36}{2} - \\frac{0}{2} = 18 - 0 = 18$"', en: 'Sima Yan: "Calculate\n$= \\frac{36}{2} - \\frac{0}{2} = 18 - 0 = 18$"' }, highlightField: 'area' },
+      { text: { zh: '司马炎："答案\n面积 $= 18$ 平方单位\n屯田面积丈量完毕！"', en: 'Sima Yan: "Answer\nArea $= 18$ square units\nFarmland survey complete!"' }, highlightField: 'area' },
+      { text: { zh: '司马炎："验算\n$f(x) = x$ 从 $0$ 到 $6$ 围成直角三角形：底 $= 6$，高 $= 6$。\n面积 $= \\frac{1}{2} \\times 6 \\times 6 = 18$ ✓\n和积分结果一致——对于简单形状，积分和几何公式殊途同归！"', en: 'Sima Yan: "Verify\n$f(x) = x$ from $0$ to $6$ forms a right triangle: base $= 6$, height $= 6$.\nArea $= \\frac{1}{2} \\times 6 \\times 6 = 18$ ✓\nMatches the integral — for simple shapes, integration and geometry agree!"' }, highlightField: 'area' },
+    ],
+    secret: { concept: { zh: '定积分 = 反导数代入上界减去下界。$\\int x\\,dx = x^2/2$。', en: 'Definite integral = antiderivative at upper bound minus lower bound.' }, formula: '$\\int_0^6 x\\,dx = \\left[\\frac{x^2}{2}\\right]_0^6 = 18$', tips: [{ zh: '司马炎提示：对于 $y = x$，积分面积就是三角形面积——可以互相验证！', en: 'Sima Yan Tip: For $y = x$, the integral equals triangle area — use one to check the other!' }] },
+    storyConsequence: { correct: { zh: '屯田面积——积分精准！做得漂亮！', en: 'Farm Area — Integration perfect!' }, wrong: { zh: '积分计算有误…再试一次！', en: 'Integration error... Try again!' } }
+  },
+  {
+    id: 1252, grade: 12, unitId: 5, order: 2,
+    unitTitle: { zh: "Unit 5: 天下计量·积分面积", en: "Unit 5: Grand Measurement — Integral Area" },
+    topic: 'Calculus', type: 'INTEGRATION',
+    title: { zh: '城墙曲面', en: 'Curved Rampart' },
+    skillName: { zh: '多项式积分', en: 'Polynomial Integration' },
+    skillSummary: { zh: '$\\int 3x^2\\,dx = x^3$', en: '$\\int 3x^2\\,dx = x^3$' },
+    story: { zh: '重修洛阳城墙，截面曲线为 $f(x) = 3x^2$。从 $x = 0$ 到 $x = 3$，求截面面积。', en: 'Rebuilding Luoyang walls. Cross-section curve: $f(x) = 3x^2$. Find the area from $x = 0$ to $x = 3$.' },
+    description: { zh: '求 $\\int_0^3 3x^2\\,dx$ 的值。', en: 'Evaluate $\\int_0^3 3x^2\\,dx$.' },
+    data: { lower: 0, upper: 3, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 600,
+    kpId: 'kp-2.12-02', sectionId: 'algebra',
+    tutorialSteps: [
+      { text: { zh: '司马炎："升级：$3x^2$ 的积分\n上一关是 $x$ 的积分，现在升级到 $3x^2$。\n幂函数的积分规律：指数加一，再除以新指数。\n$\\int 3x^2\\,dx = 3 \\times \\frac{x^3}{3} = x^3$"', en: 'Sima Yan: "Level up: integrating $3x^2$\nLast time was $x$, now we tackle $3x^2$.\nPower rule for integration: increase the exponent by 1, divide by the new exponent.\n$\\int 3x^2\\,dx = 3 \\times \\frac{x^3}{3} = x^3$"' }, highlightField: 'area' },
+      { text: { zh: '司马炎："幂函数积分公式\n$$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C$$\n对 $3x^2$：$n = 2$，所以 $\\frac{3x^3}{3} = x^3$。"', en: 'Sima Yan: "Power rule formula\n$$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C$$\nFor $3x^2$: $n = 2$, so $\\frac{3x^3}{3} = x^3$."' }, highlightField: 'area' },
+      { text: { zh: '司马炎："代入上下界\n$$\\int_0^3 3x^2\\,dx = \\left[x^3\\right]_0^3 = 3^3 - 0^3$$"', en: 'Sima Yan: "Substitute bounds\n$$\\int_0^3 3x^2\\,dx = \\left[x^3\\right]_0^3 = 3^3 - 0^3$$"' }, highlightField: 'area' },
+      { text: { zh: '司马炎："计算\n$= 27 - 0 = 27$"', en: 'Sima Yan: "Calculate\n$= 27 - 0 = 27$"' }, highlightField: 'area' },
+      { text: { zh: '司马炎："答案\n城墙截面面积 $= 27$ 平方单位"', en: 'Sima Yan: "Answer\nWall cross-section area $= 27$ square units"' }, highlightField: 'area' },
+      { text: { zh: '司马炎："验算\n反向验证：$(x^3)\' = 3x^2$ ✓ （反导数的导数 = 原函数）\n$27 > 0$ ✓ （面积为正）\n积分完成——洛阳城墙重修方案确定！"', en: 'Sima Yan: "Verify\nReverse check: $(x^3)\' = 3x^2$ ✓ (derivative of antiderivative = original function)\n$27 > 0$ ✓ (area is positive)\nIntegration done — Luoyang wall reconstruction plan confirmed!"' }, highlightField: 'area' },
+    ],
+    secret: { concept: { zh: '$\\int 3x^2\\,dx = x^3$：系数和幂的积分抵消，巧妙至极。', en: '$\\int 3x^2\\,dx = x^3$: the coefficient and power integration cancel beautifully.' }, formula: '$\\int_0^3 3x^2\\,dx = [x^3]_0^3 = 27$', tips: [{ zh: '司马炎提示：积分后求导应该还原原函数——这是最可靠的验算方法。', en: 'Sima Yan Tip: Differentiating the integral should give back the original — the most reliable check.' }] },
+    storyConsequence: { correct: { zh: '城墙曲面——多项式积分精准！做得漂亮！', en: 'Curved Rampart — Polynomial integration mastered!' }, wrong: { zh: '积分公式用错了…再试一次！', en: 'Integration formula error... Try again!' } }
+  },
 ];
