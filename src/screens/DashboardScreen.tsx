@@ -19,6 +19,7 @@ import { ClassOverview } from '../components/dashboard/ClassOverview';
 import { ClassManager } from '../components/dashboard/ClassManager';
 import { DailySummary } from '../components/dashboard/DailySummary';
 import { ClassWeeklyReport } from '../components/dashboard/ClassWeeklyReport';
+import { SmartSuggestions } from '../components/dashboard/SmartSuggestions';
 import { ParentReport } from '../components/dashboard/ParentReport';
 import { KPHeatmap } from '../components/dashboard/KPHeatmap';
 import { WeeklyTrend } from '../components/dashboard/WeeklyTrend';
@@ -476,6 +477,8 @@ export function DashboardScreen({ lang, onClose }: Props) {
         })()}
         totalAssignments={dashAssignments.filter(a => !a.archived_at).length}
       />
+
+      <SmartSuggestions lang={lang} students={students} alerts={alerts} />
 
       <ClassManager lang={lang} grade={grade} students={students} onClassCreated={(name) => setFilterTag(name)} />
 
