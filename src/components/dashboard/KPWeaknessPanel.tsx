@@ -59,7 +59,7 @@ export function KPWeaknessPanel({
       setKpData((kpRes.data as KPProgressRow[]) ?? []);
       setHealthData((healthRes.data as any[]) ?? []);
       setLoading(false);
-    });
+    }).catch(() => { setLoading(false); });
   }, [grade, filterTag, studentIdSet]);
 
   const weakestKPs = useMemo(() => {

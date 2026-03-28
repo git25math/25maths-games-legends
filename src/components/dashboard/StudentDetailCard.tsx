@@ -146,8 +146,8 @@ export const StudentDetailCard = ({
     { zh: '本周获得 XP（500=满分）', en: 'XP earned this week (500=full)' },
   ];
 
-  // Find the weakest dimension for actionable suggestion
-  const weakestIdx = dims.indexOf(Math.min(...dims));
+  // Find the weakest dimension for actionable suggestion (bounds-safe)
+  const weakestIdx = Math.max(0, dims.indexOf(Math.min(...dims)));
   const SUGGESTIONS: { zh: string; en: string }[] = [
     { zh: '建议多做新关卡，扩展学习范围', en: 'Try more new missions to broaden coverage' },
     { zh: '建议重做薄弱 KP 的关卡，加深理解', en: 'Revisit weak KP missions to deepen understanding' },
@@ -269,7 +269,6 @@ export const StudentDetailCard = ({
           </div>
         )}
 
-        {/* Stats Grid */}
         {/* Stats Grid */}
         {battles.length === 0 && !loading ? (
           <div className="bg-slate-50 rounded-xl p-3 mb-4 text-center">
