@@ -951,7 +951,7 @@ export const MISSIONS_Y10: Mission[] = [
     skillSummary: { zh: 'A = (θ/360)πr²', en: 'A = (θ/360)πr²' },
     story: { zh: '赤壁水寨呈扇形布局，需要计算扇形区域的面积来安排船只停泊。', en: 'The Red Cliffs harbor is sector-shaped. Calculate the sector area to arrange ship docking.' },
     description: { zh: '求扇形面积，已知半径和角度。', en: 'Find sector area given radius and angle.' },
-    data: { r: 10, angle: 90, generatorType: 'SECTOR_RANDOM', mode: 'sector_area' }, difficulty: 'Medium', reward: 450,
+    data: { r: 10, pi: 3.14, angle: 90, mode: 'area', answer: 78.5, generatorType: 'SECTOR_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-5.3-03', sectionId: 'geometry',
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要了解扇形？\n圆形城楼上的弓箭手，射程覆盖的范围就是一个扇形——\n角度决定你能守多宽的防线！', en: 'Zhou Yu: "Why understand sectors?\nArchers atop a circular tower — their range covers a sector —\nThe angle determines how wide a defense line you can hold!"' }, highlightField: 'ans' },
@@ -973,7 +973,7 @@ export const MISSIONS_Y10: Mission[] = [
     skillSummary: { zh: 'L = (θ/360) × 2πr', en: 'L = (θ/360) × 2πr' },
     story: { zh: '水寨外围是一段弧形防线。需要算出弧长来布置铁索连环！', en: 'The harbor perimeter is an arc-shaped defense line. Calculate the arc length to set up chain barriers!' },
     description: { zh: '求弧长，已知半径和角度。', en: 'Find arc length given radius and angle.' },
-    data: { r: 8, angle: 120, generatorType: 'SECTOR_RANDOM', mode: 'arc' }, difficulty: 'Hard', reward: 500,
+    data: { r: 8, pi: 3.14, angle: 120, mode: 'circumference', answer: 16.75, generatorType: 'SECTOR_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-5.3-04', sectionId: 'geometry',
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要算弧长？\n城墙是弯的——要在弧形城墙上布置多少守军，得先知道这段弧有多长！\n弧长 = 圆周长的一部分。', en: 'Zhou Yu: "Why calculate arc length?\nCity walls curve — to deploy guards along a curved wall, first know how long the arc is!\nArc length = part of the circumference."' }, highlightField: 'ans' },
