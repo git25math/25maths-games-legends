@@ -369,7 +369,7 @@ export function generateDerivativeMission(template: Mission, tier: DifficultyTie
         highlightField: 'x',
       },
     ];
-    return { ...template, description, data: { x, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
+    return { ...template, description, data: { x, func: '3x^2-3', generatorType: 'DERIVATIVE_RANDOM', ...buildNumericMC(x, [-x, x + 1, x * 2, 0]) }, tutorialSteps };
   }
 
   // Pick from multiple slope functions based on tier/random
@@ -448,7 +448,7 @@ export function generateDerivativeMission(template: Mission, tier: DifficultyTie
     zh: `曲线 $y = ${yExpr}$，在 $x = ${x}$ 处修筑切线支架，斜率 $k$ 是多少？`,
     en: `Curve $y = ${yExpr}$: build a tangent support at $x = ${x}$. What is the slope $k$?`,
   };
-  return { ...template, story, description, data: { x, func: chosenFunc, generatorType: 'DERIVATIVE_RANDOM' }, tutorialSteps };
+  return { ...template, story, description, data: { x, func: chosenFunc, generatorType: 'DERIVATIVE_RANDOM', ...buildNumericMC(2 * x, [x, x * x, 2 * x + 1, x + 1]) }, tutorialSteps };
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -816,7 +816,7 @@ export function generateRatioY7Mission(template: Mission, tier: DifficultyTier =
     return {
       ...template,
       description,
-      data: { a, b, total, answer, mode, generatorType: 'RATIO_Y7_RANDOM' },
+      data: { a, b, total, answer, mode, generatorType: 'RATIO_Y7_RANDOM', ...buildNumericMC(answer, [answer + a, answer - b, total, a * b]) },
       tutorialSteps,
     };
   } else {
@@ -883,7 +883,7 @@ export function generateRatioY7Mission(template: Mission, tier: DifficultyTier =
     return {
       ...template,
       description,
-      data: { a, b, sa, sb, g, answer, mode, generatorType: 'RATIO_Y7_RANDOM' },
+      data: { a, b, sa, sb, g, answer, mode, generatorType: 'RATIO_Y7_RANDOM', ...buildNumericMC(answer, [answer + a, answer - b, a + b, a * b]) },
       tutorialSteps,
     };
   }
@@ -1030,7 +1030,7 @@ export function generateRatioY8Mission(template: Mission, tier: DifficultyTier =
   return {
     ...template,
     description,
-    data: { ...template.data, mode, k, x1, y1, x2, y2, answer: y2, generatorType: 'RATIO_Y8_RANDOM' },
+    data: { ...template.data, mode, k, x1, y1, x2, y2, answer: y2, generatorType: 'RATIO_Y8_RANDOM', ...buildNumericMC(y2, [x2, y1, y2 + k, y1 * k]) },
     tutorialSteps,
   };
 }

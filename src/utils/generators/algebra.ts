@@ -1244,7 +1244,7 @@ export function generateFuncValMission(template: Mission, tier: DifficultyTier =
       zh: `函数 $y = ${funcDisplay}$，当 $x = ${x}$ 时，函数值是多少？`,
       en: `Function $y = ${funcDisplay}$: what is the value when $x = ${x}$?`,
     };
-    return { ...template, story, description, data: { m, b, x, generatorType: 'FUNC_VAL_RANDOM' }, tutorialSteps };
+    return { ...template, story, description, data: { m, b, x, generatorType: 'FUNC_VAL_RANDOM', ...buildNumericMC(m * x + b, [m + b, m * b, m * x, b * x]) }, tutorialSteps };
   }
 
   // Vertex form: t = -b/(2a)
@@ -1784,7 +1784,7 @@ export function generateSequenceNthMission(template: Mission, tier: DifficultyTi
     return {
       ...template,
       description,
-      data: { a, r, n, seqType: 'geometric', generatorType: 'SEQUENCE_NTH_RANDOM' },
+      data: { a, r, n, seqType: 'geometric', generatorType: 'SEQUENCE_NTH_RANDOM', ...buildNumericMC(a * Math.pow(r, n - 1), [a * r * n, a * r, a + r * (n - 1), a * n]) },
       tutorialSteps,
     };
   }
@@ -1855,7 +1855,7 @@ export function generateSequenceNthMission(template: Mission, tier: DifficultyTi
   return {
     ...template,
     description,
-    data: { a, d, n, seqType: 'arithmetic', generatorType: 'SEQUENCE_NTH_RANDOM' },
+    data: { a, d, n, seqType: 'arithmetic', generatorType: 'SEQUENCE_NTH_RANDOM', ...buildNumericMC(a + (n - 1) * d, [a + n * d, a * d, a + d, a * n]) },
     tutorialSteps,
   };
 }
