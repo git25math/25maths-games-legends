@@ -33,9 +33,18 @@ export const LatexText = ({ text, className = "" }: { text: string; className?: 
               if (part.startsWith('$') && part.endsWith('$') && part.length > 2) {
                 return <MathView key={pi} tex={part.slice(1, -1)} />;
               }
-              // Split plain text into word-level chunks for wrapping
+              // Plain text: handle **bold** markdown, then render
               if (!part) return null;
-              return <span key={pi} style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>{part}</span>;
+              const boldParts = part.split(/(\*\*[^*]+\*\*)/g);
+              return (
+                <span key={pi} style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                  {boldParts.map((bp, bi) =>
+                    bp.startsWith('**') && bp.endsWith('**') && bp.length > 4
+                      ? <strong key={bi} className="font-black">{bp.slice(2, -2)}</strong>
+                      : <span key={bi}>{bp}</span>
+                  )}
+                </span>
+              );
             })}
           </span>
         );
