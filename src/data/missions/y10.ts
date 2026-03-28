@@ -380,6 +380,37 @@ export const MISSIONS_Y10: Mission[] = [
     storyConsequence: { correct: { zh: '军阵通项——公式推导完美！做得漂亮！', en: 'Formation nth Term — Well done!' }, wrong: { zh: '通项公式推错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
+  {
+    id: 1055, grade: 10, unitId: 5, order: 5,
+    unitTitle: { zh: "Unit 5: 等差军阵与序列", en: "Unit 5: Military Formations & Sequences" },
+    topic: 'Algebra', type: 'SEQUENCE_NTH',
+    title: { zh: '兵力预测', en: 'Troop Forecast' },
+    skillName: { zh: '等差第n项术', en: 'Arithmetic nth Term' },
+    skillSummary: { zh: '$a_n = a_1 + (n-1)d$ 求指定项', en: '$a_n = a_1 + (n-1)d$ for a given term' },
+    story: { zh: '曹操每日增兵，第 1 天 {a} 人，每天多招 {d} 人。请问第 {n} 天总共有多少新兵？', en: 'Cao Cao recruits daily: {a} on day 1, adding {d} more each day. How many recruits on day {n}?' },
+    description: { zh: '求等差数列第 $n$ 项：$a_n = a + (n-1)d$。', en: 'Find the nth term: $a_n = a + (n-1)d$.' },
+    data: { a: 5, d: 3, n: 10, seqType: 'arithmetic', generatorType: 'SEQUENCE_NTH_RANDOM' }, difficulty: 'Medium', reward: 480,
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '等差数列第n项 = 首项 + (n−1)×公差。', en: 'Arithmetic nth term = first term + (n−1) × common difference.' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '曹操提示：兵贵神速，公式比数数快百倍！', en: 'Cao Cao Tip: Speed wins wars — the formula is 100x faster than counting!' }] },
+    storyConsequence: { correct: { zh: '兵力预测——公式精准！做得漂亮！', en: 'Troop Forecast — Formula nailed!' }, wrong: { zh: '计算有误…再试一次！', en: 'Not quite... Try again!' } }
+  },
+  {
+    id: 1056, grade: 10, unitId: 5, order: 6,
+    unitTitle: { zh: "Unit 5: 等差军阵与序列", en: "Unit 5: Military Formations & Sequences" },
+    topic: 'Algebra', type: 'SEQUENCE_NTH',
+    title: { zh: '瘟疫蔓延', en: 'Plague Spread' },
+    skillName: { zh: '等比第n项术', en: 'Geometric nth Term' },
+    skillSummary: { zh: '$a_n = a \\times r^{n-1}$ 求指定项', en: '$a_n = a \\times r^{n-1}$ for a given term' },
+    story: { zh: '营地瘟疫，第 1 天 {a} 人染病，每天翻 {r} 倍。第 {n} 天有多少人感染？', en: 'Plague in the camp: {a} infected on day 1, multiplying by {r} each day. How many on day {n}?' },
+    description: { zh: '求等比数列第 $n$ 项：$a_n = a \\times r^{n-1}$。', en: 'Find the nth term: $a_n = a \\times r^{n-1}$.' },
+    data: { a: 3, r: 2, n: 5, seqType: 'geometric', generatorType: 'SEQUENCE_NTH_RANDOM' }, difficulty: 'Hard', reward: 540,
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '等比数列第n项 = 首项 × 公比^(n−1)。', en: 'Geometric nth term = first term × ratio^(n−1).' }, formula: '$a_n = a \\times r^{n-1}$', tips: [{ zh: '华佗提示：指数增长极其恐怖——早发现，早隔离！', en: 'Hua Tuo Tip: Exponential growth is terrifying — detect early, isolate early!' }] },
+    storyConsequence: { correct: { zh: '瘟疫蔓延——指数增长算准了！做得漂亮！', en: 'Plague Spread — Exponential growth calculated!' }, wrong: { zh: '指数计算有误…再试一次！', en: 'Not quite... Try again!' } }
+  },
+
   // --- Year 10 Unit 6-7: Jingzhou Governance — Mensuration ---
   {
     id: 1061, grade: 10, unitId: 6, order: 1,

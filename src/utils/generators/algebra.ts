@@ -1701,3 +1701,162 @@ export function generateSequenceFormulaMission(template: Mission, tier: Difficul
    RATIO_Y7 generator: simplify ratios and divide in ratio
    ══════════════════════════════════════════════════════════ */
 
+/* ══════════════════════════════════════════════════════════
+   SEQUENCE_NTH generator: find value of nth term
+   Arithmetic: a_n = a + (n-1)d
+   Geometric:  a_n = a × r^(n-1)
+   Uses SEQUENCE_NTH type with single answer field
+   ══════════════════════════════════════════════════════════ */
+
+export function generateSequenceNthMission(template: Mission, tier: DifficultyTier = 2): Mission {
+  const seqType = (template.data?.seqType as 'arithmetic' | 'geometric') ||
+    (tier === 3 ? pickRandom(['arithmetic', 'geometric'] as const) : 'arithmetic');
+
+  const narrator = pickRandom(['诸葛亮', '曹操', '荀彧', '郭嘉']);
+
+  if (seqType === 'geometric') {
+    // Geometric sequence: a, ar, ar², ...
+    const aPools: Record<number, number[]> = { 1: [1, 2, 3], 2: [2, 3, 4, 5], 3: [1, 2, 3, 5] };
+    const rPools: Record<number, number[]> = { 1: [2, 3], 2: [2, 3], 3: [2, 3, 4] };
+    const nPools: Record<number, number[]> = { 1: [3, 4, 5], 2: [4, 5, 6], 3: [5, 6, 7] };
+
+    const a = pickRandom(aPools[tier]);
+    const r = pickRandom(rPools[tier]);
+    const n = pickRandom(nPools[tier]);
+    const ans = a * Math.pow(r, n - 1);
+
+    // Reject if answer is unreasonably large
+    if (ans > 10000) return safeRetry(template, generateSequenceNthMission, tier);
+
+    const terms = [a, a * r, a * r * r, a * r * r * r];
+    const termsStr = terms.map(String).join(', ');
+
+    const description: BilingualText = {
+      zh: `等比数列：$${termsStr}, \\ldots$\n求第 $${n}$ 项的值。`,
+      en: `Geometric sequence: $${termsStr}, \\ldots$\nFind the value of the ${n}th term.`,
+    };
+
+    const tutorialSteps = [
+      {
+        text: {
+          zh: `${narrator}：为什么要学等比数列？\n想象军粮每天翻 ${r} 倍：第1天 ${a} 石，第2天 ${a * r} 石，第3天 ${a * r * r} 石……\n要算第 ${n} 天有多少，如果一天天乘上去太慢。\n等比数列公式让你直接跳到第 $n$ 项！`,
+          en: `${narrator}: "Why learn geometric sequences?\nImagine grain supplies multiplying ${r} times each day: day 1: ${a}, day 2: ${a * r}, day 3: ${a * r * r}...\nCalculating day ${n} step-by-step is too slow.\nThe geometric formula jumps directly to term $n$!"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：识别等比数列\n相邻两项之商：$${a * r} \\div ${a} = ${r}$，$${a * r * r} \\div ${a * r} = ${r}$。\n商相同 ✓ 这是等比数列，公比 $r = ${r}$。`,
+          en: `${narrator}: "Identify geometric sequence\nRatios of consecutive terms: $${a * r} \\div ${a} = ${r}$, $${a * r * r} \\div ${a * r} = ${r}$.\nConstant ratio ✓ Geometric sequence with common ratio $r = ${r}$."`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：等比数列公式\n$$a_n = a_1 \\times r^{n-1}$$\n首项 $a_1 = ${a}$，公比 $r = ${r}$，求第 $${n}$ 项：\n$$a_{${n}} = ${a} \\times ${r}^{${n}-1} = ${a} \\times ${r}^{${n - 1}}$$`,
+          en: `${narrator}: "Geometric sequence formula\n$$a_n = a_1 \\times r^{n-1}$$\nFirst term $a_1 = ${a}$, ratio $r = ${r}$, find term $${n}$:\n$$a_{${n}} = ${a} \\times ${r}^{${n}-1} = ${a} \\times ${r}^{${n - 1}}$$"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：计算 $${r}^{${n - 1}}$\n${Array.from({ length: n - 1 }, (_, i) => `${r}^{${i + 1}} = ${Math.pow(r, i + 1)}`).join('，\\ ')}\n所以 $${r}^{${n - 1}} = ${Math.pow(r, n - 1)}$。`,
+          en: `${narrator}: "Calculate $${r}^{${n - 1}}$\n${Array.from({ length: n - 1 }, (_, i) => `${r}^{${i + 1}} = ${Math.pow(r, i + 1)}`).join(', ')}\nSo $${r}^{${n - 1}} = ${Math.pow(r, n - 1)}$."`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：答案\n$$a_{${n}} = ${a} \\times ${Math.pow(r, n - 1)} = ${ans}$$`,
+          en: `${narrator}: "Answer\n$$a_{${n}} = ${a} \\times ${Math.pow(r, n - 1)} = ${ans}$$"`,
+        },
+        highlightField: 'ans',
+      },
+      {
+        text: {
+          zh: `${narrator}：验算——沿数列数到第 ${n} 项\n${terms.slice(0, Math.min(4, n)).map((v, i) => `$a_{${i + 1}} = ${v}$`).join('，\\ ')}，…，$a_{${n}} = ${ans}$ ✓`,
+          en: `${narrator}: "Verify — count along the sequence to term ${n}\n${terms.slice(0, Math.min(4, n)).map((v, i) => `$a_{${i + 1}} = ${v}$`).join(', ')}, ..., $a_{${n}} = ${ans}$ ✓"`,
+        },
+        highlightField: 'ans',
+      },
+    ];
+
+    return {
+      ...template,
+      description,
+      data: { a, r, n, seqType: 'geometric', generatorType: 'SEQUENCE_NTH_RANDOM' },
+      tutorialSteps,
+    };
+  }
+
+  // Arithmetic sequence
+  const aPools: Record<number, number[]> = { 1: [1, 2, 3, 4, 5], 2: [2, 3, 4, 5, 6, -1, -2], 3: [3, 5, 7, -2, -3, -5, 10] };
+  const dPools: Record<number, number[]> = { 1: [2, 3, 4, 5], 2: [3, 4, 5, 6, 7, -2, -3], 3: [5, 6, 7, 8, -3, -4, -5] };
+  const nPools: Record<number, number[]> = { 1: [5, 6, 8, 10], 2: [10, 12, 15, 20], 3: [20, 25, 30, 50] };
+
+  const a = pickRandom(aPools[tier]);
+  const d = pickRandom(dPools[tier]);
+  const n = pickRandom(nPools[tier]);
+  const ans = a + (n - 1) * d;
+
+  const terms = [a, a + d, a + 2 * d, a + 3 * d];
+  const termsStr = terms.join(', ');
+
+  const description: BilingualText = {
+    zh: `等差数列：$${termsStr}, \\ldots$\n求第 $${n}$ 项的值。`,
+    en: `Arithmetic sequence: $${termsStr}, \\ldots$\nFind the value of the ${n}th term.`,
+  };
+
+  const tutorialSteps = [
+    {
+      text: {
+        zh: `${narrator}：为什么等差数列要有公式？\n等差数列每项增加固定的公差 $d$——就像曹操的军粮每天增加 ${Math.abs(d)} 石（${d > 0 ? '递增' : '递减'}）。\n第 ${n} 项要数 ${n} 步，有了公式 $a_n = a_1 + (n-1)d$，一步算到！`,
+        en: `${narrator}: "Why do arithmetic sequences need a formula?\nAn arithmetic sequence increases by the same difference $d$ each step — like grain supplies changing by ${Math.abs(d)} each day (${d > 0 ? 'increasing' : 'decreasing'}).\nTerm ${n} would take ${n} steps to count — formula $a_n = a_1 + (n-1)d$ gets there instantly!"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：识别等差数列\n相邻两项之差：$${terms[1]} - ${terms[0]} = ${d}$，$${terms[2]} - ${terms[1]} = ${d}$，$${terms[3]} - ${terms[2]} = ${d}$。\n差相同 ✓ 这是等差数列，公差 $d = ${d}$。`,
+        en: `${narrator}: "Identify arithmetic sequence\nDifferences: $${terms[1]} - ${terms[0]} = ${d}$, $${terms[2]} - ${terms[1]} = ${d}$, $${terms[3]} - ${terms[2]} = ${d}$.\nConstant difference ✓ Arithmetic sequence with common difference $d = ${d}$."`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：等差数列公式\n$$a_n = a_1 + (n-1) \\times d$$\n首项 $a_1 = ${a}$，公差 $d = ${d}$，求第 $${n}$ 项：\n$$a_{${n}} = ${a} + (${n}-1) \\times ${d}$$`,
+        en: `${narrator}: "Arithmetic sequence formula\n$$a_n = a_1 + (n-1) \\times d$$\nFirst term $a_1 = ${a}$, difference $d = ${d}$. Find term $${n}$:\n$$a_{${n}} = ${a} + (${n}-1) \\times ${d}$$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：计算\n$$a_{${n}} = ${a} + ${n - 1} \\times ${d} = ${a} + ${(n - 1) * d} = ${ans}$$`,
+        en: `${narrator}: "Calculate\n$$a_{${n}} = ${a} + ${n - 1} \\times ${d} = ${a} + ${(n - 1) * d} = ${ans}$$"`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：答案：$a_{${n}} = ${ans}$。`,
+        en: `${narrator}: "Answer: $a_{${n}} = ${ans}$."`,
+      },
+      highlightField: 'ans',
+    },
+    {
+      text: {
+        zh: `${narrator}：验算——代回公式检验\n$a_{${n}} = ${a} + (${n}-1) \\times ${d} = ${a} + ${(n - 1) * d} = ${ans}$ ✓\n也可以用通项公式 $a_n = ${d}n + ${a - d}$ 代入 $n=${n}$：$${d} \\times ${n} + ${a - d} = ${ans}$ ✓`,
+        en: `${narrator}: "Verify — substitute back\n$a_{${n}} = ${a} + (${n}-1) \\times ${d} = ${a} + ${(n - 1) * d} = ${ans}$ ✓\nAlso using $a_n = ${d}n + ${a - d}$, substitute $n=${n}$: $${d} \\times ${n} + ${a - d} = ${ans}$ ✓"`,
+      },
+      highlightField: 'ans',
+    },
+  ];
+
+  return {
+    ...template,
+    description,
+    data: { a, d, n, seqType: 'arithmetic', generatorType: 'SEQUENCE_NTH_RANDOM' },
+    tutorialSteps,
+  };
+}
+

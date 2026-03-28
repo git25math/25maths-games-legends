@@ -380,6 +380,19 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     val = Math.round(val * 10000) / 10000;
     return { correct: Math.abs(parse(inputs.p || '') - val) < 0.01, expected: { p: toFraction(val) } };
   }
+  // Sequence nth term: arithmetic a + (n-1)d, or geometric a * r^(n-1)
+  if (type === 'SEQUENCE_NTH') {
+    const { a, d, r: ratio, n, seqType } = data;
+    if (!n) return { correct: false, expected: { ans: '0' } };
+    let val: number;
+    if (seqType === 'geometric') {
+      val = (a as number) * Math.pow(ratio as number, (n as number) - 1);
+    } else {
+      // arithmetic
+      val = (a as number) + ((n as number) - 1) * (d as number);
+    }
+    return { correct: Math.abs(parse(inputs.ans || '') - val) < 0.01, expected: { ans: round(val) } };
+  }
   // Probability tree: compound probability (P(A∩B), P(exactly one), P(≥1))
   if (type === 'PROBABILITY_TREE') {
     const { p1, p2, mode } = data;
@@ -410,7 +423,7 @@ const PARTIAL_CREDIT_TYPES = new Set([
   'FACTORISE', 'INEQUALITY', 'FDP_CONVERT', 'BODMAS', 'SIMPLIFY',
   'ARITHMETIC', 'ESTIMATION', 'SQUARE_CUBE', 'SQUARE_ROOT',
   'INTEGER_ADD', 'INTEGER_MUL', 'HCF', 'LCM',
-  'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES', 'TREE_DIAGRAM',
+  'PROBABILITY_TREE', 'SEQUENCE_FORMULA', 'SIMILAR_TRIANGLES', 'TREE_DIAGRAM', 'SEQUENCE_NTH',
 ]);
 
 // Types that NEVER get partial credit (boolean/discrete answers)

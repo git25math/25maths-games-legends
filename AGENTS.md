@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v9.8.0 (2026-03-28)
+> **最后更新**: v9.10.0 (2026-03-28)
 
 ---
 
@@ -12,8 +12,8 @@
 Step 1: npm run build         → 必须零错误，否则不能改任何代码
 Step 2: 读 docs/CONTRIBUTING.md → 唯一权威规范（金标准/反模式/审查标准）
 Step 3: 读 docs/DEVELOPMENT-PLAN.md → 版本历程 + 下一步计划
-Step 4: 读本文件第三章"当前状态快照" → 214 关卡/已完成/遗留
-Step 5: npm test -- --run     → 2289 测试必须全通过
+Step 4: 读本文件第三章"当前状态快照" → 226 关卡/已完成/遗留
+Step 5: npm test -- --run     → 2339 测试必须全通过
 ```
 
 ---
@@ -25,9 +25,9 @@ Step 5: npm test -- --run     → 2289 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v9.8.0 (2026-03-28) |
+| **当前版本** | v9.10.0 (2026-03-28) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
-| **测试框架** | Vitest (2289 tests, `npm test -- --run`) |
+| **测试框架** | Vitest (2339 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
@@ -348,7 +348,7 @@ for mid, steps_raw in missions:
 | 优先级 | 任务 | 说明 |
 |--------|------|------|
 | ~~HIGH~~ | ~~TREE_DIAGRAM 新题型~~ | ✅ 完成：Y9 id=9148/9149，7文件全流程，2314 tests |
-| HIGH | **SEQUENCE_NTH 新题型** | Y10/Y11 等差等比数列第n项，公式代入类题型 |
+| ~~HIGH~~ | ~~SEQUENCE_NTH 新题型~~ | ✅ 完成：Y10 id=1055/1056 + Y11 id=1133（等差+等比第n项），基础设施+3关，2339 tests |
 | MEDIUM | **新远征·蜀道** | expeditions.ts 新增蜀道远征（8节点），配合赛季2主题 |
 | LOW | **3D_COORD 新题型** | Y10 三维坐标题（Season 2 Y10内容） |
 | LOW | **missions.ts 拆分已完成** | ✅ 已按年级拆分（y7-y12.ts），manualChunks 已配置，最大 chunk 364 kB |
@@ -382,7 +382,7 @@ grep -A 20 'id: 1211' src/data/missions.ts | grep -c 'text:'
 
 **预期输出**:
 - Build: `✓ built in X.XXs`（无 ERROR）
-- Tests: `2289 passed`
+- Tests: `2339 passed`
 - 重复ID: 空输出
 - 关卡数: ~210
 - Y12 步骤: ≥6（当前已完成）

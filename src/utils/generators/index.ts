@@ -11,7 +11,7 @@ export { type DifficultyTier } from './shared';
 // Import all generators from chapter modules
 import { generateIntegerAddMission, generateIntegerMulMission, generateFracAddSameDenMission, generateFracAddMission, generateFracMulMission, generateMixedImproperMission, generatePrimeMission, generateFactorTreeMission, generateFactorsListMission, generateHcfMission, generateLcmMission, generateSquareCubeMission, generateSquareRootMission, generateIndicesMission, generateFdpConvertMission, generateBodmasMission, generatePercentageOfMission, generatePercentageMission, generatePercentageInterestMission, generateEstimationRoundMission, generateStdFormMission, generateSpeedMission, generateVennMission } from './number';
 
-import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateExpandNegMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission, generateSequenceFormulaMission } from './algebra';
+import { generateSimpleEqMission, generateAddEqMission, generateTwoStepEqMission, generateExpandMission, generateExpandNegMission, generateFactoriseMission, generateSimplifyMission, generateInequalityMission, generateSubstitutionMission, generateLinearMission, generateQuadraticMission, generateRootsMission, generateSimultaneousMission, generateSimultaneousY8Mission, generateFuncValMission, generateArithmeticMission, generateSequenceY7Mission, generateCoordinatesMission, generateSequenceFormulaMission, generateSequenceNthMission } from './algebra';
 
 import { generateAnglesMission, generateAnglesTriangleMission, generateAnglesPointMission, generateParallelAnglesMission, generateAreaRectMission, generateAreaTrapMission, generateAreaTriangleMission, generatePerimeterRectMission, generatePythagorasMission, generateTrigonometryMission, generateSimilarityMission, generateCircleY8Mission, generateVolumeMission, generateVolumeY8Mission, generateSectorMission, generateCircleTheoremMission, generateSimilarTrianglesMission } from './geometry';
 
@@ -49,7 +49,8 @@ export type GeneratorType =
   | 'PROB_TREE_RANDOM'
   | 'SEQUENCE_FORMULA_RANDOM'
   | 'SIMILAR_TRIANGLES_RANDOM'
-  | 'TREE_DIAGRAM_RANDOM';
+  | 'TREE_DIAGRAM_RANDOM'
+  | 'SEQUENCE_NTH_RANDOM';
 
 /* ── Generator dispatch map ── */
 
@@ -98,6 +99,7 @@ const GENERATOR_MAP: Record<GeneratorType, GeneratorFn> = {
   ARITHMETIC_RANDOM: generateArithmeticMission,
   SEQUENCE_Y7_RANDOM: generateSequenceY7Mission,
   SEQUENCE_FORMULA_RANDOM: generateSequenceFormulaMission,
+  SEQUENCE_NTH_RANDOM: generateSequenceNthMission,
   COORDINATES_RANDOM: generateCoordinatesMission,
 
   // Geometry (CH4+CH5+CH6)

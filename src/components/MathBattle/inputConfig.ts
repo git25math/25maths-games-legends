@@ -209,4 +209,8 @@ export const INPUT_FIELDS: Record<QuestionType, BilingualInputFields> = {
     zh: [{ id: 'p', label: '概率 P（分数或小数）', placeholder: 'P = ?' }],
     en: [{ id: 'p', label: 'Probability P (fraction or decimal)', placeholder: 'P = ?' }],
   },
+  SEQUENCE_NTH: {
+    zh: [{ id: 'ans', label: '第n项的值', placeholder: 'a_n = ?' }],
+    en: [{ id: 'ans', label: 'Value of nth term', placeholder: 'a_n = ?' }],
+  },
 };

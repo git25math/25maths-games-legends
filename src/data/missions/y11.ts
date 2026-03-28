@@ -135,6 +135,22 @@ export const MISSIONS_Y11: Mission[] = [
     storyConsequence: { correct: { zh: '屯粮通项——公式推导完美！做得漂亮！', en: 'Stockpile nth Term — Well done!' }, wrong: { zh: '通项公式推错了…再试一次！', en: 'Not quite... Try again!' } }
   },
 
+  {
+    id: 1133, grade: 11, unitId: 3, order: 3,
+    unitTitle: { zh: "Unit 3: 粮草序列", en: "Unit 3: Supply Sequences" },
+    topic: 'Algebra', type: 'SEQUENCE_NTH',
+    title: { zh: '军饷翻倍', en: 'Doubling Wages' },
+    skillName: { zh: '等比第n项术', en: 'Geometric nth Term' },
+    skillSummary: { zh: '$a_n = a \\times r^{n-1}$ 求指定项', en: '$a_n = a \\times r^{n-1}$ for a given term' },
+    story: { zh: '司马懿悬赏灭蜀：第 1 月赏金 {a} 金，每月翻 {r} 倍。第 {n} 月赏金多少？', en: 'Sima Yi offers a bounty: {a} gold in month 1, multiplying by {r} each month. How much in month {n}?' },
+    description: { zh: '求等比数列第 $n$ 项：$a_n = a \\times r^{n-1}$。', en: 'Find the nth term: $a_n = a \\times r^{n-1}$.' },
+    data: { a: 2, r: 3, n: 6, seqType: 'geometric', generatorType: 'SEQUENCE_NTH_RANDOM' }, difficulty: 'Hard', reward: 500,
+    kpId: 'kp-2.7-01', sectionId: 'algebra',
+    tutorialSteps: [],
+    secret: { concept: { zh: '等比数列第n项 = 首项 × 公比^(n−1)，指数增长不可小觑。', en: 'Geometric nth term = first × ratio^(n−1). Never underestimate exponential growth.' }, formula: '$a_n = a \\times r^{n-1}$', tips: [{ zh: '司马懿提示：数列虽短，赏金暴涨——这就是指数的力量。', en: 'Sima Yi Tip: Short sequence, skyrocketing bounty — that\'s the power of exponents.' }] },
+    storyConsequence: { correct: { zh: '军饷翻倍——等比数列精准！做得漂亮！', en: 'Doubling Wages — Geometric sequence nailed!' }, wrong: { zh: '指数计算有误…再试一次！', en: 'Not quite... Try again!' } }
+  },
+
   // --- Year 11 Units 4-5: Jin Unification — Statistics & Probability ---
   {
     id: 1141, grade: 11, unitId: 4, order: 1,
