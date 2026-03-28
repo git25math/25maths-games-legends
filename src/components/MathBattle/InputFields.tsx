@@ -65,6 +65,7 @@ export const InputFields = ({
               disabled={isTutorial && !isHighlighted}
               value={inputs[field.id] || ''}
               onChange={(e) => setInputs({ ...inputs, [field.id]: e.target.value })}
+              onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)}
               placeholder={field.placeholder}
               className={`w-full px-6 py-5 bg-white/50 border-2 rounded-lg text-2xl font-black text-ink focus:bg-white outline-none transition-all shadow-md ${
                 isHighlighted ? 'border-indigo-500 ring-4 ring-indigo-500/20' : 'border-ink'
