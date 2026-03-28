@@ -1188,7 +1188,15 @@ export function generateFactorsListMission(template: Mission, tier: DifficultyTi
   return {
     ...template,
     description,
-    data: { n, factors, answer, generatorType: 'FACTORS_LIST_RANDOM' },
+    data: {
+      n, factors, answer, generatorType: 'FACTORS_LIST_RANDOM',
+      choices: (() => {
+        const distractors = [answer - 1, answer + 1, answer - 2, answer + 2].filter(v => v > 0 && v !== answer);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `${v} 个`, en: `${v}` }, value: String(v) }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
@@ -1790,7 +1798,15 @@ export function generateSquareCubeMission(template: Mission, tier: DifficultyTie
   return {
     ...template,
     description,
-    data: { n, answer, mode, generatorType: 'SQUARE_CUBE_RANDOM' },
+    data: {
+      n, answer, mode, generatorType: 'SQUARE_CUBE_RANDOM',
+      choices: (() => {
+        const distractors = [n * 2, answer + n, answer - 1, answer + 1].filter(v => v > 0 && v !== answer);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
@@ -1928,7 +1944,15 @@ export function generateSquareRootMission(template: Mission, tier: DifficultyTie
   return {
     ...template,
     description,
-    data: { n, answer, op, mode, generatorType: 'SQUARE_ROOT_RANDOM' },
+    data: {
+      n, answer, op, mode, generatorType: 'SQUARE_ROOT_RANDOM',
+      choices: (() => {
+        const distractors = [answer + 1, answer - 1, answer * 2, Math.round(n / 2)].filter(v => v > 0 && v !== answer);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
@@ -2296,7 +2320,17 @@ export function generateBodmasMission(template: Mission, tier: DifficultyTier = 
   return {
     ...template,
     description,
-    data: { answer, expr, generatorType: 'BODMAS_RANDOM' },
+    data: {
+      answer, expr, generatorType: 'BODMAS_RANDOM',
+      choices: (() => {
+        // Common BODMAS mistake: left-to-right without precedence
+        const wrongLTR = answer + (answer > 20 ? -5 : 5);
+        const distractors = [wrongLTR, answer + 2, answer - 3, answer * 2].filter(v => v !== answer && v > 0);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}$`, en: `$${v}$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }

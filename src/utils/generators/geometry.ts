@@ -64,7 +64,16 @@ export function generateAnglesMission(template: Mission, tier: DifficultyTier = 
   return {
     ...template,
     description,
-    data: { ...template.data, angle, total, ans, generatorType: 'ANGLES_RANDOM' },
+    data: {
+      ...template.data, angle, total, ans, generatorType: 'ANGLES_RANDOM',
+      choices: (() => {
+        const wrong = total === 90 ? 180 - angle : 90 - angle;
+        const distractors = [wrong, angle, ans + 10, ans - 10].filter(v => v > 0 && v < total && v !== ans);
+        const opts = [...new Set([ans, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}°$`, en: `$${v}°$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(ans),
+    },
     tutorialSteps,
   };
 }
@@ -137,7 +146,15 @@ export function generateAnglesTriangleMission(template: Mission, tier: Difficult
   return {
     ...template,
     description,
-    data: { ...template.data, angle: a1 + a2, total: 180, a1, a2, generatorType: 'ANGLES_TRIANGLE_RANDOM' },
+    data: {
+      ...template.data, angle: a1 + a2, total: 180, a1, a2, generatorType: 'ANGLES_TRIANGLE_RANDOM',
+      choices: (() => {
+        const distractors = [180 - a1, 180 - a2, a1 + a2, answer + 10].filter(v => v > 0 && v < 180 && v !== answer);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}°$`, en: `$${v}°$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }
@@ -222,7 +239,15 @@ export function generateAnglesPointMission(template: Mission, tier: DifficultyTi
   return {
     ...template,
     description,
-    data: { ...template.data, angle: sum, total: 360, angles, generatorType: 'ANGLES_POINT_RANDOM' },
+    data: {
+      ...template.data, angle: sum, total: 360, angles, generatorType: 'ANGLES_POINT_RANDOM',
+      choices: (() => {
+        const distractors = [360 - angles[0], answer + 20, answer - 20, 180 - answer].filter(v => v > 0 && v < 360 && v !== answer);
+        const opts = [...new Set([answer, ...distractors])].slice(0, 4).sort((a, b) => a - b);
+        return opts.map(v => ({ label: { zh: `$${v}°$`, en: `$${v}°$` }, value: String(v), isLatex: true }));
+      })(),
+      correctChoice: String(answer),
+    },
     tutorialSteps,
   };
 }

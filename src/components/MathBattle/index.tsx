@@ -257,22 +257,15 @@ export const MathBattle = ({
     const correctIdx = (currentQuestion.data.choices as any[]).findIndex((c: any) => String(c.value) === String(currentQuestion.data.correctChoice));
     setMcSelectedIndex(index);
     setMcCorrectIndex(correctIdx);
-    // Set the answer in inputs so checkAnswer works via normal path
-    setInputs({ ans: value });
+    // Set the answer in inputs with _mc flag so checkAnswer uses MC path
+    setInputs({ ans: value, _mc: '1' });
     const isCorrect = String(value) === String(currentQuestion.data.correctChoice);
     setMcResult(isCorrect ? 'correct' : 'wrong');
     playClick();
     // Delay then process via normal submit flow
     setTimeout(() => {
-      if (isCorrect) {
-        // Simulate correct answer processing
-        setInputs({ ans: value });
-        handleSubmit();
-      } else {
-        // Simulate wrong answer processing
-        setInputs({ ans: value });
-        handleSubmit();
-      }
+      setInputs({ ans: value, _mc: '1' });
+      handleSubmit();
     }, 600); // Show visual feedback before advancing
   };
 

@@ -33,8 +33,8 @@ function gcd(a: number, b: number): number {
 export function checkAnswer(mission: Mission, inputs: { [key: string]: string }): CheckResult {
   const { type, data, topic } = mission;
 
-  // Generic multiple-choice: data.choices + data.correctChoice
-  if (data?.choices && data?.correctChoice !== undefined) {
+  // Generic multiple-choice: only when _mc flag is set (from MultipleChoice button clicks)
+  if (data?.choices && data?.correctChoice !== undefined && inputs._mc === '1') {
     const isCorrect = String(inputs.ans || '').trim() === String(data.correctChoice).trim();
     return { correct: isCorrect, expected: { ans: String(data.correctChoice) } };
   }
