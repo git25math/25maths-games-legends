@@ -3,7 +3,7 @@
  * Shows ExamHub vocabulary mastery data in Play teacher dashboard.
  * Reads from shared Supabase `leaderboard` table (teacher-readable via RLS).
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BookOpen, ExternalLink } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow } from './types';
@@ -26,6 +26,9 @@ export function ExamHubBridge({ lang, students }: Props) {
   const [vocabData, setVocabData] = useState<Map<string, LeaderboardEntry>>(new Map());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  // Only re-fetch when student IDs change, not on every realtime score update
+  const studentIdKey = useMemo(() => students.map(s => s.user_id).sort().join(','), [students]);
 
   useEffect(() => {
     if (students.length === 0) return;
@@ -56,7 +59,7 @@ export function ExamHubBridge({ lang, students }: Props) {
         setError(true);
         setLoading(false);
       });
-  }, [students]);
+  }, [studentIdKey]);
 
   // Only show if we have any matching data
   const matchedStudents = students.filter(s => vocabData.has(s.user_id));

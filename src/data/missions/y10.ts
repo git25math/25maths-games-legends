@@ -391,7 +391,14 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求等差数列第 $n$ 项：$a_n = a + (n-1)d$。', en: 'Find the nth term: $a_n = a + (n-1)d$.' },
     data: { a: 5, d: 3, n: 10, seqType: 'arithmetic', generatorType: 'SEQUENCE_NTH_RANDOM' }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '曹操："为什么要学等差数列第n项公式？每天清点兵力，一天天数到第10天太慢。公式 $a_n = a_1 + (n-1)d$ 让你直接算出第10天的兵力！"', en: 'Cao Cao: "Why learn the nth term formula? Counting to day 10 one by one is slow. Formula $a_n = a_1 + (n-1)d$ jumps directly to day 10!"' }, highlightField: 'ans' },
+      { text: { zh: '曹操："识别等差数列：第1天 5 人，第2天 8 人，第3天 11 人，差值 = 3（恒定），公差 $d = 3$。"', en: 'Cao Cao: "Identify arithmetic: day 1: 5, day 2: 8, day 3: 11. Difference = 3 (constant). Common difference $d = 3$."' }, highlightField: 'ans' },
+      { text: { zh: '曹操："套公式：首项 $a_1 = 5$，公差 $d = 3$，求第 $10$ 项：\n$$a_{10} = 5 + (10-1) \\times 3$$"', en: 'Cao Cao: "Apply formula: $a_1 = 5$, $d = 3$. Find term 10:\n$$a_{10} = 5 + (10-1) \\times 3$$"' }, highlightField: 'ans' },
+      { text: { zh: '曹操："计算：$a_{10} = 5 + 9 \\times 3 = 5 + 27 = 32$。"', en: 'Cao Cao: "Calculate: $a_{10} = 5 + 9 \\times 3 = 5 + 27 = 32$."' }, highlightField: 'ans' },
+      { text: { zh: '曹操："答案：第 $10$ 天有 $32$ 名新兵。"', en: 'Cao Cao: "Answer: 32 new recruits on day 10."' }, highlightField: 'ans' },
+      { text: { zh: '曹操："验算：通项公式 $a_n = 3n + 2$，代入 $n=10$：$3 \\times 10 + 2 = 32$ ✓ 一致！"', en: 'Cao Cao: "Verify: formula $a_n = 3n + 2$, substitute $n=10$: $3 \\times 10 + 2 = 32$ ✓ Matches!"' }, highlightField: 'ans' },
+    ],
     secret: { concept: { zh: '等差数列第n项 = 首项 + (n−1)×公差。', en: 'Arithmetic nth term = first term + (n−1) × common difference.' }, formula: '$a_n = a_1 + (n-1)d$', tips: [{ zh: '曹操提示：兵贵神速，公式比数数快百倍！', en: 'Cao Cao Tip: Speed wins wars — the formula is 100x faster than counting!' }] },
     storyConsequence: { correct: { zh: '兵力预测——公式精准！做得漂亮！', en: 'Troop Forecast — Formula nailed!' }, wrong: { zh: '计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },
@@ -406,7 +413,14 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求等比数列第 $n$ 项：$a_n = a \\times r^{n-1}$。', en: 'Find the nth term: $a_n = a \\times r^{n-1}$.' },
     data: { a: 3, r: 2, n: 5, seqType: 'geometric', generatorType: 'SEQUENCE_NTH_RANDOM' }, difficulty: 'Hard', reward: 540,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
-    tutorialSteps: [],
+    tutorialSteps: [
+      { text: { zh: '华佗："等比数列中每项是前一项的固定倍数——就像瘟疫：第1天 3 人染病，第2天 6，第3天 12，第4天 24……翻倍速度极其恐怖！"', en: 'Hua Tuo: "In a geometric sequence each term is a fixed multiple of the previous — like plague: day 1: 3, day 2: 6, day 3: 12, day 4: 24... Doubling speed is terrifying!"' }, highlightField: 'ans' },
+      { text: { zh: '华佗："识别等比数列：$6/3 = 2$，$12/6 = 2$，$24/12 = 2$，比值恒定 ✓ 公比 $r = 2$。"', en: 'Hua Tuo: "Identify geometric: $6/3 = 2$, $12/6 = 2$, $24/12 = 2$. Constant ratio ✓ Common ratio $r = 2$."' }, highlightField: 'ans' },
+      { text: { zh: '华佗："等比数列公式：$$a_n = a_1 \\times r^{n-1}$$\n首项 $a_1 = 3$，公比 $r = 2$，求第 $5$ 项：$$a_5 = 3 \\times 2^{5-1} = 3 \\times 2^4$$"', en: 'Hua Tuo: "Geometric formula: $$a_n = a_1 \\times r^{n-1}$$\nFirst term $a_1 = 3$, ratio $r = 2$. Find term 5: $$a_5 = 3 \\times 2^{5-1} = 3 \\times 2^4$$"' }, highlightField: 'ans' },
+      { text: { zh: '华佗："计算 $2^4$：$2^1=2$，$2^2=4$，$2^3=8$，$2^4=16$。\n所以 $a_5 = 3 \\times 16 = 48$。"', en: 'Hua Tuo: "Calculate $2^4$: $2^1=2$, $2^2=4$, $2^3=8$, $2^4=16$.\nSo $a_5 = 3 \\times 16 = 48$."' }, highlightField: 'ans' },
+      { text: { zh: '华佗："答案：第 $5$ 天有 $48$ 人染病。"', en: 'Hua Tuo: "Answer: 48 people infected on day 5."' }, highlightField: 'ans' },
+      { text: { zh: '华佗："验算：数列为 $3, 6, 12, 24, 48$，第5项 = $48$ ✓ 指数增长在第5天已有 48 人！必须立即隔离。"', en: 'Hua Tuo: "Verify: sequence is $3, 6, 12, 24, 48$. Term 5 = $48$ ✓ 48 infected by day 5! Must isolate immediately."' }, highlightField: 'ans' },
+    ],
     secret: { concept: { zh: '等比数列第n项 = 首项 × 公比^(n−1)。', en: 'Geometric nth term = first term × ratio^(n−1).' }, formula: '$a_n = a \\times r^{n-1}$', tips: [{ zh: '华佗提示：指数增长极其恐怖——早发现，早隔离！', en: 'Hua Tuo Tip: Exponential growth is terrifying — detect early, isolate early!' }] },
     storyConsequence: { correct: { zh: '瘟疫蔓延——指数增长算准了！做得漂亮！', en: 'Plague Spread — Exponential growth calculated!' }, wrong: { zh: '指数计算有误…再试一次！', en: 'Not quite... Try again!' } }
   },

@@ -170,18 +170,19 @@ export function DashboardScreen({ lang, onClose }: Props) {
   };
 
   const removeStudentTag = async (userId: string, tag: string) => {
-    // Optimistic update with rollback on failure
+    // Optimistic update with rollback + error feedback on failure
     setStudents(prev => prev.map(s =>
       s.user_id === userId ? { ...s, class_tags: s.class_tags.filter(t => t !== tag) } : s
     ));
     const { error: err } = await supabase.rpc('remove_student_tag', { p_user_id: userId, p_tag: tag });
     if (err) {
-      // Rollback: re-add tag
+      setError(lang === 'en' ? 'Failed to remove tag — restored' : '标签删除失败，已恢复');
       setStudents(prev => prev.map(s =>
         s.user_id === userId && !s.class_tags.includes(tag)
           ? { ...s, class_tags: [...s.class_tags, tag] }
           : s
       ));
+      setTimeout(() => setError(''), 3000);
     }
   };
 
@@ -457,7 +458,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                 className={`bg-white border border-indigo-200 rounded-lg px-3 py-1.5 text-sm text-indigo-900 font-bold ${INPUT_FOCUS_CLASS}`}
                 autoFocus
               >
-                <option value="">选择...</option>
+                <option value="">{lang === 'en' ? 'Select...' : '选择...'}</option>
                 {ALL_CLASSES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
               <button onClick={batchAddTag} className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors">{t.confirm}</button>
@@ -617,7 +618,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                             className={`text-[9px] bg-white border border-indigo-300 rounded px-1 py-0.5 font-bold text-indigo-900 ${INPUT_FOCUS_CLASS}`}
                             autoFocus
                           >
-                            <option value="">选择班级...</option>
+                            <option value="">{lang === 'en' ? 'Select class...' : '选择班级...'}</option>
                             {ALL_CLASSES.filter(c => !(s.class_tags || []).includes(c)).map(c => (
                               <option key={c} value={c}>{c}</option>
                             ))}

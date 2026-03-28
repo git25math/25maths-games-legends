@@ -101,15 +101,18 @@ export const StudentDetailCard = ({
 
   // Fetch via SECURITY DEFINER RPCs (bypasses RLS for teacher access)
   useEffect(() => {
+    let mounted = true;
     setLoading(true);
     Promise.all([
       supabase.rpc('get_student_battles', { p_user_id: student.user_id }),
       supabase.rpc('get_student_kp_progress', { p_user_id: student.user_id }),
     ]).then(([battleRes, kpRes]) => {
+      if (!mounted) return;
       setBattles((battleRes.data as BattleRecord[]) || []);
       setKpRecords((kpRes.data as KPRecord[]) || []);
       setLoading(false);
-    }).catch(() => setLoading(false));
+    }).catch(() => { if (mounted) setLoading(false); });
+    return () => { mounted = false; };
   }, [student.user_id]);
 
   const dims = compute7Dimensions(student, units, totalMissions, battles, kpRecords);

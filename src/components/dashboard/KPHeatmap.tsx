@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { Grid3X3, ChevronDown, ChevronUp } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, KPProgressRow } from './types';
@@ -43,10 +43,12 @@ export const KPHeatmap = ({
   const [kpData, setKpData] = useState<KPProgressRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
+  const tableRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setLoading(true);
     setExpanded(false);
+    if (tableRef.current) tableRef.current.scrollLeft = 0;
     supabase.rpc('get_class_kp_progress', {
       p_grade: grade,
       p_class: filterTag || null,
@@ -126,7 +128,7 @@ export const KPHeatmap = ({
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow">
+      <div ref={tableRef} className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow">
         <table className="w-full text-[10px]">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
@@ -155,7 +157,7 @@ export const KPHeatmap = ({
                 onClick={() => onStudentClick(s.user_id)}
               >
                 <td className="sticky left-0 bg-white z-10 px-2 py-1.5 font-bold text-slate-700 whitespace-nowrap" title={s.display_name || ''}>
-                  {(s.display_name || '?').length > 12 ? (s.display_name || '?').slice(0, 11) + '…' : (s.display_name || '?')}
+                  <span className="inline-block max-w-[100px] truncate align-bottom">{s.display_name || '?'}</span>
                 </td>
                 {visibleKPs.map(kp => {
                   const cell = matrix[s.user_id]?.[kp];
