@@ -1,18 +1,16 @@
 /**
- * BottomNav — Mobile bottom navigation bar (4 tabs)
- * Replaces the "More" dropdown menu on mobile for better UX.
- * Only visible on screens < md breakpoint.
+ * BottomNav — Mobile bottom navigation (3 tabs: Map / Homework / Me)
+ * Simplified from 4 tabs. Expedition + Achievements moved into "Me" panel.
  */
 import { motion } from 'motion/react';
-import { MapIcon, Swords, Trophy, User } from 'lucide-react';
+import { MapIcon, BookOpen, User } from 'lucide-react';
 import type { Language } from '../types';
 
-export type BottomTab = 'map' | 'expedition' | 'achievements' | 'profile';
+export type BottomTab = 'map' | 'homework' | 'profile';
 
 const TABS: { id: BottomTab; icon: typeof MapIcon; zh: string; en: string }[] = [
-  { id: 'map', icon: MapIcon, zh: '地图', en: 'Map' },
-  { id: 'expedition', icon: Swords, zh: '远征', en: 'Quest' },
-  { id: 'achievements', icon: Trophy, zh: '成就', en: 'Awards' },
+  { id: 'map', icon: MapIcon, zh: '练习', en: 'Practice' },
+  { id: 'homework', icon: BookOpen, zh: '作业', en: 'Homework' },
   { id: 'profile', icon: User, zh: '我的', en: 'Me' },
 ];
 
