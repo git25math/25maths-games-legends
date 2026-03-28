@@ -506,7 +506,7 @@ function CreateAssignmentModal({
       return;
     }
 
-    onCreated(title.trim(), selectedMissions.size, data as string | undefined);
+    onCreated(title.trim(), selectedMissions.size);
   };
 
   return (
