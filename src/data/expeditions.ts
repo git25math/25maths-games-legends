@@ -147,7 +147,49 @@ const NORTHERN: Expedition = {
   ],
 };
 
-export const EXPEDITIONS: Expedition[] = [REDCLIFFS, PEACHGARDEN, NORTHERN];
+// ── Expedition 4: 蜀道行军 ──────────────────────────────────────────
+const SHUDAO: Expedition = {
+  id: 'exp_shudao',
+  name: { zh: '蜀道行军', en: 'Road to Shu' },
+  description: { zh: '赤壁大捷后，刘备挥师入蜀！翻山越岭，攻关夺隘，一路杀向成都。', en: 'After Red Cliffs, Liu Bei marches into Shu! Scale mountains, breach passes, and fight your way to Chengdu.' },
+  gradeMin: 8, gradeMax: 10,
+  startingRations: 5,
+  era: { zh: '建安十六年', en: '211 CE' },
+  quotes: [
+    { text: { zh: '蜀道之难，难于上青天！', en: 'The road to Shu is harder than climbing to the blue sky!' }, author: { zh: '李白', en: 'Li Bai' } },
+    { text: { zh: '剑阁峥嵘而崔嵬，一夫当关，万夫莫开。', en: 'Sword Gate towers steep and lofty — one man can hold it against ten thousand.' }, author: { zh: '李白', en: 'Li Bai' } },
+    { text: { zh: '益州险塞，沃野千里，天府之土。', en: 'Yizhou is a natural fortress with fertile plains for a thousand li — a land of heavenly abundance.' }, author: { zh: '诸葛亮', en: 'Zhuge Liang' } },
+    { text: { zh: '志当存高远。', en: 'One\'s aspirations should reach far and high.' }, author: { zh: '诸葛亮', en: 'Zhuge Liang' } },
+  ],
+  nodes: [
+    { id: 1, type: 'battle', difficulty: 'green', questionCount: 1, rationReward: 0, xpMultiplier: 1,
+      name: { zh: '荆州集结', en: 'Jingzhou Assembly' },
+      intel: { zh: '赤壁胜利后，刘备在荆州整军备战。三万精兵，待命出发！', en: 'After Red Cliffs, Liu Bei musters his forces at Jingzhou. Thirty thousand troops stand ready!' } },
+    { id: 2, type: 'battle', difficulty: 'green', questionCount: 1, rationReward: 1, xpMultiplier: 1,
+      name: { zh: '樊城突围', en: 'Fan Castle Breakout' },
+      intel: { zh: '曹仁扼守樊城，关羽请命先行突破！', en: 'Cao Ren holds Fan Castle. Guan Yu volunteers to break through!' } },
+    { id: 3, type: 'battle', difficulty: 'amber', questionCount: 2, rationReward: 0, xpMultiplier: 1.5,
+      name: { zh: '汉水渡口', en: 'Han River Crossing' },
+      intel: { zh: '汉水湍急，敌军在对岸设防。渡河需要精密计算！', en: 'The Han River rushes fast with enemies fortified on the opposite bank. Crossing demands precision!' } },
+    { id: 4, type: 'rest', difficulty: 'green', questionCount: 0, rationReward: 2, xpMultiplier: 0,
+      name: { zh: '山间补给', en: 'Mountain Supply' },
+      intel: { zh: '翻越秦岭，山路崎岖。找到一处山泉营地，稍作休整。', en: 'Crossing the Qinling Mountains on rugged paths. A mountain spring campsite offers respite.' } },
+    { id: 5, type: 'battle', difficulty: 'amber', questionCount: 2, rationReward: 1, xpMultiplier: 2,
+      name: { zh: '阳平关', en: 'Yangping Pass' },
+      intel: { zh: '阳平关是汉中门户，张鲁重兵把守。夺关方能入蜀！', en: 'Yangping Pass guards the way to Hanzhong. Zhang Lu\'s heavy garrison must be overcome!' } },
+    { id: 6, type: 'battle', difficulty: 'red', questionCount: 2, rationReward: 0, xpMultiplier: 2.5,
+      name: { zh: '剑门天险', en: 'Sword Gate Pass' },
+      intel: { zh: '"一夫当关，万夫莫开"——剑门关天险，须以智取！', en: '"One man can hold against ten thousand" — Sword Gate\'s natural barrier demands cunning!' } },
+    { id: 7, type: 'battle', difficulty: 'red', questionCount: 3, rationReward: 0, xpMultiplier: 3,
+      name: { zh: '绵竹决战', en: 'Mianzhu Battle' },
+      intel: { zh: '刘璋最后防线——绵竹关守将李严殊死抵抗！', en: 'Liu Zhang\'s final defense — Commander Li Yan fights desperately at Mianzhu!' } },
+    { id: 8, type: 'boss', difficulty: 'red', questionCount: 3, rationReward: 0, xpMultiplier: 5,
+      name: { zh: '成都入城', en: 'Enter Chengdu' },
+      intel: { zh: '成都城门大开——刘璋出降，蜀汉基业由此开创！', en: 'Chengdu\'s gates open — Liu Zhang surrenders. The foundation of Shu Han begins!' } },
+  ],
+};
+
+export const EXPEDITIONS: Expedition[] = [REDCLIFFS, PEACHGARDEN, NORTHERN, SHUDAO];
 
 /** Get all expeditions available for a grade */
 export function getExpeditionsForGrade(grade: number): Expedition[] {
