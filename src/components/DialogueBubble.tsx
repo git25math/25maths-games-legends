@@ -70,7 +70,7 @@ export const DialogueBubble = memo(function DialogueBubble({
         {lines.map((line, idx) => {
           if (idx >= revealedLines) return null;
           if (!line.trim()) return <div key={idx} className="h-1" />;
-          return <TypewriterLine key={`${idx}-${text.slice(0, 8)}`} text={line} />;
+          return <div key={`${idx}-${text.slice(0, 8)}`}><TypewriterLine text={line} /></div>;
         })}
       </div>
     </motion.div>
