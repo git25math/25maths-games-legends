@@ -3,7 +3,7 @@
  * Shown at the top of DashboardScreen.
  */
 import { useState, useEffect } from 'react';
-import { Plus, Copy, Check, Archive } from 'lucide-react';
+import { Plus, Copy, Check, Archive, School } from 'lucide-react';
 import type { Language } from '../../types';
 import { createClass, getMyClasses, archiveClass, type TeacherClass } from '../../utils/classInvite';
 import { toTraditional } from '../../i18n/zhHantMap';
@@ -59,7 +59,8 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
   return (
     <div className="bg-white/60 backdrop-blur rounded-2xl border border-slate-100 p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-black text-slate-700">
+        <h3 className="text-sm font-black text-slate-700 flex items-center gap-2">
+          <School size={16} className="text-indigo-500" />
           {txt('我的班级', 'My Classes')}
         </h3>
         <button
@@ -100,7 +101,7 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
 
       {/* Class list */}
       {activeClasses.length === 0 ? (
-        <p className="text-xs text-slate-400 text-center py-2">
+        <p className="text-xs text-slate-400 text-center py-4">
           {txt('还没有班级。创建一个来获取邀请码。', 'No classes yet. Create one to get an invite code.')}
         </p>
       ) : (
@@ -114,7 +115,7 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
                   <button onClick={() => setExpandedClassId(isExpanded ? null : cls.id)} className="text-left flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold text-slate-700">{cls.name}</span>
-                      <span className="px-1.5 py-0.5 bg-slate-200 text-slate-600 text-[10px] font-bold rounded">
+                      <span className="px-2 py-0.5 bg-slate-200 text-slate-600 text-[10px] font-black rounded-full">
                         {members.length} {txt('人', 'students')}
                       </span>
                     </div>

@@ -119,7 +119,7 @@ export function WrongAnswerPanel({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
-      className={`rounded-xl p-5 space-y-4 border-2 ${isPartial ? 'bg-yellow-50 border-yellow-300' : 'bg-red-50 border-red-200'}`}
+      className={`rounded-xl p-5 space-y-4 border-2 ${isPartial ? 'bg-yellow-50 border-yellow-300' : 'bg-red-100 border-red-300'}`}
     >
       {/* Header */}
       <div className={`flex items-center gap-2 font-bold ${isPartial ? 'text-yellow-700' : 'text-red-700'}`}>
