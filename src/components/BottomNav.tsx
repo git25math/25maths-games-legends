@@ -56,7 +56,7 @@ export function BottomNav({ activeTab, onTabChange, lang, badge = {} }: Props) {
               {isActive && (
                 <motion.div
                   layoutId="bottomNavIndicator"
-                  className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gold-light rounded-full"
+                  className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-1 bg-gold-light rounded-full"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}

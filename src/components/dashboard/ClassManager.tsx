@@ -64,7 +64,7 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
         </h3>
         <button
           onClick={() => setShowCreate(!showCreate)}
-          className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-500 transition-colors"
         >
           <Plus size={12} />
           {txt('创建班级', 'New Class')}
@@ -81,13 +81,13 @@ export function ClassManager({ lang, grade, students = [], onClassCreated }: {
               onChange={e => setNewName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleCreate()}
               placeholder={txt('班级名称（如 7A 数学）', 'Class name (e.g., 7A Math)')}
-              className="flex-1 px-3 py-2 text-sm border border-indigo-300 rounded-lg focus:outline-none focus:border-indigo-500"
+              className="flex-1 px-3 py-2 text-sm border border-indigo-300 rounded-xl focus:outline-none focus:border-indigo-500"
               autoFocus
             />
             <button
               onClick={handleCreate}
               disabled={creating || !newName.trim()}
-              className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 disabled:opacity-50 transition-colors"
+              className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-500 disabled:opacity-50 transition-colors"
             >
               {creating ? '...' : txt('创建', 'Create')}
             </button>
