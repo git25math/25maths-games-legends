@@ -26,13 +26,15 @@ import { hasAnyPracticeCompletion } from '../utils/completionState';
 import { getTopicForKp } from '../data/curriculum/kp-registry';
 import { createQuestionFingerprint } from '../utils/questionFingerprint';
 import { logAttempt } from '../utils/logAttempt';
+import { DiscoverPanel } from '../components/DiscoverPanel';
 
-type PracticePhase = 'green' | 'amber' | 'red' | 'battle';
+type PracticePhase = 'discover' | 'green' | 'amber' | 'red' | 'battle';
 
-const PHASE_ORDER: PracticePhase[] = ['green', 'amber', 'red', 'battle'];
+const PHASE_ORDER: PracticePhase[] = ['discover', 'green', 'amber', 'red', 'battle'];
 
 /** Correct answers required to advance from each phase */
 const PHASE_REQUIRED: Record<PracticePhase, number> = {
+  discover: 0, // interactive exploration — manual advance
   green: 0,    // manual advance after tutorial
   amber: 1,    // 1 guided question
   red: 3,      // 3 independent questions
@@ -85,6 +87,13 @@ export const PracticeScreen = ({
   } = usePracticePersistedState(mission.id);
 
   const currentPhase = repairMode ? 'red' as const : persistedPhase;
+
+  // Auto-skip discover phase if mission has no discoverSteps
+  useEffect(() => {
+    if (currentPhase === 'discover' && (!mission.discoverSteps || mission.discoverSteps.length === 0)) {
+      setCurrentPhase('green');
+    }
+  }, [currentPhase, mission.discoverSteps, setCurrentPhase]);
 
   const [currentMission, setCurrentMission] = useState<Mission>(() => generateMission(mission, adaptiveTier));
   const [inputs, setInputs] = useState<Record<string, string>>({});
@@ -295,7 +304,7 @@ export const PracticeScreen = ({
     let earnedXP = 0;
     if (!repairMode && onEarnXP) {
       const phaseRatios: Record<PracticePhase, number> = {
-        green: 0.10, amber: 0.15, red: 0.25, battle: 0.50,
+        discover: 0.05, green: 0.10, amber: 0.15, red: 0.25, battle: 0.50,
       };
       const base = Math.max(3, Math.round((mission.reward || 50) * phaseRatios[currentPhase]));
       // First clear: full XP; repeat (any phase ever done): 20%
@@ -456,10 +465,10 @@ export const PracticeScreen = ({
                   const isCurrent = phase === currentPhase;
                   const isCompleted = i < phaseIndex;
                   const colors: Record<PracticePhase, string> = {
-                    green: 'bg-emerald-500', amber: 'bg-amber-500', red: 'bg-rose-500', battle: 'bg-indigo-500',
+                    discover: 'bg-amber-400', green: 'bg-emerald-500', amber: 'bg-amber-500', red: 'bg-rose-500', battle: 'bg-indigo-500',
                   };
                   const dimColors: Record<PracticePhase, string> = {
-                    green: 'bg-emerald-900', amber: 'bg-amber-900', red: 'bg-rose-900', battle: 'bg-indigo-900',
+                    discover: 'bg-amber-900', green: 'bg-emerald-900', amber: 'bg-amber-900', red: 'bg-rose-900', battle: 'bg-indigo-900',
                   };
                   const phaseLabels: Record<PracticePhase, Record<string, string>> = {
                     green: { zh: '\u6559\u5b66', en: 'Tutorial' },
@@ -589,7 +598,21 @@ export const PracticeScreen = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
             className="space-y-6"
-          >            {currentPhase === 'green' ? (
+          >            {currentPhase === 'discover' ? (
+              <>
+                {/* DISCOVER PHASE: Interactive concept exploration */}
+                {mission.discoverSteps && mission.discoverSteps.length > 0 ? (
+                  <DiscoverPanel
+                    steps={mission.discoverSteps}
+                    lang={lang}
+                    onComplete={() => {
+                      logAttempt({ questionId: `${mission.id}-discover-complete`, nodeId: mission.kpId || mission.type, isCorrect: true, sourceMode: 'practice', durationMs: Date.now() - questionStartRef.current });
+                      advancePhase();
+                    }}
+                  />
+                ) : null}
+              </>
+            ) : currentPhase === 'green' ? (
               <>
                 {/* GREEN PHASE: Worked example — no input, just watch the solution */}
                 <div className="px-3 py-2 bg-amber-900/40 border border-amber-600/30 rounded-lg text-amber-100 text-xs font-bold text-center">
@@ -608,6 +631,7 @@ export const PracticeScreen = ({
                 {/* Skip tutorial option — shown after first step to measure engagement */}
                 {tutorialStep >= 1 && (
                   <button
+                    aria-label={lang === 'en' ? 'Skip tutorial and go to practice' : '跳过教程直接练习'}
                     onClick={() => {
                       logAttempt({ questionId: `${mission.id}-skip-tutorial`, nodeId: mission.kpId || mission.type, isCorrect: true, sourceMode: 'practice', durationMs: Date.now() - questionStartRef.current });
                       advancePhase();
@@ -727,13 +751,15 @@ export const PracticeScreen = ({
                 <AnimatePresence>
                   {showRepairIntercept && !repairMode && (
                     <motion.div
+                      role="dialog"
+                      aria-label={lang === 'en' ? 'Repair training suggestion' : '修复训练建议'}
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       className="rounded-2xl border-2 border-rose-500/40 bg-gradient-to-r from-rose-950/60 to-amber-950/40 p-4 mb-3"
                     >
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-lg">🛠</span>
+                        <span className="text-lg" aria-hidden="true">🛠</span>
                         <h3 className="text-sm font-black text-rose-400">
                           {lang === 'en' ? 'You\'re stuck — let\'s fix the foundation' : lang === 'zh_TW' ? '你卡住了——先修基礎' : '你卡住了——先修基础'}
                         </h3>
@@ -765,6 +791,7 @@ export const PracticeScreen = ({
 
                 <motion.button
                   {...(wrongAnswerData || showCorrectFlash || showRepairIntercept ? {} : buttonBase)}
+                  aria-label={lang === 'en' ? 'Submit answer' : '提交答案'}
                   onClick={handleSubmit}
                   disabled={!!wrongAnswerData || showCorrectFlash || showRepairIntercept}
                   className={`w-full py-5 text-[#f4e4bc] text-xl font-black rounded-lg transition-colors flex items-center justify-center gap-3 border-2 min-h-12 ${
@@ -773,7 +800,7 @@ export const PracticeScreen = ({
                       : 'bg-[#8b0000] shadow-[0_4px_0_#5c0000] border-[#5c0000]'
                   }`}
                 >
-                  <Swords size={24} />
+                  <Swords size={24} aria-hidden="true" />
                   {t.attack}
                 </motion.button>
               </>
@@ -814,6 +841,8 @@ export const PracticeScreen = ({
     <AnimatePresence>
       {showExitConfirm && (
         <motion.div
+          role="dialog"
+          aria-label={lang === 'en' ? 'Quit confirmation' : '退出确认'}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
         >

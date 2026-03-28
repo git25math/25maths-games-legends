@@ -94,6 +94,8 @@ export const RepairDialog = ({
 
   return (
     <motion.div
+      role="dialog"
+      aria-label={lang === 'en' ? 'Repair equipment' : '修复装备'}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

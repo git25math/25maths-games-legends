@@ -60,6 +60,8 @@ export const InputFields = ({
               type="text"
               inputMode="decimal"
               autoComplete="off"
+              aria-label={field.label}
+              aria-disabled={isTutorial && !isHighlighted}
               disabled={isTutorial && !isHighlighted}
               value={inputs[field.id] || ''}
               onChange={(e) => setInputs({ ...inputs, [field.id]: e.target.value })}

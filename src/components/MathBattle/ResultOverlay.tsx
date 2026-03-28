@@ -56,6 +56,9 @@ export function ResultOverlay({
   return (
     <AnimatePresence>
       <motion.div
+        role="dialog"
+        aria-live="assertive"
+        aria-label={showResult === 'success' ? (lang === 'en' ? 'Victory' : '胜利') : (lang === 'en' ? 'Defeat' : '失败')}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, scale: 0.95, y: -20 }}
