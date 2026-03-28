@@ -101,6 +101,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [showWeeklyReport, setShowWeeklyReport] = useState(false);
   const [parentReportStudent, setParentReportStudent] = useState<StudentRow | null>(null);
   const [alertOnly, setAlertOnly] = useState(false);
+  const [showAnalysis, setShowAnalysis] = useState(false);
 
   // Assignments (shared: AssignmentPanel renders, StudentDetailCard reads)
   type AssignmentRecord = { id: string; mission_ids: number[]; title: string; deadline: string | null; archived_at: string | null };
@@ -413,7 +414,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="min-h-screen bg-white/40 backdrop-blur-md rounded-3xl p-5 border border-white/60 shadow-xl"
+      className="min-h-screen bg-white/40 backdrop-blur-md rounded-3xl p-5 border border-white/60 shadow-xl space-y-4"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4 bg-white rounded-2xl px-5 py-3 border border-slate-200 shadow-md">
@@ -753,19 +754,29 @@ export function DashboardScreen({ lang, onClose }: Props) {
       {/* ╔══════════════════════════════════════════╗
          ║  ZONE 3: 深入分析（需要时展开）          ║
          ╚══════════════════════════════════════════╝ */}
-      <div className="mt-2 mb-3 flex items-center gap-2">
+      <button
+        onClick={() => setShowAnalysis(!showAnalysis)}
+        className="w-full flex items-center gap-2 py-2"
+      >
         <div className="h-px flex-1 bg-slate-200" />
-        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{lang === 'en' ? 'Analysis' : '深入分析'}</span>
+        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1">
+          {lang === 'en' ? 'Analysis' : '深入分析'}
+          <span className="text-slate-300">{showAnalysis ? '▲' : '▼'}</span>
+        </span>
         <div className="h-px flex-1 bg-slate-200" />
-      </div>
-      <WeeklyTrend lang={lang} grade={grade} filterTag={filterTag} />
-      <ClassOverview lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} totalMissions={totalMissions} />
-      <ClassManager lang={lang} grade={grade} students={students} onClassCreated={(name) => setFilterTag(name)} />
-      <ExamHubBridge lang={lang} students={students} />
-      <KPHeatmap lang={lang} grade={grade} filterTag={filterTag} students={students} onStudentClick={(uid) => {
-        const s = students.find(st => st.user_id === uid);
-        if (s) setSelectedStudent(s);
-      }} />
+      </button>
+      {showAnalysis && (
+        <div className="space-y-4">
+          <WeeklyTrend lang={lang} grade={grade} filterTag={filterTag} />
+          <ClassOverview lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} totalMissions={totalMissions} />
+          <ClassManager lang={lang} grade={grade} students={students} onClassCreated={(name) => setFilterTag(name)} />
+          <ExamHubBridge lang={lang} students={students} />
+          <KPHeatmap lang={lang} grade={grade} filterTag={filterTag} students={students} onStudentClick={(uid) => {
+            const s = students.find(st => st.user_id === uid);
+            if (s) setSelectedStudent(s);
+          }} />
+        </div>
+      )}
 
       {/* ═══ Student Detail Card (v8.0) ═══ */}
       <AnimatePresence>
