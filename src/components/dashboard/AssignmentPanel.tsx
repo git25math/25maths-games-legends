@@ -470,7 +470,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
 
 function CreateAssignmentModal({
   lang, grade, filterTag, units, onClose, onCreated,
-  initialKpId, initialMissionIds, weakStudentNames,
+  initialKpId, initialMissionIds, weakStudentNames, targetStudentIds,
 }: {
   lang: Language;
   grade: number;
