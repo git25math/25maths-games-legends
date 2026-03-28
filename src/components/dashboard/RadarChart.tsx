@@ -10,7 +10,7 @@ type RadarProps = {
   compareColor?: string;
 };
 
-export const RadarChart = memo(function RadarChart({ values, labels, size = 200, color = '#6366f1' }: RadarProps) {
+export const RadarChart = memo(function RadarChart({ values, labels, size = 200, color = '#6366f1', compareValues, compareColor = '#94a3b8' }: RadarProps) {
   const cx = size / 2;
   const cy = size / 2;
   const r = size * 0.38;
@@ -53,6 +53,14 @@ export const RadarChart = memo(function RadarChart({ values, labels, size = 200,
         const p = point(i, 1);
         return <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="#e2e8f0" strokeWidth={0.5} />;
       })}
+
+      {/* Compare overlay (e.g., class average) — drawn UNDER data */}
+      {compareValues && compareValues.length === n && (
+        <polygon
+          points={compareValues.map((v, i) => { const p = point(i, Math.min(v, 1)); return `${p.x},${p.y}`; }).join(' ')}
+          fill={compareColor} fillOpacity={0.08} stroke={compareColor} strokeWidth={1.5} strokeDasharray="4 3"
+        />
+      )}
 
       {/* Data area */}
       <polygon points={dataPoints.map(p => `${p.x},${p.y}`).join(' ')} fill={color} fillOpacity={0.15} stroke={color} strokeWidth={2} />

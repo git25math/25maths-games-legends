@@ -224,9 +224,21 @@ export const StudentDetailCard = ({
           {loading ? (
             <div className="h-[200px] flex items-center justify-center text-slate-300 text-sm">{lang === 'en' ? 'Loading...' : '加载中...'}</div>
           ) : (
-            <RadarChart values={dims} labels={radarLabels} />
+            <RadarChart values={dims} labels={radarLabels} compareValues={classAverageDims} />
           )}
         </div>
+
+        {/* Radar legend */}
+        {!loading && classAverageDims && (
+          <div className="flex items-center gap-4 px-1 mb-1">
+            <span className="flex items-center gap-1.5 text-[9px] text-indigo-600 font-bold">
+              <span className="w-3 h-0.5 bg-indigo-500 rounded inline-block" /> {lang === 'en' ? 'This student' : '该学生'}
+            </span>
+            <span className="flex items-center gap-1.5 text-[9px] text-slate-400 font-bold">
+              <span className="w-3 h-0.5 bg-slate-400 rounded inline-block border-dashed" style={{ borderTop: '1.5px dashed #94a3b8', height: 0 }} /> {lang === 'en' ? 'Class average' : '班级平均'}
+            </span>
+          </div>
+        )}
 
         {/* Dimension legend */}
         {!loading && (

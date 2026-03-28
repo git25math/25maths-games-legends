@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { Users, Zap, Target, TrendingUp } from 'lucide-react';
+import { Users, Zap, Target, TrendingUp, Star, AlertTriangle } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, UnitEntry } from './types';
 import { countGreenMissions } from './types';
@@ -94,27 +94,64 @@ export const ClassOverview = ({
     },
   ];
 
+  // Top performer (highest score) and needs help (lowest progress)
+  const topPerformer = useMemo(() => {
+    if (battleStats.length === 0) return null;
+    const best = [...battleStats].sort((a, b) => b.total_score - a.total_score)[0];
+    return best?.display_name || null;
+  }, [battleStats]);
+
+  const needsHelp = useMemo(() => {
+    if (students.length === 0 || totalMissions === 0) return null;
+    let worst: StudentRow | null = null;
+    let worstPct = 1;
+    for (const s of students) {
+      const pct = countGreenMissions(s.completed_missions, units) / totalMissions;
+      if (pct < worstPct) { worstPct = pct; worst = s; }
+    }
+    return worst?.display_name || null;
+  }, [students, units, totalMissions]);
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-      {cards.map((c, i) => {
-        const Icon = c.icon;
-        return (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className={`rounded-2xl border p-3 ${c.color}`}
-          >
-            <div className="flex items-center gap-2 mb-1">
-              <Icon size={14} className={c.iconColor} />
-              <span className="text-[10px] font-bold opacity-70">{c.label}</span>
-            </div>
-            <div className="text-xl font-black">{c.value}</div>
-            <div className="text-[10px] opacity-50 font-bold">{c.sub}</div>
-          </motion.div>
-        );
-      })}
+    <div className="mb-4 space-y-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {cards.map((c, i) => {
+          const Icon = c.icon;
+          return (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 }}
+              className={`rounded-2xl border p-3 ${c.color}`}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <Icon size={14} className={c.iconColor} />
+                <span className="text-[10px] font-bold opacity-70">{c.label}</span>
+              </div>
+              <div className="text-xl font-black">{c.value}</div>
+              <div className="text-[10px] opacity-50 font-bold">{c.sub}</div>
+            </motion.div>
+          );
+        })}
+      </div>
+      {/* Quick glance: top + needs help */}
+      {(topPerformer || needsHelp) && (
+        <div className="flex flex-wrap gap-3 px-1">
+          {topPerformer && (
+            <span className="flex items-center gap-1.5 text-[10px] font-bold text-amber-600">
+              <Star size={12} className="text-amber-400" />
+              {lang === 'en' ? 'Top performer:' : '本周之星:'} {topPerformer}
+            </span>
+          )}
+          {needsHelp && (
+            <span className="flex items-center gap-1.5 text-[10px] font-bold text-rose-500">
+              <AlertTriangle size={12} className="text-rose-400" />
+              {lang === 'en' ? 'Needs support:' : '最需关注:'} {needsHelp}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };

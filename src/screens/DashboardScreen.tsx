@@ -334,6 +334,23 @@ export function DashboardScreen({ lang, onClose }: Props) {
   // Alerts
   const alerts = useMemo(() => computeAlerts(students, units, totalMissions), [students, units, totalMissions]);
 
+  // Class average radar dimensions (simplified: progress, kpMastery, winRate placeholders)
+  const classAvgDims = useMemo(() => {
+    if (students.length === 0 || totalMissions === 0) return undefined;
+    const n = students.length;
+    // 1. Progress
+    const avgProgress = students.reduce((s, st) => s + (getStudentOverall(st) / totalMissions), 0) / n;
+    // 2. KP mastery (from kpMasteryMap, cap at 10)
+    let kpSum = 0;
+    for (const s of students) kpSum += Math.min((kpMasteryMap.get(s.user_id) ?? 0) / 10, 1);
+    const avgKP = kpSum / n;
+    // 3-7: Use overall score as proxy (normalized)
+    const maxScore = Math.max(...students.map(s => s.total_score || 0), 1);
+    const avgScoreNorm = students.reduce((s, st) => s + ((st.total_score || 0) / maxScore), 0) / n;
+    // Return [progress, mastery, activity(proxy), accuracy(proxy), streak(proxy), balance(proxy), growth(proxy)]
+    return [avgProgress, avgKP, avgScoreNorm * 0.6, avgScoreNorm * 0.7, avgScoreNorm * 0.5, avgScoreNorm * 0.8, avgScoreNorm * 0.5];
+  }, [students, totalMissions, kpMasteryMap]);
+
   // Sorted students (optionally filtered to alert-only)
   const sortedStudents = useMemo(() => {
     const alertUserIds = alertOnly ? new Set(alerts.map(a => a.userId)) : null;
@@ -417,13 +434,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
         <div className="mb-3 px-4 py-2 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs font-bold">{error}</div>
       )}
 
-      {/* ═══ Alert Panel (v8.0) ═══ */}
-      <AlertPanel lang={lang} alerts={alerts} alertOnly={alertOnly} onToggleAlertOnly={() => setAlertOnly(!alertOnly)} onStudentClick={(uid) => {
-        const s = students.find(st => st.user_id === uid);
-        if (s) setSelectedStudent(s);
-      }} />
-
-      {/* ═══ Class Overview Cards (v8.1) ═══ */}
+      {/* ═══ Class Overview Cards — FIRST (teacher's morning glance) ═══ */}
       <ClassOverview lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} totalMissions={totalMissions} />
 
       {/* Tag filter chips */}
@@ -491,6 +502,12 @@ export function DashboardScreen({ lang, onClose }: Props) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ═══ Alert Panel — after filters (teacher sees overview → filters → then problems) ═══ */}
+      <AlertPanel lang={lang} alerts={alerts} alertOnly={alertOnly} onToggleAlertOnly={() => setAlertOnly(!alertOnly)} onStudentClick={(uid) => {
+        const s = students.find(st => st.user_id === uid);
+        if (s) setSelectedStudent(s);
+      }} />
 
       {/* ═══ Weekly Trend (v8.2) ═══ */}
       <WeeklyTrend lang={lang} grade={grade} filterTag={filterTag} />
@@ -708,6 +725,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
               const done = a.mission_ids.filter(mid => (selectedStudent.completed_missions as any)?.[String(mid)]?.green).length;
               return { id: a.id, title: a.title, deadline: a.deadline, missionsDone: done, missionsTotal: a.mission_ids.length };
             })}
+            classAverageDims={classAvgDims}
             onClose={() => setSelectedStudent(null)}
           />
         )}

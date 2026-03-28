@@ -111,7 +111,7 @@ export const KPHeatmap = ({
         <div className="flex items-center gap-2">
           <Grid3X3 size={14} className="text-indigo-500" />
           <span className="text-xs font-black text-slate-700">
-            {lang === 'en' ? 'KP Mastery Heatmap' : '知识点掌握热力图'}
+            {lang === 'en' ? 'Topic Mastery by Student' : '每生知识点掌握一览'}
           </span>
           <span className="text-[10px] text-slate-400 font-bold">
             {kpIds.length} KPs · {students.length} {lang === 'en' ? 'students' : '人'}

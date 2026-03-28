@@ -160,8 +160,26 @@ export const WeeklyTrend = ({
         </div>
       </div>
 
+      {/* Auto-generated parent-friendly summary */}
+      <div className="mt-3 pt-2 border-t border-slate-100 mb-2">
+        <p className="text-[10px] text-slate-500 leading-relaxed italic">
+          {lang === 'en'
+            ? `This week: ${thisWeek.activeStudents} active student${thisWeek.activeStudents !== 1 ? 's' : ''} completed ${thisWeek.battles} battle${thisWeek.battles !== 1 ? 's' : ''} and earned ${thisWeek.xp} XP${
+                lastWeek.battles > 0
+                  ? ` (${thisWeek.battles >= lastWeek.battles ? '↑' : '↓'} ${Math.abs(Math.round(((thisWeek.battles - lastWeek.battles) / lastWeek.battles) * 100))}% from last week)`
+                  : ''
+              }.`
+            : `本周：${thisWeek.activeStudents} 名学生活跃，完成 ${thisWeek.battles} 次对局，获得 ${thisWeek.xp} 经验值${
+                lastWeek.battles > 0
+                  ? `（较上周${thisWeek.battles >= lastWeek.battles ? '增长' : '下降'} ${Math.abs(Math.round(((thisWeek.battles - lastWeek.battles) / lastWeek.battles) * 100))}%）`
+                  : ''
+              }。`
+          }
+        </p>
+      </div>
+
       {/* Trend badges */}
-      <div className="flex items-center gap-4 mt-3 pt-2 border-t border-slate-100">
+      <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
           <span className="text-[10px] text-slate-400 font-bold">{lang === 'en' ? 'Battles' : '对局'}</span>
           <TrendBadge current={thisWeek.battles} previous={lastWeek.battles} lang={lang} />

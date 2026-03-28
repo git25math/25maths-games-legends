@@ -147,7 +147,7 @@ export function KPWeaknessPanel({
         <div className="flex items-center gap-2">
           <AlertTriangle size={14} className="text-rose-500" />
           <span className="text-sm font-black text-slate-700">
-            {lang === 'en' ? 'Class Weak Points' : '班级薄弱点排名'}
+            {lang === 'en' ? 'Topics to Review' : '需重点复习的知识点'}
           </span>
           <span className="px-2 py-0.5 bg-rose-100 text-rose-600 text-[10px] font-black rounded-full">
             {weakestKPs.length} KPs
