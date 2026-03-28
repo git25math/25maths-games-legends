@@ -44,9 +44,12 @@ function compute7Dimensions(
   const masteredKPs = kpRecords.filter(k => k.mastered_at).length;
   const mastery = totalKPs > 0 ? masteredKPs / Math.max(totalKPs, 10) : 0; // cap at 10 for normalization
 
-  // 3. Activity (battles in last 7 days)
+  // Pre-parse battle timestamps once (avoid repeated Date construction in filters)
   const weekAgo = Date.now() - 7 * 86400000;
-  const recentBattles = battles.filter(b => new Date(b.created_at).getTime() > weekAgo).length;
+  const battleTimestamps = battles.map(b => new Date(b.created_at).getTime());
+
+  // 3. Activity (battles in last 7 days)
+  const recentBattles = battleTimestamps.filter(ts => ts > weekAgo).length;
   const activity = Math.min(recentBattles / 20, 1); // 20 battles/week = 100%
 
   // 4. Error control rate
@@ -69,8 +72,10 @@ function compute7Dimensions(
   }
 
   // 7. Growth speed (this week XP vs capacity)
-  const weekBattles = battles.filter(b => new Date(b.created_at).getTime() > weekAgo && b.success);
-  const weekXP = weekBattles.reduce((sum, b) => sum + b.score, 0);
+  let weekXP = 0;
+  for (let i = 0; i < battles.length; i++) {
+    if (battleTimestamps[i] > weekAgo && battles[i].success) weekXP += battles[i].score;
+  }
   const growth = Math.min(weekXP / 500, 1); // 500 XP/week = 100%
 
   return [progress, mastery, activity, errorControl, streak, balance, growth];

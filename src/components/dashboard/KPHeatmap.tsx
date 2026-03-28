@@ -163,9 +163,9 @@ export const KPHeatmap = ({
                     ? getCellStatus(cell.wins, cell.attempts, cell.mastered)
                     : 'untouched';
                   return (
-                    <td key={kp} className="px-0.5 py-1">
+                    <td key={kp} className="px-0.5 py-0.5">
                       <div
-                        className={`w-full h-4 rounded-sm ${CELL_COLORS[status]}`}
+                        className={`w-full h-5 rounded-sm ${CELL_COLORS[status]} hover:ring-1 hover:ring-slate-400 transition-shadow`}
                         title={`${s.display_name}: ${kp} — ${CELL_LABELS[status].en}${cell ? ` (${cell.wins}/${cell.attempts})` : ''}`}
                       />
                     </td>

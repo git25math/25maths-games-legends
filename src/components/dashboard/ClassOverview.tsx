@@ -33,12 +33,13 @@ export const ClassOverview = ({
   const [battleStats, setBattleStats] = useState<BattleStat[]>([]);
 
   useEffect(() => {
+    setBattleStats([]); // clear stale data on filter change
     supabase.rpc('get_class_battle_stats', {
       p_grade: grade,
       p_class: filterTag || null,
     }).then(({ data, error }) => {
       if (!error && data) setBattleStats(data as BattleStat[]);
-    }, () => {});
+    }, () => { setBattleStats([]); });
   }, [grade, filterTag]);
 
   // Compute stats

@@ -1,4 +1,5 @@
 /** SVG Radar Chart — 7 dimensions, 0–1 scale */
+import { memo } from 'react';
 
 type RadarProps = {
   values: number[]; // 7 values, each 0–1
@@ -7,7 +8,7 @@ type RadarProps = {
   color?: string;
 };
 
-export const RadarChart = ({ values, labels, size = 200, color = '#6366f1' }: RadarProps) => {
+export const RadarChart = memo(function RadarChart({ values, labels, size = 200, color = '#6366f1' }: RadarProps) {
   const cx = size / 2;
   const cy = size / 2;
   const r = size * 0.38;
@@ -97,4 +98,4 @@ export const RadarChart = ({ values, labels, size = 200, color = '#6366f1' }: Ra
       })}
     </svg>
   );
-};
+});

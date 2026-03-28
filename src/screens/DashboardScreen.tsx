@@ -232,15 +232,22 @@ export function DashboardScreen({ lang, onClose }: Props) {
     return { green, amber, red, total: unitMissions.length };
   };
 
-  const getStudentOverall = (student: StudentRow) => {
-    let done = 0;
-    for (const [, u] of units) {
-      for (const m of u.missions) {
-        if (student.completed_missions?.[String(m.id)]?.green) done++;
+  // Pre-compute overall progress per student (used by sort, CSV, progress bars)
+  const studentOverallMap = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const s of students) {
+      let done = 0;
+      for (const [, u] of units) {
+        for (const m of u.missions) {
+          if (s.completed_missions?.[String(m.id)]?.green) done++;
+        }
       }
+      map.set(s.user_id, done);
     }
-    return done;
-  };
+    return map;
+  }, [students, units]);
+
+  const getStudentOverall = (student: StudentRow) => studentOverallMap.get(student.user_id) ?? 0;
 
   // KP mastery counts via RPC (bypasses RLS for teacher access)
   // Only depends on grade/filterTag — NOT students (avoids refetch on every realtime update)

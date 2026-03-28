@@ -11,6 +11,10 @@ import { supabase } from '../supabase';
 import { lt } from '../i18n/resolveText';
 import { MISSIONS } from '../data/missions';
 
+// Module-level: built once, shared across all renders
+const MISSION_MAP = new Map<number, Mission>();
+for (const m of MISSIONS) MISSION_MAP.set(m.id, m);
+
 type StudentAssignment = {
   id: string;
   grade: number;
@@ -33,9 +37,6 @@ export function AssignmentBanner({ lang, assignments, completedMissions, onMissi
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   if (assignments.length === 0) return null;
-
-  const missionMap = new Map<number, Mission>();
-  for (const m of MISSIONS) missionMap.set(m.id, m);
 
   const formatDeadline = (deadline: string | null) => {
     if (!deadline) return null;
@@ -142,7 +143,7 @@ export function AssignmentBanner({ lang, assignments, completedMissions, onMissi
                     )}
                     <div className="space-y-2">
                       {a.mission_ids.map(mid => {
-                        const mission = missionMap.get(mid);
+                        const mission = MISSION_MAP.get(mid);
                         if (!mission) return null;
                         const isDone = (completedMissions as any)?.[String(mid)]?.green;
                         return (
