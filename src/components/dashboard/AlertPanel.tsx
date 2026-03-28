@@ -22,7 +22,7 @@ export function computeAlerts(
     const login = (s.completed_missions as any)?._login as { lastDate?: string; streak?: number; bestStreak?: number } | undefined;
     const name = s.display_name || 'Anonymous';
 
-    // 1. Login check
+    // 1. Login check — skip brand-new students (total_score === 0, not yet interacted)
     if (login?.lastDate) {
       const last = new Date(login.lastDate).getTime();
       const daysSince = Math.floor((now - last) / 86400000);
@@ -31,9 +31,9 @@ export function computeAlerts(
       } else if (daysSince >= 3) {
         alerts.push({ userId: s.user_id, name, level: 'warning', reason: `${daysSince} 天未登录`, reasonEn: `${daysSince} days inactive` });
       }
-    } else {
-      // Never logged in streak data
-      alerts.push({ userId: s.user_id, name, level: 'warning', reason: '从未登录', reasonEn: 'Never logged in' });
+    } else if ((s.total_score ?? 0) > 0) {
+      // Has score but no login record — likely a data gap, worth flagging
+      alerts.push({ userId: s.user_id, name, level: 'warning', reason: '从未登录游戏', reasonEn: 'Never played' });
     }
 
     // 2. Progress check (behind class average by >20%)

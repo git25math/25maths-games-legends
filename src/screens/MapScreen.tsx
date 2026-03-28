@@ -31,7 +31,7 @@ import { getExpeditionsForGrade, type Expedition } from '../data/expeditions';
 import { getNextMilestone } from '../data/streakMilestones';
 import { getWeakMissions, getMistakes, rankByWeakness, getDominantPattern } from '../utils/errorMemory';
 import type { MistakeRecord } from '../utils/errorMemory';
-import { AssignmentBanner, useAssignedMissionIds } from '../components/AssignmentBanner';
+import { AssignmentBanner, useMyAssignments } from '../components/AssignmentBanner';
 import { StaminaBar } from '../components/StaminaBar';
 import { getStamina, getRemainingAttempts } from '../utils/stamina';
 import { getInventory, getTotalItems } from '../utils/inventory';
@@ -263,8 +263,8 @@ export const MapScreen = ({
   const currentUnit = unitDataList[activeUnitIdx];
   const upcomingUnits = unitDataList.slice(activeUnitIdx + 1);
 
-  // ── Assigned mission IDs (from teacher assignments) ──
-  const assignedMissionIds = useAssignedMissionIds(profile.user_id);
+  // ── Assigned missions (from teacher assignments) — single fetch, shared below ──
+  const { assignments: myAssignments, assignedMissionIds } = useMyAssignments(profile.user_id);
 
   // ── Equipment decay map (for repair badges on cards) ──
   const equipmentDecayMap = (() => {
@@ -1053,7 +1053,7 @@ export const MapScreen = ({
       {/* ═══════════════════ Teacher Assignments (v8.3) ═══════════════════ */}
       <AssignmentBanner
         lang={lang}
-        userId={profile.user_id}
+        assignments={myAssignments}
         completedMissions={profile.completed_missions}
         onMissionStart={onPracticeStart}
       />

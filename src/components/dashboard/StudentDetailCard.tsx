@@ -99,11 +99,10 @@ export const StudentDetailCard = ({
     setLoading(true);
     Promise.all([
       supabase.rpc('get_student_battles', { p_user_id: student.user_id }),
-      supabase.rpc('get_class_kp_progress', { p_grade: student.grade ?? 7, p_class: null }),
+      supabase.rpc('get_student_kp_progress', { p_user_id: student.user_id }),
     ]).then(([battleRes, kpRes]) => {
       setBattles((battleRes.data as BattleRecord[]) || []);
-      const allKP = (kpRes.data || []) as (KPRecord & { user_id: string })[];
-      setKpRecords(allKP.filter(r => r.user_id === student.user_id));
+      setKpRecords((kpRes.data as KPRecord[]) || []);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [student.user_id]);

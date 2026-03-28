@@ -3,7 +3,7 @@
  * Shows active assignments from teachers with deadline countdown.
  * Renders above the mission map on MapScreen.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ClipboardList, Clock, CheckCircle2, ChevronDown, ChevronRight, Swords } from 'lucide-react';
 import type { Language, Mission, CompletedMissions } from '../types';
@@ -24,21 +24,13 @@ type StudentAssignment = {
 
 type Props = {
   lang: Language;
-  userId: string;
+  assignments: StudentAssignment[];
   completedMissions: CompletedMissions;
   onMissionStart: (mission: Mission) => void;
 };
 
-export function AssignmentBanner({ lang, userId, completedMissions, onMissionStart }: Props) {
-  const [assignments, setAssignments] = useState<StudentAssignment[]>([]);
+export function AssignmentBanner({ lang, assignments, completedMissions, onMissionStart }: Props) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (userId === 'guest') return;
-    supabase.rpc('get_my_assignments').then(({ data, error }) => {
-      if (!error && data) setAssignments(data as StudentAssignment[]);
-    }, () => {});
-  }, [userId]);
 
   if (assignments.length === 0) return null;
 
@@ -186,24 +178,35 @@ export function AssignmentBanner({ lang, userId, completedMissions, onMissionSta
 }
 
 /**
- * Returns a Set of mission IDs that are part of any active assignment.
- * Used by MapScreen to show assignment badges on mission cards.
+ * Single source of truth for student assignments.
+ * Returns both the full list and a Set of assigned mission IDs.
+ * Use this hook once in MapScreen; pass `assignments` prop to AssignmentBanner.
  */
-export function useAssignedMissionIds(userId: string): Set<number> {
-  const [ids, setIds] = useState<Set<number>>(new Set());
+export function useMyAssignments(userId: string): {
+  assignments: StudentAssignment[];
+  assignedMissionIds: Set<number>;
+} {
+  const [assignments, setAssignments] = useState<StudentAssignment[]>([]);
 
   useEffect(() => {
     if (userId === 'guest') return;
     supabase.rpc('get_my_assignments').then(({ data, error }) => {
-      if (!error && data) {
-        const set = new Set<number>();
-        for (const a of data as StudentAssignment[]) {
-          for (const mid of a.mission_ids) set.add(mid);
-        }
-        setIds(set);
-      }
+      if (!error && data) setAssignments(data as StudentAssignment[]);
     }, () => {});
   }, [userId]);
 
-  return ids;
+  const assignedMissionIds = useMemo(() => {
+    const set = new Set<number>();
+    for (const a of assignments) {
+      for (const mid of a.mission_ids) set.add(mid);
+    }
+    return set;
+  }, [assignments]);
+
+  return { assignments, assignedMissionIds };
+}
+
+/** @deprecated Use useMyAssignments instead */
+export function useAssignedMissionIds(userId: string): Set<number> {
+  return useMyAssignments(userId).assignedMissionIds;
 }

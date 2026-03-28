@@ -73,14 +73,26 @@ export function ExamHubBridge({ lang, students }: Props) {
     );
   }
 
-  if (error || !hasData) {
+  if (error) {
+    return (
+      <div className="bg-rose-50/60 backdrop-blur rounded-2xl p-4 border border-rose-100">
+        <div className="flex items-center gap-2 text-sm text-rose-400">
+          <BookOpen size={14} />
+          <span className="font-bold">ExamHub</span>
+          <span>— {lang === 'en' ? 'Failed to load vocab data' : '词汇数据加载失败'}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hasData) {
     return (
       <div className="bg-white/60 backdrop-blur rounded-2xl p-4 border border-slate-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-slate-400">
             <BookOpen size={14} />
             <span className="font-bold">ExamHub</span>
-            <span>— {lang === 'en' ? 'No vocab data for these students' : '这些学生暂无词汇数据'}</span>
+            <span>— {lang === 'en' ? 'No vocab data for this class yet' : '该班级暂无词汇数据'}</span>
           </div>
           <a
             href="https://examhub.25maths.com"
