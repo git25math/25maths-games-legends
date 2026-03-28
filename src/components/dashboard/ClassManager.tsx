@@ -7,14 +7,18 @@ import { Plus, Copy, Check, Archive } from 'lucide-react';
 import type { Language } from '../../types';
 import { createClass, getMyClasses, archiveClass, type TeacherClass } from '../../utils/classInvite';
 
-export function ClassManager({ lang, grade, onClassCreated }: {
+type StudentInfo = { display_name: string; class_tags: string[] };
+
+export function ClassManager({ lang, grade, students = [], onClassCreated }: {
   lang: Language;
   grade: number;
+  students?: StudentInfo[];
   onClassCreated?: (className: string) => void;
 }) {
   const [classes, setClasses] = useState<TeacherClass[]>([]);
   const [showCreate, setShowCreate] = useState(false);
   const [newName, setNewName] = useState('');
+  const [expandedClassId, setExpandedClassId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const en = lang === 'en';
@@ -102,32 +106,59 @@ export function ClassManager({ lang, grade, onClassCreated }: {
         </p>
       ) : (
         <div className="space-y-2">
-          {activeClasses.map(cls => (
-            <div key={cls.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
-              <div>
-                <div className="text-sm font-bold text-slate-700">{cls.name}</div>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs font-black rounded tracking-widest">
-                    {cls.invite_code}
-                  </span>
+          {activeClasses.map(cls => {
+            const members = students.filter(s => (s.class_tags || []).includes(cls.name));
+            const isExpanded = expandedClassId === cls.id;
+            return (
+              <div key={cls.id} className="bg-slate-50 rounded-xl overflow-hidden">
+                <div className="flex items-center justify-between p-3">
+                  <button onClick={() => setExpandedClassId(isExpanded ? null : cls.id)} className="text-left flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-slate-700">{cls.name}</span>
+                      <span className="px-1.5 py-0.5 bg-slate-200 text-slate-600 text-[10px] font-bold rounded">
+                        {members.length} {en ? 'students' : '人'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs font-black rounded tracking-widest">
+                        {cls.invite_code}
+                      </span>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleCopy(cls.invite_code, cls.id); }}
+                        className="text-slate-400 hover:text-indigo-600 transition-colors"
+                      >
+                        {copiedId === cls.id ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                      </button>
+                    </div>
+                  </button>
                   <button
-                    onClick={() => handleCopy(cls.invite_code, cls.id)}
-                    className="text-slate-400 hover:text-indigo-600 transition-colors"
-                    title={en ? 'Copy code' : '复制邀请码'}
+                    onClick={() => handleArchive(cls.id)}
+                    className="text-slate-300 hover:text-rose-500 transition-colors ml-2"
+                    title={en ? 'Archive' : '归档'}
                   >
-                    {copiedId === cls.id ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                    <Archive size={14} />
                   </button>
                 </div>
+                {isExpanded && members.length > 0 && (
+                  <div className="px-3 pb-3 border-t border-slate-200">
+                    <p className="text-[10px] text-slate-400 font-bold mt-2 mb-1">{en ? 'Members' : '成员'}</p>
+                    <div className="flex flex-wrap gap-1">
+                      {members.map((m, i) => (
+                        <span key={i} className="px-2 py-0.5 bg-white text-slate-600 text-[10px] rounded border border-slate-200">
+                          {m.display_name || 'Anonymous'}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {isExpanded && members.length === 0 && (
+                  <div className="px-3 pb-3 border-t border-slate-200">
+                    <p className="text-[10px] text-slate-400 mt-2">{en ? 'No students yet. Share the code!' : '还没有学生，快分享邀请码！'}</p>
+                  </div>
+                )}
               </div>
-              <button
-                onClick={() => handleArchive(cls.id)}
-                className="text-slate-300 hover:text-rose-500 transition-colors"
-                title={en ? 'Archive class' : '归档班级'}
-              >
-                <Archive size={14} />
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

@@ -124,9 +124,9 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const unitMap = useMemo(() => getUnitMap(grade), [grade]);
   const units: UnitEntry[] = useMemo(() => [...unitMap.entries()], [unitMap]);
 
-  // Collect all unique tags for quick-filter chips
+  // Collect all unique tags: from students + hardcoded presets
   const allTags = useMemo(() => {
-    const tags = new Set<string>();
+    const tags = new Set<string>(ALL_CLASSES);
     for (const s of students) {
       for (const t of (s.class_tags || [])) tags.add(t);
     }
@@ -477,7 +477,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
         totalAssignments={dashAssignments.filter(a => !a.archived_at).length}
       />
 
-      <ClassManager lang={lang} grade={grade} onClassCreated={(name) => setFilterTag(name)} />
+      <ClassManager lang={lang} grade={grade} students={students} onClassCreated={(name) => setFilterTag(name)} />
 
       {/* ═══ Class Overview Cards — FIRST (teacher's morning glance) ═══ */}
       <ClassOverview lang={lang} grade={grade} filterTag={filterTag} students={students} units={units} totalMissions={totalMissions} />
@@ -539,7 +539,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                 autoFocus
               >
                 <option value="">{lang === 'en' ? 'Select...' : '选择...'}</option>
-                {ALL_CLASSES.map(c => <option key={c} value={c}>{c}</option>)}
+                {allTags.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
               <button onClick={batchAddTag} className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors">{t.confirm}</button>
               <button onClick={() => setShowBatchAssign(false)} className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-600 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors">{t.cancel}</button>
@@ -705,7 +705,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
                             autoFocus
                           >
                             <option value="">{lang === 'en' ? 'Select class...' : '选择班级...'}</option>
-                            {ALL_CLASSES.filter(c => !(s.class_tags || []).includes(c)).map(c => (
+                            {allTags.filter(c => !(s.class_tags || []).includes(c)).map(c => (
                               <option key={c} value={c}>{c}</option>
                             ))}
                           </select>
