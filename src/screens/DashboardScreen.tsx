@@ -154,26 +154,47 @@ export function DashboardScreen({ lang, onClose }: Props) {
     setError('');
     fetchingRef.current = true;
     try {
-      const { data, error: rpcErr } = await supabase.rpc('get_class_progress', {
-        p_grade: grade,
-        p_class: filterTag || null,
-      });
-      if (!rpcErr && data) {
-        setStudents((data as StudentRow[]).map(s => ({
-          ...s,
-          class_tags: s.class_tags || [],
-        })));
-      } else {
-        let query = supabase.from('gl_user_progress').select('*').eq('grade', grade);
-        if (filterTag) query = query.contains('class_tags', [filterTag]);
-        const { data: fallback, error: fbErr } = await query.order('display_name');
-        if (fbErr) {
+      // Strategy: find students by class_tags prefix (authoritative for assigned students)
+      // plus grade fallback (for unassigned students). This ensures a 7A student
+      // studying Y8 content still appears under Y7 in the dashboard.
+      const prefix = String(grade);
+      const gradeClasses = CLASS_GROUPS.homeroom.filter(c => c.startsWith(prefix));
+
+      if (filterTag) {
+        // Specific class selected — query by class_tags contains
+        const { data, error: err } = await supabase
+          .from('gl_user_progress').select('*')
+          .contains('class_tags', [filterTag])
+          .order('display_name');
+        if (err) {
           setError(lang === 'en' ? 'Failed to load data' : '加载数据失败');
+          setStudents([]);
+        } else {
+          setStudents((data as StudentRow[] || []).map(s => ({ ...s, class_tags: s.class_tags || [] })));
         }
-        setStudents(((fallback as StudentRow[]) || []).map(s => ({
-          ...s,
-          class_tags: s.class_tags || [],
-        })));
+      } else {
+        // No specific class — get ALL students in any grade-level class OR with matching grade
+        const { data: byTags } = await supabase
+          .from('gl_user_progress').select('*')
+          .overlaps('class_tags', gradeClasses)
+          .order('display_name');
+
+        const { data: byGrade } = await supabase
+          .from('gl_user_progress').select('*')
+          .eq('grade', grade)
+          .order('display_name');
+
+        // Merge and deduplicate by user_id
+        const seen = new Set<string>();
+        const merged: StudentRow[] = [];
+        for (const row of [...(byTags || []), ...(byGrade || [])] as StudentRow[]) {
+          if (!seen.has(row.user_id)) {
+            seen.add(row.user_id);
+            merged.push({ ...row, class_tags: row.class_tags || [] });
+          }
+        }
+        merged.sort((a, b) => (a.display_name || '').localeCompare(b.display_name || ''));
+        setStudents(merged);
       }
     } catch {
       setError(lang === 'en' ? 'Network error' : '网络错误');
