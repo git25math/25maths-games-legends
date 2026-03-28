@@ -237,7 +237,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units }: Pro
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          const url = `${window.location.origin}${window.location.pathname}?hw=1`;
+                          const url = `${window.location.origin}${window.location.pathname}?hw=${a.id}`;
                           navigator.clipboard.writeText(url).then(() => {
                             setCopiedAssignmentId(a.id);
                             setTimeout(() => setCopiedAssignmentId(null), 2000);

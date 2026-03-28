@@ -459,8 +459,12 @@ export function DashboardScreen({ lang, onClose }: Props) {
         <div className="mb-3 px-4 py-2 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs font-bold">{error}</div>
       )}
 
-      {/* ═══ Class Manager — Create classes, invite codes ═══ */}
       {/* ═══ Daily Summary — 30-second glance ═══ */}
+      {loading && students.length === 0 ? (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[0,1,2,3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-xl animate-pulse" />)}
+        </div>
+      ) : (
       <DailySummary
         lang={lang}
         students={students}
@@ -477,6 +481,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
         })()}
         totalAssignments={dashAssignments.filter(a => !a.archived_at).length}
       />
+      )}
 
       <SmartSuggestions lang={lang} students={students} alerts={alerts} />
 

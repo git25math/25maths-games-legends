@@ -246,11 +246,11 @@ export default function App() {
     }
   }, [activeRoom?.status]);
 
-  // Check URL for homework deep link (?hw=1)
+  // Check URL for homework deep link (?hw=<id>)
   const [pendingHomework, setPendingHomework] = useState(() => {
     try {
       const params = new URLSearchParams(window.location.search);
-      return params.get('hw') === '1';
+      return !!params.get('hw');
     } catch { return false; }
   });
 
