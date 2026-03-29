@@ -798,6 +798,7 @@ export const PracticeScreen = ({
                       lang={lang}
                       onContinue={handleWrongAnswerContinue}
                       continueLabel={t.gotItNextQuestion}
+                      descText={descText}
                       prereqHint={(() => {
                         if (!currentMission.kpId) return null;
                         const prereqs = getKPPrereqs(currentMission.kpId);

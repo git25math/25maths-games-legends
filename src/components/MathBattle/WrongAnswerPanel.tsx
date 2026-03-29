@@ -10,6 +10,7 @@ import { staggerContainer, staggerItem } from '../../utils/animationPresets';
 import { parseAnswer } from '../../utils/parseAnswer';
 import { diagnoseError } from '../../utils/diagnoseError';
 import { getPattern } from '../../utils/errorPatterns';
+import { findVocabInText } from '../../data/vocab/mathVocab';
 
 const LABELS = {
   zh: {
@@ -80,6 +81,8 @@ type Props = {
   partialScore?: number;
   /** KP prerequisite hint — what foundation skill may be weak */
   prereqHint?: { kpId: string; reason: { zh: string; en: string } } | null;
+  /** Question description text — used to extract related vocab */
+  descText?: string;
 };
 
 export function WrongAnswerPanel({
@@ -95,6 +98,7 @@ export function WrongAnswerPanel({
   isPartial = false,
   partialScore,
   prereqHint,
+  descText,
 }: Props) {
   const t = LABELS[lang];
   const fc = INPUT_FIELDS[questionType as keyof typeof INPUT_FIELDS] || { zh: [], en: [] };
@@ -195,6 +199,27 @@ export function WrongAnswerPanel({
           </p>
         </motion.div>
       )}
+
+      {/* Related vocabulary from the question */}
+      {descText && lang === 'en' && (() => {
+        const vocabMatches = findVocabInText(descText);
+        if (vocabMatches.length === 0) return null;
+        return (
+          <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+            <p className="text-[10px] font-black text-purple-500 uppercase tracking-wider mb-1.5">
+              {lang === 'en' ? 'Key vocabulary in this question' : '本题关键词汇'}
+            </p>
+            <div className="flex flex-wrap gap-1">
+              {vocabMatches.slice(0, 4).map((vm, i) => (
+                <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 bg-white rounded text-[11px]">
+                  <span className="font-bold text-purple-700">{vm.word.en}</span>
+                  <span className="text-purple-400">= {vm.word.zh}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Answer comparison */}
       <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-2">
