@@ -9,6 +9,8 @@ import { lt, resolveFormula } from '../../i18n/resolveText';
 import { LatexText, MathView } from '../MathView';
 import { getTopicForKp } from '../../data/curriculum/kp-registry';
 import { getKPPrereqs } from '../../data/curriculum/kp-graph';
+import { TappableText } from '../TappableText';
+import { recordVocabTap } from '../../utils/vocabPool';
 import { InputFields } from './InputFields';
 import { MultipleChoice } from './MultipleChoice';
 import type { ChoiceOption } from './MultipleChoice';
@@ -80,7 +82,19 @@ export function BattleContent({
         </div>
 
         <div className="text-ink-light text-sm font-bold mb-3 sm:mb-6 leading-relaxed">
-          <LatexText text={descText} />
+          {lang === 'en' ? (
+            <TappableText
+              text={descText}
+              lang={lang}
+              kpId={currentQuestion.kpId}
+              missionDesc={currentQuestion.description}
+              onVocabTap={(wordId, level) => {
+                recordVocabTap(wordId, level, currentQuestion.kpId || currentQuestion.type, mission.id);
+              }}
+            />
+          ) : (
+            <LatexText text={descText} />
+          )}
         </div>
         <VisualData mission={currentQuestion} lang={lang} />
 

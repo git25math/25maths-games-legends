@@ -40,6 +40,7 @@ import type { CharacterProgression } from '../types';
 import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completionState';
 import { getCurrency, CURRENCY_LABELS } from '../utils/currency';
 import { ProgressReport } from '../components/ProgressReport';
+import { VocabReviewPanel } from '../components/VocabReviewPanel';
 import { JoinClassModal } from '../components/JoinClassModal';
 import { MyAssignments } from '../components/MyAssignments';
 
@@ -162,6 +163,7 @@ export const MapScreen = ({
   const [repairDialogTarget, setRepairDialogTarget] = useState<number | null>(null);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showProgressReport, setShowProgressReport] = useState(false);
+  const [showVocabReview, setShowVocabReview] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [showJoinClass, setShowJoinClass] = useState(false);
   const [showMoreItems, setShowMoreItems] = useState(false);
@@ -900,6 +902,9 @@ export const MapScreen = ({
                     <button onClick={() => { setShowProgressReport(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-blue-600/20 border border-blue-500/30 rounded-lg text-xs text-blue-300">
                       📊 {lang === 'en' ? 'Report' : '学习报告'}
                     </button>
+                    <button onClick={() => { setShowVocabReview(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300">
+                      📖 {lang === 'en' ? 'Vocab Review' : '词汇复习'}
+                    </button>
                     <button onClick={() => { setShowTimeline(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-amber-600/20 border border-amber-500/30 rounded-lg text-xs text-amber-300">
                       ✨ {lang === 'en' ? 'My Journey' : '成长轨迹'}
                     </button>
@@ -1394,6 +1399,14 @@ export const MapScreen = ({
           totalScore={profile.total_score || 0}
           completedMissions={(profile.completed_missions || {}) as CompletedMissions}
           onClose={() => setShowProgressReport(false)}
+        />
+      )}
+
+      {/* Vocab Review Panel */}
+      {showVocabReview && (
+        <VocabReviewPanel
+          lang={lang}
+          onClose={() => setShowVocabReview(false)}
         />
       )}
 

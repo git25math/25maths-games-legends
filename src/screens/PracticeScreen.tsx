@@ -15,6 +15,7 @@ import { AnimatedTutorial } from '../components/MathBattle/AnimatedTutorial';
 import { WrongAnswerPanel } from '../components/MathBattle/WrongAnswerPanel';
 import { getKPPrereqs, getKPLeadsTo } from '../data/curriculum/kp-graph';
 import { TappableText } from '../components/TappableText';
+import { recordVocabTap } from '../utils/vocabPool';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { SkillBadgeCard } from '../components/SkillBadgeCard';
 import { CalculatorWidget } from '../components/Calculator';
@@ -631,6 +632,7 @@ export const PracticeScreen = ({
                   kpId={currentMission.kpId}
                   missionDesc={currentMission.description}
                   onVocabTap={(wordId, level) => {
+                    recordVocabTap(wordId, level, currentMission.kpId || currentMission.type, mission.id);
                     logAttempt({ questionId: `${mission.id}-vocab-${wordId}-L${level}`, nodeId: currentMission.kpId || currentMission.type, isCorrect: true, sourceMode: 'practice' });
                   }}
                 />
