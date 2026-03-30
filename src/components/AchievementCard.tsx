@@ -73,13 +73,13 @@ export const AchievementCard = memo(function AchievementCard({
   const maxHp = 4;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
         transition={{ type: 'spring', duration: 0.5 }}
-        className="relative w-full max-w-[360px] max-h-[640px] overflow-hidden rounded-lg"
+        className="relative w-full max-w-[360px] max-h-[640px] overflow-hidden rounded-lg mx-auto"
         style={{
           border: '4px solid #3d2b1f',
           background: 'linear-gradient(to bottom, #f4e4bc, #e8d5a7, #f4e4bc)',

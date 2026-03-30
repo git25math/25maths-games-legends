@@ -61,8 +61,8 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
               {en ? `Level ${level} Hint` : `第${level}层提示`}
             </span>
           </div>
-          <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded-full transition-colors" aria-label="Close">
-            <X size={16} className="text-slate-400" />
+          <button onClick={onClose} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-slate-100 rounded-full transition-colors" aria-label="Close">
+            <X size={18} className="text-slate-400" />
           </button>
         </div>
 

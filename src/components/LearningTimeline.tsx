@@ -189,7 +189,7 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
               {lang === 'en' ? 'My Learning Journey' : '我的成长轨迹'}
             </h2>
           </div>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600"><X size={18} /></button>
+          <button onClick={onClose} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-slate-400 hover:text-slate-600 rounded-full" aria-label="Close"><X size={18} /></button>
         </div>
 
         {/* Stats bar */}

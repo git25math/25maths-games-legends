@@ -576,7 +576,7 @@ function CreateAssignmentModal({
             <h3 className="text-lg font-black text-slate-800">
               {lang === 'en' ? 'New Assignment' : '新建任务'}
             </h3>
-            <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600">
+            <button onClick={onClose} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-slate-400 hover:text-slate-600 rounded-full" aria-label="Close">
               <X size={20} />
             </button>
           </div>

@@ -59,8 +59,8 @@ export function RecoveryPathPanel({
     >
       {/* Header */}
       <div className="flex items-center gap-2 p-4 border-b border-white/10">
-        <button onClick={onCancel} className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
-          <ChevronLeft size={18} className="text-white/60" />
+        <button onClick={onCancel} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 transition-colors" aria-label="Go back">
+          <ChevronLeft size={20} className="text-white/60" />
         </button>
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-black text-white">

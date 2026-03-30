@@ -97,8 +97,8 @@ export function VocabReviewPanel({ lang, currentKpId, onClose }: Props) {
               {completed + 1}/{recommendations.length}
             </span>
           </div>
-          <button onClick={onClose} className="p-1.5 hover:bg-slate-100 rounded-full" aria-label="Close">
-            <X size={16} className="text-slate-400" />
+          <button onClick={onClose} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-slate-100 rounded-full" aria-label="Close">
+            <X size={18} className="text-slate-400" />
           </button>
         </div>
 
