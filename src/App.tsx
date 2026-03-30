@@ -13,7 +13,9 @@ import { useProfile } from './hooks/useProfile';
 import { useMissions } from './hooks/useMissions';
 import { useMultiplayer, PK_COUNTDOWN_SECS, getFirstFinishTime, getFirstOpponentFinishTime } from './hooks/useMultiplayer';
 
-import { generateMission } from './utils/generateMission';
+// generateMission is loaded lazily via dynamic import() to keep it out of the
+// critical path (352 KB generators chunk deferred until first use).
+const lazyGenerate = () => import('./utils/generateMission').then(m => m.generateMission);
 import { getDailyKey, DAILY_MULTIPLIER } from './utils/dailyChallenge';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
@@ -172,6 +174,20 @@ export default function App() {
     return 'en';
   });
   const setLang = (l: Language) => { setLangState(l); try { localStorage.setItem('gl_lang', l); } catch {} };
+
+  // --- Auto-hide top controls (language + logout) ---
+  const [topControlsVisible, setTopControlsVisible] = useState(true);
+  const topControlsTimer = useRef<number | null>(null);
+  const resetTopControlsTimer = () => {
+    if (topControlsTimer.current) clearTimeout(topControlsTimer.current);
+    setTopControlsVisible(true);
+    topControlsTimer.current = window.setTimeout(() => setTopControlsVisible(false), 3000);
+  };
+  useEffect(() => {
+    resetTopControlsTimer();
+    return () => { if (topControlsTimer.current) clearTimeout(topControlsTimer.current); };
+  }, []);
+
   const [learnerMode, setLearnerMode] = useState<import('./types').LearnerMode>(() => {
     try { const s = localStorage.getItem('gl_learner_mode'); if (s === 'explore' || s === 'practice' || s === 'exam') return s; } catch {}
     return 'practice';
@@ -382,9 +398,12 @@ export default function App() {
     if (gameState === 'lobby' && activeRoom?.status === 'playing' && !activeMission) {
       const m = missions.find(mi => mi.id === activeRoom.missionId);
       if (m) {
-        const battleMission = m.data?.generatorType ? generateMission(m) : m;
-        setActiveMission(battleMission);
-        setGameState('battle');
+        if (m.data?.generatorType) {
+          lazyGenerate().then(gen => { setActiveMission(gen(m)); setGameState('battle'); });
+        } else {
+          setActiveMission(m);
+          setGameState('battle');
+        }
       }
     }
   }, [activeRoom?.missionId, activeRoom?.status, activeMission, gameState, missions, missionsLoading]);
@@ -470,16 +489,16 @@ export default function App() {
 
     // Challenge mode: skip difficulty selector, go straight to battle
     // Difficulty progression (Green→Amber→Red) is handled in Practice mode
-    let battleMission = mission;
     if (mission.data?.generatorType) {
-      battleMission = generateMission(mission);
-      setActiveMission(battleMission);
-      setSelectedSkillCard(null);
-      // Show battle mode selector first, then skill cards
-      setShowBattleModeSelector(true);
+      lazyGenerate().then(gen => {
+        setActiveMission(gen(mission));
+        setSelectedSkillCard(null);
+        // Show battle mode selector first, then skill cards
+        setShowBattleModeSelector(true);
+      });
     } else {
       // Single-question: go directly to ScrollOfWisdom
-      setActiveMission(battleMission);
+      setActiveMission(mission);
       setShowSecret(true);
     }
   };
@@ -854,30 +873,46 @@ export default function App() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-slate-900 font-sans text-slate-900 selection:bg-indigo-100 overflow-x-hidden">
-        {/* Top controls */}
-        <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
-          <button
-            onClick={() => setLang(lang === 'zh' ? 'zh_TW' : lang === 'zh_TW' ? 'en' : 'zh')}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-bold hover:bg-white/20 transition-all"
-          >
-            <Languages size={18} />
-            {lang === 'zh' ? '繁體' : lang === 'zh_TW' ? 'EN' : '简体'}
-          </button>
-          {(user || isGuest) && (
+        {/* Top controls — auto-hide after 3s, tap dot to reveal */}
+        <div
+          className="fixed top-4 right-4 z-50"
+          onMouseEnter={resetTopControlsTimer}
+          onTouchStart={resetTopControlsTimer}
+        >
+          {topControlsVisible ? (
+            <div className="flex items-center gap-2 animate-in fade-in duration-200">
+              <button
+                onClick={() => { setLang(lang === 'zh' ? 'zh_TW' : lang === 'zh_TW' ? 'en' : 'zh'); resetTopControlsTimer(); }}
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-bold hover:bg-white/20 transition-all"
+              >
+                <Languages size={18} />
+                {lang === 'zh' ? '繁體' : lang === 'zh_TW' ? 'EN' : '简体'}
+              </button>
+              {(user || isGuest) && (
+                <button
+                  onClick={() => {
+                    signOut();
+                    setIsGuest(false);
+                    setGameState('welcome');
+                    setActiveMission(null);
+                    setSelectedCharId(null);
+                    localStorage.removeItem(LS_STATE_KEY);
+                    localStorage.removeItem(LS_GUEST_KEY);
+                    clearOnboardingFlag();
+                  }}
+                  className="p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-full hover:bg-rose-500/30 transition-all"
+                >
+                  <LogOut size={20} />
+                </button>
+              )}
+            </div>
+          ) : (
             <button
-              onClick={() => {
-                signOut();
-                setIsGuest(false);
-                setGameState('welcome');
-                setActiveMission(null);
-                setSelectedCharId(null);
-                localStorage.removeItem(LS_STATE_KEY);
-                localStorage.removeItem(LS_GUEST_KEY);
-                clearOnboardingFlag();
-              }}
-              className="p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-full hover:bg-rose-500/30 transition-all"
+              onClick={resetTopControlsTimer}
+              aria-label="Show controls"
+              className="w-8 h-8 flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/40 hover:text-white/70 hover:bg-white/20 transition-all"
             >
-              <LogOut size={20} />
+              <Languages size={14} />
             </button>
           )}
         </div>
@@ -1143,8 +1178,8 @@ export default function App() {
                     // Set activeMission from room's missionId so MathBattle can render
                     const m = missions.find(mi => mi.id === activeRoom.missionId);
                     if (m) {
-                      const battleMission = m.data?.generatorType ? generateMission(m) : m;
-                      setActiveMission(battleMission);
+                      const gen = await lazyGenerate();
+                      setActiveMission(m.data?.generatorType ? gen(m) : m);
                     }
                     setGameState('battle');
                   }}
