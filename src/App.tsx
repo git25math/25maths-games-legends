@@ -877,44 +877,40 @@ export default function App() {
         <div
           className="fixed top-4 right-4 z-50"
           onMouseEnter={resetTopControlsTimer}
-          onTouchStart={resetTopControlsTimer}
         >
-          {topControlsVisible ? (
-            <div className="flex items-center gap-2 animate-in fade-in duration-200">
-              <button
-                onClick={() => { setLang(lang === 'zh' ? 'zh_TW' : lang === 'zh_TW' ? 'en' : 'zh'); resetTopControlsTimer(); }}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-bold hover:bg-white/20 transition-all"
-              >
-                <Languages size={18} />
-                {lang === 'zh' ? '繁體' : lang === 'zh_TW' ? 'EN' : '简体'}
-              </button>
-              {(user || isGuest) && (
-                <button
-                  onClick={() => {
-                    signOut();
-                    setIsGuest(false);
-                    setGameState('welcome');
-                    setActiveMission(null);
-                    setSelectedCharId(null);
-                    localStorage.removeItem(LS_STATE_KEY);
-                    localStorage.removeItem(LS_GUEST_KEY);
-                    clearOnboardingFlag();
-                  }}
-                  className="p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-full hover:bg-rose-500/30 transition-all"
-                >
-                  <LogOut size={20} />
-                </button>
-              )}
-            </div>
-          ) : (
+          <div className={`flex items-center gap-2 transition-all duration-300 origin-right ${topControlsVisible ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-90 pointer-events-none absolute right-0'}`}>
             <button
-              onClick={resetTopControlsTimer}
-              aria-label="Show controls"
-              className="w-8 h-8 flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/40 hover:text-white/70 hover:bg-white/20 transition-all"
+              onClick={() => { setLang(lang === 'zh' ? 'zh_TW' : lang === 'zh_TW' ? 'en' : 'zh'); resetTopControlsTimer(); }}
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-bold hover:bg-white/20 transition-all"
             >
-              <Languages size={14} />
+              <Languages size={18} />
+              {lang === 'zh' ? '繁體' : lang === 'zh_TW' ? 'EN' : '简体'}
             </button>
-          )}
+            {(user || isGuest) && (
+              <button
+                onClick={() => {
+                  signOut();
+                  setIsGuest(false);
+                  setGameState('welcome');
+                  setActiveMission(null);
+                  setSelectedCharId(null);
+                  localStorage.removeItem(LS_STATE_KEY);
+                  localStorage.removeItem(LS_GUEST_KEY);
+                  clearOnboardingFlag();
+                }}
+                className="p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-full hover:bg-rose-500/30 transition-all"
+              >
+                <LogOut size={20} />
+              </button>
+            )}
+          </div>
+          <button
+            onClick={resetTopControlsTimer}
+            aria-label="Show controls"
+            className={`min-w-[44px] min-h-[44px] flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/40 hover:text-white/70 hover:bg-white/20 transition-all duration-300 ${topControlsVisible ? 'opacity-0 scale-75 pointer-events-none absolute right-0' : 'opacity-100 scale-100 pointer-events-auto'}`}
+          >
+            <Languages size={16} />
+          </button>
         </div>
 
         {/* Overlays — lazy loaded (all appear after user interaction, null fallback is safe) */}
