@@ -312,10 +312,10 @@ export const TechTreeScreen = ({
                       <div className="flex items-center justify-between text-[10px] mb-1">
                         <span className="text-white/40 font-bold">{lang === 'en' ? 'Skill Health' : '技能健康度'}</span>
                         <span className={`font-black ${
-                          selectedTopicData.nodeState.healthScore >= 75 ? 'text-emerald-400' :
-                          selectedTopicData.nodeState.healthScore >= 50 ? 'text-amber-400' :
-                          selectedTopicData.nodeState.healthScore >= 25 ? 'text-orange-400' :
-                          'text-rose-400'
+                          selectedTopicData.nodeState.healthScore >= 75 ? 'text-emerald-300' :
+                          selectedTopicData.nodeState.healthScore >= 50 ? 'text-amber-300' :
+                          selectedTopicData.nodeState.healthScore >= 25 ? 'text-orange-300' :
+                          'text-rose-300'
                         }`}>{selectedTopicData.nodeState.healthScore}%</span>
                       </div>
                       <div className="h-2 bg-white/5 rounded-full overflow-hidden">

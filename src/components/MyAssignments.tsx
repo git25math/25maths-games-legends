@@ -117,7 +117,7 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
                 }`}>
                   {/* Title + status */}
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-sm font-black text-slate-800">{a.title}</h3>
+                    <h3 className="text-sm font-black text-slate-800 line-clamp-2" title={a.title}>{a.title}</h3>
                     {allDone && <CheckCircle2 size={16} className="text-emerald-500 flex-shrink-0" />}
                     {overdue && !allDone && <AlertTriangle size={16} className="text-rose-500 flex-shrink-0" />}
                   </div>

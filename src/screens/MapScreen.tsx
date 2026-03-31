@@ -463,7 +463,7 @@ export const MapScreen = ({
                   );
                 })()}
                 {/* Title first — primary visual weight */}
-                <h4 className="text-sm sm:text-lg md:text-2xl font-black text-slate-800 mb-1 sm:mb-2 line-clamp-2 pr-8">{lt(mission.title, lang)}</h4>
+                <h4 className="text-sm sm:text-lg md:text-2xl font-black text-slate-800 mb-1 sm:mb-2 line-clamp-2 pr-10">{lt(mission.title, lang)}</h4>
 
                 {/* Status row — minimal on mobile */}
                 <div className="flex items-center gap-1.5 mb-2 sm:mb-3">

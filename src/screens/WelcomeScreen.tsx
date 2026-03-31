@@ -103,7 +103,7 @@ export const WelcomeScreen = ({
             onClick={() => { playTap(); onStart(); }}
             aria-disabled={!selectedCharId || !isLoggedIn}
             className={`px-16 py-6 rounded-3xl text-3xl font-black transition-all shadow-2xl focus-visible:ring-2 focus-visible:ring-amber-400 ${
-              selectedCharId && isLoggedIn ? 'bg-amber-500 text-white' : 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-60'
+              selectedCharId && isLoggedIn ? 'bg-amber-500 text-white' : 'bg-slate-700 text-slate-400 cursor-not-allowed opacity-70'
             }`}
             {...(selectedCharId && isLoggedIn ? { ...tapScale, ...hoverGlow } : {})}
           >

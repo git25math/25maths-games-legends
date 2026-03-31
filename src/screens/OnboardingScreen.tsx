@@ -53,7 +53,7 @@ export const OnboardingScreen = ({
       {/* Skip button */}
       <button
         onClick={skip}
-        className="absolute top-4 sm:top-6 right-4 sm:right-20 text-white/30 hover:text-white/60 text-xs sm:text-sm font-bold transition-colors z-10"
+        className="absolute top-4 sm:top-6 right-4 sm:right-20 min-h-[44px] min-w-[44px] flex items-center justify-center text-white/30 hover:text-white/60 text-xs sm:text-sm font-bold focus-visible:ring-2 focus-visible:ring-white/40 rounded-lg transition-colors z-10"
       >
         {(t as any).skipOnboarding ?? 'Skip'}
       </button>
@@ -93,7 +93,7 @@ export const OnboardingScreen = ({
             {/* CTA */}
             <button
               onClick={advance}
-              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-600 to-amber-500 text-white font-black text-lg rounded-2xl shadow-xl shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 transition-all"
+              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-600 to-amber-500 text-white font-black text-lg rounded-2xl shadow-xl shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 focus-visible:ring-2 focus-visible:ring-amber-300 transition-all"
             >
               {t.onboardingStart}
               <ChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
@@ -163,7 +163,7 @@ export const OnboardingScreen = ({
 
             <button
               onClick={advance}
-              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-black text-lg rounded-2xl shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 transition-all"
+              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-black text-lg rounded-2xl shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 focus-visible:ring-2 focus-visible:ring-indigo-300 transition-all"
             >
               {t.onboardingPhaseBtn}
               <ChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
@@ -197,7 +197,7 @@ export const OnboardingScreen = ({
 
             <button
               onClick={advance}
-              className="group flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-amber-600 to-rose-500 text-white font-black text-xl rounded-2xl shadow-xl shadow-rose-500/30 hover:shadow-rose-500/50 hover:scale-105 transition-all"
+              className="group flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-amber-600 to-rose-500 text-white font-black text-xl rounded-2xl shadow-xl shadow-rose-500/30 hover:shadow-rose-500/50 hover:scale-105 focus-visible:ring-2 focus-visible:ring-rose-300 transition-all"
             >
               {t.onboardingGuideBtn}
               <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />

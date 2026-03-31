@@ -187,8 +187,8 @@ export const PKResultPanel = ({
 
                     {/* Name */}
                     <div className="flex-1 text-left min-w-0">
-                      <p className="text-white text-sm font-bold truncate">
-                        {p.name}
+                      <p className="text-white text-sm font-bold truncate max-w-[140px]">
+                        {p.name || 'Player'}
                         {isMe && <span className="text-indigo-400 text-[10px] ml-1">({lang === 'en' ? 'You' : '你'})</span>}
                       </p>
                       {multiplier > 1 && (
@@ -239,9 +239,14 @@ export const PKResultPanel = ({
               )}
 
               {/* Mission picker (host only) */}
-              {showPicker && onNextRound && (
+              {showPicker && onNextRound && (() => {
+                const gradeMissions = missions.filter(m => m.grade === (grade ?? 7));
+                if (gradeMissions.length === 0) return (
+                  <p className="text-white/30 text-xs text-center py-4">{lang === 'en' ? 'No missions available' : '暂无可用关卡'}</p>
+                );
+                return (
                 <div className="max-h-48 overflow-y-auto rounded-xl border border-white/10 bg-slate-700/50 p-2 space-y-1">
-                  {missions.filter(m => m.grade === (grade ?? 7)).map(m => (
+                  {gradeMissions.map(m => (
                     <button
                       key={m.id}
                       onClick={() => { onNextRound(m.id); setShowPicker(false); }}
@@ -256,7 +261,8 @@ export const PKResultPanel = ({
                     </button>
                   ))}
                 </div>
-              )}
+                );
+              })()}
 
               <button
                 onClick={onClose}

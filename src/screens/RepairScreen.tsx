@@ -314,7 +314,7 @@ export const RepairScreen = ({
                       value={inputs[field.id] ?? ''}
                       onChange={e => setInputs(prev => ({ ...prev, [field.id]: e.target.value }))}
                       placeholder={field.placeholder}
-                      className="w-full px-4 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white text-lg font-bold text-center placeholder:text-white/20 focus:border-rose-400 focus:outline-none"
+                      className="w-full px-4 py-3 bg-white/10 border-2 border-white/20 rounded-xl text-white text-lg font-bold text-center placeholder:text-white/30 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400/50"
                       onKeyDown={e => { if (e.key === 'Enter' && fi === fields.length - 1) handleSubmit(); }}
                       autoFocus={fi === 0}
                     />
