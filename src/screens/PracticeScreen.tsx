@@ -489,15 +489,11 @@ export const PracticeScreen = ({
                       <div className="h-full bg-amber-400 rounded-full transition-all" style={{ width: `${(repairCorrect / REPAIR_TARGET) * 100}%` }} />
                     </div>
                   </div>
-                  {repairPattern && (
-                    <span className="text-rose-400/80 text-[10px] font-bold">
-                      {repairPattern === 'sign' ? `⚠️ ${lang === 'en' ? 'Fixing: sign errors (±)' : lang === 'zh_TW' ? '修復：正負號錯誤 (±)' : '修复：正负号错误 (±)'}` :
-                       repairPattern === 'rounding' ? `⚠️ ${lang === 'en' ? 'Fixing: rounding errors (≈)' : lang === 'zh_TW' ? '修復：精度錯誤 (≈)' : '修复：精度错误 (≈)'}` :
-                       repairPattern === 'magnitude' ? `⚠️ ${lang === 'en' ? 'Fixing: magnitude errors (×10)' : lang === 'zh_TW' ? '修復：數量級錯誤 (×10)' : '修复：数量级错误 (×10)'}` :
-                       repairPattern === 'method' ? `⚠️ ${lang === 'en' ? 'Fixing: method errors (?)' : lang === 'zh_TW' ? '修復：方法錯誤 (?)' : '修复：方法错误 (?)'}` :
-                       `⚠️ ${lang === 'en' ? 'Repair training' : lang === 'zh_TW' ? '修復訓練' : '修复训练'}`}
-                    </span>
-                  )}
+                  {repairPattern && (() => {
+                    const rp = (t as any).repairPatterns ?? {};
+                    const label = rp[repairPattern] ?? rp.default ?? 'Repair';
+                    return <span className="text-rose-400/80 text-[10px] font-bold">⚠️ {label}</span>;
+                  })()}
                 </div>
               ) : (
               <div className="flex flex-wrap items-center gap-2 mt-1">

@@ -122,6 +122,13 @@ export const translations = {
     skipForNow: "暂时跳过，稍后加入",
     joinedHint: "没有邀请码也可以先玩——随时可以在设置中加入班级。",
     fillFieldsFirst: "请先填写所有答题栏",
+    repairPatterns: {
+      sign: "修复：正负号错误 (±)",
+      rounding: "修复：精度错误 (≈)",
+      magnitude: "修复：数量级错误 (×10)",
+      method: "修复：方法错误 (?)",
+      default: "修复训练",
+    },
     lockedByOrder: "请先完成本单元前置关卡",
     // RAG difficulty system
     difficultyMode: {
@@ -381,6 +388,13 @@ export const translations = {
     skipForNow: "Skip for now",
     joinedHint: "No code? No worries — you can join a class anytime from settings.",
     fillFieldsFirst: "Fill in all fields first",
+    repairPatterns: {
+      sign: "Fixing: sign errors (±)",
+      rounding: "Fixing: rounding errors (≈)",
+      magnitude: "Fixing: magnitude errors (×10)",
+      method: "Fixing: method errors (?)",
+      default: "Repair training",
+    },
     lockedByOrder: "Complete previous missions first",
     difficultyMode: {
       green: "Master's Guide",
@@ -638,6 +652,13 @@ export const translations = {
     skipForNow: "暫時跳過，稍後加入",
     joinedHint: "沒有邀請碼也可以先玩——隨時可以在設定中加入班級。",
     fillFieldsFirst: "請先填寫所有答題欄",
+    repairPatterns: {
+      sign: "修復：正負號錯誤 (±)",
+      rounding: "修復：精度錯誤 (≈)",
+      magnitude: "修復：數量級錯誤 (×10)",
+      method: "修復：方法錯誤 (?)",
+      default: "修復訓練",
+    },
     lockedByOrder: "請先完成本單元前置關卡",
     difficultyMode: {
       green: "名師指路",
