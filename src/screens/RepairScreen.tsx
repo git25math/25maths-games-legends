@@ -155,7 +155,7 @@ export const RepairScreen = ({
           className="max-w-md w-full space-y-5"
         >
           {/* Back button */}
-          <button onClick={onCancel} className="flex items-center gap-2 text-white/30 hover:text-white/60 text-sm">
+          <button onClick={onCancel} className="flex items-center gap-2 min-h-[44px] text-white/30 hover:text-white/60 focus-visible:ring-2 focus-visible:ring-white/30 rounded-lg text-sm" aria-label={lang === 'en' ? 'Back to map' : '返回地图'}>
             <ArrowLeft size={16} /> {lang === 'en' ? 'Back' : '返回'}
           </button>
 

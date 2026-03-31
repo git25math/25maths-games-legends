@@ -56,7 +56,7 @@ export const PKSetupPanel = ({
               {lang === 'en' ? 'Friend PK' : '好友对决'}
             </h2>
           </div>
-          <button onClick={onClose} className="p-2 min-w-10 min-h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors">
+          <button onClick={onClose} className="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-white/60 hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-400 rounded-lg transition-colors" aria-label="Close">
             <X size={24} />
           </button>
         </div>

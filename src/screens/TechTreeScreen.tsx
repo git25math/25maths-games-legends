@@ -187,7 +187,7 @@ export const TechTreeScreen = ({
               </div>
               <button
                 onClick={dismissOnboarding}
-                className="shrink-0 px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-400 text-xs font-bold hover:bg-cyan-500/30 transition-colors"
+                className="shrink-0 px-4 py-2 min-h-[44px] rounded-lg bg-cyan-500/20 text-cyan-400 text-xs font-bold hover:bg-cyan-500/30 focus-visible:ring-2 focus-visible:ring-cyan-400 transition-colors"
               >
                 {l.onboardingDismiss}
               </button>
@@ -271,7 +271,7 @@ export const TechTreeScreen = ({
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 bottom-0 w-80 md:w-96 bg-slate-800/95 border-l border-white/10 p-5 overflow-y-auto"
+              className="absolute right-0 top-0 bottom-0 w-80 md:w-96 max-w-[90vw] bg-slate-800/95 border-l border-white/10 p-5 overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
               {/* Topic header */}

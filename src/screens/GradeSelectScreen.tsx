@@ -36,7 +36,7 @@ export const GradeSelectScreen = ({
             onClick={() => setSelectedGrade(g)}
             animate={selectedGrade === g ? { scale: 1.05, borderColor: '#818cf8' } : { scale: 1, borderColor: 'rgba(255,255,255,0.1)' }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className={`p-4 sm:p-8 border-2 rounded-3xl text-white group ${
+            className={`p-4 sm:p-8 min-h-[72px] border-2 rounded-3xl text-white group focus-visible:ring-2 focus-visible:ring-indigo-400 ${
               selectedGrade === g
                 ? 'bg-indigo-600'
                 : 'bg-white/5 hover:bg-indigo-600/50'
@@ -61,14 +61,14 @@ export const GradeSelectScreen = ({
             <motion.button
               {...buttonBase}
               onClick={() => setShowJoinModal(true)}
-              className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl text-sm hover:bg-indigo-500 transition-all min-w-[10rem]"
+              className="px-8 py-3 min-h-[44px] bg-indigo-600 text-white font-bold rounded-xl text-sm hover:bg-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-400 transition-all min-w-[10rem]"
             >
               🎟️ {l.hasCode}
             </motion.button>
             <motion.button
               {...buttonBase}
               onClick={() => onSelect(selectedGrade)}
-              className="px-6 py-3 bg-white/10 border border-white/20 text-white/60 font-bold rounded-xl text-sm hover:bg-white/20 transition-all"
+              className="px-6 py-3 min-h-[44px] bg-white/10 border border-white/20 text-white/60 font-bold rounded-xl text-sm hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/40 transition-all"
             >
               {l.noCode}
             </motion.button>

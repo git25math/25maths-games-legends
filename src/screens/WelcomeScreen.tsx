@@ -101,8 +101,9 @@ export const WelcomeScreen = ({
           <motion.button
             disabled={!selectedCharId || !isLoggedIn}
             onClick={() => { playTap(); onStart(); }}
-            className={`px-16 py-6 rounded-3xl text-3xl font-black transition-all shadow-2xl ${
-              selectedCharId && isLoggedIn ? 'bg-amber-500 text-white' : 'bg-slate-800 text-slate-600 cursor-not-allowed'
+            aria-disabled={!selectedCharId || !isLoggedIn}
+            className={`px-16 py-6 rounded-3xl text-3xl font-black transition-all shadow-2xl focus-visible:ring-2 focus-visible:ring-amber-400 ${
+              selectedCharId && isLoggedIn ? 'bg-amber-500 text-white' : 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-60'
             }`}
             {...(selectedCharId && isLoggedIn ? { ...tapScale, ...hoverGlow } : {})}
           >
@@ -118,20 +119,23 @@ export const WelcomeScreen = ({
               <p className="text-white/60 text-sm font-bold">{t.loginToPlay}</p>
               <button
                 onClick={() => setShowAuthForm(true)}
-                className="px-4 py-2 bg-white text-slate-900 font-black rounded-xl text-xs hover:bg-slate-100 transition-all"
+                className="px-4 py-2 min-h-[44px] bg-white text-slate-900 font-black rounded-xl text-xs hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-400 transition-all"
+                aria-label={lang === 'en' ? 'Log in or create account' : '登录或注册'}
               >
                 {t.loginBtn}
               </button>
               <button
                 onClick={onGuest}
-                className="px-4 py-2 bg-emerald-700 text-white font-bold rounded-xl text-xs hover:bg-emerald-600 transition-all"
+                className="px-4 py-2 min-h-[44px] bg-emerald-700 text-white font-bold rounded-xl text-xs hover:bg-emerald-600 focus-visible:ring-2 focus-visible:ring-emerald-400 transition-all"
+                aria-label={lang === 'en' ? 'Try without account' : '免注册试玩'}
               >
                 {lang === 'en' ? 'Try Without Account →' : lang === 'zh_TW' ? '免註冊試玩 →' : '免注册试玩 →'}
               </button>
               {onDashboard && (
                 <button
                   onClick={onDashboard}
-                  className="px-4 py-2 bg-indigo-700 text-white font-bold rounded-xl text-xs hover:bg-indigo-600 transition-all"
+                  className="px-4 py-2 min-h-[44px] bg-indigo-700 text-white font-bold rounded-xl text-xs hover:bg-indigo-600 focus-visible:ring-2 focus-visible:ring-indigo-400 transition-all"
+                  aria-label={lang === 'en' ? 'Teacher dashboard' : '教师看板'}
                 >
                   {t.dashboard}
                 </button>

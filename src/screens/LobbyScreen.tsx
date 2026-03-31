@@ -71,12 +71,13 @@ export const LobbyScreen = ({
 
           {/* Room code card */}
           <div className="text-center">
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">
+            <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mb-1">
               {lang === 'en' ? 'Room Code' : '房间代码'}
             </div>
             <button
               onClick={copyCode}
-              className="bg-slate-100 hover:bg-slate-200 px-5 py-3 rounded-2xl font-black text-slate-700 text-xl tracking-[0.2em] transition-colors flex items-center gap-2"
+              className="bg-slate-100 hover:bg-slate-200 px-5 py-3 min-h-[44px] rounded-2xl font-black text-slate-700 text-xl tracking-[0.2em] transition-colors flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-indigo-400"
+              aria-label={lang === 'en' ? `Copy room code ${roomCode}` : `复制房间代码 ${roomCode}`}
             >
               {roomCode}
               {copied
@@ -125,7 +126,7 @@ export const LobbyScreen = ({
                 </div>
                 <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase ${
                   p.isReady ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200 text-slate-400'
-                }`}>
+                }`} aria-label={p.isReady ? (lang === 'en' ? 'Player ready' : '玩家就绪') : (lang === 'en' ? 'Waiting' : '等待中')}>
                   {p.isReady ? (lang === 'en' ? 'Ready' : '就绪') : '...'}
                 </div>
               </motion.div>

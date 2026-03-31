@@ -41,8 +41,12 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
   const missionMap = useAssignmentMissionMap(assignmentMissionIds, missions);
 
   useEffect(() => {
-    supabase.rpc('get_my_assignments').then(({ data }) => {
+    supabase.rpc('get_my_assignments').then(({ data, error }) => {
+      if (error) console.warn('Failed to load assignments:', error.message);
       setAssignments((data || []) as AssignmentData[]);
+      setLoading(false);
+    }).catch(() => {
+      setAssignments([]);
       setLoading(false);
     });
   }, []);
@@ -77,13 +81,13 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
               {txt('我的作业', 'My Homework')}
             </h2>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+          <button onClick={onClose} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-slate-400 hover:text-slate-600 focus-visible:ring-2 focus-visible:ring-indigo-400 rounded-lg" aria-label="Close">
             <X size={18} />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-4 space-y-3 max-h-[65vh] overflow-y-auto">
+        <div className="p-4 space-y-3 max-h-[calc(100vh-120px)] sm:max-h-[65vh] overflow-y-auto">
           {loading ? (
             <p className="text-sm text-slate-400 text-center py-8">
               {txt('加载中...', 'Loading...')}

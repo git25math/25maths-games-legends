@@ -421,7 +421,7 @@ export const MapScreen = ({
                 className={`bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isNextUp ? 'border-amber-400 shadow-amber-500/20' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
               >
                 {isNextUp && (
-                  <div className="absolute -top-3 left-4 px-3 py-1 bg-amber-500 text-white text-[10px] font-black rounded-full z-10 shadow-md">
+                  <div className="absolute -top-3 left-4 px-3 py-1 bg-amber-500 text-white text-[11px] sm:text-xs font-black rounded-full z-10 shadow-md">
                     {(t as any).startHere ?? 'Start here!'}
                   </div>
                 )}
@@ -467,13 +467,13 @@ export const MapScreen = ({
 
                 {/* Status row — minimal on mobile */}
                 <div className="flex items-center gap-1.5 mb-2 sm:mb-3">
-                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                  <span className={`px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-black uppercase tracking-wider ${
                     mission.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' :
                     mission.difficulty === 'Medium' ? 'bg-orange-100 text-orange-700' : 'bg-rose-100 text-rose-700'
                   }`}>
                     {t.difficulty[mission.difficulty]}
                   </span>
-                  <span className="hidden sm:inline text-indigo-500 text-[9px] font-bold uppercase">{t.questionTypes[mission.type]}</span>
+                  <span className="hidden sm:inline text-indigo-500 text-xs font-bold uppercase">{t.questionTypes[mission.type]}</span>
                   {isCompleted && <CheckCircle2 className="text-emerald-500 ml-auto" size={16} />}
                   {isLocked && <Lock className="text-slate-400 ml-auto" size={16} />}
                 </div>
@@ -1368,25 +1368,25 @@ export const MapScreen = ({
                 {/* 科技树 */}
                 {onTechTree && (
                   <button onClick={() => { onMobileMenuClose?.(); onTechTree(); }}
-                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🌿</span>
-                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Tech Tree' : '科技树'}</span>
+                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Tech Tree' : '科技树'}</span>
                   </button>
                 )}
                 {/* 技能树 */}
                 {getCharProgression && selectedChar && (
                   <button onClick={() => { onMobileMenuClose?.(); setShowSkillTree(true); }}
-                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🃏</span>
-                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Skills' : '技能'}</span>
+                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Skills' : '技能'}</span>
                   </button>
                 )}
                 {/* 装备库 */}
                 {onRepairEquipment && (
                   <button onClick={() => { onMobileMenuClose?.(); setShowEquipmentPanel(true); }}
-                    className="relative flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    className="relative flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🛡️</span>
-                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Arsenal' : '装备'}</span>
+                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Arsenal' : '装备'}</span>
                     {countNeedsRepair(profile.completed_missions as Record<string, unknown>) > 0 && (
                       <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">
                         {countNeedsRepair(profile.completed_missions as Record<string, unknown>)}
@@ -1397,33 +1397,33 @@ export const MapScreen = ({
                 {/* 排行榜 */}
                 {onLeaderboard && (
                   <button onClick={() => { onMobileMenuClose?.(); onLeaderboard(); }}
-                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🏆</span>
-                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Ranks' : '排行'}</span>
+                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Ranks' : '排行'}</span>
                   </button>
                 )}
                 {/* 好友对决 */}
                 {onFriendPK && (
                   <button onClick={() => { onMobileMenuClose?.(); onFriendPK(); }}
-                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">⚔️</span>
-                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Friend PK' : 'PK'}</span>
+                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Friend PK' : 'PK'}</span>
                   </button>
                 )}
                 {/* 成就墙 */}
                 {onAchievements && (
                   <button onClick={() => { onMobileMenuClose?.(); onAchievements(); }}
-                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🏅</span>
-                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Awards' : '成就'}</span>
+                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Awards' : '成就'}</span>
                   </button>
                 )}
                 {/* 教师看板 */}
                 {onDashboard && (
                   <button onClick={() => { onMobileMenuClose?.(); onDashboard(); }}
-                    className="flex flex-col items-center gap-1 py-3 bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10">
+                    className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">📊</span>
-                    <span className="text-[10px] font-bold">{lang === 'en' ? 'Dashboard' : '看板'}</span>
+                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Dashboard' : '看板'}</span>
                   </button>
                 )}
               </div>
