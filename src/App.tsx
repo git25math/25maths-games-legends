@@ -1480,6 +1480,7 @@ export default function App() {
                   grade={profile.grade}
                   currentUserId={profile.user_id}
                   classTags={profile.class_tags ?? undefined}
+                  isAdmin={isTeacher && !(profile.class_tags ?? []).some(t => /^\d/.test(t))}
                   onClose={() => setGameState('map')}
                 />
               )}

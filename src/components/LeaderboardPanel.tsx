@@ -41,19 +41,21 @@ export const LeaderboardPanel = ({
   grade,
   currentUserId,
   classTags,
+  isAdmin,
   onClose,
 }: {
   lang: Language;
   grade: number;
   currentUserId: string;
   classTags?: string[];
+  isAdmin?: boolean;
   onClose: () => void;
 }) => {
   useEscapeKey(onClose);
   const hasClass = classTags && classTags.length > 0;
-  const availableTabs: TabId[] = hasClass
+  const availableTabs: TabId[] = (hasClass || isAdmin)
     ? ['class', 'grade', 'school', 'weekly']
-    : ['grade', 'weekly']; // No school tab for users without a class (non-school users)
+    : ['grade', 'weekly'];
   const [tab, setTab] = useState<TabId>(hasClass ? 'class' : 'grade');
   const [gradeEntries, setGradeEntries] = useState<LeaderEntry[]>([]);
   const [classEntries, setClassEntries] = useState<LeaderEntry[]>([]);
