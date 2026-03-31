@@ -16,13 +16,14 @@ type LeaderEntry = {
 
 type WeeklyEntry = LeaderEntry & { weeklyXP: number };
 
-type TabId = 'grade' | 'class' | 'weekly';
+type TabId = 'class' | 'grade' | 'school' | 'weekly';
 
 const MEDAL = ['🥇', '🥈', '🥉'];
 
 const TAB_LABELS: Record<TabId, { zh: string; zh_TW: string; en: string }> = {
-  grade: { zh: '年级', zh_TW: '年級', en: 'Grade' },
   class: { zh: '我的班', zh_TW: '我的班', en: 'My Class' },
+  grade: { zh: '年级', zh_TW: '年級', en: 'Grade' },
+  school: { zh: '全校', zh_TW: '全校', en: 'School' },
   weekly: { zh: '本周', zh_TW: '本週', en: 'Weekly' },
 };
 
@@ -50,10 +51,13 @@ export const LeaderboardPanel = ({
 }) => {
   useEscapeKey(onClose);
   const hasClass = classTags && classTags.length > 0;
-  const availableTabs: TabId[] = hasClass ? ['grade', 'class', 'weekly'] : ['grade', 'weekly'];
+  const availableTabs: TabId[] = hasClass
+    ? ['class', 'grade', 'school', 'weekly']
+    : ['grade', 'weekly']; // No school tab for users without a class (non-school users)
   const [tab, setTab] = useState<TabId>(hasClass ? 'class' : 'grade');
   const [gradeEntries, setGradeEntries] = useState<LeaderEntry[]>([]);
   const [classEntries, setClassEntries] = useState<LeaderEntry[]>([]);
+  const [schoolEntries, setSchoolEntries] = useState<LeaderEntry[]>([]);
   const [weeklyEntries, setWeeklyEntries] = useState<WeeklyEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -83,6 +87,21 @@ export const LeaderboardPanel = ({
       .then(({ data, error: err }) => {
         if (err) throw err;
         setClassEntries((data as LeaderEntry[]) ?? []);
+      });
+  };
+
+  const fetchSchool = () => {
+    // Only students with class_tags (school-assigned) appear in school leaderboard
+    return supabase
+      .from('gl_user_progress')
+      .select('user_id, display_name, total_score, selected_char_id, class_tags')
+      .gt('total_score', 0)
+      .not('class_tags', 'eq', '{}')
+      .order('total_score', { ascending: false })
+      .limit(50)
+      .then(({ data, error: err }) => {
+        if (err) throw err;
+        setSchoolEntries((data as LeaderEntry[]) ?? []);
       });
   };
 
@@ -125,14 +144,14 @@ export const LeaderboardPanel = ({
   const fetchData = () => {
     setLoading(true);
     setError(false);
-    Promise.all([fetchGrade(), fetchClass(), fetchWeekly()])
+    Promise.all([fetchGrade(), fetchClass(), fetchSchool(), fetchWeekly()])
       .then(() => { if (mountedRef.current) setLoading(false); })
       .catch(() => { if (mountedRef.current) { setError(true); setLoading(false); } });
   };
 
   useEffect(fetchData, [grade]);
 
-  const entries = tab === 'class' ? classEntries : tab === 'weekly' ? [] : gradeEntries;
+  const entries = tab === 'class' ? classEntries : tab === 'school' ? schoolEntries : tab === 'weekly' ? [] : gradeEntries;
   const isWeekly = tab === 'weekly';
   const myRank = entries.findIndex(e => e.user_id === currentUserId) + 1;
   const myWeeklyRank = weeklyEntries.findIndex(e => e.user_id === currentUserId) + 1;
@@ -140,6 +159,8 @@ export const LeaderboardPanel = ({
 
   const title = tab === 'class' && hasClass
     ? (lang === 'en' ? `${classTags![0]} Leaderboard` : `${classTags![0]} 排行榜`)
+    : tab === 'school'
+    ? (lang === 'en' ? 'School Top 50' : '全校前 50')
     : tab === 'weekly'
     ? (lang === 'en' ? 'Weekly Progress' : '本周进步')
     : (lang === 'en' ? `Year ${grade} Leaderboard` : `${grade} 年级排行榜`);
