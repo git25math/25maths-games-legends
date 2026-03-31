@@ -1121,6 +1121,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '求二次函数的顶点坐标。', en: 'Find the vertex of a quadratic function.' },
     data: { a: -1, b: 6, c: -5, generatorType: 'QUADRATIC_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-2.10-01', sectionId: 'functions',
+    discoverSteps: [
+      {
+        prompt: { zh: "投石车的轨迹是抛物线。怎么找到最高点？", en: "A catapult's trajectory is a parabola. How do you find the highest point?" },
+        type: 'choice',
+        choices: [
+          { zh: "用顶点公式 $x = -\\frac{b}{2a}$", en: "Use the vertex formula $x = -\\frac{b}{2a}$" },
+          { zh: "代入 $x = 0$", en: "Substitute $x = 0$" },
+        ],
+        onCorrect: { zh: "完美！$y = ax^2+bx+c$ 的顶点在 $x = -\\frac{b}{2a}$。\n$a < 0$ 时开口朝下，顶点是最高点。$a > 0$ 则是最低点。", en: "Perfect! Vertex of $y = ax^2+bx+c$ is at $x = -\\frac{b}{2a}$.\n$a < 0$ → opens down → vertex is maximum. $a > 0$ → minimum." },
+        onWrong: { zh: "$x=0$ 只是 $y$ 轴上的点。抛物线的顶点用 $x = -\\frac{b}{2a}$ 计算。", en: "$x=0$ is just a point on the y-axis. The vertex uses $x = -\\frac{b}{2a}$." },
+        onSkip: { zh: "抛物线顶点：$x = -\\frac{b}{2a}$。$a<0$ 最高点，$a>0$ 最低点。", en: "Parabola vertex: $x = -\\frac{b}{2a}$. $a<0$ → max, $a>0$ → min." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要找抛物线的顶点？\n投石机的石块轨迹是抛物线——顶点就是转折点。\n找到顶点，才能知道石块飞多高、在哪里开始下落！', en: 'Zhuge Liang: "Why find the vertex of a parabola?\nCatapult stones trace a parabola — the vertex is the turning point.\nFinding the vertex tells you how high the stone flies and where it starts falling!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：顶点公式\n$$x = -\\frac{b}{2a}$$\n然后代回原式求 $y$。\n不需要配方法，这个公式直接给出 $x$ 坐标！', en: 'Zhuge Liang: "Vertex formula\n$$x = -\\frac{b}{2a}$$\nThen substitute back to find $y$.\nNo completing the square needed — this formula gives $x$ directly!"' }, highlightField: 'ans' },
@@ -1143,6 +1156,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '用求根公式求二次方程的解。', en: 'Use the quadratic formula to solve a quadratic equation.' },
     data: { a: 1, b: -5, c: 6, generatorType: 'ROOTS_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-2.10-02', sectionId: 'functions',
+    discoverSteps: [
+      {
+        prompt: { zh: "投石轨迹什么时候落地？\"落地\"意味着什么？", en: "When does the projectile land? What does \"landing\" mean mathematically?" },
+        type: 'choice',
+        choices: [
+          { zh: "$y = 0$——高度为零就是落地", en: "$y = 0$ — zero height means landing" },
+          { zh: "$x = 0$", en: "$x = 0$" },
+        ],
+        onCorrect: { zh: "对！$y=0$ 就是地面。解 $ax^2+bx+c=0$ 找落点。\n求根公式：$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$", en: "Yes! $y=0$ is ground level. Solve $ax^2+bx+c=0$ for landing points.\nQuadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$" },
+        onWrong: { zh: "$x=0$ 是发射点。落地 = 高度为零 = $y=0$。\n用求根公式解：$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$", en: "$x=0$ is the launch point. Landing = height zero = $y=0$.\nSolve with: $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$" },
+        onSkip: { zh: "函数零点 = $y=0$ 的解。用求根公式 $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$。", en: "Roots = solutions where $y=0$. Quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要求抛物线的根？\n投石的轨迹方程告诉你石块的路径——但石块在哪里落地？\n根就是抛物线和地面的交点，也就是石块着陆的位置！', en: 'Zhuge Liang: "Why find the roots of a parabola?\nThe trajectory equation describes the path — but where does the stone land?\nRoots are where the parabola meets the ground — the landing points!"' }, highlightField: 'x1' },
       { text: { zh: '诸葛亮：求根公式\n$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$\n$b^2 - 4ac$ 叫"判别式"：\n$> 0$：两个实根（两个落点）\n$= 0$：一个重根（刚好触地）\n$< 0$：无实根（飞过去了）', en: 'Zhuge Liang: "Quadratic formula\n$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$\n$b^2 - 4ac$ is the discriminant:\n$> 0$: two real roots\n$= 0$: one repeated root\n$< 0$: no real roots"' }, highlightField: 'x1' },
@@ -1165,6 +1191,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '求 $f(x)$ 的值。', en: 'Find the value of $f(x)$.' },
     data: { expression: '2x^2+3x-5', x: 4, generatorType: 'FUNC_VAL_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-3.1-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "函数 $f(x) = 2x^2 + 3x - 5$。如果 $x=3$，$f(3)$ 等于多少？怎么算？", en: "Function $f(x) = 2x^2 + 3x - 5$. If $x=3$, what is $f(3)$? How to calculate?" },
+        type: 'choice',
+        choices: [
+          { zh: "把所有 $x$ 替换成 3，然后计算", en: "Replace every $x$ with 3, then calculate" },
+          { zh: "把 3 加到函数上", en: "Add 3 to the function" },
+        ],
+        onCorrect: { zh: "就这么简单！代入 = 替换。\n$f(3) = 2(3)^2 + 3(3) - 5 = 18 + 9 - 5 = 22$\n先算幂次，再算乘法，最后加减。", en: "That simple! Substitution = replacement.\n$f(3) = 2(3)^2 + 3(3) - 5 = 18 + 9 - 5 = 22$\nPowers first, then multiply, then add/subtract." },
+        onWrong: { zh: "代入是替换，不是加上去。$f(3)$ 意味着把公式里每个 $x$ 换成 3。\n$f(3) = 2(3)^2 + 3(3) - 5$", en: "Substitution means replacing, not adding. $f(3)$ means swap every $x$ for 3.\n$f(3) = 2(3)^2 + 3(3) - 5$" },
+        onSkip: { zh: "代入求值：把 $x$ 的值替换进去，按运算顺序计算。先幂次→乘法→加减。", en: "Function evaluation: replace $x$ with the value, follow order of operations. Powers → multiply → add/subtract." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要学函数代入？\n"知道公式却不会用"——那和没有公式一样。\n代入就是把抽象的 $x$ 变成具体的数。\n军需官算预算、将军算粮草——都是代入。', en: 'Zhuge Liang: "Why learn function substitution?\nKnowing a formula but not using it is the same as not knowing it.\nSubstitution turns abstract $x$ into a concrete number.\nQuartermasters calculate budgets, generals calculate rations — all substitution."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：运算顺序口诀\n代入后按"先幂、再乘、后加减"的顺序。\n$f(x) = 2x^2 + 3x - 5$，代入 $x = 4$：\n不要急着从左到右——先处理 $x^2$！', en: 'Zhuge Liang: "Order of operations\nAfter substitution: powers first, then multiply, then add/subtract.\n$f(x) = 2x^2 + 3x - 5$, substitute $x = 4$:\nDon\'t rush left to right — handle $x^2$ first!"' }, highlightField: 'ans' },
@@ -1227,6 +1266,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '三角形中，$a = 8$, $b = 10$, $C = 60°$。用余弦定理求 $c$（保留2位小数）。', en: 'In a triangle, $a = 8$, $b = 10$, $C = 60°$. Use the cosine rule to find $c$ (2 d.p.).' },
     data: { opposite: 10, adjacent: 8, angle: 60, func: 'sin', generatorType: 'SINE_COSINE_RANDOM', mode: 'cosine_rule' }, difficulty: 'Hard', reward: 800,
     kpId: 'kp-6.5-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "两支军队从同一点出发，走不同方向。知道两条路的长度和夹角。\n怎么算两军最终的距离？", en: "Two armies depart from the same point in different directions. Given both path lengths and the angle between.\nHow to find the final distance between them?" },
+        type: 'choice',
+        choices: [
+          { zh: "余弦定理：$c^2 = a^2 + b^2 - 2ab\\cos C$", en: "Cosine rule: $c^2 = a^2 + b^2 - 2ab\\cos C$" },
+          { zh: "直接相加", en: "Just add them" },
+        ],
+        onCorrect: { zh: "余弦定理处理\"已知两边和夹角，求第三边\"。\n它是勾股定理的一般化——90° 时 $\\cos 90°=0$，退化为 $c^2=a^2+b^2$。", en: "Cosine rule handles \"two sides and included angle → third side\".\nIt generalizes Pythagoras — at 90°, $\\cos 90°=0$, reduces to $c^2=a^2+b^2$." },
+        onWrong: { zh: "相加只在同一直线上成立。不同方向走的路需要余弦定理。\n$c^2 = a^2 + b^2 - 2ab\\cos C$", en: "Adding only works on the same line. Different directions need the cosine rule.\n$c^2 = a^2 + b^2 - 2ab\\cos C$" },
+        onSkip: { zh: "两边+夹角 → 余弦定理求第三边。$c^2 = a^2 + b^2 - 2ab\\cos C$。", en: "Two sides + included angle → cosine rule for third side. $c^2 = a^2 + b^2 - 2ab\\cos C$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '姜维："为什么需要余弦定理？\n当你知道两边和夹角（SAS），正弦定理用不了——没有角对边配对。\n余弦定理专门解决这种情况！"', en: 'Jiang Wei: "Why the cosine rule?\nWhen you know two sides and the included angle (SAS), the sine rule won\'t work — no angle-side pair.\nThe cosine rule solves exactly this!"' }, highlightField: 'c' },
       { text: { zh: '姜维："余弦定理\n$$c^2 = a^2 + b^2 - 2ab\\cos C$$\n像勾股定理加了一个修正项。当 $C=90°$，$\\cos 90°=0$，变回勾股！"', en: 'Jiang Wei: "The Cosine Rule\n$$c^2 = a^2 + b^2 - 2ab\\cos C$$\nLike Pythagoras with a correction. When $C=90°$, $\\cos 90°=0$, it becomes Pythagoras!"' }, highlightField: 'c' },
@@ -1249,6 +1301,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '已知三边 $a=5$, $b=7$, $c=8$，求角 $C$（保留2位小数）。', en: 'Given sides $a=5$, $b=7$, $c=8$, find angle $C$ (2 d.p.).' },
     data: { answer: 81.79 }, difficulty: 'Hard', reward: 850,
     kpId: 'kp-6.5-03', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "三边已知，怎么求夹角？", en: "All three sides known. How to find an angle?" },
+        type: 'choice',
+        choices: [
+          { zh: "余弦定理变形：$\\cos C = \\frac{a^2+b^2-c^2}{2ab}$", en: "Rearranged cosine rule: $\\cos C = \\frac{a^2+b^2-c^2}{2ab}$" },
+          { zh: "用正弦定理", en: "Use sine rule" },
+        ],
+        onCorrect: { zh: "对！余弦定理可以反过来用——已知三边求角。\n$\\cos C = \\frac{a^2+b^2-c^2}{2ab}$，然后 $C = \\cos^{-1}(\\text{结果})$。", en: "Yes! Cosine rule works in reverse — three sides → angle.\n$\\cos C = \\frac{a^2+b^2-c^2}{2ab}$, then $C = \\cos^{-1}(\\text{result})$." },
+        onWrong: { zh: "正弦定理需要已知角。三边全知无角——用余弦定理变形。\n$\\cos C = \\frac{a^2+b^2-c^2}{2ab}$", en: "Sine rule needs a known angle. Three sides, no angle — rearrange cosine rule.\n$\\cos C = \\frac{a^2+b^2-c^2}{2ab}$" },
+        onSkip: { zh: "三边求角：$\\cos C = \\frac{a^2+b^2-c^2}{2ab}$，再取反余弦。", en: "Three sides → angle: $\\cos C = \\frac{a^2+b^2-c^2}{2ab}$, then inverse cosine." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良："为什么要用余弦定理求角？\n三边都知道了，但角度未知。正弦定理需要已知角——用不了。\n余弦定理的变形公式专门求角！"', en: 'Ma Liang: "Why use the cosine rule for angles?\nAll three sides are known, but no angle. Sine rule needs a known angle — can\'t use it.\nThe rearranged cosine rule finds angles!"' }, highlightField: 'ans' },
       { text: { zh: '马良："余弦定理变形\n$$\\cos C = \\frac{a^2 + b^2 - c^2}{2ab}$$\n把原公式移项——把 $\\cos C$ 单独放到一边。"', en: 'Ma Liang: "Rearranged Cosine Rule\n$$\\cos C = \\frac{a^2 + b^2 - c^2}{2ab}$$\nRearrange the original formula — isolate $\\cos C$."' }, highlightField: 'ans' },
@@ -1271,6 +1336,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '$a=6$, $b=8$, $C=30°$。用公式 Area $= \\frac{1}{2}ab\\sin C$ 求面积。', en: '$a=6$, $b=8$, $C=30°$. Use Area $= \\frac{1}{2}ab\\sin C$ to find the area.' },
     data: { answer: 12 }, difficulty: 'Medium', reward: 700,
     kpId: 'kp-6.5-07', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "三角形营地两边和夹角已知。面积怎么算？", en: "Campsite triangle: two sides and included angle known. How to find the area?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{1}{2}ab\\sin C$——两边和夹角的正弦", en: "$\\frac{1}{2}ab\\sin C$ — two sides and sine of included angle" },
+          { zh: "$\\frac{1}{2} \\times \\text{底} \\times \\text{高}$", en: "$\\frac{1}{2} \\times base \\times height$" },
+        ],
+        onCorrect: { zh: "当没有直接的\"高\"时，用正弦面积公式更方便。\n$\\text{Area} = \\frac{1}{2}ab\\sin C$\n本质上 $b\\sin C$ 就是三角形的高。", en: "When there's no direct \"height\", the sine area formula is more convenient.\nArea $= \\frac{1}{2}ab\\sin C$\nEssentially, $b\\sin C$ IS the height." },
+        onWrong: { zh: "底×高需要知道高——但这里只有两边和夹角。\n$\\frac{1}{2}ab\\sin C$ 不需要高！$b\\sin C$ 就是高的计算。", en: "Base × height needs the height — but we only have two sides and angle.\n$\\frac{1}{2}ab\\sin C$ doesn't need height! $b\\sin C$ calculates the height." },
+        onSkip: { zh: "正弦面积公式：$\\frac{1}{2}ab\\sin C$。两边+夹角直接算面积，无需求高。", en: "Sine area formula: $\\frac{1}{2}ab\\sin C$. Two sides + included angle → area directly." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '费祎："为什么不用底×高÷2？\n普通面积公式需要知道高——但如果没有直角，高不好量！\n有两边和夹角？正弦面积公式直接算，不需要找高！"', en: 'Fei Yi: "Why not use base × height ÷ 2?\nThe normal formula needs the height — but without a right angle, height is hard to measure!\nTwo sides and included angle? Sine area formula calculates directly, no height needed!"' }, highlightField: 'area' },
       { text: { zh: '费祎："正弦面积公式\n$$\\text{Area} = \\frac{1}{2}ab\\sin C$$\n两边乘以夹角的正弦值，再除以 2。"', en: 'Fei Yi: "Sine Area Formula\n$$\\text{Area} = \\frac{1}{2}ab\\sin C$$\nTwo sides times the sine of the included angle, divided by 2."' }, highlightField: 'area' },
@@ -1333,6 +1411,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '底面对角线 $= 13$，高 $= 8$。求 $\\tan\\theta$（保留4位小数）。', en: 'Base diagonal $= 13$, height $= 8$. Find $\\tan\\theta$ (4 d.p.).' },
     data: { opposite: 8, adjacent: 13 }, difficulty: 'Hard', reward: 800,
     kpId: 'kp-6.6-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "从城楼底面看向楼顶——仰角是什么？", en: "Looking from the base to the top of a tower — what is the angle of elevation?" },
+        type: 'choice',
+        choices: [
+          { zh: "水平线和视线之间的夹角", en: "The angle between the horizontal and the line of sight" },
+          { zh: "楼的倾斜角度", en: "The tilt angle of the tower" },
+        ],
+        onCorrect: { zh: "仰角 = 从水平线向上抬头的角度。\n在三维问题中，先在底面用勾股定理求水平距离，再用 $\\tan\\theta = \\frac{\\text{高}}{\\text{水平距离}}$ 求仰角。", en: "Elevation angle = angle looking up from horizontal.\nIn 3D: first find horizontal distance using Pythagoras on the base, then $\\tan\\theta = \\frac{height}{horizontal\\ distance}$." },
+        onWrong: { zh: "仰角不是楼自身的角度——是你抬头看的角度。\n从水平线向上看的角度 = $\\tan^{-1}(\\frac{高}{底面距离})$。", en: "Elevation isn't the tower's own angle — it's how much you tilt your head up.\nAngle from horizontal = $\\tan^{-1}(\\frac{height}{base\\ distance})$." },
+        onSkip: { zh: "仰角 = arctan(高/水平距离)。3D 问题先在底面算对角线距离。", en: "Elevation = arctan(height / horizontal distance). In 3D, first find diagonal on the base." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '赵云："为什么用 tan？\n仰角问题就是直角三角形：对边=高，邻边=底面对角线。\ntan = 对边/邻边，这是最直接的比值！"', en: 'Zhao Yun: "Why tan?\nElevation angles form right triangles: opposite = height, adjacent = base diagonal.\ntan = opposite/adjacent, the most direct ratio!"' }, highlightField: 'tan' },
       { text: { zh: '赵云："识别直角三角形\n底面对角线（水平）和高（竖直）形成直角。\n仰角 $\\theta$ 就是这个直角三角形的锐角。"', en: 'Zhao Yun: "Identify the right triangle\nBase diagonal (horizontal) and height (vertical) form a right angle.\nElevation angle $\\theta$ is the acute angle of this right triangle."' }, highlightField: 'tan' },
@@ -1395,6 +1486,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '$\\sqrt{50}$ 化简为 $a\\sqrt{b}$，求 $a$ 的值。', en: 'Simplify $\\sqrt{50}$ to $a\\sqrt{b}$. Find $a$.' },
     data: { answer: 5 }, difficulty: 'Medium', reward: 600,
     kpId: 'kp-1.18-01', sectionId: 'number',
+    discoverSteps: [
+      {
+        prompt: { zh: "$\\sqrt{50}$ 不够简洁。怎么化简？", en: "$\\sqrt{50}$ isn't neat. How do you simplify it?" },
+        type: 'choice',
+        choices: [
+          { zh: "找最大完全平方因子：$\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$", en: "Find the largest perfect square factor: $\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$" },
+          { zh: "用计算器算小数", en: "Use a calculator for the decimal" },
+        ],
+        onCorrect: { zh: "化简根式的核心：找完全平方因子，拿到根号外面。\n$\\sqrt{ab} = \\sqrt{a} \\times \\sqrt{b}$\n$\\sqrt{50} = \\sqrt{25} \\times \\sqrt{2} = 5\\sqrt{2}$", en: "Simplifying surds: find perfect square factors, bring them outside.\n$\\sqrt{ab} = \\sqrt{a} \\times \\sqrt{b}$\n$\\sqrt{50} = \\sqrt{25} \\times \\sqrt{2} = 5\\sqrt{2}$" },
+        onWrong: { zh: "小数是近似值，数学要求精确答案。\n$\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$——这是精确的简化形式。", en: "Decimal is an approximation. Math requires exact answers.\n$\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$ — this is the exact simplified form." },
+        onSkip: { zh: "化简根式：拆出最大完全平方因子。$\\sqrt{n} = \\sqrt{a^2 \\cdot b} = a\\sqrt{b}$。", en: "Simplify surds: extract largest perfect square factor. $\\sqrt{n} = \\sqrt{a^2 \\cdot b} = a\\sqrt{b}$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良："为什么要化简根式？\n$\\sqrt{50}$ 很难直观理解——它到底多大？\n化简后 $5\\sqrt{2}$ 就清楚了：5个$\\sqrt{2}$，约5×1.414。\n化简让运算更简洁、结果更精确。"', en: 'Ma Liang: "Why simplify surds?\n$\\sqrt{50}$ is hard to grasp — how big is it?\nSimplified: $5\\sqrt{2}$ is clear — five $\\sqrt{2}$\'s, about 5×1.414.\nSimplification makes calculation cleaner and more exact."' }, highlightField: 'ans' },
       { text: { zh: '马良："化简法则\n$$\\sqrt{ab} = \\sqrt{a} \\times \\sqrt{b}$$\n关键：找到最大的完全平方因子！"', en: 'Ma Liang: "Simplification rule\n$$\\sqrt{ab} = \\sqrt{a} \\times \\sqrt{b}$$\nKey: find the largest perfect square factor!"' }, highlightField: 'ans' },
@@ -1457,6 +1561,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '$y = f(x) + 3$ 相比 $y = f(x)$ 向上移动了几个单位？', en: '$y = f(x) + 3$ compared to $y = f(x)$ shifts up by how many units?' },
     data: { answer: 3 }, difficulty: 'Medium', reward: 600,
     kpId: 'kp-2.11-02', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "函数 $y = f(x)$ 向上移 3 个单位。新函数是什么？", en: "Function $y = f(x)$ moves up 3 units. What's the new function?" },
+        type: 'choice',
+        choices: [
+          { zh: "$y = f(x) + 3$", en: "$y = f(x) + 3$" },
+          { zh: "$y = f(x + 3)$", en: "$y = f(x + 3)$" },
+        ],
+        onCorrect: { zh: "上下平移改 $y$：$+3$ 上移，$-3$ 下移。\n左右平移改 $x$（方向相反！）：$f(x-3)$ 右移，$f(x+3)$ 左移。\n记住：\"上下看外面，左右看里面且反向\"。", en: "Vertical shift changes $y$: $+3$ up, $-3$ down.\nHorizontal shift changes $x$ (opposite direction!): $f(x-3)$ → right, $f(x+3)$ → left.\nRemember: \"vertical = outside, horizontal = inside and reversed\"." },
+        onWrong: { zh: "$f(x+3)$ 是左右平移（且左移！）。上下平移在函数外面加减。\n上移 3：$y = f(x) + 3$", en: "$f(x+3)$ is horizontal shift (left!). Vertical shift adds/subtracts outside.\nUp 3: $y = f(x) + 3$" },
+        onSkip: { zh: "上移：$y=f(x)+k$。下移：$-k$。右移：$f(x-k)$。左移：$f(x+k)$。", en: "Up: $y=f(x)+k$. Down: $-k$. Right: $f(x-k)$. Left: $f(x+k)$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '费祎："为什么要学函数平移？\n调整函数位置是图形变换的基础——\n城墙加高3米，就是整条防线上移3！\n$+3$ 在函数外面，所以是竖直移动。"', en: 'Fei Yi: "Why learn function translation?\nAdjusting function position is the basis of graph transformations —\nRaise the wall 3m = shift the entire defense line up 3!\n$+3$ outside the function means vertical shift."' }, highlightField: 'ans' },
       { text: { zh: '费祎："平移规则\n$y = f(x) + k$：向上移 $k$ 单位（$k > 0$）\n$y = f(x) - k$：向下移 $k$ 单位\n加在函数外面 = 上下移动！"', en: 'Fei Yi: "Translation rules\n$y = f(x) + k$: shift up $k$ units ($k > 0$)\n$y = f(x) - k$: shift down $k$ units\nAdded outside the function = vertical shift!"' }, highlightField: 'ans' },
@@ -1479,6 +1596,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '$y = 2x + 1$ 的垂直线斜率 $= ?$', en: 'Gradient of line perpendicular to $y = 2x + 1 = ?$' },
     data: { answer: -0.5 }, difficulty: 'Medium', reward: 600,
     kpId: 'kp-3.7-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "一条路的斜率是 2。垂直的岔路斜率是多少？", en: "A road has gradient 2. What's the gradient of a perpendicular road?" },
+        type: 'choice',
+        choices: [
+          { zh: "$-\\frac{1}{2}$——负倒数", en: "$-\\frac{1}{2}$ — negative reciprocal" },
+          { zh: "$-2$", en: "$-2$" },
+        ],
+        onCorrect: { zh: "垂直线斜率 = 原斜率的负倒数。\n$m_1 \\times m_2 = -1$\n斜率 2 的垂直线：$m = -\\frac{1}{2}$", en: "Perpendicular gradient = negative reciprocal.\n$m_1 \\times m_2 = -1$\nPerpendicular to gradient 2: $m = -\\frac{1}{2}$" },
+        onWrong: { zh: "$-2$ 是取反，不是负倒数。垂直 = 翻转再变号。\n$2 \\to \\frac{1}{2} \\to -\\frac{1}{2}$。验证：$2 \\times (-\\frac{1}{2}) = -1$ ✓", en: "$-2$ is just negation, not negative reciprocal. Perpendicular = flip then negate.\n$2 \\to \\frac{1}{2} \\to -\\frac{1}{2}$. Check: $2 \\times (-\\frac{1}{2}) = -1$ ✓" },
+        onSkip: { zh: "垂直线：$m_1 \\times m_2 = -1$。斜率的负倒数。", en: "Perpendicular: $m_1 \\times m_2 = -1$. Negative reciprocal of the gradient." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良："为什么垂直线斜率有规律？\n两条线垂直时，一条上升另一条下降——\n而且它们的斜率关系是固定的：乘积 $= -1$。\n知道一条线的斜率，就能立刻求出垂直线的斜率！"', en: 'Ma Liang: "Why do perpendicular gradients have a pattern?\nWhen two lines are perpendicular, one rises and the other falls —\nTheir gradient relationship is fixed: product $= -1$.\nKnow one gradient, instantly find the perpendicular one!"' }, highlightField: 'ans' },
       { text: { zh: '马良："垂直线斜率法则\n$$m_1 \\times m_2 = -1$$\n所以 $m_2 = -\\frac{1}{m_1}$\n取负数，再取倒数！"', en: 'Ma Liang: "Perpendicular gradient rule\n$$m_1 \\times m_2 = -1$$\nSo $m_2 = -\\frac{1}{m_1}$\nNegate and reciprocate!"' }, highlightField: 'ans' },
@@ -1505,6 +1635,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '$y \\propto \\sqrt{x}$。$x=4$ 时 $y=6$。求 $x=16$ 时的 $y$。', en: '$y \\propto \\sqrt{x}$. When $x=4$, $y=6$. Find $y$ when $x=16$.' },
     data: { answer: 12 }, difficulty: 'Medium', reward: 700,
     kpId: 'kp-2.8-02', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "$y$ 与 $\\sqrt{x}$ 成正比。$x$ 变为 4 倍时，$y$ 变为多少倍？", en: "$y$ is proportional to $\\sqrt{x}$. When $x$ quadruples, how does $y$ change?" },
+        type: 'choice',
+        choices: [
+          { zh: "$y$ 变为 2 倍——$\\sqrt{4}=2$", en: "$y$ doubles — $\\sqrt{4}=2$" },
+          { zh: "$y$ 变为 4 倍", en: "$y$ quadruples" },
+        ],
+        onCorrect: { zh: "正比意味着 $y = k\\sqrt{x}$。\n$x$ 变 4 倍 → $\\sqrt{4x} = 2\\sqrt{x}$ → $y$ 变 2 倍。\n幂次关系中，$x$ 变 $n$ 倍 → $y$ 变 $n^p$ 倍（$p$ 是幂次）。", en: "Proportional means $y = k\\sqrt{x}$.\n$x$ × 4 → $\\sqrt{4x} = 2\\sqrt{x}$ → $y$ × 2.\nIn power relationships, $x$ × $n$ → $y$ × $n^p$ ($p$ is the power)." },
+        onWrong: { zh: "不是线性关系！$y \\propto \\sqrt{x} = x^{0.5}$。\n$x$ 乘 4 → $y$ 乘 $4^{0.5} = 2$。", en: "Not linear! $y \\propto \\sqrt{x} = x^{0.5}$.\n$x$ × 4 → $y$ × $4^{0.5} = 2$." },
+        onSkip: { zh: "$y \\propto x^n$：$x$ 变 $k$ 倍 → $y$ 变 $k^n$ 倍。$\\sqrt{x}$ 中 $n=0.5$。", en: "$y \\propto x^n$: $x$ × $k$ → $y$ × $k^n$. For $\\sqrt{x}$, $n=0.5$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮："为什么不是简单的正比？\n现实中很多关系不是线性的——弩箭射程和弓弦张力的关系就是根号关系。\n$y \\propto \\sqrt{x}$ 意味着 $x$ 乘以4，$y$ 只乘以2。"', en: 'Zhuge Liang: "Why not simple proportion?\nMany real relationships aren\'t linear — crossbow range and tension follow a square root law.\n$y \\propto \\sqrt{x}$ means if $x$ quadruples, $y$ only doubles."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮："比例到方程\n$y \\propto \\sqrt{x}$ → $y = k\\sqrt{x}$\n先用已知条件求常数 $k$。"', en: 'Zhuge Liang: "Proportion to equation\n$y \\propto \\sqrt{x}$ → $y = k\\sqrt{x}$\nFirst find the constant $k$ using known values."' }, highlightField: 'ans' },
@@ -1565,6 +1708,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: 'tanθ=5/5=1, θ=?', en: 'tanθ=5/5=1, θ=?' },
     data: { opposite: 5, adjacent: 5, func: 'tan_inv' },
     difficulty: 'Medium', reward: 520, kpId: 'kp-6.2-03', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "已知 $\\tan\\theta = 1$。$\\theta$ 是多少度？", en: "Given $\\tan\\theta = 1$. What is $\\theta$ in degrees?" },
+        type: 'choice',
+        choices: [
+          { zh: "$45°$——因为 $\\tan 45° = 1$", en: "$45°$ — because $\\tan 45° = 1$" },
+          { zh: "$90°$", en: "$90°$" },
+        ],
+        onCorrect: { zh: "记住特殊角的三角值是基本功！\n$\\tan 45° = 1$（等腰直角三角形，对边=邻边）。\n反三角函数 $\\theta = \\tan^{-1}(1) = 45°$。", en: "Memorizing special angle trig values is essential!\n$\\tan 45° = 1$ (isosceles right triangle, opposite = adjacent).\nInverse: $\\theta = \\tan^{-1}(1) = 45°$." },
+        onWrong: { zh: "$\\tan 90°$ 未定义（趋向无穷大）！$\\tan 45° = 1$。\n等腰直角三角形：对边 = 邻边 → 比值 = 1。", en: "$\\tan 90°$ is undefined (tends to infinity)! $\\tan 45° = 1$.\nIsosceles right triangle: opposite = adjacent → ratio = 1." },
+        onSkip: { zh: "$\\tan^{-1}(1) = 45°$。反三角函数把比值变回角度。", en: "$\\tan^{-1}(1) = 45°$. Inverse trig turns a ratio back into an angle." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '姜维：为什么要用反三角函数？\n知道两条边，求角度——这是"反过来"的三角问题。\n$\\tan^{-1}$ 就是 tan 的反函数，把比值变回角度。', en: 'Jiang Wei: "Why use inverse trig?\nKnowing two sides, finding the angle — this is trig \'in reverse\'.\n$\\tan^{-1}$ is the inverse of tan, converting a ratio back to an angle."' }, highlightField: 'ans' },
       { text: { zh: '姜维：选择正确的比\n已知：对边=5，邻边=5\n求：角度 θ\n对边和邻边 → 用 $\\tan$（TOA）', en: 'Jiang Wei: "Choose the right ratio\nKnown: opposite=5, adjacent=5\nFind: angle θ\nOpposite and adjacent → use $\\tan$ (TOA)"' }, highlightField: 'ans' },
@@ -1587,6 +1743,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: 'tan45°=?', en: 'tan45°=?' },
     data: { answer: 1 },
     difficulty: 'Easy', reward: 400, kpId: 'kp-6.3-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "特殊角 $30°, 45°, 60°$ 的三角值必须记住。$\\tan 45°$ 等于多少？", en: "Special angles $30°, 45°, 60°$ — their trig values must be memorized. What is $\\tan 45°$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$1$", en: "$1$" },
+          { zh: "$\\frac{\\sqrt{3}}{2}$", en: "$\\frac{\\sqrt{3}}{2}$" },
+        ],
+        onCorrect: { zh: "对！关键三角值：\n$\\sin 30°=\\frac{1}{2}$，$\\cos 30°=\\frac{\\sqrt{3}}{2}$，$\\tan 30°=\\frac{1}{\\sqrt{3}}$\n$\\sin 45°=\\frac{\\sqrt{2}}{2}$，$\\cos 45°=\\frac{\\sqrt{2}}{2}$，$\\tan 45°=1$\n$\\sin 60°=\\frac{\\sqrt{3}}{2}$，$\\cos 60°=\\frac{1}{2}$，$\\tan 60°=\\sqrt{3}$", en: "Yes! Key trig values:\n$\\sin 30°=\\frac{1}{2}$, $\\cos 30°=\\frac{\\sqrt{3}}{2}$, $\\tan 30°=\\frac{1}{\\sqrt{3}}$\n$\\sin 45°=\\frac{\\sqrt{2}}{2}$, $\\cos 45°=\\frac{\\sqrt{2}}{2}$, $\\tan 45°=1$\n$\\sin 60°=\\frac{\\sqrt{3}}{2}$, $\\cos 60°=\\frac{1}{2}$, $\\tan 60°=\\sqrt{3}$" },
+        onWrong: { zh: "$\\frac{\\sqrt{3}}{2}$ 是 $\\sin 60°$ 或 $\\cos 30°$。$\\tan 45° = 1$。", en: "$\\frac{\\sqrt{3}}{2}$ is $\\sin 60°$ or $\\cos 30°$. $\\tan 45° = 1$." },
+        onSkip: { zh: "30-45-60° 三角值表是必背内容。$\\tan 45°=1$。", en: "30-45-60° trig value table must be memorized. $\\tan 45°=1$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：为什么要记住精确值？\n考试不让用计算器时，你必须记住特殊角的三角值！\n30°、45°、60° 是最常考的三个角。', en: 'Ma Liang: "Why memorize exact values?\nWhen calculators aren\'t allowed in exams, you MUST know special angle values!\n30°, 45°, 60° are the three most tested angles."' }, highlightField: 'ans' },
       { text: { zh: '马良：45° 的来源\n等腰直角三角形：两直角边=1，斜边=$\\sqrt{2}$。\n$\\tan 45° = \\frac{\\text{对边}}{\\text{邻边}} = \\frac{1}{1}$', en: 'Ma Liang: "Origin of 45°\nIsosceles right triangle: both legs=1, hypotenuse=$\\sqrt{2}$.\n$\\tan 45° = \\frac{\\text{opp}}{\\text{adj}} = \\frac{1}{1}$"' }, highlightField: 'ans' },
@@ -1609,6 +1778,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: 'sin0°=?', en: 'sin0°=?' },
     data: { answer: 0 },
     difficulty: 'Easy', reward: 380, kpId: 'kp-6.4-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "$\\sin 0°$ 等于多少？想象角度从 $0°$ 开始…", en: "$\\sin 0°$ equals what? Imagine the angle starting from $0°$..." },
+        type: 'choice',
+        choices: [
+          { zh: "$0$——角度为零时对边为零", en: "$0$ — at zero angle the opposite side is zero" },
+          { zh: "$1$", en: "$1$" },
+        ],
+        onCorrect: { zh: "$\\sin$ = 对边/斜边。角度 $0°$ 时三角形\"扁\"成一条线——对边为 0。\n类似地：$\\cos 0° = 1$（全在邻边上），$\\sin 90° = 1$，$\\cos 90° = 0$。", en: "$\\sin$ = opposite/hypotenuse. At $0°$ the triangle \"flattens\" — opposite = 0.\nSimilarly: $\\cos 0° = 1$ (all on adjacent), $\\sin 90° = 1$, $\\cos 90° = 0$." },
+        onWrong: { zh: "$\\sin 90° = 1$，不是 $\\sin 0°$。\n$0°$ 时三角形完全扁平，对边长度为零 → $\\sin 0° = 0$。", en: "$\\sin 90° = 1$, not $\\sin 0°$.\nAt $0°$ the triangle is completely flat, opposite = zero → $\\sin 0° = 0$." },
+        onSkip: { zh: "$\\sin 0°=0$，$\\cos 0°=1$，$\\sin 90°=1$，$\\cos 90°=0$。", en: "$\\sin 0°=0$, $\\cos 0°=1$, $\\sin 90°=1$, $\\cos 90°=0$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '费祎：为什么 sin0° 是基础？\nsin0° 是三角函数图像的起点。理解它，就能理解整个正弦曲线。\n0° 表示"零角度"——对边长度为零！', en: 'Fei Yi: "Why is sin0° fundamental?\nsin0° is the starting point of the sine curve. Understand it, understand the whole graph.\n0° means \'zero angle\' — opposite side has zero length!"' }, highlightField: 'ans' },
       { text: { zh: '费祎：几何理解\n直角三角形中，角趋向 $0°$ 时，对边趋向 $0$。\n$\\sin\\theta = \\frac{\\text{对边}}{\\text{斜边}}$，对边→$0$ → $\\sin 0° = 0$', en: 'Fei Yi: "Geometric understanding\nIn a right triangle, as angle → $0°$, opposite side → $0$.\n$\\sin\\theta = \\frac{\\text{opp}}{\\text{hyp}}$, opp→$0$ → $\\sin 0° = 0$"' }, highlightField: 'ans' },
@@ -1631,6 +1813,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: 'sinx的周期=?度', en: 'Period of sinx = ? degrees' },
     data: { answer: 360 },
     difficulty: 'Easy', reward: 420, kpId: 'kp-6.4-03', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "$\\sin x$ 的图像像波浪。它多少度重复一次？", en: "The $\\sin x$ graph looks like a wave. How many degrees until it repeats?" },
+        type: 'choice',
+        choices: [
+          { zh: "$360°$——一个完整周期", en: "$360°$ — one complete cycle" },
+          { zh: "$180°$", en: "$180°$" },
+        ],
+        onCorrect: { zh: "对！$\\sin x$ 和 $\\cos x$ 的周期都是 $360°$。\n$\\tan x$ 的周期是 $180°$（因为 $\\tan$ 每半圈重复一次）。", en: "Yes! Both $\\sin x$ and $\\cos x$ have period $360°$.\n$\\tan x$ has period $180°$ (repeats every half cycle)." },
+        onWrong: { zh: "$180°$ 是 $\\tan x$ 的周期。$\\sin x$ 需要完整的 $360°$ 才回到起点。\n$0° \\to 90° \\to 180° \\to 270° \\to 360°$：上→零→下→零→上。", en: "$180°$ is the period of $\\tan x$. $\\sin x$ needs a full $360°$ to return.\n$0° \\to 90° \\to 180° \\to 270° \\to 360°$: up → zero → down → zero → up." },
+        onSkip: { zh: "$\\sin/\\cos$ 周期 $360°$，$\\tan$ 周期 $180°$。", en: "$\\sin/\\cos$ period $360°$, $\\tan$ period $180°$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '赵云：为什么要知道周期？\n潮汐、温度、心跳——很多自然现象都是周期性的。\n正弦函数就是描述这种"重复"规律的工具。', en: 'Zhao Yun: "Why know the period?\nTides, temperature, heartbeat — many natural phenomena are periodic.\nThe sine function is the tool for describing this \'repeating\' pattern."' }, highlightField: 'ans' },
       { text: { zh: '赵云：什么是周期？\n完成一次完整的"波"需要多少度。\n$\\sin x$ 从 $0°$ 开始上升，到 $90°$ 最高，$180°$ 回到零，$270°$ 最低，$360°$ 回到起点。', en: 'Zhao Yun: "What is a period?\nHow many degrees for one complete wave.\n$\\sin x$ rises from $0°$, peaks at $90°$, returns to zero at $180°$, bottoms at $270°$, back to start at $360°$."' }, highlightField: 'ans' },
@@ -1653,6 +1848,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '三角形面积=½×6×8×sin30°=?', en: 'Triangle area = ½×6×8×sin30° = ?' },
     data: { answer: 12 },
     difficulty: 'Medium', reward: 550, kpId: 'kp-6.5-04', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "两边长 6 和 8，夹角 $30°$。面积怎么算？", en: "Two sides 6 and 8, included angle $30°$. How to find the area?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{1}{2} \\times 6 \\times 8 \\times \\sin 30°$", en: "$\\frac{1}{2} \\times 6 \\times 8 \\times \\sin 30°$" },
+          { zh: "$6 \\times 8 = 48$", en: "$6 \\times 8 = 48$" },
+        ],
+        onCorrect: { zh: "正弦面积公式！$\\sin 30° = \\frac{1}{2}$。\n面积 $= \\frac{1}{2} \\times 6 \\times 8 \\times \\frac{1}{2} = 12$。\n$\\frac{1}{2}ab\\sin C$ 适用于任意三角形。", en: "Sine area formula! $\\sin 30° = \\frac{1}{2}$.\nArea $= \\frac{1}{2} \\times 6 \\times 8 \\times \\frac{1}{2} = 12$.\n$\\frac{1}{2}ab\\sin C$ works for any triangle." },
+        onWrong: { zh: "$6 \\times 8$ 是矩形面积。三角形还要乘 $\\frac{1}{2}$ 和 $\\sin C$。\n$= \\frac{1}{2} \\times 6 \\times 8 \\times \\sin 30° = 12$", en: "$6 \\times 8$ is rectangle area. Triangle needs $\\frac{1}{2}$ and $\\sin C$.\n$= \\frac{1}{2} \\times 6 \\times 8 \\times \\sin 30° = 12$" },
+        onSkip: { zh: "三角面积 = $\\frac{1}{2}ab\\sin C$。代入已知两边和夹角即可。", en: "Triangle area = $\\frac{1}{2}ab\\sin C$. Substitute the two sides and included angle." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么用正弦算面积？\n底×高÷2 需要知道高——但实际中"高"很难量！\n知道两边和夹角就够了：$\\frac{1}{2}ab\\sin C$ 直接给出面积。', en: 'Zhuge Liang: "Why use sine for area?\nBase × height ÷ 2 needs the height — but height is hard to measure!\nKnowing two sides and included angle is enough: $\\frac{1}{2}ab\\sin C$ gives area directly."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：正弦面积公式\n$$A = \\frac{1}{2}ab\\sin C$$\n$a$、$b$ = 两条边，$C$ = 它们的夹角。', en: 'Zhuge Liang: "Sine area formula\n$$A = \\frac{1}{2}ab\\sin C$$\n$a$, $b$ = two sides, $C$ = included angle."' }, highlightField: 'ans' },
@@ -1675,6 +1883,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '用正弦定理求未知边。', en: 'Use sine rule to find unknown side.' },
     data: { opposite: 10, adjacent: 8, angle: 45, func: 'sin', generatorType: 'SINE_COSINE_RANDOM', mode: 'sine_rule' },
     difficulty: 'Hard', reward: 600, kpId: 'kp-6.5-05', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "正弦定理什么时候用？什么时候用余弦定理？", en: "When do you use sine rule? When cosine rule?" },
+        type: 'choice',
+        choices: [
+          { zh: "有\"边-对角配对\"用正弦，有\"两边夹角\"或\"三边\"用余弦", en: "Side-opposite angle pair → sine rule. Two sides + included angle or three sides → cosine" },
+          { zh: "都可以随便用", en: "Either one works anytime" },
+        ],
+        onCorrect: { zh: "选择规则：\n正弦定理：$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$ → 需要一对边-角\n余弦定理：$c^2 = a^2+b^2-2ab\\cos C$ → 需要两边+夹角 或 三边", en: "Selection rule:\nSine: $\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$ → need one side-angle pair\nCosine: $c^2 = a^2+b^2-2ab\\cos C$ → need 2 sides + included angle, or 3 sides" },
+        onWrong: { zh: "不能随便用——取决于已知条件。\n有一对\"边和对角\" → 正弦定理。没有配对 → 余弦定理。", en: "Can't use either — depends on what's known.\nHave a \"side and opposite angle\" pair → sine. No pair → cosine." },
+        onSkip: { zh: "正弦 ↔ 边角配对。余弦 ↔ 两边夹角或三边。看已知条件选公式。", en: "Sine ↔ side-angle pair. Cosine ↔ two sides + included angle or three sides. Choose based on knowns." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么需要正弦定理？\n战场三角形不是直角的！SOHCAHTOA 只能算直角三角形。\n正弦定理对所有三角形通用：$\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$', en: 'Zhuge Liang: "Why the sine rule?\nBattlefield triangles aren\'t right-angled! SOHCAHTOA only works for right triangles.\nSine rule works for ALL triangles: $\\frac{a}{\\sin A} = \\frac{b}{\\sin B}$"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：正弦定理\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$\n每条边和它对角的正弦成比例。', en: 'Zhuge Liang: "Sine rule\n$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$\nEach side is proportional to the sine of its opposite angle."' }, highlightField: 'ans' },
@@ -1697,6 +1918,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: '用余弦定理求未知边。', en: 'Use cosine rule to find unknown side.' },
     data: { opposite: 10, adjacent: 8, angle: 60, func: 'sin', generatorType: 'SINE_COSINE_RANDOM', mode: 'cosine_rule' },
     difficulty: 'Hard', reward: 620, kpId: 'kp-6.5-06', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "余弦定理求边后，得到 $c^2 = 164$。$c$ 等于多少？", en: "After cosine rule, $c^2 = 164$. What is $c$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$c = \\sqrt{164} = 2\\sqrt{41} \\approx 12.8$", en: "$c = \\sqrt{164} = 2\\sqrt{41} \\approx 12.8$" },
+          { zh: "$c = 164 \\div 2 = 82$", en: "$c = 164 \\div 2 = 82$" },
+        ],
+        onCorrect: { zh: "从 $c^2$ 到 $c$ 需要开方，不是除以 2。\n$\\sqrt{164} = \\sqrt{4 \\times 41} = 2\\sqrt{41}$\n考试中通常保留根式或四舍五入到适当精度。", en: "From $c^2$ to $c$ requires square root, not dividing by 2.\n$\\sqrt{164} = \\sqrt{4 \\times 41} = 2\\sqrt{41}$\nIn exams, usually keep surd form or round appropriately." },
+        onWrong: { zh: "$c^2 = 164$ 不是 $2c = 164$！$c^2$ 意味着 $c$ 的平方。\n$c = \\sqrt{164} \\approx 12.8$", en: "$c^2 = 164$ is NOT $2c = 164$! $c^2$ means $c$ squared.\n$c = \\sqrt{164} \\approx 12.8$" },
+        onSkip: { zh: "$c^2 = n$ → $c = \\sqrt{n}$。化简根式或保留小数。", en: "$c^2 = n$ → $c = \\sqrt{n}$. Simplify the surd or keep decimal." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '姜维：为什么需要余弦定理？\n知道两边和夹角——但没有"边-角对"，用不了正弦定理！\n余弦定理专门解决"两边+夹角"或"三边"的问题。', en: 'Jiang Wei: "Why the cosine rule?\nKnowing two sides and included angle — but no side-angle pair for sine rule!\nCosine rule specifically handles \'two sides + included angle\' or \'three sides\' problems."' }, highlightField: 'ans' },
       { text: { zh: '姜维：余弦定理\n$$c^2 = a^2 + b^2 - 2ab\\cos C$$\n当 $C = 90°$ 时 $\\cos 90° = 0$，变回勾股定理！', en: 'Jiang Wei: "Cosine rule\n$$c^2 = a^2 + b^2 - 2ab\\cos C$$\nWhen $C = 90°$, $\\cos 90° = 0$, it becomes Pythagoras!"' }, highlightField: 'ans' },
@@ -1757,6 +1991,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: 'f(x)=x+1, g(x)=2x. f(g(3))=?', en: 'f(x)=x+1, g(x)=2x. f(g(3))=?' },
     data: { answer: 7 },
     difficulty: 'Medium', reward: 560, kpId: 'kp-2.13-03', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "$f(x) = x+1$，$g(x) = 2x$。$f(g(3))$ 怎么算？", en: "$f(x) = x+1$, $g(x) = 2x$. How to calculate $f(g(3))$?" },
+        type: 'choice',
+        choices: [
+          { zh: "先算 $g(3)=6$，再算 $f(6)=7$——从里到外", en: "First $g(3)=6$, then $f(6)=7$ — inside out" },
+          { zh: "先算 $f(3)=4$，再算 $g(4)=8$", en: "First $f(3)=4$, then $g(4)=8$" },
+        ],
+        onCorrect: { zh: "复合函数从里到外！$f(g(x))$ 先算 $g$，结果喂给 $f$。\n$g(3) = 6$，$f(6) = 7$。\n注意顺序：$f(g(x)) \\neq g(f(x))$！", en: "Composite functions work inside out! $f(g(x))$: compute $g$ first, feed result to $f$.\n$g(3) = 6$, $f(6) = 7$.\nOrder matters: $f(g(x)) \\neq g(f(x))$!" },
+        onWrong: { zh: "那是 $g(f(3))$！$f(g(3))$ 中先做括号里的 $g(3)$。\n$g(3) = 2 \\times 3 = 6$，$f(6) = 6+1 = 7$。", en: "That's $g(f(3))$! In $f(g(3))$, compute $g(3)$ in brackets first.\n$g(3) = 2 \\times 3 = 6$, $f(6) = 6+1 = 7$." },
+        onSkip: { zh: "复合函数：$f(g(x))$ 先算 $g(x)$，结果代入 $f$。从里到外。", en: "Composite: $f(g(x))$ — compute $g(x)$ first, feed to $f$. Inside out." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '姜维：为什么要学复合函数？\n一层加密不够安全——两层加密更难破解！\n$f(g(x))$ 就是先用 $g$ 加密一次，再用 $f$ 加密一次。', en: 'Jiang Wei: "Why learn composite functions?\nOne layer of encryption isn\'t safe enough — two layers are harder to crack!\n$f(g(x))$ means first encrypt with $g$, then with $f$."' }, highlightField: 'ans' },
       { text: { zh: '姜维：从里到外\n$f(g(3))$：先算里面的 $g(3)$，再把结果丢进 $f$。\n顺序很重要！$f(g(x)) \\neq g(f(x))$', en: 'Jiang Wei: "Inside out\n$f(g(3))$: first calculate inner $g(3)$, then feed result into $f$.\nOrder matters! $f(g(x)) \\neq g(f(x))$"' }, highlightField: 'ans' },
@@ -1779,6 +2026,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: 'f(x)=x², x∈R. f(x)的最小值=?', en: 'f(x)=x², x∈R. Minimum of f(x)=?' },
     data: { answer: 0 },
     difficulty: 'Easy', reward: 480, kpId: 'kp-2.13-04', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "$f(x) = x^2$。$x$ 可以是任何实数，但 $f(x)$ 能取负值吗？", en: "$f(x) = x^2$. $x$ can be any real number, but can $f(x)$ be negative?" },
+        type: 'choice',
+        choices: [
+          { zh: "不能——平方永远 $\\geq 0$，值域是 $[0, \\infty)$", en: "No — squares are always $\\geq 0$, range is $[0, \\infty)$" },
+          { zh: "能——$(-3)^2 = -9$", en: "Yes — $(-3)^2 = -9$" },
+        ],
+        onCorrect: { zh: "定义域 = $x$ 能取什么值。值域 = $f(x)$ 能输出什么值。\n$x^2 \\geq 0$ 对所有实数 $x$ 成立。\n所以定义域 = $\\mathbb{R}$，值域 = $[0, \\infty)$。", en: "Domain = what $x$ can be. Range = what $f(x)$ can output.\n$x^2 \\geq 0$ for all real $x$.\nSo domain = $\\mathbb{R}$, range = $[0, \\infty)$." },
+        onWrong: { zh: "$(-3)^2 = 9$，不是 $-9$！负数的平方是正数。\n$x^2$ 永远 $\\geq 0$，所以值域是 $[0, \\infty)$。", en: "$(-3)^2 = 9$, NOT $-9$! Squaring a negative gives positive.\n$x^2$ is always $\\geq 0$, so range is $[0, \\infty)$." },
+        onSkip: { zh: "定义域 = 输入范围，值域 = 输出范围。$x^2$ 的值域 = $[0, \\infty)$。", en: "Domain = input range, range = output range. $x^2$ range = $[0, \\infty)$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：为什么要学定义域和值域？\n定义域 = 函数接受哪些输入。值域 = 函数能输出哪些值。\n知道值域才能知道函数的极限——最高能到哪，最低能到哪。', en: 'Ma Liang: "Why learn domain and range?\nDomain = what inputs the function accepts. Range = what outputs it can produce.\nKnowing the range tells you the function\'s limits — highest and lowest."' }, highlightField: 'ans' },
       { text: { zh: '马良：分析 f(x)=x²\n$x^2$ 是平方——任何数的平方 ≥ 0。\n正数的平方是正的，负数的平方也是正的，零的平方是零。', en: 'Ma Liang: "Analyse f(x)=x²\n$x^2$ is a square — any number squared ≥ 0.\nPositive squared is positive, negative squared is positive, zero squared is zero."' }, highlightField: 'ans' },
@@ -1801,6 +2061,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: 'y=(x-1)(x-2)(x-3)有几个x轴交点?', en: 'y=(x-1)(x-2)(x-3) how many x-axis intersections?' },
     data: { answer: 3 },
     difficulty: 'Medium', reward: 520, kpId: 'kp-2.11-03', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "$y = (x-1)(x-2)(x-3)$。这条曲线和 $x$ 轴有几个交点？", en: "$y = (x-1)(x-2)(x-3)$. How many times does this curve cross the x-axis?" },
+        type: 'choice',
+        choices: [
+          { zh: "3 个——每个因子 $=0$ 给一个交点", en: "3 — each factor $=0$ gives one crossing" },
+          { zh: "1 个", en: "1" },
+        ],
+        onCorrect: { zh: "已因式分解的多项式，每个因子 $=0$ 给一个 $x$ 轴交点。\n$(x-1)=0 \\to x=1$，$(x-2)=0 \\to x=2$，$(x-3)=0 \\to x=3$。\n3 个不同的根 = 3 个交点。", en: "In factored form, each factor $=0$ gives an x-intercept.\n$(x-1)=0 \\to x=1$, $(x-2)=0 \\to x=2$, $(x-3)=0 \\to x=3$.\n3 distinct roots = 3 crossings." },
+        onWrong: { zh: "乘积为零，至少一个因子为零。这里有 3 个因子，所以最多 3 个根。\n$x=1, 2, 3$ 都让 $y=0$。", en: "Product is zero when at least one factor is zero. Three factors → up to 3 roots.\n$x=1, 2, 3$ all make $y=0$." },
+        onSkip: { zh: "因式分解的多项式：令每个因子 $=0$，解出 $x$。几个不同的根 = 几个交点。", en: "Factored polynomial: set each factor $=0$, solve for $x$. Number of distinct roots = number of crossings." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '费祎：为什么要数交点？\n$x$ 轴交点就是方程 $y=0$ 的解——解的个数决定了曲线的形态。\n交点越多，曲线越"弯曲"。', en: 'Fei Yi: "Why count intersections?\n$x$-axis intersections are solutions to $y=0$ — the number of solutions determines the curve\'s shape.\nMore intersections = more curves."' }, highlightField: 'ans' },
       { text: { zh: '费祎：因式分解法\n$y = (x-1)(x-2)(x-3)$\n已经是因式分解形式！每个因式给一个根。', en: 'Fei Yi: "Factored form\n$y = (x-1)(x-2)(x-3)$\nAlready factored! Each factor gives one root."' }, highlightField: 'ans' },
@@ -1861,6 +2134,19 @@ export const MISSIONS_Y11: Mission[] = [
     description: { zh: 'OM=1/n(a+b)中n=?', en: 'OM=1/n(a+b), n=?' },
     data: { answer: 2 },
     difficulty: 'Medium', reward: 580, kpId: 'kp-7.4-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "M 是 AB 的中点。$\\vec{OA} = \\mathbf{a}$，$\\vec{OB} = \\mathbf{b}$。$\\vec{OM}$ 怎么表示？", en: "M is the midpoint of AB. $\\vec{OA} = \\mathbf{a}$, $\\vec{OB} = \\mathbf{b}$. How to express $\\vec{OM}$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\vec{OM} = \\frac{1}{2}(\\mathbf{a} + \\mathbf{b})$", en: "$\\vec{OM} = \\frac{1}{2}(\\mathbf{a} + \\mathbf{b})$" },
+          { zh: "$\\vec{OM} = \\mathbf{a} + \\mathbf{b}$", en: "$\\vec{OM} = \\mathbf{a} + \\mathbf{b}$" },
+        ],
+        onCorrect: { zh: "中点 = 两端点位置向量的平均。\n$\\vec{OM} = \\frac{\\vec{OA} + \\vec{OB}}{2} = \\frac{\\mathbf{a}+\\mathbf{b}}{2}$\n这是向量几何的核心技巧之一。", en: "Midpoint = average of the two position vectors.\n$\\vec{OM} = \\frac{\\vec{OA} + \\vec{OB}}{2} = \\frac{\\mathbf{a}+\\mathbf{b}}{2}$\nThis is a core vector geometry technique." },
+        onWrong: { zh: "$\\mathbf{a}+\\mathbf{b}$ 是两个向量之和，不是中点。中点要取平均——除以 2。\n$\\vec{OM} = \\frac{\\mathbf{a}+\\mathbf{b}}{2}$", en: "$\\mathbf{a}+\\mathbf{b}$ is the vector sum, not midpoint. Midpoint needs averaging — divide by 2.\n$\\vec{OM} = \\frac{\\mathbf{a}+\\mathbf{b}}{2}$" },
+        onSkip: { zh: "中点公式：$\\vec{OM} = \\frac{\\mathbf{a}+\\mathbf{b}}{2}$。位置向量取平均。", en: "Midpoint formula: $\\vec{OM} = \\frac{\\mathbf{a}+\\mathbf{b}}{2}$. Average the position vectors." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '赵云：为什么用向量找中点？\n中点不只是"坐标平均"——向量法更通用！\n不管在二维还是三维，$\\vec{OM} = \\frac{1}{2}(\\vec{OA} + \\vec{OB})$ 永远成立。', en: 'Zhao Yun: "Why use vectors for midpoints?\nMidpoint isn\'t just \'averaging coordinates\' — vectors are more general!\nWhether 2D or 3D, $\\vec{OM} = \\frac{1}{2}(\\vec{OA} + \\vec{OB})$ always holds."' }, highlightField: 'ans' },
       { text: { zh: '赵云：推导\nM 是 AB 中点 → $\\vec{AM} = \\frac{1}{2}\\vec{AB}$\n$\\vec{OM} = \\vec{OA} + \\vec{AM} = a + \\frac{1}{2}(b - a)$', en: 'Zhao Yun: "Derive\nM is midpoint of AB → $\\vec{AM} = \\frac{1}{2}\\vec{AB}$\n$\\vec{OM} = \\vec{OA} + \\vec{AM} = a + \\frac{1}{2}(b - a)$"' }, highlightField: 'ans' },
