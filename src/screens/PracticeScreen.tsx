@@ -187,7 +187,7 @@ export const PracticeScreen = ({
     const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
     const hasEmpty = fields.some((f: { id: string }) => !inputs[f.id]?.trim());
     if (hasEmpty) {
-      setPhaseToast({ text: lang === 'en' ? 'Fill in all fields first' : '请先填写所有答题栏', phase: currentPhase });
+      setPhaseToast({ text: (t as any).fillFieldsFirst ?? (lang === 'en' ? 'Fill in all fields first' : '请先填写所有答题栏'), phase: currentPhase });
       setTimeout(() => setPhaseToast(null), 2000);
       return;
     }

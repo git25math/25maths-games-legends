@@ -1,4 +1,4 @@
-const LS_KEY = 'expedition_records_v1';
+const LS_KEY = 'gl_expedition_records_v1';
 
 export type ExpeditionRecord = {
   bestNodes: number;

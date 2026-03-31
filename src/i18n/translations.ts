@@ -117,6 +117,11 @@ export const translations = {
     stats: { power: "武力", speed: "爆发", wisdom: "智力" },
     chooseGrade: "选择你的学段",
     year: "年级",
+    classPrompt: "你有老师给的邀请码吗？",
+    hasCode: "有邀请码",
+    skipForNow: "暂时跳过，稍后加入",
+    joinedHint: "没有邀请码也可以先玩——随时可以在设置中加入班级。",
+    fillFieldsFirst: "请先填写所有答题栏",
     lockedByOrder: "请先完成本单元前置关卡",
     // RAG difficulty system
     difficultyMode: {
@@ -371,6 +376,11 @@ export const translations = {
     stats: { power: "Might", speed: "Burst", wisdom: "Intel" },
     chooseGrade: "Choose Your Grade",
     year: "Year",
+    classPrompt: "Do you have a class invite code from your teacher?",
+    hasCode: "I have a code",
+    skipForNow: "Skip for now",
+    joinedHint: "No code? No worries — you can join a class anytime from settings.",
+    fillFieldsFirst: "Fill in all fields first",
     lockedByOrder: "Complete previous missions first",
     difficultyMode: {
       green: "Master's Guide",
@@ -623,6 +633,11 @@ export const translations = {
     stats: { power: "武力", speed: "爆發", wisdom: "智力" },
     chooseGrade: "選擇你的學段",
     year: "年級",
+    classPrompt: "你有老師給的邀請碼嗎？",
+    hasCode: "有邀請碼",
+    skipForNow: "暫時跳過，稍後加入",
+    joinedHint: "沒有邀請碼也可以先玩——隨時可以在設定中加入班級。",
+    fillFieldsFirst: "請先填寫所有答題欄",
     lockedByOrder: "請先完成本單元前置關卡",
     difficultyMode: {
       green: "名師指路",

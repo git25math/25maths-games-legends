@@ -239,7 +239,7 @@ export const MapScreen = ({
           map.set(r.kp_id, { wins: r.wins, mastered: !!r.mastered_at });
         }
         setKpProgress(map);
-      }, () => {});
+      }, () => { /* KP progress load failed — non-blocking */ });
   }, [profile.user_id]);
 
   useEffect(() => { playBGMMap(); return () => stopBGM(); }, []);

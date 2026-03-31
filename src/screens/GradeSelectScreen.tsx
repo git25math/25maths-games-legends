@@ -16,13 +16,6 @@ export const GradeSelectScreen = ({
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
   const [showJoinModal, setShowJoinModal] = useState(false);
 
-  const LABELS = {
-    zh: { classPrompt: '你有老师给的邀请码吗？', hasCode: '有邀请码', noCode: '暂时跳过，稍后加入', joinedHint: '没有邀请码也可以先玩——随时可以在设置中加入班级。' },
-    zh_TW: { classPrompt: '你有老師給的邀請碼嗎？', hasCode: '有邀請碼', noCode: '暫時跳過，稍後加入', joinedHint: '沒有邀請碼也可以先玩——隨時可以在設定中加入班級。' },
-    en: { classPrompt: 'Do you have a class invite code from your teacher?', hasCode: 'I have a code', noCode: 'Skip for now', joinedHint: 'No code? No worries — you can join a class anytime from settings.' },
-  };
-  const l = LABELS[lang] || LABELS.zh;
-
   return (
     <motion.div key="grade-select" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl mx-auto text-center space-y-12 py-20">
       <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tighter">{t.chooseGrade}</h2>
@@ -48,14 +41,14 @@ export const GradeSelectScreen = ({
         ))}
       </div>
 
-      {/* Invite code prompt — replaces manual class input */}
+      {/* Invite code prompt */}
       {selectedGrade && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col items-center gap-4"
         >
-          <p className="text-lg font-bold text-white/80">{l.classPrompt}</p>
+          <p className="text-lg font-bold text-white/80">{(t as any).classPrompt}</p>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <motion.button
@@ -63,18 +56,18 @@ export const GradeSelectScreen = ({
               onClick={() => setShowJoinModal(true)}
               className="px-8 py-3 min-h-[44px] bg-indigo-600 text-white font-bold rounded-xl text-sm hover:bg-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-400 transition-all min-w-[10rem]"
             >
-              🎟️ {l.hasCode}
+              🎟️ {(t as any).hasCode}
             </motion.button>
             <motion.button
               {...buttonBase}
               onClick={() => onSelect(selectedGrade)}
               className="px-6 py-3 min-h-[44px] bg-white/10 border border-white/20 text-white/60 font-bold rounded-xl text-sm hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/40 transition-all"
             >
-              {l.noCode}
+              {(t as any).skipForNow}
             </motion.button>
           </div>
 
-          <p className="text-xs text-white/30 max-w-xs">{l.joinedHint}</p>
+          <p className="text-xs text-white/30 max-w-xs">{(t as any).joinedHint}</p>
         </motion.div>
       )}
 

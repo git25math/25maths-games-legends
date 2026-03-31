@@ -41,7 +41,7 @@ export function getActiveSeasonRewards(): SeasonReward[] {
 
 /* ── Helpers ── */
 
-const LS_KEY = '_season';
+const LS_KEY = 'gl_season';
 
 function today(): string {
   const d = new Date();

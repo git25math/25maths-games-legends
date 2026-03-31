@@ -142,10 +142,10 @@ export function DashboardScreen({ lang, onClose }: Props) {
 
   // Persist sort preference in localStorage
   const [sortKey, setSortKey] = useState<'score' | 'progress' | 'kp' | 'name'>(() => {
-    try { return (localStorage.getItem('dashboard_sortKey') as any) || 'score'; } catch { return 'score'; }
+    try { return (localStorage.getItem('gl_dashboard_sortKey') as any) || 'score'; } catch { return 'score'; }
   });
   const [sortAsc, setSortAsc] = useState(() => {
-    try { return localStorage.getItem('dashboard_sortAsc') === 'true'; } catch { return false; }
+    try { return localStorage.getItem('gl_dashboard_sortAsc') === 'true'; } catch { return false; }
   });
 
   const unitMap = useMemo(() => getUnitMap(gradeMissions), [gradeMissions]);
@@ -412,7 +412,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
     const nextKey = key;
     setSortKey(nextKey);
     setSortAsc(nextAsc);
-    try { localStorage.setItem('dashboard_sortKey', nextKey); localStorage.setItem('dashboard_sortAsc', String(nextAsc)); } catch {}
+    try { localStorage.setItem('gl_dashboard_sortKey', nextKey); localStorage.setItem('gl_dashboard_sortAsc', String(nextAsc)); } catch {}
   };
 
   // Alerts
