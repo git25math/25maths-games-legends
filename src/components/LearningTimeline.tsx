@@ -6,11 +6,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Trophy, Flame, Star, Heart, Zap, Target, ChevronDown, ChevronUp, Sparkles, X, CheckCircle2, XCircle } from 'lucide-react';
-import type { Language, UserProfile } from '../types';
-import { MISSIONS } from '../data/missions';
-import { lt } from '../i18n/resolveText';
+import type { BilingualText, Language, UserProfile } from '../types';
 import { getLevelInfo } from '../utils/xpLevels';
 import { supabase } from '../supabase';
+import { loadAllMissionSummaries } from '../data/missionSummaries/loader';
 
 // ── Types ──
 
@@ -35,9 +34,22 @@ type Props = {
   onClose: () => void;
 };
 
-// ── Mission name cache ──
-const missionNameMap = new Map<number, { zh: string; en: string }>();
-for (const m of MISSIONS) missionNameMap.set(m.id, m.title);
+type MissionTitle = BilingualText;
+
+let missionNameMapPromise: Promise<Map<number, MissionTitle>> | null = null;
+
+async function loadMissionNameMap(): Promise<Map<number, MissionTitle>> {
+  if (!missionNameMapPromise) {
+    missionNameMapPromise = loadAllMissionSummaries().then((allMissions) => {
+      const map = new Map<number, MissionTitle>();
+      for (const mission of allMissions) {
+        map.set(mission.id, mission.title);
+      }
+      return map;
+    });
+  }
+  return missionNameMapPromise;
+}
 
 // ── Soul messages for different achievement types ──
 const SOUL_VICTORY: { zh: string; en: string }[] = [
@@ -61,38 +73,64 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
 
   // Fetch battle history from Supabase
   useEffect(() => {
-    if (profile.user_id === 'guest') { setLoading(false); return; }
-    supabase
-      .from('gl_battle_results')
-      .select('mission_id, success, score, duration_secs, difficulty_mode, hp_remaining, created_at')
-      .eq('user_id', profile.user_id)
-      .order('created_at', { ascending: false })
-      .limit(200)
-      .then(({ data }) => {
-        if (!data) { setLoading(false); return; }
-        const mapped: TimelineEntry[] = (data as any[]).map((b, i) => {
-          const title = missionNameMap.get(b.mission_id) ?? { zh: `关卡 #${b.mission_id}`, en: `Mission #${b.mission_id}` };
-          const soul = b.success
-            ? SOUL_VICTORY[i % SOUL_VICTORY.length]
-            : SOUL_DEFEAT[i % SOUL_DEFEAT.length];
-          return {
-            date: b.created_at.slice(0, 10),
-            timestamp: new Date(b.created_at).getTime(),
-            type: 'battle' as const,
-            success: b.success,
-            missionId: b.mission_id,
-            missionTitle: title,
-            score: b.score ?? 0,
-            duration: b.duration_secs ?? 0,
-            difficulty: b.difficulty_mode ?? 'green',
-            accuracy: b.hp_remaining !== null ? `HP ${b.hp_remaining}` : undefined,
-            reward: b.success ? `+${b.score} XP` : undefined,
-            soulMessage: soul,
-          };
-        });
-        setEntries(mapped);
+    let cancelled = false;
+
+    const loadTimeline = async () => {
+      setLoading(true);
+      const missionNameMap = await loadMissionNameMap();
+      if (cancelled) return;
+
+      if (profile.user_id === 'guest') {
+        setEntries([]);
         setLoading(false);
+        return;
+      }
+
+      const { data } = await supabase
+        .from('gl_battle_results')
+        .select('mission_id, success, score, duration_secs, difficulty_mode, hp_remaining, created_at')
+        .eq('user_id', profile.user_id)
+        .order('created_at', { ascending: false })
+        .limit(200);
+      if (cancelled) return;
+      if (!data) {
+        setEntries([]);
+        setLoading(false);
+        return;
+      }
+      const mapped: TimelineEntry[] = (data as any[]).map((b, i) => {
+        const title = missionNameMap.get(b.mission_id) ?? { zh: `关卡 #${b.mission_id}`, en: `Mission #${b.mission_id}` };
+        const soul = b.success
+          ? SOUL_VICTORY[i % SOUL_VICTORY.length]
+          : SOUL_DEFEAT[i % SOUL_DEFEAT.length];
+        return {
+          date: b.created_at.slice(0, 10),
+          timestamp: new Date(b.created_at).getTime(),
+          type: 'battle' as const,
+          success: b.success,
+          missionId: b.mission_id,
+          missionTitle: title,
+          score: b.score ?? 0,
+          duration: b.duration_secs ?? 0,
+          difficulty: b.difficulty_mode ?? 'green',
+          accuracy: b.hp_remaining !== null ? `HP ${b.hp_remaining}` : undefined,
+          reward: b.success ? `+${b.score} XP` : undefined,
+          soulMessage: soul,
+        };
       });
+      setEntries(mapped);
+      setLoading(false);
+    };
+
+    loadTimeline().catch(() => {
+      if (cancelled) return;
+      setEntries([]);
+      setLoading(false);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [profile.user_id]);
 
   // Add local milestones (streaks, level)

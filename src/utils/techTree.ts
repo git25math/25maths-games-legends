@@ -3,7 +3,7 @@
 
 import type { Mission, CompletedMissions } from '../types';
 import type { Chapter, Topic } from '../data/curriculum/kp-registry';
-import { getSkillHealthMap, type SkillHealthState } from './processAttempt';
+import { getSkillHealthMap, type SkillHealthState } from './skillHealth';
 import { ERROR_PATTERNS } from './errorPatterns';
 import { CHAPTERS } from '../data/curriculum/kp-registry';
 import { hasAnyPracticeCompletion } from './completionState';

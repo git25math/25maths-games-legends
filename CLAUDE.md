@@ -12,13 +12,13 @@
 2. **读取接手文档**: `AGENTS.md` → 当前状态快照、优先级、遗留问题
 3. **读取开发规范**: `docs/CONTRIBUTING.md` → 金标准、叙事原则、审查标准、Bug 防范规则
 4. **读取开发计划**: `docs/DEVELOPMENT-PLAN.md` → 版本历程、下一步
-5. **测试确认**: `npm test -- --run` → 必须 2389 passed 才能继续
+5. **测试确认**: `npm test -- --run` → 必须 2422 passed 才能继续
 
 ## 项目信息
 
 - **根目录**: `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends`
 - **部署**: push main → GitHub Actions → play.25maths.com
-- **版本**: v10.4.0 (2026-03-28)
+- **版本**: v10.5.6 (2026-03-30)
 - **仓库**: `git25math/25maths-games-legends`
 
 ## 关联项目
@@ -44,7 +44,7 @@
 ### 核心源文件
 | 文件 | 行数 | 说明 |
 |------|------|------|
-| `src/data/missions.ts` | ~4920 | 全部关卡定义（Y7-Y12 共 210 关） |
+| `src/data/missions.ts` | ~4920 | 关卡数据总入口（已按年级拆分，Y7-Y12 共 424 关） |
 | `src/utils/generateMission.ts` | ~5 | 向后兼容的 barrel export |
 | `src/utils/generators/` | 7 文件 | 按章节拆分的生成器实现（71 个活跃类型） |
 | `src/utils/checkCorrectness.ts` | ~410 | 答案校验 |

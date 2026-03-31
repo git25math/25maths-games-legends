@@ -1,0 +1,25 @@
+import type { MissionSummary } from '../../types';
+import { MISSION_SUMMARIES_Y7 } from './y7';
+import { MISSION_SUMMARIES_Y8 } from './y8';
+import { MISSION_SUMMARIES_Y9 } from './y9';
+import { MISSION_SUMMARIES_Y10 } from './y10';
+import { MISSION_SUMMARIES_Y11 } from './y11';
+import { MISSION_SUMMARIES_Y12 } from './y12';
+
+export {
+  MISSION_SUMMARIES_Y7,
+  MISSION_SUMMARIES_Y8,
+  MISSION_SUMMARIES_Y9,
+  MISSION_SUMMARIES_Y10,
+  MISSION_SUMMARIES_Y11,
+  MISSION_SUMMARIES_Y12,
+};
+
+export const MISSION_SUMMARIES: MissionSummary[] = [
+  ...MISSION_SUMMARIES_Y7,
+  ...MISSION_SUMMARIES_Y8,
+  ...MISSION_SUMMARIES_Y9,
+  ...MISSION_SUMMARIES_Y10,
+  ...MISSION_SUMMARIES_Y11,
+  ...MISSION_SUMMARIES_Y12,
+];

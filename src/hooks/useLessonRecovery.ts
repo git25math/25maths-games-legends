@@ -11,7 +11,7 @@
  */
 import { useEffect, useState } from 'react';
 import { supabase } from '../supabase';
-import { getSkillHealthMap, type SkillHealthState } from '../utils/processAttempt';
+import { getSkillHealthMap, type SkillHealthState } from '../utils/skillHealth';
 import type { CompletedMissions } from '../types';
 
 export type LessonRecoveryOffer = {

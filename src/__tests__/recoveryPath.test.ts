@@ -49,23 +49,23 @@ const MISSIONS: Mission[] = [
 
 describe('recoveryPath', () => {
   describe('buildRecoveryPath', () => {
-    it('returns null when no weak prerequisites exist', () => {
+    it('returns null when no weak prerequisites exist', async () => {
       // Origin has errors but all prereqs are healthy
       const mistakes: Record<string, MistakeRecord> = {
         '30': makeMistake(5, 'sign'),
       };
-      const result = buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
+      const result = await buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
       // No weak prereqs (1.6, 2.2 are all clean) → null or single-step
       expect(result).toBeNull();
     });
 
-    it('builds multi-step path when prerequisites are weak', () => {
+    it('builds multi-step path when prerequisites are weak', async () => {
       const mistakes: Record<string, MistakeRecord> = {
         '30': makeMistake(6, 'sign'),  // 2.5 — corrupted origin
         '20': makeMistake(4, 'sign'),  // 2.2 — weak prereq
         '1':  makeMistake(3, 'sign'),  // 1.6 — weak deeper prereq
       };
-      const result = buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
+      const result = await buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
       expect(result).not.toBeNull();
       expect(result!.steps.length).toBeGreaterThanOrEqual(2);
       // Origin should be the last step
@@ -83,48 +83,48 @@ describe('recoveryPath', () => {
       }
     });
 
-    it('origin topic is always the final step', () => {
+    it('origin topic is always the final step', async () => {
       const mistakes: Record<string, MistakeRecord> = {
         '30': makeMistake(5, 'method'),
         '20': makeMistake(3, 'method'),
       };
-      const result = buildRecoveryPath('2.5', 'method', mistakes, MISSIONS);
+      const result = await buildRecoveryPath('2.5', 'method', mistakes, MISSIONS);
       if (result) {
         expect(result.steps[result.steps.length - 1].topicId).toBe('2.5');
       }
     });
 
-    it('does not include duplicate topicIds', () => {
+    it('does not include duplicate topicIds', async () => {
       const mistakes: Record<string, MistakeRecord> = {
         '30': makeMistake(6, 'sign'),
         '20': makeMistake(4, 'sign'),
         '10': makeMistake(3, 'sign'),
         '1':  makeMistake(3, 'sign'),
       };
-      const result = buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
+      const result = await buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
       if (result) {
         const ids = result.steps.map(s => s.topicId);
         expect(new Set(ids).size).toBe(ids.length);
       }
     });
 
-    it('caps path length at 8 steps', () => {
+    it('caps path length at 8 steps', async () => {
       // Even with many weak nodes, path should not exceed 8
       const mistakes: Record<string, MistakeRecord> = {};
       MISSIONS.forEach(m => { mistakes[String(m.id)] = makeMistake(5, 'method'); });
-      const result = buildRecoveryPath('6.2', 'method', mistakes, MISSIONS);
+      const result = await buildRecoveryPath('6.2', 'method', mistakes, MISSIONS);
       if (result) {
         expect(result.steps.length).toBeLessThanOrEqual(8);
       }
     });
 
-    it('each step has a valid missionId from the missions list', () => {
+    it('each step has a valid missionId from the missions list', async () => {
       const mistakes: Record<string, MistakeRecord> = {
         '30': makeMistake(6, 'sign'),
         '20': makeMistake(4, 'sign'),
         '1':  makeMistake(3, 'sign'),
       };
-      const result = buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
+      const result = await buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
       if (result) {
         const missionIds = new Set(MISSIONS.map(m => m.id));
         for (const step of result.steps) {
@@ -133,12 +133,12 @@ describe('recoveryPath', () => {
       }
     });
 
-    it('session starts at step 0', () => {
+    it('session starts at step 0', async () => {
       const mistakes: Record<string, MistakeRecord> = {
         '30': makeMistake(6, 'sign'),
         '20': makeMistake(4, 'sign'),
       };
-      const result = buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
+      const result = await buildRecoveryPath('2.5', 'sign', mistakes, MISSIONS);
       if (result) {
         expect(result.currentStepIdx).toBe(0);
         expect(result.startedAt).toBeGreaterThan(0);

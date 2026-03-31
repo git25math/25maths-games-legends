@@ -128,6 +128,17 @@ export type Mission = {
   sectionId?: string;
 };
 
+export type MissionSummary = {
+  id: number;
+  grade: number;
+  unitId: number;
+  order: number;
+  unitTitle: BilingualText;
+  title: BilingualText;
+  topic: KnowledgePoint;
+  kpId?: string;
+};
+
 export type MissionCompletion = {
   green: boolean;
   amber: boolean;

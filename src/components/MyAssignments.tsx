@@ -3,13 +3,15 @@
  * Fetches from get_my_assignments() RPC. Shows title, deadline, progress.
  * Tapping a mission navigates to practice.
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { BookOpen, Clock, CheckCircle2, AlertTriangle, X } from 'lucide-react';
-import type { Language, Mission, CompletedMissions } from '../types';
+import type { Language, MissionSummary, CompletedMissions } from '../types';
 import { supabase } from '../supabase';
 import { lt } from '../i18n/resolveText';
 import { toTraditional } from '../i18n/zhHantMap';
+import { resolveAssignmentMissionItems } from '../utils/missionSummary';
+import { useAssignmentMissionMap } from '../hooks/useAssignmentMissionMap';
 
 type AssignmentData = {
   id: string;
@@ -22,9 +24,9 @@ type AssignmentData = {
 
 type Props = {
   lang: Language;
-  missions: Mission[];
+  missions: MissionSummary[];
   completedMissions: CompletedMissions;
-  onMissionStart: (mission: Mission) => void;
+  onMissionStart: (missionId: number) => void;
   onClose: () => void;
 };
 
@@ -32,6 +34,11 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
   const [assignments, setAssignments] = useState<AssignmentData[]>([]);
   const [loading, setLoading] = useState(true);
   const txt = (zh: string, en: string) => lang === 'en' ? en : lang === 'zh_TW' ? toTraditional(zh) : zh;
+  const assignmentMissionIds = useMemo(
+    () => assignments.flatMap(assignment => assignment.mission_ids),
+    [assignments],
+  );
+  const missionMap = useAssignmentMissionMap(assignmentMissionIds, missions);
 
   useEffect(() => {
     supabase.rpc('get_my_assignments').then(({ data }) => {
@@ -154,15 +161,12 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
 
                   {/* Mission list — undone first */}
                   <div className="space-y-1.5">
-                    {a.mission_ids
-                      .map(mid => ({ mid, mission: missions.find(m => m.id === mid), isDone: !!(completedMissions[String(mid)] as any)?.green }))
-                      .sort((a, b) => (a.isDone ? 1 : 0) - (b.isDone ? 1 : 0))
-                      .map(({ mid, mission, isDone }) => {
-                      if (!mission) return null;
+                    {resolveAssignmentMissionItems(a.mission_ids, missionMap, completedMissions)
+                      .map(({ id, title, isDone, missingSummary }) => {
                       return (
                         <button
-                          key={mid}
-                          onClick={() => { if (!isDone) { onClose(); onMissionStart(mission); } }}
+                          key={id}
+                          onClick={() => { if (!isDone) { onClose(); onMissionStart(id); } }}
                           disabled={isDone}
                           className={`w-full flex items-center gap-3 px-4 py-3 min-h-[44px] rounded-xl text-left text-sm transition-all ${
                             isDone
@@ -171,7 +175,8 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
                           }`}
                         >
                           {isDone ? <CheckCircle2 size={16} /> : <BookOpen size={16} className="text-indigo-500" />}
-                          <span className="truncate">{lt(mission.title, lang)}</span>
+                          <span className="truncate">{lt(title, lang)}</span>
+                          {missingSummary && !isDone && <span className="text-[10px] text-slate-400">{txt('补载中', 'Loading')}</span>}
                           {!isDone && <span className="ml-auto text-indigo-400 text-xs">→</span>}
                         </button>
                       );

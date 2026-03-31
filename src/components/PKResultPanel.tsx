@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, RefreshCw } from 'lucide-react';
-import type { Language, Room, RoomPlayer } from '../types';
+import type { Language, MissionSummary, Room, RoomPlayer } from '../types';
 import { lt } from '../i18n/resolveText';
 import { CHARACTERS } from '../data/characters';
-import { MISSIONS } from '../data/missions';
 import { Confetti } from './Confetti';
 import { getRankMultiplier } from '../utils/pkRank';
 
@@ -15,6 +14,7 @@ const MEDAL_EMOJI = ['🥇', '🥈', '🥉'];
 
 export const PKResultPanel = ({
   lang,
+  missions,
   room,
   currentUserId,
   grade,
@@ -22,6 +22,7 @@ export const PKResultPanel = ({
   onNextRound,
 }: {
   lang: Language;
+  missions: MissionSummary[];
   room: Room;
   currentUserId: string;
   grade?: number;
@@ -240,7 +241,7 @@ export const PKResultPanel = ({
               {/* Mission picker (host only) */}
               {showPicker && onNextRound && (
                 <div className="max-h-48 overflow-y-auto rounded-xl border border-white/10 bg-slate-700/50 p-2 space-y-1">
-                  {MISSIONS.filter(m => m.grade === (grade ?? 7)).map(m => (
+                  {missions.filter(m => m.grade === (grade ?? 7)).map(m => (
                     <button
                       key={m.id}
                       onClick={() => { onNextRound(m.id); setShowPicker(false); }}

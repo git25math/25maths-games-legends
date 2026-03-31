@@ -1,10 +1,11 @@
 {
   "name": "25maths-games-legends",
   "private": true,
-  "version": "10.5.1",
+  "version": "10.5.6",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
+    "generate:mission-summaries": "tsx scripts/generate-mission-summaries.ts",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",

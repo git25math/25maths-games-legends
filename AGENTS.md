@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v10.4.0 (2026-03-28)
+> **最后更新**: v10.5.6 (2026-03-30)
 
 ---
 
@@ -12,8 +12,8 @@
 Step 1: npm run build         → 必须零错误，否则不能改任何代码
 Step 2: 读 docs/CONTRIBUTING.md → 唯一权威规范（金标准/反模式/审查标准）
 Step 3: 读 docs/DEVELOPMENT-PLAN.md → 版本历程 + 下一步计划
-Step 4: 读本文件第三章"当前状态快照" → 241 关卡/已完成/遗留
-Step 5: npm test -- --run     → 2389 测试必须全通过
+Step 4: 读本文件第三章"当前状态快照" → 424 关卡/已完成/遗留
+Step 5: npm test -- --run     → 2422 测试必须全通过
 ```
 
 ---
@@ -25,19 +25,19 @@ Step 5: npm test -- --run     → 2389 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v10.4.0 (2026-03-28) |
+| **当前版本** | v10.5.6 (2026-03-30) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
-| **测试框架** | Vitest (2389 tests, `npm test -- --run`) |
+| **测试框架** | Vitest (2422 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v10.4.0, 2026-03-28）
+## 三、当前状态快照（v10.5.6, 2026-03-30）
 
 ### 规模
-- **428 missions** 分布: Y7(90) + Y8(78) + Y9(96) + Y10(89) + Y11(60) + Y12(15)
+- **424 missions** 分布: Y7(89) + Y8(78) + Y9(95) + Y10(87) + Y11(60) + Y12(15)
 - **81 个活跃 generatorType**（含 SINE_COSINE_RANDOM），100% 覆盖
-- **2,414 个 Vitest 用例**（全通过）
+- **2,422 个 Vitest 用例**（全通过）
 - **KP 覆盖率**: 287/288 = 99.7%（仅 kp-1.14-01 计算器跳过）
 - **4 条远征**: 桃园(Y7-8) / 赤壁(Y7-12) / 蜀道(Y8-10) / 北伐(Y10-12)
 - **91 个 discoverSteps**: Y7(22) Y8(17) Y9(21) Y10(19) Y11(8) Y12(4)
@@ -57,7 +57,41 @@ Step 5: npm test -- --run     → 2389 测试必须全通过
 | Y11 | 60 | ✅ 全达标 | ✅ 全达标 | ✅ 全达标 | **金标准** |
 | Y12 | 15 | ✅ 全达标 | ✅ 全达标 | ✅ 全达标 | **金标准** |
 
-**结论**: Y7-Y12 全部 241 关卡均达金标准（自动化审计 100%）。
+**结论**: Y7-Y12 全部 424 关卡均达金标准（自动化审计 100%）。
+
+#### v10.5.2 — 性能收口（主包 + 教师路径）
+- `skillHealth.ts`: 把 skill health 读写/恢复逻辑从 `processAttempt.ts` 拆成轻量模块
+- `App.tsx`: battle success/failure 的 Resilience Engine 改为按需 `import('./utils/processAttempt')`
+- `recoveryPath.ts`: `buildRecoveryPath()` 改为异步按需加载 `errorRemediation` + `techTree`
+- `DashboardScreen.tsx`: 改用 `useMissions(grade)` 年级懒加载，不再静态导入全量 `MISSIONS`
+- 构建主入口 `470.49 kB → 361.60 kB`，运行时剩余全量 missions 静态导入仅 `LearningTimeline`
+- 测试: `2414 passed`, build 零错误
+
+#### v10.5.3 — 清零全量 missions 运行时静态依赖
+- `LearningTimeline.tsx`: 去掉 `../data/missions` 静态导入，改为打开时按需加载各年级 mission title map，并做模块级缓存
+- 运行时 `src/screens` / `src/components` 已无全量 `MISSIONS` 静态导入
+- 测试: `2414 passed`, build 零错误
+
+#### v10.5.4 — MissionSummary 数据层收口
+- 新增 `scripts/generate-mission-summaries.ts` + `src/data/missionSummaries/*` 生成产物，按年级输出轻量 summary 数据
+- 新增 `useMissionSummaries(grade)` 和 `missionSummaries/loader.ts`，把教师看板与时间线的只读 mission 访问切到 summary loader
+- `MyAssignments.tsx` / `AssignmentBanner.tsx` 改为只消费 `MissionSummary` + `missionId` 回调，地图页保留 full mission 仅用于真正开题
+- 新增 `missionSummary.test.ts`，锁定 summary 生成结果与 mission 源数据一致
+- 测试: `2420 passed`, build 零错误
+
+#### v10.5.5 — MapScreen 弹层懒加载
+- `MapScreen.tsx`: `SkillTreePanel / EquipmentPanel / InventoryPanel / ShopPanel / BattlePassPanel / StrategicScrollsPanel / ProgressReport / MyAssignments` 全部改为 `React.lazy + Suspense`
+- 地图首屏不再同步打包这些非首屏弹层，打开对应面板时再加载 chunk
+- 构建 `MapScreen` chunk `114.45 kB → 68.20 kB`，主入口维持 `361.89 kB`
+- 测试: `2420 passed`, build 零错误
+
+#### v10.5.6 — summary loader 恢复力 + 作业缺失兜底
+- `missionSummaries/loader.ts`: 失败后不再缓存 reject，`useMissionSummaries()` 新增错误态，断网恢复后可重新加载 summary chunk
+- `MapScreen.tsx`: lazy 面板统一增加 loading overlay，不再 `fallback={null}`；作业入口改为 `missionId -> loadMissionById()`，兼容跨年级/历史任务开题
+- `AssignmentBanner.tsx` / `MyAssignments.tsx`: 不再静默丢失缺 summary 的题目，先显示占位标题，再按需补加载 missing summaries
+- 新增 `missionSummary.test.ts` 两条护栏：loader 失败后恢复、缺失 summary 时 assignment item 仍可见
+- 构建 `MapScreen` chunk `68.20 kB → 69.50 kB`，主入口 `361.89 kB → 362.59 kB`，属于可接受的恢复力成本
+- 测试: `2422 passed`, build 零错误
 
 ### 本轮完成（v10.0→v10.4, 2026-03-28）
 
@@ -429,7 +463,7 @@ grep -A 20 'id: 1211' src/data/missions.ts | grep -c 'text:'
 
 **预期输出**:
 - Build: `✓ built in X.XXs`（无 ERROR）
-- Tests: `2389 passed`
+- Tests: `2422 passed`
 - 重复ID: 空输出
-- 关卡数: ~210
+- 关卡数: ~424
 - Y12 步骤: ≥6（当前已完成）

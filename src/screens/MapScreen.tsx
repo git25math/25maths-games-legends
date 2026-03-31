@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle, ClipboardList, MoreHorizontal, X, Sparkles } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character, CompletedMissions } from '../types';
@@ -14,14 +14,8 @@ import { EmptyState } from '../components/EmptyState';
 import { getLevelInfo, getRankTier } from '../utils/xpLevels';
 import { getDailyMission, isDailyCompleted, getSecondsUntilMidnight, formatCountdown } from '../utils/dailyChallenge';
 import { MissionProgressBar } from '../components/MissionProgressBar';
-import { SkillTreePanel } from '../components/SkillTreePanel';
-import { EquipmentPanel } from '../components/EquipmentPanel';
-import { InventoryPanel } from '../components/InventoryPanel';
-import { ShopPanel } from '../components/ShopPanel';
 import { RepairDialog } from '../components/RepairDialog';
-import { BattlePassPanel } from '../components/BattlePassPanel';
 import { DailyQuestPanel } from '../components/DailyQuestPanel';
-import { StrategicScrollsPanel } from '../components/StrategicScrollsPanel';
 import { getSeasonLevel, getSeasonBorder, getSeasonTitle } from '../data/seasons/season1';
 import { getSeasonProgress } from '../utils/seasonTracker';
 import { getEquipmentState, countNeedsRepair, EQUIPMENT_COLORS, getEquipmentHealth } from '../utils/equipment';
@@ -32,18 +26,26 @@ import { getNextMilestone } from '../data/streakMilestones';
 import { getWeakMissions, getMistakes, rankByWeakness, getDominantPattern } from '../utils/errorMemory';
 import type { MistakeRecord } from '../utils/errorMemory';
 import { AssignmentBanner, useMyAssignments } from '../components/AssignmentBanner';
-import { LearningTimeline } from '../components/LearningTimeline';
 import { StaminaBar } from '../components/StaminaBar';
 import { getStamina, getRemainingAttempts } from '../utils/stamina';
 import { getInventory, getTotalItems } from '../utils/inventory';
 import type { CharacterProgression } from '../types';
 import { hasAnyPracticeCompletion, isPracticePerfect } from '../utils/completionState';
 import { getCurrency, CURRENCY_LABELS } from '../utils/currency';
-import { ProgressReport } from '../components/ProgressReport';
 import { VocabReviewPanel } from '../components/VocabReviewPanel';
 import { JoinClassModal } from '../components/JoinClassModal';
-import { MyAssignments } from '../components/MyAssignments';
+import { toMissionSummaries } from '../utils/missionSummary';
+import { loadMissionById } from '../hooks/useMissions';
 
+const SkillTreePanel = lazy(() => import('../components/SkillTreePanel').then(module => ({ default: module.SkillTreePanel })));
+const EquipmentPanel = lazy(() => import('../components/EquipmentPanel').then(module => ({ default: module.EquipmentPanel })));
+const InventoryPanel = lazy(() => import('../components/InventoryPanel').then(module => ({ default: module.InventoryPanel })));
+const ShopPanel = lazy(() => import('../components/ShopPanel').then(module => ({ default: module.ShopPanel })));
+const BattlePassPanel = lazy(() => import('../components/BattlePassPanel').then(module => ({ default: module.BattlePassPanel })));
+const StrategicScrollsPanel = lazy(() => import('../components/StrategicScrollsPanel').then(module => ({ default: module.StrategicScrollsPanel })));
+const ProgressReport = lazy(() => import('../components/ProgressReport').then(module => ({ default: module.ProgressReport })));
+const MyAssignments = lazy(() => import('../components/MyAssignments').then(module => ({ default: module.MyAssignments })));
+const LearningTimeline = lazy(() => import('../components/LearningTimeline').then(module => ({ default: module.LearningTimeline })));
 
 const CHAPTER_IMAGES = [
   './map/ch1-peach-garden.png',
@@ -82,6 +84,19 @@ function computeUnits(gradeMissions: Mission[], profile: UserProfile, lang: Lang
     });
     return { unitTitle, unitIndex, unitMissions, completedSet, unitComplete, firstPlayable };
   });
+}
+
+function MapOverlayFallback({ lang }: { lang: Language }) {
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/55 backdrop-blur-sm">
+      <div className="px-5 py-4 rounded-2xl bg-slate-900/90 border border-white/10 shadow-2xl flex items-center gap-3">
+        <div className="w-5 h-5 rounded-full border-2 border-white/20 border-t-indigo-400 animate-spin" />
+        <p className="text-sm font-bold text-white/80">
+          {lang === 'en' ? 'Loading panel...' : lang === 'zh_TW' ? '載入面板中…' : '加载面板中...'}
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export const MapScreen = ({
@@ -250,6 +265,21 @@ export const MapScreen = ({
   }, [profile.grade]);
 
   const gradeMissions = missions.filter(m => m.grade === profile.grade);
+  const missionSummaries = useMemo(() => toMissionSummaries(missions), [missions]);
+  const missionById = useMemo(() => {
+    const map = new Map<number, Mission>();
+    for (const mission of missions) {
+      map.set(mission.id, mission);
+    }
+    return map;
+  }, [missions]);
+
+  const startAssignmentMission = async (missionId: number) => {
+    const mission = missionById.get(missionId) ?? await loadMissionById(missionId);
+    if (mission) {
+      onPracticeStart(mission);
+    }
+  };
 
   useEffect(() => {
     if (currentUnitRef.current && !hasScrolled.current) {
@@ -1080,8 +1110,9 @@ export const MapScreen = ({
       <AssignmentBanner
         lang={lang}
         assignments={myAssignments}
+        missions={missionSummaries}
         completedMissions={profile.completed_missions}
-        onMissionStart={onPracticeStart}
+        onMissionStart={startAssignmentMission}
       />
 
       {/* ═══════════════════ Mission Map ═══════════════════ */}
@@ -1187,63 +1218,75 @@ export const MapScreen = ({
 
       {/* ═══════════════════ Overlay Panels ═══════════════════ */}
       {showSkillTree && selectedChar && getCharProgression && getTotalSP && onUnlockSkill && onEquipSkill && (
-        <SkillTreePanel
-          lang={lang}
-          charId={selectedChar.id}
-          charName={lt(selectedChar.name, lang)}
-          progression={getCharProgression(selectedChar.id)}
-          availableSP={(() => { const sp = getTotalSP(); return sp.total - sp.spent; })()}
-          onUnlock={(skillId) => onUnlockSkill(selectedChar.id, skillId)}
-          onEquip={(skillId) => onEquipSkill(selectedChar.id, skillId)}
-          onClose={() => setShowSkillTree(false)}
-        />
+        <Suspense fallback={<MapOverlayFallback lang={lang} />}>
+          <SkillTreePanel
+            lang={lang}
+            charId={selectedChar.id}
+            charName={lt(selectedChar.name, lang)}
+            progression={getCharProgression(selectedChar.id)}
+            availableSP={(() => { const sp = getTotalSP(); return sp.total - sp.spent; })()}
+            onUnlock={(skillId) => onUnlockSkill(selectedChar.id, skillId)}
+            onEquip={(skillId) => onEquipSkill(selectedChar.id, skillId)}
+            onClose={() => setShowSkillTree(false)}
+          />
+        </Suspense>
       )}
 
       {showBattlePass && (
-        <BattlePassPanel
-          lang={lang}
-          completedMissions={profile.completed_missions as Record<string, unknown>}
-          onClose={() => setShowBattlePass(false)}
-        />
+        <Suspense fallback={<MapOverlayFallback lang={lang} />}>
+          <BattlePassPanel
+            lang={lang}
+            completedMissions={profile.completed_missions as Record<string, unknown>}
+            onClose={() => setShowBattlePass(false)}
+          />
+        </Suspense>
       )}
 
       {showEquipmentPanel && onRepairEquipment && (
-        <EquipmentPanel
-          lang={lang}
-          completedMissions={profile.completed_missions as Record<string, unknown>}
-          missions={missions}
-          onRepair={(missionId) => { setShowEquipmentPanel(false); onRepairEquipment(missionId); }}
-          onRepairWithItem={onRepairWithItem ? (missionId) => {
-            setShowEquipmentPanel(false);
-            setRepairDialogTarget(missionId);
-          } : undefined}
-          onOpenInventory={() => { setShowEquipmentPanel(false); setShowInventory(true); }}
-          onClose={() => setShowEquipmentPanel(false)}
-        />
+        <Suspense fallback={<MapOverlayFallback lang={lang} />}>
+          <EquipmentPanel
+            lang={lang}
+            completedMissions={profile.completed_missions as Record<string, unknown>}
+            missions={missions}
+            onRepair={(missionId) => { setShowEquipmentPanel(false); onRepairEquipment(missionId); }}
+            onRepairWithItem={onRepairWithItem ? (missionId) => {
+              setShowEquipmentPanel(false);
+              setRepairDialogTarget(missionId);
+            } : undefined}
+            onOpenInventory={() => { setShowEquipmentPanel(false); setShowInventory(true); }}
+            onClose={() => setShowEquipmentPanel(false)}
+          />
+        </Suspense>
       )}
 
       {showInventory && (
-        <InventoryPanel
-          lang={lang}
-          completedMissions={profile.completed_missions as Record<string, unknown>}
-          onClose={() => setShowInventory(false)}
-        />
+        <Suspense fallback={<MapOverlayFallback lang={lang} />}>
+          <InventoryPanel
+            lang={lang}
+            completedMissions={profile.completed_missions as Record<string, unknown>}
+            onClose={() => setShowInventory(false)}
+          />
+        </Suspense>
       )}
 
       {showScrolls && (
-        <StrategicScrollsPanel
-          lang={lang}
-          onClose={() => setShowScrolls(false)}
-        />
+        <Suspense fallback={<MapOverlayFallback lang={lang} />}>
+          <StrategicScrollsPanel
+            lang={lang}
+            onClose={() => setShowScrolls(false)}
+          />
+        </Suspense>
       )}
 
       {showShop && onBuyItem && (
-        <ShopPanel
-          lang={lang}
-          completedMissions={profile.completed_missions as Record<string, unknown>}
-          onBuyItem={onBuyItem}
-          onClose={() => setShowShop(false)}
-        />
+        <Suspense fallback={<MapOverlayFallback lang={lang} />}>
+          <ShopPanel
+            lang={lang}
+            completedMissions={profile.completed_missions as Record<string, unknown>}
+            onBuyItem={onBuyItem}
+            onClose={() => setShowShop(false)}
+          />
+        </Suspense>
       )}
 
       {repairDialogTarget !== null && onRepairWithItem && (() => {
@@ -1392,14 +1435,16 @@ export const MapScreen = ({
       </AnimatePresence>
 
       {showProgressReport && (
-        <ProgressReport
-          lang={lang}
-          displayName={profile.display_name || (lang === 'en' ? 'Student' : '学生')}
-          grade={profile.grade || 7}
-          totalScore={profile.total_score || 0}
-          completedMissions={(profile.completed_missions || {}) as CompletedMissions}
-          onClose={() => setShowProgressReport(false)}
-        />
+        <Suspense fallback={<MapOverlayFallback lang={lang} />}>
+          <ProgressReport
+            lang={lang}
+            displayName={profile.display_name || (lang === 'en' ? 'Student' : '学生')}
+            grade={profile.grade || 7}
+            totalScore={profile.total_score || 0}
+            completedMissions={(profile.completed_missions || {}) as CompletedMissions}
+            onClose={() => setShowProgressReport(false)}
+          />
+        </Suspense>
       )}
 
       {/* Vocab Review Panel */}
@@ -1413,22 +1458,26 @@ export const MapScreen = ({
       {/* Learning Timeline */}
       <AnimatePresence>
         {showTimeline && (
-          <LearningTimeline
-            lang={lang}
-            profile={profile}
-            onClose={() => setShowTimeline(false)}
-          />
+          <Suspense fallback={<MapOverlayFallback lang={lang} />}>
+            <LearningTimeline
+              lang={lang}
+              profile={profile}
+              onClose={() => setShowTimeline(false)}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 
       {showMyHomework && (
-        <MyAssignments
-          lang={lang}
-          missions={missions}
-          completedMissions={(profile.completed_missions || {}) as CompletedMissions}
-          onMissionStart={onPracticeStart}
-          onClose={() => { setShowMyHomework(false); onHomeworkOpened?.(); }}
-        />
+        <Suspense fallback={<MapOverlayFallback lang={lang} />}>
+          <MyAssignments
+            lang={lang}
+            missions={missionSummaries}
+            completedMissions={(profile.completed_missions || {}) as CompletedMissions}
+            onMissionStart={startAssignmentMission}
+            onClose={() => { setShowMyHomework(false); onHomeworkOpened?.(); }}
+          />
+        </Suspense>
       )}
 
       {showJoinClass && (

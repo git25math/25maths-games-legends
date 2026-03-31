@@ -1,4 +1,4 @@
-import type { CompletedMissions, Mission } from '../../types';
+import type { CompletedMissions, MissionSummary } from '../../types';
 
 /** Count green-completed missions for a student across all units */
 export function countGreenMissions(cm: CompletedMissions, units: UnitEntry[]): number {
@@ -34,7 +34,7 @@ export type StudentAlert = {
   suggestionEn?: string;
 };
 
-export type UnitEntry = [number, { title: string; missions: Mission[] }];
+export type UnitEntry = [number, { title: string; missions: MissionSummary[] }];
 
 /** Shared KP progress row type — used by KPHeatmap, KPWeaknessPanel, StudentDetailCard */
 export type KPProgressRow = {

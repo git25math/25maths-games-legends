@@ -5,7 +5,6 @@ import type { Language, Mission, Character } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import type { Expedition, ExpeditionQuote } from '../data/expeditions';
-import { MISSIONS as LOCAL_MISSIONS } from '../data/missions';
 import { generateMission } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
 import { InputFields } from '../components/MathBattle/InputFields';
@@ -74,6 +73,7 @@ export const ExpeditionScreen = ({
   character,
   lang,
   grade,
+  missions,
   onComplete,
   onSaveRun,
   onCancel,
@@ -82,6 +82,7 @@ export const ExpeditionScreen = ({
   character: Character;
   lang: Language;
   grade: number;
+  missions: Mission[];
   onComplete: (xpEarned: number, nodesCleared: number) => void;
   onSaveRun?: (xpEarned: number, nodesCleared: number) => Promise<void>;
   onCancel: () => void;
@@ -112,16 +113,14 @@ export const ExpeditionScreen = ({
   const currentNode = expedition.nodes[currentNodeIdx];
 
   const generateBattleQuestions = useCallback((count: number) => {
-    let pool = LOCAL_MISSIONS.filter(m => m.grade === grade && m.data?.generatorType);
-    if (pool.length === 0) pool = LOCAL_MISSIONS.filter(m => Math.abs(m.grade - grade) <= 1 && m.data?.generatorType);
-    if (pool.length === 0) pool = LOCAL_MISSIONS.filter(m => m.data?.generatorType);
+    const pool = missions.filter(m => m.grade === grade && m.data?.generatorType);
     const questions: Mission[] = [];
     for (let i = 0; i < count; i++) {
       const template = pool[Math.floor(Math.random() * pool.length)];
       questions.push(generateMission(template));
     }
     return questions;
-  }, [grade]);
+  }, [grade, missions]);
 
   const startNode = () => {
     playTap();
@@ -186,7 +185,7 @@ export const ExpeditionScreen = ({
             setShowCorrectAnswer(false);
             setInputs({});
             const qs = [...battleQuestions];
-            const template = LOCAL_MISSIONS.find(m => m.id === question.id) || question;
+            const template = missions.find(m => m.id === question.id) || question;
             qs[battleQIdx] = template.data?.generatorType ? generateMission(template) : template;
             setBattleQuestions(qs);
           }, 1500);

@@ -10,8 +10,6 @@ import type { Mission } from '../types';
 import type { ErrorType } from './diagnoseError';
 import type { MistakeRecord } from './errorMemory';
 import { getDominantPattern } from './errorMemory';
-import { getDeepRemediationPath } from './errorRemediation';
-import { buildMissionTopicMap } from './techTree';
 
 // ── Types ──
 
@@ -50,12 +48,16 @@ const MAX_STEPS = 8;
  *
  * Returns null if no weak prerequisites exist (origin-only repair).
  */
-export function buildRecoveryPath(
+export async function buildRecoveryPath(
   originTopicId: string,
   originErrorType: ErrorType,
   mistakes: Record<string, MistakeRecord>,
   missions: Mission[],
-): RecoverySession | null {
+): Promise<RecoverySession | null> {
+  const [{ getDeepRemediationPath }, { buildMissionTopicMap }] = await Promise.all([
+    import('./errorRemediation'),
+    import('./techTree'),
+  ]);
   const missionTopicMap = buildMissionTopicMap(missions);
 
   // 1. Deep trace (returns immediate → deepest order)

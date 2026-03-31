@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Timer, Copy, Check, Swords, Users } from 'lucide-react';
-import type { Language, Room } from '../types';
+import type { Language, Mission, Room } from '../types';
 import { translations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import { CHARACTERS } from '../data/characters';
-import { MISSIONS } from '../data/missions';
 import { buttonBase } from '../utils/animationPresets';
 
 export const LobbyScreen = ({
   lang,
+  missions,
   room,
   userId,
   onReady,
@@ -17,6 +17,7 @@ export const LobbyScreen = ({
   onLeave,
 }: {
   lang: Language;
+  missions: Mission[];
   room: Room;
   userId: string;
   onReady: () => void;
@@ -29,7 +30,7 @@ export const LobbyScreen = ({
   const playerCount = Object.keys(room.players).length;
   const allReady = playerCount >= 2 && Object.values(room.players).every(p => p.isReady);
   const maxPlayers = 6;
-  const mission = MISSIONS.find(m => m.id === room.missionId);
+  const mission = missions.find(m => m.id === room.missionId);
   const isPK = room.type === 'pk';
 
   const copyCode = async () => {

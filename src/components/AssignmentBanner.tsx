@@ -6,14 +6,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ClipboardList, Clock, CheckCircle2, ChevronDown, ChevronRight, Swords } from 'lucide-react';
-import type { Language, Mission, CompletedMissions } from '../types';
+import type { Language, MissionSummary, CompletedMissions } from '../types';
 import { supabase } from '../supabase';
 import { lt } from '../i18n/resolveText';
-import { MISSIONS } from '../data/missions';
-
-// Module-level: built once, shared across all renders
-const MISSION_MAP = new Map<number, Mission>();
-for (const m of MISSIONS) MISSION_MAP.set(m.id, m);
+import { resolveAssignmentMissionItems } from '../utils/missionSummary';
+import { useAssignmentMissionMap } from '../hooks/useAssignmentMissionMap';
 
 type StudentAssignment = {
   id: string;
@@ -29,12 +26,15 @@ type StudentAssignment = {
 type Props = {
   lang: Language;
   assignments: StudentAssignment[];
+  missions: MissionSummary[];
   completedMissions: CompletedMissions;
-  onMissionStart: (mission: Mission) => void;
+  onMissionStart: (missionId: number) => void;
 };
 
-export function AssignmentBanner({ lang, assignments, completedMissions, onMissionStart }: Props) {
+export function AssignmentBanner({ lang, assignments, missions, completedMissions, onMissionStart }: Props) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const assignmentMissionIds = useMemo(() => assignments.flatMap(assignment => assignment.mission_ids), [assignments]);
+  const missionMap = useAssignmentMissionMap(assignmentMissionIds, missions);
 
   if (assignments.length === 0) return null;
 
@@ -142,22 +142,24 @@ export function AssignmentBanner({ lang, assignments, completedMissions, onMissi
                       <p className="text-xs text-white/50 mb-3 italic">{a.description}</p>
                     )}
                     <div className="space-y-2">
-                      {a.mission_ids.map(mid => {
-                        const mission = MISSION_MAP.get(mid);
-                        if (!mission) return null;
-                        const isDone = (completedMissions as any)?.[String(mid)]?.green;
+                      {resolveAssignmentMissionItems(a.mission_ids, missionMap, completedMissions).map(({ id, title, isDone, missingSummary }) => {
                         return (
-                          <div key={mid} className="flex items-center gap-3">
+                          <div key={id} className="flex items-center gap-3">
                             {isDone
                               ? <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
                               : <div className="w-4 h-4 rounded-full border-2 border-white/20 shrink-0" />
                             }
                             <span className={`text-xs font-bold flex-1 truncate ${isDone ? 'text-emerald-300/70 line-through' : 'text-white/80'}`}>
-                              {lt(mission.title, lang)}
+                              {lt(title, lang)}
                             </span>
+                            {missingSummary && !isDone && (
+                              <span className="text-[10px] text-white/40 shrink-0">
+                                {lang === 'en' ? 'Loading' : '补载中'}
+                              </span>
+                            )}
                             {!isDone && (
                               <button
-                                onClick={(e) => { e.stopPropagation(); onMissionStart(mission); }}
+                                onClick={(e) => { e.stopPropagation(); onMissionStart(id); }}
                                 className="flex items-center gap-1 px-2.5 py-1 bg-indigo-600/40 border border-indigo-500/30 rounded-lg text-[10px] font-bold text-indigo-300 hover:bg-indigo-600/60 transition-colors shrink-0"
                               >
                                 <Swords size={10} /> {lang === 'en' ? 'Go' : '去做'}
@@ -206,5 +208,3 @@ export function useMyAssignments(userId: string): {
 
   return { assignments, assignedMissionIds };
 }
-
-

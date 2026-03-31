@@ -1,21 +1,22 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { X, Swords, UserPlus } from 'lucide-react';
-import type { Language, Mission } from '../types';
+import type { Language, MissionSummary } from '../types';
 import { lt } from '../i18n/resolveText';
-import { MISSIONS } from '../data/missions';
 import { useAudio } from '../audio';
 import { useEscapeKey } from '../hooks/useEscapeKey';
 
 export const PKSetupPanel = ({
   lang,
   grade,
+  missions,
   onCreateRoom,
   onJoinRoom,
   onClose,
 }: {
   lang: Language;
   grade: number;
+  missions: MissionSummary[];
   onCreateRoom: (missionId: number) => void;
   onJoinRoom: (roomCode: string) => void;
   onClose: () => void;
@@ -24,9 +25,9 @@ export const PKSetupPanel = ({
   useEscapeKey(onClose);
   const [mode, setMode] = useState<'choose' | 'create' | 'join'>('choose');
   const [roomCode, setRoomCode] = useState('');
-  const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
+  const [selectedMission, setSelectedMission] = useState<MissionSummary | null>(null);
 
-  const gradeMissions = MISSIONS.filter(m => m.grade === grade);
+  const gradeMissions = missions.filter(m => m.grade === grade);
 
   // Group by unit
   const units = Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang))));

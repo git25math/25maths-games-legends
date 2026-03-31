@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import type { Mission } from '../types';
 
 /** Dynamically import only the grade's chunk. Returns the grade array. */
-async function loadGradeMissions(grade: number): Promise<Mission[]> {
+export async function loadGradeMissions(grade: number): Promise<Mission[]> {
   switch (grade) {
     case 7:  { const m = await import('../data/missions/y7');  return m.MISSIONS_Y7; }
     case 8:  { const m = await import('../data/missions/y8');  return m.MISSIONS_Y8; }
@@ -12,6 +12,34 @@ async function loadGradeMissions(grade: number): Promise<Mission[]> {
     case 12: { const m = await import('../data/missions/y12'); return m.MISSIONS_Y12; }
     default: { const m = await import('../data/missions');     return m.MISSIONS; }
   }
+}
+
+export async function loadMissionById(missionId: number): Promise<Mission | null> {
+  const id = String(missionId);
+  const inferredGrade = id.startsWith('12')
+    ? 12
+    : id.startsWith('11')
+      ? 11
+      : id.startsWith('10')
+        ? 10
+        : id.startsWith('9')
+          ? 9
+          : id.startsWith('8')
+            ? 8
+            : 7;
+
+  const inferredGradeMissions = await loadGradeMissions(inferredGrade);
+  const inferredMatch = inferredGradeMissions.find(mission => mission.id === missionId);
+  if (inferredMatch) return inferredMatch;
+
+  const allGrades = [7, 8, 9, 10, 11, 12].filter(grade => grade !== inferredGrade);
+  for (const grade of allGrades) {
+    const missions = await loadGradeMissions(grade);
+    const mission = missions.find(item => item.id === missionId);
+    if (mission) return mission;
+  }
+
+  return null;
 }
 
 /**

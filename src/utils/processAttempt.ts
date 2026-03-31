@@ -13,25 +13,12 @@
  */
 
 import type { ErrorType } from './diagnoseError';
-import { ERROR_PATTERNS, detectErrorPattern, type ErrorPattern } from './errorPatterns';
+import { ERROR_PATTERNS } from './errorPatterns';
+import { createDefaultHealth, type CorruptionLevel, type SkillHealthState } from './skillHealth';
 
 // ═══════════════════════════════════════════════════════════════
 // Types
 // ═══════════════════════════════════════════════════════════════
-
-export type CorruptionLevel = 'none' | 'warning' | 'blocked' | 'critical';
-
-export type SkillHealthState = {
-  healthScore: number;              // 0-100
-  corruptionLevel: CorruptionLevel;
-  dominantPatternId: string | null;
-  consecutiveSamePattern: number;
-  recentErrorCount: number;         // errors in recent window
-  totalAttempts: number;
-  blockingPatterns: string[];       // up to 3 distinct patterns
-  lastErrorAt: string | null;       // ISO timestamp
-  recoveredAt: string | null;       // last recovery completion
-};
 
 export type AttemptResult = {
   isCorrect: boolean;
@@ -54,7 +41,6 @@ export type AttemptResult = {
 
 const BASE_DAMAGE = 20;
 const CORRECT_HEAL = 8;
-const RECOVERY_FULL_HEAL = 100;
 const MAX_BLOCKING_PATTERNS = 3;
 
 // Corruption thresholds
@@ -62,24 +48,6 @@ const HEALTH_WARNING = 75;
 const HEALTH_BLOCKED = 50;
 const HEALTH_CRITICAL = 25;
 const CONSECUTIVE_BLOCK_THRESHOLD = 3;
-
-// ═══════════════════════════════════════════════════════════════
-// Default state
-// ═══════════════════════════════════════════════════════════════
-
-export function createDefaultHealth(): SkillHealthState {
-  return {
-    healthScore: 100,
-    corruptionLevel: 'none',
-    dominantPatternId: null,
-    consecutiveSamePattern: 0,
-    recentErrorCount: 0,
-    totalAttempts: 0,
-    blockingPatterns: [],
-    lastErrorAt: null,
-    recoveredAt: null,
-  };
-}
 
 // ═══════════════════════════════════════════════════════════════
 // Main Engine
@@ -103,22 +71,6 @@ export function processAttempt(
   } else {
     return processIncorrect(s, patternId, topicId);
   }
-}
-
-/**
- * Process a Recovery Pack completion — full node restoration.
- */
-export function processRecoveryComplete(state: SkillHealthState): SkillHealthState {
-  return {
-    ...state,
-    healthScore: RECOVERY_FULL_HEAL,
-    corruptionLevel: 'none',
-    dominantPatternId: null,
-    consecutiveSamePattern: 0,
-    recentErrorCount: 0,
-    blockingPatterns: [],
-    recoveredAt: new Date().toISOString(),
-  };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -248,31 +200,4 @@ function getFallbackPattern(topicId: string): string {
   if (ch === '2') return 'generic_algebra';
   if (ch === '4' || ch === '5') return 'generic_geometry';
   return 'generic_number';
-}
-
-// ═══════════════════════════════════════════════════════════════
-// Storage helpers — read/write from completed_missions JSONB
-// ═══════════════════════════════════════════════════════════════
-
-const SKILL_HEALTH_KEY = '_skillHealth';
-
-/** Read all skill health states from completed_missions */
-export function getSkillHealthMap(cm: Record<string, unknown>): Record<string, SkillHealthState> {
-  return ((cm as any)?.[SKILL_HEALTH_KEY] ?? {}) as Record<string, SkillHealthState>;
-}
-
-/** Get health state for a specific topic */
-export function getSkillHealth(cm: Record<string, unknown>, topicId: string): SkillHealthState {
-  const map = getSkillHealthMap(cm);
-  return map[topicId] ?? createDefaultHealth();
-}
-
-/** Write updated health state back into completed_missions (returns new cm) */
-export function setSkillHealth(
-  cm: Record<string, unknown>,
-  topicId: string,
-  state: SkillHealthState,
-): Record<string, unknown> {
-  const map = getSkillHealthMap(cm);
-  return { ...cm, [SKILL_HEALTH_KEY]: { ...map, [topicId]: state } };
 }
