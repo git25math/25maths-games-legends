@@ -42,11 +42,11 @@ export function MyAssignments({ lang, missions, completedMissions, onMissionStar
 
   useEffect(() => {
     supabase.rpc('get_my_assignments').then(({ data, error }) => {
-      if (error) console.warn('Failed to load assignments:', error.message);
-      setAssignments((data || []) as AssignmentData[]);
-      setLoading(false);
-    }).catch(() => {
-      setAssignments([]);
+      if (error) {
+        setAssignments([]);
+      } else {
+        setAssignments((data || []) as AssignmentData[]);
+      }
       setLoading(false);
     });
   }, []);
