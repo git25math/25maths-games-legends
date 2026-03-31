@@ -49,6 +49,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求火势覆盖的水平宽度（即两根之差）。', en: 'Find the horizontal width of the fire (difference between roots).' },
     data: { a: -1, b: 0, c: 16, generatorType: 'ROOTS_RANDOM' }, difficulty: 'Medium', reward: 350,
     kpId: 'kp-2.10-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "赤壁火船烧出一道火弧。火势覆盖的水平宽度——就是抛物线两个根之间的距离。怎么找这两个根？", en: "Fire ships at Red Cliffs burn an arc. The horizontal span of the fire — the distance between two roots of a parabola. How to find them?" },
+        type: 'choice',
+        choices: [
+          { zh: "令 $y=0$，解二次方程", en: "Set $y=0$ and solve the quadratic" },
+          { zh: "令 $x=0$，代入求值", en: "Set $x=0$ and substitute" },
+        ],
+        onCorrect: { zh: "根 = 曲线与 $x$ 轴的交点 = $y=0$ 的解。\n解 $ax^2+bx+c=0$ 得到两个根 $x_1, x_2$，火势宽度 $= |x_1 - x_2|$。\n求根公式：$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$", en: "Roots = where the curve crosses the x-axis = solutions of $y=0$.\nSolve $ax^2+bx+c=0$ for $x_1, x_2$; fire span $= |x_1 - x_2|$.\nQuadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$" },
+        onWrong: { zh: "$x=0$ 只给出 $y$ 轴上的截距。根是曲线碰到 $x$ 轴的地方——令 $y=0$。", en: "$x=0$ only gives the y-intercept. Roots are where the curve meets the x-axis — set $y=0$." },
+        onSkip: { zh: "二次方程的根 = 令 $y=0$ 的解。用求根公式或因式分解。", en: "Roots of a quadratic = solutions when $y=0$. Use the quadratic formula or factorisation." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要求二次方程的根？\n火船冲向曹营，火势覆盖范围取决于方程的根——\n根就是火焰触地的两端！知道了根，就知道火能烧多宽。', en: 'Zhou Yu: "Why find roots of a quadratic?\nFire ships charge the camp, the fire coverage depends on the roots —\nRoots are where the flames touch the ground! Knowing the roots tells us how wide the fire burns."' }, highlightField: 'x' },
       { text: { zh: '周瑜：什么是"根"？\n根就是让 $y = 0$ 的 $x$ 值。想象抛物线和地面（$x$ 轴）的交点——\n那就是火焰从哪里开始、到哪里结束！', en: 'Zhou Yu: "What are roots?\nRoots are the $x$ values that make $y = 0$. Imagine where the parabola meets the ground ($x$-axis) —\nThat\'s where the flames start and end!"' }, highlightField: 'x' },
@@ -71,6 +84,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求石块落地的位置 $x$（即 $y=0$ 且 $x>0$ 的根）。', en: 'Find where the stone hits the ground $x$ (root of $y=0$ where $x>0$).' },
     data: { a: -1, b: 0, c: 100, generatorType: 'ROOTS_RANDOM' }, difficulty: 'Hard', reward: 480,
     kpId: 'kp-2.10-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "投石车发射石块，轨迹为 $y = -x^2 + 5x$。石块在哪里落地？\"落地\"在数学上怎么表达？", en: "A catapult launches a stone along $y = -x^2 + 5x$. Where does it land? What does \"landing\" mean mathematically?" },
+        type: 'choice',
+        choices: [
+          { zh: "$y=0$ 且 $x>0$——高度为零就是落地", en: "$y=0$ and $x>0$ — zero height means landing" },
+          { zh: "求最高点", en: "Find the highest point" },
+        ],
+        onCorrect: { zh: "落地 = 高度归零 = $y=0$。\n$-x^2+5x=0 \\Rightarrow x(-x+5)=0 \\Rightarrow x=0$ 或 $x=5$。\n$x=0$ 是发射点，$x=5$ 是落地点。", en: "Landing = height returns to zero = $y=0$.\n$-x^2+5x=0 \\Rightarrow x(-x+5)=0 \\Rightarrow x=0$ or $x=5$.\n$x=0$ is launch, $x=5$ is landing." },
+        onWrong: { zh: "最高点是顶点，不是落地点。石块落地 = 回到地面 = $y=0$。\n解 $y=0$ 并取 $x>0$ 的根。", en: "Highest point is the vertex, not landing. Landing = back to ground = $y=0$.\nSolve $y=0$ and take the $x>0$ root." },
+        onSkip: { zh: "落地 = $y=0$。解方程取正根。发射点在 $x=0$，落点在另一个根。", en: "Landing = $y=0$. Solve and take the positive root. Launch at $x=0$, land at the other root." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '曹仁：为什么要算投石射程？\n投石机架好了，但石块能飞多远？射程不够打不到敌人，射程太远浪费弹药——\n求出落地点，才能精准打击！', en: 'Cao Ren: "Why calculate catapult range?\nThe catapult is ready, but how far can the stone fly? Too short and we miss; too far and we waste ammo —\nFind the landing point for precise strikes!"' }, highlightField: 'x' },
       { text: { zh: '曹仁：落地点就是方程的根\n石块落地时高度为零，所以令 $y = 0$：\n$-x^2 + 100 = 0$\n$x > 0$（石块往前飞，不往后飞！）', en: 'Cao Ren: "Landing point = root of the equation\nWhen the stone lands, height is zero, so set $y = 0$:\n$-x^2 + 100 = 0$\n$x > 0$ (stones fly forward, not backward!)"' }, highlightField: 'x' },
@@ -128,6 +154,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求一车粮 $x$ 和一车草 $y$ 的价格。', en: 'Find price of 1 grain $x$ and 1 grass $y$.' },
     data: { eq1: [3, 2, 12], eq2: [2, 3, 13], generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Medium', reward: 550,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "粮草互换：3车粮+2车草=26两银，1车粮+4车草=22两银。为什么需要两个方程？", en: "Supply trade: 3 grain + 2 hay = 26 silver, 1 grain + 4 hay = 22 silver. Why do we need two equations?" },
+        type: 'choice',
+        choices: [
+          { zh: "两个未知数需要两个方程才能唯一确定", en: "Two unknowns need two equations for a unique solution" },
+          { zh: "一个方程就够了", en: "One equation is enough" },
+        ],
+        onCorrect: { zh: "一个方程有无穷多组解。两个方程 = 两条直线的交点 = 唯一解。\n消元法：第二个方程 ×3 → $3x+12y=66$，减去第一个方程消去 $x$。\n或代入法：从第二个方程 $x=22-4y$ 代入第一个。", en: "One equation has infinitely many solutions. Two equations = intersection of two lines = unique solution.\nElimination: multiply 2nd by 3 → $3x+12y=66$, subtract 1st to eliminate $x$.\nOr substitution: from 2nd, $x=22-4y$, sub into 1st." },
+        onWrong: { zh: "一个方程两个未知数——无穷多组解！必须两个方程联立才能锁定 $x$ 和 $y$。", en: "One equation, two unknowns — infinitely many solutions! Need two equations to pin down $x$ and $y$." },
+        onSkip: { zh: "$n$ 个未知数需要 $n$ 个独立方程。用消元法或代入法求解。", en: "$n$ unknowns need $n$ independent equations. Solve by elimination or substitution." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '鲁肃：为什么这题也要用联立方程？\n三车粮和两车草的总价知道了，两车粮和三车草的总价也知道了——\n但单价是多少？两笔交易，两个价格，必须同时满足才能算出来！', en: 'Lu Su: "Why simultaneous equations again?\nWe know the total for 3 grain + 2 grass, and the total for 2 grain + 3 grass —\nBut what\'s each unit price? Two deals, two prices, both must be satisfied to solve!"' }, highlightField: 'x' },
       { text: { zh: '鲁肃：巧妙的对称消元\n$3x + 2y = 12$ ①\n$2x + 3y = 13$ ②\n系数是对称的！① + ② 和 ① - ② 都能简化！', en: 'Lu Su: "Clever symmetric elimination\n$3x + 2y = 12$ ①\n$2x + 3y = 13$ ②\nCoefficients are symmetric! Both ① + ② and ① - ② simplify nicely!"' }, highlightField: 'x' },
@@ -150,6 +189,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求大船和小船的数量。', en: 'Find the number of large and small ships.' },
     data: { x: 10, y: 10, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Hard', reward: 400,
     kpId: 'kp-2.5-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "赤壁调度：大船 $x$ 艘+小船 $y$ 艘，$x+y=10$，$5x+2y=38$。怎么最快求解？", en: "Fleet dispatch: large boats $x$ + small boats $y$, $x+y=10$, $5x+2y=38$. Fastest method?" },
+        type: 'choice',
+        choices: [
+          { zh: "从 $x+y=10$ 得 $y=10-x$，代入第二个方程", en: "From $x+y=10$ get $y=10-x$, substitute into the second" },
+          { zh: "两个方程直接相加", en: "Just add the two equations" },
+        ],
+        onCorrect: { zh: "代入法在其中一个方程容易变形时最高效。\n$y=10-x$ 代入：$5x+2(10-x)=38$\n$5x+20-2x=38 \\Rightarrow 3x=18 \\Rightarrow x=6$，$y=4$。", en: "Substitution is most efficient when one equation rearranges easily.\n$y=10-x$ sub in: $5x+2(10-x)=38$\n$5x+20-2x=38 \\Rightarrow 3x=18 \\Rightarrow x=6$, $y=4$." },
+        onWrong: { zh: "直接相加得 $6x+3y=48$——未知数没有被消掉！\n要消去一个未知数，用代入或先乘系数再相减。", en: "Adding gives $6x+3y=48$ — no unknown eliminated!\nTo eliminate, substitute or multiply then subtract." },
+        onSkip: { zh: "代入法：从简单方程解出一个变量，代入另一个。消元法：对齐系数再相减。", en: "Substitution: solve one variable from the simpler equation, sub into the other. Elimination: match coefficients then subtract." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么需要代入法？\n大船载兵多但慢，小船快但载兵少。船数和总兵力——两个条件必须同时满足。\n当一个方程能直接表示 $y$，代入法比消元法更快！', en: 'Zhou Yu: "Why use substitution?\nLarge ships carry more but are slow; small ships are fast but carry fewer. Ship count and total troops — both conditions must be met.\nWhen one equation directly expresses $y$, substitution is faster than elimination!"' }, highlightField: 'x' },
       { text: { zh: '周瑜：代入法的思路\n$x + y = 20$ ① → 可以直接得到 $y = 20 - x$\n$10x + 5y = 150$ ②\n把 ① 变形后的 $y$ 塞进 ②，就只剩 $x$ 一个未知数了！', en: 'Zhou Yu: "Substitution strategy\n$x + y = 20$ ① → directly gives $y = 20 - x$\n$10x + 5y = 150$ ②\nPlug the transformed $y$ from ① into ②, leaving only $x$!"' }, highlightField: 'x' },
@@ -210,6 +262,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '计算独立事件同时发生的概率：$P(A \\cap B) = P(A) \\times P(B)$。', en: 'Calculate prob of independent events: $P(A \\cap B) = P(A) \\times P(B)$.' },
     data: { p1: 0.6, p2: 0.6, generatorType: 'PROBABILITY_IND_RANDOM' }, difficulty: 'Medium', reward: 350,
     kpId: 'kp-8.3-02', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "连环计：庞统说服曹操锁船（成功率0.7），黄盖诈降（成功率0.8）。两件事都成功的概率是多少？", en: "Chain strategy: Pang Tong convinces Cao Cao to chain ships (P=0.7), Huang Gai feigns surrender (P=0.8). Probability both succeed?" },
+        type: 'choice',
+        choices: [
+          { zh: "$0.7 \\times 0.8 = 0.56$——独立事件相乘", en: "$0.7 \\times 0.8 = 0.56$ — multiply for independent events" },
+          { zh: "$0.7 + 0.8 = 1.5$", en: "$0.7 + 0.8 = 1.5$" },
+        ],
+        onCorrect: { zh: "独立事件\"同时发生\" = 概率相乘。\n$P(A \\cap B) = P(A) \\times P(B)$\n注意：概率不会超过 1！相加得到 1.5 一定是错的。", en: "Independent events \"both happening\" = multiply probabilities.\n$P(A \\cap B) = P(A) \\times P(B)$\nNote: probability never exceeds 1! Adding to get 1.5 is definitely wrong." },
+        onWrong: { zh: "概率超过 1 一定是错的！\"同时\" = 相乘，不是相加。\n$P(A \\cap B) = 0.7 \\times 0.8 = 0.56$", en: "Probability over 1 is always wrong! \"Both\" = multiply, not add.\n$P(A \\cap B) = 0.7 \\times 0.8 = 0.56$" },
+        onSkip: { zh: "独立事件同时发生：$P(A \\cap B) = P(A) \\times P(B)$。\"同时\"想到\"乘\"。", en: "Independent events both occurring: $P(A \\cap B) = P(A) \\times P(B)$. \"Both\" → \"multiply\"." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '庞统：为什么独立事件要用乘法？\n两艘分开的战船，一艘着火不影响另一艘——这就是"独立"。\n但铁索连舟之后呢？一烧全烧！连环计的妙处就在这里。', en: 'Pang Tong: "Why multiply for independent events?\nTwo separate ships — one catching fire doesn\'t affect the other. That\'s independence.\nBut chain them together? One burns, all burn! That\'s the brilliance of the chain strategy."' }, highlightField: 'p' },
       { text: { zh: '庞统：独立事件的联合概率\n$$P(A \\text{ 且 } B) = P(A) \\times P(B)$$\n就像掷两次骰子——第一次的结果不影响第二次。\n每次的概率独立相乘！', en: 'Pang Tong: "Joint probability of independent events\n$$P(A \\text{ and } B) = P(A) \\times P(B)$$\nLike rolling dice twice — the first roll doesn\'t affect the second.\nMultiply each probability independently!"' }, highlightField: 'p' },
@@ -232,6 +297,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求遇到伏兵的概率 $P = {target}/{total}$。', en: 'Find the probability of ambush: $P = {target}/{total}$.' },
     data: { total: 27, target: 19, generatorType: 'PROBABILITY_SIMPLE_RANDOM' }, difficulty: 'Hard', reward: 450,
     kpId: 'kp-8.1-02', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "华容道有 5 条路，其中 2 条有伏兵。随机选一条，遇到伏兵的概率是多少？", en: "Huarong Pass has 5 paths, 2 have ambushes. Picking randomly, what is the probability of an ambush?" },
+        type: 'choice',
+        choices: [
+          { zh: "$P = \\frac{2}{5}$——有利结果÷总结果", en: "$P = \\frac{2}{5}$ — favourable ÷ total" },
+          { zh: "$P = \\frac{5}{2}$", en: "$P = \\frac{5}{2}$" },
+        ],
+        onCorrect: { zh: "概率的基本公式：$P = \\frac{\\text{有利结果数}}{\\text{总结果数}}$\n2 条有伏兵 ÷ 5 条路 = $\\frac{2}{5}$。\n概率永远在 0 到 1 之间。", en: "Basic probability formula: $P = \\frac{\\text{favourable outcomes}}{\\text{total outcomes}}$\n2 ambush paths ÷ 5 total paths = $\\frac{2}{5}$.\nProbability is always between 0 and 1." },
+        onWrong: { zh: "$\\frac{5}{2} = 2.5$——概率不能大于 1！分子是有利的，分母是总数。\n$P = \\frac{2}{5}$", en: "$\\frac{5}{2} = 2.5$ — probability cannot exceed 1! Numerator is favourable, denominator is total.\n$P = \\frac{2}{5}$" },
+        onSkip: { zh: "$P = \\frac{\\text{有利}}{\\text{总数}}$，结果在 $[0, 1]$ 之间。", en: "$P = \\frac{\\text{favourable}}{\\text{total}}$, always between 0 and 1." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '关羽：为什么曹操逃不掉？\n华容道 27 条路，19 条有伏兵——\n曹操随便选一条路，遇到伏兵的概率有多大？', en: 'Guan Yu: "Why can\'t Cao Cao escape?\n27 paths, 19 have ambushes —\nHow likely is an ambush on a random path?"' }, highlightField: 'p' },
       { text: { zh: '关羽：简单概率公式\n$$P = \\frac{\\text{目标结果数}}{\\text{总结果数}}$$\n目标 = 有伏兵的路，总数 = 所有路。', en: 'Guan Yu: "Simple probability\n$$P = \\frac{\\text{favorable}}{\\text{total}}$$\nFavorable = ambush paths, total = all paths."' }, highlightField: 'p' },
@@ -254,6 +332,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '用概率树求恰好一次「吉」的概率。', en: 'Use a probability tree to find P(exactly one auspicious).' },
     data: { p1: 2/5, p2: 1/4, p3: 1/4, mode: 'exactly_one', frac1: '2/5', frac2: '1/4', generatorType: 'PROB_TREE_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-9.2-01', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "诸葛亮连占两卦，每卦吉凶各半。用概率树求\"恰好一次吉\"的概率——怎么算？", en: "Zhuge Liang reads two fortunes, each 50-50 lucky/unlucky. Using a tree diagram, find P(exactly one lucky). How?" },
+        type: 'choice',
+        choices: [
+          { zh: "画树形图，把\"吉凶\"和\"凶吉\"两条路径的概率加起来", en: "Draw a tree, add probabilities of \"lucky-unlucky\" and \"unlucky-lucky\" paths" },
+          { zh: "直接算 $0.5 \\times 0.5$", en: "Just calculate $0.5 \\times 0.5$" },
+        ],
+        onCorrect: { zh: "\"恰好一次\"有两条路径：\n吉→凶：$0.5 \\times 0.5 = 0.25$\n凶→吉：$0.5 \\times 0.5 = 0.25$\n合计：$0.25 + 0.25 = 0.5$\n树形图帮你不遗漏任何路径！", en: "\"Exactly one\" has two paths:\nLucky→Unlucky: $0.5 \\times 0.5 = 0.25$\nUnlucky→Lucky: $0.5 \\times 0.5 = 0.25$\nTotal: $0.25 + 0.25 = 0.5$\nTree diagrams ensure no path is missed!" },
+        onWrong: { zh: "$0.5 \\times 0.5 = 0.25$ 只是\"两次都吉\"的概率。\n\"恰好一次\"要加上两条路径：吉凶 + 凶吉。", en: "$0.5 \\times 0.5 = 0.25$ is only P(both lucky).\n\"Exactly one\" needs both paths: lucky-unlucky + unlucky-lucky." },
+        onSkip: { zh: "概率树：沿路径相乘，不同路径相加。\"恰好一次\" = 两条路径之和。", en: "Tree diagram: multiply along branches, add between paths. \"Exactly one\" = sum of two paths." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮："为什么要用树形图？「恰好一次」意味着两种情况：第一卦吉第二卦凶，或第一卦凶第二卦吉——树形图帮你不遗漏任何情况。"', en: 'Zhuge Liang: "Why a tree? \'Exactly one\' means two scenarios: first auspicious second not, OR first not second auspicious — a tree ensures no case is missed."' }, highlightField: 'p' },
       { text: { zh: '诸葛亮："画树：左边 → 第一卦吉 ($\\frac{2}{5}$) 或凶 ($\\frac{3}{5}$)。每条分支再接第二卦吉 ($\\frac{1}{4}$) 或凶 ($\\frac{3}{4}$)。"', en: 'Zhuge Liang: "Tree: First auspicious ($\\frac{2}{5}$) or not ($\\frac{3}{5}$). Each branches to second auspicious ($\\frac{1}{4}$) or not ($\\frac{3}{4}$)."' }, highlightField: 'p' },
@@ -311,6 +402,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求角度 $\\theta$。', en: 'Find angle $\\theta$.' },
     data: { opposite: 30, adjacent: 30, func: 'tan_inv', generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Medium', reward: 650,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "旗舰与敌船之间的距离和高度差已知。求两船之间的夹角 $\\theta$——用哪个三角比？", en: "Distance and height difference between flagship and enemy known. Find angle $\\theta$ — which trig ratio?" },
+        type: 'choice',
+        choices: [
+          { zh: "看已知边是对边、邻边还是斜边，选 SOH CAH TOA", en: "Check if known sides are opposite, adjacent, or hypotenuse — use SOH CAH TOA" },
+          { zh: "都用 $\\sin$", en: "Always use $\\sin$" },
+        ],
+        onCorrect: { zh: "SOH CAH TOA 三选一的关键：看你有哪两条边。\n$\\sin\\theta = \\frac{O}{H}$，$\\cos\\theta = \\frac{A}{H}$，$\\tan\\theta = \\frac{O}{A}$\n有对边和邻边 → $\\tan$；有对边和斜边 → $\\sin$；有邻边和斜边 → $\\cos$。", en: "SOH CAH TOA selection: check which two sides you have.\n$\\sin\\theta = \\frac{O}{H}$, $\\cos\\theta = \\frac{A}{H}$, $\\tan\\theta = \\frac{O}{A}$\nOpposite + Adjacent → $\\tan$; Opposite + Hypotenuse → $\\sin$; Adjacent + Hypotenuse → $\\cos$." },
+        onWrong: { zh: "不能总用 $\\sin$！三角比的选择取决于已知的两条边。\n记住 SOH CAH TOA 三个口诀对应三种情况。", en: "Can't always use $\\sin$! The ratio depends on which two sides are known.\nRemember SOH CAH TOA — three ratios for three situations." },
+        onSkip: { zh: "SOH: $\\sin=O/H$，CAH: $\\cos=A/H$，TOA: $\\tan=O/A$。看已知边选公式。", en: "SOH: $\\sin=O/H$, CAH: $\\cos=A/H$, TOA: $\\tan=O/A$. Choose based on known sides." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '甘宁：为什么需要反三角函数？\n这次不是求边长——是求角度！知道两条边，反过来推角度。\n$\\tan$ 的逆运算就是 $\\arctan$。', en: 'Gan Ning: "Why inverse trig?\nNot finding a side — finding an angle! Given two sides, work backwards.\nThe inverse of $\\tan$ is $\\arctan$."' }, highlightField: 'angle' },
       { text: { zh: '甘宁：选哪个三角函数？\n已知对边 = 30，邻边 = 30。\n对边和邻边 → 用 $\\tan$（TOA）\n$\\tan(\\theta) = \\frac{\\text{对边}}{\\text{邻边}}$', en: 'Gan Ning: "Which trig function?\nOpposite = 30, adjacent = 30.\nOpp and adj → use $\\tan$ (TOA)\n$\\tan(\\theta) = \\frac{\\text{opp}}{\\text{adj}}$"' }, highlightField: 'angle' },
@@ -333,6 +437,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求仰角 $\\theta$。', en: 'Find elevation angle $\\theta$.' },
     data: { opposite: 100, adjacent: 100, func: 'tan_inv', generatorType: 'TRIGONOMETRY_RANDOM' }, difficulty: 'Hard', reward: 700,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "火攻时从江面看城墙顶。水平距离 30m，城墙高 20m。仰角 $\\theta$ 怎么求？", en: "During fire attack, looking up at the wall top. Horizontal distance 30m, wall height 20m. Find elevation angle $\\theta$." },
+        type: 'choice',
+        choices: [
+          { zh: "$\\tan\\theta = \\frac{20}{30}$，$\\theta = \\tan^{-1}(\\frac{2}{3})$", en: "$\\tan\\theta = \\frac{20}{30}$, $\\theta = \\tan^{-1}(\\frac{2}{3})$" },
+          { zh: "$\\sin\\theta = \\frac{20}{30}$", en: "$\\sin\\theta = \\frac{20}{30}$" },
+        ],
+        onCorrect: { zh: "仰角问题：已知对边（高度）和邻边（水平距离）→ 用 $\\tan$。\n$\\tan\\theta = \\frac{\\text{对边}}{\\text{邻边}} = \\frac{20}{30} = \\frac{2}{3}$\n$\\theta = \\tan^{-1}(\\frac{2}{3}) \\approx 33.7°$", en: "Elevation angle: given opposite (height) and adjacent (horizontal) → use $\\tan$.\n$\\tan\\theta = \\frac{opp}{adj} = \\frac{20}{30} = \\frac{2}{3}$\n$\\theta = \\tan^{-1}(\\frac{2}{3}) \\approx 33.7°$" },
+        onWrong: { zh: "$\\sin$ 用的是斜边，但这里 30m 是水平距离（邻边），不是斜边！\n对边 + 邻边 → $\\tan\\theta = \\frac{20}{30}$。", en: "$\\sin$ uses hypotenuse, but 30m is horizontal distance (adjacent), not hypotenuse!\nOpposite + Adjacent → $\\tan\\theta = \\frac{20}{30}$." },
+        onSkip: { zh: "仰角 = $\\tan^{-1}(\\frac{\\text{高}}{\\text{水平距离}})$。对边和邻边 → $\\tan$。", en: "Elevation = $\\tan^{-1}(\\frac{height}{horizontal})$. Opposite and adjacent → $\\tan$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '甘宁：为什么要算仰角？\n火船要冲向曹营高台——仰角太小火势不够猛，太大船会减速。\n精准计算仰角，才能让火攻威力最大！', en: 'Gan Ning: "Why calculate elevation angle?\nFire ships charge the elevated camp — too shallow means weak fire, too steep slows the ships.\nPrecise angle maximizes the attack!"' }, highlightField: 'angle' },
       { text: { zh: '甘宁：仰角问题结构\n水平距离（邻边）= 100 丈\n高度差（对边）= 100 丈\n对边和邻边 → 用 $\\tan$！', en: 'Gan Ning: "Elevation angle structure\nHorizontal (adjacent) = 100\nHeight (opposite) = 100\nOpp and adj → use $\\tan$!"' }, highlightField: 'angle' },
@@ -355,6 +472,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求第 {n} 日的增兵人数。$a_n = a_1 + (n-1)d$', en: 'Find reinforcements on Day {n}. $a_n = a_1 + (n-1)d$' },
     data: { a1: 200, d: 150, n: 8, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Easy', reward: 300,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "赤壁增兵：第一天 200 人，之后每天多派 50 人。第 $n$ 天派多少人？", en: "Red Cliffs reinforcements: 200 on day 1, adding 50 more each day. How many on day $n$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$a_n = 200 + (n-1) \\times 50$——等差数列", en: "$a_n = 200 + (n-1) \\times 50$ — arithmetic sequence" },
+          { zh: "$a_n = 200 \\times 50^n$", en: "$a_n = 200 \\times 50^n$" },
+        ],
+        onCorrect: { zh: "每天\"多一样多\" = 等差数列。公差 $d=50$，首项 $a=200$。\n$a_n = a + (n-1)d = 200 + (n-1) \\times 50$\n第5天：$200 + 4 \\times 50 = 400$ 人。", en: "Same amount added each day = arithmetic sequence. Common difference $d=50$, first term $a=200$.\n$a_n = a + (n-1)d = 200 + (n-1) \\times 50$\nDay 5: $200 + 4 \\times 50 = 400$." },
+        onWrong: { zh: "$200 \\times 50^n$ 是指数增长——第2天就变一万了！\n\"每天多50\"是加法，不是乘法。等差数列：$a_n = a + (n-1)d$。", en: "$200 \\times 50^n$ is exponential growth — day 2 would be ten thousand!\n\"50 more each day\" is addition, not multiplication. Arithmetic: $a_n = a + (n-1)d$." },
+        onSkip: { zh: "等差数列：$a_n = a + (n-1)d$。$a$ = 首项，$d$ = 公差。", en: "Arithmetic sequence: $a_n = a + (n-1)d$. $a$ = first term, $d$ = common difference." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '鲁肃：为什么要学等差数列？\n联军每天增兵，增加人数固定不变——这种等距增长的规律叫等差数列。\n掌握规律，就能预测第 8 天有多少兵！', en: 'Lu Su: "Why learn arithmetic sequences?\nDaily reinforcements with constant increase — this constant-step pattern is an arithmetic sequence.\nMaster the pattern to predict Day 8!"' }, highlightField: 'ans' },
       { text: { zh: '鲁肃：通项公式\n$$a_n = a_1 + (n-1) \\times d$$\n$a_1$ = 首项，$d$ = 公差，$n$ = 第几项\n就像爬楼梯——起点 + 走了几步 × 每步高度！', en: 'Lu Su: "Formula\n$$a_n = a_1 + (n-1) \\times d$$\n$a_1$ = first term, $d$ = common difference, $n$ = term number\nLike climbing stairs!"' }, highlightField: 'ans' },
@@ -377,6 +507,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求第 {n} 排的弩机数量。', en: 'Find crossbows in Row {n}.' },
     data: { a1: 10, d: 6, n: 12, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "连弩阵：第一排 3 架弩机，每多一排加 2 架。第 $n$ 排有多少架？", en: "Crossbow formation: 3 in row 1, adding 2 per row. How many in row $n$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$a_n = 3 + (n-1) \\times 2 = 2n+1$", en: "$a_n = 3 + (n-1) \\times 2 = 2n+1$" },
+          { zh: "$a_n = 3 \\times 2^n$", en: "$a_n = 3 \\times 2^n$" },
+        ],
+        onCorrect: { zh: "首项 $a=3$，公差 $d=2$。\n$a_n = 3 + (n-1)(2) = 3 + 2n - 2 = 2n+1$\n验证：$n=1 \\to 3$，$n=2 \\to 5$，$n=3 \\to 7$ ✓", en: "First term $a=3$, common difference $d=2$.\n$a_n = 3 + (n-1)(2) = 3 + 2n - 2 = 2n+1$\nCheck: $n=1 \\to 3$, $n=2 \\to 5$, $n=3 \\to 7$" },
+        onWrong: { zh: "$3 \\times 2^n$ 是等比数列（翻倍）。这里每排\"加\"2，不是\"乘\"2。\n加法增长 = 等差数列 $a_n = a + (n-1)d$。", en: "$3 \\times 2^n$ is geometric (doubling). Here each row \"adds\" 2, not \"multiplies\" by 2.\nAdditive growth = arithmetic: $a_n = a + (n-1)d$." },
+        onSkip: { zh: "区分等差（加）和等比（乘）。每排加 $d$ → $a_n = a + (n-1)d$。", en: "Distinguish arithmetic (add) from geometric (multiply). Add $d$ per row → $a_n = a + (n-1)d$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么连弩要按等差排列？\n首排少、后排多——前排挡视线，后排火力递增。\n等差数列让弩机数量有规律增长，便于快速部署！', en: 'Zhuge Liang: "Why arrange crossbows arithmetically?\nFewer in front, more behind — front blocks view, rear increases firepower.\nArithmetic growth enables rapid deployment!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：套公式\n$a_n = a_1 + (n-1) \\times d$\n$a_1 = 10$，$d = 6$，$n = 12$', en: 'Zhuge Liang: "Apply formula\n$a_n = a_1 + (n-1) \\times d$\n$a_1 = 10$, $d = 6$, $n = 12$"' }, highlightField: 'ans' },
@@ -399,6 +542,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求第 {n} 日的消耗量。', en: 'Find consumption on Day {n}.' },
     data: { a1: 300, d: 20, n: 15, generatorType: 'ARITHMETIC_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "粮草消耗：第1天用100石，之后每天多消耗15石。第 $n$ 天消耗多少？", en: "Supply consumption: 100 units on day 1, increasing by 15 each day. How much on day $n$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$a_n = 100 + (n-1) \\times 15$", en: "$a_n = 100 + (n-1) \\times 15$" },
+          { zh: "$a_n = 100 + 15n$", en: "$a_n = 100 + 15n$" },
+        ],
+        onCorrect: { zh: "注意是 $(n-1)$，不是 $n$！第 1 天增加了 0 次。\n$a_1 = 100 + 0 \\times 15 = 100$ ✓\n$a_2 = 100 + 1 \\times 15 = 115$ ✓\n常见错误：忘记减 1，导致首项多加了一个 $d$。", en: "Note it's $(n-1)$, not $n$! Day 1 has 0 increases.\n$a_1 = 100 + 0 \\times 15 = 100$ ✓\n$a_2 = 100 + 1 \\times 15 = 115$ ✓\nCommon mistake: forgetting to subtract 1, adding an extra $d$ to the first term." },
+        onWrong: { zh: "$100 + 15n$ 在 $n=1$ 时 = $115$，但第1天应该是 100！\n$(n-1)$ 确保第1天增加了 0 次公差。", en: "$100 + 15n$ gives $115$ when $n=1$, but day 1 should be 100!\n$(n-1)$ ensures day 1 has zero increases." },
+        onSkip: { zh: "$a_n = a + (n-1)d$。用 $n=1$ 验算首项是否正确。", en: "$a_n = a + (n-1)d$. Always verify with $n=1$ to check the first term." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '张昭：为什么要预测粮草消耗？\n赤壁大捷，但战争消耗巨大。粮草日增 20 石——\n不提前算好，打到一半断粮前功尽弃！', en: 'Zhang Zhao: "Why predict supply consumption?\nGreat victory, but war costs are huge. +20 daily —\nWithout planning, running out mid-campaign means all is lost!"' }, highlightField: 'ans' },
       { text: { zh: '张昭：三要素\n$a_1 = 300$（首日），$d = 20$（日增），$n = 15$\n$a_n = a_1 + (n-1) \\times d$', en: 'Zhang Zhao: "Three elements\n$a_1 = 300$ (Day 1), $d = 20$ (increase), $n = 15$\n$a_n = a_1 + (n-1) \\times d$"' }, highlightField: 'ans' },
@@ -421,6 +577,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求等差数列第 n 项的公式 $pn + q$。', en: 'Find the nth term formula $pn + q$ of the arithmetic sequence.' },
     data: { a1: 5, d: 3, terms: [5, 8, 11, 14], p: 3, q: 2, generatorType: 'SEQUENCE_FORMULA_RANDOM' }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "军阵排列：3, 7, 11, 15, ... 求第 $n$ 项的通项公式 $pn+q$。怎么找 $p$ 和 $q$？", en: "Formation pattern: 3, 7, 11, 15, ... Find the $n$th term formula $pn+q$. How to find $p$ and $q$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$p$ = 公差 = 4，代入 $n=1$ 解出 $q$", en: "$p$ = common difference = 4, substitute $n=1$ to find $q$" },
+          { zh: "$p$ = 首项 = 3", en: "$p$ = first term = 3" },
+        ],
+        onCorrect: { zh: "等差数列通项 $= pn + q$，其中 $p =$ 公差。\n$p = 7-3 = 4$。代入 $n=1$：$4(1)+q = 3 \\Rightarrow q = -1$。\n通项公式：$4n - 1$。验证：$n=2 \\to 7$ ✓", en: "Arithmetic $n$th term $= pn + q$, where $p =$ common difference.\n$p = 7-3 = 4$. Sub $n=1$: $4(1)+q = 3 \\Rightarrow q = -1$.\nFormula: $4n - 1$. Check: $n=2 \\to 7$ ✓" },
+        onWrong: { zh: "$p$ 是每项增加的量（公差），不是首项。\n3→7→11→15：每次加4，所以 $p=4$。", en: "$p$ is the amount added each term (common difference), not the first term.\n3→7→11→15: adding 4 each time, so $p=4$." },
+        onSkip: { zh: "通项公式 $pn+q$：$p$ = 公差，$q$ = 代入 $n=1$ 后解出。", en: "Formula $pn+q$: $p$ = common difference, $q$ = solve by substituting $n=1$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '张昭："为什么要找通项公式？曹操有 100 支队，数到第 99 支要多少人？一项项数太慢——通项公式 $pn+q$ 代入 $n=99$ 就搞定。"', en: 'Zhang Zhao: "Why find the nth term formula? Cao Cao has 100 units — counting to Unit 99 takes forever. The formula $pn+q$ gives you Unit 99 in one step."' }, highlightField: 'p' },
       { text: { zh: '张昭："公差 $d$ 就是公式中 $n$ 的系数 $p$。每队多 {d} 人，所以 $p = {d}$。"', en: 'Zhang Zhao: "Common difference $d$ is the coefficient $p$ of $n$. Each unit gains {d} soldiers, so $p = {d}$."' }, highlightField: 'p' },
@@ -444,6 +613,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求等差数列第 $n$ 项：$a_n = a + (n-1)d$。', en: 'Find the nth term: $a_n = a + (n-1)d$.' },
     data: { a: 5, d: 3, n: 10, seqType: 'arithmetic', generatorType: 'SEQUENCE_NTH_RANDOM' }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "兵力预测：等差数列首项 $a=50$，公差 $d=8$。第 20 项是多少？", en: "Force prediction: arithmetic sequence $a=50$, $d=8$. What is the 20th term?" },
+        type: 'choice',
+        choices: [
+          { zh: "$a_{20} = 50 + 19 \\times 8 = 202$", en: "$a_{20} = 50 + 19 \\times 8 = 202$" },
+          { zh: "$a_{20} = 50 + 20 \\times 8 = 210$", en: "$a_{20} = 50 + 20 \\times 8 = 210$" },
+        ],
+        onCorrect: { zh: "第 $n$ 项要加 $(n-1)$ 个公差！第20项加了19个公差。\n$a_{20} = 50 + 19 \\times 8 = 50 + 152 = 202$\n从第1项到第20项，增加了 19 次。", en: "The $n$th term adds $(n-1)$ common differences! The 20th adds 19.\n$a_{20} = 50 + 19 \\times 8 = 50 + 152 = 202$\nFrom term 1 to term 20, there are 19 increases." },
+        onWrong: { zh: "$n=20$ 时加的是 $19 \\times d$，不是 $20 \\times d$！\n想一想：从第1项到第2项，只增加了1次，所以 $(n-1)$ 次。", en: "At $n=20$ you add $19 \\times d$, not $20 \\times d$!\nThink: from term 1 to term 2, there's only 1 increase — hence $(n-1)$ times." },
+        onSkip: { zh: "$a_n = a + (n-1)d$。第 $n$ 项经历了 $(n-1)$ 次增长。", en: "$a_n = a + (n-1)d$. The $n$th term has undergone $(n-1)$ increases." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '曹操："为什么要学等差数列第n项公式？每天清点兵力，一天天数到第10天太慢。公式 $a_n = a_1 + (n-1)d$ 让你直接算出第10天的兵力！"', en: 'Cao Cao: "Why learn the nth term formula? Counting to day 10 one by one is slow. Formula $a_n = a_1 + (n-1)d$ jumps directly to day 10!"' }, highlightField: 'ans' },
       { text: { zh: '曹操："识别等差数列：第1天 5 人，第2天 8 人，第3天 11 人，差值 = 3（恒定），公差 $d = 3$。"', en: 'Cao Cao: "Identify arithmetic: day 1: 5, day 2: 8, day 3: 11. Difference = 3 (constant). Common difference $d = 3$."' }, highlightField: 'ans' },
@@ -466,6 +648,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求等比数列第 $n$ 项：$a_n = a \\times r^{n-1}$。', en: 'Find the nth term: $a_n = a \\times r^{n-1}$.' },
     data: { a: 3, r: 2, n: 5, seqType: 'geometric', generatorType: 'SEQUENCE_NTH_RANDOM' }, difficulty: 'Hard', reward: 540,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "瘟疫蔓延：第1天10人感染，之后每天感染人数是前一天的3倍。第 $n$ 天多少人？这是什么数列？", en: "Plague spreads: 10 infected on day 1, tripling daily. How many on day $n$? What type of sequence?" },
+        type: 'choice',
+        choices: [
+          { zh: "$a_n = 10 \\times 3^{n-1}$——等比数列", en: "$a_n = 10 \\times 3^{n-1}$ — geometric sequence" },
+          { zh: "$a_n = 10 + 3n$——等差数列", en: "$a_n = 10 + 3n$ — arithmetic sequence" },
+        ],
+        onCorrect: { zh: "\"每天是前一天的 $r$ 倍\" = 等比数列。公比 $r=3$。\n$a_n = a \\times r^{n-1} = 10 \\times 3^{n-1}$\n等比增长极快：第5天 $= 10 \\times 81 = 810$ 人！", en: "\"Each day is $r$ times the previous\" = geometric sequence. Common ratio $r=3$.\n$a_n = a \\times r^{n-1} = 10 \\times 3^{n-1}$\nGeometric growth is explosive: day 5 $= 10 \\times 81 = 810$!" },
+        onWrong: { zh: "\"加\"是等差，\"乘\"是等比。每天乘以3 → 等比。\n$a_n = a \\times r^{n-1} = 10 \\times 3^{n-1}$", en: "\"Add\" = arithmetic, \"multiply\" = geometric. Daily tripling → geometric.\n$a_n = a \\times r^{n-1} = 10 \\times 3^{n-1}$" },
+        onSkip: { zh: "等比数列：$a_n = a \\times r^{n-1}$。$a$ = 首项，$r$ = 公比。", en: "Geometric sequence: $a_n = a \\times r^{n-1}$. $a$ = first term, $r$ = common ratio." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '华佗：为什么要懂等比增长？\n瘟疫不是线性蔓延的——它翻倍！今天 3 人，明天 6，后天 12……\n如果不懂指数增长，你永远低估疫情的速度。\n学会计算第 $n$ 天的感染人数，才能及时隔离。', en: 'Hua Tuo: "Why understand geometric growth?\nPlagues don\'t spread linearly — they multiply! 3 today, 6 tomorrow, 12 the day after...\nIf you don\'t understand exponential growth, you\'ll always underestimate its speed.\nCalculating day $n$ infections is the key to timely quarantine."' }, highlightField: 'ans' },
       { text: { zh: '华佗："识别等比数列：$6/3 = 2$，$12/6 = 2$，$24/12 = 2$，比值恒定 ✓ 公比 $r = 2$。"', en: 'Hua Tuo: "Identify geometric: $6/3 = 2$, $12/6 = 2$, $24/12 = 2$. Constant ratio ✓ Common ratio $r = 2$."' }, highlightField: 'ans' },
@@ -490,6 +685,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '长 ${length}$ 丈，宽 ${width}$ 丈，求面积。', en: 'Length ${length}$, width ${width}$. Find the area.' },
     data: { length: 15, width: 8, generatorType: 'AREA_RECT_RANDOM' }, difficulty: 'Easy', reward: 300,
     kpId: 'kp-5.2-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "诸葛亮丈量田亩：一块长方形田地长 12 步、宽 8 步。面积怎么算？", en: "Zhuge Liang measures farmland: a rectangular field 12 paces long, 8 paces wide. Area?" },
+        type: 'choice',
+        choices: [
+          { zh: "$12 \\times 8 = 96$ 平方步", en: "$12 \\times 8 = 96$ square paces" },
+          { zh: "$(12 + 8) \\times 2 = 40$ 步", en: "$(12 + 8) \\times 2 = 40$ paces" },
+        ],
+        onCorrect: { zh: "面积 = 长 $\\times$ 宽。$(12+8)\\times 2$ 是周长，不是面积！\n面积衡量覆盖了多少地面，单位是\"平方\"。\n周长衡量绕一圈有多长，单位是\"长度\"。", en: "Area = length $\\times$ width. $(12+8)\\times 2$ is perimeter, not area!\nArea measures how much ground is covered (square units).\nPerimeter measures distance around (linear units)." },
+        onWrong: { zh: "那是周长（绕一圈的长度），不是面积（覆盖的地面）。\n面积 = 长 × 宽 = $12 \\times 8 = 96$ 平方步。", en: "That's perimeter (distance around), not area (ground covered).\nArea = length × width = $12 \\times 8 = 96$ square paces." },
+        onSkip: { zh: "长方形面积 = 长 × 宽。别和周长 = 2(长+宽) 搞混。", en: "Rectangle area = length × width. Don't confuse with perimeter = 2(length + width)." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要丈量田地？\n治国之本在于农。荆州百废待兴，每一寸土地都要登记造册。\n田地面积 = 粮食产量的基础，算错一分地，就少收一分粮！', en: 'Zhuge Liang: "Why survey farmland?\nAgriculture is the foundation of governance. Every inch of Jingzhou land must be registered.\nFarmland area = basis for grain yield. Miscalculate even slightly, and you lose precious grain!"' }, highlightField: 'area' },
       { text: { zh: '诸葛亮：长方形面积怎么算？\n想象铺砖——横排铺 ${length}$ 块，竖排铺 ${width}$ 块。\n总共就是 $长 \\times 宽$ 块砖！\n\n$$面积 = 长 \\times 宽$$', en: 'Zhuge Liang: "How to find rectangle area?\nImagine laying tiles — ${length}$ across, ${width}$ down.\nTotal = $length \\times width$ tiles!\n\n$$\\text{Area} = \\text{length} \\times \\text{width}$$"' }, highlightField: 'area' },
@@ -512,6 +720,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '底边 ${base}$ 丈，高 ${height}$ 丈，求三角形面积。', en: 'Base ${base}$, height ${height}$. Find the triangle area.' },
     data: { base: 12, height: 8, answer: 48, generatorType: 'AREA_TRIANGLE_RANDOM' }, difficulty: 'Easy', reward: 320,
     kpId: 'kp-5.2-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "堤坝截面是三角形，底边 10m，高 6m。截面积是多少？", en: "Dam cross-section is a triangle, base 10m, height 6m. Cross-sectional area?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{1}{2} \\times 10 \\times 6 = 30$ m²", en: "$\\frac{1}{2} \\times 10 \\times 6 = 30$ m²" },
+          { zh: "$10 \\times 6 = 60$ m²", en: "$10 \\times 6 = 60$ m²" },
+        ],
+        onCorrect: { zh: "三角形 = 长方形的一半！底 × 高 是长方形面积，再 ÷ 2。\n$A = \\frac{1}{2}bh = \\frac{1}{2} \\times 10 \\times 6 = 30$ m²\n注意：高必须是垂直于底边的距离。", en: "Triangle = half a rectangle! Base × height is rectangle area, then ÷ 2.\n$A = \\frac{1}{2}bh = \\frac{1}{2} \\times 10 \\times 6 = 30$ m²\nNote: height must be perpendicular to the base." },
+        onWrong: { zh: "$60$ m² 是长方形面积。三角形只占长方形的一半。\n$A = \\frac{1}{2} \\times 底 \\times 高 = 30$ m²", en: "$60$ m² is rectangle area. A triangle takes up half.\n$A = \\frac{1}{2} \\times base \\times height = 30$ m²" },
+        onSkip: { zh: "三角形面积 = $\\frac{1}{2}bh$。是同底同高长方形的一半。", en: "Triangle area = $\\frac{1}{2}bh$. Half the rectangle with same base and height." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '庞统：为什么三角形面积要除以 2？\n把两个一模一样的三角形拼在一起——变成一个长方形！\n长方形面积 = 底 × 高，三角形只占一半。\n\n所以 $三角形面积 = \\frac{底 \\times 高}{2}$', en: 'Pang Tong: "Why divide by 2 for triangles?\nPut two identical triangles together — they form a rectangle!\nRectangle area = base × height, triangle is half.\n\nSo $\\text{Triangle area} = \\frac{\\text{base} \\times \\text{height}}{2}$"' }, highlightField: 'area' },
       { text: { zh: '庞统：核心公式\n$$A = \\frac{1}{2} \\times b \\times h$$\n$b$ = 底边长度，$h$ = 从底到顶点的垂直高度。\n注意：高必须是**垂直**的，不是斜边！', en: 'Pang Tong: "Core formula\n$$A = \\frac{1}{2} \\times b \\times h$$\n$b$ = base length, $h$ = perpendicular height from base to apex.\nNote: height must be PERPENDICULAR, not the slant!"' }, highlightField: 'area' },
@@ -534,6 +755,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '上底 ${a}$ 丈，下底 ${b}$ 丈，高 ${h}$ 丈，求梯形面积。', en: 'Top ${a}$, bottom ${b}$, height ${h}$. Find the trapezoid area.' },
     data: { a: 6, b: 10, h: 8, generatorType: 'AREA_TRAP_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-5.2-03', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "城墙截面是梯形：上底 4m，下底 8m，高 5m。面积怎么算？", en: "Wall cross-section is a trapezium: parallel sides 4m and 8m, height 5m. Area?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{1}{2}(4+8) \\times 5 = 30$ m²", en: "$\\frac{1}{2}(4+8) \\times 5 = 30$ m²" },
+          { zh: "$4 \\times 8 \\times 5$", en: "$4 \\times 8 \\times 5$" },
+        ],
+        onCorrect: { zh: "梯形面积 = $\\frac{1}{2}(a+b) \\times h$，其中 $a, b$ 是两条平行边。\n本质上是\"两条平行边的平均长度 × 高\"。\n$\\frac{4+8}{2} \\times 5 = 6 \\times 5 = 30$ m²", en: "Trapezium area = $\\frac{1}{2}(a+b) \\times h$, where $a, b$ are parallel sides.\nEssentially \"average of parallel sides × height\".\n$\\frac{4+8}{2} \\times 5 = 6 \\times 5 = 30$ m²" },
+        onWrong: { zh: "三个数相乘没有意义。梯形公式是\"上下底之和的一半 × 高\"。\n$A = \\frac{1}{2}(4+8) \\times 5 = 30$ m²", en: "Multiplying three numbers doesn't apply. Trapezium formula: \"half the sum of parallel sides × height\".\n$A = \\frac{1}{2}(4+8) \\times 5 = 30$ m²" },
+        onSkip: { zh: "梯形面积 = $\\frac{1}{2}(a+b)h$。上底加下底取平均再乘以高。", en: "Trapezium area = $\\frac{1}{2}(a+b)h$. Average of parallel sides times height." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：为什么城墙是梯形？\n上窄下宽才稳——就像金字塔一样！\n要算城墙用了多少砖，就得算出这个梯形的面积。', en: 'Ma Liang: "Why are walls trapezoid-shaped?\nNarrow top, wide base = stable — like a pyramid!\nTo calculate bricks needed, we need this trapezoid\'s area."' }, highlightField: 'area' },
       { text: { zh: '马良：梯形面积公式\n$$A = \\frac{(a + b) \\times h}{2}$$\n$a$ = 上底（短边），$b$ = 下底（长边），$h$ = 高\n\n为什么要"上底加下底除以2"？因为这是取**平均宽度**，再乘以高度！', en: 'Ma Liang: "Trapezoid area formula\n$$A = \\frac{(a + b) \\times h}{2}$$\n$a$ = top (short side), $b$ = bottom (long side), $h$ = height\n\nWhy \'top + bottom ÷ 2\'? It\'s the **average width** times height!"' }, highlightField: 'area' },
@@ -556,6 +790,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '半径 $r = {r}$，$\\pi = {pi}$，求面积或周长。', en: 'Radius $r = {r}$, $\\pi = {pi}$. Find the area or circumference.' },
     data: { r: 7, pi: 3.14, mode: 'area', generatorType: 'CIRCLE_Y8_RANDOM' }, difficulty: 'Hard', reward: 450,
     kpId: 'kp-5.3-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "瞭望塔底座是半径 $r=5$m 的圆。占地面积是多少？", en: "Watchtower base is a circle with radius $r=5$m. Ground area?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\pi r^2 = 25\\pi$ m²", en: "$\\pi r^2 = 25\\pi$ m²" },
+          { zh: "$2\\pi r = 10\\pi$ m", en: "$2\\pi r = 10\\pi$ m" },
+        ],
+        onCorrect: { zh: "面积 = $\\pi r^2$，周长 = $2\\pi r$。别搞混！\n$\\pi \\times 5^2 = 25\\pi \\approx 78.5$ m²\n面积是二维量（平方），周长是一维量（长度）。", en: "Area = $\\pi r^2$, circumference = $2\\pi r$. Don't mix them up!\n$\\pi \\times 5^2 = 25\\pi \\approx 78.5$ m²\nArea is 2D (squared), circumference is 1D (length)." },
+        onWrong: { zh: "$2\\pi r$ 是周长——绕一圈的距离。面积用 $\\pi r^2$。\n$\\pi \\times 5^2 = 25\\pi$ m²", en: "$2\\pi r$ is circumference — distance around. Area uses $\\pi r^2$.\n$\\pi \\times 5^2 = 25\\pi$ m²" },
+        onSkip: { zh: "圆面积 = $\\pi r^2$。圆周长 = $2\\pi r$ 或 $\\pi d$。", en: "Circle area = $\\pi r^2$. Circumference = $2\\pi r$ or $\\pi d$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：为什么瞭望塔是圆形？\n圆形在所有形状中**周长最短但面积最大**——用最少的围栏围住最大的空间！\n古人早就发现了这个秘密。', en: 'Ma Liang: "Why are watchtowers circular?\nCircles have the **shortest perimeter for the largest area** of any shape — maximum space with minimum fencing!\nThe ancients knew this secret."' }, highlightField: 'area' },
       { text: { zh: '马良：圆的两个核心公式\n面积：$A = \\pi r^2$（半径的平方乘以 π）\n周长：$C = 2\\pi r$（直径乘以 π）\n\n$\\pi \\approx 3.14$——这个神奇的数，是周长与直径的比值。', en: 'Ma Liang: "Two core circle formulas\nArea: $A = \\pi r^2$ (radius squared times π)\nCircumference: $C = 2\\pi r$ (diameter times π)\n\n$\\pi \\approx 3.14$ — this magical number is the ratio of circumference to diameter."' }, highlightField: 'area' },
@@ -578,6 +825,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '△ABC ~ △DEF，$AB={p}$，$BC={q}$，$DE={r}$，求 $EF=x$。', en: '△ABC ~ △DEF, $AB={p}$, $BC={q}$, $DE={r}$. Find $EF=x$.' },
     data: { p: 5, q: 9, r: 15, generatorType: 'SIMILAR_TRIANGLES_RANDOM' }, difficulty: 'Hard', reward: 480,
     kpId: 'kp-4.4-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "两块三角形田地形状相同、大小不同——\"相似三角形\"。已知一条边和对应边的比是 $2:5$。另一对对应边怎么算？", en: "Two triangle fields, same shape, different size — \"similar triangles\". One pair of sides has ratio $2:5$. How to find another pair?" },
+        type: 'choice',
+        choices: [
+          { zh: "所有对应边的比都相等：$\\frac{a_1}{a_2} = \\frac{b_1}{b_2} = \\frac{2}{5}$", en: "All corresponding side ratios are equal: $\\frac{a_1}{a_2} = \\frac{b_1}{b_2} = \\frac{2}{5}$" },
+          { zh: "另一对边差 3", en: "The other pair differs by 3" },
+        ],
+        onCorrect: { zh: "相似 = 同形不同大 → 对应边成比例。\n比例 $2:5$ 意味着大三角形每条边是小的 $\\frac{5}{2}$ 倍。\n所有边乘同一个比例因子。面积比 = 边比的平方 = $4:25$。", en: "Similar = same shape, different size → corresponding sides proportional.\nRatio $2:5$ means the larger is $\\frac{5}{2}$ times the smaller for every side.\nAll sides scale by the same factor. Area ratio = side ratio squared = $4:25$." },
+        onWrong: { zh: "相似三角形是比例关系，不是差值关系。\n$2:5$ 意味着每条边都乘以 $\\frac{5}{2}$，不是加 3。", en: "Similar triangles use ratios, not differences.\n$2:5$ means every side multiplied by $\\frac{5}{2}$, not +3." },
+        onSkip: { zh: "相似三角形：对应边成比例。边比 $k$ → 面积比 $k^2$ → 体积比 $k^3$。", en: "Similar triangles: corresponding sides proportional. Side ratio $k$ → area ratio $k^2$ → volume ratio $k^3$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良："为什么相似三角形是测量神器？\n\n荆州田界错综复杂，无法直接量到对角。但只要两块田形状相同、大小按比例——就能用「相似三角形」。\n已知小田的两边，再量大田的一条边，就能算出大田的另一条边。省时省力！"', en: 'Ma Liang: "Why are similar triangles the ultimate surveying tool?\n\nJingzhou boundaries are complex — you can\'t measure every diagonal directly. But if two plots have the same shape in different sizes — use similar triangles!\nKnow two sides of the small plot, measure one side of the large plot, and you can find the other side. Efficient!"' }, highlightField: 'x' },
       { text: { zh: '马良："相似三角形的核心：对应边成比例\n△ABC ~ △DEF 意思是：\n• 角度完全对应（AA/SAS/SSS 相似条件之一成立）\n• 每对对应边的比值都相同：$\\frac{AB}{DE} = \\frac{BC}{EF} = \\frac{CA}{FD} = k$\n$k$ 叫做**相似比（scale factor）**。"', en: 'Ma Liang: "Core of similar triangles: corresponding sides are proportional.\n△ABC ~ △DEF means:\n• Angles match perfectly (one of AA/SAS/SSS similarity conditions holds)\n• Each pair of corresponding sides has the same ratio: $\\frac{AB}{DE} = \\frac{BC}{EF} = \\frac{CA}{FD} = k$\n$k$ is called the **scale factor**."' }, highlightField: 'x' },
@@ -600,6 +860,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求 $A(2, 4, 6)$ 和 $B(8, 0, 2)$ 的中点坐标。', en: 'Find the midpoint of $A(2, 4, 6)$ and $B(8, 0, 2)$.' },
     data: { x1: 2, y1: 4, z1: 6, x2: 8, y2: 0, z2: 2, mode: 'midpoint', generatorType: 'COORD_3D_RANDOM' }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-4.1-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "两位将领从城楼两端出发会师。A$(2,4,6)$，B$(8,10,12)$。中点坐标怎么求？", en: "Two generals march from opposite ends. A$(2,4,6)$, B$(8,10,12)$. How to find the midpoint?" },
+        type: 'choice',
+        choices: [
+          { zh: "每个坐标取平均：$(\\frac{2+8}{2}, \\frac{4+10}{2}, \\frac{6+12}{2})$", en: "Average each coordinate: $(\\frac{2+8}{2}, \\frac{4+10}{2}, \\frac{6+12}{2})$" },
+          { zh: "坐标相减", en: "Subtract the coordinates" },
+        ],
+        onCorrect: { zh: "中点 = 两端点坐标的平均值。3D 也一样！\n$M = (\\frac{2+8}{2}, \\frac{4+10}{2}, \\frac{6+12}{2}) = (5, 7, 9)$\n$x, y, z$ 每个维度分别取平均。", en: "Midpoint = average of endpoint coordinates. Same in 3D!\n$M = (\\frac{2+8}{2}, \\frac{4+10}{2}, \\frac{6+12}{2}) = (5, 7, 9)$\nAverage each dimension separately." },
+        onWrong: { zh: "坐标相减得到的是向量（位移），不是中点。\n中点 = $\\frac{A+B}{2}$，每个坐标取平均。", en: "Subtracting coordinates gives a vector (displacement), not a midpoint.\nMidpoint = $\\frac{A+B}{2}$, average each coordinate." },
+        onSkip: { zh: "中点公式（2D/3D通用）：$M = (\\frac{x_1+x_2}{2}, \\frac{y_1+y_2}{2}, \\frac{z_1+z_2}{2})$。", en: "Midpoint formula (works in 2D/3D): $M = (\\frac{x_1+x_2}{2}, \\frac{y_1+y_2}{2}, \\frac{z_1+z_2}{2})$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良："为什么需要三维坐标？\n荆州城不是平地——城楼有高低，城墙有远近。两面旗帜的位置需要三个数 $(x, y, z)$ 才能精确描述。\n中点就是两旗之间的"等距会合点"——架联络台的最佳位置！"', en: 'Ma Liang: "Why 3D coordinates?\nJingzhou isn\'t flat — towers have height, walls have depth. Three numbers $(x, y, z)$ are needed to precisely describe each flag\'s position.\nThe midpoint is the equidistant meeting point — perfect for a relay station!"' }, highlightField: 'x' },
       { text: { zh: '马良："三维中点公式\n$$M = \\left(\\frac{x_1+x_2}{2},\\; \\frac{y_1+y_2}{2},\\; \\frac{z_1+z_2}{2}\\right)$$\n和二维一样——每个坐标分别取平均，多了个 $z$ 而已。"', en: 'Ma Liang: "3D midpoint formula\n$$M = \\left(\\frac{x_1+x_2}{2},\\; \\frac{y_1+y_2}{2},\\; \\frac{z_1+z_2}{2}\\right)$$\nSame as 2D — average each coordinate separately, just add $z$."' }, highlightField: 'x' },
@@ -622,6 +895,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求 $P(-3, 5, 1)$ 和 $Q(7, -1, 9)$ 的中点坐标。', en: 'Find the midpoint of $P(-3, 5, 1)$ and $Q(7, -1, 9)$.' },
     data: { x1: -3, y1: 5, z1: 1, x2: 7, y2: -1, z2: 9, mode: 'midpoint', generatorType: 'COORD_3D_RANDOM' }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-4.1-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "烽火定位：两座烽火台 $P(1,3,5)$、$Q(7,9,11)$。中点是信号中继站。坐标？", en: "Beacon positioning: two towers $P(1,3,5)$, $Q(7,9,11)$. Midpoint is the relay station. Coordinates?" },
+        type: 'choice',
+        choices: [
+          { zh: "$(4, 6, 8)$——每个坐标分别求平均", en: "$(4, 6, 8)$ — average each coordinate separately" },
+          { zh: "$(6, 6, 6)$——坐标相减", en: "$(6, 6, 6)$ — subtract coordinates" },
+        ],
+        onCorrect: { zh: "$M = (\\frac{1+7}{2}, \\frac{3+9}{2}, \\frac{5+11}{2}) = (4, 6, 8)$ ✓\n中点公式在任意维度都成立：每个分量取平均。", en: "$M = (\\frac{1+7}{2}, \\frac{3+9}{2}, \\frac{5+11}{2}) = (4, 6, 8)$ ✓\nMidpoint formula works in any dimension: average each component." },
+        onWrong: { zh: "相减得到位移向量 $(6,6,6)$，不是中点。\n中点 = $(\\frac{1+7}{2}, \\frac{3+9}{2}, \\frac{5+11}{2}) = (4, 6, 8)$", en: "Subtracting gives displacement vector $(6,6,6)$, not midpoint.\nMidpoint = $(\\frac{1+7}{2}, \\frac{3+9}{2}, \\frac{5+11}{2}) = (4, 6, 8)$" },
+        onSkip: { zh: "中点 = 两点坐标逐个求平均。$M = \\frac{P+Q}{2}$。", en: "Midpoint = average coordinates component-wise. $M = \\frac{P+Q}{2}$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '费祎：为什么要掌握负坐标中点？\n战场不是只有"前方"——敌人可能在你身后、地下、高空。\n负坐标代表反方向。如果你只会算正数中点，一半的战场你就看不到了。\n关键陷阱：$(-3) + 7 = 4$，不是 $10$！', en: 'Fei Yi: "Why master midpoints with negatives?\nThe battlefield isn\'t just \'forward\' — enemies could be behind, below, or above.\nNegative coordinates mean opposite direction. If you can only handle positives, half the battlefield is invisible.\nKey trap: $(-3) + 7 = 4$, not $10$!"' }, highlightField: 'x' },
       { text: { zh: '费祎："公式回顾\n$$M = \\left(\\frac{x_1+x_2}{2},\\; \\frac{y_1+y_2}{2},\\; \\frac{z_1+z_2}{2}\\right)$$"', en: 'Fei Yi: "Formula review\n$$M = \\left(\\frac{x_1+x_2}{2},\\; \\frac{y_1+y_2}{2},\\; \\frac{z_1+z_2}{2}\\right)$$"' }, highlightField: 'x' },
@@ -679,6 +965,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '半径 ${radius}$，高 ${height}$，$\\pi = {pi}$，求体积。', en: 'Radius ${radius}$, height ${height}$, $\\pi = {pi}$. Find the volume.' },
     data: { radius: 4, height: 12, pi: 3.14, answer: 602.88, generatorType: 'VOLUME_Y8_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-5.4-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "水井是圆柱形，半径 $r=2$m，深 $h=10$m。水井的体积（容水量）是多少？", en: "A well is cylindrical, radius $r=2$m, depth $h=10$m. Volume (water capacity)?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\pi r^2 h = \\pi \\times 4 \\times 10 = 40\\pi$ m³", en: "$\\pi r^2 h = \\pi \\times 4 \\times 10 = 40\\pi$ m³" },
+          { zh: "$2\\pi r h = 40\\pi$ m²", en: "$2\\pi r h = 40\\pi$ m²" },
+        ],
+        onCorrect: { zh: "圆柱体积 = 底面积 × 高 = $\\pi r^2 h$。\n$2\\pi rh$ 是侧面积（展开成长方形），不是体积！\n体积单位是 m³，面积单位是 m²。", en: "Cylinder volume = base area × height = $\\pi r^2 h$.\n$2\\pi rh$ is lateral surface area (unwrap into rectangle), not volume!\nVolume is m³, area is m²." },
+        onWrong: { zh: "$2\\pi rh$ 是侧面积。体积 = 底面积 × 高 = $\\pi r^2 h$。\n$\\pi \\times 2^2 \\times 10 = 40\\pi$ m³", en: "$2\\pi rh$ is lateral surface area. Volume = base area × height = $\\pi r^2 h$.\n$\\pi \\times 2^2 \\times 10 = 40\\pi$ m³" },
+        onSkip: { zh: "圆柱体积 = $\\pi r^2 h$。底面积 ($\\pi r^2$) × 高 ($h$)。", en: "Cylinder volume = $\\pi r^2 h$. Base area ($\\pi r^2$) × height ($h$)." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：为什么要算圆柱体积？\n荆州百姓需要打井取水。这口井是圆柱形的——\n知道了体积，才能算出能蓄多少水、需要挖多深！', en: 'Ma Liang: "Why calculate cylinder volume?\nThe people of Jingzhou need wells. This well is cylindrical —\nKnowing the volume tells us how much water it holds and how deep to dig!"' }, highlightField: 'v' },
       { text: { zh: '马良：为什么水井是圆形？\n跟瞭望塔一样的道理——圆形挖最少的土，蓄最多的水！\n再说，圆形井壁受力均匀，不容易塌。', en: 'Ma Liang: "Why are wells circular?\nSame reason as watchtowers — circles dig less earth, store more water!\nPlus, circular walls distribute pressure evenly — less likely to collapse."' }, highlightField: 'v' },
@@ -701,6 +1000,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '底面半径 ${radius}$，高 ${height}$，$\\pi = {pi}$，求锥体体积。', en: 'Base radius ${radius}$, height ${height}$, $\\pi = {pi}$. Find the cone volume.' },
     data: { radius: 6, height: 15, pi: 3.14, mode: 'cone', generatorType: 'VOLUME_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-5.4-03', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "烽火台是圆锥形。它的体积和同底同高的圆柱相比是多少？", en: "A beacon tower is cone-shaped. How does its volume compare to a cylinder with the same base and height?" },
+        type: 'choice',
+        choices: [
+          { zh: "圆锥 = 圆柱的 $\\frac{1}{3}$，即 $V = \\frac{1}{3}\\pi r^2 h$", en: "Cone = $\\frac{1}{3}$ of cylinder, i.e. $V = \\frac{1}{3}\\pi r^2 h$" },
+          { zh: "圆锥 = 圆柱的 $\\frac{1}{2}$", en: "Cone = $\\frac{1}{2}$ of cylinder" },
+        ],
+        onCorrect: { zh: "记住\"三分之一\"法则：锥体 = 对应柱体的 $\\frac{1}{3}$。\n圆锥：$\\frac{1}{3}\\pi r^2 h$\n三棱锥：$\\frac{1}{3} \\times$ 底面积 $\\times h$\n这在所有锥体中通用！", en: "Remember the \"one-third\" rule: cone = $\\frac{1}{3}$ of corresponding prism.\nCone: $\\frac{1}{3}\\pi r^2 h$\nPyramid: $\\frac{1}{3} \\times$ base area $\\times h$\nThis applies to ALL pointed solids!" },
+        onWrong: { zh: "不是一半！圆锥是圆柱的 $\\frac{1}{3}$。\n$V_{\\text{cone}} = \\frac{1}{3}\\pi r^2 h$", en: "Not half! A cone is $\\frac{1}{3}$ of a cylinder.\n$V_{\\text{cone}} = \\frac{1}{3}\\pi r^2 h$" },
+        onSkip: { zh: "锥体体积 = $\\frac{1}{3}$ × 底面积 × 高。圆锥 = $\\frac{1}{3}\\pi r^2 h$。", en: "Cone volume = $\\frac{1}{3}$ × base area × height. Cone = $\\frac{1}{3}\\pi r^2 h$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么烽火台是锥形？\n锥形底宽顶尖，稳如泰山。狼烟升起，百里可见。\n锥形的体积比同底同高的圆柱**小三分之二**。', en: 'Zhuge Liang: "Why are beacon towers conical?\nWide base, pointed top — stable as a mountain. Smoke signals visible for a hundred miles.\nA cone\'s volume is **one-third** of the same-base-same-height cylinder."' }, highlightField: 'v' },
       { text: { zh: '诸葛亮：锥体体积公式\n$$V = \\frac{1}{3} \\pi r^2 h$$\n跟圆柱比就多了个 $\\frac{1}{3}$。\n\n为什么是三分之一？因为三个相同的锥体刚好能拼成一个柱体！', en: 'Zhuge Liang: "Cone volume formula\n$$V = \\frac{1}{3} \\pi r^2 h$$\nSame as cylinder, but with $\\frac{1}{3}$.\n\nWhy one-third? Because three identical cones fit exactly into one cylinder!"' }, highlightField: 'v' },
@@ -725,6 +1037,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求函数在给定 $x$ 处的值。', en: 'Find the function value at the given $x$.' },
     data: { m: 3, b: 5, x: 4, generatorType: 'FUNC_VAL_RANDOM' }, difficulty: 'Easy', reward: 350,
     kpId: 'kp-2.13-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "连弩射程公式 $f(x) = 3x^2 - 2x + 5$。当 $x=4$ 时射程是多少？", en: "Crossbow range formula $f(x) = 3x^2 - 2x + 5$. What is the range when $x=4$?" },
+        type: 'choice',
+        choices: [
+          { zh: "代入 $x=4$：$3(16) - 2(4) + 5 = 45$", en: "Substitute $x=4$: $3(16) - 2(4) + 5 = 45$" },
+          { zh: "把 4 加到 $f(x)$ 上", en: "Add 4 to $f(x)$" },
+        ],
+        onCorrect: { zh: "代入 = 替换所有 $x$ 为给定值，然后按运算顺序计算。\n$f(4) = 3(4)^2 - 2(4) + 5 = 48 - 8 + 5 = 45$\n先算幂次 → 乘法 → 加减。", en: "Substitution = replace every $x$ with the value, then follow order of operations.\n$f(4) = 3(4)^2 - 2(4) + 5 = 48 - 8 + 5 = 45$\nPowers first → multiply → add/subtract." },
+        onWrong: { zh: "代入不是\"加上去\"。$f(4)$ 意味着把每个 $x$ 替换成 4。\n$f(4) = 3 \\times 16 - 2 \\times 4 + 5 = 45$", en: "Substitution is not \"adding\". $f(4)$ means replace every $x$ with 4.\n$f(4) = 3 \\times 16 - 2 \\times 4 + 5 = 45$" },
+        onSkip: { zh: "代入求值：$x$ 替换为数值，按 BIDMAS 顺序计算。", en: "Function evaluation: replace $x$ with the value, follow BIDMAS order." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要学函数？\n战场上一切皆有规律——兵力与粮草的关系、距离与时间的关系。\n函数就是描述这种对应关系的数学工具：输入一个值，必然得到唯一的输出。', en: 'Zhuge Liang: "Why learn functions?\nOn the battlefield, everything follows patterns — troops and supplies, distance and time.\nA function describes these relationships: input one value, always get one unique output."' }, highlightField: 'y' },
       { text: { zh: '诸葛亮：题目要什么？\n当 $x$ 等于给定值时，$y$ 是多少？\n就是把数字"丢进机器"。', en: 'Zhuge Liang: "What does the problem ask?\nWhen $x$ equals the given value, what is $y$?\nJust \'feed the number into the machine\'."' }, highlightField: 'y' },
@@ -747,6 +1072,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '计算百分比变化后的值。', en: 'Calculate the value after percentage change.' },
     data: { initial: 800, rate: -0.35, years: 1, answer: 520, generatorType: 'PERCENTAGE_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-1.13-01', sectionId: 'number',
+    discoverSteps: [
+      {
+        prompt: { zh: "战损评估：开战前 800 人，战后剩 600 人。战损百分比是多少？", en: "Battle damage: 800 troops before, 600 after. What is the percentage loss?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{800-600}{800} \\times 100\\% = 25\\%$", en: "$\\frac{800-600}{800} \\times 100\\% = 25\\%$" },
+          { zh: "$\\frac{800-600}{600} \\times 100\\%$", en: "$\\frac{800-600}{600} \\times 100\\%$" },
+        ],
+        onCorrect: { zh: "百分比变化 = $\\frac{\\text{变化量}}{\\text{原始值}} \\times 100\\%$\n分母是原始值（战前），不是新值！\n$\\frac{200}{800} \\times 100\\% = 25\\%$ 损失。", en: "Percentage change = $\\frac{\\text{change}}{\\text{original}} \\times 100\\%$\nDenominator is original value (before), not new value!\n$\\frac{200}{800} \\times 100\\% = 25\\%$ loss." },
+        onWrong: { zh: "分母应该是原始值 800，不是战后的 600！\n百分比变化永远以\"变化前\"为基准。$\\frac{200}{800} = 25\\%$", en: "Denominator should be original 800, not the after-value 600!\nPercentage change always uses the \"before\" as base. $\\frac{200}{800} = 25\\%$" },
+        onSkip: { zh: "百分比变化 = $\\frac{\\text{变化量}}{\\text{原始值}} \\times 100\\%$。分母是原值。", en: "Percentage change = $\\frac{change}{original} \\times 100\\%$. Denominator is original." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '张昭：为什么要用百分比？\n损失 100 人——是多还是少？如果全军 200 人，那是灾难；如果全军 10000 人，那是小事。\n百分比让你公平比较不同规模的数据，这就是它的威力！', en: 'Zhang Zhao: "Why use percentages?\nLosing 100 soldiers — is that a lot? With 200 total, a disaster; with 10,000, minor.\nPercentages let you fairly compare data of different scales — that\'s their power!"' }, highlightField: 'ans' },
       { text: { zh: '张昭：百分比变化公式\n$\\text{最终} = \\text{初始} \\times (1 + \\text{变化率})$\n减少用负数：$-35\\% = -0.35$\n所以乘以 $(1 - 0.35) = 0.65$', en: 'Zhang Zhao: "Percentage change formula\n$\\text{Final} = \\text{Initial} \\times (1 + \\text{rate})$\nDecrease uses negative: $-35\\% = -0.35$\nSo multiply by $(1 - 0.35) = 0.65$"' }, highlightField: 'ans' },
@@ -769,6 +1107,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求复利增长后的最终金额。', en: 'Find the final amount after compound growth.' },
     data: { principal: 1000, rate: 10, years: 3, mode: 'compound', generatorType: 'PERCENTAGE_INTEREST_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-1.13-03', sectionId: 'number',
+    discoverSteps: [
+      {
+        prompt: { zh: "粮仓存粮 1000 石，每年增长 5%。3 年后有多少？为什么不能用 $1000 + 3 \\times 50$？", en: "Granary: 1000 units, growing 5% yearly. After 3 years? Why not $1000 + 3 \\times 50$?" },
+        type: 'choice',
+        choices: [
+          { zh: "因为每年的 5% 是基于上一年的新总量——$1000 \\times 1.05^3$", en: "Because each year's 5% is based on the new total — $1000 \\times 1.05^3$" },
+          { zh: "$1000 + 150 = 1150$", en: "$1000 + 150 = 1150$" },
+        ],
+        onCorrect: { zh: "这就是复利的威力！每年增长基于去年的总量，不是最初的本金。\n$1000 \\times 1.05^3 = 1000 \\times 1.157625 = 1157.63$\n比单利的 1150 多了 7.63！时间越长差距越大。", en: "This is the power of compound interest! Each year's growth is based on last year's total.\n$1000 \\times 1.05^3 = 1000 \\times 1.157625 = 1157.63$\nMore than simple interest's 1150 by 7.63! The gap widens over time." },
+        onWrong: { zh: "$1150$ 是单利计算（每年固定加 50）。但复利中第二年的 5% 是基于 1050，不是 1000！\n复利公式：$A = P \\times (1+r)^n$", en: "$1150$ is simple interest (flat 50 per year). But in compound interest, year 2's 5% is based on 1050, not 1000!\nCompound: $A = P \\times (1+r)^n$" },
+        onSkip: { zh: "复利：$A = P(1+r)^n$。每期增长基于新总额，不是原始本金。", en: "Compound interest: $A = P(1+r)^n$. Each period's growth is on the new total, not the original." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要学复利？\n简单利息只算本金的增长，但现实中，收益会再投入产生更多收益——利滚利！\n理解复利，才能预测粮食繁殖等越长越快的现象。', en: 'Zhuge Liang: "Why learn compound interest?\nSimple interest only grows the principal, but in reality, gains reinvest to produce more gains — interest on interest!\nUnderstanding compound interest lets you predict accelerating growth patterns."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：复利公式\n$$A = P(1 + r)^n$$\n$P$ = 本金，$r$ = 年利率（小数），$n$ = 年数\n\n每年乘以 $(1 + r)$，连乘 $n$ 次。', en: 'Zhuge Liang: "Compound formula\n$$A = P(1 + r)^n$$\n$P$ = principal, $r$ = annual rate (decimal), $n$ = years\n\nMultiply by $(1 + r)$ each year, $n$ times."' }, highlightField: 'ans' },
@@ -793,6 +1144,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '将点沿轴反射，求新坐标。', en: 'Reflect the point across the axis. Find new coordinates.' },
     data: { px: 3, py: 4, axis: 'y', ansX: -3, ansY: 4, generatorType: 'SYMMETRY_RANDOM' }, difficulty: 'Easy', reward: 350,
     kpId: 'kp-7.1-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "沿河反射：点 $(3, 2)$ 关于 $y$ 轴反射后坐标是什么？", en: "River reflection: point $(3, 2)$ reflected in the y-axis. New coordinates?" },
+        type: 'choice',
+        choices: [
+          { zh: "$(-3, 2)$——$x$ 变号，$y$ 不变", en: "$(-3, 2)$ — $x$ changes sign, $y$ stays" },
+          { zh: "$(3, -2)$", en: "$(3, -2)$" },
+        ],
+        onCorrect: { zh: "反射规则：\n关于 $y$ 轴：$(x,y) \\to (-x, y)$\n关于 $x$ 轴：$(x,y) \\to (x, -y)$\n关于 $y=x$：$(x,y) \\to (y, x)$\n哪条轴不动就不变号。", en: "Reflection rules:\nIn y-axis: $(x,y) \\to (-x, y)$\nIn x-axis: $(x,y) \\to (x, -y)$\nIn $y=x$: $(x,y) \\to (y, x)$\nThe axis you reflect in stays unchanged." },
+        onWrong: { zh: "$(3, -2)$ 是关于 $x$ 轴的反射。关于 $y$ 轴反射 → $x$ 变号。\n$(3, 2) \\to (-3, 2)$", en: "$(3, -2)$ is reflection in the x-axis. Reflection in y-axis → $x$ changes sign.\n$(3, 2) \\to (-3, 2)$" },
+        onSkip: { zh: "$y$ 轴反射：$x$ 变号。$x$ 轴反射：$y$ 变号。", en: "y-axis reflection: negate $x$. x-axis reflection: negate $y$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要学反射变换？\n八卦阵的玄妙在于对称——入阵者看到的路和实际的路是镜像。\n掌握反射规则，才能设计出让敌人迷失方向的完美阵法！', en: 'Zhuge Liang: "Why learn reflections?\nThe Eight Trigrams Formation\'s power lies in symmetry — paths inside mirror the real paths.\nMaster reflection rules to design formations that disorient the enemy!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：反射规则\n沿 $y$ 轴：$(x, y) \\to (-x, y)$\n沿 $x$ 轴：$(x, y) \\to (x, -y)$\n\n只有垂直于镜面那个坐标变号！', en: 'Zhuge Liang: "Reflection rules\nAcross $y$-axis: $(x, y) \\to (-x, y)$\nAcross $x$-axis: $(x, y) \\to (x, -y)$\n\nOnly the coordinate perpendicular to the mirror changes sign!"' }, highlightField: 'x' },
@@ -815,6 +1179,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '将点按向量平移，求新坐标 $(x, y)$。', en: 'Translate the point by the vector. Find new coordinates $(x, y)$.' },
     data: { targetX: 7, targetY: 3, generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Medium', reward: 400,
     kpId: 'kp-7.1-03', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "阵型平移：三角形一个顶点在 $(2, 3)$，沿向量 $\\binom{4}{-1}$ 平移。新坐标？", en: "Formation translation: a triangle vertex at $(2, 3)$, translated by vector $\\binom{4}{-1}$. New coordinates?" },
+        type: 'choice',
+        choices: [
+          { zh: "$(2+4, 3+(-1)) = (6, 2)$", en: "$(2+4, 3+(-1)) = (6, 2)$" },
+          { zh: "$(2 \\times 4, 3 \\times (-1)) = (8, -3)$", en: "$(2 \\times 4, 3 \\times (-1)) = (8, -3)$" },
+        ],
+        onCorrect: { zh: "平移 = 坐标加上向量。\n$(x, y) + \\binom{a}{b} = (x+a, y+b)$\n$(2+4, 3-1) = (6, 2)$\n平移不改变形状和大小，只改变位置。", en: "Translation = add the vector to coordinates.\n$(x, y) + \\binom{a}{b} = (x+a, y+b)$\n$(2+4, 3-1) = (6, 2)$\nTranslation changes position only — shape and size stay the same." },
+        onWrong: { zh: "平移是加法，不是乘法！向量告诉你移动多少，不是缩放多少。\n$(2, 3) + \\binom{4}{-1} = (6, 2)$", en: "Translation is addition, not multiplication! The vector tells you how far to move, not how to scale.\n$(2, 3) + \\binom{4}{-1} = (6, 2)$" },
+        onSkip: { zh: "平移：$(x,y) \\to (x+a, y+b)$。向量分量加到坐标上。", en: "Translation: $(x,y) \\to (x+a, y+b)$. Add vector components to coordinates." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要学平移？\n行军就是平移——整支部队朝同一方向移动相同距离。\n坐标上的平移规则，就是行军调度的数学基础！', en: 'Zhuge Liang: "Why learn translations?\nMarching is translation — the entire army moves the same direction and distance.\nTranslation rules on coordinates are the mathematical basis of troop deployment!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：平移规则\n$$（x, y) \\to (x + a, y + b)$$\n平移向量 $\\binom{a}{b}$：$a$ 控制左右，$b$ 控制上下。', en: 'Zhuge Liang: "Translation rule\n$$(x, y) \\to (x + a, y + b)$$\nTranslation vector $\\binom{a}{b}$: $a$ controls left/right, $b$ controls up/down."' }, highlightField: 'x' },
@@ -837,6 +1214,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '将点绕原点旋转，求新坐标 $(x, y)$。', en: 'Rotate the point about the origin. Find new coordinates $(x, y)$.' },
     data: { targetX: -4, targetY: 3, px: 3, py: 4, angle: 90, generatorType: 'ROTATION_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-7.1-05', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "旋转阵型：点 $(1, 0)$ 绕原点逆时针旋转 $90°$。新坐标？", en: "Rotation formation: point $(1, 0)$ rotated $90°$ anticlockwise about the origin. New coordinates?" },
+        type: 'choice',
+        choices: [
+          { zh: "$(0, 1)$——$90°$ 逆时针：$(x,y) \\to (-y, x)$", en: "$(0, 1)$ — $90°$ anticlockwise: $(x,y) \\to (-y, x)$" },
+          { zh: "$(0, -1)$", en: "$(0, -1)$" },
+        ],
+        onCorrect: { zh: "旋转规则（绕原点）：\n$90°$ 逆时针：$(x,y) \\to (-y, x)$\n$90°$ 顺时针：$(x,y) \\to (y, -x)$\n$180°$：$(x,y) \\to (-x, -y)$\n$(1,0) \\to (0, 1)$ ✓", en: "Rotation rules (about origin):\n$90°$ anticlockwise: $(x,y) \\to (-y, x)$\n$90°$ clockwise: $(x,y) \\to (y, -x)$\n$180°$: $(x,y) \\to (-x, -y)$\n$(1,0) \\to (0, 1)$ ✓" },
+        onWrong: { zh: "$(0, -1)$ 是顺时针 $90°$。逆时针 $90°$：$(x,y) \\to (-y, x)$。\n$(1, 0) \\to (-(0), 1) = (0, 1)$", en: "$(0, -1)$ is clockwise $90°$. Anticlockwise $90°$: $(x,y) \\to (-y, x)$.\n$(1, 0) \\to (-(0), 1) = (0, 1)$" },
+        onSkip: { zh: "逆时针 $90°$：$(x,y)\\to(-y,x)$。顺时针 $90°$：$(x,y)\\to(y,-x)$。$180°$：$(-x,-y)$。", en: "Anticlockwise $90°$: $(x,y)\\to(-y,x)$. Clockwise $90°$: $(x,y)\\to(y,-x)$. $180°$: $(-x,-y)$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要学旋转？\n八卦阵最玄妙的变化就是旋转——整个阵型绕中心旋转，敌人瞬间找不到出口。\n掌握旋转坐标变换，就掌握了阵法的核心！', en: 'Zhuge Liang: "Why learn rotations?\nThe formation\'s most mysterious move is rotation — the entire formation spins, enemies lose their way.\nMaster rotation coordinate transforms to master the formation\'s core!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：旋转规则\n$90°$ 逆时针：$(x,y) \\to (-y, x)$\n$180°$：$(x,y) \\to (-x, -y)$\n$270°$ 逆时针：$(x,y) \\to (y, -x)$', en: 'Zhuge Liang: "Rotation rules\n$90°$ anticlockwise: $(x,y) \\to (-y, x)$\n$180°$: $(x,y) \\to (-x, -y)$\n$270°$ anticlockwise: $(x,y) \\to (y, -x)$"' }, highlightField: 'x' },
@@ -859,6 +1249,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '以原点为中心放大，求新坐标 $(x, y)$。', en: 'Enlarge from origin. Find new coordinates $(x, y)$.' },
     data: { targetX: 6, targetY: 8, px: 3, py: 4, k: 2, generatorType: 'ENLARGEMENT_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-7.1-07', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "阵型放大：三角形顶点 $(2, 3)$，以原点为中心、比例因子 3 放大。新坐标？", en: "Formation enlargement: vertex $(2, 3)$, centre of enlargement at origin, scale factor 3. New coordinates?" },
+        type: 'choice',
+        choices: [
+          { zh: "$(6, 9)$——每个坐标乘以比例因子", en: "$(6, 9)$ — multiply each coordinate by the scale factor" },
+          { zh: "$(5, 6)$——每个坐标加 3", en: "$(5, 6)$ — add 3 to each coordinate" },
+        ],
+        onCorrect: { zh: "以原点为中心放大：每个坐标 × 比例因子。\n$(2, 3) \\times 3 = (6, 9)$\n放大改变大小但保持形状。比例因子 >1 放大，0-1 之间缩小。", en: "Enlargement from origin: multiply each coordinate by scale factor.\n$(2, 3) \\times 3 = (6, 9)$\nEnlargement changes size but preserves shape. Factor >1 enlarges, 0-1 shrinks." },
+        onWrong: { zh: "放大是乘法，不是加法！放大因子是缩放的倍数。\n$(2, 3) \\times 3 = (6, 9)$，不是 $(2+3, 3+3)$。", en: "Enlargement is multiplication, not addition! Scale factor multiplies.\n$(2, 3) \\times 3 = (6, 9)$, not $(2+3, 3+3)$." },
+        onSkip: { zh: "以原点为中心放大：$(x,y) \\to (kx, ky)$。$k$ = 比例因子。", en: "Enlargement from origin: $(x,y) \\to (kx, ky)$. $k$ = scale factor." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要学放大（缩放）？\n把军营的小地图放大成实际建造图——形状不变，尺寸按比例放大。\n缩放变换就是比例尺的数学原理！', en: 'Zhuge Liang: "Why learn enlargement (scaling)?\nScaling a small camp map to actual construction size — shape stays the same, dimensions scale proportionally.\nEnlargement transforms are the math behind map scales!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：从原点放大的规则\n$$(x, y) \\to (kx, ky)$$\n每个坐标都乘以 $k$。', en: 'Zhuge Liang: "Enlargement from origin\n$$(x, y) \\to (kx, ky)$$\nMultiply each coordinate by $k$."' }, highlightField: 'x' },
@@ -918,6 +1321,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '半径 $r = {r}$，圆心角 ${angle}°$，$\\pi = {pi}$，求扇形面积。', en: 'Radius $r = {r}$, angle ${angle}°$, $\\pi = {pi}$. Find sector area.' },
     data: { r: 8, pi: 3.14, angle: 90, mode: 'area', answer: 50.24, generatorType: 'SECTOR_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-5.3-04', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "烽火覆盖区域是扇形。半径 $r=10$m，圆心角 $\\theta=72°$。面积？", en: "Beacon coverage is a sector. Radius $r=10$m, angle $\\theta=72°$. Area?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{72}{360} \\times \\pi \\times 10^2 = 20\\pi$ m²", en: "$\\frac{72}{360} \\times \\pi \\times 10^2 = 20\\pi$ m²" },
+          { zh: "$\\pi \\times 10^2 = 100\\pi$ m²", en: "$\\pi \\times 10^2 = 100\\pi$ m²" },
+        ],
+        onCorrect: { zh: "扇形 = 圆的一部分。占了多大一部分？$\\frac{\\theta}{360}$。\n扇形面积 = $\\frac{\\theta}{360} \\times \\pi r^2 = \\frac{72}{360} \\times 100\\pi = \\frac{1}{5} \\times 100\\pi = 20\\pi$ m²\n$72° = \\frac{1}{5}$ 个完整圆。", en: "Sector = fraction of a circle. What fraction? $\\frac{\\theta}{360}$.\nSector area = $\\frac{\\theta}{360} \\times \\pi r^2 = \\frac{72}{360} \\times 100\\pi = \\frac{1}{5} \\times 100\\pi = 20\\pi$ m²\n$72° = \\frac{1}{5}$ of a full circle." },
+        onWrong: { zh: "$100\\pi$ 是整个圆的面积！扇形只占圆的 $\\frac{72}{360} = \\frac{1}{5}$。\n$\\frac{1}{5} \\times 100\\pi = 20\\pi$ m²", en: "$100\\pi$ is the full circle! The sector is only $\\frac{72}{360} = \\frac{1}{5}$ of it.\n$\\frac{1}{5} \\times 100\\pi = 20\\pi$ m²" },
+        onSkip: { zh: "扇形面积 = $\\frac{\\theta}{360} \\times \\pi r^2$。角度占 360° 的比例 × 整圆面积。", en: "Sector area = $\\frac{\\theta}{360} \\times \\pi r^2$. Angle fraction × full circle area." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要算扇形面积？\n扇形是圆的一部分——就像切蛋糕。烽火台的照射范围就是一个扇形。\n知道扇形面积，才能算出火光能覆盖多大区域！', en: 'Zhuge Liang: "Why calculate sector area?\nA sector is part of a circle — like slicing a cake. A beacon\'s light range is a sector.\nKnowing the sector area tells you how much area the light covers!"' }, highlightField: 'area' },
       { text: { zh: '诸葛亮：$\\frac{\\theta}{360}$ 就是"这块扇形占了整个圆的几分之几"。\n$90° = \\frac{1}{4}$，$180° = \\frac{1}{2}$，$60° = \\frac{1}{6}$。', en: 'Zhuge Liang: "$\\frac{\\theta}{360}$ tells us \'what fraction of the full circle this sector is\'.\n$90° = \\frac{1}{4}$, $180° = \\frac{1}{2}$, $60° = \\frac{1}{6}$."' }, highlightField: 'area' },
@@ -940,6 +1356,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求两点间距离，输入 $x$ = 距离值。', en: 'Find distance between two points. Enter $x$ = distance value.' },
     data: { targetX: 5, targetY: 0, generatorType: 'COORDINATES_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-3.4-02', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "两阵相隔：阵地 A$(1,2)$，阵地 B$(4,6)$。两阵距离怎么算？", en: "Two formations apart: camp A$(1,2)$, camp B$(4,6)$. Distance between them?" },
+        type: 'choice',
+        choices: [
+          { zh: "$d = \\sqrt{(4-1)^2 + (6-2)^2} = \\sqrt{9+16} = 5$", en: "$d = \\sqrt{(4-1)^2 + (6-2)^2} = \\sqrt{9+16} = 5$" },
+          { zh: "$d = (4-1) + (6-2) = 7$", en: "$d = (4-1) + (6-2) = 7$" },
+        ],
+        onCorrect: { zh: "距离公式 = 勾股定理的应用！\n$d = \\sqrt{(\\Delta x)^2 + (\\Delta y)^2}$\n水平差 $3$，垂直差 $4$ → $\\sqrt{9+16} = \\sqrt{25} = 5$\n这就是 3-4-5 直角三角形！", en: "Distance formula = Pythagoras applied to coordinates!\n$d = \\sqrt{(\\Delta x)^2 + (\\Delta y)^2}$\nHorizontal difference 3, vertical 4 → $\\sqrt{9+16} = \\sqrt{25} = 5$\nA classic 3-4-5 right triangle!" },
+        onWrong: { zh: "直接相加是\"曼哈顿距离\"（沿网格走），不是直线距离。\n直线距离用勾股定理：$\\sqrt{3^2+4^2} = 5$。", en: "Adding is \"Manhattan distance\" (along grid), not straight-line distance.\nStraight-line uses Pythagoras: $\\sqrt{3^2+4^2} = 5$." },
+        onSkip: { zh: "两点间距离 = $\\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$。本质是勾股定理。", en: "Distance = $\\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$. Essentially Pythagoras." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要算两点距离？\n两个营寨之间隔着山河——不能直接丈量。\n但知道了坐标，用勾股定理就能精确算出直线距离！', en: 'Zhuge Liang: "Why calculate distance between two points?\nTwo camps separated by mountains and rivers — can\'t measure directly.\nBut with coordinates, the Pythagorean theorem gives the exact straight-line distance!"' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：距离公式\n$$d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$\n这就是勾股定理 $c = \\sqrt{a^2 + b^2}$ 的坐标版本！', en: 'Zhuge Liang: "Distance formula\n$$d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$\nThis is Pythagoras $c = \\sqrt{a^2 + b^2}$ in coordinate form!"' }, highlightField: 'x' },
@@ -964,6 +1393,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '展开括号并化简。', en: 'Expand brackets and simplify.' },
     data: { a: 3, b: 2, c: 5, generatorType: 'EXPAND_RANDOM' }, difficulty: 'Easy', reward: 400,
     kpId: 'kp-2.3-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "火攻展开：$3(2x + 5)$ 怎么展开？", en: "Fire attack expansion: how to expand $3(2x + 5)$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$6x + 15$——3 分别乘以括号里每一项", en: "$6x + 15$ — multiply 3 by each term inside" },
+          { zh: "$6x + 5$", en: "$6x + 5$" },
+        ],
+        onCorrect: { zh: "展开 = 分配律：外面的数乘以括号里的每一项。\n$3 \\times 2x = 6x$，$3 \\times 5 = 15$\n$3(2x+5) = 6x + 15$\n每一项都要乘，不能只乘第一项！", en: "Expanding = distributive law: multiply the outside by EACH term inside.\n$3 \\times 2x = 6x$, $3 \\times 5 = 15$\n$3(2x+5) = 6x + 15$\nEvery term gets multiplied!" },
+        onWrong: { zh: "5 也要乘以 3！展开括号时，外面的数乘以里面的每一项。\n$3(2x+5) = 3 \\times 2x + 3 \\times 5 = 6x + 15$", en: "5 must also be multiplied by 3! When expanding, the outside multiplies every term inside.\n$3(2x+5) = 3 \\times 2x + 3 \\times 5 = 6x + 15$" },
+        onSkip: { zh: "展开括号：$a(b+c) = ab + ac$。每一项都要乘。", en: "Expand brackets: $a(b+c) = ab + ac$. Multiply every term." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要展开括号？\n$3(x + 5)$ 就像"3份(x加5)"——展开就是把每份的内容都写出来。\n这是代数最基本的操作，后面因式分解、解方程全要用！', en: 'Zhou Yu: "Why expand brackets?\n$3(x + 5)$ means \'3 lots of (x plus 5)\' — expanding writes out each lot.\nThis is the most basic algebra operation — factoring and solving all need it!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：分配律\n$$a(b + c) = ab + ac$$\n括号外的数，要和括号里的每一项都乘一遍。\n就像发工资——每个人都要发到。', en: 'Zhou Yu: "Distributive law\n$$a(b + c) = ab + ac$$\nThe number outside multiplies EVERY term inside.\nLike paying wages — everyone gets their share."' }, highlightField: 'ans' },
@@ -986,6 +1428,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '因式分解表达式。', en: 'Factorise the expression.' },
     data: { a: 4, b: 8, generatorType: 'FACTORISE_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-2.3-03', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "战后整编：$x^2 + 5x + 6$ 能分解成什么形式？", en: "Post-battle reorganisation: how to factorise $x^2 + 5x + 6$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$(x+2)(x+3)$——找两个数：乘积=6，和=5", en: "$(x+2)(x+3)$ — find two numbers: product = 6, sum = 5" },
+          { zh: "$x(x+5) + 6$", en: "$x(x+5) + 6$" },
+        ],
+        onCorrect: { zh: "因式分解 $x^2+bx+c$：找两个数 $p, q$ 使得 $p+q=b$，$pq=c$。\n$2+3=5$ ✓，$2 \\times 3=6$ ✓\n$(x+2)(x+3)$。验证：展开回去 = $x^2+5x+6$ ✓", en: "To factorise $x^2+bx+c$: find $p, q$ where $p+q=b$ and $pq=c$.\n$2+3=5$ ✓, $2 \\times 3=6$ ✓\n$(x+2)(x+3)$. Check: expand back = $x^2+5x+6$ ✓" },
+        onWrong: { zh: "$x(x+5)+6$ 不是完全分解——还有 $+6$ 在外面。\n要找 $(x+p)(x+q)$ 形式：$p \\times q = 6$，$p + q = 5$。", en: "$x(x+5)+6$ isn't fully factored — there's still $+6$ outside.\nFind $(x+p)(x+q)$ form: $p \\times q = 6$, $p + q = 5$." },
+        onSkip: { zh: "因式分解 $x^2+bx+c$：找两个数，和 = $b$，积 = $c$。然后写成 $(x+p)(x+q)$。", en: "Factorise $x^2+bx+c$: find two numbers, sum = $b$, product = $c$. Write as $(x+p)(x+q)$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要学因式分解？\n方程太复杂解不出来？把它拆成几个简单因式的乘积——\n化繁为简是解方程的核心技巧！', en: 'Zhou Yu: "Why learn factorisation?\nEquation too complex? Break it into simpler factors —\nSimplification is the core technique for solving equations!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：找公因式\n看每一项都有什么共同的因子（数字和字母都要看）。\n公因式就是"每个士兵都配备的装备"。', en: 'Zhou Yu: "Find common factor\nLook at what every term shares (check both numbers and letters).\nThe common factor is \'equipment every soldier carries\'."' }, highlightField: 'ans' },
@@ -1008,6 +1463,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '解一元一次不等式。', en: 'Solve a linear inequality.' },
     data: { a: 3, b: 5, c: 20, generatorType: 'INEQUALITY_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-2.7-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "粮草底线：军需要求 $3x + 7 > 22$。$x$ 最少是多少？", en: "Supply minimum: requirement $3x + 7 > 22$. What is the minimum $x$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$x > 5$——和解方程一样，两边减 7 再除以 3", en: "$x > 5$ — same as solving equations: subtract 7, divide by 3" },
+          { zh: "$x > 29$", en: "$x > 29$" },
+        ],
+        onCorrect: { zh: "解不等式和解方程一样——但注意：乘除负数时符号要反转！\n$3x + 7 > 22$\n$3x > 15$\n$x > 5$\n本题除以正数 3，符号不变。", en: "Solving inequalities is like equations — but beware: multiply/divide by negative → flip the sign!\n$3x + 7 > 22$\n$3x > 15$\n$x > 5$\nHere we divide by positive 3, so sign stays." },
+        onWrong: { zh: "要两边减 7，不是加 7！$3x > 22 - 7 = 15$，$x > 5$。\n不等式的操作和方程一样：减再除。", en: "Subtract 7 from both sides, not add! $3x > 22 - 7 = 15$, $x > 5$.\nInequality operations are the same as equations: subtract then divide." },
+        onSkip: { zh: "解不等式：像方程一样移项。注意：乘除负数要翻转不等号。", en: "Solve inequalities like equations. Key rule: multiply/divide by negative → flip the inequality sign." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要学不等式？\n方程告诉你恰好是多少，但现实中更多的是至少需要多少、最多能承受多少——\n不等式就是描述范围和限制条件的数学语言！', en: 'Zhuge Liang: "Why learn inequalities?\nEquations tell you exactly how much, but reality is about at least or at most —\nInequalities are the math language for ranges and constraints!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：解法和方程一样\n两边同时减 $5$，再同时除以 $3$。\n⚠️ 唯一区别：除以负数时，不等号要翻转！', en: 'Zhuge Liang: "Solving is the same as equations\nSubtract 5 from both sides, then divide by 3.\n⚠️ Only difference: dividing by a negative FLIPS the inequality sign!"' }, highlightField: 'ans' },
@@ -1032,6 +1500,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求扇形面积，已知半径和角度。', en: 'Find sector area given radius and angle.' },
     data: { r: 10, pi: 3.14, angle: 90, mode: 'area', answer: 78.5, generatorType: 'SECTOR_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-5.3-03', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "水寨扇面：半径 $r=8$m，角度 $45°$。扇形面积怎么算？", en: "Water camp sector: radius $r=8$m, angle $45°$. Sector area?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{45}{360} \\times \\pi \\times 8^2 = 8\\pi$ m²", en: "$\\frac{45}{360} \\times \\pi \\times 8^2 = 8\\pi$ m²" },
+          { zh: "$\\frac{1}{2} \\times 8 \\times 8 = 32$ m²", en: "$\\frac{1}{2} \\times 8 \\times 8 = 32$ m²" },
+        ],
+        onCorrect: { zh: "$\\frac{45}{360} = \\frac{1}{8}$，扇形占圆的八分之一。\n$\\frac{1}{8} \\times \\pi \\times 64 = 8\\pi \\approx 25.1$ m²\n先化简分数再算，更不容易出错。", en: "$\\frac{45}{360} = \\frac{1}{8}$, the sector is one-eighth of the circle.\n$\\frac{1}{8} \\times \\pi \\times 64 = 8\\pi \\approx 25.1$ m²\nSimplify the fraction first for easier calculation." },
+        onWrong: { zh: "那是三角形面积公式。扇形是圆的一部分，要用 $\\frac{\\theta}{360} \\times \\pi r^2$。\n$\\frac{45}{360} \\times 64\\pi = 8\\pi$ m²", en: "That's the triangle area formula. A sector is part of a circle: $\\frac{\\theta}{360} \\times \\pi r^2$.\n$\\frac{45}{360} \\times 64\\pi = 8\\pi$ m²" },
+        onSkip: { zh: "扇形面积 = $\\frac{\\theta}{360} \\pi r^2$。先把 $\\frac{\\theta}{360}$ 化简。", en: "Sector area = $\\frac{\\theta}{360} \\pi r^2$. Simplify $\\frac{\\theta}{360}$ first." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要了解扇形？\n圆形城楼上的弓箭手，射程覆盖的范围就是一个扇形——\n角度决定你能守多宽的防线！', en: 'Zhou Yu: "Why understand sectors?\nArchers atop a circular tower — their range covers a sector —\nThe angle determines how wide a defense line you can hold!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：扇形面积 = 圆面积的一部分\n$$A = \\frac{\\theta}{360} \\times \\pi r^2$$\n角度占 $360°$ 的几分之几，面积就是圆面积的几分之几。', en: 'Zhou Yu: "Sector area = fraction of circle area\n$$A = \\frac{\\theta}{360} \\times \\pi r^2$$\nThe angle as a fraction of 360° gives the area as a fraction of the full circle."' }, highlightField: 'ans' },
@@ -1054,6 +1535,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '求弧长，已知半径和角度。', en: 'Find arc length given radius and angle.' },
     data: { r: 8, pi: 3.14, angle: 120, mode: 'circumference', answer: 16.75, generatorType: 'SECTOR_RANDOM' }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-5.3-04', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "弧长测量：半径 $r=6$m，圆心角 $120°$。弧长是多少？", en: "Arc length measurement: radius $r=6$m, angle $120°$. Arc length?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{120}{360} \\times 2\\pi \\times 6 = 4\\pi$ m", en: "$\\frac{120}{360} \\times 2\\pi \\times 6 = 4\\pi$ m" },
+          { zh: "$\\frac{120}{360} \\times \\pi \\times 6^2$", en: "$\\frac{120}{360} \\times \\pi \\times 6^2$" },
+        ],
+        onCorrect: { zh: "弧长 = 圆周长的一部分 = $\\frac{\\theta}{360} \\times 2\\pi r$。\n$\\frac{120}{360} = \\frac{1}{3}$，弧长 = $\\frac{1}{3} \\times 12\\pi = 4\\pi$ m。\n弧长是长度（一维），面积是二维！", en: "Arc length = fraction of circumference = $\\frac{\\theta}{360} \\times 2\\pi r$.\n$\\frac{120}{360} = \\frac{1}{3}$, arc = $\\frac{1}{3} \\times 12\\pi = 4\\pi$ m.\nArc is length (1D), area is 2D!" },
+        onWrong: { zh: "那是扇形面积公式！弧长用周长：$\\frac{\\theta}{360} \\times 2\\pi r$。\n面积 = $\\frac{\\theta}{360} \\pi r^2$，弧长 = $\\frac{\\theta}{360} \\times 2\\pi r$。", en: "That's the sector area formula! Arc length uses circumference: $\\frac{\\theta}{360} \\times 2\\pi r$.\nArea = $\\frac{\\theta}{360} \\pi r^2$, Arc = $\\frac{\\theta}{360} \\times 2\\pi r$." },
+        onSkip: { zh: "弧长 = $\\frac{\\theta}{360} \\times 2\\pi r$。面积用 $\\pi r^2$，弧长用 $2\\pi r$。", en: "Arc length = $\\frac{\\theta}{360} \\times 2\\pi r$. Area uses $\\pi r^2$, arc uses $2\\pi r$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要算弧长？\n城墙是弯的——要在弧形城墙上布置多少守军，得先知道这段弧有多长！\n弧长 = 圆周长的一部分。', en: 'Zhou Yu: "Why calculate arc length?\nCity walls curve — to deploy guards along a curved wall, first know how long the arc is!\nArc length = part of the circumference."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：公式\n$$L = \\frac{\\theta}{360} \\times 2\\pi r$$\n和扇形面积同样的思路——角度的比例！', en: 'Zhou Yu: "Formula\n$$L = \\frac{\\theta}{360} \\times 2\\pi r$$\nSame logic as sector area — the angle ratio!"' }, highlightField: 'ans' },
@@ -1078,6 +1572,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '计算一组数据的平均数。', en: 'Calculate the mean of a dataset.' },
     data: { values: [80, 60, 45, 90, 70], generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-9.1-01', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "军力均值：五营兵力分别是 30, 40, 50, 60, 70。平均每营多少人？", en: "Army mean: five camps have 30, 40, 50, 60, 70 troops. Average per camp?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{30+40+50+60+70}{5} = 50$", en: "$\\frac{30+40+50+60+70}{5} = 50$" },
+          { zh: "中间那个数 50", en: "The middle number, 50" },
+        ],
+        onCorrect: { zh: "平均数 = $\\frac{\\text{总和}}{\\text{个数}}$\n$\\frac{250}{5} = 50$\n中间那个数是中位数——这里碰巧和平均数相同，但通常不一样！", en: "Mean = $\\frac{\\text{total}}{\\text{count}}$\n$\\frac{250}{5} = 50$\nThe middle number is the median — it happens to equal the mean here, but usually they differ!" },
+        onWrong: { zh: "中间的数是中位数 (median)，不是平均数 (mean)！\n平均数必须先求总和再除以个数。这里碰巧相同是因为数据均匀分布。", en: "The middle number is the median, not the mean!\nMean requires summing all values then dividing by count. They match here only because the data is evenly spaced." },
+        onSkip: { zh: "平均数 (mean) = 总和 ÷ 个数。中位数 (median) = 排序后中间值。别混淆。", en: "Mean = sum ÷ count. Median = middle value when sorted. Don't confuse them." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马懿：为什么简单平均不够？\n曹操 80 万大军，刘备 5 万——两人战力"平均"是 42.5 万？当然不对！\n加权平均：人多的国家占更大比重。', en: 'Sima Yi: "Why isn\'t simple average enough?\nCao Cao has 800k troops, Liu Bei 50k — average is 425k? Clearly wrong!\nWeighted mean: larger armies count more."' }, highlightField: 'ans' },
       { text: { zh: '司马懿：公式\n$$\\bar{x} = \\frac{\\sum x}{n}$$\n先求总和，再除以个数。', en: 'Sima Yi: "Formula\n$$\\bar{x} = \\frac{\\sum x}{n}$$\nSum all values, then divide by count."' }, highlightField: 'ans' },
@@ -1100,6 +1607,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '计算一组数据的极差。', en: 'Calculate the range of a dataset.' },
     data: { values: [34, 67, 23, 89, 45, 12, 78], generatorType: 'STATISTICS_RANGE_RANDOM' }, difficulty: 'Easy', reward: 400,
     kpId: 'kp-9.3-03', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "极差分析：各路兵力——最多 120 人，最少 30 人。极差（range）是多少？", en: "Range analysis: troop sizes — max 120, min 30. What is the range?" },
+        type: 'choice',
+        choices: [
+          { zh: "$120 - 30 = 90$", en: "$120 - 30 = 90$" },
+          { zh: "$\\frac{120+30}{2} = 75$", en: "$\\frac{120+30}{2} = 75$" },
+        ],
+        onCorrect: { zh: "极差 = 最大值 - 最小值 = 数据的\"跨度\"。\n$120 - 30 = 90$\n极差衡量数据的离散程度——越大越分散。\n$\\frac{120+30}{2}$ 是两个端点的中间值，不是极差。", en: "Range = maximum - minimum = the \"spread\" of data.\n$120 - 30 = 90$\nRange measures dispersion — larger range means more spread out.\n$\\frac{120+30}{2}$ is the midpoint, not range." },
+        onWrong: { zh: "那是中点值（midrange），不是极差！极差 = 最大 - 最小。\n$120 - 30 = 90$", en: "That's the midrange, not the range! Range = max - min.\n$120 - 30 = 90$" },
+        onSkip: { zh: "极差 = 最大值 - 最小值。衡量数据跨度。", en: "Range = maximum - minimum. Measures data spread." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马懿：为什么要算极差？\n知道平均值还不够——两支部队平均战力相同，但一支稳定、另一支忽高忽低。\n极差告诉你数据的波动范围！', en: 'Sima Yi: "Why calculate range?\nThe average alone isn\'t enough — two armies with the same average, but one stable, one volatile.\nRange tells you the spread!"' }, highlightField: 'ans' },
       { text: { zh: '司马懿：公式\n$$\\text{极差} = \\text{最大值} - \\text{最小值}$$\n就这么简单——找最大、找最小、相减。', en: 'Sima Yi: "Formula\n$$\\text{Range} = \\text{max} - \\text{min}$$\nThat simple — find max, find min, subtract."' }, highlightField: 'ans' },
@@ -1122,6 +1642,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '找出一组数据的众数。', en: 'Find the mode of a dataset.' },
     data: { values: [5, 3, 7, 3, 8, 3, 6, 7, 3], generatorType: 'STATISTICS_MODE_RANDOM' }, difficulty: 'Easy', reward: 400,
     kpId: 'kp-9.1-01', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "众数决策：刀 5 把、枪 8 把、剑 8 把、弓 3 把。出现最多的武器是什么？", en: "Mode decision: 5 swords, 8 spears, 8 blades, 3 bows. Most frequent weapon?" },
+        type: 'choice',
+        choices: [
+          { zh: "枪和剑都是众数——各出现 8 次", en: "Spears and blades are both modes — each appears 8 times" },
+          { zh: "只有一个众数", en: "There can only be one mode" },
+        ],
+        onCorrect: { zh: "众数 = 出现次数最多的数据。可以有多个众数！\n枪 8 次，剑 8 次 → 双众数 (bimodal)。\n如果所有数据出现次数相同 → 无众数。", en: "Mode = most frequent value. There CAN be multiple modes!\nSpears 8, blades 8 → bimodal.\nIf all values appear equally → no mode." },
+        onWrong: { zh: "众数可以有多个！当两个或更多值出现次数相同且最多时，都是众数。\n这里枪和剑都出现了 8 次。", en: "There can be multiple modes! When two or more values share the highest frequency, all are modes.\nHere spears and blades both appear 8 times." },
+        onSkip: { zh: "众数 = 出现最多的值。可有 0 个、1 个或多个众数。", en: "Mode = most frequent value. Can have 0, 1, or multiple modes." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马懿：为什么要找众数？\n调查敌军最常用的战术——出现最多次的就是主力战术。\n众数帮你快速识别最常见的情况！', en: 'Sima Yi: "Why find the mode?\nInvestigate the enemy\'s most common tactics — the most frequent is the main strategy.\nThe mode identifies the most common case!"' }, highlightField: 'ans' },
       { text: { zh: '司马懿：方法\n1. 数每个值出现几次\n2. 出现最多的就是众数\n（可能有多个众数，也可能没有——如果每个值只出现一次）', en: 'Sima Yi: "Method\n1. Count how often each value appears\n2. The most frequent is the mode\n(There can be multiple modes, or none if every value appears once)"' }, highlightField: 'ans' },
@@ -1146,6 +1679,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: 'AB 是直径，C 在圆上。求角度 $x$。', en: 'AB is a diameter, C is on the circle. Find angle $x$.' },
     data: { knownAngle: 35, answer: 55, theoremType: 'semicircle', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-5.4-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "半圆直角：直径 AB 上有一点 C 在圆上。$\\angle ACB$ 等于多少？为什么？", en: "Semicircle angle: point C is on a circle with diameter AB. What is $\\angle ACB$? Why?" },
+        type: 'choice',
+        choices: [
+          { zh: "$90°$——直径对应的圆周角是直角", en: "$90°$ — angle in a semicircle is a right angle" },
+          { zh: "$180°$", en: "$180°$" },
+        ],
+        onCorrect: { zh: "泰勒斯定理：直径所对的圆周角永远是 $90°$。\n为什么？圆心角 = $180°$（直径是半圆），圆周角 = $\\frac{1}{2}$ 圆心角 = $90°$。\n看到直径 → 想到直角！", en: "Thales' theorem: angle subtended by a diameter is always $90°$.\nWhy? Central angle = $180°$ (diameter spans semicircle), inscribed angle = $\\frac{1}{2}$ central = $90°$.\nSee diameter → think right angle!" },
+        onWrong: { zh: "$180°$ 是一条直线的角度，不是圆周角。直径对的圆周角 = $90°$。\n这是最基础的圆定理之一。", en: "$180°$ is a straight line angle, not an inscribed angle. Angle in semicircle = $90°$.\nThis is one of the most fundamental circle theorems." },
+        onSkip: { zh: "半圆定理：直径对应的圆周角 = $90°$。看到直径就找直角。", en: "Semicircle theorem: angle subtended by diameter = $90°$. See diameter → find right angle." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要学圆中角度？\n赤壁之战，周瑜从岸上观察曹军船阵——"哪个位置看到的角度最大？"\n古希腊数学家泰勒斯发现：圆的直径所对的圆周角，永远是直角！\n无论 C 在圆上哪个位置，$\\angle ACB$ 都等于 $90°$。', en: 'Zhou Yu: "Why learn circle angles?\nAt Red Cliffs, Zhou Yu watched the fleet from shore — \'which position gives the widest angle?\'\nThales discovered: the inscribed angle subtended by a diameter is always a right angle!\nNo matter where C is, $\\angle ACB$ always equals $90°$."' }, highlightField: 'x' },
       { text: { zh: '周瑜：关键定理\n直径所对的圆周角 = $90°$\n因为 AB 是直径，所以 $\\angle ACB = 90°$。\n三角形内角和 = $180°$，所以另外两个角加起来 = $90°$。', en: 'Zhou Yu: "Key theorem\nThe inscribed angle subtended by a diameter = $90°$\nSince AB is diameter, $\\angle ACB = 90°$.\nAngles in a triangle sum to $180°$, so the other two add up to $90°$."' }, highlightField: 'x' },
@@ -1168,6 +1714,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '已知圆心角或圆周角，求另一个角 $x$。', en: 'Given a central or inscribed angle subtending the same arc, find the other angle $x$.' },
     data: { knownAngle: 120, answer: 60, isGivenCentral: true, inscribedAngle: 60, centralAngle: 120, theoremType: 'center_double', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-5.4-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "圆心角定理：圆心角和同弧上的圆周角有什么关系？", en: "Central angle theorem: how are the central angle and the inscribed angle on the same arc related?" },
+        type: 'choice',
+        choices: [
+          { zh: "圆心角 = 2 × 圆周角", en: "Central angle = 2 × inscribed angle" },
+          { zh: "它们相等", en: "They are equal" },
+        ],
+        onCorrect: { zh: "这是所有圆定理的根基！同一条弧：\n圆心角 = $2 \\times$ 圆周角\n例如：圆周角 $35°$ → 圆心角 $70°$\n半圆定理就是它的特例（圆心角 $180°$ → 圆周角 $90°$）。", en: "This is the foundation of all circle theorems! Same arc:\nCentral angle = $2 \\times$ inscribed angle\nExample: inscribed $35°$ → central $70°$\nSemicircle theorem is a special case (central $180°$ → inscribed $90°$)." },
+        onWrong: { zh: "它们不相等！圆心角是圆周角的两倍。\n圆心在圆的正中心，\"看\"同一段弧的角度更大。", en: "They're not equal! Central angle is twice the inscribed angle.\nThe centre is right in the middle, so it \"sees\" the same arc at a wider angle." },
+        onSkip: { zh: "圆心角 = 2 × 圆周角（同弧）。这是所有圆定理的基础。", en: "Central angle = 2 × inscribed angle (same arc). Foundation of all circle theorems." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么圆心角是圆周角的两倍？\n\n想象你站在圆心 O 看一段弧——你的视角最宽，正好是圆周上任意一点 C 看同一段弧的两倍。这叫"圆心角定理"：同弧所对的圆心角 = 2 × 圆周角。', en: 'Zhuge Liang: Why is the central angle twice the inscribed angle?\n\nImagine standing at centre O looking at an arc — your view is the widest, exactly twice the view from any point C on the circle looking at the same arc. This is the Central Angle Theorem: central angle = 2 × inscribed angle on the same arc.' }, highlightField: 'x' },
       { text: { zh: '诸葛亮：核心定理\n$$\\angle AOB = 2 \\times \\angle ACB$$\n其中 $O$ 是圆心，$A$、$B$ 是弧的端点，$C$ 是圆周上任意一点（与弧同侧）。\n\n圆心"看"得更宽，所以圆心角更大。', en: 'Zhuge Liang: Core theorem\n$$\\angle AOB = 2 \\times \\angle ACB$$\nWhere $O$ is the centre, $A$ and $B$ are the arc endpoints, and $C$ is any point on the circle on the same side of the arc.\n\nThe centre "sees" wider, so the central angle is larger.' }, highlightField: 'x' },
@@ -1228,6 +1787,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '弧AB上两点C和D，已知角ACB=35°，求角ADB。', en: 'Points C and D on arc AB. Given angle ACB = 35°, find angle ADB.' },
     data: { answer: 35, theoremType: 'same_segment', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-4.7-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "同弓形角：同一条弧 AB 上的两个圆周角 $\\angle ACB$ 和 $\\angle ADB$。它们有什么关系？", en: "Angles in same segment: two inscribed angles $\\angle ACB$ and $\\angle ADB$ on the same arc AB. Relationship?" },
+        type: 'choice',
+        choices: [
+          { zh: "它们相等——同弧上的圆周角相等", en: "They are equal — angles subtended by the same arc are equal" },
+          { zh: "加起来等于 $180°$", en: "They add up to $180°$" },
+        ],
+        onCorrect: { zh: "同弧上的圆周角相等！不管 C 和 D 在弧上什么位置。\n为什么？因为它们都是同一个圆心角的一半。\n$\\angle ACB = \\angle ADB = \\frac{1}{2} \\times$ 圆心角", en: "Inscribed angles on the same arc are equal! Regardless of where C and D are on the arc.\nWhy? Both are half the same central angle.\n$\\angle ACB = \\angle ADB = \\frac{1}{2} \\times$ central angle" },
+        onWrong: { zh: "加起来 $180°$ 是圆内接四边形对角的性质。\n同弧上的圆周角是相等的，不是互补的。", en: "Adding to $180°$ is for opposite angles in a cyclic quadrilateral.\nAngles in the same segment are equal, not supplementary." },
+        onSkip: { zh: "同弧上的圆周角相等。它们都是同一圆心角的一半。", en: "Angles in the same segment are equal. Both are half the same central angle." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么同弓形上的角相等？\n想象圆形城墙内，两个哨兵站在同一侧——他们看同一段墙的视角竟然一模一样！\n这就是同弓形角定理：同弧同侧的圆周角相等。', en: 'Zhou Yu: "Why are angles in the same segment equal?\nImagine two sentries inside a circular wall on the same side — they see the same wall section at exactly the same angle!\nThis is the same segment theorem: inscribed angles on the same arc and same side are equal."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：关键定理\n同弧所对、同侧的圆周角相等：\n$$\\angle ACB = \\angle ADB$$\nC 和 D 都在弧 AB 的同一侧，所以它们的角相等。', en: 'Zhou Yu: "Key theorem\nInscribed angles subtending the same arc on the same side are equal:\n$$\\angle ACB = \\angle ADB$$\nC and D are on the same side of arc AB, so their angles are equal."' }, highlightField: 'ans' },
@@ -1250,6 +1822,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '圆内接四边形一角=110°，求对角。', en: 'Cyclic quadrilateral: one angle = 110°, find the opposite angle.' },
     data: { answer: 70, theoremType: 'cyclic_quad', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-4.7-03', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "圆内接四边形 ABCD。$\\angle A = 110°$。对角 $\\angle C$ 等于多少？", en: "Cyclic quadrilateral ABCD. $\\angle A = 110°$. What is the opposite angle $\\angle C$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\angle C = 70°$——对角互补，$110° + 70° = 180°$", en: "$\\angle C = 70°$ — opposite angles supplementary, $110° + 70° = 180°$" },
+          { zh: "$\\angle C = 110°$——对角相等", en: "$\\angle C = 110°$ — opposite angles equal" },
+        ],
+        onCorrect: { zh: "圆内接四边形：对角之和 = $180°$（互补）。\n$\\angle A + \\angle C = 180°$，$\\angle B + \\angle D = 180°$\n不是相等！是互补。\n只有四个顶点都在圆上才成立。", en: "Cyclic quadrilateral: opposite angles sum to $180°$ (supplementary).\n$\\angle A + \\angle C = 180°$, $\\angle B + \\angle D = 180°$\nNot equal — supplementary!\nOnly works when all four vertices lie on the circle." },
+        onWrong: { zh: "对角不是相等，是互补！$\\angle A + \\angle C = 180°$。\n$110° + \\angle C = 180°$，所以 $\\angle C = 70°$。", en: "Opposite angles aren't equal — they're supplementary! $\\angle A + \\angle C = 180°$.\n$110° + \\angle C = 180°$, so $\\angle C = 70°$." },
+        onSkip: { zh: "圆内接四边形：对角互补（和 = $180°$）。记住：补不是等！", en: "Cyclic quadrilateral: opposite angles are supplementary (sum = $180°$). Remember: supplementary, not equal!" },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：为什么圆内接四边形的对角互补？\n四个顶点都在圆上——它们被圆"束缚"住了。\n对角分别对应两段弧，两段弧加起来 = 整个圆 = 360°。\n所以对角加起来 = 360°/2 = 180°！', en: 'Ma Liang: "Why do opposite angles of a cyclic quad sum to 180°?\nAll four vertices on the circle — constrained by the circle.\nOpposite angles subtend two arcs that together make the full circle = 360°.\nSo opposite angles sum to 360°/2 = 180°!"' }, highlightField: 'ans' },
       { text: { zh: '马良：关键定理\n$$\\angle A + \\angle C = 180°$$\n$$\\angle B + \\angle D = 180°$$\n圆内接四边形的对角互补。', en: 'Ma Liang: "Key theorem\n$$\\angle A + \\angle C = 180°$$\n$$\\angle B + \\angle D = 180°$$\nOpposite angles of a cyclic quadrilateral are supplementary."' }, highlightField: 'ans' },
@@ -1272,6 +1857,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '已知半径与弦夹角=55°，切线与弦的夹角=?', en: 'Given radius-chord angle = 55°, find the tangent-chord angle.' },
     data: { answer: 35, theoremType: 'tangent_radius', generatorType: 'CIRCLE_THEOREM_RANDOM' }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-4.7-04', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "一条直线和圆只有一个交点——这是切线。切线和半径在切点处成什么角？", en: "A line touches a circle at exactly one point — a tangent. What angle does the tangent make with the radius at the point of contact?" },
+        type: 'choice',
+        choices: [
+          { zh: "$90°$——切线⊥半径", en: "$90°$ — tangent is perpendicular to radius" },
+          { zh: "$60°$", en: "$60°$" },
+        ],
+        onCorrect: { zh: "切线与半径在切点处垂直 ($90°$)。\n这是因为半径是从圆心到切点的最短距离——最短距离一定是垂直的。\n看到切线 → 画半径 → 标直角！", en: "Tangent meets radius at $90°$ at the point of tangency.\nThe radius to the tangent point is the shortest distance from centre to line — shortest distance is always perpendicular.\nSee tangent → draw radius → mark right angle!" },
+        onWrong: { zh: "$60°$ 没有特殊几何意义。切线和半径永远垂直：$90°$。\n这是一个\"永远成立\"的定理，不依赖圆的大小。", en: "$60°$ has no special geometric significance here. Tangent and radius are always perpendicular: $90°$.\nThis theorem holds universally, regardless of circle size." },
+        onSkip: { zh: "切线⊥半径（在切点处成 $90°$）。看到切线就找直角。", en: "Tangent ⊥ radius ($90°$ at point of tangency). See tangent → find right angle." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '庞统：为什么切线与半径垂直？\n想象一个轮子在地面上滚动——轮子的半径指向地面，而地面就是切线。\n轮子与地面的接触点，半径和地面永远成90°！', en: 'Pang Tong: "Why is the tangent perpendicular to the radius?\nImagine a wheel rolling on the ground — the radius points to the ground, and the ground is the tangent.\nAt the contact point, the radius and ground always make 90°!"' }, highlightField: 'ans' },
       { text: { zh: '庞统：关键定理\n切线与半径在切点处垂直：\n$$\\text{切线} \\perp \\text{半径}$$\n所以切线与半径的夹角 = 90°。', en: 'Pang Tong: "Key theorem\nTangent is perpendicular to radius at point of tangency:\n$$\\text{Tangent} \\perp \\text{Radius}$$\nSo tangent-radius angle = 90°."' }, highlightField: 'ans' },
@@ -1332,6 +1930,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: 'y与x²成正比，x=3时y=18。x=5时y=?', en: 'y is proportional to x². When x=3, y=18. Find y when x=5.' },
     data: { answer: 50, generatorType: 'RATIO_Y7_RANDOM', mode: 'simplify' }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-2.8-04', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "正比平方：$y \\propto x^2$。当 $x=3$ 时 $y=18$。$x=5$ 时 $y=?$", en: "Direct proportion squared: $y \\propto x^2$. When $x=3$, $y=18$. Find $y$ when $x=5$." },
+        type: 'choice',
+        choices: [
+          { zh: "先求 $k$：$18 = k \\times 9$，$k=2$。再算 $y = 2 \\times 25 = 50$", en: "Find $k$ first: $18 = k \\times 9$, $k=2$. Then $y = 2 \\times 25 = 50$" },
+          { zh: "$y = 18 \\times \\frac{5}{3} = 30$", en: "$y = 18 \\times \\frac{5}{3} = 30$" },
+        ],
+        onCorrect: { zh: "$y \\propto x^2$ 意味着 $y = kx^2$。\n第一步：用已知值求 $k$。$18 = k \\times 3^2 = 9k$，$k=2$。\n第二步：$y = 2 \\times 5^2 = 50$。\n注意：不是线性比例！$x$ 变 $\\frac{5}{3}$ 倍，$y$ 变 $(\\frac{5}{3})^2$ 倍。", en: "$y \\propto x^2$ means $y = kx^2$.\nStep 1: Find $k$ using known values. $18 = k \\times 3^2 = 9k$, $k=2$.\nStep 2: $y = 2 \\times 5^2 = 50$.\nNote: not linear! $x$ scales by $\\frac{5}{3}$, $y$ scales by $(\\frac{5}{3})^2$." },
+        onWrong: { zh: "$\\frac{5}{3}$ 只在线性比例 ($y \\propto x$) 时成立。这里是 $y \\propto x^2$！\n必须先求常数 $k$，再用 $y = kx^2$ 计算。", en: "$\\frac{5}{3}$ only works for linear proportion ($y \\propto x$). Here it's $y \\propto x^2$!\nMust find constant $k$ first, then use $y = kx^2$." },
+        onSkip: { zh: "$y \\propto x^n$ → $y = kx^n$。用已知点求 $k$，再代入新 $x$。", en: "$y \\propto x^n$ → $y = kx^n$. Use known point to find $k$, then substitute new $x$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么有些量与平方成正比？\n火势蔓延面积和风速不是简单的正比——风速翻倍，面积变成4倍！\n因为面积与风速的平方成正比：$y = kx^2$。', en: 'Zhuge Liang: "Why are some quantities proportional to the square?\nFire spread area and wind speed aren\'t simply proportional — double the wind, quadruple the area!\nBecause area is proportional to wind speed squared: $y = kx^2$."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：关键公式\n$y = kx^2$\n$k$ 是比例常数。关键：先用已知数据求 $k$。', en: 'Zhuge Liang: "Key formula\n$y = kx^2$\n$k$ is the proportionality constant. Key: find $k$ first using known data."' }, highlightField: 'ans' },
@@ -1354,6 +1965,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: 'z与xy成正比，x=2,y=3时z=12。x=4,y=5时z=?', en: 'z is proportional to xy. When x=2, y=3, z=12. Find z when x=4, y=5.' },
     data: { answer: 40, generatorType: 'RATIO_Y7_RANDOM', mode: 'simplify' }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-2.8-06', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "联合变量：$z \\propto xy$。当 $x=2, y=3$ 时 $z=12$。$x=4, y=5$ 时 $z=?$", en: "Joint variation: $z \\propto xy$. When $x=2, y=3$, $z=12$. Find $z$ when $x=4, y=5$." },
+        type: 'choice',
+        choices: [
+          { zh: "$z = kxy$，$k = \\frac{12}{6} = 2$，$z = 2 \\times 4 \\times 5 = 40$", en: "$z = kxy$, $k = \\frac{12}{6} = 2$, $z = 2 \\times 4 \\times 5 = 40$" },
+          { zh: "$z = 12 \\times \\frac{4}{2} \\times \\frac{5}{3}$", en: "$z = 12 \\times \\frac{4}{2} \\times \\frac{5}{3}$" },
+        ],
+        onCorrect: { zh: "联合正比：$z = kxy$。\n$12 = k \\times 2 \\times 3 = 6k$，$k=2$。\n$z = 2 \\times 4 \\times 5 = 40$。\n第二种方法虽然也能得到正确答案，但先求 $k$ 更清晰可靠。", en: "Joint variation: $z = kxy$.\n$12 = k \\times 2 \\times 3 = 6k$, $k=2$.\n$z = 2 \\times 4 \\times 5 = 40$.\nThe ratio method also works, but finding $k$ first is clearer and more reliable." },
+        onWrong: { zh: "这个比例方法其实也能算出正确答案！$12 \\times 2 \\times \\frac{5}{3} = 40$。\n但更标准的做法是：先写公式 $z=kxy$，求 $k$，再代入。", en: "The ratio method actually gives the right answer too! $12 \\times 2 \\times \\frac{5}{3} = 40$.\nBut the standard approach is: write formula $z=kxy$, find $k$, then substitute." },
+        onSkip: { zh: "联合正比 $z \\propto xy$：$z = kxy$。用已知值求 $k$。", en: "Joint variation $z \\propto xy$: $z = kxy$. Find $k$ from known values." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么需要联合变量？\n攻城力不只取决于兵力——武器也重要！\n兵力翻倍，攻城力翻倍；武器翻倍，也翻倍。两个同时翻倍？变成4倍！\n$z = kxy$——联合比例。', en: 'Zhou Yu: "Why joint variation?\nSiege power depends on both troops AND weapons!\nDouble troops, double power. Double weapons, double power. Both double? Quadruple!\n$z = kxy$ — joint variation."' }, highlightField: 'ans' },
       { text: { zh: '周瑜：关键公式\n$z = kxy$\n$z$ 同时与 $x$ 和 $y$ 成正比。\n先用已知数据求 $k$。', en: 'Zhou Yu: "Key formula\n$z = kxy$\n$z$ is proportional to both $x$ and $y$ simultaneously.\nFind $k$ first using known data."' }, highlightField: 'ans' },
@@ -1376,6 +2000,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '$y = k/x$ 的图像是什么形状？(1=直线, 2=抛物线, 3=双曲线)', en: 'What shape is the graph of $y = k/x$? (1=line, 2=parabola, 3=hyperbola)' },
     data: { answer: 3 }, difficulty: 'Medium', reward: 450,
     kpId: 'kp-2.8-08', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "变量图像：$y = \\frac{k}{x}$（$k>0$）的图像是什么形状？", en: "Variable graph: what shape is $y = \\frac{k}{x}$ ($k>0$)?" },
+        type: 'choice',
+        choices: [
+          { zh: "双曲线——两条分离的曲线在第一和第三象限", en: "Hyperbola — two separate curves in quadrants I and III" },
+          { zh: "一条直线", en: "A straight line" },
+        ],
+        onCorrect: { zh: "反比关系 $y = \\frac{k}{x}$ 产生双曲线。\n$x$ 越大，$y$ 越小（但永远不到零）。\n$x=0$ 无定义——图像永远不穿过 $y$ 轴。\n$k>0$ 时在一、三象限；$k<0$ 时在二、四象限。", en: "Inverse relationship $y = \\frac{k}{x}$ produces a hyperbola.\nAs $x$ increases, $y$ decreases (but never reaches zero).\n$x=0$ is undefined — graph never crosses the y-axis.\n$k>0$: quadrants I & III; $k<0$: quadrants II & IV." },
+        onWrong: { zh: "直线是 $y = mx + c$。$y = \\frac{k}{x}$ 是反比——曲线，不是直线。", en: "Straight line is $y = mx + c$. $y = \\frac{k}{x}$ is inverse — a curve, not a line." },
+        onSkip: { zh: "$y = \\frac{k}{x}$：双曲线。两条曲线趋近但不碰到坐标轴（渐近线）。", en: "$y = \\frac{k}{x}$: hyperbola. Two curves approaching but never touching the axes (asymptotes)." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么要认识变量图像？\n看到一张图就能判断变量关系——这是数学直觉。\n直线 = 正比，抛物线 = 平方关系，双曲线 = 反比例。', en: 'Zhuge Liang: "Why recognize variation graphs?\nSee a graph and instantly know the relationship — that\'s mathematical intuition.\nLine = direct proportion, parabola = square, hyperbola = inverse."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：三种基本图形\n1. $y = kx$ → 直线（过原点）\n2. $y = kx^2$ → 抛物线（U形/倒U形）\n3. $y = k/x$ → 双曲线（两条弯曲的分支）', en: 'Zhuge Liang: "Three basic shapes\n1. $y = kx$ → straight line (through origin)\n2. $y = kx^2$ → parabola (U-shape)\n3. $y = k/x$ → hyperbola (two curved branches)"' }, highlightField: 'ans' },
@@ -1436,6 +2073,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: 'a=4(±0.5), b=3(±0.5)。a+b的上界=?', en: 'a=4 (±0.5), b=3 (±0.5). Upper bound of a+b = ?' },
     data: { answer: 8 }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-1.10-03', sectionId: 'number',
+    discoverSteps: [
+      {
+        prompt: { zh: "运算中的界：$a = 3.5$（精确到 0.1），$b = 2.5$（精确到 0.1）。$a + b$ 的上界是多少？", en: "Bounds in operations: $a = 3.5$ (to 1 d.p.), $b = 2.5$ (to 1 d.p.). Upper bound of $a + b$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$3.55 + 2.55 = 6.1$——各取上界再相加", en: "$3.55 + 2.55 = 6.1$ — add the upper bounds" },
+          { zh: "$3.5 + 2.5 = 6.0$", en: "$3.5 + 2.5 = 6.0$" },
+        ],
+        onCorrect: { zh: "精确到 0.1 意味着：$3.5$ 的范围是 $[3.45, 3.55)$。\n加法的上界 = 上界 + 上界。\n$a_{\\max} + b_{\\max} = 3.55 + 2.55 = 6.1$\n乘法也类似：最大 × 最大 = 上界。", en: "Rounded to 1 d.p. means: $3.5$ ranges from $[3.45, 3.55)$.\nUpper bound of sum = upper + upper.\n$a_{max} + b_{max} = 3.55 + 2.55 = 6.1$\nMultiplication: max × max = upper bound." },
+        onWrong: { zh: "$6.0$ 是四舍五入后的值，不是上界。\n$3.5$ 可能最大是 $3.5499... \\approx 3.55$。两个上界相加。", en: "$6.0$ is the rounded value, not the upper bound.\n$3.5$ could be as large as $3.5499... \\approx 3.55$. Add both upper bounds." },
+        onSkip: { zh: "加法上界 = 上界 + 上界。精确到 0.1 → 上界 = 值 + 0.05。", en: "Upper bound of sum = UB + UB. Rounded to 1 d.p. → UB = value + 0.05." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '鲁肃：为什么运算也有上下界？\n两段路都有误差，加起来误差会累积！\n最坏情况：两段路都取最大值——这就是和的上界。', en: 'Lu Su: "Why do calculations have bounds too?\nBoth distances have error, and errors accumulate!\nWorst case: both at maximum — that\'s the upper bound of the sum."' }, highlightField: 'ans' },
       { text: { zh: '鲁肃：加法规则\n$$\\text{上界}(a+b) = \\text{上界}(a) + \\text{上界}(b)$$\n$$\\text{下界}(a+b) = \\text{下界}(a) + \\text{下界}(b)$$\n加法：两边都取极端值。', en: 'Lu Su: "Addition rule\n$$\\text{UB}(a+b) = \\text{UB}(a) + \\text{UB}(b)$$\n$$\\text{LB}(a+b) = \\text{LB}(a) + \\text{LB}(b)$$\nAddition: take extreme values on both sides."' }, highlightField: 'ans' },
@@ -1458,6 +2108,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: 'A=10(±0.5), B=4(±0.5)。A÷B的最大值? (保留整数)', en: 'A=10 (±0.5), B=4 (±0.5). Max value of A÷B? (nearest integer)' },
     data: { answer: 3 }, difficulty: 'Hard', reward: 520,
     kpId: 'kp-1.10-04', sectionId: 'number',
+    discoverSteps: [
+      {
+        prompt: { zh: "$A = 10$（精确到整数），$B = 3$（精确到整数）。$\\frac{A}{B}$ 的最大值？", en: "$A = 10$ (to nearest integer), $B = 3$ (to nearest integer). Maximum value of $\\frac{A}{B}$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{10.5}{2.5} = 4.2$——分子取上界，分母取下界", en: "$\\frac{10.5}{2.5} = 4.2$ — numerator upper bound, denominator lower bound" },
+          { zh: "$\\frac{10.5}{3.5} = 3$", en: "$\\frac{10.5}{3.5} = 3$" },
+        ],
+        onCorrect: { zh: "除法的最大值：让分子尽量大（上界），分母尽量小（下界）。\n$A_{max} = 10.5$，$B_{min} = 2.5$\n$\\frac{A}{B}_{max} = \\frac{10.5}{2.5} = 4.2$\n除法中分母小 → 结果大！", en: "To maximize a fraction: numerator as large (UB) and denominator as small (LB) as possible.\n$A_{max} = 10.5$, $B_{min} = 2.5$\n$\\frac{A}{B}_{max} = \\frac{10.5}{2.5} = 4.2$\nSmaller denominator → larger result!" },
+        onWrong: { zh: "分母取上界会让分数变小！要最大化分数：分子最大 ÷ 分母最小。\n$\\frac{10.5}{2.5} = 4.2$", en: "Upper bound on denominator makes the fraction smaller! To maximize: largest numerator ÷ smallest denominator.\n$\\frac{10.5}{2.5} = 4.2$" },
+        onSkip: { zh: "最大化分数：$\\frac{UB}{LB}$。最小化分数：$\\frac{LB}{UB}$。", en: "Maximize fraction: $\\frac{UB}{LB}$. Minimize: $\\frac{LB}{UB}$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：为什么除法的极值这么重要？\n分配物资时，分子尽量大、分母尽量小——每人分到的就最多。\n这就是除法取最大值的逻辑：上界 ÷ 下界！', en: 'Zhuge Liang: "Why are division extremes important?\nWhen distributing supplies, maximize numerator and minimize denominator — each person gets the most.\nThis is max division logic: UB ÷ LB!"' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：除法规则\n$$\\text{最大值}(A/B) = \\frac{\\text{上界}(A)}{\\text{下界}(B)}$$\n分子取最大，分母取最小——商就最大！', en: 'Zhuge Liang: "Division rule\n$$\\text{Max}(A/B) = \\frac{\\text{UB}(A)}{\\text{LB}(B)}$$\nNumerator at max, denominator at min — quotient is maximized!"' }, highlightField: 'ans' },
@@ -1518,6 +2181,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '20/35化简后分子是? (P(男|戴眼镜))', en: 'Simplify 20/35. What is the numerator? (P(male | glasses))' },
     data: { answer: 4 }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-8.4-02', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "列联表：60 名士兵中，会骑马的有 24 人，其中 8 人还会射箭。随机选一个会骑马的士兵，他也会射箭的概率？", en: "Contingency table: of 60 soldiers, 24 ride horses, 8 of those also do archery. P(archery | horse rider)?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{8}{24} = \\frac{1}{3}$——在骑兵中找射手", en: "$\\frac{8}{24} = \\frac{1}{3}$ — find archers among riders" },
+          { zh: "$\\frac{8}{60}$", en: "$\\frac{8}{60}$" },
+        ],
+        onCorrect: { zh: "条件概率！\"已知他是骑兵\"→ 总数缩小到 24，不是 60。\n$P(\\text{射箭}|\\text{骑马}) = \\frac{8}{24} = \\frac{1}{3}$\n条件概率的分母是\"条件限定的子集\"。", en: "Conditional probability! \"Given he rides\" → total shrinks to 24, not 60.\n$P(archery|rider) = \\frac{8}{24} = \\frac{1}{3}$\nIn conditional probability, the denominator is the restricted subset." },
+        onWrong: { zh: "$\\frac{8}{60}$ 是从全军中随机选到会骑马又会射箭的概率。\n但题目说\"已知是骑兵\"→ 分母是 24 个骑兵。", en: "$\\frac{8}{60}$ is P(rider AND archer) from the whole army.\nBut \"given he rides\" → denominator is the 24 riders." },
+        onSkip: { zh: "条件概率：$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$。\"已知B\"时分母缩小到B。", en: "Conditional probability: $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$. \"Given B\" → denominator shrinks to B." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '庞统：为什么要用列联表？\n军队情报复杂——男女、有无眼镜、老中青……列联表把所有信息整理成格子，一目了然！\n从表中直接读取条件概率。', en: 'Pang Tong: "Why use two-way tables?\nMilitary intel is complex — gender, glasses, age... A two-way table organizes everything into cells, clear at a glance!\nRead conditional probabilities directly from the table."' }, highlightField: 'ans' },
       { text: { zh: '庞统：条件概率公式\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$\n翻译：已知B发生，A也发生的概率 = 两者同时发生 ÷ B发生', en: 'Pang Tong: "Conditional probability formula\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$\nTranslation: given B happened, probability of A = both happen ÷ B happens"' }, highlightField: 'ans' },
@@ -1578,6 +2254,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '直方图某柱高(密度)=4，组距=5。该组频率=?', en: 'Histogram bar height (density) = 4, class width = 5. Frequency = ?' },
     data: { answer: 20 }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-9.7-02', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "读直方图：某柱的组距是 5，柱高（频率密度）是 4。这组有多少个数据？", en: "Reading a histogram: class width 5, bar height (frequency density) 4. How many data points in this class?" },
+        type: 'choice',
+        choices: [
+          { zh: "频率 = 频率密度 × 组距 = $4 \\times 5 = 20$", en: "Frequency = frequency density × class width = $4 \\times 5 = 20$" },
+          { zh: "频率 = 柱高 = 4", en: "Frequency = bar height = 4" },
+        ],
+        onCorrect: { zh: "直方图的关键：柱的面积 = 频率，不是柱高！\n频率 = 频率密度 × 组距 = $4 \\times 5 = 20$\n组距不等时，柱高只表示\"密度\"，面积才是真正的频率。", en: "Key histogram fact: bar AREA = frequency, not height!\nFrequency = frequency density × class width = $4 \\times 5 = 20$\nWith unequal widths, height shows density; area shows actual frequency." },
+        onWrong: { zh: "直方图中柱高不等于频率！那是条形图。\n直方图：频率 = 柱高 × 组距 = 面积。$4 \\times 5 = 20$。", en: "In histograms, bar height does NOT equal frequency! That's a bar chart.\nHistogram: frequency = height × width = area. $4 \\times 5 = 20$." },
+        onSkip: { zh: "直方图：频率 = 频率密度 × 组距 = 柱的面积。", en: "Histogram: frequency = frequency density × class width = bar area." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：为什么要从直方图还原频率？\n直方图的 y 轴是频率密度——不能直接当频率用！\n要知道真正有多少个数据，必须用面积（密度 × 组距）。', en: 'Ma Liang: "Why recover frequency from a histogram?\nThe y-axis is frequency density — can\'t use it directly as frequency!\nTo find actual data count, calculate area (density × width)."' }, highlightField: 'ans' },
       { text: { zh: '马良：关键公式（反向）\n$$\\text{频率} = \\text{频率密度} \\times \\text{组距}$$\n柱子的面积 = 频率！这是直方图的核心。', en: 'Ma Liang: "Key formula (reverse)\n$$\\text{Frequency} = \\text{Density} \\times \\text{Class width}$$\nBar area = frequency! This is the core of histograms."' }, highlightField: 'ans' },
@@ -1638,6 +2327,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '$-2x < -6$，除以 $-2$ 时翻转！$x > ?$', en: '$-2x < -6$, flip when dividing by $-2$! $x > ?$' },
     data: { answer: 3 }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-2.6-03', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "负数翻转：$-2x < -6$。解这个不等式。", en: "Negative flip: $-2x < -6$. Solve this inequality." },
+        type: 'choice',
+        choices: [
+          { zh: "$x > 3$——除以负数要翻转不等号", en: "$x > 3$ — dividing by negative flips the inequality" },
+          { zh: "$x < 3$", en: "$x < 3$" },
+        ],
+        onCorrect: { zh: "除以负数 → 不等号翻转！这是最容易犯的错误。\n$-2x < -6$\n$x > 3$（除以 $-2$，$<$ 变成 $>$）\n验证：$x=4$：$-8 < -6$ ✓。$x=2$：$-4 < -6$ ✗。", en: "Dividing by negative → flip the inequality! The most common mistake.\n$-2x < -6$\n$x > 3$ (divide by $-2$, $<$ becomes $>$)\nCheck: $x=4$: $-8 < -6$ ✓. $x=2$: $-4 < -6$ ✗." },
+        onWrong: { zh: "$x < 3$ 忘记翻转了！乘或除以负数 → 不等号必须反向。\n试试 $x=2$：$-2(2)=-4$，$-4 < -6$？不对！", en: "$x < 3$ forgot to flip! Multiply/divide by negative → inequality reverses.\nTry $x=2$: $-2(2)=-4$, $-4 < -6$? False!" },
+        onSkip: { zh: "铁律：乘除负数 → 翻转不等号。代入数值验证方向。", en: "Iron rule: multiply/divide by negative → flip inequality. Substitute values to verify direction." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么负数要翻转？\n想象温度：$-2°C$ 比 $-6°C$ 更高！\n负数的世界是"镜像"的——数字越大，值反而越小。\n所以除以负数时，大小关系要翻转！', en: 'Zhou Yu: "Why flip for negatives?\nThink temperature: $-2°C$ is higher than $-6°C$!\nThe negative world is a mirror — bigger digits mean smaller values.\nSo dividing by a negative flips the relationship!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：翻转规则\n两边同乘/除以正数 → 不等号不变\n两边同乘/除以负数 → 不等号翻转\n$< \\rightarrow >$，$\\leq \\rightarrow \\geq$', en: 'Zhou Yu: "Flip rule\nMultiply/divide both sides by positive → sign unchanged\nMultiply/divide both sides by negative → sign flips\n$< \\rightarrow >$, $\\leq \\rightarrow \\geq$"' }, highlightField: 'ans' },
@@ -1660,6 +2362,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '$1 \\leq 2x - 3 < 5$，求整数解的个数', en: '$1 \\leq 2x - 3 < 5$, how many integer solutions?' },
     data: { answer: 2 }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-2.6-04', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "双重不等式：$1 \\leq 2x - 3 < 5$。求整数解。", en: "Double inequality: $1 \\leq 2x - 3 < 5$. Find integer solutions." },
+        type: 'choice',
+        choices: [
+          { zh: "三部分同时加 3 再除以 2：$2 \\leq x < 4$，整数 2, 3", en: "Add 3 to all three parts, divide by 2: $2 \\leq x < 4$, integers 2, 3" },
+          { zh: "分别解两个不等式：$x \\geq 2$ 和 $x < 4$", en: "Solve two separate inequalities: $x \\geq 2$ and $x < 4$" },
+        ],
+        onCorrect: { zh: "两种方法都对！整体操作更简洁：\n$1 \\leq 2x-3 < 5$\n$4 \\leq 2x < 8$（三边加 3）\n$2 \\leq x < 4$（三边除以 2）\n整数解：$x = 2, 3$。注意 4 不包含（$<$）！", en: "Both methods work! Operating on all three parts is cleaner:\n$1 \\leq 2x-3 < 5$\n$4 \\leq 2x < 8$ (add 3)\n$2 \\leq x < 4$ (divide by 2)\nInteger solutions: $x = 2, 3$. Note 4 excluded ($<$)!" },
+        onWrong: { zh: "分别解也是对的！关键是两个结果取交集。\n$2x-3 \\geq 1 \\Rightarrow x \\geq 2$\n$2x-3 < 5 \\Rightarrow x < 4$\n交集：$2 \\leq x < 4$，整数 2, 3。", en: "Solving separately also works! Take the intersection of both results.\n$2x-3 \\geq 1 \\Rightarrow x \\geq 2$\n$2x-3 < 5 \\Rightarrow x < 4$\nIntersection: $2 \\leq x < 4$, integers 2, 3." },
+        onSkip: { zh: "双重不等式：三部分同时操作，或分别解再取交集。注意 $\\leq$ 和 $<$ 的区别。", en: "Double inequality: operate on all three parts, or solve separately and intersect. Watch $\\leq$ vs $<$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '庞统：为什么需要双重不等式？\n兵力部署有上下限——太少不够守城，太多又浪费粮草。\n双重不等式就是给 $x$ 一个"范围"：不能太小，也不能太大。', en: 'Pang Tong: "Why double inequalities?\nTroop deployment has limits — too few can\'t hold, too many waste rations.\nA double inequality gives $x$ a range: not too small, not too large."' }, highlightField: 'ans' },
       { text: { zh: '庞统：三段同时处理\n$1 \\leq 2x - 3 < 5$\n三段同时加 3：\n$4 \\leq 2x < 8$', en: 'Pang Tong: "Process all three parts together\n$1 \\leq 2x - 3 < 5$\nAdd 3 to all parts:\n$4 \\leq 2x < 8$"' }, highlightField: 'ans' },
@@ -1720,6 +2435,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '$y \\propto 1/x$，$x=2$ 时 $y=6$。$x=6$ 时 $y=?$', en: '$y \\propto 1/x$, when $x=2$, $y=6$. When $x=6$, $y=?$' },
     data: { answer: 2 }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-2.8-05', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "反比例：$y \\propto \\frac{1}{x}$。$x$ 翻倍时 $y$ 怎么变？", en: "Inverse proportion: $y \\propto \\frac{1}{x}$. When $x$ doubles, what happens to $y$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$y$ 减半——$x$ 越大 $y$ 越小", en: "$y$ halves — as $x$ increases, $y$ decreases" },
+          { zh: "$y$ 也翻倍", en: "$y$ also doubles" },
+        ],
+        onCorrect: { zh: "反比例 = $y = \\frac{k}{x}$。$x$ 翻倍 → $y = \\frac{k}{2x} = \\frac{1}{2} \\cdot \\frac{k}{x}$。\n$y$ 变为原来的一半。\n反比关系：一个变大，另一个变小。$xy = k$ 永远是常数。", en: "Inverse proportion = $y = \\frac{k}{x}$. $x$ doubles → $y = \\frac{k}{2x} = \\frac{1}{2} \\cdot \\frac{k}{x}$.\n$y$ becomes half.\nInverse: one increases, the other decreases. $xy = k$ is always constant." },
+        onWrong: { zh: "那是正比（$y \\propto x$）！反比是相反的——$x$ 大 $y$ 就小。\n$y = \\frac{k}{x}$，$x$ 翻倍 → $y$ 减半。", en: "That's direct proportion ($y \\propto x$)! Inverse is opposite — bigger $x$, smaller $y$.\n$y = \\frac{k}{x}$, $x$ doubles → $y$ halves." },
+        onSkip: { zh: "反比：$y = \\frac{k}{x}$，$xy = k$。$x$ 乘 $n$ → $y$ 除以 $n$。", en: "Inverse: $y = \\frac{k}{x}$, $xy = k$. $x$ × $n$ → $y$ ÷ $n$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '鲁肃：为什么要学反比例？\n粮食总量固定，人越多每人分得越少——这就是反比例！\n生活中处处是反比例：速度和时间、价格和数量……', en: 'Lu Su: "Why learn inverse proportion?\nTotal rations are fixed — more people means less each — that\'s inverse proportion!\nIt\'s everywhere: speed vs time, price vs quantity..."' }, highlightField: 'ans' },
       { text: { zh: '鲁肃：反比例公式\n$y \\propto \\frac{1}{x}$ → $y = \\frac{k}{x}$\n也可以写成 $xy = k$（乘积为常数）', en: 'Lu Su: "Inverse proportion formula\n$y \\propto \\frac{1}{x}$ → $y = \\frac{k}{x}$\nAlso written as $xy = k$ (product is constant)"' }, highlightField: 'ans' },
@@ -1742,6 +2470,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '$y = ax + b$，$x=0$ 时 $y=10$，$x=2$ 时 $y=30$。$a=?$', en: '$y = ax + b$, when $x=0$, $y=10$; when $x=2$, $y=30$. $a=?$' },
     data: { answer: 10 }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-2.8-07', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "部分变分：$y = ax + b$。当 $x=0$ 时 $y=5$，$x=2$ 时 $y=11$。求 $a$ 和 $b$。", en: "Partial variation: $y = ax + b$. When $x=0$, $y=5$; when $x=2$, $y=11$. Find $a$ and $b$." },
+        type: 'choice',
+        choices: [
+          { zh: "$b=5$（代入 $x=0$），$a=3$（代入 $x=2$）", en: "$b=5$ (sub $x=0$), $a=3$ (sub $x=2$)" },
+          { zh: "$a=5, b=11$", en: "$a=5, b=11$" },
+        ],
+        onCorrect: { zh: "$x=0$ 时：$y = a(0)+b = b = 5$。\n$x=2$ 时：$11 = 2a+5 \\Rightarrow 2a=6 \\Rightarrow a=3$。\n$y = 3x+5$。部分变分 = 有固定部分 ($b$) + 变动部分 ($ax$)。", en: "$x=0$: $y = a(0)+b = b = 5$.\n$x=2$: $11 = 2a+5 \\Rightarrow 2a=6 \\Rightarrow a=3$.\n$y = 3x+5$. Partial variation = fixed part ($b$) + variable part ($ax$)." },
+        onWrong: { zh: "$a$ 是 $x$ 的系数（斜率），$b$ 是常数项（$x=0$ 时的 $y$）。\n$b=5$，$11=2a+5$，$a=3$。", en: "$a$ is the coefficient of $x$ (gradient), $b$ is the constant ($y$ when $x=0$).\n$b=5$, $11=2a+5$, $a=3$." },
+        onSkip: { zh: "$y=ax+b$：$b$ = 截距（$x=0$ 时），$a$ = 斜率。代入两点求解。", en: "$y=ax+b$: $b$ = intercept ($x=0$), $a$ = gradient. Substitute two points to solve." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：什么是部分变分？\n出租车计费：上车就收起步价（固定部分 $b$），再按公里数加钱（变化部分 $ax$）。\n$y = ax + b$ 就是"固定费用 + 变化费用"。', en: 'Ma Liang: "What is partial variation?\nTaxi fare: base fee on entry (fixed part $b$), plus per-km charge (variable part $ax$).\n$y = ax + b$ is \'fixed cost + variable cost\'."' }, highlightField: 'ans' },
       { text: { zh: '马良：先求 b\n当 $x = 0$ 时，$y = a(0) + b = b$\n所以 $b = 10$（没有变化量时的基础值）', en: 'Ma Liang: "Find b first\nWhen $x = 0$: $y = a(0) + b = b$\nSo $b = 10$ (base value with no variation)"' }, highlightField: 'ans' },
@@ -1802,6 +2543,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '$y = 2x^3$，$x = 1$ 时 $y = ?$', en: '$y = 2x^3$, when $x = 1$, $y = ?$' },
     data: { answer: 2 }, difficulty: 'Easy', reward: 450,
     kpId: 'kp-2.10-04', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "立方函数：$y = 2x^3$。当 $x=1$ 时 $y$ 等于多少？$x=-1$ 呢？", en: "Cubic function: $y = 2x^3$. What is $y$ when $x=1$? What about $x=-1$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$x=1$: $y=2$，$x=-1$: $y=-2$——立方保留符号", en: "$x=1$: $y=2$, $x=-1$: $y=-2$ — cubing preserves sign" },
+          { zh: "$x=1$: $y=2$，$x=-1$: $y=2$", en: "$x=1$: $y=2$, $x=-1$: $y=2$" },
+        ],
+        onCorrect: { zh: "立方和平方的关键区别：$(-1)^3 = -1$，$(-1)^2 = 1$。\n立方保留负号：$2(-1)^3 = 2 \\times (-1) = -2$。\n立方函数图像是 S 形，经过原点，关于原点对称。", en: "Key difference between cubic and quadratic: $(-1)^3 = -1$, $(-1)^2 = 1$.\nCubing preserves the negative: $2(-1)^3 = 2 \\times (-1) = -2$.\nCubic graph is S-shaped, through origin, symmetric about origin." },
+        onWrong: { zh: "平方会把负号吃掉，但立方不会！\n$(-1)^2 = 1$，$(-1)^3 = -1$\n奇数幂保留符号，偶数幂变正。", en: "Squaring absorbs the negative, but cubing doesn't!\n$(-1)^2 = 1$, $(-1)^3 = -1$\nOdd powers preserve sign, even powers make positive." },
+        onSkip: { zh: "奇数幂（立方）保留负号。偶数幂（平方）结果总为正。", en: "Odd powers (cube) preserve sign. Even powers (square) always give positive." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '庞统：立方函数和二次函数有什么不同？\n二次函数是 U 形，立方函数是 S 形——先降后升（或先升后降）。\n$x^3$ 增长比 $x^2$ 快得多：$10^2 = 100$，但 $10^3 = 1000$！', en: 'Pang Tong: "How does a cubic differ from a quadratic?\nQuadratics are U-shaped, cubics are S-shaped — fall then rise (or vice versa).\n$x^3$ grows much faster than $x^2$: $10^2 = 100$, but $10^3 = 1000$!"' }, highlightField: 'ans' },
       { text: { zh: '庞统：立方函数基本形\n$y = ax^3$\n$a > 0$：从左下到右上（递增）\n$a < 0$：从左上到右下（递减）', en: 'Pang Tong: "Basic cubic form\n$y = ax^3$\n$a > 0$: bottom-left to top-right (increasing)\n$a < 0$: top-left to bottom-right (decreasing)"' }, highlightField: 'ans' },
@@ -1862,6 +2616,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '弦切角定理：弦与切线夹角 = 对面弓形角 = $55°$。答案是？', en: 'Alternate segment theorem: angle = $55°$. What is it?' },
     data: { answer: 55 }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-4.7-06', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "弦切角定理（交替弓形角）：切线和弦之间的角等于什么？", en: "Alternate segment theorem: the angle between a tangent and a chord equals what?" },
+        type: 'choice',
+        choices: [
+          { zh: "等于对面弓形中的圆周角", en: "The inscribed angle in the alternate (opposite) segment" },
+          { zh: "等于圆心角", en: "The central angle" },
+        ],
+        onCorrect: { zh: "弦切角 = 交替弓形中的圆周角。\n切线和弦在切点形成的角 = 弦另一侧弧上的圆周角。\n这是圆定理中最常考的一个——看到切线和弦就想到它！", en: "Angle between tangent and chord = inscribed angle in the alternate segment.\nThe angle formed at the tangent point = inscribed angle on the other side of the chord.\nThis is one of the most tested circle theorems — see tangent + chord, think alternate segment!" },
+        onWrong: { zh: "不是圆心角。弦切角等于对面弓形中的圆周角。\n记住：切线+弦 → 看对面弓形的角。", en: "Not the central angle. Tangent-chord angle equals the inscribed angle in the opposite segment.\nRemember: tangent + chord → look at the alternate segment." },
+        onSkip: { zh: "弦切角定理：切线与弦的夹角 = 交替弓形中的圆周角。", en: "Alternate segment theorem: angle between tangent and chord = inscribed angle in the alternate segment." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：什么是弦切角定理？\n切线和弦之间的夹角 = 对面弓形里的圆周角。\n就像镜子反射——这边的角度等于对面的角度！', en: 'Zhou Yu: "What is the alternate segment theorem?\nAngle between tangent and chord = inscribed angle in the alternate segment.\nLike a mirror reflection — this side\'s angle equals the other side\'s!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：图解\n切线在 P 点与圆相切，弦 PA 连接切点和圆上另一点。\n切线与 PA 的夹角 = 圆上对面弓形中任意一点 B 的 $\\angle PBA$。', en: 'Zhou Yu: "Diagram\nTangent touches circle at P, chord PA connects to another point on circle.\nAngle between tangent and PA = $\\angle PBA$ for any point B in the alternate segment."' }, highlightField: 'ans' },
@@ -1922,6 +2689,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '半径 3 的半圆弧长（$\\pi = 3.14$）', en: 'Semicircle arc length, radius 3 ($\\pi = 3.14$)' },
     data: { answer: 9.42 }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-5.3-05', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "半圆弧长：半径 $r$ 的半圆，弧长是多少？", en: "Semicircle arc: what is the arc length of a semicircle with radius $r$?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\pi r$——整圆周长的一半", en: "$\\pi r$ — half the full circumference" },
+          { zh: "$2\\pi r$", en: "$2\\pi r$" },
+        ],
+        onCorrect: { zh: "整圆周长 = $2\\pi r$。半圆 = 一半 = $\\pi r$。\n或用扇形弧长公式：$\\frac{180}{360} \\times 2\\pi r = \\pi r$。\n注意半圆的周长 = 弧长 + 直径 = $\\pi r + 2r$！", en: "Full circumference = $2\\pi r$. Semicircle = half = $\\pi r$.\nOr use sector formula: $\\frac{180}{360} \\times 2\\pi r = \\pi r$.\nNote semicircle perimeter = arc + diameter = $\\pi r + 2r$!" },
+        onWrong: { zh: "$2\\pi r$ 是整圆的周长。半圆弧长是一半：$\\pi r$。", en: "$2\\pi r$ is the full circumference. Semicircle arc is half: $\\pi r$." },
+        onSkip: { zh: "半圆弧长 = $\\pi r$。半圆周长（含直径）= $\\pi r + 2r$。", en: "Semicircle arc = $\\pi r$. Semicircle perimeter (incl. diameter) = $\\pi r + 2r$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '鲁肃：弧长是什么？\n弧长就是圆弧的"展开长度"——把弯曲的弧拉直，就是弧长。\n圆周长 = $2\\pi r$，半圆弧长就是一半 = $\\pi r$。', en: 'Lu Su: "What is arc length?\nArc length is the \'unrolled length\' of a curve — straighten the arc to get its length.\nCircumference = $2\\pi r$, semicircle arc = half = $\\pi r$."' }, highlightField: 'ans' },
       { text: { zh: '鲁肃：弧长公式\n完整圆周：$C = 2\\pi r$\n半圆弧长：$L = \\pi r$\n一般弧长：$L = \\frac{\\theta}{360°} \\times 2\\pi r$', en: 'Lu Su: "Arc length formula\nFull circumference: $C = 2\\pi r$\nSemicircle arc: $L = \\pi r$\nGeneral arc: $L = \\frac{\\theta}{360°} \\times 2\\pi r$"' }, highlightField: 'ans' },
@@ -1944,6 +2724,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '直径 10 的圆周长（$\\pi = 3.14$）', en: 'Circumference of circle with diameter 10 ($\\pi = 3.14$)' },
     data: { r: 5, pi: 3.14, mode: 'circumference' }, difficulty: 'Easy', reward: 450,
     kpId: 'kp-5.3-06', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "圆周长：直径 $d = 14$cm。圆周长是多少？", en: "Circumference: diameter $d = 14$cm. What is the circumference?" },
+        type: 'choice',
+        choices: [
+          { zh: "$C = \\pi d = 14\\pi \\approx 44$cm", en: "$C = \\pi d = 14\\pi \\approx 44$cm" },
+          { zh: "$C = \\pi r^2 = 49\\pi$", en: "$C = \\pi r^2 = 49\\pi$" },
+        ],
+        onCorrect: { zh: "周长 = $\\pi d = 2\\pi r$。面积 = $\\pi r^2$。\n知道直径 → 用 $C = \\pi d$ 更快。知道半径 → 用 $C = 2\\pi r$。\n$14\\pi \\approx 14 \\times 3.14 = 43.96$cm。", en: "Circumference = $\\pi d = 2\\pi r$. Area = $\\pi r^2$.\nKnow diameter → use $C = \\pi d$. Know radius → use $C = 2\\pi r$.\n$14\\pi \\approx 14 \\times 3.14 = 43.96$cm." },
+        onWrong: { zh: "$\\pi r^2$ 是面积公式！$r = 7$，$\\pi \\times 49$ 是面积。\n周长 = $\\pi d = 14\\pi$cm。单位是 cm（长度），不是 cm²。", en: "$\\pi r^2$ is the area formula! $r = 7$, $\\pi \\times 49$ is area.\nCircumference = $\\pi d = 14\\pi$cm. Units: cm (length), not cm²." },
+        onSkip: { zh: "周长 = $\\pi d$ 或 $2\\pi r$。面积 = $\\pi r^2$。看单位区分。", en: "Circumference = $\\pi d$ or $2\\pi r$. Area = $\\pi r^2$. Distinguish by units." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：圆周长有什么用？\n帐篷要用绳子围一圈——需要多长的绳子？\n这就是圆周长！$C = \\pi d = 2\\pi r$。', en: 'Zhuge Liang: "Why circumference?\nThe tent needs rope around it — how much rope?\nThat\'s the circumference! $C = \\pi d = 2\\pi r$."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：两种公式\n知道直径：$C = \\pi d$\n知道半径：$C = 2\\pi r$\n直径 = 2 × 半径，两个公式本质相同。', en: 'Zhuge Liang: "Two formulas\nGiven diameter: $C = \\pi d$\nGiven radius: $C = 2\\pi r$\nDiameter = 2 × radius — same formula, different form."' }, highlightField: 'ans' },
@@ -2004,6 +2797,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '球体 $r = 3$ 的体积（$\\pi = 3.14$）', en: 'Sphere volume with $r = 3$ ($\\pi = 3.14$)' },
     data: { answer: 113.04 }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-5.4-05', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "球体体积：半径 $r=3$cm。体积是多少？", en: "Sphere volume: radius $r=3$cm. Volume?" },
+        type: 'choice',
+        choices: [
+          { zh: "$V = \\frac{4}{3}\\pi r^3 = \\frac{4}{3}\\pi(27) = 36\\pi$ cm³", en: "$V = \\frac{4}{3}\\pi r^3 = \\frac{4}{3}\\pi(27) = 36\\pi$ cm³" },
+          { zh: "$V = 4\\pi r^2 = 36\\pi$ cm²", en: "$V = 4\\pi r^2 = 36\\pi$ cm²" },
+        ],
+        onCorrect: { zh: "球体体积 = $\\frac{4}{3}\\pi r^3$。别和表面积 $4\\pi r^2$ 搞混！\n$\\frac{4}{3}\\pi(3)^3 = \\frac{4}{3} \\times 27\\pi = 36\\pi$ cm³\n体积 = 立方（cm³），面积 = 平方（cm²）。", en: "Sphere volume = $\\frac{4}{3}\\pi r^3$. Don't confuse with surface area $4\\pi r^2$!\n$\\frac{4}{3}\\pi(3)^3 = \\frac{4}{3} \\times 27\\pi = 36\\pi$ cm³\nVolume = cubic (cm³), area = square (cm²)." },
+        onWrong: { zh: "$4\\pi r^2$ 是球的表面积（cm²），不是体积（cm³）！\n体积 = $\\frac{4}{3}\\pi r^3$。注意 $r^3$ 和 $\\frac{4}{3}$。", en: "$4\\pi r^2$ is sphere surface area (cm²), not volume (cm³)!\nVolume = $\\frac{4}{3}\\pi r^3$. Note $r^3$ and $\\frac{4}{3}$." },
+        onSkip: { zh: "球体：体积 = $\\frac{4}{3}\\pi r^3$，表面积 = $4\\pi r^2$。", en: "Sphere: volume = $\\frac{4}{3}\\pi r^3$, surface area = $4\\pi r^2$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '诸葛亮：球体体积公式\n$$V = \\frac{4}{3}\\pi r^3$$\n记忆口诀："三分之四 pi r 立方"——比圆柱公式多了 $\\frac{4}{3}$。', en: 'Zhuge Liang: "Sphere volume formula\n$$V = \\frac{4}{3}\\pi r^3$$\nMemory aid: \'four-thirds pi r cubed\' — like a cylinder formula with $\\frac{4}{3}$."' }, highlightField: 'ans' },
       { text: { zh: '诸葛亮：球体与圆柱的关系\n球体恰好装进一个半径 $r$、高 $2r$ 的圆柱中。\n球体体积 = 圆柱体积的 $\\frac{2}{3}$！\n$\\frac{2}{3} \\times \\pi r^2 \\times 2r = \\frac{4}{3}\\pi r^3$ ✓', en: 'Zhuge Liang: "Sphere vs cylinder\nA sphere fits perfectly in a cylinder of radius $r$, height $2r$.\nSphere volume = $\\frac{2}{3}$ of that cylinder!\n$\\frac{2}{3} \\times \\pi r^2 \\times 2r = \\frac{4}{3}\\pi r^3$ ✓"' }, highlightField: 'ans' },
@@ -2026,6 +2832,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '球体 $r = 3$ 的表面积（$\\pi = 3.14$）', en: 'Sphere surface area with $r = 3$ ($\\pi = 3.14$)' },
     data: { answer: 113.04 }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-5.4-06', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "球体表面积：半径 $r=5$cm。表面积？", en: "Sphere surface area: radius $r=5$cm. Surface area?" },
+        type: 'choice',
+        choices: [
+          { zh: "$A = 4\\pi r^2 = 4\\pi(25) = 100\\pi$ cm²", en: "$A = 4\\pi r^2 = 4\\pi(25) = 100\\pi$ cm²" },
+          { zh: "$A = \\frac{4}{3}\\pi r^3$", en: "$A = \\frac{4}{3}\\pi r^3$" },
+        ],
+        onCorrect: { zh: "球面积 = $4\\pi r^2$ = 4 个大圆的面积。\n$4\\pi(5)^2 = 100\\pi \\approx 314$ cm²\n记忆技巧：表面积带 $r^2$（二维），体积带 $r^3$（三维）。", en: "Sphere SA = $4\\pi r^2$ = area of 4 great circles.\n$4\\pi(5)^2 = 100\\pi \\approx 314$ cm²\nMemory tip: SA has $r^2$ (2D), volume has $r^3$ (3D)." },
+        onWrong: { zh: "$\\frac{4}{3}\\pi r^3$ 是体积！表面积 = $4\\pi r^2$。\n看幂次：$r^2$ = 面积，$r^3$ = 体积。", en: "$\\frac{4}{3}\\pi r^3$ is volume! Surface area = $4\\pi r^2$.\nCheck the power: $r^2$ = area, $r^3$ = volume." },
+        onSkip: { zh: "球：SA = $4\\pi r^2$（$r^2$ = 面积），V = $\\frac{4}{3}\\pi r^3$（$r^3$ = 体积）。", en: "Sphere: SA = $4\\pi r^2$ ($r^2$ = area), V = $\\frac{4}{3}\\pi r^3$ ($r^3$ = volume)." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：球体表面积公式\n$$S = 4\\pi r^2$$\n记忆："4 个大圆的面积"——球的表面积等于 4 个最大截面圆的面积之和！', en: 'Ma Liang: "Sphere surface area formula\n$$S = 4\\pi r^2$$\nMemory aid: \'4 great circles\' — sphere surface area equals 4 times the area of the largest cross-section circle!"' }, highlightField: 'ans' },
       { text: { zh: '马良：直觉理解\n想象把橘子皮平铺——恰好能铺满 4 个同样大小的圆形！\n$S = 4 \\times \\pi r^2$', en: 'Ma Liang: "Intuitive understanding\nImagine flattening an orange peel — it covers exactly 4 circles of the same size!\n$S = 4 \\times \\pi r^2$"' }, highlightField: 'ans' },
@@ -2048,6 +2867,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '圆柱 $r=5, h=10$ 的总表面积（$\\pi = 3.14$）', en: 'Cylinder total surface area, $r=5, h=10$ ($\\pi = 3.14$)' },
     data: { answer: 471 }, difficulty: 'Hard', reward: 500,
     kpId: 'kp-5.4-07', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "圆柱表面积：半径 $r$，高 $h$。总表面积由哪些部分组成？", en: "Cylinder surface area: radius $r$, height $h$. What parts make up the total SA?" },
+        type: 'choice',
+        choices: [
+          { zh: "两个圆 + 侧面长方形 = $2\\pi r^2 + 2\\pi rh$", en: "Two circles + lateral rectangle = $2\\pi r^2 + 2\\pi rh$" },
+          { zh: "$\\pi r^2 + 2\\pi rh$", en: "$\\pi r^2 + 2\\pi rh$" },
+        ],
+        onCorrect: { zh: "圆柱表面积 = 顶 + 底 + 侧面\n两个圆：$2 \\times \\pi r^2$\n侧面展开是长方形：$2\\pi r \\times h$（周长 × 高）\n总 SA = $2\\pi r^2 + 2\\pi rh = 2\\pi r(r+h)$", en: "Cylinder SA = top + bottom + lateral surface\nTwo circles: $2 \\times \\pi r^2$\nLateral unwraps to rectangle: $2\\pi r \\times h$ (circumference × height)\nTotal SA = $2\\pi r^2 + 2\\pi rh = 2\\pi r(r+h)$" },
+        onWrong: { zh: "别忘了有两个圆面（顶和底）！只写一个 $\\pi r^2$ 漏了一面。\n总 SA = $2\\pi r^2 + 2\\pi rh$", en: "Don't forget there are TWO circular faces (top and bottom)! One $\\pi r^2$ misses a face.\nTotal SA = $2\\pi r^2 + 2\\pi rh$" },
+        onSkip: { zh: "圆柱总表面积 = $2\\pi r^2 + 2\\pi rh$。两个圆 + 侧面展开长方形。", en: "Cylinder total SA = $2\\pi r^2 + 2\\pi rh$. Two circles + lateral rectangle." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '鲁肃：圆柱表面积的组成\n展开一个圆柱，你会得到：\n- 两个圆形盖子（上下底面）\n- 一个长方形侧面（"罐头标签"）\n总面积 = 两个圆 + 一个矩形', en: 'Lu Su: "Components of cylinder surface area\nUnfold a cylinder and you get:\n- Two circular lids (top & bottom)\n- One rectangular side (the \'label\')\nTotal = two circles + one rectangle"' }, highlightField: 'ans' },
       { text: { zh: '鲁肃：公式\n两个底面：$2\\pi r^2$\n侧面（展开成矩形）：$2\\pi r \\times h$\n$$S = 2\\pi r^2 + 2\\pi rh$$', en: 'Lu Su: "Formula\nTwo bases: $2\\pi r^2$\nLateral (unrolls into rectangle): $2\\pi r \\times h$\n$$S = 2\\pi r^2 + 2\\pi rh$$"' }, highlightField: 'ans' },
@@ -2108,6 +2940,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '总数 40 人，Q3 在第几个位置？（$40 \\times \\frac{3}{4}$）', en: 'Total 40 people, Q3 position? ($40 \\times \\frac{3}{4}$)' },
     data: { answer: 30 }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-9.6-04', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "四分位数：15 个有序数据。下四分位数 $Q_1$ 在第几个位置？", en: "Quartiles: 15 ordered data points. What position is the lower quartile $Q_1$?" },
+        type: 'choice',
+        choices: [
+          { zh: "第 4 个——$\\frac{15+1}{4} = 4$", en: "4th value — $\\frac{15+1}{4} = 4$" },
+          { zh: "第 3.75 个", en: "3.75th value" },
+        ],
+        onCorrect: { zh: "$n$ 个数据点：\n$Q_1$ 位置 = $\\frac{n+1}{4}$\n$Q_2$（中位数）= $\\frac{n+1}{2}$\n$Q_3$ = $\\frac{3(n+1)}{4}$\n$n=15$：$Q_1$ 第 4 个，$Q_2$ 第 8 个，$Q_3$ 第 12 个。", en: "$n$ data points:\n$Q_1$ position = $\\frac{n+1}{4}$\n$Q_2$ (median) = $\\frac{n+1}{2}$\n$Q_3$ = $\\frac{3(n+1)}{4}$\n$n=15$: $Q_1$ at 4th, $Q_2$ at 8th, $Q_3$ at 12th." },
+        onWrong: { zh: "$\\frac{n}{4} = 3.75$ 不是标准公式。用 $\\frac{n+1}{4}$ 来定位四分位数。\n$\\frac{15+1}{4} = 4$，$Q_1$ 是第 4 个值。", en: "$\\frac{n}{4} = 3.75$ isn't the standard formula. Use $\\frac{n+1}{4}$ to locate quartiles.\n$\\frac{15+1}{4} = 4$, $Q_1$ is the 4th value." },
+        onSkip: { zh: "四分位数位置：$Q_1 = \\frac{n+1}{4}$，$Q_2 = \\frac{n+1}{2}$，$Q_3 = \\frac{3(n+1)}{4}$。", en: "Quartile positions: $Q_1 = \\frac{n+1}{4}$, $Q_2 = \\frac{n+1}{2}$, $Q_3 = \\frac{3(n+1)}{4}$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '鲁肃：什么是四分位数？\n把数据分成 4 等份：\nQ1 = 25% 位置（$\\frac{1}{4}n$），Q2 = 50%（中位数），Q3 = 75%（$\\frac{3}{4}n$）。\n四分位距 IQR = Q3 - Q1，衡量数据的"集中程度"。', en: 'Lu Su: "What are quartiles?\nDivide data into 4 equal parts:\nQ1 = 25% ($\\frac{1}{4}n$), Q2 = 50% (median), Q3 = 75% ($\\frac{3}{4}n$).\nIQR = Q3 - Q1, measuring data spread."' }, highlightField: 'ans' },
       { text: { zh: '鲁肃：Q3 位置公式\n$$Q3 = \\frac{3}{4} \\times n$$\n$n = 40$', en: 'Lu Su: "Q3 position formula\n$$Q3 = \\frac{3}{4} \\times n$$\n$n = 40$"' }, highlightField: 'ans' },
@@ -2132,6 +2977,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: 'T形 = 矩形 $10 \\times 4$ + 矩形 $7 \\times 2$，总面积 = ?', en: 'T-shape = rectangle $10 \\times 4$ + rectangle $7 \\times 2$, total area = ?' },
     data: { answer: 54 }, difficulty: 'Easy', reward: 450,
     kpId: 'kp-5.5-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "T形面积：一个 T 形怎么计算面积？", en: "T-shape area: how to calculate the area of a T-shape?" },
+        type: 'choice',
+        choices: [
+          { zh: "分割成两个矩形，分别算再相加", en: "Split into two rectangles, calculate each, then add" },
+          { zh: "长 × 宽", en: "Length × width" },
+        ],
+        onCorrect: { zh: "复合图形 → 分割成基本图形（矩形、三角形、半圆等）。\nT 形 = 横条矩形 + 竖条矩形。\n分别算面积再相加。注意不要重复计算重叠区域！", en: "Composite shapes → split into basic shapes (rectangles, triangles, semicircles, etc.).\nT-shape = horizontal rectangle + vertical rectangle.\nCalculate each area, then add. Don't double-count overlapping regions!" },
+        onWrong: { zh: "T 形不是简单的矩形，不能直接用长×宽。\n把它分成两个矩形来计算。", en: "T-shape isn't a simple rectangle — can't just use length × width.\nSplit it into two rectangles." },
+        onSkip: { zh: "复合图形：分割成基本图形，分别计算面积再求和。", en: "Composite shapes: split into basic shapes, calculate each area, then sum." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '庞统：组合图形怎么算面积？\n把复杂图形拆成简单的部分——每部分的面积都会算！\nT形可以拆成两个矩形（或者用大矩形减去缺角）。', en: 'Pang Tong: "How to find area of compound shapes?\nBreak complex shapes into simple parts — you know how to find each part\'s area!\nA T-shape splits into two rectangles (or a large rectangle minus corners)."' }, highlightField: 'ans' },
       { text: { zh: '庞统：分割策略\nT形 → 上部矩形 + 下部矩形\n上部：$10 \\times 4$\n下部：$7 \\times 2$', en: 'Pang Tong: "Split strategy\nT-shape → top rectangle + bottom rectangle\nTop: $10 \\times 4$\nBottom: $7 \\times 2$"' }, highlightField: 'ans' },
@@ -2192,6 +3050,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '测量6cm(精确到1cm)的下界=?', en: 'Measurement 6cm (to nearest 1cm), lower bound = ?' },
     data: { answer: 5.5 },
     difficulty: 'Medium', reward: 360, kpId: 'kp-1.10-05', sectionId: 'number',
+    discoverSteps: [
+      {
+        prompt: { zh: "精度极限：一段绳子长 6cm，精确到 1cm。最短可能是多少？", en: "Accuracy limits: a rope is 6cm long, measured to the nearest 1cm. What is the shortest it could be?" },
+        type: 'choice',
+        choices: [
+          { zh: "$5.5$cm——下界 = 6 - 0.5", en: "$5.5$cm — lower bound = 6 - 0.5" },
+          { zh: "$5$cm", en: "$5$cm" },
+        ],
+        onCorrect: { zh: "精确到 1cm 意味着：$5.5 \\leq \\text{实际长度} < 6.5$。\n下界 = 测量值 - 精度的一半。\n$6 - 0.5 = 5.5$cm。\n$5.5$ 可以四舍五入到 $6$，但 $5.4$ 会变成 $5$。", en: "To nearest 1cm means: $5.5 \\leq actual < 6.5$.\nLower bound = measurement - half the precision.\n$6 - 0.5 = 5.5$cm.\n$5.5$ rounds to $6$, but $5.4$ would round to $5$." },
+        onWrong: { zh: "$5$cm 四舍五入是 $5$，不是 $6$！\n下界 = 测量值 - 精度的一半 = $6 - 0.5 = 5.5$cm。", en: "$5$cm rounds to $5$, not $6$!\nLower bound = measurement - half precision = $6 - 0.5 = 5.5$cm." },
+        onSkip: { zh: "下界 = 值 - 精度/2。精确到 1cm → $\\pm 0.5$cm。精确到 0.1 → $\\pm 0.05$。", en: "Lower bound = value - precision/2. To nearest 1cm → $\\pm 0.5$cm. To 0.1 → $\\pm 0.05$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '周瑜：为什么要算精度极限？\n城墙说 6cm——但实际可能是 5.8 或 6.3 都四舍五入得 6。\n知道下界，才能确保城墙足够厚不被攻破！', en: 'Zhou Yu: "Why calculate accuracy limits?\nThe wall says 6cm — but 5.8 or 6.3 both round to 6.\nKnowing the lower bound ensures the wall is thick enough to withstand an attack!"' }, highlightField: 'ans' },
       { text: { zh: '周瑜：下界公式\n精确到 $d = 1$cm → 误差 = $\\pm 0.5$cm\n下界 = 测量值 - $\\frac{d}{2}$', en: 'Zhou Yu: "Lower bound formula\nAccurate to $d = 1$cm → error = $\\pm 0.5$cm\nLower bound = measurement - $\\frac{d}{2}$"' }, highlightField: 'ans' },
@@ -2214,6 +3085,19 @@ export const MISSIONS_Y10: Mission[] = [
     description: { zh: '身高↑体重↑是(1=正,2=负,3=无)相关?', en: 'Height↑weight↑ is (1=positive, 2=negative, 3=none) correlation?' },
     data: { answer: 1 },
     difficulty: 'Easy', reward: 300, kpId: 'kp-9.5-02', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "散点预判：散点图上点从左下到右上分布。这是什么相关性？", en: "Scatter prediction: points on a scatter graph trend from bottom-left to top-right. What correlation?" },
+        type: 'choice',
+        choices: [
+          { zh: "正相关——$x$ 增大时 $y$ 也增大", en: "Positive correlation — as $x$ increases, $y$ increases" },
+          { zh: "负相关", en: "Negative correlation" },
+        ],
+        onCorrect: { zh: "正相关：左下→右上（同向变化）\n负相关：左上→右下（反向变化）\n无相关：没有明显趋势（散乱分布）\n相关性不等于因果关系！", en: "Positive: bottom-left → top-right (same direction)\nNegative: top-left → bottom-right (opposite direction)\nNo correlation: no clear trend (scattered)\nCorrelation does NOT mean causation!" },
+        onWrong: { zh: "负相关是从左上到右下（一个增大另一个减小）。\n左下到右上 = 同时增大 = 正相关。", en: "Negative is top-left to bottom-right (one increases, other decreases).\nBottom-left to top-right = both increase = positive correlation." },
+        onSkip: { zh: "正相关：同向。负相关：反向。无相关：无趋势。相关≠因果。", en: "Positive: same direction. Negative: opposite. None: no trend. Correlation ≠ causation." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '马良：为什么要学散点图？\n两组数据有关系吗？散点图一眼就能看出——\n点越靠近一条线，关系越强。这叫"相关性"。', en: 'Ma Liang: "Why learn scatter diagrams?\nAre two data sets related? Scatter diagrams show it at a glance —\nThe closer points are to a line, the stronger the relationship. This is called correlation."' }, highlightField: 'ans' },
       { text: { zh: '马良：三种相关性\n正相关：一个↑另一个也↑（同向）\n负相关：一个↑另一个↓（反向）\n无相关：看不出规律（散乱）', en: 'Ma Liang: "Three types of correlation\nPositive: one↑ the other↑ (same direction)\nNegative: one↑ the other↓ (opposite direction)\nNo correlation: no pattern (scattered)"' }, highlightField: 'ans' },

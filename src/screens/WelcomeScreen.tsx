@@ -147,13 +147,15 @@ export const WelcomeScreen = ({
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 w-full max-w-sm space-y-4"
+              className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 w-full max-w-sm"
             >
+              <form onSubmit={e => { e.preventDefault(); handleAuth(); }} className="space-y-4">
               <input
                 type="email"
                 placeholder={t.emailPlaceholder}
                 value={email}
                 onChange={e => setEmail(e.target.value)}
+                autoComplete="email"
                 className={`w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 ${INPUT_FOCUS_CLASS}`}
               />
               <input
@@ -161,22 +163,24 @@ export const WelcomeScreen = ({
                 placeholder={t.passwordPlaceholder}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
+                autoComplete="current-password"
                 className={`w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 ${INPUT_FOCUS_CLASS}`}
-                onKeyDown={e => e.key === 'Enter' && handleAuth()}
               />
               {authError && <p className="text-rose-400 text-xs font-bold">{authError}</p>}
               <button
-                onClick={handleAuth}
+                type="submit"
                 className="w-full py-3 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-500 transition-all"
               >
                 {isSignup ? t.signupSubmit : t.loginSubmit}
               </button>
               <button
+                type="button"
                 onClick={() => setIsSignup(!isSignup)}
                 className="w-full text-white/50 text-xs font-bold hover:text-white/80 transition-colors"
               >
                 {isSignup ? t.switchToLogin : t.switchToSignup}
               </button>
+              </form>
             </motion.div>
           )}
         </div>
