@@ -97,6 +97,8 @@ export function DashboardScreen({ lang, onClose }: Props) {
 
   // Teacher class scoping: null = admin (see all), string[] = teacher (filtered)
   const [teacherClasses, setTeacherClasses] = useState<string[] | null>(null);
+  // Teaching groups this teacher owns (for programme tag visibility)
+  const [teacherGroups, setTeacherGroups] = useState<string[]>([]);
   useEffect(() => {
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -113,6 +115,23 @@ export function DashboardScreen({ lang, onClose }: Props) {
       } else {
         // No direct class assignments → admin, see everything
         setTeacherClasses(null);
+      }
+      // Find teaching groups this teacher owns or supervises
+      const { data: groups } = await supabase
+        .from('teaching_groups').select('slug, name')
+        .or(`owner_user_id.eq.${user.id},supervisor_user_id.eq.${user.id}`);
+      if (groups && groups.length > 0) {
+        // Extract the tag format from slug: harrowhk-nzh-mathea → NZH-MathEA
+        // Use the tag that students actually have in class_tags
+        const groupTags = groups.map(g => {
+          // Match against CLASS_GROUPS.programme
+          for (const p of CLASS_GROUPS.programme) {
+            if (g.slug.toLowerCase().includes(p.toLowerCase().replace(/-/g, ''))) return p;
+            if (g.name.includes(p)) return p;
+          }
+          return g.name.replace('HarrowHK-', '');
+        });
+        setTeacherGroups(groupTags);
       }
     })();
   }, []);
@@ -160,17 +179,18 @@ export function DashboardScreen({ lang, onClose }: Props) {
     for (const c of CLASS_GROUPS.homeroom) {
       if (c.startsWith(prefix)) tags.add(c);
     }
-    // Always include cross-grade programme tags
-    for (const c of CLASS_GROUPS.programme) tags.add(c);
-    // Add any custom tags from students that match this grade
+    // Include teaching group tags this teacher owns (admin sees all programme tags)
+    const visibleGroups = teacherClasses === null ? CLASS_GROUPS.programme : teacherGroups;
+    for (const c of visibleGroups) tags.add(c);
+    // Add any custom tags from students that match this grade or visible groups
     for (const s of students) {
       for (const t of (s.class_tags || [])) {
-        if (t.startsWith(prefix) || CLASS_GROUPS.programme.includes(t)) tags.add(t);
+        if (t.startsWith(prefix) || visibleGroups.includes(t)) tags.add(t);
       }
     }
-    // Teacher scoping: if teacher has assigned classes, only show those + programme tags
+    // Teacher scoping: if teacher has assigned classes, only show those + their groups
     if (teacherClasses) {
-      const allowed = new Set([...teacherClasses, ...CLASS_GROUPS.programme]);
+      const allowed = new Set([...teacherClasses, ...visibleGroups]);
       return [...tags].filter(t => allowed.has(t)).sort();
     }
     return [...tags].sort();

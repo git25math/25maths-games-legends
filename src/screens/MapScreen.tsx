@@ -1339,16 +1339,18 @@ export const MapScreen = ({
               {/* Handle bar */}
               <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4" />
               {/* ═══ Core items (always visible) ═══ */}
-              <div className="grid grid-cols-3 gap-3 mb-3">
-                <button onClick={() => { onMobileMenuClose?.(); setShowJoinClass(true); }}
-                  className="flex flex-col items-center gap-1.5 py-4 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-300 active:bg-indigo-500/20">
-                  <span className="text-2xl">🏫</span>
-                  <span className="text-xs font-bold">{lang === 'en' ? 'Join Class' : '加入班级'}</span>
-                </button>
+              <div className="grid grid-cols-4 gap-3 mb-3">
+                {onLeaderboard && (
+                  <button onClick={() => { onMobileMenuClose?.(); onLeaderboard(); }}
+                    className="flex flex-col items-center gap-1.5 py-4 bg-yellow-500/10 rounded-xl border border-yellow-500/20 text-yellow-300 active:bg-yellow-500/20">
+                    <span className="text-2xl">🏆</span>
+                    <span className="text-xs font-bold">{lang === 'en' ? 'Ranks' : '排行'}</span>
+                  </button>
+                )}
                 <button onClick={() => { onMobileMenuClose?.(); setShowProgressReport(true); }}
                   className="flex flex-col items-center gap-1.5 py-4 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-300 active:bg-blue-500/20">
                   <span className="text-2xl">📊</span>
-                  <span className="text-xs font-bold">{lang === 'en' ? 'Report' : '学习报告'}</span>
+                  <span className="text-xs font-bold">{lang === 'en' ? 'Report' : '报告'}</span>
                 </button>
                 {onStartExpedition && (
                   <button onClick={() => { onMobileMenuClose?.(); const exps = getExpeditionsForGrade(profile.grade!); if (exps.length > 0 && onStartExpedition) onStartExpedition(exps[0].id); }}
@@ -1357,6 +1359,11 @@ export const MapScreen = ({
                     <span className="text-xs font-bold">{lang === 'en' ? 'Quest' : '远征'}</span>
                   </button>
                 )}
+                <button onClick={() => { onMobileMenuClose?.(); setShowJoinClass(true); }}
+                  className="flex flex-col items-center gap-1.5 py-4 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-300 active:bg-indigo-500/20">
+                  <span className="text-2xl">🏫</span>
+                  <span className="text-xs font-bold">{lang === 'en' ? 'Class' : '班级'}</span>
+                </button>
               </div>
 
               {/* ══�� More items (collapsed) ═══ */}
