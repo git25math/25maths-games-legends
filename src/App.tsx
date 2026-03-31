@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Component, Suspense, lazy } from 'react';
+import { useState, useEffect, useRef, useMemo, Component, Suspense, lazy } from 'react';
 import 'katex/dist/katex.min.css';
 import { AnimatePresence, motion } from 'motion/react';
 import { Languages, LogOut, XCircle } from 'lucide-react';
@@ -16,6 +16,7 @@ import { useMultiplayer, PK_COUNTDOWN_SECS, getFirstFinishTime, getFirstOpponent
 // generateMission is loaded lazily via dynamic import() to keep it out of the
 // critical path (352 KB generators chunk deferred until first use).
 const lazyGenerate = () => import('./utils/generateMission').then(m => m.generateMission);
+const loadProcessAttemptUtils = () => import('./utils/processAttempt');
 import { getDailyKey, DAILY_MULTIPLIER } from './utils/dailyChallenge';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
@@ -43,12 +44,12 @@ import { getInventory, addItem, useItem } from './utils/inventory';
 import { awardBattleItems, computeRecoveryReward } from './utils/repairItems';
 import { buildRecoveryPath, advanceRecoveryStep, isRecoveryComplete, getCurrentStep, getRecoverySession } from './utils/recoveryPath';
 import type { RecoverySession } from './utils/recoveryPath';
+import { toMissionSummaries } from './utils/missionSummary';
 
 import { BottomNav, type BottomTab } from "./components/BottomNav";
 import { Confetti } from './components/Confetti';
 import { useLessonRecovery } from './hooks/useLessonRecovery';
-import { processAttempt, getSkillHealth, setSkillHealth, processRecoveryComplete, getSkillHealthMap, type AttemptResult } from './utils/processAttempt';
-import { detectErrorPattern, getPattern, ERROR_PATTERNS } from './utils/errorPatterns';
+import { getSkillHealth, getSkillHealthMap, processRecoveryComplete, setSkillHealth } from './utils/skillHealth';
 const MathBattle = lazy(() => import('./components/MathBattle').then(module => ({ default: module.MathBattle })));
 const MapScreen = lazy(() => import('./screens/MapScreen').then(module => ({ default: module.MapScreen })));
 const LobbyScreen = lazy(() => import('./screens/LobbyScreen').then(module => ({ default: module.LobbyScreen })));
@@ -243,6 +244,7 @@ export default function App() {
     getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
   const { missions, loading: missionsLoading, offline } = useMissions(profile?.grade);
+  const missionSummaries = useMemo(() => toMissionSummaries(missions), [missions]);
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
   const hasRestoredMissionRef = useRef(false);
@@ -701,27 +703,32 @@ export default function App() {
         if (activeMission.kpId) {
           const topicMatch = activeMission.kpId.match(/^kp-(\d+\.\d+)/);
           if (topicMatch) {
-            const topicId = topicMatch[1];
-            const prevHealth = getSkillHealth(cm as Record<string, unknown>, topicId);
-            const { newState, result: healthResult } = processAttempt(prevHealth, true, undefined, topicId);
-            cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
-            // Show skill health recovery toast if health was below 100
-            if (prevHealth.healthScore < 100 && healthResult.healthDelta > 0) {
-              setSkillHealToast({ topicId, delta: healthResult.healthDelta, newHealth: newState.healthScore });
-              setTimeout(() => setSkillHealToast(null), 3000);
-            }
-            // Fire-and-forget: sync to Supabase user_skill_health table
-            if (user && !isGuest) {
-              supabase.from('user_skill_health').upsert({
-                user_id: user.id,
-                node_id: topicId,
-                health_score: newState.healthScore,
-                corruption_level: newState.corruptionLevel,
-                dominant_error_pattern_id: newState.dominantPatternId,
-                consecutive_same_pattern_count: newState.consecutiveSamePattern,
-                total_attempt_count: newState.totalAttempts,
-                last_attempt_at: new Date().toISOString(),
-              }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+            try {
+              const { processAttempt } = await loadProcessAttemptUtils();
+              const topicId = topicMatch[1];
+              const prevHealth = getSkillHealth(cm as Record<string, unknown>, topicId);
+              const { newState, result: healthResult } = processAttempt(prevHealth, true, undefined, topicId);
+              cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
+              // Show skill health recovery toast if health was below 100
+              if (prevHealth.healthScore < 100 && healthResult.healthDelta > 0) {
+                setSkillHealToast({ topicId, delta: healthResult.healthDelta, newHealth: newState.healthScore });
+                setTimeout(() => setSkillHealToast(null), 3000);
+              }
+              // Fire-and-forget: sync to Supabase user_skill_health table
+              if (user && !isGuest) {
+                supabase.from('user_skill_health').upsert({
+                  user_id: user.id,
+                  node_id: topicId,
+                  health_score: newState.healthScore,
+                  corruption_level: newState.corruptionLevel,
+                  dominant_error_pattern_id: newState.dominantPatternId,
+                  consecutive_same_pattern_count: newState.consecutiveSamePattern,
+                  total_attempt_count: newState.totalAttempts,
+                  last_attempt_at: new Date().toISOString(),
+                }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+              }
+            } catch (error) {
+              console.error('Failed to lazy-load processAttempt for battle success', error);
             }
           }
         }
@@ -777,29 +784,35 @@ export default function App() {
       if (activeMission.kpId) {
         const topicMatch = activeMission.kpId.match(/^kp-(\d+\.\d+)/);
         if (topicMatch) {
-          const topicId = topicMatch[1];
-          const health = getSkillHealth(cm as Record<string, unknown>, topicId);
-          // Use first error as dominant pattern (or generic if none)
-          const dominantErr = pendingErrorsRef.current[0];
-          const patternId = dominantErr === 'sign' ? 'sign_distribution' : dominantErr === 'method' ? 'generic_algebra' : dominantErr ? 'generic_number' : undefined;
-          const { newState } = processAttempt(health, false, patternId, topicId);
-          cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
-          // Fire-and-forget: sync to Supabase
-          if (user && !isGuest) {
-            supabase.from('user_skill_health').upsert({
-              user_id: user.id,
-              node_id: topicId,
-              health_score: newState.healthScore,
-              corruption_level: newState.corruptionLevel,
-              dominant_error_pattern_id: newState.dominantPatternId,
-              consecutive_same_pattern_count: newState.consecutiveSamePattern,
-              recent_error_count: newState.recentErrorCount,
-              total_attempt_count: newState.totalAttempts,
-              last_attempt_at: new Date().toISOString(),
-              last_error_at: new Date().toISOString(),
-              recommended_recovery_pack_id: newState.corruptionLevel === 'blocked' || newState.corruptionLevel === 'critical'
-                ? (patternId ? (ERROR_PATTERNS[patternId]?.recoveryPackId ?? null) : null) : null,
-            }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+          try {
+            const { processAttempt } = await loadProcessAttemptUtils();
+            const topicId = topicMatch[1];
+            const health = getSkillHealth(cm as Record<string, unknown>, topicId);
+            // Use first error as dominant pattern (or generic if none)
+            const dominantErr = pendingErrorsRef.current[0];
+            const patternId = dominantErr === 'sign' ? 'sign_distribution' : dominantErr === 'method' ? 'generic_algebra' : dominantErr ? 'generic_number' : undefined;
+            const { newState, result: healthResult } = processAttempt(health, false, patternId, topicId);
+            cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
+            // Fire-and-forget: sync to Supabase
+            if (user && !isGuest) {
+              supabase.from('user_skill_health').upsert({
+                user_id: user.id,
+                node_id: topicId,
+                health_score: newState.healthScore,
+                corruption_level: newState.corruptionLevel,
+                dominant_error_pattern_id: newState.dominantPatternId,
+                consecutive_same_pattern_count: newState.consecutiveSamePattern,
+                recent_error_count: newState.recentErrorCount,
+                total_attempt_count: newState.totalAttempts,
+                last_attempt_at: new Date().toISOString(),
+                last_error_at: new Date().toISOString(),
+                recommended_recovery_pack_id: newState.corruptionLevel === 'blocked' || newState.corruptionLevel === 'critical'
+                  ? healthResult.recoveryPackId
+                  : null,
+              }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+            }
+          } catch (error) {
+            console.error('Failed to lazy-load processAttempt for battle failure', error);
           }
         }
       }
@@ -847,8 +860,14 @@ export default function App() {
   };
 
   const isLoggedIn = !!user || isGuest;
-  // Teacher access: original admin email OR any user with TEACHER tag in class_tags
-  const isTeacher = user?.email === 'zhuxingda86@hotmail.com' || user?.email === 'nzhu@harrowhaikou.cn' || (profile?.class_tags ?? []).some(t => t.toUpperCase() === 'TEACHER');
+  // Teacher access: check teachers table (cached) OR TEACHER tag fallback
+  const [isTeacherDb, setIsTeacherDb] = useState(false);
+  useEffect(() => {
+    if (!user || isGuest) { setIsTeacherDb(false); return; }
+    supabase.from('teachers').select('id').eq('user_id', user.id).maybeSingle()
+      .then(({ data }) => setIsTeacherDb(!!data));
+  }, [user, isGuest]);
+  const isTeacher = isTeacherDb || (profile?.class_tags ?? []).some(t => t.toUpperCase() === 'TEACHER');
   const isMissionShellLoading = missionsLoading && (
     gameState === 'map' ||
     gameState === 'lobby' ||
@@ -1166,6 +1185,7 @@ export default function App() {
               {!isMissionShellLoading && gameState === 'lobby' && activeRoom && user && (
                 <LobbyScreen
                   lang={lang}
+                  missions={missions}
                   room={activeRoom}
                   userId={user.id}
                   onReady={toggleReady}
@@ -1435,6 +1455,7 @@ export default function App() {
                     character={selectedChar}
                     lang={lang}
                     grade={profile.grade}
+                    missions={missions}
                     onSaveRun={saveExpeditionXP}
                     onComplete={async (xpEarned, nodesCleared) => {
                       await saveExpeditionXP(xpEarned, nodesCleared);
@@ -1487,30 +1508,33 @@ export default function App() {
                       setGameState('practice');
                     }
                   }}
-                  onStartRecovery={(topicId) => {
+                  onStartRecovery={async (topicId) => {
                     if (!profile) return;
                     const healthMap = getSkillHealthMap(profile.completed_missions as Record<string, unknown>);
                     const health = healthMap[topicId];
                     const patternId = health?.dominantPatternId ?? null;
                     const errorType = (patternId ?? 'method') as import('./utils/diagnoseError').ErrorType;
 
-                    // Try multi-step recovery path first
-                    const mistakes = getMistakesMap(profile.completed_missions as Record<string, unknown>);
-                    const recoveryPath = buildRecoveryPath(topicId, errorType, mistakes, missions);
+                    try {
+                      const mistakes = getMistakesMap(profile.completed_missions as Record<string, unknown>);
+                      const recoveryPath = await buildRecoveryPath(topicId, errorType, mistakes, missions);
 
-                    if (recoveryPath && recoveryPath.steps.length > 1) {
-                      // Multi-step: persist session and show RecoveryPathPanel
-                      setRecoverySession(recoveryPath);
-                      const cm = structuredClone(profile.completed_missions) as any;
-                      cm._recovery = recoveryPath;
-                      updateProfile({ completed_missions: cm });
-                      // Stay on tech tree — RecoveryPathPanel will render
-                    } else {
-                      // Single-topic fallback: direct to RepairScreen
-                      setRepairTopicId(topicId);
-                      setRepairPatternId(patternId);
-                      setGameState('repair');
+                      if (recoveryPath && recoveryPath.steps.length > 1) {
+                        // Multi-step: persist session and show RecoveryPathPanel
+                        setRecoverySession(recoveryPath);
+                        const cm = structuredClone(profile.completed_missions) as any;
+                        cm._recovery = recoveryPath;
+                        updateProfile({ completed_missions: cm });
+                        return;
+                      }
+                    } catch (error) {
+                      console.error('Failed to build recovery path, falling back to single-topic repair', error);
                     }
+
+                    // Single-topic fallback: direct to RepairScreen
+                    setRepairTopicId(topicId);
+                    setRepairPatternId(patternId);
+                    setGameState('repair');
                   }}
                   recoverySession={recoverySession}
                   onRecoveryStepStart={(missionId) => {
@@ -1562,6 +1586,7 @@ export default function App() {
                 <PKSetupPanel
                   lang={lang}
                   grade={profile.grade}
+                  missions={missionSummaries}
                   onCreateRoom={async (missionId) => {
                     const ok = await createRoom('pk', missionId);
                     if (ok) {
@@ -1763,6 +1788,7 @@ export default function App() {
             <Suspense fallback={<ScreenLoader lang={lang} label={lang === 'en' ? 'Loading result' : '正在加载结算'} />}>
               <PKResultPanel
                 lang={lang}
+                missions={missionSummaries}
                 room={activeRoom}
                 currentUserId={user.id}
                 grade={profile?.grade ?? 7}

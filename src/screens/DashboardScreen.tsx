@@ -7,12 +7,12 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, RefreshCw, Users, CheckCircle, Circle, Trophy, Plus, X, UserPlus, Tag, Download, ArrowUpDown, Filter } from 'lucide-react';
-import type { Language, Mission } from '../types';
+import type { Language, MissionSummary } from '../types';
 import { supabase } from '../supabase';
 import { getMissionIdsForKP } from '../utils/kpMissions';
 import { SkeletonRow } from '../components/SkeletonRow';
 import { INPUT_FOCUS_CLASS } from '../utils/animationPresets';
-import { MISSIONS } from '../data/missions';
+import { useMissionSummaries } from '../hooks/useMissionSummaries';
 import { lt } from '../i18n/resolveText';
 import { AlertPanel, computeAlerts } from '../components/dashboard/AlertPanel';
 import { StudentDetailCard } from '../components/dashboard/StudentDetailCard';
@@ -34,14 +34,14 @@ type Props = {
   onClose: () => void;
 };
 
-// Group missions by grade → unitId → ordered missions
-function getUnitMap(grade: number): Map<number, { title: string; missions: Mission[] }> {
-  const map = new Map<number, { title: string; missions: Mission[] }>();
-  const gradeMissions = MISSIONS.filter(m => m.grade === grade).sort((a, b) => {
+// Group missions by unitId → ordered missions
+function getUnitMap(missions: MissionSummary[]): Map<number, { title: string; missions: MissionSummary[] }> {
+  const map = new Map<number, { title: string; missions: MissionSummary[] }>();
+  const sortedMissions = [...missions].sort((a, b) => {
     if (a.unitId !== b.unitId) return a.unitId - b.unitId;
     return a.order - b.order;
   });
-  for (const m of gradeMissions) {
+  for (const m of sortedMissions) {
     if (!map.has(m.unitId)) {
       map.set(m.unitId, { title: m.unitTitle ? lt(m.unitTitle, 'zh') : `Unit ${m.unitId}`, missions: [] });
     }
@@ -59,7 +59,7 @@ function Dot({ done, color }: { done: boolean; color: string }) {
 // Predefined class groups
 const CLASS_GROUPS: Record<string, string[]> = {
   homeroom: ['7A', '7B', '7C', '8A', '8B', '8C', '9A', '9B', '9C', '10A', '10B', '10C', '11A', '11B', '11C'],
-  programme: ['NZH MATHS EA'],
+  programme: ['NZH-MathEA', 'StudentLed-MathEA', 'MathCompetition'],
 };
 const ALL_CLASSES = [...CLASS_GROUPS.homeroom, ...CLASS_GROUPS.programme];
 
@@ -94,6 +94,20 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
   const [error, setError] = useState('');
+
+  // Teacher class scoping: load which classes this teacher owns
+  const [teacherClasses, setTeacherClasses] = useState<string[] | null>(null); // null = admin (see all)
+  useEffect(() => {
+    supabase.rpc('get_teacher_classes').then(({ data }) => {
+      if (data && data.length > 0) {
+        // Teacher has assigned classes — extract class names as tags
+        setTeacherClasses(data.map((c: { name: string }) => c.name));
+      } else {
+        // Admin or no classes — see everything
+        setTeacherClasses(null);
+      }
+    });
+  }, []);
   const [addingTagFor, setAddingTagFor] = useState<string | null>(null);
   const [newTagValue, setNewTagValue] = useState('');
   const [showBatchAssign, setShowBatchAssign] = useState(false);
@@ -104,6 +118,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [parentReportStudent, setParentReportStudent] = useState<StudentRow | null>(null);
   const [alertOnly, setAlertOnly] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
+  const { missions: gradeMissions, loading: missionsLoading } = useMissionSummaries(grade);
 
   // Assignments (shared: AssignmentPanel renders, StudentDetailCard reads)
   type AssignmentRecord = { id: string; mission_ids: number[]; title: string; deadline: string | null; archived_at: string | null };
@@ -125,10 +140,11 @@ export function DashboardScreen({ lang, onClose }: Props) {
     try { return localStorage.getItem('dashboard_sortAsc') === 'true'; } catch { return false; }
   });
 
-  const unitMap = useMemo(() => getUnitMap(grade), [grade]);
+  const unitMap = useMemo(() => getUnitMap(gradeMissions), [gradeMissions]);
   const units: UnitEntry[] = useMemo(() => [...unitMap.entries()], [unitMap]);
+  const isDashboardLoading = loading || missionsLoading;
 
-  // Collect tags filtered by current grade: Y7 → only 7A/7B/7C, Y8 → 8A/8B/8C, etc.
+  // Collect tags filtered by current grade + teacher scope
   const allTags = useMemo(() => {
     const prefix = String(grade);
     const tags = new Set<string>();
@@ -143,6 +159,11 @@ export function DashboardScreen({ lang, onClose }: Props) {
       for (const t of (s.class_tags || [])) {
         if (t.startsWith(prefix) || CLASS_GROUPS.programme.includes(t)) tags.add(t);
       }
+    }
+    // Teacher scoping: if teacher has assigned classes, only show those + programme tags
+    if (teacherClasses) {
+      const allowed = new Set([...teacherClasses, ...CLASS_GROUPS.programme]);
+      return [...tags].filter(t => allowed.has(t)).sort();
     }
     return [...tags].sort();
   }, [students, grade]);
@@ -282,7 +303,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
     return count;
   }, [units]);
 
-  const getStudentUnitProgress = (student: StudentRow, unitMissions: Mission[]) => {
+  const getStudentUnitProgress = (student: StudentRow, unitMissions: MissionSummary[]) => {
     let green = 0, amber = 0, red = 0;
     const cm = student.completed_missions;
     if (!cm || typeof cm !== 'object') return { green: 0, amber: 0, red: 0, total: unitMissions.length };
@@ -467,7 +488,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
             onClick={fetchStudents}
             className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-indigo-50 hover:border-indigo-200 transition-colors shadow-sm"
           >
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            <RefreshCw size={14} className={isDashboardLoading ? 'animate-spin' : ''} />
           </button>
           <button
             onClick={() => setShowWeeklyReport(true)}
@@ -530,7 +551,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
       {/* ╔══════════════════════════════════════════╗
          ║  ZONE 1: 今天怎么样？（选完班级再看）    ║
          ╚══════════════════════════════════════════╝ */}
-      {loading && students.length === 0 ? (
+      {isDashboardLoading && students.length === 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[0,1,2,3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-xl animate-pulse" />)}
         </div>
@@ -670,7 +691,7 @@ export function DashboardScreen({ lang, onClose }: Props) {
             {students.length === 0 && (
               <tr>
                 <td colSpan={6 + units.length} className="text-center py-8">
-                  {loading ? (
+                  {isDashboardLoading ? (
                     <div className="flex flex-col gap-2 p-4">
                       {Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} columns={5 + units.length} />)}
                     </div>
