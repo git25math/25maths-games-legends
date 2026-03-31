@@ -66,11 +66,7 @@ export const LeaderboardPanel = ({
 
   const fetchGrade = () => {
     return supabase
-      .from('gl_user_progress')
-      .select('user_id, display_name, total_score, selected_char_id')
-      .eq('grade', grade)
-      .order('total_score', { ascending: false })
-      .limit(20)
+      .rpc('get_grade_leaderboard', { p_grade: grade, p_limit: 20 })
       .then(({ data, error: err }) => {
         if (err) throw err;
         setGradeEntries((data as LeaderEntry[]) ?? []);
@@ -80,12 +76,7 @@ export const LeaderboardPanel = ({
   const fetchClass = () => {
     if (!hasClass) return Promise.resolve();
     return supabase
-      .from('gl_user_progress')
-      .select('user_id, display_name, total_score, selected_char_id')
-      .eq('grade', grade)
-      .contains('class_tags', [classTags![0]])
-      .order('total_score', { ascending: false })
-      .limit(50)
+      .rpc('get_class_leaderboard', { p_class_tag: classTags![0], p_limit: 50 })
       .then(({ data, error: err }) => {
         if (err) throw err;
         setClassEntries((data as LeaderEntry[]) ?? []);
@@ -93,14 +84,8 @@ export const LeaderboardPanel = ({
   };
 
   const fetchSchool = () => {
-    // Only students with class_tags (school-assigned) appear in school leaderboard
     return supabase
-      .from('gl_user_progress')
-      .select('user_id, display_name, total_score, selected_char_id, class_tags')
-      .gt('total_score', 0)
-      .not('class_tags', 'eq', '{}')
-      .order('total_score', { ascending: false })
-      .limit(50)
+      .rpc('get_school_leaderboard', { p_limit: 50 })
       .then(({ data, error: err }) => {
         if (err) throw err;
         setSchoolEntries((data as LeaderEntry[]) ?? []);
@@ -109,7 +94,7 @@ export const LeaderboardPanel = ({
 
   const fetchWeekly = () => {
     const mondayISO = getMondayISO();
-    // Fetch this week's battles + grade user list, aggregate client-side
+    // Fetch this week's battles + grade user list via RPC, aggregate client-side
     return Promise.all([
       supabase
         .from('gl_battle_results')
@@ -117,9 +102,7 @@ export const LeaderboardPanel = ({
         .eq('success', true)
         .gte('created_at', mondayISO),
       supabase
-        .from('gl_user_progress')
-        .select('user_id, display_name, total_score, selected_char_id')
-        .eq('grade', grade),
+        .rpc('get_grade_leaderboard', { p_grade: grade, p_limit: 100 }),
     ]).then(([battleRes, userRes]) => {
       if (battleRes.error) throw battleRes.error;
       if (userRes.error) throw userRes.error;
