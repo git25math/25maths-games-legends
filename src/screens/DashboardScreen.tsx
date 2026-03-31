@@ -777,9 +777,11 @@ export function DashboardScreen({ lang, onClose }: Props) {
                   </td>
                   <td className="hidden sm:table-cell px-2 py-2" onClick={e => e.stopPropagation()}>
                     <div className="flex items-center gap-1 flex-wrap">
-                      {(s.class_tags || []).map(tag => (
-                        <TagBadge key={tag} tag={tag} onRemove={() => removeStudentTag(s.user_id, tag)} />
-                      ))}
+                      {(s.class_tags || []).map(tag => {
+                        // Homeroom class tags (start with digit) are not removable
+                        const isHomeroom = /^\d/.test(tag);
+                        return <TagBadge key={tag} tag={tag} onRemove={isHomeroom ? undefined : () => removeStudentTag(s.user_id, tag)} />;
+                      })}
                       {addingTagFor === s.user_id ? (
                         <span className="inline-flex items-center gap-0.5">
                           <select
