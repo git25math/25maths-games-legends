@@ -95,18 +95,26 @@ export function DashboardScreen({ lang, onClose }: Props) {
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
   const [error, setError] = useState('');
 
-  // Teacher class scoping: load which classes this teacher owns
-  const [teacherClasses, setTeacherClasses] = useState<string[] | null>(null); // null = admin (see all)
+  // Teacher class scoping: null = admin (see all), string[] = teacher (filtered)
+  const [teacherClasses, setTeacherClasses] = useState<string[] | null>(null);
   useEffect(() => {
-    supabase.rpc('get_teacher_classes').then(({ data }) => {
-      if (data && data.length > 0) {
-        // Teacher has assigned classes — extract class names as tags
-        setTeacherClasses(data.map((c: { name: string }) => c.name));
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      // Find this teacher's ID in teachers table
+      const { data: teacher } = await supabase
+        .from('teachers').select('id').eq('user_id', user.id).maybeSingle();
+      if (!teacher) return;
+      // Find classes directly assigned to this teacher
+      const { data: classes } = await supabase
+        .from('kw_classes').select('name').eq('teacher_id', teacher.id);
+      if (classes && classes.length > 0) {
+        setTeacherClasses(classes.map(c => c.name));
       } else {
-        // Admin or no classes — see everything
+        // No direct class assignments → admin, see everything
         setTeacherClasses(null);
       }
-    });
+    })();
   }, []);
   const [addingTagFor, setAddingTagFor] = useState<string | null>(null);
   const [newTagValue, setNewTagValue] = useState('');
