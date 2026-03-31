@@ -1353,7 +1353,7 @@ export const MapScreen = ({
                   <span className="text-xs font-bold">{lang === 'en' ? 'Report' : '报告'}</span>
                 </button>
                 {onStartExpedition && (
-                  <button onClick={() => { onMobileMenuClose?.(); const exps = getExpeditionsForGrade(profile.grade!); if (exps.length > 0 && onStartExpedition) onStartExpedition(exps[0].id); }}
+                  <button onClick={() => { const exps = getExpeditionsForGrade(profile.grade!); if (exps.length > 0) { onStartExpedition(exps[0].id); } onMobileMenuClose?.(); }}
                     className="flex flex-col items-center gap-1.5 py-4 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-300 active:bg-amber-500/20">
                     <span className="text-2xl">⚔️</span>
                     <span className="text-xs font-bold">{lang === 'en' ? 'Quest' : '远征'}</span>
