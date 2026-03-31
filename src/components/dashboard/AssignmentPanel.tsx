@@ -6,10 +6,11 @@
 import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ClipboardList, Plus, Archive, Calendar, CheckCircle2, Clock, ChevronDown, ChevronRight, X, Link2, Check } from 'lucide-react';
-import type { Language, Mission } from '../../types';
+import type { Language, MissionSummary } from '../../types';
 import type { StudentRow, UnitEntry } from './types';
 import { supabase } from '../../supabase';
 import { lt } from '../../i18n/resolveText';
+import { buildMissionSummaryMap } from '../../utils/missionSummary';
 
 type Assignment = {
   id: string;
@@ -55,18 +56,14 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
 
   // All missions for current grade, grouped by unit
   const gradeMissions = useMemo(() => {
-    const missions: Mission[] = [];
+    const missions: MissionSummary[] = [];
     for (const [, u] of units) {
       missions.push(...u.missions);
     }
     return missions;
   }, [units]);
 
-  const missionMap = useMemo(() => {
-    const map = new Map<number, Mission>();
-    for (const m of gradeMissions) map.set(m.id, m);
-    return map;
-  }, [gradeMissions]);
+  const missionMap = useMemo(() => buildMissionSummaryMap(gradeMissions), [gradeMissions]);
 
   // Fetch assignments
   const fetchAssignments = async () => {
@@ -164,7 +161,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
           )}
         </h3>
         <button
-          onClick={() => setShowCreate(true)}
+          onClick={() => setShowCreate(!showCreate)}
           className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-colors"
         >
           <Plus size={14} /> {lang === 'en' ? 'New' : '新建'}
@@ -511,7 +508,7 @@ function CreateAssignmentModal({
     });
   };
 
-  const selectUnit = (unitMissions: Mission[]) => {
+  const selectUnit = (unitMissions: MissionSummary[]) => {
     setSelectedMissions(prev => {
       const next = new Set(prev);
       const allSelected = unitMissions.every(m => next.has(m.id));
