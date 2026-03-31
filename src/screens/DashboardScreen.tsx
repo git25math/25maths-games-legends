@@ -181,7 +181,11 @@ export function DashboardScreen({ lang, onClose }: Props) {
       // plus grade fallback (for unassigned students). This ensures a 7A student
       // studying Y8 content still appears under Y7 in the dashboard.
       const prefix = String(grade);
-      const gradeClasses = CLASS_GROUPS.homeroom.filter(c => c.startsWith(prefix));
+      // Teacher scoping: only show classes the teacher owns
+      const allGradeClasses = CLASS_GROUPS.homeroom.filter(c => c.startsWith(prefix));
+      const gradeClasses = teacherClasses
+        ? allGradeClasses.filter(c => teacherClasses.includes(c))
+        : allGradeClasses;
 
       if (filterTag) {
         // Specific class selected — query by class_tags contains
@@ -482,7 +486,17 @@ export function DashboardScreen({ lang, onClose }: Props) {
             onChange={e => { setGrade(Number(e.target.value)); setFilterTag(''); }}
             className={`bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-900 shadow-sm transition-shadow ${INPUT_FOCUS_CLASS}`}
           >
-            {[7, 8, 9, 10, 11].map(g => <option key={g} value={g}>Y{g}</option>)}
+            {(() => {
+              // If teacher has scoped classes, only show relevant grades
+              if (teacherClasses) {
+                const grades = new Set(teacherClasses.map(c => {
+                  const m = c.match(/^(\d+)/);
+                  return m ? Number(m[1]) : null;
+                }).filter(Boolean) as number[]);
+                if (grades.size > 0) return [...grades].sort().map(g => <option key={g} value={g}>Y{g}</option>);
+              }
+              return [7, 8, 9, 10, 11].map(g => <option key={g} value={g}>Y{g}</option>);
+            })()}
           </select>
           <button
             onClick={fetchStudents}
