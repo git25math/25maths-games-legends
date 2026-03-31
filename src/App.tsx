@@ -865,8 +865,7 @@ export default function App() {
   useEffect(() => {
     if (!user || isGuest) { setIsTeacherDb(false); return; }
     supabase.from('teachers').select('id').eq('user_id', user.id).maybeSingle()
-      .then(({ data }) => setIsTeacherDb(!!data))
-      .catch(() => setIsTeacherDb(false));
+      .then(({ data, error }) => setIsTeacherDb(!error && !!data));
   }, [user, isGuest]);
   const isTeacher = isTeacherDb || (profile?.class_tags ?? []).some(t => t.toUpperCase() === 'TEACHER');
   const isMissionShellLoading = missionsLoading && (

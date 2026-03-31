@@ -77,8 +77,7 @@ export function useLessonRecovery(
             return;
           }
         }
-      })
-      .catch(() => { /* lesson recovery check non-blocking */ });
+      });
   }, [userId, completedMissions, dismissed]);
 
   return {
