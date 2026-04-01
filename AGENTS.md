@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v10.5.6 (2026-03-30)
+> **最后更新**: v10.6.0 (2026-04-01)
 
 ---
 
@@ -25,14 +25,14 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v10.5.6 (2026-03-30) |
+| **当前版本** | v10.6.0 (2026-04-01) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (2422 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
 
 ---
 
-## 三、当前状态快照（v10.5.6, 2026-03-30）
+## 三、当前状态快照（v10.6.0, 2026-04-01）
 
 ### 规模
 - **424 missions** 分布: Y7(89) + Y8(78) + Y9(95) + Y10(87) + Y11(60) + Y12(15)
@@ -84,6 +84,18 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 - 地图首屏不再同步打包这些非首屏弹层，打开对应面板时再加载 chunk
 - 构建 `MapScreen` chunk `114.45 kB → 68.20 kB`，主入口维持 `361.89 kB`
 - 测试: `2420 passed`, build 零错误
+
+#### v10.6.0 — 安全加固 + 通知系统 + 积分修正 (2026-04-01)
+- **多窗口重复积分漏洞修复**: `record_battle_result` RPC 30秒去重 + `battleSubmittingRef` 客户端锁
+- **total_score 篡改封堵**: 删除 UPDATE RLS，所有 profile 修改走 `update_user_progress_safe` RPC
+- **add_score RPC**: 唯一加分通道，单次上限 10000
+- **submit_pk_score**: PK 分数上限 50000
+- **SP 服务端校验**: 增量 ≤5/不可减少，spent_SP 不可减少/不可超 total
+- **通知系统**: `useNotifications` + `NotificationModal`，登录自动弹出未读消息
+- **积分修正**: 8 名受影响用户重算 + 个性化通知
+- **登录 XP 防重**: localStorage 双重锁 `gl_login_done_YYYY-MM-DD`
+- **Bug 防范规则**: +3 条（规则 M/N/O）
+- 新文件: `src/hooks/useNotifications.ts`, `src/components/NotificationModal.tsx`
 
 #### v10.5.6 — summary loader 恢复力 + 作业缺失兜底
 - `missionSummaries/loader.ts`: 失败后不再缓存 reject，`useMissionSummaries()` 新增错误态，断网恢复后可重新加载 summary chunk
@@ -348,6 +360,9 @@ gh run list --repo git25math/25maths-games-legends --limit 1  # 验证部署
 7. **规则G** — formula 用短公式：不要在 `\text{}` 里放长中文句子
 8. **规则H** — 重复 ID 检查：`grep -o 'id: [0-9]*' src/data/missions.ts | sort | uniq -d` 必须为空
 9. **规则I** — 新文件必须 git add：commit 前 `git status` 检查 `??` 未跟踪文件
+10. **规则M** — 积分写入必须走 RPC：SECURITY DEFINER + 去重 + 上限校验，禁止客户端直接 INSERT 计分表
+11. **规则N** — 竞争性字段走专用 RPC：total_score 等排行榜字段禁止直接 UPDATE，必须走 `add_score` RPC（上限 10000）
+12. **规则O** — 每日奖励双重防重：DB 字段 + localStorage 锁，锁在异步操作之前设置
 
 ---
 
@@ -431,9 +446,14 @@ for mid, steps_raw in missions:
 | DONE | **家长周报** | ✅ ProgressReport.tsx（3统计+鼓励语+MapScreen入口）|
 | DONE | **教师行动建议** | ✅ AlertPanel 5类建议 + KPWeaknessPanel top-3建议 |
 | DONE | **ARIA无障碍** | ✅ 5文件 dialog/alert/input/button |
+| DONE | **安全加固 v10.6** | ✅ 多窗口去重 + total_score RPC 保护 + PK 分数上限 + SP 校验 + 登录 XP 防重 |
+| DONE | **通知系统** | ✅ useNotifications + NotificationModal，登录自动弹出未读通知 |
+| DONE | **积分修正** | ✅ 8 名受影响用户积分重算 + 个性化通知 |
 | NEXT | **用户测试 (Phase 1)** | 找5个学生做30分钟试用，见 USER-TEST-PLAYBOOK.md |
+| NEXT | **Season 2 上线** | 数据就绪，改 ACTIVE_SEASON[0]→[1] 即可 |
 | FUTURE | **Phase 5** | 章节地图 + 视频三位一体 + 离线支持 |
 | FUTURE | **班级远征** | 多人协作通关 |
+| FUTURE | **积分来源审计** | 定期校验 total_score vs gl_battle_results 聚合值，自动标记异常用户 |
 
 ---
 

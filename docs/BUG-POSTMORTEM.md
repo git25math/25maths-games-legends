@@ -193,3 +193,43 @@ await updateProfile({ total_score: prevScore + xp });
 | generateSimplifyMission | 4707 | 是否加常数项 | 无 template 控制 | ✅ OK |
 
 **结论**: 所有需要尊重 template 的生成器都已修复。其余随机化是设计意图（如随机正负号、随机变体），不需要修改。
+
+---
+
+## Bug 13: 多窗口重复积分漏洞（CRITICAL — v10.6.0 修复）
+
+**现象**: 学生同时开多个浏览器标签页做同一关卡，每个窗口都提交分数，积分翻倍。Freeman 通过此方式积累到 100 万+。
+**根因**: `handleBattleComplete` 直接 INSERT 到 `gl_battle_results`，无去重机制。同一关卡同一用户 30 秒内可提交无限次。
+**修复**:
+1. 服务端：创建 `record_battle_result` RPC，30 秒内同 user+mission 的重复提交返回 `false`
+2. 客户端：`battleSubmittingRef` useRef 锁 + try/finally，防止同一标签页双击提交
+3. 积分修正：8 名受影响用户重新结算，个性化通知已发送
+**防范规则**:
+> **规则 M**: 所有写入积分/成就的操作必须走 SECURITY DEFINER RPC，RPC 内做去重+上限校验。绝不允许客户端直接 INSERT 到计分表。
+
+---
+
+## Bug 14: total_score 可被 DevTools 直接篡改（CRITICAL — v10.6.0 修复）
+
+**现象**: 用户可在 DevTools 执行 `supabase.from('gl_user_progress').update({total_score: 999999})` 直接修改积分。
+**根因**: RLS UPDATE 策略仅检查 `auth.uid() = user_id`（行所有权），不限制哪些字段可以修改。
+**修复**:
+1. 删除 `gl_user_progress` 所有 UPDATE RLS 策略，彻底封死直接 UPDATE
+2. 创建 `update_user_progress_safe` SECURITY DEFINER RPC，路由所有 profile 修改
+3. 创建 `add_score` SECURITY DEFINER RPC（单次上限 10000），唯一合法加分通道
+4. RPC 内校验：SP 增量 ≤5/不可减少，spent_SP 不可减少/不可超 total
+5. 前端 `updateProfile` 改为调 RPC，自动剥离 `total_score`
+**防范规则**:
+> **规则 N**: 竞争性字段（total_score、stats 等影响排行榜的数据）禁止通过直接 UPDATE 修改。必须走专用 RPC，RPC 内做增量校验+上限约束。
+
+---
+
+## Bug 15: 登录 XP 每次刷新重复发放（MEDIUM — v10.6.0 修复）
+
+**现象**: 每次刷新页面都弹出 "+20 XP" 登录奖励通知，每天应只发一次。
+**根因**: 登录去重依赖 `_login.lastDate` 写入 DB，但如果 `updateProfile` RPC 失败（静默吞错误），lastDate 未持久化，刷新后重新触发。`addScore` 和通知弹出在 `updateProfile` 之后无条件执行。
+**修复**:
+1. 增加 localStorage 双重防护：`gl_login_done_YYYY-MM-DD`，在异步操作之前设置
+2. DB 检查 + localStorage 检查 = 双重保险
+**防范规则**:
+> **规则 O**: 每日一次的奖励逻辑必须有 localStorage 防重锁作为 DB 写入失败的兜底。锁在异步操作之前设置，防止快速刷新竞态。
