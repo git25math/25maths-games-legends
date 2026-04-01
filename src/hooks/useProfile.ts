@@ -87,12 +87,13 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
       return;
     }
     if (!user) return;
-    const { error } = await supabase
-      .from('gl_user_progress')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('user_id', user.id);
+    // Strip total_score (must use addScore RPC) and user_id (immutable)
+    const { total_score: _ts, user_id: _uid, updated_at: _ua, ...safeUpdates } = updates as any;
+    const { error } = await supabase.rpc('update_user_progress_safe', {
+      p_updates: safeUpdates,
+    });
     if (error) {
-      handleSupabaseError(error, 'update', 'gl_user_progress');
+      handleSupabaseError(error, 'rpc', 'update_user_progress_safe');
     } else {
       setProfile(prev => prev ? { ...prev, ...updates } : null);
     }
