@@ -192,6 +192,7 @@ export const MapScreen = ({
     }
   }, [autoOpenHomework]);
   const [expandedCompletedUnit, setExpandedCompletedUnit] = useState<string | null>(null);
+  const [showCompletedInCurrentUnit, setShowCompletedInCurrentUnit] = useState(false);
 
   // Daily challenge countdown
   const [countdown, setCountdown] = useState(getSecondsUntilMidnight());
@@ -385,41 +386,89 @@ export const MapScreen = ({
         currentId={u.firstPlayable?.id}
       />
 
-      {/* Mission card grid */}
-      <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-        {u.unitMissions.map(mission => {
-          const comp = profile.completed_missions[String(mission.id)];
-          const isNextUp = mission.id === u.firstPlayable?.id;
-          const isCompleted = hasAnyPracticeCompletion(comp);
-          const prevMission = gradeMissions.find(m => m.unitId === mission.unitId && m.order === mission.order - 1);
-          const prevComp = prevMission ? profile.completed_missions[String(prevMission.id)] : null;
-          const isLocked = mission.order > 1 && prevMission && !hasAnyPracticeCompletion(prevComp);
-          const isPlayable = !isLocked && !isCompleted;
-          const isPerfect = isPracticePerfect(comp);
-          const isLastCleared = lastClearedMissionId === mission.id;
-          const cardVariants = isLocked ? { initial: { opacity: 0.5, y: 0 }, animate: { opacity: 0.5, y: 0 } } : staggerItem;
-
-          return (
-            <motion.div
-              key={mission.id}
-              ref={isNextUp && isCurrentUnit ? currentUnitRef : undefined}
-              variants={cardVariants}
-              className="relative group"
-              {...(!isLocked ? {
-                whileHover: { y: -4, boxShadow: "0 12px 40px rgba(99,102,241,0.15)" },
-                whileTap: { y: -2, scale: 0.98 },
-                transition: { type: "spring", stiffness: 300, damping: 20 },
-              } : {
-                whileTap: { x: [0, -4, 4, -3, 3, -1, 1, 0] },
-                transition: { duration: 0.4 },
-                onClick: () => { playTap(); },
-              })}
-            >
-              <motion.div
-                animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})}
-                transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : (isLastCleared ? { duration: 2.5, ease: "easeInOut" } : {})}
-                className={`bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isNextUp ? 'border-amber-400 shadow-amber-500/20' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
+      {/* Mission cards — completed missions compact, active/upcoming full */}
+      {(() => {
+        const completedInUnit = u.unitMissions.filter(m => hasAnyPracticeCompletion(profile.completed_missions[String(m.id)]));
+        const activeAndUpcoming = u.unitMissions.filter(m => !hasAnyPracticeCompletion(profile.completed_missions[String(m.id)]));
+        return (<>
+          {/* Compact completed row within current unit */}
+          {isCurrentUnit && completedInUnit.length > 0 && (
+            <div className="mb-4">
+              <button
+                onClick={() => { playTap(); setShowCompletedInCurrentUnit(!showCompletedInCurrentUnit); }}
+                className="flex items-center gap-2 text-white/40 hover:text-white/60 transition-colors text-xs font-bold"
               >
+                <CheckCircle2 size={14} className="text-emerald-400/60" />
+                {lt({ zh: `已完成 ${completedInUnit.length} 关`, en: `${completedInUnit.length} completed` }, lang)}
+                {showCompletedInCurrentUnit ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+              </button>
+              <AnimatePresence>
+                {showCompletedInCurrentUnit && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="overflow-hidden mt-2"
+                  >
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                      {completedInUnit.map(mission => {
+                        const isPerfect = isPracticePerfect(profile.completed_missions[String(mission.id)]);
+                        return (
+                          <motion.button
+                            key={mission.id}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => { playTap(); onPracticeStart(mission); }}
+                            className="flex items-center gap-2 px-3 py-2 bg-white/[0.06] border border-white/10 rounded-xl text-left hover:bg-white/10 transition-colors"
+                          >
+                            <CheckCircle2 size={14} className="text-emerald-400/70 shrink-0" />
+                            <span className="text-white/50 text-[11px] font-bold truncate flex-1">{lt(mission.title, lang)}</span>
+                            {isPerfect && <Crown size={12} className="text-amber-400 shrink-0" />}
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+
+          {/* Active + upcoming missions — full cards */}
+          <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            {(isCurrentUnit ? activeAndUpcoming : u.unitMissions).map(mission => {
+              const comp = profile.completed_missions[String(mission.id)];
+              const isNextUp = mission.id === u.firstPlayable?.id;
+              const isCompleted = hasAnyPracticeCompletion(comp);
+              const prevMission = gradeMissions.find(m => m.unitId === mission.unitId && m.order === mission.order - 1);
+              const prevComp = prevMission ? profile.completed_missions[String(prevMission.id)] : null;
+              const isLocked = mission.order > 1 && prevMission && !hasAnyPracticeCompletion(prevComp);
+              const isPlayable = !isLocked && !isCompleted;
+              const isPerfect = isPracticePerfect(comp);
+              const isLastCleared = lastClearedMissionId === mission.id;
+              const cardVariants = isLocked ? { initial: { opacity: 0.5, y: 0 }, animate: { opacity: 0.5, y: 0 } } : staggerItem;
+
+              return (
+                <motion.div
+                  key={mission.id}
+                  ref={isNextUp && isCurrentUnit ? currentUnitRef : undefined}
+                  variants={cardVariants}
+                  className="relative group"
+                  {...(!isLocked ? {
+                    whileHover: { y: -4, boxShadow: "0 12px 40px rgba(99,102,241,0.15)" },
+                    whileTap: { y: -2, scale: 0.98 },
+                    transition: { type: "spring", stiffness: 300, damping: 20 },
+                  } : {
+                    whileTap: { x: [0, -4, 4, -3, 3, -1, 1, 0] },
+                    transition: { duration: 0.4 },
+                    onClick: () => { playTap(); },
+                  })}
+                >
+                  <motion.div
+                    animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})}
+                    transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : (isLastCleared ? { duration: 2.5, ease: "easeInOut" } : {})}
+                    className={`bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isNextUp ? 'border-amber-400 shadow-amber-500/20' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
+                  >
                 {isNextUp && (
                   <div className="absolute -top-3 left-4 px-3 py-1 bg-amber-500 text-white text-[11px] sm:text-xs font-black rounded-full z-10 shadow-md">
                     {(t as any).startHere ?? 'Start here!'}
@@ -530,6 +579,8 @@ export const MapScreen = ({
           );
         })}
       </motion.div>
+        </>);
+      })()}
     </div>
   );
 
