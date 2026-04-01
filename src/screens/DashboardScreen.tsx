@@ -216,11 +216,9 @@ export function DashboardScreen({ lang, onClose }: Props) {
         : allGradeClasses;
 
       if (filterTag) {
-        // Specific class selected — query by class_tags contains
+        // Specific class selected — query by class tag via RPC
         const { data, error: err } = await supabase
-          .from('gl_user_progress').select('*')
-          .contains('class_tags', [filterTag])
-          .order('display_name');
+          .rpc('get_students_by_class', { p_class_tag: filterTag });
         if (err) {
           setError(lang === 'en' ? 'Failed to load data' : '加载数据失败');
           setStudents([]);
@@ -229,20 +227,15 @@ export function DashboardScreen({ lang, onClose }: Props) {
         }
       } else {
         // No specific class — get ALL students in any grade-level class OR with matching grade
-        const { data: byTags } = await supabase
-          .from('gl_user_progress').select('*')
-          .overlaps('class_tags', gradeClasses)
-          .order('display_name');
-
-        const { data: byGrade } = await supabase
-          .from('gl_user_progress').select('*')
-          .eq('grade', grade)
-          .order('display_name');
+        const [tagsRes, gradeRes] = await Promise.all([
+          supabase.rpc('get_students_by_tags', { p_tags: gradeClasses }),
+          supabase.rpc('get_students_by_grade', { p_grade: grade }),
+        ]);
 
         // Merge and deduplicate by user_id
         const seen = new Set<string>();
         const merged: StudentRow[] = [];
-        for (const row of [...(byTags || []), ...(byGrade || [])] as StudentRow[]) {
+        for (const row of [...(tagsRes.data || []), ...(gradeRes.data || [])] as StudentRow[]) {
           if (!seen.has(row.user_id)) {
             seen.add(row.user_id);
             merged.push({ ...row, class_tags: row.class_tags || [] });
