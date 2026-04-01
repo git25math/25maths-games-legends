@@ -160,10 +160,7 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
   /** Remove self from room's players in DB before leaving */
   const leaveRoomClean = async () => {
     if (user && activeRoom && activeRoom.hostId !== user.id) {
-      // Use direct update for host, RPC would be needed for non-host but leave is best-effort
-      await supabase.from('gl_rooms').update({
-        players: Object.fromEntries(Object.entries(activeRoom.players).filter(([id]) => id !== user.id))
-      }).eq('id', activeRoom.id).then(() => {});
+      await supabase.rpc('leave_room', { p_room_id: activeRoom.id });
     }
     setActiveRoom(null);
   };
