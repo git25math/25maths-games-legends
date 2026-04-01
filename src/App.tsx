@@ -405,16 +405,16 @@ export default function App() {
 
   // PK: When non-host detects room status='playing' via realtime, auto-enter battle
   useEffect(() => {
-    if (missionsLoading) return;
-    if (gameState === 'lobby' && activeRoom?.status === 'playing' && !activeMission) {
-      const m = missions.find(mi => mi.id === activeRoom.missionId);
-      if (m) {
-        if (m.data?.generatorType) {
-          lazyGenerate().then(gen => { setActiveMission(gen(m)); setGameState('battle'); });
-        } else {
-          setActiveMission(m);
-          setGameState('battle');
-        }
+    if (gameState !== 'lobby' || activeRoom?.status !== 'playing') return;
+    if (activeMission) return; // already set
+    if (missionsLoading || missions.length === 0) return; // wait for missions to load
+    const m = missions.find(mi => mi.id === activeRoom.missionId);
+    if (m) {
+      if (m.data?.generatorType) {
+        lazyGenerate().then(gen => { setActiveMission(gen(m)); setGameState('battle'); });
+      } else {
+        setActiveMission(m);
+        setGameState('battle');
       }
     }
   }, [activeRoom?.missionId, activeRoom?.status, activeMission, gameState, missions, missionsLoading]);

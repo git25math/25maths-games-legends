@@ -75,10 +75,13 @@ export function MultipleChoice({ choices, onSelect, disabled, lang, result, sele
               {BUTTON_LETTERS[i]}
             </span>
             <span className="flex-1 text-left text-sm font-bold">
-              {choice.isLatex
-                ? <MathView tex={lt(choice.label, lang)} className="text-sm" />
-                : lt(choice.label, lang)
-              }
+              {(() => {
+                const text = lt(choice.label, lang);
+                const hasLatex = choice.isLatex || /\\frac|\\sqrt|\\times|\\div|\$/.test(text);
+                return hasLatex
+                  ? <MathView tex={text} className="text-sm" />
+                  : text;
+              })()}
             </span>
             {showSuccess && <CheckCircle2 size={20} className="text-emerald-500 shrink-0" />}
             {showWrong && <XCircle size={20} className="text-rose-500 shrink-0" />}
