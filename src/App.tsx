@@ -243,7 +243,7 @@ export default function App() {
 
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
   const {
-    profile, updateProfile, recordBattleComplete,
+    profile, updateProfile, addScore, recordBattleComplete,
     getCharProgression, getTotalSP, unlockSkill, equipSkill,
   } = useProfile(user, isGuest);
   const { missions, loading: missionsLoading, offline } = useMissions(profile?.grade);
@@ -392,9 +392,8 @@ export default function App() {
         const multiplier = getRankMultiplier(myRank);
         const bonusXP = Math.round(myScore * (multiplier - 1));
         if (bonusXP > 0) {
-          const prevScore = latestScoreRef.current;
-          latestScoreRef.current = prevScore + bonusXP;
-          updateProfile({ total_score: prevScore + bonusXP });
+          latestScoreRef.current += bonusXP;
+          addScore(bonusXP);
         }
       }
       lastRoundPlayersRef.current = null;
@@ -473,9 +472,9 @@ export default function App() {
     }
 
     (async () => {
-      const loginPrevScore = latestScoreRef.current;
-      latestScoreRef.current = loginPrevScore + xp;
-      await updateProfile({ completed_missions: cm, total_score: loginPrevScore + xp });
+      latestScoreRef.current += xp;
+      await updateProfile({ completed_missions: cm });
+      await addScore(xp);
       setLoginRewardNotif({ streak: newStreak, xp, sp });
       setTimeout(() => setLoginRewardNotif(null), milestone ? 8000 : 5000);
     })();
@@ -588,13 +587,12 @@ export default function App() {
     latestScoreRef.current = prevScore + xp; // optimistic update for next phase
     const levelsGained = computeLevelsGained(prevScore, xp);
     if (levelsGained > 0) {
-      // Merge SP + score into single write
+      // Merge SP into single write
       const cm = structuredClone(profile.completed_missions) as any;
       cm._total_skill_points = (cm._total_skill_points ?? 0) + levelsGained;
-      await updateProfile({ total_score: prevScore + xp, completed_missions: cm });
-    } else {
-      await updateProfile({ total_score: prevScore + xp });
+      await updateProfile({ completed_missions: cm });
     }
+    await addScore(xp);
     showLevelUpNotifications(prevScore, xp, levelsGained);
   };
 
@@ -756,9 +754,10 @@ export default function App() {
           awardCurrency(cm, 'merit', CURRENCY_REWARDS.DAILY_WIN_BONUS);
         }
 
-        // Step 6: Single atomic updateProfile call (use latestScoreRef — not stale battleData.newScore)
+        // Step 6: Save progress + score via separate safe channels
         latestScoreRef.current = prevScore + score;
-        await updateProfile({ total_score: prevScore + score, completed_missions: cm, stats });
+        await updateProfile({ completed_missions: cm, stats });
+        await addScore(score);
 
         // Step 6: Notifications only (no writes)
         showLevelUpNotifications(prevScore, score, levelsGained);
@@ -1423,12 +1422,9 @@ export default function App() {
                         }
                       }
 
-                      const repairPrevScore = latestScoreRef.current;
-                      latestScoreRef.current = repairPrevScore + bonus;
-                      await updateProfile({
-                        completed_missions: cm,
-                        total_score: repairPrevScore + bonus,
-                      });
+                      latestScoreRef.current += bonus;
+                      await updateProfile({ completed_missions: cm });
+                      await addScore(bonus);
                       setIsRepairMode(false);
 
                       if (currentRecovery) {
@@ -1476,9 +1472,9 @@ export default function App() {
                     }
                     const { updatedProgress } = evaluateAndUpdateTasks(profile, sp);
                     cm._season = updatedProgress;
-                    const expPrevScore = latestScoreRef.current;
-                    latestScoreRef.current = expPrevScore + xp;
-                    await updateProfile({ total_score: expPrevScore + xp, completed_missions: cm });
+                    latestScoreRef.current += xp;
+                    await updateProfile({ completed_missions: cm });
+                    await addScore(xp);
                   }
                 };
                 return (
@@ -1834,9 +1830,8 @@ export default function App() {
                     const multiplier = getRankMultiplier(myRank);
                     const bonusXP = Math.round(myScore * (multiplier - 1));
                     if (bonusXP > 0) {
-                      const prevScore = latestScoreRef.current;
-                      latestScoreRef.current = prevScore + bonusXP;
-                      await updateProfile({ total_score: prevScore + bonusXP });
+                      latestScoreRef.current += bonusXP;
+                      await addScore(bonusXP);
                     }
                   }
                   // Start next round first — only close panel + transition if successful
@@ -1856,9 +1851,8 @@ export default function App() {
                     const multiplier = getRankMultiplier(myRank);
                     const bonusXP = Math.round(myScore * (multiplier - 1));
                     if (bonusXP > 0) {
-                      const prevScore = latestScoreRef.current;
-                      latestScoreRef.current = prevScore + bonusXP;
-                      await updateProfile({ total_score: prevScore + bonusXP });
+                      latestScoreRef.current += bonusXP;
+                      await addScore(bonusXP);
                     }
                   }
                   setShowPKResult(false);

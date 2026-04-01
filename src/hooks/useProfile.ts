@@ -210,8 +210,29 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     await updateProfile({ completed_missions: cm });
   };
 
+  /** Safely increment total_score via server-side RPC (bypasses RLS restriction) */
+  const addScore = async (amount: number) => {
+    if (amount === 0) return;
+    if (isGuest) {
+      setProfile(prev => {
+        if (!prev) return null;
+        const updated = { ...prev, total_score: prev.total_score + amount };
+        saveGuestProfile(updated);
+        return updated;
+      });
+      return;
+    }
+    if (!user) return;
+    const { error } = await supabase.rpc('add_score', { p_amount: amount });
+    if (error) {
+      handleSupabaseError(error, 'rpc', 'add_score');
+    } else {
+      setProfile(prev => prev ? { ...prev, total_score: prev.total_score + amount } : null);
+    }
+  };
+
   return {
-    profile, updateProfile, recordBattleComplete,
+    profile, updateProfile, addScore, recordBattleComplete,
     // Skill tree
     getCharProgression, getTotalSP, unlockSkill, equipSkill, grantSkillPoint,
   };
