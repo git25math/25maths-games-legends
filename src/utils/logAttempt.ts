@@ -4,6 +4,7 @@
  * Silent on error — analytics should never block the student experience.
  */
 import { supabase } from '../supabase';
+import { getKnIdForKp } from '../data/curriculum/kp-registry';
 
 export interface AttemptEvent {
   questionId: string;   // mission id + question fingerprint
@@ -19,10 +20,13 @@ export function logAttempt(event: AttemptEvent): void {
   // Fire-and-forget — don't await, don't block UI
   supabase.auth.getUser().then(({ data }) => {
     if (!data?.user?.id) return; // guest mode — skip logging
+    // Resolve canonical kn_id from nodeId (kpId format)
+    const knId = getKnIdForKp(event.nodeId) ?? null;
     supabase.from('user_attempt_log').insert({
       user_id: data.user.id,
       question_id: event.questionId,
       node_id: event.nodeId,
+      kn_id: knId,
       is_correct: event.isCorrect,
       raw_answer: event.rawAnswer?.slice(0, 200),
       primary_error_pattern_id: event.errorPatternId || null,

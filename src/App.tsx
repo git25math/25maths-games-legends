@@ -25,6 +25,7 @@ import { OnboardingScreen, isOnboardingDone, clearOnboardingFlag } from './scree
 import { cleanStalePracticeKeys, clearPracticeState } from './hooks/usePracticeState';
 import { translations } from './i18n/translations';
 import { getHotTopic } from './utils/hotTopic';
+import { getKnIdForKp } from './data/curriculum/kp-registry';
 import { getActiveSkillEffect } from './data/heroSkills';
 import { STREAK_MILESTONES, getNewlyEarnedMilestone, getNextMilestone } from './data/streakMilestones';
 const ScrollOfWisdom = lazy(() => import('./components/ScrollOfWisdom').then(m => ({ default: m.ScrollOfWisdom })));
@@ -737,9 +738,11 @@ export default function App() {
               }
               // Fire-and-forget: sync to Supabase user_skill_health table
               if (user && !isGuest) {
+                const knId = activeMission.kpId ? getKnIdForKp(activeMission.kpId) ?? null : null;
                 supabase.from('user_skill_health').upsert({
                   user_id: user.id,
                   node_id: topicId,
+                  kn_id: knId,
                   health_score: newState.healthScore,
                   corruption_level: newState.corruptionLevel,
                   dominant_error_pattern_id: newState.dominantPatternId,
@@ -773,6 +776,7 @@ export default function App() {
           supabase.rpc('upsert_play_kp', {
             p_user_id: user.id, p_kp_id: activeMission.kpId,
             p_success: true, p_score: score,
+            p_kn_id: getKnIdForKp(activeMission.kpId) ?? null,
           });
         }
       }
@@ -786,6 +790,7 @@ export default function App() {
       supabase.rpc('upsert_play_kp', {
         p_user_id: user.id, p_kp_id: activeMission.kpId,
         p_success: false, p_score: score,
+        p_kn_id: getKnIdForKp(activeMission.kpId) ?? null,
       });
     }
     // Failed battles: consume stamina + record errors + update skill health
@@ -817,9 +822,11 @@ export default function App() {
             cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
             // Fire-and-forget: sync to Supabase
             if (user && !isGuest) {
+              const knId = activeMission?.kpId ? getKnIdForKp(activeMission.kpId) ?? null : null;
               supabase.from('user_skill_health').upsert({
                 user_id: user.id,
                 node_id: topicId,
+                kn_id: knId,
                 health_score: newState.healthScore,
                 corruption_level: newState.corruptionLevel,
                 dominant_error_pattern_id: newState.dominantPatternId,
@@ -1328,6 +1335,7 @@ export default function App() {
                         supabase.rpc('upsert_play_kp', {
                           p_user_id: user.id, p_kp_id: activeMission.kpId,
                           p_success: true, p_score: 0,
+                          p_kn_id: getKnIdForKp(activeMission.kpId) ?? null,
                         });
                       }
                     }
