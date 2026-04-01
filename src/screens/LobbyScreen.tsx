@@ -60,11 +60,13 @@ export const LobbyScreen = ({
                 {lt(mission.title, lang)}
               </p>
             )}
-            <p className="text-slate-400 flex items-center gap-2 font-bold text-sm mt-1">
+            <p className={`flex items-center gap-2 font-bold text-sm mt-1 ${playerCount < 2 ? 'text-amber-500 animate-pulse' : 'text-emerald-500'}`}>
               <Timer size={16} />
               {playerCount < 2
                 ? (lang === 'en' ? 'Waiting for opponent...' : '等待对手加入...')
-                : (lang === 'en' ? 'Ready to battle!' : '准备开战！')
+                : allReady
+                  ? (lang === 'en' ? '⚡ All ready — start the duel!' : '⚡ 全员就绪——开始对决！')
+                  : (lang === 'en' ? 'Press Ready when you\'re set!' : '准备好了就点"就绪"！')
               }
             </p>
           </div>
@@ -134,10 +136,10 @@ export const LobbyScreen = ({
           })}
 
           {/* Empty slots */}
-          {Array.from({ length: Math.min(maxPlayers - playerCount, 3) }).map((_, i) => (
-            <div key={`empty-${i}`} className="p-5 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center">
+          {Array.from({ length: Math.min(maxPlayers - playerCount, isPK ? 1 : 3) }).map((_, i) => (
+            <div key={`empty-${i}`} className="p-5 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center animate-pulse">
               <p className="text-slate-300 font-bold text-sm">
-                {lang === 'en' ? 'Waiting for player...' : '等待玩家...'}
+                {lang === 'en' ? '👤 Waiting for player...' : '👤 等待玩家加入...'}
               </p>
             </div>
           ))}
