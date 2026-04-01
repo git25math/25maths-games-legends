@@ -179,12 +179,31 @@ export const PracticeScreen = ({
     questionStartRef.current = Date.now();
   }, [mission, adaptiveTier]);
 
+  // For types with multi-field configs where only one field is active per question
+  function filterActiveFields(type: string, fields: { id: string }[], data: Record<string, unknown>): { id: string }[] {
+    if (type === 'CIRCLE') {
+      const targetId = data.mode === 'area' ? 'area' : 'c';
+      return fields.filter(f => f.id === targetId);
+    }
+    if (type === 'FUNC_VAL') {
+      const targetId = data.m !== undefined ? 'y' : 't';
+      return fields.filter(f => f.id === targetId);
+    }
+    if (type === 'DERIVATIVE') {
+      const targetId = data.func === '3x^2-3' ? 'x' : 'k';
+      return fields.filter(f => f.id === targetId);
+    }
+    return fields;
+  }
+
   const handleSubmit = () => {
     if (isSubmitting || showCorrectFlash) return;
-    // Validate: at least one non-empty input required
+    // Validate: required fields must be filled
     const fieldConfig = INPUT_FIELDS[currentMission.type];
     const langKey = lang === 'en' ? 'en' : lang === 'zh_TW' ? 'zh_TW' : 'zh';
-    const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
+    const allFields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
+    // For types with mode-dependent fields, only require the active field
+    const fields = filterActiveFields(currentMission.type, allFields, currentMission.data);
     const hasEmpty = fields.some((f: { id: string }) => !inputs[f.id]?.trim());
     if (hasEmpty) {
       setPhaseToast({ text: (t as any).fillFieldsFirst ?? (lang === 'en' ? 'Fill in all fields first' : '请先填写所有答题栏'), phase: currentPhase });
