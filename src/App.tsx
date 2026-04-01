@@ -224,6 +224,7 @@ export default function App() {
   const [showStaminaGate, setShowStaminaGate] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showHomeworkTab, setShowHomeworkTab] = useState(false);
+  const [homeworkBadge, setHomeworkBadge] = useState(0);
   const [repairCompleteInfo, setRepairCompleteInfo] = useState<{ missionId: number; bonus: number; scrollAwarded: boolean } | null>(null);
   const [pendingBattleMission, setPendingBattleMission] = useState<Mission | null>(null);
   const [itemRewardToast, setItemRewardToast] = useState<{ items: { itemId: string; reason: string }[] } | null>(null);
@@ -248,6 +249,14 @@ export default function App() {
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
   const hasRestoredMissionRef = useRef(false);
+
+  // Homework badge: count active assignments for bottom nav
+  useEffect(() => {
+    if (!user || isGuest) { setHomeworkBadge(0); return; }
+    supabase.rpc('get_my_assignments').then(({ data }) => {
+      if (data) setHomeworkBadge((data as any[]).filter((a: any) => !a.archived_at).length);
+    });
+  }, [user, isGuest]);
 
   // ExamHub lesson recovery detection — "you just completed training!"
   const { offer: lessonRecoveryOffer, dismiss: dismissLessonRecovery } = useLessonRecovery(
@@ -1977,6 +1986,7 @@ export default function App() {
               }
             }}
             lang={lang}
+            badge={homeworkBadge > 0 ? { homework: homeworkBadge } : undefined}
           />
         )}
       </div>
