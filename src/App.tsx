@@ -595,7 +595,12 @@ export default function App() {
     showLevelUpNotifications(prevScore, xp, levelsGained);
   };
 
+  const battleSubmittingRef = useRef(false);
   const handleBattleComplete = async (success: boolean, score = 0, durationSecs = 0, hpRemaining = 0) => {
+    // Client-side lock: prevent multi-window / double-submit
+    if (battleSubmittingRef.current) return;
+    battleSubmittingRef.current = true;
+    try {
     // Always record battle result (success AND failure) for data integrity
     if (activeMission && profile) {
       const battleData = await recordBattleComplete(
@@ -860,6 +865,9 @@ export default function App() {
 
     setGameState('map');
     setActiveMission(null);
+    } finally {
+      battleSubmittingRef.current = false;
+    }
   };
   handleBattleCompleteRef.current = handleBattleComplete;
 

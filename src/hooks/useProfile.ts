@@ -115,20 +115,21 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
   ): Promise<{ completedMissions: any; stats: typeof DEFAULT_STATS } | null> => {
     if (!profile) return null;
 
-    // Record battle result (skip for guest)
+    // Record battle result via anti-duplicate RPC (skip for guest)
     if (user && !isGuest) {
-      const battleResult: BattleResult = {
-        user_id: user.id,
-        mission_id: missionId,
-        kp_id: kpId,
-        difficulty_mode: difficultyMode,
-        success,
-        score,
-        duration_secs: durationSecs,
-        hp_remaining: hpRemaining,
-      };
-      const { error: battleErr } = await supabase.from('gl_battle_results').insert(battleResult);
-      if (battleErr) handleSupabaseError(battleErr, 'create', 'gl_battle_results');
+      const { data: accepted } = await supabase.rpc('record_battle_result', {
+        p_user_id: user.id,
+        p_mission_id: missionId,
+        p_score: score,
+        p_success: success,
+        p_duration_secs: durationSecs,
+        p_hp_remaining: hpRemaining,
+        p_topic: topic || null,
+        p_kp_id: kpId || null,
+        p_difficulty: difficultyMode,
+      });
+      // If rejected as duplicate, skip the rest
+      if (accepted === false) return null;
     }
 
     if (success) {
