@@ -210,17 +210,13 @@ export const MapScreen = ({
     if (!tags?.length || !profile.grade) { setClassRankLoading(false); return; }
     setClassRankLoading(true);
     supabase
-      .from('gl_user_progress')
-      .select('user_id, display_name, total_score')
-      .eq('grade', profile.grade)
-      .contains('class_tags', [tags[0]])
-      .order('total_score', { ascending: false })
-      .limit(100)
+      .rpc('get_class_leaderboard', { p_class_tag: tags[0], p_limit: 100 })
       .then(({ data }) => {
         if (!data) { setClassRankLoading(false); return; }
-        const rank = data.findIndex(d => d.user_id === profile.user_id) + 1;
-        setClassRankInfo(rank > 0 ? { rank, total: data.length } : null);
-        setClassTop5(data.slice(0, 5) as any[]);
+        const entries = data as { user_id: string; display_name: string; total_score: number }[];
+        const rank = entries.findIndex(d => d.user_id === profile.user_id) + 1;
+        setClassRankInfo(rank > 0 ? { rank, total: entries.length } : null);
+        setClassTop5(entries.slice(0, 5) as any[]);
         setClassRankLoading(false);
       }, () => { setClassRankLoading(false); });
   }, [profile.user_id]);

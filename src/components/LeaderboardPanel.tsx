@@ -94,33 +94,16 @@ export const LeaderboardPanel = ({
 
   const fetchWeekly = () => {
     const mondayISO = getMondayISO();
-    // Fetch this week's battles + grade user list via RPC, aggregate client-side
-    return Promise.all([
-      supabase
-        .from('gl_battle_results')
-        .select('user_id, score')
-        .eq('success', true)
-        .gte('created_at', mondayISO),
-      supabase
-        .rpc('get_grade_leaderboard', { p_grade: grade, p_limit: 100 }),
-    ]).then(([battleRes, userRes]) => {
-      if (battleRes.error) throw battleRes.error;
-      if (userRes.error) throw userRes.error;
-      const userMap = new Map((userRes.data as LeaderEntry[]).map(u => [u.user_id, u]));
-      const xpMap = new Map<string, number>();
-      for (const row of (battleRes.data ?? []) as { user_id: string; score: number }[]) {
-        if (userMap.has(row.user_id)) {
-          xpMap.set(row.user_id, (xpMap.get(row.user_id) ?? 0) + row.score);
-        }
-      }
-      const weekly: WeeklyEntry[] = [];
-      for (const [uid, xp] of xpMap.entries()) {
-        const user = userMap.get(uid);
-        if (user && xp > 0) weekly.push({ ...user, weeklyXP: xp });
-      }
-      weekly.sort((a, b) => b.weeklyXP - a.weeklyXP);
-      setWeeklyEntries(weekly.slice(0, 20));
-    });
+    return supabase
+      .rpc('get_weekly_leaderboard', { p_grade: grade, p_since: mondayISO, p_limit: 20 })
+      .then(({ data, error: err }) => {
+        if (err) throw err;
+        const weekly = ((data ?? []) as (LeaderEntry & { weekly_xp: number })[]).map(e => ({
+          ...e,
+          weeklyXP: e.weekly_xp,
+        }));
+        setWeeklyEntries(weekly);
+      });
   };
 
   const mountedRef = useRef(true);
