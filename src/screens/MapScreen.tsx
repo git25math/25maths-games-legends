@@ -358,7 +358,7 @@ export const MapScreen = ({
             <div className="absolute inset-0 bg-amber-400/20 rounded-lg sm:rounded-xl blur-md" />
             <img
               src={CHAPTER_IMAGES[u.unitIndex % CHAPTER_IMAGES.length]}
-              alt=""
+              alt="chapter"
               className="relative w-10 h-10 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl object-cover border-2 border-amber-400/30 shadow-lg"
             />
           </div>
@@ -1233,7 +1233,7 @@ export const MapScreen = ({
                               : 'bg-white/5 border-white/10 text-white/50 hover:bg-white/10'
                           }`}
                         >
-                          <img src={CHAPTER_IMAGES[u.unitIndex % CHAPTER_IMAGES.length]} alt="" className="w-7 h-7 rounded-lg object-cover" />
+                          <img src={CHAPTER_IMAGES[u.unitIndex % CHAPTER_IMAGES.length]} alt="chapter" className="w-7 h-7 rounded-lg object-cover" />
                           <span className="hidden sm:inline max-w-[120px] truncate">{u.unitTitle}</span>
                           <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
                           {isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
@@ -1285,7 +1285,7 @@ export const MapScreen = ({
                       viewport={{ once: true }}
                       className="flex items-center gap-3 px-4 py-3 bg-white/[0.03] border border-white/[0.06] rounded-xl"
                     >
-                      <img src={CHAPTER_IMAGES[u.unitIndex % CHAPTER_IMAGES.length]} alt="" className="w-10 h-10 rounded-lg object-cover grayscale opacity-50" />
+                      <img src={CHAPTER_IMAGES[u.unitIndex % CHAPTER_IMAGES.length]} alt="chapter" className="w-10 h-10 rounded-lg object-cover grayscale opacity-50" />
                       <div className="flex-1 min-w-0">
                         <h4 className="text-white/40 text-sm font-bold truncate">{u.unitTitle}</h4>
                         <p className="text-white/20 text-[10px]">

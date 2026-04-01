@@ -1443,14 +1443,14 @@ export const MISSIONS_Y8: Mission[] = [
   {
     id: 898, grade: 8, unitId: 6, order: 9,
     unitTitle: { zh: 'Unit 6: 代数篇 · 隆中对前奏', en: 'Unit 6: Algebra · Prelude to Longzhong' },
-    topic: 'Algebra', type: 'EXPAND' as any,
+    topic: 'Algebra', type: 'EXPAND',
     title: { zh: '负号突围', en: 'Negative Breakthrough' },
     skillName: { zh: '负号分配术', en: 'Negative Distribution' },
     skillSummary: { zh: '$-a(bx+c) = -abx - ac$', en: '$-a(bx+c) = -abx - ac$' },
     story: { zh: '敌军设下陷阱，负号隐藏在括号之外——你能正确分配它吗？', en: 'The enemy has set a trap — a negative sign lurks outside the brackets. Can you distribute it correctly?' },
     description: { zh: '展开负号括号，求 $x$ 的系数', en: 'Expand negative brackets, find the coefficient of $x$' },
     data: { a: 2, b: 3, c: 4, coeff: -6, constant: -8, answer: -6, generatorType: 'EXPAND_NEG_RANDOM' },
-    difficulty: 'Medium' as any, reward: 180, kpId: 'kp-2.2-03', sectionId: 'algebra',
+    difficulty: 'Medium', reward: 180, kpId: 'kp-2.2-03', sectionId: 'algebra',
     discoverSteps: [
       {
         prompt: { zh: "展开 $-(3x - 5)$。负号展开有什么特殊规则？", en: "Expand $-(3x - 5)$. Any special rule for expanding with a negative?" },
