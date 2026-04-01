@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { X, Wrench } from 'lucide-react';
 import type { Language, Mission, EquipmentState, KPEquipment } from '../types';
-import { translations } from '../i18n/translations';
+import { getTranslations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import { getEquipmentList, computeRepairBonus, EQUIPMENT_COLORS } from '../utils/equipment';
 import { EQUIPMENT_DECAY } from '../utils/gameBalance';
@@ -33,7 +33,7 @@ export const EquipmentPanel = ({
   onOpenInventory?: () => void;
   onClose: () => void;
 }) => {
-  const t = translations[lang];
+  const t = getTranslations(lang);
   const { playTap } = useAudio();
   useEscapeKey(onClose);
   const mistakes = (completedMissions as any)?._mistakes as Record<string, { count: number }> | undefined;
@@ -60,7 +60,7 @@ export const EquipmentPanel = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-xl font-black text-white">
-            {(t as any).equipmentArsenal ?? '装备库'}
+            {t.equipmentArsenal ?? '装备库'}
           </h2>
           <button onClick={onClose} className="p-2 min-w-10 min-h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors">
             <X size={24} />
@@ -69,7 +69,7 @@ export const EquipmentPanel = ({
 
         {equipment.length === 0 ? (
           <div className="text-center text-white/30 py-12">
-            <p className="text-sm">{(t as any).noEquipment ?? '完成 Red 难度关卡即可获得装备'}</p>
+            <p className="text-sm">{t.noEquipment ?? '完成 Red 难度关卡即可获得装备'}</p>
           </div>
         ) : (
           <div className="flex flex-col gap-2">
@@ -156,7 +156,7 @@ export const EquipmentPanel = ({
                         className="flex items-center gap-1 px-3 py-1.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-xs font-bold hover:bg-amber-500/30 transition-all"
                       >
                         <Wrench size={14} />
-                        {(t as any).repair ?? '修复'}
+                        {t.repair ?? '修复'}
                       </button>
                     </div>
                   )}

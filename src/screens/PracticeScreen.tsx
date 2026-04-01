@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { XCircle, BookOpen, ChevronRight, ChevronLeft, Swords, MapIcon, CheckCircle2 } from 'lucide-react';
 import type { Mission, Character, Language, DifficultyMode } from '../types';
-import { translations } from '../i18n/translations';
+import { getTranslations } from '../i18n/translations';
 import { lt, resolveFormula } from '../i18n/resolveText';
 import { generateMission, type DifficultyTier } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
@@ -77,7 +77,7 @@ export const PracticeScreen = ({
   /** Learner mode: explore (discover-heavy), practice (balanced), exam (skip tutorials) */
   learnerMode?: import('../types').LearnerMode;
 }) => {
-  const t = translations[lang];
+  const t = getTranslations(lang);
 
   // Persisted practice state (survives page refresh)
   // Repair mode: force Red phase, ignore persistence
@@ -206,7 +206,7 @@ export const PracticeScreen = ({
     const fields = filterActiveFields(currentMission.type, allFields, currentMission.data);
     const hasEmpty = fields.some((f: { id: string }) => !inputs[f.id]?.trim());
     if (hasEmpty) {
-      setPhaseToast({ text: (t as any).fillFieldsFirst ?? (lang === 'en' ? 'Fill in all fields first' : '请先填写所有答题栏'), phase: currentPhase });
+      setPhaseToast({ text: t.fillFieldsFirst ?? (lang === 'en' ? 'Fill in all fields first' : '请先填写所有答题栏'), phase: currentPhase });
       setTimeout(() => setPhaseToast(null), 2000);
       return;
     }
@@ -243,7 +243,7 @@ export const PracticeScreen = ({
         playTierUp();
         setAdaptiveTier(prev => Math.min(3, prev + 1) as DifficultyTier);
         setConsecutiveCorrect(0);
-        setPhaseToast((t as any).difficultyUp ?? 'Difficulty up!');
+        setPhaseToast(t.difficultyUp ?? 'Difficulty up!');
         setTimeout(() => setPhaseToast(null), 2000);
       }
       setTimeout(() => {
@@ -281,7 +281,7 @@ export const PracticeScreen = ({
         playTierDown();
         setAdaptiveTier(prev => Math.max(1, prev - 1) as DifficultyTier);
         setConsecutiveWrong(0);
-        setPhaseToast((t as any).difficultyDown ?? 'Easier numbers!');
+        setPhaseToast(t.difficultyDown ?? 'Easier numbers!');
         setTimeout(() => setPhaseToast(null), 2000);
       }
       // Record error type for persistent memory
@@ -385,8 +385,8 @@ export const PracticeScreen = ({
     setCurrentPhase(nextPhase);
     setPhaseCorrectCount(0);
     const phaseLabels: Record<string, string> = {
-      amber: (t as any).phaseToAmber ?? 'Now try with hints.',
-      red: (t as any).phaseToRed ?? 'No hints \u2014 independent challenge!',
+      amber: t.phaseToAmber ?? 'Now try with hints.',
+      red: t.phaseToRed ?? 'No hints \u2014 independent challenge!',
       battle: lt({ zh: '最终闯关 — 10 题挑战！', en: 'Final battle — 10 questions!' }, lang),
     };
     const xpLabel = earnedXP > 0 ? ` \u2728 +${earnedXP} XP` : '';
@@ -502,14 +502,14 @@ export const PracticeScreen = ({
                 <div className="flex flex-col gap-1 mt-1">
                   <div className="flex items-center gap-2">
                     <span className="text-amber-400 text-xs font-bold">
-                      {`${(t as any).repair ?? '修复'} ${repairCorrect}/${REPAIR_TARGET}`}
+                      {`${t.repair ?? '修复'} ${repairCorrect}/${REPAIR_TARGET}`}
                     </span>
                     <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden max-w-[120px]">
                       <div className="h-full bg-amber-400 rounded-full transition-all" style={{ width: `${(repairCorrect / REPAIR_TARGET) * 100}%` }} />
                     </div>
                   </div>
                   {repairPattern && (() => {
-                    const rp = (t as any).repairPatterns ?? {};
+                    const rp = t.repairPatterns ?? {};
                     const label = rp[repairPattern] ?? rp.default ?? 'Repair';
                     return <span className="text-rose-400/80 text-[10px] font-bold">⚠️ {label}</span>;
                   })()}
@@ -696,7 +696,7 @@ export const PracticeScreen = ({
               <>
                 {/* GREEN PHASE: Worked example — no input, just watch the solution */}
                 <div className="px-3 py-2 bg-amber-900/40 border border-amber-600/30 rounded-lg text-amber-100 text-xs font-bold text-center">
-                  {(t as any).greenPhaseHint ?? 'Just watch — click through each step.'}
+                  {t.greenPhaseHint ?? 'Just watch — click through each step.'}
                 </div>
                 {currentMission.tutorialSteps && (
                   <AnimatedTutorial
@@ -763,13 +763,13 @@ export const PracticeScreen = ({
                     <div className="text-amber-800 text-xs font-bold mb-1">{t.secretFormula}</div>
                     <MathView tex={resolveFormula(currentMission.secret.formula, lang)} className="text-lg font-black text-amber-900" />
                     <div className="text-amber-700/60 text-[10px] font-bold mt-1">
-                      {(t as any).amberPhaseHint ?? 'Hint: use this formula!'}
+                      {t.amberPhaseHint ?? 'Hint: use this formula!'}
                     </div>
                   </div>
                 )}
                 {currentPhase === 'red' && (
                   <div className="px-3 py-2 bg-amber-900/40 border border-amber-600/30 rounded-lg text-amber-100 text-xs font-bold text-center mb-2">
-                    {(t as any).redPhaseHint ?? 'No hints \u2014 you can do it!'} ({phaseCorrectCount}/{PHASE_REQUIRED.red})
+                    {t.redPhaseHint ?? 'No hints \u2014 you can do it!'} ({phaseCorrectCount}/{PHASE_REQUIRED.red})
                   </div>
                 )}
                 {currentPhase === 'battle' && (

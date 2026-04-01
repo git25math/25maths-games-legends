@@ -3,7 +3,7 @@ import { X, Lock, Check, Zap } from 'lucide-react';
 import type { Language, CharacterProgression } from '../types';
 import { getCharSkills, getSkillById } from '../data/heroSkills';
 import { lt } from '../i18n/resolveText';
-import { translations } from '../i18n/translations';
+import { getTranslations } from '../i18n/translations';
 import { useAudio } from '../audio';
 import { useEscapeKey } from '../hooks/useEscapeKey';
 
@@ -26,7 +26,7 @@ export const SkillTreePanel = ({
   onEquip: (skillId: string | null) => void;
   onClose: () => void;
 }) => {
-  const t = translations[lang];
+  const t = getTranslations(lang);
   const skills = getCharSkills(charId);
   const { playTap, playBadgeUnlock } = useAudio();
   useEscapeKey(onClose);
@@ -49,10 +49,10 @@ export const SkillTreePanel = ({
           <div>
             <h2 className="text-xl font-black text-white">{charName}</h2>
             <p className="text-amber-400 text-sm font-bold">
-              {(t as any).skillPointsAvailable ?? '修炼点'}: {availableSP}
+              {t.skillPointsAvailable ?? '修炼点'}: {availableSP}
             </p>
             <p className="text-white/30 text-[10px] mt-0.5">
-              {(t as any).spSourceHint ?? '每升一级 +1 修炼点'}
+              {t.spSourceHint ?? '每升一级 +1 修炼点'}
             </p>
           </div>
           <button onClick={onClose} className="p-2 min-w-10 min-h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors">
@@ -102,7 +102,7 @@ export const SkillTreePanel = ({
                         <span className="text-xs text-white/30">Tier {skill.tier}</span>
                         {isEquipped && (
                           <span className="text-xs bg-amber-400/20 text-amber-400 px-2 py-0.5 rounded-full font-bold">
-                            {(t as any).equipped ?? '已装备'}
+                            {t.equipped ?? '已装备'}
                           </span>
                         )}
                       </div>
@@ -130,7 +130,7 @@ export const SkillTreePanel = ({
                         }`}
                       >
                         <Zap size={14} />
-                        {(t as any).unlockSkill ?? '解锁'} ({skill.cost} SP)
+                        {t.unlockSkill ?? '解锁'} ({skill.cost} SP)
                       </button>
                     )}
                     {isUnlocked && !isEquipped && (
@@ -138,7 +138,7 @@ export const SkillTreePanel = ({
                         onClick={() => { playTap(); onEquip(skill.id); }}
                         className="px-4 py-2 bg-indigo-500/30 text-indigo-300 rounded-xl text-xs font-bold hover:bg-indigo-500/50 transition-all"
                       >
-                        {(t as any).equipSkill ?? '装备'}
+                        {t.equipSkill ?? '装备'}
                       </button>
                     )}
                     {isEquipped && (
@@ -146,7 +146,7 @@ export const SkillTreePanel = ({
                         onClick={() => { playTap(); onEquip(null); }}
                         className="px-4 py-2 bg-white/5 text-white/30 rounded-xl text-xs font-bold hover:bg-white/10 transition-all"
                       >
-                        {(t as any).unequipSkill ?? '卸下'}
+                        {t.unequipSkill ?? '卸下'}
                       </button>
                     )}
                   </div>

@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle, ClipboardList, MoreHorizontal, X, Sparkles } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character, CompletedMissions } from '../types';
-import { translations } from '../i18n/translations';
+import { getTranslations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import { MathView, LatexText } from '../components/MathView';
 import { CharacterAvatar } from '../components/CharacterAvatar';
@@ -166,7 +166,7 @@ export const MapScreen = ({
   mobileMenuOpen?: boolean;
   onMobileMenuClose?: () => void;
 }) => {
-  const t = translations[lang];
+  const t = getTranslations(lang);
   const { playTap, playBGMMap, stopBGM } = useAudio();
 
   const [showSkillTree, setShowSkillTree] = useState(false);
@@ -367,7 +367,7 @@ export const MapScreen = ({
             <span className="truncate">{u.unitTitle}</span>
             {u.unitComplete && (
               <span className="ml-1 px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[9px] sm:text-xs font-bold rounded-full normal-case tracking-normal flex-shrink-0">
-                {(t as any).unitConquered ?? 'Conquered'}
+                {t.unitConquered ?? 'Conquered'}
               </span>
             )}
           </h3>
@@ -516,7 +516,7 @@ export const MapScreen = ({
                     transition={{ duration: 2.5, ease: "easeOut" }}
                     className="absolute -top-4 left-1/2 -translate-x-1/2 text-lg font-black text-yellow-400 z-50 pointer-events-none drop-shadow-md whitespace-nowrap"
                   >
-                    {(t as any).missionCleared ?? 'Cleared!'}
+                    {t.missionCleared ?? 'Cleared!'}
                   </motion.div>
                 )}
                 {isPerfect && (
@@ -886,14 +886,14 @@ export const MapScreen = ({
                 )}
                 {getCharProgression && selectedChar && (
                   <button onClick={() => setShowSkillTree(true)} className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors">
-                    {(t as any).skillTree ?? 'Skills'}
+                    {t.skillTree ?? 'Skills'}
                   </button>
                 )}
                 {onRepairEquipment && (() => {
                   const repairCount = countNeedsRepair(profile.completed_missions as Record<string, unknown>);
                   return (
                     <button onClick={() => setShowEquipmentPanel(true)} className="relative px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors">
-                      {(t as any).equipmentArsenal ?? 'Arsenal'}
+                      {t.equipmentArsenal ?? 'Arsenal'}
                       {repairCount > 0 && (
                         <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">{repairCount}</span>
                       )}
@@ -932,7 +932,7 @@ export const MapScreen = ({
                   </button>
                 )}
                 <button onClick={() => setShowBattlePass(true)} className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors">
-                  {(t as any).growthHandbook ?? '\u624b\u518c'}
+                  {t.growthHandbook ?? '\u624b\u518c'}
                 </button>
                 <button onClick={() => setShowScrolls(true)} className="px-2 py-0.5 bg-amber-600/20 border border-amber-500/30 rounded text-xs text-amber-300 hover:bg-amber-600/40 transition-colors flex items-center gap-1">
                   📜 {lang === 'en' ? 'Strategy' : lang === 'zh_TW' ? '兵法寶典' : '兵法宝典'}
@@ -942,7 +942,7 @@ export const MapScreen = ({
                   if (exps.length === 0) return null;
                   if (exps.length === 1) return (
                     <button onClick={() => onStartExpedition(exps[0].id)} className="px-2 py-0.5 bg-orange-600/20 border border-orange-500/30 rounded text-xs text-orange-300 hover:bg-orange-600/40 transition-colors animate-pulse">
-                      {(t as any).expedition ?? '\u8fdc\u5f81'}
+                      {t.expedition ?? '\u8fdc\u5f81'}
                     </button>
                   );
                   return exps.map(exp => (
@@ -988,12 +988,12 @@ export const MapScreen = ({
                     )}
                     {getCharProgression && selectedChar && (
                       <button onClick={() => { setShowSkillTree(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300">
-                        {(t as any).skillTree ?? 'Skills'}
+                        {t.skillTree ?? 'Skills'}
                       </button>
                     )}
                     {onRepairEquipment && (
                       <button onClick={() => { setShowEquipmentPanel(true); setShowMoreMenu(false); }} className="relative px-3 py-1.5 bg-amber-600/20 border border-amber-500/30 rounded-lg text-xs text-amber-300">
-                        {(t as any).equipmentArsenal ?? 'Arsenal'}
+                        {t.equipmentArsenal ?? 'Arsenal'}
                         {countNeedsRepair(profile.completed_missions as Record<string, unknown>) > 0 && (
                           <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">{countNeedsRepair(profile.completed_missions as Record<string, unknown>)}</span>
                         )}
@@ -1050,7 +1050,7 @@ export const MapScreen = ({
                       </button>
                     )}
                     <button onClick={() => { setShowBattlePass(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-rose-600/20 border border-rose-500/30 rounded-lg text-xs text-rose-300">
-                      {(t as any).growthHandbook ?? '\u624b\u518c'}
+                      {t.growthHandbook ?? '\u624b\u518c'}
                     </button>
                     <button onClick={() => { setShowScrolls(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-amber-600/20 border border-amber-500/30 rounded-lg text-xs text-amber-300">
                       📜 {lang === 'en' ? 'Strategy' : lang === 'zh_TW' ? '兵法寶典' : '兵法宝典'}

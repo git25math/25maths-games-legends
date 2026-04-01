@@ -796,3 +796,10 @@ export const translations = {
 } as const;
 
 export type TranslationKey = keyof typeof translations.zh;
+
+/** Loose-typed translation accessor for keys that exist in all languages
+ *  but aren't in the TypeScript intersection type. Avoids `(t as any)` casts. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getTranslations(lang: 'zh' | 'en' | 'zh_TW'): Record<string, any> {
+  return translations[lang];
+}

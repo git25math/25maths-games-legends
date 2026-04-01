@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import type { Language } from '../types';
-import { translations } from '../i18n/translations';
+import { getTranslations } from '../i18n/translations';
 import { buttonBase } from '../utils/animationPresets';
 import { JoinClassModal } from '../components/JoinClassModal';
 
@@ -12,7 +12,7 @@ export const GradeSelectScreen = ({
   lang: Language;
   onSelect: (grade: number, className?: string) => void;
 }) => {
-  const t = translations[lang];
+  const t = getTranslations(lang);
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
   const [showJoinModal, setShowJoinModal] = useState(false);
 
@@ -48,7 +48,7 @@ export const GradeSelectScreen = ({
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col items-center gap-4"
         >
-          <p className="text-lg font-bold text-white/80">{(t as any).classPrompt}</p>
+          <p className="text-lg font-bold text-white/80">{t.classPrompt}</p>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <motion.button
@@ -56,18 +56,18 @@ export const GradeSelectScreen = ({
               onClick={() => setShowJoinModal(true)}
               className="px-8 py-3 min-h-[44px] bg-indigo-600 text-white font-bold rounded-xl text-sm hover:bg-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-400 transition-all min-w-[10rem]"
             >
-              🎟️ {(t as any).hasCode}
+              🎟️ {t.hasCode}
             </motion.button>
             <motion.button
               {...buttonBase}
               onClick={() => onSelect(selectedGrade)}
               className="px-6 py-3 min-h-[44px] bg-white/10 border border-white/20 text-white/60 font-bold rounded-xl text-sm hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/40 transition-all"
             >
-              {(t as any).skipForNow}
+              {t.skipForNow}
             </motion.button>
           </div>
 
-          <p className="text-xs text-white/30 max-w-xs">{(t as any).joinedHint}</p>
+          <p className="text-xs text-white/30 max-w-xs">{t.joinedHint}</p>
         </motion.div>
       )}
 

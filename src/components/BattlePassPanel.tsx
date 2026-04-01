@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { X, Star, Check, Lock, Gift, Flame, Swords, Shield, Palette } from 'lucide-react';
 import type { Language } from '../types';
-import { translations } from '../i18n/translations';
+import { getTranslations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import { getSeasonLevel, type SeasonTask } from '../data/seasons/season1';
 import { getSeasonProgress, getTaskStatus, getActiveSeasonTasks, getActiveSeasonRewards, type SeasonProgress } from '../utils/seasonTracker';
@@ -25,7 +25,7 @@ export const BattlePassPanel = ({
   completedMissions: Record<string, unknown>;
   onClose: () => void;
 }) => {
-  const t = translations[lang];
+  const t = getTranslations(lang);
   const { playTap } = useAudio();
   useEscapeKey(onClose);
   const [tab, setTab] = useState<'tasks' | 'rewards'>('tasks');
@@ -51,7 +51,7 @@ export const BattlePassPanel = ({
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-black text-white">
-              {(t as any).growthHandbook ?? 'Growth Handbook'}
+              {t.growthHandbook ?? 'Growth Handbook'}
             </h2>
             <div className="flex items-center gap-2 mt-1">
               <span className="text-amber-400 font-black text-sm">Lv.{level}</span>
@@ -76,7 +76,7 @@ export const BattlePassPanel = ({
                 tab === tabId ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-white/5 text-white/40 border border-white/10'
               }`}
             >
-              {tabId === 'tasks' ? ((t as any).tasks ?? 'Tasks') : ((t as any).rewards ?? 'Rewards')}
+              {tabId === 'tasks' ? (t.tasks ?? 'Tasks') : (t.rewards ?? 'Rewards')}
             </button>
           ))}
         </div>
@@ -89,7 +89,7 @@ export const BattlePassPanel = ({
               return (
                 <div key={freq}>
                   <div className="text-[10px] font-bold uppercase text-white/30 mb-1 tracking-wider">
-                    {freq === 'daily' ? ((translations[lang] as any).freqDaily ?? 'Daily') : freq === 'weekly' ? ((translations[lang] as any).freqWeekly ?? 'Weekly') : ((translations[lang] as any).freqMilestone ?? 'Milestone')}
+                    {freq === 'daily' ? (t.freqDaily ?? 'Daily') : freq === 'weekly' ? (t.freqWeekly ?? 'Weekly') : (t.freqMilestone ?? 'Milestone')}
                   </div>
                   {tasks.map(task => {
                     const status = getTaskStatus(task, progress);

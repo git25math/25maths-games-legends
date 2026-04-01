@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Scroll, Eye, Lightbulb, Sword, ChevronRight } from 'lucide-react';
 import type { Language } from '../types';
-import { translations } from '../i18n/translations';
+import { getTranslations } from '../i18n/translations';
 import { useAudio } from '../audio';
 
 const LS_ONBOARDING_KEY = 'gl_onboarding_done';
@@ -27,7 +27,7 @@ export const OnboardingScreen = ({
   onComplete: () => void;
 }) => {
   const [step, setStep] = useState(0);
-  const t = translations[lang];
+  const t = getTranslations(lang);
   const { playTap, playPhaseAdvance } = useAudio();
 
   const advance = () => {
@@ -55,7 +55,7 @@ export const OnboardingScreen = ({
         onClick={skip}
         className="absolute top-4 sm:top-6 right-4 sm:right-20 min-h-[44px] min-w-[44px] flex items-center justify-center text-white/30 hover:text-white/60 text-xs sm:text-sm font-bold focus-visible:ring-2 focus-visible:ring-white/40 rounded-lg transition-colors z-10"
       >
-        {(t as any).skipOnboarding ?? 'Skip'}
+        {t.skipOnboarding ?? 'Skip'}
       </button>
 
       {/* Step indicators */}

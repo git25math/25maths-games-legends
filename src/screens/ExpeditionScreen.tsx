@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, Swords, Coffee, Crown, ArrowLeft, Package, ChevronRight, Shield, Trophy, Skull, Scroll } from 'lucide-react';
 import type { Language, Mission, Character } from '../types';
-import { translations } from '../i18n/translations';
+import { getTranslations } from '../i18n/translations';
 import { lt } from '../i18n/resolveText';
 import type { Expedition, ExpeditionQuote } from '../data/expeditions';
 import { generateMission } from '../utils/generateMission';
@@ -87,7 +87,7 @@ export const ExpeditionScreen = ({
   onSaveRun?: (xpEarned: number, nodesCleared: number) => Promise<void>;
   onCancel: () => void;
 }) => {
-  const t = translations[lang];
+  const t = getTranslations(lang);
   const { playTap, playSuccess, playFail, playVictory, playDefeat, playPhaseAdvance } = useAudio();
 
   const [currentNodeIdx, setCurrentNodeIdx] = useState(0);
@@ -343,7 +343,7 @@ export const ExpeditionScreen = ({
           </div>
           {nodesCleared > 0 && (
             <button onClick={handleRetreat} className="px-3 py-1.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-bold">
-              {(t as any).retreat ?? 'Retreat'}
+              {t.retreat ?? 'Retreat'}
             </button>
           )}
         </div>
@@ -438,7 +438,7 @@ export const ExpeditionScreen = ({
           <p className="text-amber-400 font-bold mb-6">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '军粮'}</p>
           <p className="text-white/40 text-sm mb-8">{lang === 'en' ? `You now have ${rations} rations.` : `现在有 ${rations} 份军粮。`}</p>
           <button onClick={() => { setCurrentNodeIdx(prev => prev + 1); setPhase('map'); }} className="px-8 py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 transition-all">
-            {(t as any).continueMarching ?? 'Continue March'}
+            {t.continueMarching ?? 'Continue March'}
           </button>
         </motion.div>
       </div>
@@ -625,9 +625,9 @@ export const ExpeditionScreen = ({
           {/* Result title */}
           <div className="text-center py-4">
             <h2 className={`text-xl font-black mb-1 ${isVictory ? 'text-amber-400' : isRetreat ? 'text-amber-300' : 'text-rose-400'}`}>
-              {isVictory ? ((t as any).expeditionVictory ?? 'Expedition Complete!')
-                : isRetreat ? ((t as any).safeRetreat ?? 'Safe Retreat')
-                : ((t as any).rationsDepleted ?? 'Rations Depleted')}
+              {isVictory ? (t.expeditionVictory ?? 'Expedition Complete!')
+                : isRetreat ? (t.safeRetreat ?? 'Safe Retreat')
+                : (t.rationsDepleted ?? 'Rations Depleted')}
             </h2>
             <p className="text-white/40 text-xs">
               {isVictory ? (lang === 'en' ? 'Full victory. All rewards earned.' : '大获全胜，全额奖励已发放。')
