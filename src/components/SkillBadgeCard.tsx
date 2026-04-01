@@ -131,9 +131,9 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
             <div className="text-[10px] font-bold uppercase tracking-wide mb-2" style={{ color: '#b8860b' }}>
               {t.summary}
             </div>
-            <p className="text-white/80 text-sm leading-relaxed mb-3">
-              {lt(skillSummary, lang)}
-            </p>
+            <div className="text-white/80 text-sm leading-relaxed mb-3">
+              <MathView tex={lt(skillSummary, lang)} className="text-white/80" />
+            </div>
             {formula && (
               <div className="flex justify-center">
                 <MathView tex={formula.replace(/\$/g, '')} className="text-base text-yellow-300" />
