@@ -328,6 +328,10 @@ export const KP_KN_MAP: Record<string, string> = {
   'kp-1.4-02': 'kn_0030', // Multiply fractions
   'kp-1.4-03': 'kn_0027', // FDP conversion
   'kp-1.4-04': 'kn_0031', // Fraction of an amount
+  // 1.5 Ordering
+  'kp-1.5-01': 'kn_0343', // Order integers on a number line
+  'kp-1.5-02': 'kn_0344', // Order fractions, decimals and percentages
+  'kp-1.5-03': 'kn_0343', // Order (ambush range)
   // 1.6 Four operations
   'kp-1.6-01': 'kn_0033', // Negative numbers
   'kp-1.6-02': 'kn_0311', // Add/subtract negatives
@@ -368,6 +372,8 @@ export const KP_KN_MAP: Record<string, string> = {
   'kp-1.13-02': 'kn_0064', // Percentage increase
   'kp-1.13-03': 'kn_0069', // Compound interest
   'kp-1.13-04': 'kn_0067', // Reverse percentage
+  // 1.14 Using a calculator
+  'kp-1.14-01': 'kn_0345', // Efficient calculator use
   // 1.15 Time
   'kp-1.15-01': 'kn_0075', // Calculate duration
   'kp-1.15-02': 'kn_0073', // 12/24 hour time
@@ -378,6 +384,8 @@ export const KP_KN_MAP: Record<string, string> = {
   'kp-1.16-03': 'kn_0078', // Currency exchange
   // 1.17 Exponential growth
   'kp-1.17-01': 'kn_0070', // Exponential growth and decay
+  // 1.18 Surds
+  'kp-1.18-01': 'kn_0346', // Simplify surds
 
   // Ch2: Algebra — 2.1 Introduction
   'kp-2.1-01': 'kn_0083', // Substitution
@@ -455,6 +463,9 @@ export const KP_KN_MAP: Record<string, string> = {
   'kp-2.11-01': 'kn_0131', // Solve trig equations
   'kp-2.11-02': 'kn_0132', // Find turning points
   'kp-2.11-03': 'kn_0133', // Trig reflex angle
+  // 2.12 Differentiation
+  'kp-2.12-01': 'kn_0347', // Differentiate using power rule
+  'kp-2.12-02': 'kn_0348', // Find gradient and turning points
   // 2.13 Functions
   'kp-2.13-01': 'kn_0134', // Evaluate f(x)
   'kp-2.13-02': 'kn_0136', // Inverse f^-1(x)
@@ -480,10 +491,29 @@ export const KP_KN_MAP: Record<string, string> = {
   'kp-3.7-01': 'kn_0142', // Perpendicular gradient
 
   // Ch4: Geometry
-  // 4.4 Similarity → Pythagoras nodes
-  'kp-4.4-01': 'kn_0313', // Pythagoras concept
-  'kp-4.4-02': 'kn_0314', // Find hypotenuse
-  'kp-4.4-03': 'kn_0315', // Find shorter side
+  // 4.1 Geometrical terms
+  'kp-4.1-01': 'kn_0349', // Shape recognition (2D shapes)
+  'kp-4.1-02': 'kn_0350', // Identify nets and 3D shapes
+  'kp-4.1-03': 'kn_0349', // Formation properties (2D shapes)
+  // 4.2 Geometrical constructions
+  'kp-4.2-01': 'kn_0352', // Compass fortress (construct shapes)
+  'kp-4.2-02': 'kn_0352', // Equilateral formation (construct shapes)
+  'kp-4.2-03': 'kn_0351', // Angle bisector
+  'kp-4.2-04': 'kn_0351', // Locus patrol (bisectors)
+  // 4.3 Scale drawings and bearings
+  'kp-4.3-01': 'kn_0353', // Scale drawing
+  'kp-4.3-02': 'kn_0354', // Bearings (watchtower)
+  'kp-4.3-03': 'kn_0354', // Bearing calculation
+  // 4.4 Similarity and congruence
+  'kp-4.4-01': 'kn_0390', // Scale factor (similar shapes concept)
+  'kp-4.4-02': 'kn_0391', // Find missing length using similarity
+  'kp-4.4-03': 'kn_0392', // Area ratio (similarity ratios)
+  'kp-4.4-04': 'kn_0392', // Volume ratio (similarity ratios)
+  'kp-4.4-05': 'kn_0391', // Similar triangles — find side
+  'kp-4.4-06': 'kn_0393', // Can AAA prove congruence? (congruence conditions)
+  // 4.5 Symmetry
+  'kp-4.5-01': 'kn_0355', // Line symmetry
+  'kp-4.5-02': 'kn_0356', // Rotational symmetry
   // 4.6 Angles
   'kp-4.6-01': 'kn_0145', // Angles in a triangle
   'kp-4.6-02': 'kn_0146', // Angles on a straight line
@@ -503,7 +533,16 @@ export const KP_KN_MAP: Record<string, string> = {
   'kp-4.7-05': 'kn_0318', // Angle in semicircle
   'kp-4.7-06': 'kn_0320', // Apply circle theorem
 
+  // 4.8 Constructions and loci
+  'kp-4.8-01': 'kn_0357', // Locus (safe zone)
+  'kp-4.8-02': 'kn_0357', // Equidistant border (locus)
+  'kp-4.8-03': 'kn_0358', // Loci intersection
+
   // Ch5: Mensuration
+  // 5.1 Units of measure
+  'kp-5.1-01': 'kn_0359', // Convert metric units (length)
+  'kp-5.1-02': 'kn_0359', // Convert metric units (mass)
+  'kp-5.1-03': 'kn_0360', // Convert area units
   'kp-5.2-01': 'kn_0329', // Area of 2D shapes
   'kp-5.2-02': 'kn_0329', // Area of 2D shapes
   'kp-5.2-03': 'kn_0329', // Area of 2D shapes
@@ -514,17 +553,58 @@ export const KP_KN_MAP: Record<string, string> = {
   'kp-5.3-05': 'kn_0150', // Arc length
   'kp-5.3-06': 'kn_0330', // Circumference and area of circle
 
+  // 5.4 Surface area and volume
+  'kp-5.4-01': 'kn_0361', // Volume of prisms/cylinders
+  'kp-5.4-02': 'kn_0361', // Volume of prisms/cylinders
+  'kp-5.4-03': 'kn_0362', // Surface area of 3D shapes
+  'kp-5.4-04': 'kn_0363', // Volume of cone
+  'kp-5.4-05': 'kn_0363', // Volume of sphere
+  'kp-5.4-06': 'kn_0364', // Surface area of sphere
+  'kp-5.4-07': 'kn_0362', // Surface area of cylinder
+  // 5.5 Compound shapes
+  'kp-5.5-01': 'kn_0365', // L-shaped compound area
+  'kp-5.5-02': 'kn_0365', // T-shape compound area
+  'kp-5.5-03': 'kn_0365', // Notched wall compound area
+
   // Ch6: Trigonometry
   'kp-6.1-01': 'kn_0313', // Pythagoras
   'kp-6.1-02': 'kn_0314', // Find hypotenuse
   'kp-6.2-01': 'kn_0326', // Sine/cosine/tangent ratios
   'kp-6.2-02': 'kn_0327', // Find side using trig
   'kp-6.2-03': 'kn_0328', // Find angle using inverse trig
+  // 6.3 Exact trigonometric values
+  'kp-6.3-01': 'kn_0366', // Exact trig values
+  'kp-6.3-02': 'kn_0366', // Exact trig values
   'kp-6.4-01': 'kn_0153', // Solve trig equation
   'kp-6.4-02': 'kn_0154', // Linear trig equation
   'kp-6.4-03': 'kn_0153', // Solve trig equation
+  // 6.5 Non-right-angled triangles
+  'kp-6.5-01': 'kn_0367', // Sine rule — find side
+  'kp-6.5-02': 'kn_0368', // Cosine rule — find side
+  'kp-6.5-03': 'kn_0368', // Cosine rule — find angle
+  'kp-6.5-04': 'kn_0369', // Trig area (1/2 ab sin C)
+  'kp-6.5-05': 'kn_0367', // Sine rule advanced
+  'kp-6.5-06': 'kn_0368', // Cosine rule advanced
+  'kp-6.5-07': 'kn_0369', // Triangle area formula
+  // 6.6 3D trigonometry
+  'kp-6.6-01': 'kn_0370', // 3D Pythagoras
+  'kp-6.6-02': 'kn_0371', // 3D elevation angle
 
-  // Ch7: Vectors
+  // Ch7: Transformations and Vectors
+  // 7.1 Transformations
+  'kp-7.1-01': 'kn_0372', // Reflection (river reflection)
+  'kp-7.1-02': 'kn_0374', // Translation
+  'kp-7.1-03': 'kn_0374', // Formation translation
+  'kp-7.1-04': 'kn_0372', // Reflection in x-axis
+  'kp-7.1-05': 'kn_0373', // Rotate formation
+  'kp-7.1-06': 'kn_0372', // Reflection in y=x
+  'kp-7.1-07': 'kn_0375', // Enlargement
+  'kp-7.1-08': 'kn_0373', // Rotation 90 CCW
+  'kp-7.1-09': 'kn_0373', // Rotation 180
+  'kp-7.1-10': 'kn_0375', // Enlargement SF 2
+  'kp-7.1-11': 'kn_0375', // Enlargement SF 1/2
+  'kp-7.1-12': 'kn_0377', // Combined transformations
+  // 7.2 Vectors in 2D
   'kp-7.2-01': 'kn_0322', // Add and subtract vectors
   'kp-7.2-02': 'kn_0323', // Multiply vector by scalar
   'kp-7.2-03': 'kn_0325', // Use position vectors
@@ -551,16 +631,34 @@ export const KP_KN_MAP: Record<string, string> = {
   // Ch9: Statistics
   'kp-9.1-01': 'kn_0162', // Calculate the mean
   'kp-9.1-02': 'kn_0162', // Calculate the mean
+  // 9.2 Interpreting statistical data
+  'kp-9.2-01': 'kn_0380', // Interpret tables and charts
+  'kp-9.2-02': 'kn_0381', // Two-way tables
+  'kp-9.2-03': 'kn_0380', // Comparing averages
   'kp-9.3-01': 'kn_0164', // Find the mode
   'kp-9.3-02': 'kn_0163', // Find the median
   'kp-9.3-03': 'kn_0165', // Find the range
   'kp-9.3-04': 'kn_0165', // Find the range
   'kp-9.3-05': 'kn_0166', // Mean from frequency table
   'kp-9.3-06': 'kn_0167', // Missing value / combined mean
+  // 9.4 Statistical charts and diagrams
+  'kp-9.4-01': 'kn_0382', // Pie chart
+  'kp-9.4-02': 'kn_0383', // Stem-and-leaf (bar chart category)
+  'kp-9.4-03': 'kn_0384', // Frequency polygon
+  'kp-9.4-04': 'kn_0382', // Pie chart (pay distribution)
+  'kp-9.4-05': 'kn_0383', // Stem-and-leaf decode
   'kp-9.5-01': 'kn_0168', // Identify Correlation Type
   'kp-9.5-02': 'kn_0169', // Use Line of Best Fit
   'kp-9.5-03': 'kn_0169', // Use Line of Best Fit
   'kp-9.5-04': 'kn_0168', // Identify Correlation Type
+  // 9.6 Cumulative frequency
+  'kp-9.6-01': 'kn_0385', // Cumulative frequency diagram
+  'kp-9.6-02': 'kn_0386', // Quartile analysis
+  'kp-9.6-03': 'kn_0386', // Cumulative frequency median
+  'kp-9.6-04': 'kn_0386', // Quartiles from CF
+  // 9.7 Histograms
+  'kp-9.7-01': 'kn_0388', // Frequency density
+  'kp-9.7-02': 'kn_0388', // Read histogram
 };
 
 /** Get canonical kn_id for a Play KP */
