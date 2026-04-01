@@ -496,7 +496,6 @@ export const MapScreen = ({
               return (
                 <motion.div
                   key={mission.id}
-                  ref={isNextUp && isCurrentUnit ? currentUnitRef : undefined}
                   variants={cardVariants}
                   className="relative group"
                   {...(!isLocked ? {
@@ -512,13 +511,8 @@ export const MapScreen = ({
                   <motion.div
                     animate={isPlayable ? { scale: [1, 1.02, 1] } : (isLastCleared ? { borderColor: ['#e2e8f0', '#facc15', '#facc15', '#e2e8f0'] } : {})}
                     transition={isPlayable ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : (isLastCleared ? { duration: 2.5, ease: "easeInOut" } : {})}
-                    className={`bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isNextUp ? 'border-amber-400 shadow-amber-500/20' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
+                    className={`bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl border-2 transition-shadow ${isLocked ? 'opacity-50 grayscale border-transparent' : isLastCleared ? 'border-transparent' : 'border-transparent hover:shadow-indigo-500/20'}`}
                   >
-                {isNextUp && (
-                  <div className="absolute -top-3 left-4 px-3 py-1 bg-amber-500 text-white text-[11px] sm:text-xs font-black rounded-full z-10 shadow-md">
-                    {(t as any).startHere ?? 'Start here!'}
-                  </div>
-                )}
                 {isLastCleared && (
                   <motion.div
                     initial={{ opacity: 0, y: 0, scale: 0.5 }}
