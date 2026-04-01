@@ -434,9 +434,54 @@ export const MapScreen = ({
             </div>
           )}
 
-          {/* Active + upcoming missions — full cards */}
+          {/* ── Hero Focus Card: Next mission front and center ── */}
+          {isCurrentUnit && u.firstPlayable && (
+            <motion.div
+              ref={currentUnitRef}
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
+              className="relative mb-6"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 via-indigo-500/10 to-emerald-500/20 rounded-3xl blur-xl" />
+              <div className="relative bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-amber-400/40 rounded-3xl p-5 sm:p-8 shadow-2xl shadow-amber-500/10">
+                <div className="absolute top-3 right-4 px-3 py-1 bg-amber-500 text-white text-[10px] font-black rounded-full uppercase tracking-wider">
+                  {lt({ zh: '下一关', en: 'Next Up' }, lang)}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-xl sm:text-3xl font-black text-white mb-2 pr-20">{lt(u.firstPlayable.title, lang)}</h3>
+                    {u.firstPlayable.skillName && (
+                      <p className="text-amber-300/80 text-xs sm:text-sm font-bold mb-2">{lt(u.firstPlayable.skillName, lang)}</p>
+                    )}
+                    <LatexText text={interpolate(lt(u.firstPlayable.description, lang), u.firstPlayable.data ?? {})} className="text-white/50 text-xs sm:text-sm mb-4 line-clamp-2" />
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-black uppercase ${
+                        u.firstPlayable.difficulty === 'Easy' ? 'bg-emerald-500/20 text-emerald-300' :
+                        u.firstPlayable.difficulty === 'Medium' ? 'bg-orange-500/20 text-orange-300' : 'bg-rose-500/20 text-rose-300'
+                      }`}>{t.difficulty[u.firstPlayable.difficulty]}</span>
+                      <span className="text-white/30 text-[11px] font-bold">+{u.firstPlayable.reward} XP</span>
+                    </div>
+                  </div>
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => { playTap(); onPracticeStart(u.firstPlayable!); }}
+                  className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-black rounded-2xl text-base sm:text-lg flex items-center justify-center gap-3 shadow-lg shadow-amber-500/30 transition-all min-h-[56px]"
+                >
+                  <Zap size={22} />
+                  {lt({ zh: '立即挑战', en: 'Start Challenge' }, lang)}
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Remaining missions grid (skip the hero mission) */}
           <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-            {(isCurrentUnit ? activeAndUpcoming : u.unitMissions).map(mission => {
+            {(isCurrentUnit ? activeAndUpcoming.filter(m => m.id !== u.firstPlayable?.id) : u.unitMissions).map(mission => {
               const comp = profile.completed_missions[String(mission.id)];
               const isNextUp = mission.id === u.firstPlayable?.id;
               const isCompleted = hasAnyPracticeCompletion(comp);
