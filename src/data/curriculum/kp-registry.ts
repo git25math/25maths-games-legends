@@ -19,6 +19,7 @@ export interface KnowledgePoint {
   prereqs: string[];     // prerequisite KP IDs
   topicId: string;       // e.g., "2.5"
   chapterId: string;     // e.g., "ch2"
+  kn_id?: string;        // canonical knowledge-network node ID (e.g., "kn_0042")
 }
 
 export interface Topic {
@@ -294,3 +295,275 @@ export function getChapterForKp(kpId: string): Chapter | undefined {
 
 /** Total KP count */
 export const TOTAL_KPS = ALL_KP_IDS.length;
+
+// ═══════════════════════════════════════════════════════════════
+// Knowledge Network mapping (Phase 2B.1b)
+// Maps Play KP IDs → canonical kn_ids from knowledge-network seed
+// ═══════════════════════════════════════════════════════════════
+
+/** KP ID → canonical knowledge-network node ID */
+export const KP_KN_MAP: Record<string, string> = {
+  // Ch1: Number — 1.1 Types of number
+  'kp-1.1-01': 'kn_0001', // Place value
+  'kp-1.1-02': 'kn_0002', // Prime numbers
+  'kp-1.1-03': 'kn_0009', // Square numbers and roots
+  'kp-1.1-04': 'kn_0004', // Multiples
+  'kp-1.1-05': 'kn_0011', // Reciprocal
+  'kp-1.1-06': 'kn_0003', // Factors
+  'kp-1.1-07': 'kn_0007', // LCM
+  'kp-1.1-08': 'kn_0005', // Prime factorisation
+  'kp-1.1-09': 'kn_0008', // HCF/LCM in context
+  // 1.2 Sets
+  'kp-1.2-01': 'kn_0012', // List Set Elements
+  'kp-1.2-02': 'kn_0012', // Set concepts (Venn)
+  'kp-1.2-03': 'kn_0013', // Set Cardinality
+  'kp-1.2-04': 'kn_0013', // Set Cardinality
+  'kp-1.2-05': 'kn_0013', // Set Cardinality
+  // 1.3 Powers and roots
+  'kp-1.3-01': 'kn_0014', // Evaluate powers
+  'kp-1.3-02': 'kn_0015', // Evaluate roots
+  'kp-1.3-03': 'kn_0019', // Index laws
+  // 1.4 Fractions, decimals, percentages
+  'kp-1.4-01': 'kn_0020', // Fraction concept
+  'kp-1.4-02': 'kn_0030', // Multiply fractions
+  'kp-1.4-03': 'kn_0027', // FDP conversion
+  'kp-1.4-04': 'kn_0031', // Fraction of an amount
+  // 1.6 Four operations
+  'kp-1.6-01': 'kn_0033', // Negative numbers
+  'kp-1.6-02': 'kn_0311', // Add/subtract negatives
+  'kp-1.6-03': 'kn_0032', // Order of operations (BODMAS)
+  'kp-1.6-04': 'kn_0034', // Decimal arithmetic
+  // 1.7 Indices I
+  'kp-1.7-01': 'kn_0016', // Zero index
+  'kp-1.7-02': 'kn_0018', // Fractional index
+  // 1.8 Standard form
+  'kp-1.8-01': 'kn_0036', // Standard form concept
+  'kp-1.8-02': 'kn_0037', // Convert to standard form
+  // 1.9 Estimation
+  'kp-1.9-01': 'kn_0044', // Round to nearest 10/100/1000
+  'kp-1.9-02': 'kn_0043', // Round to significant figures
+  'kp-1.9-03': 'kn_0042', // Round to decimal places
+  'kp-1.9-04': 'kn_0045', // Estimate by rounding
+  'kp-1.9-05': 'kn_0045', // Estimate (check)
+  'kp-1.9-06': 'kn_0045', // Estimate (lengths)
+  'kp-1.9-07': 'kn_0043', // Round to SF
+  // 1.10 Limits of accuracy
+  'kp-1.10-01': 'kn_0046', // Upper & lower bounds
+  'kp-1.10-02': 'kn_0050', // Error interval notation
+  'kp-1.10-03': 'kn_0047', // Bounds of sums
+  'kp-1.10-04': 'kn_0048', // Bounds of products
+  'kp-1.10-05': 'kn_0051', // Bounds in context
+  // 1.11 Ratio and proportion
+  'kp-1.11-01': 'kn_0052', // Simplify ratios
+  'kp-1.11-02': 'kn_0054', // Share in a given ratio
+  'kp-1.11-03': 'kn_0055', // Ratio word problems
+  'kp-1.11-04': 'kn_0053', // Write as a ratio
+  'kp-1.11-05': 'kn_0054', // Share in ratio
+  // 1.12 Rates
+  'kp-1.12-01': 'kn_0058', // Convert length units
+  'kp-1.12-02': 'kn_0056', // Speed-Distance-Time
+  'kp-1.12-03': 'kn_0057', // Convert speed units
+  // 1.13 Percentages
+  'kp-1.13-01': 'kn_0062', // Percentage of an amount
+  'kp-1.13-02': 'kn_0064', // Percentage increase
+  'kp-1.13-03': 'kn_0069', // Compound interest
+  'kp-1.13-04': 'kn_0067', // Reverse percentage
+  // 1.15 Time
+  'kp-1.15-01': 'kn_0075', // Calculate duration
+  'kp-1.15-02': 'kn_0073', // 12/24 hour time
+  'kp-1.15-03': 'kn_0077', // Time zones
+  // 1.16 Money
+  'kp-1.16-01': 'kn_0068', // Simple interest
+  'kp-1.16-02': 'kn_0069', // Compound interest
+  'kp-1.16-03': 'kn_0078', // Currency exchange
+  // 1.17 Exponential growth
+  'kp-1.17-01': 'kn_0070', // Exponential growth and decay
+
+  // Ch2: Algebra — 2.1 Introduction
+  'kp-2.1-01': 'kn_0083', // Substitution
+  'kp-2.1-02': 'kn_0084', // Formula Substitution
+  'kp-2.1-03': 'kn_0083', // Substitution (two-variable)
+  // 2.2 Algebraic manipulation
+  'kp-2.2-01': 'kn_0085', // Collect like terms
+  'kp-2.2-02': 'kn_0086', // Expand single bracket
+  'kp-2.2-03': 'kn_0085', // Collect like terms
+  'kp-2.2-04': 'kn_0087', // Expand two brackets (FOIL)
+  'kp-2.2-05': 'kn_0094', // Form algebraic expressions
+  'kp-2.2-06': 'kn_0089', // Factorise by common factor
+  'kp-2.2-07': 'kn_0090', // Factorise quadratic
+  'kp-2.2-08': 'kn_0091', // Difference of two squares
+  'kp-2.2-09': 'kn_0093', // Algebraic fractions
+  'kp-2.2-10': 'kn_0092', // Factorise by grouping
+  'kp-2.2-11': 'kn_0096', // Algebraic proof
+  'kp-2.2-12': 'kn_0019', // Index laws
+  'kp-2.2-13': 'kn_0095', // Rearrange formulae
+  // 2.3 Algebraic fractions
+  'kp-2.3-01': 'kn_0097', // Simplify algebraic fraction
+  'kp-2.3-02': 'kn_0307', // Simplify by factorising
+  'kp-2.3-03': 'kn_0098', // Add algebraic fractions
+  'kp-2.3-04': 'kn_0309', // Multiply/divide algebraic fractions
+  // 2.4 Indices II
+  'kp-2.4-01': 'kn_0099', // Multiply/divide index laws
+  'kp-2.4-02': 'kn_0101', // Negative and fractional indices
+  'kp-2.4-03': 'kn_0100', // Power of a power
+  // 2.5 Equations
+  'kp-2.5-01': 'kn_0103', // One-step equations
+  'kp-2.5-02': 'kn_0104', // Two-step equations
+  'kp-2.5-03': 'kn_0106', // Equations with fractions
+  'kp-2.5-04': 'kn_0105', // Equations with x on both sides
+  'kp-2.5-05': 'kn_0110', // Form and solve equations
+  'kp-2.5-06': 'kn_0110', // Form and solve equations
+  'kp-2.5-07': 'kn_0110', // Trial & improvement
+  'kp-2.5-08': 'kn_0107', // Simultaneous equations
+  'kp-2.5-09': 'kn_0108', // Solve quadratic by factorising
+  'kp-2.5-10': 'kn_0109', // Quadratic formula
+  'kp-2.5-11': 'kn_0108', // Completing the square
+  'kp-2.5-12': 'kn_0303', // Simultaneous by elimination
+  'kp-2.5-13': 'kn_0107', // Linear-Quadratic simultaneous
+  // 2.6 Inequalities
+  'kp-2.6-01': 'kn_0111', // Solve linear inequality
+  'kp-2.6-02': 'kn_0111', // Graphical inequalities
+  'kp-2.6-03': 'kn_0111', // Negative flip
+  'kp-2.6-04': 'kn_0112', // Compound inequality
+  // 2.7 Sequences
+  'kp-2.7-01': 'kn_0113', // Recognise pattern
+  'kp-2.7-02': 'kn_0115', // nth term linear
+  'kp-2.7-03': 'kn_0114', // Term-to-term rule
+  'kp-2.7-04': 'kn_0116', // Use nth term formula
+  'kp-2.7-05': 'kn_0117', // nth term quadratic
+  // 2.8 Proportion
+  'kp-2.8-01': 'kn_0121', // Inverse proportion
+  'kp-2.8-02': 'kn_0122', // Write proportion formula
+  'kp-2.8-03': 'kn_0120', // Direct proportion
+  'kp-2.8-04': 'kn_0120', // Direct proportion
+  'kp-2.8-05': 'kn_0121', // Inverse proportion
+  'kp-2.8-06': 'kn_0123', // Proportional change
+  'kp-2.8-07': 'kn_0123', // Proportional change
+  'kp-2.8-08': 'kn_0122', // Proportion formula
+  // 2.9 Graphs in practical situations
+  'kp-2.9-01': 'kn_0124', // Speed-Time
+  'kp-2.9-02': 'kn_0125', // Average Speed
+  'kp-2.9-03': 'kn_0126', // Speed Unit Conversion
+  'kp-2.9-04': 'kn_0125', // Average Speed
+  'kp-2.9-05': 'kn_0124', // Speed-Time
+  // 2.10 Graphs of functions
+  'kp-2.10-01': 'kn_0127', // Complete Table of Values
+  'kp-2.10-02': 'kn_0129', // Equation of a Line
+  'kp-2.10-03': 'kn_0130', // Identify Function Type
+  'kp-2.10-04': 'kn_0130', // Identify Function Type
+  // 2.11 Sketching curves
+  'kp-2.11-01': 'kn_0131', // Solve trig equations
+  'kp-2.11-02': 'kn_0132', // Find turning points
+  'kp-2.11-03': 'kn_0133', // Trig reflex angle
+  // 2.13 Functions
+  'kp-2.13-01': 'kn_0134', // Evaluate f(x)
+  'kp-2.13-02': 'kn_0136', // Inverse f^-1(x)
+  'kp-2.13-03': 'kn_0135', // Composite fg(x)
+  'kp-2.13-04': 'kn_0134', // Domain & Range
+
+  // Ch3: Coordinate Geometry
+  'kp-3.1-01': 'kn_0137', // Plot and read coordinates
+  'kp-3.1-02': 'kn_0137', // Plot and read coordinates
+  'kp-3.2-01': 'kn_0141', // Equation of a line
+  'kp-3.3-01': 'kn_0140', // Gradient
+  'kp-3.3-02': 'kn_0140', // Gradient
+  'kp-3.4-01': 'kn_0138', // Find midpoint
+  'kp-3.4-02': 'kn_0139', // Distance between points
+  'kp-3.4-03': 'kn_0139', // Distance between points
+  'kp-3.4-04': 'kn_0138', // Find midpoint
+  'kp-3.5-01': 'kn_0141', // Equation of a line
+  'kp-3.5-02': 'kn_0141', // Equation of a line
+  'kp-3.5-03': 'kn_0141', // Equation of a line
+  'kp-3.5-04': 'kn_0141', // Equation of a line
+  'kp-3.6-01': 'kn_0140', // Gradient (parallel)
+  'kp-3.6-02': 'kn_0141', // Equation of line (parallel)
+  'kp-3.7-01': 'kn_0142', // Perpendicular gradient
+
+  // Ch4: Geometry
+  // 4.4 Similarity → Pythagoras nodes
+  'kp-4.4-01': 'kn_0313', // Pythagoras concept
+  'kp-4.4-02': 'kn_0314', // Find hypotenuse
+  'kp-4.4-03': 'kn_0315', // Find shorter side
+  // 4.6 Angles
+  'kp-4.6-01': 'kn_0145', // Angles in a triangle
+  'kp-4.6-02': 'kn_0146', // Angles on a straight line
+  'kp-4.6-03': 'kn_0148', // Angles with parallel lines
+  'kp-4.6-04': 'kn_0148', // Angles with parallel lines
+  'kp-4.6-05': 'kn_0149', // Polygon angles
+  'kp-4.6-06': 'kn_0149', // Polygon angles
+  'kp-4.6-07': 'kn_0149', // Polygon angles
+  'kp-4.6-08': 'kn_0149', // Polygon angles
+  'kp-4.6-09': 'kn_0146', // Angles on a straight line
+  'kp-4.6-10': 'kn_0149', // Polygon angles
+  // 4.7 Circle theorems
+  'kp-4.7-01': 'kn_0318', // Angle in semicircle
+  'kp-4.7-02': 'kn_0317', // Angle at centre
+  'kp-4.7-03': 'kn_0320', // Apply circle theorem
+  'kp-4.7-04': 'kn_0319', // Tangent perpendicular
+  'kp-4.7-05': 'kn_0318', // Angle in semicircle
+  'kp-4.7-06': 'kn_0320', // Apply circle theorem
+
+  // Ch5: Mensuration
+  'kp-5.2-01': 'kn_0329', // Area of 2D shapes
+  'kp-5.2-02': 'kn_0329', // Area of 2D shapes
+  'kp-5.2-03': 'kn_0329', // Area of 2D shapes
+  'kp-5.3-01': 'kn_0330', // Circumference and area of circle
+  'kp-5.3-02': 'kn_0330', // Circumference and area of circle
+  'kp-5.3-03': 'kn_0150', // Arc length
+  'kp-5.3-04': 'kn_0151', // Sector area
+  'kp-5.3-05': 'kn_0150', // Arc length
+  'kp-5.3-06': 'kn_0330', // Circumference and area of circle
+
+  // Ch6: Trigonometry
+  'kp-6.1-01': 'kn_0313', // Pythagoras
+  'kp-6.1-02': 'kn_0314', // Find hypotenuse
+  'kp-6.2-01': 'kn_0326', // Sine/cosine/tangent ratios
+  'kp-6.2-02': 'kn_0327', // Find side using trig
+  'kp-6.2-03': 'kn_0328', // Find angle using inverse trig
+  'kp-6.4-01': 'kn_0153', // Solve trig equation
+  'kp-6.4-02': 'kn_0154', // Linear trig equation
+  'kp-6.4-03': 'kn_0153', // Solve trig equation
+
+  // Ch7: Vectors
+  'kp-7.2-01': 'kn_0322', // Add and subtract vectors
+  'kp-7.2-02': 'kn_0323', // Multiply vector by scalar
+  'kp-7.2-03': 'kn_0325', // Use position vectors
+  'kp-7.3-01': 'kn_0322', // Add and subtract vectors
+  'kp-7.4-01': 'kn_0324', // Position vectors
+  'kp-7.4-02': 'kn_0325', // Use position vectors
+
+  // Ch8: Probability
+  'kp-8.1-01': 'kn_0155', // Simple Probability
+  'kp-8.1-02': 'kn_0156', // Complementary Probability
+  'kp-8.2-01': 'kn_0157', // Expected Frequency
+  'kp-8.2-02': 'kn_0157', // Expected Frequency
+  'kp-8.3-01': 'kn_0155', // Simple Probability
+  'kp-8.3-02': 'kn_0158', // Independent Events
+  'kp-8.3-03': 'kn_0158', // Independent Events
+  'kp-8.3-04': 'kn_0158', // Independent Events
+  'kp-8.3-05': 'kn_0156', // Complementary Probability
+  'kp-8.3-06': 'kn_0155', // Simple Probability
+  'kp-8.3-07': 'kn_0155', // Simple Probability
+  'kp-8.3-08': 'kn_0155', // Simple Probability
+  'kp-8.4-01': 'kn_0160', // Two Without Replacement
+  'kp-8.4-02': 'kn_0161', // Conditional Given
+
+  // Ch9: Statistics
+  'kp-9.1-01': 'kn_0162', // Calculate the mean
+  'kp-9.1-02': 'kn_0162', // Calculate the mean
+  'kp-9.3-01': 'kn_0164', // Find the mode
+  'kp-9.3-02': 'kn_0163', // Find the median
+  'kp-9.3-03': 'kn_0165', // Find the range
+  'kp-9.3-04': 'kn_0165', // Find the range
+  'kp-9.3-05': 'kn_0166', // Mean from frequency table
+  'kp-9.3-06': 'kn_0167', // Missing value / combined mean
+  'kp-9.5-01': 'kn_0168', // Identify Correlation Type
+  'kp-9.5-02': 'kn_0169', // Use Line of Best Fit
+  'kp-9.5-03': 'kn_0169', // Use Line of Best Fit
+  'kp-9.5-04': 'kn_0168', // Identify Correlation Type
+};
+
+/** Get canonical kn_id for a Play KP */
+export function getKnIdForKp(kpId: string): string | undefined {
+  return KP_KN_MAP[kpId];
+}

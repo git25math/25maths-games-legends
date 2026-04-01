@@ -125,6 +125,7 @@ export type Mission = {
     wrong: BilingualText;
   };
   kpId?: string;
+  kn_id?: string;
   sectionId?: string;
 };
 
@@ -137,6 +138,7 @@ export type MissionSummary = {
   title: BilingualText;
   topic: KnowledgePoint;
   kpId?: string;
+  kn_id?: string;
 };
 
 export type MissionCompletion = {
