@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v10.6.0 (2026-04-01)
+> **最后更新**: v10.7.0 (2026-04-02)
 
 ---
 
@@ -25,7 +25,7 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v10.6.0 (2026-04-01) |
+| **当前版本** | v10.7.0 (2026-04-02) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (2422 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
@@ -40,7 +40,7 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 - **2,422 个 Vitest 用例**（全通过）
 - **KP 覆盖率**: 287/288 = 99.7%（仅 kp-1.14-01 计算器跳过）
 - **4 条远征**: 桃园(Y7-8) / 赤壁(Y7-12) / 蜀道(Y8-10) / 北伐(Y10-12)
-- **91 个 discoverSteps**: Y7(22) Y8(17) Y9(21) Y10(19) Y11(8) Y12(4)
+- **230 个 discoverSteps**: Y7(89) Y8(78) Y9(21) Y10(19) Y11(8) Y12(15)
 - **51 个 MC 多选生成器**
 - **课纲可见性**: Practice/Battle 显示 CIE 0580 topic 标签
 - **KP 知识图谱**: 362 条边, 288 节点 (前置/后续/根因分析)
@@ -84,6 +84,15 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 - 地图首屏不再同步打包这些非首屏弹层，打开对应面板时再加载 chunk
 - 构建 `MapScreen` chunk `114.45 kB → 68.20 kB`，主入口维持 `361.89 kB`
 - 测试: `2420 passed`, build 零错误
+
+#### v10.7.0 — RLS 安全修复 + 139 discoverSteps + SkillBadge LaTeX (2026-04-02)
+- **排行榜 RLS 修复**: 创建 4 个 SECURITY DEFINER RPCs（get_grade/class/school/weekly_leaderboard），排行榜从"空白"恢复正常
+- **教师看板 RLS 修复**: 创建 3 个 SECURITY DEFINER RPCs（get_students_by_class/grade/tags），教师可正常查看学生数据
+- **MapScreen 班级排名**: 改用 `get_class_leaderboard` RPC，不再直查 gl_user_progress
+- **SkillBadgeCard LaTeX 渲染**: `MathView` → `LatexText`，修复技能习得卡片中 `$...$` 公式不渲染的问题
+- **139 个 discoverSteps**: Y7(67) + Y8(61) + Y12(11)，交互式概念检查全覆盖
+- 新迁移文件: `20260401100000_leaderboard_rpcs.sql`, `20260402000000_weekly_leaderboard_rpc.sql`, `20260402100000_dashboard_read_rpcs.sql`
+- 测试: `2422 passed`, build 零错误
 
 #### v10.6.0 — 安全加固 + 通知系统 + 积分修正 (2026-04-01)
 - **多窗口重复积分漏洞修复**: `record_battle_result` RPC 30秒去重 + `battleSubmittingRef` 客户端锁
