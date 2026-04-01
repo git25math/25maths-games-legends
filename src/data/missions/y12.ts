@@ -82,6 +82,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '若发生两次独立战争，魏国全胜的概率是多少？', en: 'If two independent wars occur, what is the probability of Wei winning both?' },
     data: { p1: 0.7, p2: 0.7, generatorType: 'PROBABILITY_IND_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-8.3-02', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "两场独立战争，魏国每场胜率 $\\frac{2}{3}$。两场全胜的概率？", en: "Two independent battles, Wei's win probability $\\frac{2}{3}$ each. Probability of winning both?" },
+        type: 'choice',
+        choices: [
+          { zh: "$\\frac{2}{3} \\times \\frac{2}{3} = \\frac{4}{9}$——独立事件相乘", en: "$\\frac{2}{3} \\times \\frac{2}{3} = \\frac{4}{9}$ — multiply for independent events" },
+          { zh: "$\\frac{2}{3} + \\frac{2}{3} = \\frac{4}{3}$", en: "$\\frac{2}{3} + \\frac{2}{3} = \\frac{4}{3}$" },
+        ],
+        onCorrect: { zh: "独立事件：$P(A \\cap B) = P(A) \\times P(B)$。\n$\\frac{2}{3} \\times \\frac{2}{3} = \\frac{4}{9}$\n\"都发生\" = 相乘。注意：$\\frac{4}{3} > 1$，概率不可能超过 1！", en: "Independent events: $P(A \\cap B) = P(A) \\times P(B)$.\n$\\frac{2}{3} \\times \\frac{2}{3} = \\frac{4}{9}$\n\"Both happen\" = multiply. Note: $\\frac{4}{3} > 1$, probability can't exceed 1!" },
+        onWrong: { zh: "$\\frac{4}{3} > 1$！概率最大只能是 1。相加是\"或\"的规则。\n\"都\" = 乘：$\\frac{2}{3} \\times \\frac{2}{3} = \\frac{4}{9}$", en: "$\\frac{4}{3} > 1$! Probability can't exceed 1. Adding is the \"or\" rule.\n\"Both\" = multiply: $\\frac{2}{3} \\times \\frac{2}{3} = \\frac{4}{9}$" },
+        onSkip: { zh: "独立事件\"且\" → 乘。\"或\" → 加。概率 $\\leq 1$。", en: "Independent events \"AND\" → multiply. \"OR\" → add. Probability $\\leq 1$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎：为什么需要联合概率？\n魏国打一场能赢，不代表连打两场都能赢。\n每多打一场，"全胜"的概率就在缩小——这就是独立事件乘法原理。', en: 'Sima Yan: "Why joint probability?\nWinning one battle doesn\'t guarantee winning two.\nEach extra battle shrinks the \'win all\' probability — that\'s the multiplication rule."' }, highlightField: 'p' },
       { text: { zh: '司马炎：独立事件\n"独立"= 第一场的结果不影响第二场。\n就像抛两次硬币——第一次正面不会影响第二次。\n如果两件事互相不影响，概率就相乘。', en: 'Sima Yan: "Independent events\n\'Independent\' = first result doesn\'t affect the second.\nLike flipping a coin twice — first flip doesn\'t change the second.\nIf two events don\'t affect each other, multiply probabilities."' }, highlightField: 'p' },
@@ -105,6 +118,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $f(x) = x^2$ 在 $x = 3$ 处的导数值。', en: 'Find the derivative of $f(x) = x^2$ at $x = 3$.' },
     data: { x: 3, func: 'x^2', generatorType: 'DERIVATIVE_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-2.12-01', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "攻城速率变化：$f(x) = x^2$ 在 $x=3$ 处的导数是什么意思？", en: "Rate of siege change: what does the derivative of $f(x) = x^2$ at $x=3$ mean?" },
+        type: 'choice',
+        choices: [
+          { zh: "切线斜率 = 瞬时变化率。$f'(x) = 2x$，$f'(3) = 6$", en: "Tangent gradient = instantaneous rate of change. $f'(x) = 2x$, $f'(3) = 6$" },
+          { zh: "$f(3) = 9$——代入求值", en: "$f(3) = 9$ — substitution" },
+        ],
+        onCorrect: { zh: "导数 = 变化率 = 切线斜率。\n$f(x) = x^2$ → $f'(x) = 2x$（幂前乘，次减一）\n$f'(3) = 2(3) = 6$\n在 $x=3$ 处，曲线的斜率是 6。", en: "Derivative = rate of change = tangent gradient.\n$f(x) = x^2$ → $f'(x) = 2x$ (multiply by power, reduce by 1)\n$f'(3) = 2(3) = 6$\nAt $x=3$, the curve's gradient is 6." },
+        onWrong: { zh: "$f(3)=9$ 是函数值，不是导数。导数问的是\"变化有多快\"。\n$f'(x) = 2x$ → $f'(3) = 6$", en: "$f(3)=9$ is the function value, not derivative. Derivative asks \"how fast is it changing\".\n$f'(x) = 2x$ → $f'(3) = 6$" },
+        onSkip: { zh: "导数：$x^n \\to nx^{n-1}$。$x^2 \\to 2x$。代入求瞬时变化率。", en: "Derivative: $x^n \\to nx^{n-1}$. $x^2 \\to 2x$. Substitute for instantaneous rate." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎：为什么要求导数？\n攻城不是匀速推进——有时猛攻，有时停滞。\n"此刻的推进速度"就是导数。知道速率，才能决定何时投入预备队。', en: 'Sima Yan: "Why find derivatives?\nSieges don\'t progress at constant speed — sometimes rushing, sometimes stalling.\nThe \'speed right now\' is the derivative. Knowing the rate tells you when to commit reserves."' }, highlightField: 'k' },
       { text: { zh: '司马炎：幂规则\n$$f(x) = x^n \\Rightarrow f\'(x) = n \\cdot x^{n-1}$$\n指数拿下来当系数，指数减 $1$。\n就这一条规则，搞定所有幂函数！', en: 'Sima Yan: "Power rule\n$$f(x) = x^n \\Rightarrow f\'(x) = n \\cdot x^{n-1}$$\nBring the exponent down as coefficient, reduce exponent by 1.\nThis one rule handles all power functions!"' }, highlightField: 'k' },
@@ -127,6 +153,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '计算加权平均值。', en: 'Calculate the weighted mean.' },
     data: { values: [40, 50, 80], mode: 'mean', generatorType: 'STATISTICS_MEAN_RANDOM' }, difficulty: 'Medium', reward: 480,
     kpId: 'kp-8.2-01', sectionId: 'statistics',
+    discoverSteps: [
+      {
+        prompt: { zh: "三种军粮的加权平均值怎么算？和普通平均有什么区别？", en: "How to calculate weighted mean of three supply types? How is it different from simple mean?" },
+        type: 'choice',
+        choices: [
+          { zh: "每个值乘以权重，求和后除以总权重", en: "Multiply each value by its weight, sum, then divide by total weight" },
+          { zh: "把所有值加起来除以个数", en: "Add all values and divide by count" },
+        ],
+        onCorrect: { zh: "加权平均 = $\\frac{\\sum(x_i \\times w_i)}{\\sum w_i}$\n普通平均假设所有数据等权重。加权平均考虑每个数据的重要性/数量不同。\n频率表中，频率就是权重。", en: "Weighted mean = $\\frac{\\sum(x_i \\times w_i)}{\\sum w_i}$\nSimple mean assumes equal weights. Weighted mean accounts for different importance/frequency.\nIn frequency tables, frequency IS the weight." },
+        onWrong: { zh: "那是简单平均（等权重）。频率不同时必须用加权平均。\n$\\bar{x} = \\frac{\\sum fx}{\\sum f}$", en: "That's simple mean (equal weights). Different frequencies require weighted mean.\n$\\bar{x} = \\frac{\\sum fx}{\\sum f}$" },
+        onSkip: { zh: "加权平均 = $\\sum fx / \\sum f$。频率表问题常用。", en: "Weighted mean = $\\sum fx / \\sum f$. Common in frequency table problems." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎：为什么要加权平均？\n三个郡的粮仓大小不一样。\n小仓存 40 石，大仓存 80 石——简单平均 $\\frac{40+50+80}{3}$ 不公平。\n大仓应该"说话声更大"——这就是加权的意义。', en: 'Sima Yan: "Why weighted average?\nThree prefectures have different granary sizes.\nSmall stores 40, large stores 80 — simple average $\\frac{40+50+80}{3}$ isn\'t fair.\nThe larger granary should \'count more\' — that\'s what weighting means."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：加权平均公式\n$$\\bar{x} = \\frac{\\sum f_i \\cdot x_i}{\\sum f_i}$$\n$f_i$ = 权重（仓库容量），$x_i$ = 数值（存粮率）\n分子 = 每个值 × 它的权重，分母 = 权重之和。', en: 'Sima Yan: "Weighted mean formula\n$$\\bar{x} = \\frac{\\sum f_i \\cdot x_i}{\\sum f_i}$$\n$f_i$ = weight (granary size), $x_i$ = value (stock rate)\nNumerator = each value × its weight, denominator = sum of weights."' }, highlightField: 'ans' },
@@ -151,6 +190,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '用消元法解联立方程组。', en: 'Solve simultaneous equations by elimination.' },
     data: { a1: 2, b1: 1, c1: 100, a2: 1, b2: 3, c2: 110, generatorType: 'SIMULTANEOUS_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-2.5-08', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "三国均势：两个方程两个未知数。消元法的核心思想？", en: "Three Kingdoms balance: two equations, two unknowns. Core idea of elimination?" },
+        type: 'choice',
+        choices: [
+          { zh: "让一个变量的系数相同，然后相加或相减消去它", en: "Make one variable's coefficients equal, then add or subtract to eliminate it" },
+          { zh: "两个方程相乘", en: "Multiply the two equations together" },
+        ],
+        onCorrect: { zh: "消元法：\n1. 调整系数使某变量对齐\n2. 相加或相减消去该变量\n3. 解出剩余变量\n4. 代回求另一个\n\n例：$2x+y=7$，$x+y=4$ → 相减 → $x=3$", en: "Elimination:\n1. Adjust coefficients to align one variable\n2. Add or subtract to eliminate it\n3. Solve for remaining variable\n4. Substitute back\n\nE.g.: $2x+y=7$, $x+y=4$ → subtract → $x=3$" },
+        onWrong: { zh: "方程不能相乘！消元法是通过加减消去变量。\n可以将某个方程整体乘以常数来对齐系数。", en: "Don't multiply equations together! Elimination uses addition/subtraction.\nYou can multiply one equation by a constant to align coefficients." },
+        onSkip: { zh: "消元法：对齐系数 → 加减消去 → 解 → 代回。", en: "Elimination: align coefficients → add/subtract → solve → substitute back." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎：为什么需要联立方程？\n一个方程只有一个限制——答案有无数种可能。\n两个方程 = 两个限制 = 精确定位唯一解。\n就像用两条路线交叉确定一个地点。', en: 'Sima Yan: "Why simultaneous equations?\nOne equation = one constraint — infinite solutions.\nTwo equations = two constraints = one unique solution.\nLike two routes intersecting to pinpoint a location."' }, highlightField: 'x' },
       { text: { zh: '司马炎：消元法思路\n让其中一个未知数"消失"——把两个方程组合成只含一个未知数的新方程。\n就像审讯两个俘虏——交叉对比就能找到真相。', en: 'Sima Yan: "Elimination method\nMake one unknown \'disappear\' — combine equations into one with a single unknown.\nLike interrogating two prisoners — cross-reference to find the truth."' }, highlightField: 'x' },
@@ -173,6 +225,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '将 $x$ 代入函数求值。', en: 'Substitute $x$ into the function to evaluate.' },
     data: { a: 2, b: -3, c: 1, x: 5, generatorType: 'FUNC_VAL_RANDOM' }, difficulty: 'Easy', reward: 450,
     kpId: 'kp-2.13-01', sectionId: 'functions',
+    discoverSteps: [
+      {
+        prompt: { zh: "国力函数 $f(x) = 3x^2 - 2x + 1$。$f(-2)$ 怎么算？", en: "Power function $f(x) = 3x^2 - 2x + 1$. How to find $f(-2)$?" },
+        type: 'choice',
+        choices: [
+          { zh: "代入 $x = -2$：$3(-2)^2 - 2(-2) + 1 = 17$", en: "Substitute $x = -2$: $3(-2)^2 - 2(-2) + 1 = 17$" },
+          { zh: "$3(4) - 4 + 1 = 9$", en: "$3(4) - 4 + 1 = 9$" },
+        ],
+        onCorrect: { zh: "逐步代入：\n$3(-2)^2 = 3 \\times 4 = 12$\n$-2(-2) = +4$\n$+1$\n$12 + 4 + 1 = 17$\n注意：$(-2)^2 = 4$（正），$-2 \\times (-2) = +4$（负负得正）！", en: "Step by step:\n$3(-2)^2 = 3 \\times 4 = 12$\n$-2(-2) = +4$\n$+1$\n$12 + 4 + 1 = 17$\nNote: $(-2)^2 = 4$ (positive), $-2 \\times (-2) = +4$ (neg × neg = pos)!" },
+        onWrong: { zh: "$-2(-2) = +4$，不是 $-4$！负负得正。\n$12 + 4 + 1 = 17$", en: "$-2(-2) = +4$, not $-4$! Negative times negative = positive.\n$12 + 4 + 1 = 17$" },
+        onSkip: { zh: "代入负数时注意符号：$(-a)^2 > 0$，$-b \\times (-a) > 0$。", en: "Substituting negatives: watch signs. $(-a)^2 > 0$, $-b \\times (-a) > 0$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎：为什么要算国力？\n战争的胜负不看一时勇猛——看的是国力曲线。\n$f(5)$ 就是"第五年国力多少"——一个数字决定攻守。\n会代入函数，就是会预测未来。', en: 'Sima Yan: "Why calculate national power?\nWar isn\'t won by bravery alone — it\'s decided by the power curve.\n$f(5)$ means \'how strong are we in year 5?\' — one number decides attack or defend.\nFunction evaluation is predicting the future."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：代入法\n$f(x) = 2x^2 - 3x + 1$\n$f(5)$ = 把所有 $x$ 换成 $5$。\n注意：$x^2$ 是"先平方再乘系数"，不是"先乘系数再平方"！', en: 'Sima Yan: "Substitution\n$f(x) = 2x^2 - 3x + 1$\n$f(5)$ = replace every $x$ with 5.\nNote: $x^2$ means \'square first, then multiply by coefficient\'!"' }, highlightField: 'ans' },
@@ -195,6 +260,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '用 tan 求三角形的未知边。', en: 'Use tan to find an unknown side.' },
     data: { angle: 50, adj: 20, generatorType: 'TRIGONOMETRY_RANDOM', func: 'tan' }, difficulty: 'Hard', reward: 600,
     kpId: 'kp-6.2-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "最终防线：直角三角形，已知对边和邻边的关系。什么时候用 $\\tan$？", en: "Final defense: right triangle. When to use $\\tan$?" },
+        type: 'choice',
+        choices: [
+          { zh: "当题目涉及对边和邻边（不需要斜边）", en: "When the problem involves opposite and adjacent sides (no hypotenuse needed)" },
+          { zh: "任何时候都能用 $\\tan$", en: "$\\tan$ works in any situation" },
+        ],
+        onCorrect: { zh: "SOH-CAH-TOA：\n$\\sin = \\frac{O}{H}$（对/斜），$\\cos = \\frac{A}{H}$（邻/斜），$\\tan = \\frac{O}{A}$（对/邻）\n用 $\\tan$ 当不涉及斜边 $H$。\n根据已知和未知选择正确的三角比。", en: "SOH-CAH-TOA:\n$\\sin = \\frac{O}{H}$, $\\cos = \\frac{A}{H}$, $\\tan = \\frac{O}{A}$\nUse $\\tan$ when hypotenuse $H$ is not involved.\nChoose the trig ratio based on known and unknown sides." },
+        onWrong: { zh: "不是万能的！要根据题目给的边选。\n有对边和邻边 → $\\tan$。有斜边 → $\\sin$ 或 $\\cos$。", en: "Not universal! Choose based on the given sides.\nOpposite and adjacent → $\\tan$. Hypotenuse involved → $\\sin$ or $\\cos$." },
+        onSkip: { zh: "SOH-CAH-TOA。对/邻→tan，对/斜→sin，邻/斜→cos。", en: "SOH-CAH-TOA. O/A→tan, O/H→sin, A/H→cos." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎：为什么三角函数是将军的必修课？\n站在瞭望塔上，你不可能飞到敌营量距离。\n但只需一个角度和一条已知边，tan 就能告诉你答案。\n数学让你在安全的高处掌控整个战场。', en: 'Sima Yan: "Why is trigonometry a commander\'s essential skill?\nYou can\'t fly to the enemy camp to measure distance.\nBut with just one angle and one known side, tan gives you the answer.\nMath lets you command the entire battlefield from a safe height."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：正切 = 对边 ÷ 邻边\n$\\tan \\theta = \\frac{\\text{对边}}{\\text{邻边}}$\n瞭望塔高度（对边）和敌军水平距离（邻边）的关系。', en: 'Sima Yan: "Tangent = opposite ÷ adjacent\n$\\tan \\theta = \\frac{\\text{opposite}}{\\text{adjacent}}$\nRelationship between tower height (opposite) and enemy distance (adjacent)."' }, highlightField: 'ans' },
@@ -219,6 +297,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $\\vec{a}+\\vec{b}$ 的三个分量（x, y, z）。', en: 'Find all three components (x, y, z) of $\\vec{a}+\\vec{b}$.' },
     data: { targetX: 7, targetY: 1, targetZ: 5, a1: 3, a2: 4, a3: 2, b1: 4, b2: -3, b3: 3, generatorType: 'VECTOR_3D_RANDOM' }, difficulty: 'Medium', reward: 500,
     kpId: 'kp-7.2-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "三维空间行军：$\\vec{a} = (1,2,3)$，$\\vec{b} = (4,5,6)$。$\\vec{a}+\\vec{b}$ 怎么算？", en: "3D march: $\\vec{a} = (1,2,3)$, $\\vec{b} = (4,5,6)$. How to find $\\vec{a}+\\vec{b}$?" },
+        type: 'choice',
+        choices: [
+          { zh: "对应分量相加：$(5, 7, 9)$", en: "Add corresponding components: $(5, 7, 9)$" },
+          { zh: "全部数字加起来 = $21$", en: "Add all numbers = $21$" },
+        ],
+        onCorrect: { zh: "向量加法：对应分量相加。\n$(1+4, 2+5, 3+6) = (5, 7, 9)$\n$x$ 加 $x$，$y$ 加 $y$，$z$ 加 $z$。\n三维向量有三个分量 $(x, y, z)$。", en: "Vector addition: add corresponding components.\n$(1+4, 2+5, 3+6) = (5, 7, 9)$\n$x$ with $x$, $y$ with $y$, $z$ with $z$.\n3D vectors have three components $(x, y, z)$." },
+        onWrong: { zh: "向量不是标量！不能全加在一起。每个分量单独相加。\n$(1+4, 2+5, 3+6) = (5, 7, 9)$", en: "Vectors aren't scalars! Can't add everything together. Each component adds separately.\n$(1+4, 2+5, 3+6) = (5, 7, 9)$" },
+        onSkip: { zh: "向量加法：分量对应相加。$(a_1+b_1, a_2+b_2, a_3+b_3)$。", en: "Vector addition: add corresponding components. $(a_1+b_1, a_2+b_2, a_3+b_3)$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马昭："为什么要学三维向量？\n二维向量在平地上够用了——但真实战场有高低地形。\n三维向量 $\\begin{pmatrix}x\\\\y\\\\z\\end{pmatrix}$ 多了一个分量，描述上下方向的力。\n攻山、攻城、空中投射——都需要三维思维。"', en: 'Sima Zhao: "Why 3D vectors?\n2D vectors work on flat ground — but real battlefields have elevation.\n3D vectors $\\begin{pmatrix}x\\\\y\\\\z\\end{pmatrix}$ add a component for up/down.\nAttacking hills, walls, aerial shots — all need 3D thinking."' }, highlightField: 'x' },
       { text: { zh: '司马昭："三维向量加法——和二维完全一样\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\n每个分量独立相加——$x$ 加 $x$，$y$ 加 $y$，$z$ 加 $z$。"', en: 'Sima Zhao: "3D vector addition — exactly like 2D\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\nAdd each component independently — $x$ with $x$, $y$ with $y$, $z$ with $z$."' }, highlightField: 'x' },
@@ -241,6 +332,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $\\vec{a}+\\vec{b}$ 的三个分量（x, y, z）。', en: 'Find all three components (x, y, z) of $\\vec{a}+\\vec{b}$.' },
     data: { targetX: 1, targetY: -1, targetZ: 4, a1: -3, a2: 5, a3: 1, b1: 4, b2: -6, b3: 3, generatorType: 'VECTOR_3D_RANDOM' }, difficulty: 'Hard', reward: 550,
     kpId: 'kp-7.2-01', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "炮火交叉：两个三维向量相加。减法呢？$\\vec{a} - \\vec{b}$？", en: "Crossfire: adding 3D vectors. What about subtraction? $\\vec{a} - \\vec{b}$?" },
+        type: 'choice',
+        choices: [
+          { zh: "对应分量相减", en: "Subtract corresponding components" },
+          { zh: "取绝对值后相减", en: "Take absolute values then subtract" },
+        ],
+        onCorrect: { zh: "向量减法和加法一样——分量对应操作。\n$\\vec{a} - \\vec{b} = (a_1-b_1, a_2-b_2, a_3-b_3)$\n几何意义：$\\vec{a}-\\vec{b}$ = 从 $B$ 到 $A$ 的向量。", en: "Vector subtraction works like addition — component-wise.\n$\\vec{a} - \\vec{b} = (a_1-b_1, a_2-b_2, a_3-b_3)$\nGeometric meaning: $\\vec{a}-\\vec{b}$ = vector from $B$ to $A$." },
+        onWrong: { zh: "不取绝对值！向量的分量可以是负数。\n$(1-4, 2-5, 3-6) = (-3, -3, -3)$", en: "Don't take absolute values! Vector components can be negative.\n$(1-4, 2-5, 3-6) = (-3, -3, -3)$" },
+        onSkip: { zh: "向量减法：分量对应相减，结果可以是负数。", en: "Vector subtraction: subtract corresponding components, results can be negative." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '姜维："负分量是什么意思？\n向量 $\\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix}$ 中，$-3$ 表示向西（负 $x$ 方向）。\n正负号不改变加法规则——该加还是加，只是结果可能是负的。\n负结果意味着合力方向翻转。"', en: 'Jiang Wei: "What do negative components mean?\nIn vector $\\begin{pmatrix}-3\\\\5\\\\1\\end{pmatrix}$, $-3$ means westward (negative $x$).\nSigns don\'t change the addition rule — you still add, but the result may be negative.\nA negative result means the combined force reverses direction."' }, highlightField: 'x' },
       { text: { zh: '姜维："加法公式不变\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\n负数加正数 = 抵消；负数加负数 = 更负。关键是符号。"', en: 'Jiang Wei: "Same addition formula\n$$\\vec{a}+\\vec{b} = \\begin{pmatrix}a_1+b_1\\\\a_2+b_2\\\\a_3+b_3\\end{pmatrix}$$\nNeg + pos = cancel; neg + neg = more negative. Signs are the key."' }, highlightField: 'x' },
@@ -297,6 +401,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $\\int_0^3 3x^2\\,dx$ 的值。', en: 'Evaluate $\\int_0^3 3x^2\\,dx$.' },
     data: { lower: 0, upper: 3, func: '3x^2', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 600,
     kpId: 'kp-2.12-02', sectionId: 'algebra',
+    discoverSteps: [
+      {
+        prompt: { zh: "城墙曲面面积：$\\int_0^3 3x^2\\,dx$。积分是导数的什么？", en: "Wall surface area: $\\int_0^3 3x^2\\,dx$. Integration is the ____ of differentiation?" },
+        type: 'choice',
+        choices: [
+          { zh: "逆运算——导数反过来。$\\int 3x^2\\,dx = x^3 + C$", en: "Inverse — derivative reversed. $\\int 3x^2\\,dx = x^3 + C$" },
+          { zh: "相同运算", en: "Same operation" },
+        ],
+        onCorrect: { zh: "积分 = 导数的逆运算。$\\frac{d}{dx}(x^3) = 3x^2$，反过来 $\\int 3x^2\\,dx = x^3$。\n定积分：$\\int_0^3 3x^2\\,dx = [x^3]_0^3 = 27 - 0 = 27$\n幂次加 1，系数除以新幂次。", en: "Integration = inverse of differentiation. $\\frac{d}{dx}(x^3) = 3x^2$, reverse: $\\int 3x^2\\,dx = x^3$.\nDefinite: $\\int_0^3 3x^2\\,dx = [x^3]_0^3 = 27 - 0 = 27$\nPower up by 1, divide by new power." },
+        onWrong: { zh: "完全不同！导数是\"求变化率\"，积分是\"求累积量\"。\n互为逆运算：$\\frac{d}{dx}(x^3) = 3x^2$ ↔ $\\int 3x^2\\,dx = x^3$", en: "Completely different! Derivative = \"rate of change\", integral = \"accumulation\".\nInverse operations: $\\frac{d}{dx}(x^3) = 3x^2$ ↔ $\\int 3x^2\\,dx = x^3$" },
+        onSkip: { zh: "积分 = 导数逆运算。$\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$。", en: "Integration = inverse of differentiation. $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎：为什么要积分求面积？\n城墙截面不是矩形——是曲线。\n"长 × 宽"只能算方块面积，曲线下面积只有积分能算。\n重修洛阳城墙，每一寸材料都要精确计算。', en: 'Sima Yan: "Why integrate for area?\nThe wall cross-section isn\'t rectangular — it\'s curved.\n\'Length × width\' only works for rectangles. Curved areas need integration.\nRebuilding Luoyang\'s walls demands precision in every inch of material."' }, highlightField: 'area' },
       { text: { zh: '司马炎："幂函数积分公式\n$$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C$$\n对 $3x^2$：$n = 2$，所以 $\\frac{3x^3}{3} = x^3$。"', en: 'Sima Yan: "Power rule formula\n$$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C$$\nFor $3x^2$: $n = 2$, so $\\frac{3x^3}{3} = x^3$."' }, highlightField: 'area' },
@@ -319,6 +436,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '求 $\\int_0^b 4x^3\\,dx$ 的值。', en: 'Evaluate $\\int_0^b 4x^3\\,dx$.' },
     data: { lower: 0, upper: 3, func: '4x^3', generatorType: 'INTEGRATION_RANDOM' }, difficulty: 'Hard', reward: 620,
     kpId: 'kp-2.12-02', sectionId: 'calculus',
+    discoverSteps: [
+      {
+        prompt: { zh: "四次幂堆积：$\\int_0^b 4x^3\\,dx$。怎么积分 $4x^3$？", en: "Quartic stacking: $\\int_0^b 4x^3\\,dx$. How to integrate $4x^3$?" },
+        type: 'choice',
+        choices: [
+          { zh: "幂次 $+1$，系数除以新幂次：$\\frac{4x^4}{4} = x^4$", en: "Power $+1$, divide by new power: $\\frac{4x^4}{4} = x^4$" },
+          { zh: "幂次 $-1$：$4x^2$", en: "Power $-1$: $4x^2$" },
+        ],
+        onCorrect: { zh: "积分规则：$\\int ax^n\\,dx = \\frac{a}{n+1}x^{n+1} + C$\n$\\int 4x^3\\,dx = \\frac{4}{4}x^4 = x^4$\n定积分 $= [x^4]_0^b = b^4 - 0 = b^4$", en: "Integration rule: $\\int ax^n\\,dx = \\frac{a}{n+1}x^{n+1} + C$\n$\\int 4x^3\\,dx = \\frac{4}{4}x^4 = x^4$\nDefinite integral $= [x^4]_0^b = b^4 - 0 = b^4$" },
+        onWrong: { zh: "幂次 $-1$ 是导数规则！积分是导数的逆：幂次 $+1$。\n$\\int 4x^3\\,dx = \\frac{4}{3+1}x^{3+1} = x^4$", en: "Power $-1$ is the derivative rule! Integration is the reverse: power $+1$.\n$\\int 4x^3\\,dx = \\frac{4}{3+1}x^{3+1} = x^4$" },
+        onSkip: { zh: "导数：幂 $-1$。积分：幂 $+1$ 再除。$\\int ax^n = \\frac{a}{n+1}x^{n+1}$。", en: "Derivative: power $-1$. Integration: power $+1$ then divide. $\\int ax^n = \\frac{a}{n+1}x^{n+1}$." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎：为什么要学高次积分？\n城防加固不是线性的——材料消耗随进度呈指数增长。\n$4x^3$ 意味着越到后面，消耗越恐怖。\n只有积分才能精确算出总消耗。', en: 'Sima Yan: "Why learn higher power integration?\nFortification isn\'t linear — material consumption grows exponentially.\n$4x^3$ means the further you go, the more terrifying the cost.\nOnly integration can precisely calculate the total."' }, highlightField: 'ans' },
       { text: { zh: '司马炎：幂规则（积分版）\n$$\\int ax^n\\,dx = \\frac{a}{n+1}x^{n+1} + C$$\n指数加 $1$，除以新指数。\n$n = 3$ 时：$\\frac{4}{3+1}x^{3+1} = \\frac{4}{4}x^4 = x^4$', en: 'Sima Yan: "Power rule (integration)\n$$\\int ax^n\\,dx = \\frac{a}{n+1}x^{n+1} + C$$\nAdd 1 to power, divide by new power.\nFor $n=3$: $\\frac{4}{3+1}x^{3+1} = \\frac{4}{4}x^4 = x^4$"' }, highlightField: 'ans' },
@@ -378,6 +508,19 @@ export const MISSIONS_Y12: Mission[] = [
     description: { zh: '两点的垂直平分线到两点的距离相等。$AB=10$，中点到 $A$ 的距离=?', en: 'Perpendicular bisector is equidistant from both points. $AB=10$, distance from midpoint to $A$?' },
     data: { answer: 5 }, difficulty: 'Hard', reward: 650,
     kpId: 'kp-4.8-02', sectionId: 'geometry',
+    discoverSteps: [
+      {
+        prompt: { zh: "两城之间 $AB = 10$。垂直平分线上的点到 $A$ 的距离是？", en: "Two cities $AB = 10$. A point on the perpendicular bisector — distance to $A$?" },
+        type: 'choice',
+        choices: [
+          { zh: "中点到 $A$ 的距离 = $5$", en: "Midpoint to $A$ = $5$" },
+          { zh: "$10$", en: "$10$" },
+        ],
+        onCorrect: { zh: "垂直平分线过中点且垂直于 $AB$。\n中点到 $A$ = $\\frac{AB}{2} = \\frac{10}{2} = 5$\n垂直平分线上所有点到 $A$ 和 $B$ 等距。\n但距离不一定是 5——只有中点是 5。", en: "Perpendicular bisector passes through midpoint, perpendicular to $AB$.\nMidpoint to $A$ = $\\frac{AB}{2} = $\\frac{10}{2} = 5$\nAll points on bisector are equidistant from $A$ and $B$.\nBut distance isn't always 5 — only the midpoint gives 5." },
+        onWrong: { zh: "$10$ 是 $AB$ 全长。中点到 $A$ = 一半 = $5$。\n垂直平分线把 $AB$ 从中间一分为二。", en: "$10$ is the full length of $AB$. Midpoint to $A$ = half = $5$.\nPerpendicular bisector splits $AB$ in half." },
+        onSkip: { zh: "垂直平分线过中点。中点到端点 = 线段的一半。", en: "Perpendicular bisector passes through midpoint. Midpoint to endpoint = half the segment." },
+      },
+    ],
     tutorialSteps: [
       { text: { zh: '司马炎："为什么要学区域交集？\n两座城各有势力范围。边界在哪？就在到两城距离相等的地方。\n这条线叫垂直平分线——它是两点等距轨迹。"', en: 'Sima Yan: "Why learn locus intersections?\nTwo cities each have territory. Where is the border? Where distance to both is equal.\nThis line is the perpendicular bisector — the locus equidistant from two points."' }, highlightField: 'ans' },
       { text: { zh: '司马炎："等距轨迹\n到两点等距的轨迹 = 连线的垂直平分线\n它过中点，与连线垂直"', en: 'Sima Yan: "Equidistant locus\nLocus equidistant from two points = perpendicular bisector of the line segment\nPasses through midpoint, perpendicular to the segment"' }, highlightField: 'ans' },
