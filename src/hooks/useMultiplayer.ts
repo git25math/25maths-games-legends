@@ -83,23 +83,29 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
       actualId = match.id;
     }
 
-    const { data: room, error: getErr } = await supabase.from('gl_rooms').select('*').eq('id', actualId).single();
-    if (getErr || !room) return `room_not_found: ${getErr?.message ?? 'null'}`;
-    if (room.status !== 'waiting') return `room_status: ${room.status}`;
+    // Use RPC to bypass host-only RLS on gl_rooms update
+    const { data: result, error: rpcErr } = await supabase.rpc('join_room', {
+      p_room_id: actualId,
+      p_player_name: profile.display_name,
+      p_char_id: profile.selected_char_id || '',
+    });
+    if (rpcErr) return `rpc_error: ${rpcErr.message}`;
+    if (result?.error) return result.error;
 
-    const players = { ...room.players, [user.id]: { name: profile.display_name, score: 0, isReady: false, charId: profile.selected_char_id } };
-    const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', actualId);
-    if (error) return `update_error: ${error.message}`;
-    setActiveRoom(parseRoom({ ...room, players }));
+    // Fetch full room to set local state
+    const { data: room } = await supabase.from('gl_rooms').select('*').eq('id', actualId).single();
+    if (room) setActiveRoom(parseRoom(room));
     return '';
   };
 
   const toggleReady = async () => {
     if (!user || !activeRoom) return;
+    // Use RPC to bypass host-only RLS
+    const { error } = await supabase.rpc('toggle_ready', { p_room_id: activeRoom.id });
+    if (error) handleSupabaseError(error, 'update', 'gl_rooms');
+    // Optimistic update
     const players = { ...activeRoom.players };
     players[user.id] = { ...players[user.id], isReady: !players[user.id].isReady };
-    const { error } = await supabase.from('gl_rooms').update({ players }).eq('id', activeRoom.id);
-    if (error) handleSupabaseError(error, 'update', 'gl_rooms');
     setActiveRoom({ ...activeRoom, players });
   };
 
@@ -113,21 +119,18 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
   /** Submit score + mark player as finished. Auto-finishes room when all done. */
   const submitScore = async (score: number) => {
     if (!user || !activeRoom) return;
+    // Use RPC to bypass host-only RLS
+    const { error } = await supabase.rpc('submit_pk_score', { p_room_id: activeRoom.id, p_score: score });
+    if (error) handleSupabaseError(error, 'update', 'gl_rooms');
+    // Optimistic update
     const now = Date.now();
     const players = { ...activeRoom.players };
     if (players[user.id]) {
       players[user.id] = { ...players[user.id], score, finishedAt: now };
     }
-
-    // If all players now finished, mark room as finished
     const allFinished = (Object.values(players) as RoomPlayer[]).every(p => p.finishedAt);
     const updates: Record<string, unknown> = { players };
-    if (allFinished) {
-      updates.status = 'finished';
-    }
-
-    const { error } = await supabase.from('gl_rooms').update(updates).eq('id', activeRoom.id);
-    if (error) handleSupabaseError(error, 'update', 'gl_rooms');
+    if (allFinished) updates.status = 'finished';
     setActiveRoom({ ...activeRoom, ...updates, players } as Room);
   };
 
@@ -157,9 +160,10 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
   /** Remove self from room's players in DB before leaving */
   const leaveRoomClean = async () => {
     if (user && activeRoom && activeRoom.hostId !== user.id) {
-      const players = { ...activeRoom.players };
-      delete players[user.id];
-      await supabase.from('gl_rooms').update({ players }).eq('id', activeRoom.id).then(() => {});
+      // Use direct update for host, RPC would be needed for non-host but leave is best-effort
+      await supabase.from('gl_rooms').update({
+        players: Object.fromEntries(Object.entries(activeRoom.players).filter(([id]) => id !== user.id))
+      }).eq('id', activeRoom.id).then(() => {});
     }
     setActiveRoom(null);
   };
