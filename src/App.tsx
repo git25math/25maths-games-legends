@@ -428,7 +428,7 @@ export default function App() {
     }
   }, [authLoading, user, isGuest, gameState]);
 
-  // Login streak: check once when profile first loads
+  // Login streak: check once when profile first loads (once per calendar day)
   useEffect(() => {
     if (!profile) return;
     // Use local date (consistent with dailyChallenge and seasonTracker)
@@ -437,8 +437,10 @@ export default function App() {
     const loginData = (profile.completed_missions as any)?._login as
       { lastDate: string; streak: number; bestStreak: number } | undefined;
 
-    // Already checked today
+    // Already checked today — double guard: DB field + localStorage
     if (loginData?.lastDate === todayStr) return;
+    const loginDoneKey = `gl_login_done_${todayStr}`;
+    if (localStorage.getItem(loginDoneKey)) return;
 
     const yesterday = new Date(now);
     yesterday.setDate(yesterday.getDate() - 1);
@@ -471,9 +473,13 @@ export default function App() {
       cm._total_skill_points = (cm._total_skill_points ?? 0) + sp;
     }
 
+    // Set localStorage lock BEFORE async — prevents rapid refresh double-fire
+    try { localStorage.setItem(loginDoneKey, '1'); } catch { /* ignore */ }
+
     (async () => {
-      latestScoreRef.current += xp;
       await updateProfile({ completed_missions: cm });
+      // Only add XP + show notification after profile save succeeds
+      latestScoreRef.current += xp;
       await addScore(xp);
       setLoginRewardNotif({ streak: newStreak, xp, sp });
       setTimeout(() => setLoginRewardNotif(null), milestone ? 8000 : 5000);
