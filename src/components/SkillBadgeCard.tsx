@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { motion } from 'motion/react';
 import { CharacterAvatar } from './CharacterAvatar';
-import { MathView } from './MathView';
+import { LatexText } from './MathView';
 import { lt } from '../i18n/resolveText';
 
 type Props = {
@@ -132,11 +132,11 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
               {t.summary}
             </div>
             <div className="text-white/80 text-sm leading-relaxed mb-3">
-              <MathView tex={lt(skillSummary, lang)} className="text-white/80" />
+              <LatexText text={lt(skillSummary, lang)} className="text-white/80" />
             </div>
             {formula && (
               <div className="flex justify-center">
-                <MathView tex={formula.replace(/\$/g, '')} className="text-base text-yellow-300" />
+                <LatexText text={formula} className="text-base text-yellow-300" />
               </div>
             )}
           </div>
