@@ -12,6 +12,7 @@ import { useAuth } from './hooks/useAuth';
 import { useProfile } from './hooks/useProfile';
 import { useMissions } from './hooks/useMissions';
 import { useMultiplayer, PK_COUNTDOWN_SECS, getFirstFinishTime, getFirstOpponentFinishTime } from './hooks/useMultiplayer';
+import { useNotifications } from './hooks/useNotifications';
 
 // generateMission is loaded lazily via dynamic import() to keep it out of the
 // critical path (352 KB generators chunk deferred until first use).
@@ -62,6 +63,7 @@ const AchievementWallPanel = lazy(() => import('./components/AchievementWallPane
 const PKSetupPanel = lazy(() => import('./components/PKSetupPanel').then(module => ({ default: module.PKSetupPanel })));
 const PKResultPanel = lazy(() => import('./components/PKResultPanel').then(module => ({ default: module.PKResultPanel })));
 const ExpeditionScreen = lazy(() => import('./screens/ExpeditionScreen').then(module => ({ default: module.ExpeditionScreen })));
+const NotificationModal = lazy(() => import('./components/NotificationModal').then(module => ({ default: module.NotificationModal })));
 
 // Clean up stale practice localStorage keys on startup
 cleanStalePracticeKeys();
@@ -247,6 +249,7 @@ export default function App() {
   const { missions, loading: missionsLoading, offline } = useMissions(profile?.grade);
   const missionSummaries = useMemo(() => toMissionSummaries(missions), [missions]);
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
+  const { notifications: sysNotifications, markAsRead: markNotifRead, markAllAsRead: markAllNotifsRead } = useNotifications(user);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
   const hasRestoredMissionRef = useRef(false);
 
@@ -985,6 +988,18 @@ export default function App() {
               />
             )}
           </AnimatePresence>
+        </Suspense>
+
+        {/* System notifications — shown on login when unread messages exist */}
+        <Suspense fallback={null}>
+          {sysNotifications.length > 0 && gameState === 'map' && (
+            <NotificationModal
+              lang={lang}
+              notifications={sysNotifications}
+              onDismiss={markNotifRead}
+              onDismissAll={markAllNotifsRead}
+            />
+          )}
         </Suspense>
 
         {/* v5.0 Step 5+6: Repair Complete — "Skill Stabilised" + Retry */}
