@@ -110,9 +110,11 @@ export function AreaShape(props: Props) {
       {/* Bottom side label (b) */}
       <text x={W / 2} y={botY + 16} textAnchor="middle" fontSize={12} fontWeight="bold" fill={COLORS.dim}>b = {b}</text>
 
-      {/* Height label */}
-      <line x1={topX - 12} y1={topY} x2={topX - 12} y2={botY} stroke={COLORS.dim} strokeWidth={1} strokeDasharray="4,2" />
-      <text x={topX - 18} y={(topY + botY) / 2 + 4} textAnchor="end" fontSize={12} fontWeight="bold" fill={COLORS.dim}>h = {h}</text>
+      {/* Height dashed line — from top-left vertex straight down to bottom edge */}
+      <line x1={topX} y1={topY} x2={topX} y2={botY} stroke={COLORS.dim} strokeWidth={1} strokeDasharray="4,2" />
+      {/* Right angle marker */}
+      <polyline points={`${topX},${botY - 8} ${topX + 8},${botY - 8} ${topX + 8},${botY}`} fill="none" stroke={COLORS.dim} strokeWidth={1} />
+      <text x={topX - 8} y={(topY + botY) / 2 + 4} textAnchor="end" fontSize={12} fontWeight="bold" fill={COLORS.dim}>h = {h}</text>
 
       {/* Area */}
       <text x={W / 2} y={(topY + botY) / 2 + 4} textAnchor="middle" fontSize={13} fontWeight="bold" fill={COLORS.gold}>= {area}</text>
