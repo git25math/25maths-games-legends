@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v10.8.0 (2026-04-02)
+> **最后更新**: v10.9.0 (2026-04-02)
 
 ---
 
@@ -25,7 +25,7 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v10.8.0 (2026-04-02) |
+| **当前版本** | v10.9.0 (2026-04-02) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (2422 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
@@ -84,6 +84,17 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 - 地图首屏不再同步打包这些非首屏弹层，打开对应面板时再加载 chunk
 - 构建 `MapScreen` chunk `114.45 kB → 68.20 kB`，主入口维持 `361.89 kB`
 - 测试: `2420 passed`, build 零错误
+
+#### v10.9.0 — Live Classroom 实时课堂 + PK 系统重构 (2026-04-02)
+- **Live Classroom**: DrFrost Live 式实时课堂——教师推题→全班同步→实时反馈→错题桥接→一键布置
+- **数据库**: gl_rooms 'live' 类型 + gl_live_responses 表 + 5 个 RPC（含教师验证/班级校验/去重/生成数据）
+- **新组件**: LiveTeacherPanel（控制台）+ LiveStudentScreen（答题端）+ LiveSessionBanner（通知横幅）
+- **Hook**: useLiveSession（推题/答题/统计/KP 报告）+ useNotifications 30s 轮询
+- **50+ 题型支持**: 复用 InputFields + MultipleChoice + checkAnswer + diagnoseError
+- **PK 系统修复**: start_game RPC 校验 + leave_room 房主关房 + 去轮询降级 + tab 清理 + rejoin + XP 防重
+- **4 轮审查**: 累计修复 16 个 bug（含 5 个 CRITICAL），端到端流程已验证
+- 新文件: useLiveSession.ts, LiveTeacherPanel.tsx, LiveStudentScreen.tsx, LiveSessionBanner.tsx
+- 测试: `2422 passed`, lint 零错误
 
 #### v10.8.0 — 静态资源瘦身 22MB + UX/可访问性全面修复 (2026-04-02)
 - **资源压缩**: 世界地图/章节图/头像全部 PNG→WebP（public/ 从 25MB→2.7MB，-89%）
@@ -470,11 +481,13 @@ for mid, steps_raw in missions:
 | DONE | **安全加固 v10.6** | ✅ 多窗口去重 + total_score RPC 保护 + PK 分数上限 + SP 校验 + 登录 XP 防重 |
 | DONE | **通知系统** | ✅ useNotifications + NotificationModal，登录自动弹出未读通知 |
 | DONE | **积分修正** | ✅ 8 名受影响用户积分重算 + 个性化通知 |
+| DONE | **Live Classroom** | ✅ DrFrost Live 式实时课堂，4 轮审查 16 个 bug 修复 |
+| DONE | **PK 系统重构** | ✅ 7 个 bug 修复（start_game RPC/房主退出/tab 清理/XP 防重/rejoin） |
+| DONE | **积分来源审计** | ✅ 63 活跃用户全部正常，差异来自合法非战斗来源 |
 | NEXT | **用户测试 (Phase 1)** | 找5个学生做30分钟试用，见 USER-TEST-PLAYBOOK.md |
 | NEXT | **Season 2 上线** | 数据就绪，改 ACTIVE_SEASON[0]→[1] 即可 |
 | FUTURE | **Phase 5** | 章节地图 + 视频三位一体 + 离线支持 |
 | FUTURE | **班级远征** | 多人协作通关 |
-| FUTURE | **积分来源审计** | 定期校验 total_score vs gl_battle_results 聚合值，自动标记异常用户 |
 
 ---
 
