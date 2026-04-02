@@ -271,7 +271,7 @@ export function LiveStudentScreen({ lang, room, userId, questionIndex, completed
                 ) : (
                   <>
                     <InputFields
-                      mission={effectiveMission}
+                      mission={{ ...effectiveMission, tutorialSteps: undefined } as any}
                       inputs={inputs}
                       setInputs={setInputs}
                       difficultyMode="green"
