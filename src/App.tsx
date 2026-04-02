@@ -69,6 +69,7 @@ const ExpeditionScreen = lazy(() => import('./screens/ExpeditionScreen').then(mo
 const NotificationModal = lazy(() => import('./components/NotificationModal').then(module => ({ default: module.NotificationModal })));
 const LiveTeacherPanel = lazy(() => import('./components/live/LiveTeacherPanel').then(module => ({ default: module.LiveTeacherPanel })));
 const LiveStudentScreen = lazy(() => import('./components/live/LiveStudentScreen').then(module => ({ default: module.LiveStudentScreen })));
+const LivePinJoin = lazy(() => import('./components/live/LivePinJoin').then(module => ({ default: module.LivePinJoin })));
 
 // Clean up stale practice localStorage keys on startup
 cleanStalePracticeKeys();
@@ -256,6 +257,9 @@ export default function App() {
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound, fetchAndSetRoom } = useMultiplayer(user, profile);
   const liveSession = useLiveSession(activeRoom, user);
   const { notifications: sysNotifications, markAsRead: markNotifRead, markAllAsRead: markAllNotifsRead } = useNotifications(user);
+  // Anonymous live session state (PIN-based, no login)
+  const [anonLiveId, setAnonLiveId] = useState<string | null>(null);
+  const [anonNickname, setAnonNickname] = useState<string | null>(null);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
   const hasRestoredMissionRef = useRef(false);
 
@@ -283,6 +287,14 @@ export default function App() {
       lastRoundPlayersRef.current = { ...activeRoom.players };
     }
   }, [activeRoom?.status]);
+
+  // Check URL for live join (?live or /live path)
+  const [showPinJoin] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return params.has('live') || window.location.pathname.includes('/live');
+    } catch { return false; }
+  });
 
   // Check URL for homework deep link (?hw=<id>)
   const [pendingHomework, setPendingHomework] = useState<string | null>(() => {
@@ -1606,6 +1618,54 @@ export default function App() {
                     onSubmitResponse={liveSession.submitResponse}
                     onUpdateMistakes={(cm) => updateProfile({ completed_missions: cm })}
                     onClose={async () => { await leaveRoomClean(); setGameState('map'); }}
+                  />
+                </Suspense>
+              )}
+
+              {/* PIN-based anonymous join (play.25maths.com?live) */}
+              {showPinJoin && !anonLiveId && gameState !== 'live_student' && gameState !== 'live_teacher' && (
+                <Suspense fallback={null}>
+                  <LivePinJoin
+                    lang={lang}
+                    onJoined={async (roomId, anonId, nickname) => {
+                      setAnonLiveId(anonId);
+                      setAnonNickname(nickname);
+                      await fetchAndSetRoom(roomId);
+                    }}
+                    onBack={() => window.location.href = window.location.pathname}
+                  />
+                </Suspense>
+              )}
+
+              {/* Anonymous student in live session (joined via PIN) */}
+              {anonLiveId && activeRoom?.type === 'live' && (
+                <Suspense fallback={<ScreenLoader lang={lang} label={lang === 'en' ? 'Joining classroom' : '加入课堂'} />}>
+                  <LiveStudentScreen
+                    lang={lang}
+                    room={activeRoom}
+                    userId={anonLiveId}
+                    mission={liveSession.currentQuestion ? missions.find(m => m.id === liveSession.currentQuestion!.mission_id) ?? null : null}
+                    questionIndex={liveSession.questionIndex}
+                    completedMissions={{}}
+                    onSubmitResponse={async (answer, isCorrect, errorType, durationMs) => {
+                      // Anonymous: use anon RPC instead of auth-based one
+                      const { data, error } = await supabase.rpc('submit_live_response_anon', {
+                        p_room_id: activeRoom.id,
+                        p_anon_id: anonLiveId,
+                        p_mission_id: liveSession.currentQuestion?.mission_id ?? 0,
+                        p_question_index: liveSession.questionIndex,
+                        p_answer: answer,
+                        p_is_correct: isCorrect,
+                        p_error_type: errorType ?? null,
+                        p_duration_ms: durationMs ?? null,
+                        p_kp_id: liveSession.currentQuestion?.kp_id ?? null,
+                      });
+                      if (error) return error.message;
+                      if (data?.error) return data.error;
+                      return '';
+                    }}
+                    onUpdateMistakes={() => {}}
+                    onClose={() => { setAnonLiveId(null); setAnonNickname(null); window.location.href = window.location.pathname; }}
                   />
                 </Suspense>
               )}
