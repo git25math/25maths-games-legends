@@ -40,7 +40,7 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 - **2,422 个 Vitest 用例**（全通过）
 - **KP 覆盖率**: 287/288 = 99.7%（仅 kp-1.14-01 计算器跳过）
 - **4 条远征**: 桃园(Y7-8) / 赤壁(Y7-12) / 蜀道(Y8-10) / 北伐(Y10-12)
-- **230 个 discoverSteps**: Y7(89) Y8(78) Y9(21) Y10(19) Y11(8) Y12(15)
+- **424 个 discoverSteps**: Y7(89) Y8(78) Y9(95) Y10(87) Y11(60) Y12(15) — **100% 覆盖**
 - **51 个 MC 多选生成器**
 - **课纲可见性**: Practice/Battle 显示 CIE 0580 topic 标签
 - **KP 知识图谱**: 362 条边, 288 节点 (前置/后续/根因分析)
@@ -90,9 +90,11 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 - **教师看板 RLS 修复**: 创建 3 个 SECURITY DEFINER RPCs（get_students_by_class/grade/tags），教师可正常查看学生数据
 - **MapScreen 班级排名**: 改用 `get_class_leaderboard` RPC，不再直查 gl_user_progress
 - **SkillBadgeCard LaTeX 渲染**: `MathView` → `LatexText`，修复技能习得卡片中 `$...$` 公式不渲染的问题
-- **139 个 discoverSteps**: Y7(67) + Y8(61) + Y12(11)，交互式概念检查全覆盖
+- **139 个 discoverSteps**: Y7(67) + Y8(61) + Y12(11)，总计 424/424 = 100% 覆盖
+- **翻译类型安全**: 消除全部 35 处 `(t as any)` 转型，新增 `getTranslations()` 类型安全访问器
+- **可访问性**: img alt 属性 + icon button aria-label
 - 新迁移文件: `20260401100000_leaderboard_rpcs.sql`, `20260402000000_weekly_leaderboard_rpc.sql`, `20260402100000_dashboard_read_rpcs.sql`
-- 测试: `2422 passed`, build 零错误
+- 测试: `2422 passed`, lint 零错误, build 零错误
 
 #### v10.6.0 — 安全加固 + 通知系统 + 积分修正 (2026-04-01)
 - **多窗口重复积分漏洞修复**: `record_battle_result` RPC 30秒去重 + `battleSubmittingRef` 客户端锁
