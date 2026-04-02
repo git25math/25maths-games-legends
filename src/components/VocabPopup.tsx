@@ -174,7 +174,6 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
                 </p>
                 <button
                   onClick={() => {
-                    // TODO: Navigate to tutorial for this KP
                     onLevelChange?.(3);
                   }}
                   className="w-full py-2.5 bg-emerald-500 text-white font-bold text-sm rounded-xl hover:bg-emerald-400 transition-colors flex items-center justify-center gap-2"
