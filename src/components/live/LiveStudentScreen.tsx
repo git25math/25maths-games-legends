@@ -31,9 +31,20 @@ type Props = {
   onClose: () => void;
 };
 
-/** Interpolate {key} placeholders in story text with data values */
+/** Interpolate {key} placeholders in story text with data values.
+ *  Only replaces keys that exist in the data object.
+ *  Preserves LaTeX braces like \frac{1}{4}, single-letter math vars {a},{b},
+ *  and LaTeX commands {pmatrix}. */
+// Common aliases: story templates sometimes use different names than generator data keys
+const STORY_ALIASES: Record<string, string> = { favorable: 'target' };
+
 function interpolateStory(text: string, data: Record<string, unknown>): string {
-  return text.replace(/\{(\w+)\}/g, (_, key) => String(data[key] ?? `{${key}}`));
+  return text.replace(/\{([a-zA-Z]\w*)\}/g, (match, key) => {
+    if (key in data) return String(data[key]);
+    const alias = STORY_ALIASES[key];
+    if (alias && alias in data) return String(data[alias]);
+    return match;
+  });
 }
 
 export function LiveStudentScreen({ lang, room, userId, questionIndex, completedMissions, onSubmitResponse, onUpdateMistakes, onClose }: Props) {
