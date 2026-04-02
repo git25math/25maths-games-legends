@@ -1203,15 +1203,12 @@ export const MapScreen = ({
 
       {/* ═══════════════════ Mission Map ═══════════════════ */}
       <div className="relative rounded-3xl overflow-hidden bg-[#1a1a2e]">
-        <picture>
-          <source srcSet={lang === 'zh' ? './map/world-map-zh.webp' : './map/world-map-en.webp'} type="image/webp" />
-          <img
-            src={lang === 'zh' ? './map/world-map-zh.png' : './map/world-map-en.png'}
-            alt="Three Kingdoms Map"
-            loading="lazy"
-            className="w-full rounded-3xl opacity-10 md:opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
-          />
-        </picture>
+        <img
+          src={lang === 'zh' ? './map/world-map-zh.webp' : './map/world-map-en.webp'}
+          alt="Three Kingdoms Map"
+          loading="lazy"
+          className="w-full rounded-3xl opacity-10 md:opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
+        />
         <div className="relative z-10 space-y-6 sm:space-y-8 p-3 sm:p-4 md:p-8">
           {gradeMissions.length === 0 ? (
             <EmptyState icon={<MapIcon size={48} />} title={t.noMissions} description={t.noMissionsDesc} />
