@@ -256,6 +256,24 @@ export function LiveTeacherPanel({
                     </span>
                   </div>
                 ))}
+                {onAssign && (
+                  <button
+                    onClick={() => {
+                      const weakKpIds = sessionSummary.weakKps.filter(k => k.failureRate > 40).map(k => k.kpId);
+                      const weakMissionIds = missions.filter(m => weakKpIds.includes(m.kpId || '')).map(m => m.id);
+                      const weakStudentIds = [...sessionSummary.studentMap.entries()]
+                        .filter(([, s]) => s.total > 0 && (s.correct / s.total) < 0.6)
+                        .map(([uid]) => uid);
+                      if (weakMissionIds.length > 0) {
+                        onAssign(weakKpIds[0], weakMissionIds, weakStudentIds);
+                      }
+                    }}
+                    className="w-full mt-3 py-3 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-500 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <BookOpen size={16} />
+                    {en ? 'Assign Practice for Weak KPs' : '布置薄弱知识点练习'}
+                  </button>
+                )}
               </div>
             )}
 

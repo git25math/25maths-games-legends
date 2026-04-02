@@ -10,7 +10,11 @@ import type { LiveQuestion } from '../../types';
 import { lt } from '../../i18n/resolveText';
 import { LatexText } from '../MathView';
 import { CharacterAvatar } from '../CharacterAvatar';
-import { checkCorrectness as checkAnswer } from '../../utils/checkCorrectness';
+import { InputFields } from '../MathBattle/InputFields';
+import { MultipleChoice } from '../MathBattle/MultipleChoice';
+import { INPUT_FIELDS } from '../MathBattle/inputConfig';
+import { checkAnswer } from '../../utils/checkCorrectness';
+import { diagnoseError } from '../../utils/diagnoseError';
 import { getMistakes, recordErrors } from '../../utils/errorMemory';
 import type { ErrorType } from '../../utils/diagnoseError';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
@@ -46,7 +50,7 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
   // ─── Answer state ───
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [result, setResult] = useState<{ correct: boolean } | null>(null);
+  const [result, setResult] = useState<{ correct: boolean; expected?: Record<string, string> } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const questionStartRef = useRef<number>(0);
   const lastQuestionIndexRef = useRef<number>(-1);
@@ -58,6 +62,7 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
       setInputs({});
       setSubmitted(false);
       setResult(null);
+      setMcSelected(null);
       questionStartRef.current = Date.now();
     }
   }, [questionIndex]);
@@ -85,22 +90,29 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
     setSubmitting(true);
     const durationMs = Date.now() - questionStartRef.current;
 
-    // Check answer locally
-    const isCorrect = checkAnswer(effectiveMission, inputs);
+    // Check answer locally with full result (correct, partial, expected)
+    const checkResult = checkAnswer(effectiveMission, inputs);
+    const isCorrect = checkResult.correct;
 
-    setResult({ correct: isCorrect });
+    // Diagnose error type using real comparison
+    let errorType: string | undefined;
+    if (!isCorrect) {
+      const diagnosis = diagnoseError(inputs, checkResult.expected, checkResult.partial);
+      errorType = diagnosis.type;
+    }
+
+    setResult({ correct: isCorrect, expected: checkResult.expected });
     setSubmitted(true);
 
     // Bridge errors to errorMemory for cross-product recommendations
-    const errorType: ErrorType = 'method'; // simplified for MVP
-    if (!isCorrect && effectiveMission.id) {
+    if (!isCorrect && effectiveMission.id && errorType) {
       const mistakes = getMistakes(completedMissions);
-      const updated = recordErrors(mistakes, effectiveMission.id, [errorType]);
+      const updated = recordErrors(mistakes, effectiveMission.id, [errorType as ErrorType]);
       onUpdateMistakes({ ...completedMissions, _mistakes: updated });
     }
 
     // Submit to server
-    await onSubmitResponse(inputs, isCorrect, isCorrect ? undefined : errorType, durationMs);
+    await onSubmitResponse(inputs, isCorrect, errorType, durationMs);
     setSubmitting(false);
   };
   handleSubmitRef.current = handleSubmit;
@@ -116,10 +128,9 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
 
   const myRank = leaderboard.findIndex(e => e.uid === userId) + 1;
 
-  // ─── INPUT FIELDS from mission config ───
-  const inputFields = effectiveMission?.data?.choices
-    ? null // MC questions handled differently
-    : [{ id: 'ans', label: en ? 'Answer' : '答案', placeholder: '' }]; // simplified for MVP
+  // ─── Check if this is a multiple-choice question ───
+  const hasChoices = !!(effectiveMission?.data?.choices);
+  const [mcSelected, setMcSelected] = useState<number | null>(null);
 
   return (
     <div className="fixed inset-0 z-[60] bg-slate-900 overflow-y-auto">
@@ -185,31 +196,43 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
             {/* Input or Result */}
             {!submitted ? (
               <div className="space-y-3">
-                {inputFields?.map(field => (
-                  <input
-                    key={field.id}
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    autoCapitalize="off"
-                    spellCheck={false}
-                    placeholder={field.placeholder || (en ? 'Your answer' : '你的答案')}
-                    value={inputs[field.id] || ''}
-                    onChange={e => setInputs({ ...inputs, [field.id]: e.target.value })}
-                    className="w-full px-5 py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white text-xl font-bold placeholder-white/20 focus:border-indigo-400 focus:bg-white/15 outline-none transition-all"
+                {hasChoices ? (
+                  <MultipleChoice
+                    choices={effectiveMission.data.choices}
+                    onSelect={(value) => {
+                      setInputs({ ans: value });
+                      setMcSelected(effectiveMission.data.choices.findIndex((c: any) => c.value === value));
+                      // Auto-submit on MC selection
+                      setTimeout(() => handleSubmitRef.current(), 100);
+                    }}
+                    disabled={submitting}
+                    lang={lang}
+                    selectedIndex={mcSelected}
                   />
-                ))}
-                <button
-                  onClick={handleSubmit}
-                  disabled={submitting || !Object.values(inputs).some(v => (v as string).trim())}
-                  className={`w-full py-4 font-black text-lg rounded-xl transition-colors ${
-                    submitting || !Object.values(inputs).some(v => (v as string).trim())
-                      ? 'bg-white/10 text-white/30 cursor-not-allowed'
-                      : 'bg-indigo-600 text-white hover:bg-indigo-500'
-                  }`}
-                >
-                  {submitting ? (en ? 'Submitting...' : '提交中...') : (en ? 'Submit' : '提交')}
-                </button>
+                ) : (
+                  <>
+                    <InputFields
+                      mission={effectiveMission}
+                      inputs={inputs}
+                      setInputs={setInputs}
+                      difficultyMode="green"
+                      tutorialStep={0}
+                      isTutorial={false}
+                      lang={lang}
+                    />
+                    <button
+                      onClick={handleSubmit}
+                      disabled={submitting || !Object.values(inputs).some(v => (v as string).trim())}
+                      className={`w-full py-4 font-black text-lg rounded-xl transition-colors ${
+                        submitting || !Object.values(inputs).some(v => (v as string).trim())
+                          ? 'bg-white/10 text-white/30 cursor-not-allowed'
+                          : 'bg-indigo-600 text-white hover:bg-indigo-500'
+                      }`}
+                    >
+                      {submitting ? (en ? 'Submitting...' : '提交中...') : (en ? 'Submit' : '提交')}
+                    </button>
+                  </>
+                )}
               </div>
             ) : (
               <motion.div
@@ -230,6 +253,11 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
                   <>
                     <XCircle size={48} className="text-rose-400 mx-auto mb-2" />
                     <p className="text-rose-400 font-black text-xl">{en ? 'Incorrect' : '答错了'}</p>
+                    {result?.expected && Object.keys(result.expected).length > 0 && (
+                      <p className="text-white/40 text-sm mt-2">
+                        {en ? 'Answer: ' : '正确答案：'}{Object.values(result.expected).join(', ')}
+                      </p>
+                    )}
                   </>
                 )}
                 <p className="text-white/30 text-xs mt-3">{en ? 'Waiting for next question...' : '等待下一题...'}</p>

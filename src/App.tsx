@@ -1576,6 +1576,20 @@ export default function App() {
                     onPushQuestion={liveSession.pushQuestion}
                     onEndSession={liveSession.endSession}
                     onClose={async () => { await leaveRoomClean(); setGameState('dashboard'); }}
+                    onAssign={async (kpId, missionIds, studentIds) => {
+                      const classTag = activeRoom.liveMeta?.class_tag;
+                      if (!classTag) return;
+                      await supabase.rpc('create_assignment', {
+                        p_grade: profile?.grade ?? 7,
+                        p_class_tag: classTag,
+                        p_mission_ids: missionIds,
+                        p_title: `Live Session Practice — ${kpId}`,
+                        p_description: null,
+                        p_deadline: null,
+                        p_target_user_ids: studentIds.length > 0 ? studentIds : null,
+                      });
+                      alert(lang === 'en' ? 'Practice assigned!' : '已布置练习！');
+                    }}
                   />
                 </Suspense>
               )}
