@@ -1584,8 +1584,6 @@ export default function App() {
                     lang={lang}
                     room={activeRoom}
                     userId={user.id}
-                    missions={missions}
-                    grade={profile?.grade ?? 7}
                     questionStats={liveSession.questionStats}
                     sessionSummary={liveSession.sessionSummary}
                     questionIndex={liveSession.questionIndex}

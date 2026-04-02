@@ -2,7 +2,7 @@
  * LiveTeacherPanel — Teacher control panel for live classroom sessions.
  * Shows: student roster, question pusher, real-time progress, session summary.
  */
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Radio, Users, CheckCircle2, XCircle, Clock, ChevronRight, Copy, Check, Trophy, BookOpen, X } from 'lucide-react';
 import type { Language, Room, Mission } from '../../types';
@@ -10,6 +10,7 @@ import type { QuestionStats } from '../../hooks/useLiveSession';
 import { lt } from '../../i18n/resolveText';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
+import { loadGradeMissions } from '../../hooks/useMissions';
 
 type SessionSummary = {
   weakKps: { kpId: string; total: number; correct: number; failureRate: number; studentCount: number }[];
@@ -22,8 +23,6 @@ type Props = {
   lang: Language;
   room: Room;
   userId: string;
-  missions: Mission[];
-  grade: number;
   questionStats: QuestionStats | null;
   sessionSummary: SessionSummary | null;
   questionIndex: number;
@@ -36,7 +35,7 @@ type Props = {
 const TIMER_OPTIONS = [30, 60, 90, 120, null] as const;
 
 export function LiveTeacherPanel({
-  lang, room, userId, missions, grade, questionStats, sessionSummary,
+  lang, room, userId, questionStats, sessionSummary,
   questionIndex, onPushQuestion, onEndSession, onClose, onAssign,
 }: Props) {
   useEscapeKey(onClose);
@@ -47,6 +46,13 @@ export function LiveTeacherPanel({
   const [pushing, setPushing] = useState(false);
   const [showMissionPicker, setShowMissionPicker] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+
+  // Load missions for the class grade (not teacher's grade)
+  const grade = room.liveMeta?.grade ?? 7;
+  const [missions, setMissions] = useState<Mission[]>([]);
+  useEffect(() => {
+    loadGradeMissions(grade).then(setMissions);
+  }, [grade]);
 
   const roomCode = room.id.slice(0, 6).toUpperCase();
   const students = Object.entries(room.players).filter(([uid]) => uid !== room.hostId);
