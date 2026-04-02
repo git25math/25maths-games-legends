@@ -1593,7 +1593,9 @@ export default function App() {
                     userId={user.id}
                     mission={liveSession.currentQuestion ? missions.find(m => m.id === liveSession.currentQuestion!.mission_id) ?? null : null}
                     questionIndex={liveSession.questionIndex}
+                    completedMissions={profile?.completed_missions as Record<string, unknown> ?? {}}
                     onSubmitResponse={liveSession.submitResponse}
+                    onUpdateMistakes={(cm) => updateProfile({ completed_missions: cm })}
                     onClose={async () => { await leaveRoomClean(); setGameState('map'); }}
                   />
                 </Suspense>

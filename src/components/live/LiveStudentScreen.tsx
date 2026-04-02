@@ -11,6 +11,8 @@ import { lt } from '../../i18n/resolveText';
 import { LatexText } from '../MathView';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { checkCorrectness as checkAnswer } from '../../utils/checkCorrectness';
+import { getMistakes, recordErrors } from '../../utils/errorMemory';
+import type { ErrorType } from '../../utils/diagnoseError';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 
 type Props = {
@@ -19,11 +21,13 @@ type Props = {
   userId: string;
   mission: Mission | null;
   questionIndex: number;
+  completedMissions: Record<string, unknown>;
   onSubmitResponse: (answer: Record<string, string>, isCorrect: boolean, errorType?: string, durationMs?: number) => Promise<string>;
+  onUpdateMistakes: (mistakes: Record<string, unknown>) => void;
   onClose: () => void;
 };
 
-export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, onSubmitResponse, onClose }: Props) {
+export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, completedMissions, onSubmitResponse, onUpdateMistakes, onClose }: Props) {
   useEscapeKey(onClose);
   const en = lang === 'en';
   const currentQ = room.liveMeta?.current_question;
@@ -78,8 +82,16 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
     setResult({ correct: isCorrect });
     setSubmitted(true);
 
+    // Bridge errors to errorMemory for cross-product recommendations
+    const errorType: ErrorType = 'method'; // simplified for MVP
+    if (!isCorrect && mission.id) {
+      const mistakes = getMistakes(completedMissions);
+      const updated = recordErrors(mistakes, mission.id, [errorType]);
+      onUpdateMistakes({ ...completedMissions, _mistakes: updated });
+    }
+
     // Submit to server
-    await onSubmitResponse(inputs, isCorrect, isCorrect ? undefined : 'method', durationMs);
+    await onSubmitResponse(inputs, isCorrect, isCorrect ? undefined : errorType, durationMs);
     setSubmitting(false);
   };
 
