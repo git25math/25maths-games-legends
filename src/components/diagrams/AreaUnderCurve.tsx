@@ -4,7 +4,7 @@
  */
 
 type Props = {
-  func: 'x' | '3x^2' | '2x';
+  func: 'x' | '2x' | '3x^2' | '4x^3';
   lower: number;
   upper: number;
   area: number;
@@ -23,6 +23,7 @@ function evaluate(func: Props['func'], x: number): number {
     case 'x': return x;
     case '2x': return 2 * x;
     case '3x^2': return 3 * x * x;
+    case '4x^3': return 4 * x * x * x;
   }
 }
 
@@ -31,6 +32,7 @@ function funcLabel(func: Props['func']): string {
     case 'x': return 'y = x';
     case '2x': return 'y = 2x';
     case '3x^2': return 'y = 3x²';
+    case '4x^3': return 'y = 4x³';
   }
 }
 
@@ -124,10 +126,11 @@ export function AreaUnderCurve({ func, lower, upper, area }: Props) {
 }
 
 function computeArea(func: Props['func'], lower: number, upper: number): number {
-  // Simple exact integration
+  // Exact integration: ∫f(x)dx
   switch (func) {
     case 'x': return Math.round(((upper * upper - lower * lower) / 2) * 100) / 100;
     case '2x': return Math.round((upper * upper - lower * lower) * 100) / 100;
     case '3x^2': return Math.round((upper * upper * upper - lower * lower * lower) * 100) / 100;
+    case '4x^3': return Math.round((Math.pow(upper, 4) - Math.pow(lower, 4)) * 100) / 100;
   }
 }

@@ -554,7 +554,7 @@ export function renderDiagram(
   if (gen === 'INTEGRATION_RANDOM') {
     return (
       <AreaUnderCurve
-        func={d.func as 'x' | '3x^2' | '2x'}
+        func={d.func as 'x' | '2x' | '3x^2' | '4x^3'}
         lower={(d.lower ?? d.a) as number}
         upper={(d.upper ?? d.b) as number}
         area={0}
