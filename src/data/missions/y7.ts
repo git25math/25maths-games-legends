@@ -1469,7 +1469,8 @@ export const MISSIONS_Y7: Mission[] = [
         highlightField: 'x'
       }
     ],
-    secret: { concept: { zh: '补角之和为 $180^\\circ$。', en: 'Supplementary angles sum to $180^\\circ$.' }, formula: '$x + y = 180^\\circ$', tips: [{ zh: '吕布提示：角度不对，箭矢难中！', en: "Lu Bu Tip: If the angle is wrong, the arrows won't hit!" }] }
+    secret: { concept: { zh: '补角之和为 $180^\\circ$。', en: 'Supplementary angles sum to $180^\\circ$.' }, formula: '$x + y = 180^\\circ$', tips: [{ zh: '吕布提示：角度不对，箭矢难中！', en: "Lu Bu Tip: If the angle is wrong, the arrows won't hit!" }] },
+    storyConsequence: { correct: { zh: '据守虎牢关——补角计算精准！弩床已就位！', en: 'Defending Hulao Pass — supplementary angle calculated! Ballista deployed!' }, wrong: { zh: '角度没算对，弩床方向偏了…再来一次！', en: 'Angle incorrect — ballista misaligned. Try again!' } },
   },
   {
     id: 732, grade: 7, unitId: 3, order: 2,
