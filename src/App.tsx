@@ -958,12 +958,32 @@ export default function App() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-slate-900 font-sans text-slate-900 selection:bg-indigo-100 overflow-x-hidden">
-        {/* Top controls — auto-hide after 3s, tap dot to reveal */}
+        {/* Logout — top left */}
+        {(user || isGuest) && (
+          <div className="fixed top-4 left-4 z-50" onMouseEnter={resetTopControlsTimer}>
+            <button
+              onClick={() => {
+                signOut();
+                setIsGuest(false);
+                setGameState('welcome');
+                setActiveMission(null);
+                setSelectedCharId(null);
+                localStorage.removeItem(LS_STATE_KEY);
+                localStorage.removeItem(LS_GUEST_KEY);
+                clearOnboardingFlag();
+              }}
+              className={`p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-full hover:bg-rose-500/30 transition-all duration-300 ${topControlsVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}
+            >
+              <LogOut size={20} />
+            </button>
+          </div>
+        )}
+        {/* Language — top right */}
         <div
           className="fixed top-4 right-4 z-50"
           onMouseEnter={resetTopControlsTimer}
         >
-          <div className={`flex items-center gap-2 transition-all duration-300 origin-right ${topControlsVisible ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-90 pointer-events-none absolute right-0'}`}>
+          <div className={`transition-all duration-300 origin-right ${topControlsVisible ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-90 pointer-events-none absolute right-0'}`}>
             <button
               onClick={() => { setLang(lang === 'zh' ? 'zh_TW' : lang === 'zh_TW' ? 'en' : 'zh'); resetTopControlsTimer(); }}
               className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-bold hover:bg-white/20 transition-all"
@@ -971,23 +991,6 @@ export default function App() {
               <Languages size={18} />
               {lang === 'zh' ? '繁體' : lang === 'zh_TW' ? 'EN' : '简体'}
             </button>
-            {(user || isGuest) && (
-              <button
-                onClick={() => {
-                  signOut();
-                  setIsGuest(false);
-                  setGameState('welcome');
-                  setActiveMission(null);
-                  setSelectedCharId(null);
-                  localStorage.removeItem(LS_STATE_KEY);
-                  localStorage.removeItem(LS_GUEST_KEY);
-                  clearOnboardingFlag();
-                }}
-                className="p-2 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-full hover:bg-rose-500/30 transition-all"
-              >
-                <LogOut size={20} />
-              </button>
-            )}
           </div>
           <button
             onClick={resetTopControlsTimer}
