@@ -7,12 +7,17 @@ import { CharacterAvatar } from './CharacterAvatar';
 
 export const CharacterCard = ({ character, isSelected, onSelect, lang }: { character: Character; isSelected: boolean; onSelect: () => void; lang: Language; key?: string }) => (
   <motion.div
+    role="button"
+    tabIndex={0}
+    aria-label={lt(character.name, lang)}
+    aria-pressed={isSelected}
     whileHover={isSelected ? undefined : { scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
     onClick={onSelect}
+    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(); } }}
     animate={isSelected ? { borderColor: ["#b8860b", "#daa520", "#b8860b"] } : { borderColor: "transparent" }}
     transition={isSelected ? { repeat: Infinity, duration: 2 } : undefined}
-    className={`cursor-pointer p-2 sm:p-4 rounded-xl sm:rounded-2xl border-4 transition-all ${
+    className={`cursor-pointer p-2 sm:p-4 rounded-xl sm:rounded-2xl border-4 transition-all focus-visible:ring-2 focus-visible:ring-indigo-400 ${
       isSelected ? 'shadow-xl scale-105 bg-white/10' : 'border-transparent bg-white/5'
     }`}
     style={isSelected ? { borderColor: '#b8860b' } : undefined}

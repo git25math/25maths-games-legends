@@ -38,11 +38,14 @@ export const WelcomeScreen = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
 
   const handleAuth = async () => {
     setAuthError('');
+    setAuthLoading(true);
     const fn = isSignup ? onSignup : onLogin;
     const { error } = await fn(email, password);
+    setAuthLoading(false);
     if (error) {
       setAuthError(isSignup ? t.signupError : t.loginError);
     } else {
@@ -101,6 +104,7 @@ export const WelcomeScreen = ({
           <motion.button
             disabled={!selectedCharId || !isLoggedIn}
             onClick={() => { playTap(); onStart(); }}
+            aria-label={lang === 'en' ? 'Start game' : '开始游戏'}
             aria-disabled={!selectedCharId || !isLoggedIn}
             className={`px-16 py-6 rounded-3xl text-3xl font-black transition-all shadow-2xl focus-visible:ring-2 focus-visible:ring-amber-400 ${
               selectedCharId && isLoggedIn ? 'bg-amber-500 text-white' : 'bg-slate-700 text-slate-400 cursor-not-allowed opacity-70'
@@ -152,26 +156,36 @@ export const WelcomeScreen = ({
               <form onSubmit={e => { e.preventDefault(); handleAuth(); }} className="space-y-4">
               <input
                 type="email"
+                required
                 placeholder={t.emailPlaceholder}
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={e => { setEmail(e.target.value); setAuthError(''); }}
                 autoComplete="email"
                 className={`w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 ${INPUT_FOCUS_CLASS}`}
               />
               <input
                 type="password"
+                required
+                minLength={6}
                 placeholder={t.passwordPlaceholder}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={e => { setPassword(e.target.value); setAuthError(''); }}
                 autoComplete="current-password"
                 className={`w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 ${INPUT_FOCUS_CLASS}`}
               />
               {authError && <p className="text-rose-400 text-xs font-bold">{authError}</p>}
               <button
                 type="submit"
-                className="w-full py-3 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-500 transition-all"
+                disabled={authLoading || !email || !password}
+                className={`w-full py-3 font-black rounded-xl transition-all ${
+                  authLoading || !email || !password
+                    ? 'bg-indigo-600/50 text-white/50 cursor-not-allowed'
+                    : 'bg-indigo-600 text-white hover:bg-indigo-500'
+                }`}
               >
-                {isSignup ? t.signupSubmit : t.loginSubmit}
+                {authLoading
+                  ? (lang === 'en' ? 'Loading...' : '加载中...')
+                  : isSignup ? t.signupSubmit : t.loginSubmit}
               </button>
               <button
                 type="button"

@@ -38,7 +38,9 @@ export function useNotifications(user: User | null) {
       .then(({ data, error }) => {
         if (cancelled) return;
         setLoading(false);
-        if (!error && data) {
+        if (error) {
+          console.error('Failed to load notifications:', error.message);
+        } else if (data) {
           setNotifications(data as AppNotification[]);
         }
       });
