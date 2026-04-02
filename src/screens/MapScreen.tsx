@@ -48,15 +48,15 @@ const MyAssignments = lazy(() => import('../components/MyAssignments').then(modu
 const LearningTimeline = lazy(() => import('../components/LearningTimeline').then(module => ({ default: module.LearningTimeline })));
 
 const CHAPTER_IMAGES = [
-  './map/ch1-peach-garden.png',
-  './map/ch2-hulao-pass.png',
-  './map/ch3-guandu.png',
-  './map/ch4-longzhong.png',
-  './map/ch5-red-cliffs.png',
-  './map/ch6-jingzhou.png',
-  './map/ch7-northern-campaign.png',
-  './map/ch8-probability.png',
-  './map/ch9-unification.png',
+  './map/ch1-peach-garden.webp',
+  './map/ch2-hulao-pass.webp',
+  './map/ch3-guandu.webp',
+  './map/ch4-longzhong.webp',
+  './map/ch5-red-cliffs.webp',
+  './map/ch6-jingzhou.webp',
+  './map/ch7-northern-campaign.webp',
+  './map/ch8-probability.webp',
+  './map/ch9-unification.webp',
 ];
 
 // ── Unit data helper ──
@@ -1203,12 +1203,15 @@ export const MapScreen = ({
 
       {/* ═══════════════════ Mission Map ═══════════════════ */}
       <div className="relative rounded-3xl overflow-hidden bg-[#1a1a2e]">
-        <img
-          src={lang === 'zh' ? './map/world-map-zh.png' : './map/world-map-en.png'}
-          alt="Three Kingdoms Map"
-          loading="lazy"
-          className="w-full rounded-3xl opacity-10 md:opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
-        />
+        <picture>
+          <source srcSet={lang === 'zh' ? './map/world-map-zh.webp' : './map/world-map-en.webp'} type="image/webp" />
+          <img
+            src={lang === 'zh' ? './map/world-map-zh.png' : './map/world-map-en.png'}
+            alt="Three Kingdoms Map"
+            loading="lazy"
+            className="w-full rounded-3xl opacity-10 md:opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
+          />
+        </picture>
         <div className="relative z-10 space-y-6 sm:space-y-8 p-3 sm:p-4 md:p-8">
           {gradeMissions.length === 0 ? (
             <EmptyState icon={<MapIcon size={48} />} title={t.noMissions} description={t.noMissionsDesc} />
