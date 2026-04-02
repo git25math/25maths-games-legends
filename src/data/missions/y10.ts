@@ -2137,7 +2137,7 @@ export const MISSIONS_Y10: Mission[] = [
   {
     id: 10162, grade: 10, unitId: 18, order: 1,
     unitTitle: { zh: 'Unit 18: 条件概率', en: 'Unit 18: Conditional Probability' },
-    topic: 'Algebra', type: 'PROBABILITY',
+    topic: 'Algebra', type: 'TREE_DIAGRAM',
     title: { zh: '不放回抽取', en: 'Without Replacement' },
     skillName: { zh: '条件概率术', en: 'Conditional Probability' },
     skillSummary: { zh: '不放回改变后续概率', en: 'Without replacement changes subsequent probabilities' },
