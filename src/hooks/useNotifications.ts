@@ -21,31 +21,37 @@ export function useNotifications(user: User | null) {
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch unread notifications on login
+  // Fetch unread notifications on login + poll every 30s for live session alerts
   useEffect(() => {
     if (!user) { setNotifications([]); return; }
 
     let cancelled = false;
+    const fetchNotifs = () => {
+      supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_read', false)
+        .order('created_at', { ascending: false })
+        .limit(20)
+        .then(({ data, error }) => {
+          if (cancelled) return;
+          setLoading(false);
+          if (error) {
+            console.error('Failed to load notifications:', error.message);
+          } else if (data) {
+            setNotifications(data as AppNotification[]);
+          }
+        });
+    };
+
     setLoading(true);
+    fetchNotifs();
 
-    supabase
-      .from('notifications')
-      .select('*')
-      .eq('user_id', user.id)
-      .eq('is_read', false)
-      .order('created_at', { ascending: false })
-      .limit(20)
-      .then(({ data, error }) => {
-        if (cancelled) return;
-        setLoading(false);
-        if (error) {
-          console.error('Failed to load notifications:', error.message);
-        } else if (data) {
-          setNotifications(data as AppNotification[]);
-        }
-      });
+    // Poll every 30s to catch live_session notifications from teachers
+    const poll = setInterval(fetchNotifs, 30000);
 
-    return () => { cancelled = true; };
+    return () => { cancelled = true; clearInterval(poll); };
   }, [user?.id]);
 
   /** Mark a single notification as read */

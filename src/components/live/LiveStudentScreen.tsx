@@ -56,9 +56,11 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
   const lastQuestionIndexRef = useRef<number>(-1);
 
   // Auto-close after session ends (give 10s to see final ranking)
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
   useEffect(() => {
     if (!isSessionEnded) return;
-    const timer = setTimeout(() => onClose(), 10000);
+    const timer = setTimeout(() => onCloseRef.current(), 10000);
     return () => clearTimeout(timer);
   }, [isSessionEnded]);
 

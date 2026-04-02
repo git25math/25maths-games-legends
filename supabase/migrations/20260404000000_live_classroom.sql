@@ -167,12 +167,14 @@ BEGIN
 END;
 $$;
 
--- 3c. Teacher pushes a question to the class
+-- 3c. Teacher pushes a question to the class (includes generated_data for randomized questions)
+DROP FUNCTION IF EXISTS push_live_question(UUID, INT, TEXT, INT);
 CREATE OR REPLACE FUNCTION push_live_question(
   p_room_id UUID,
   p_mission_id INT,
   p_kp_id TEXT,
-  p_timer_secs INT DEFAULT NULL
+  p_timer_secs INT DEFAULT NULL,
+  p_generated_data JSONB DEFAULT NULL
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -183,6 +185,9 @@ DECLARE
   v_room gl_rooms;
   v_meta JSONB;
   v_q_index INT;
+  v_players JSONB;
+  v_key TEXT;
+  v_player JSONB;
 BEGIN
   SELECT * INTO v_room FROM gl_rooms WHERE id = p_room_id FOR UPDATE;
   IF NOT FOUND THEN RETURN jsonb_build_object('error', 'room_not_found'); END IF;
@@ -192,34 +197,29 @@ BEGIN
   v_meta := v_room.live_meta;
   v_q_index := COALESCE((v_meta->>'question_index')::int, 0);
 
-  -- Update live_meta with new question
   v_meta := v_meta || jsonb_build_object(
     'question_index', v_q_index + 1,
     'current_question', jsonb_build_object(
       'mission_id', p_mission_id,
       'kp_id', p_kp_id,
-      'pushed_at', (extract(epoch from now()) * 1000)::bigint
+      'pushed_at', (extract(epoch from now()) * 1000)::bigint,
+      'generated_data', COALESCE(p_generated_data, '{}'::jsonb)
     ),
     'timer_secs', p_timer_secs
   );
 
-  -- Reset all players' finishedAt for new question (keep scores cumulative)
-  DECLARE
-    v_players JSONB := v_room.players;
-    v_key TEXT;
-    v_player JSONB;
-  BEGIN
-    FOR v_key, v_player IN SELECT * FROM jsonb_each(v_players) LOOP
-      v_players := jsonb_set(v_players, ARRAY[v_key], v_player - 'finishedAt');
-    END LOOP;
+  -- Reset all players' finishedAt for new question
+  v_players := v_room.players;
+  FOR v_key, v_player IN SELECT * FROM jsonb_each(v_players) LOOP
+    v_players := jsonb_set(v_players, ARRAY[v_key], v_player - 'finishedAt');
+  END LOOP;
 
-    UPDATE gl_rooms
-    SET live_meta = v_meta,
-        mission_id = p_mission_id,
-        status = 'playing',
-        players = v_players
-    WHERE id = p_room_id;
-  END;
+  UPDATE gl_rooms
+  SET live_meta = v_meta,
+      mission_id = p_mission_id,
+      status = 'playing',
+      players = v_players
+  WHERE id = p_room_id;
 
   RETURN jsonb_build_object('ok', true, 'question_index', v_q_index + 1);
 END;
