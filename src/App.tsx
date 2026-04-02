@@ -1616,7 +1616,6 @@ export default function App() {
                     lang={lang}
                     room={activeRoom}
                     userId={user.id}
-                    mission={liveSession.currentQuestion ? missions.find(m => m.id === liveSession.currentQuestion!.mission_id) ?? null : null}
                     questionIndex={liveSession.questionIndex}
                     completedMissions={profile?.completed_missions as Record<string, unknown> ?? {}}
                     onSubmitResponse={liveSession.submitResponse}
@@ -1648,7 +1647,6 @@ export default function App() {
                     lang={lang}
                     room={activeRoom}
                     userId={anonLiveId}
-                    mission={liveSession.currentQuestion ? missions.find(m => m.id === liveSession.currentQuestion!.mission_id) ?? null : null}
                     questionIndex={liveSession.questionIndex}
                     completedMissions={{}}
                     onSubmitResponse={async (answer, isCorrect, errorType, durationMs) => {

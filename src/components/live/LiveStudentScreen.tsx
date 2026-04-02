@@ -18,12 +18,12 @@ import { diagnoseError } from '../../utils/diagnoseError';
 import { getMistakes, recordErrors } from '../../utils/errorMemory';
 import type { ErrorType } from '../../utils/diagnoseError';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
+import { loadMissionById } from '../../hooks/useMissions';
 
 type Props = {
   lang: Language;
   room: Room;
   userId: string;
-  mission: Mission | null;
   questionIndex: number;
   completedMissions: Record<string, unknown>;
   onSubmitResponse: (answer: Record<string, string>, isCorrect: boolean, errorType?: string, durationMs?: number) => Promise<string>;
@@ -31,7 +31,12 @@ type Props = {
   onClose: () => void;
 };
 
-export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, completedMissions, onSubmitResponse, onUpdateMistakes, onClose }: Props) {
+/** Interpolate {key} placeholders in story text with data values */
+function interpolateStory(text: string, data: Record<string, unknown>): string {
+  return text.replace(/\{(\w+)\}/g, (_, key) => String(data[key] ?? `{${key}}`));
+}
+
+export function LiveStudentScreen({ lang, room, userId, questionIndex, completedMissions, onSubmitResponse, onUpdateMistakes, onClose }: Props) {
   useEscapeKey(onClose);
   const en = lang === 'en';
   const currentQ = room.liveMeta?.current_question;
@@ -39,13 +44,20 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
   const isSessionEnded = room.status === 'finished';
   const myPlayer = room.players[userId];
 
-  // Use generated data from live_meta if available (teacher-generated, same for all students)
+  // Load mission template by ID (handles cross-grade: teacher Y8 → student Y7)
+  const [baseMission, setBaseMission] = useState<Mission | null>(null);
+  useEffect(() => {
+    if (!currentQ?.mission_id) { setBaseMission(null); return; }
+    loadMissionById(currentQ.mission_id).then(m => setBaseMission(m));
+  }, [currentQ?.mission_id]);
+
+  // Merge generated data from teacher into mission template
   const effectiveMission = useMemo(() => {
-    if (!mission) return null;
+    if (!baseMission) return null;
     const genData = currentQ?.generated_data;
-    if (!genData) return mission;
-    return { ...mission, data: { ...mission.data, ...genData } };
-  }, [mission, currentQ?.generated_data]);
+    if (!genData) return baseMission;
+    return { ...baseMission, data: { ...baseMission.data, ...genData } };
+  }, [baseMission, currentQ?.generated_data]);
 
   // ─── Answer state ───
   const [inputs, setInputs] = useState<Record<string, string>>({});
@@ -195,10 +207,12 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
                 Q{questionIndex} · {effectiveMission.topic}
               </p>
               <div className="text-white font-bold mb-3">
-                <LatexText text={lt(effectiveMission.description, lang)} className="text-white" />
+                <LatexText text={interpolateStory(lt(effectiveMission.description, lang), effectiveMission.data)} className="text-white" />
               </div>
-              {effectiveMission.data?.story && (
-                <p className="text-white/40 text-xs italic">{lt(effectiveMission.story, lang)}</p>
+              {effectiveMission.story && (
+                <p className="text-white/40 text-xs italic">
+                  <LatexText text={interpolateStory(lt(effectiveMission.story, lang), effectiveMission.data)} className="text-white/40" />
+                </p>
               )}
             </div>
 
