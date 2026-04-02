@@ -109,10 +109,21 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
         .from('teachers').select('id').eq('user_id', user.id).maybeSingle();
       if (!teacher) return;
       // Find classes via RPC (handles super admin + teacher correctly)
-      const { data: allClasses } = await supabase.rpc('get_my_classes');
-      if (allClasses && allClasses.length > 0) {
+      const { data: allClasses, error: classError } = await supabase.rpc('get_my_classes');
+      console.log('[Dashboard] get_my_classes:', classError ? 'ERROR: ' + JSON.stringify(classError) : (allClasses?.length ?? 0) + ' classes', 'teacher.id:', teacher.id);
+      if (classError) {
+        // Fallback: direct query
+        console.log('[Dashboard] Falling back to direct kw_classes query');
+        const { data: directClasses } = await supabase.from('kw_classes').select('name').eq('teacher_id', teacher.id);
+        if (directClasses && directClasses.length > 0) {
+          setTeacherClasses(directClasses.map(c => c.name));
+        } else {
+          setTeacherClasses(null);
+        }
+      } else if (allClasses && allClasses.length > 0) {
         // Filter to classes assigned to this teacher, or show all for admin
         const myClasses = allClasses.filter((c: { teacher_id: string }) => c.teacher_id === teacher.id);
+        console.log('[Dashboard] myClasses:', myClasses.length, 'out of', allClasses.length);
         if (myClasses.length > 0) {
           setTeacherClasses(myClasses.map((c: { name: string }) => c.name));
         } else {
