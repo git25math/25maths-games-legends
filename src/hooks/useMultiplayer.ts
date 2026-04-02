@@ -32,6 +32,7 @@ function parseRoom(d: any): Room {
     id: d.id,
     hostId: d.host_id,
     missionId: d.mission_id,
+    liveMeta: d.live_meta ?? undefined,
   } as Room;
 }
 

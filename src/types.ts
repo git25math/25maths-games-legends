@@ -170,14 +170,29 @@ export type RoomPlayer = {
   finishedAt?: number; // timestamp when this player finished (0 = still playing)
 };
 
+export type LiveQuestion = {
+  mission_id: number;
+  kp_id: string;
+  pushed_at: number;
+};
+
+export type LiveMeta = {
+  class_tag: string;
+  grade: number;
+  question_index: number;
+  current_question: LiveQuestion | null;
+  timer_secs: number | null;
+};
+
 export type Room = {
   id: string;
-  type: 'team' | 'pk';
+  type: 'team' | 'pk' | 'live';
   missionId: number;
   status: 'waiting' | 'playing' | 'finished';
   players: { [uid: string]: RoomPlayer };
   hostId: string;
   winnerId?: string;
+  liveMeta?: LiveMeta;
 };
 
 export type BattleResult = {
@@ -191,7 +206,7 @@ export type BattleResult = {
   hp_remaining: number;
 };
 
-export type GameState = 'welcome' | 'onboarding' | 'modeSelect' | 'map' | 'battle' | 'lobby' | 'practice' | 'dashboard' | 'expedition' | 'leaderboard' | 'achievements' | 'pk_setup' | 'tech_tree' | 'repair';
+export type GameState = 'welcome' | 'onboarding' | 'modeSelect' | 'map' | 'battle' | 'lobby' | 'practice' | 'dashboard' | 'expedition' | 'leaderboard' | 'achievements' | 'pk_setup' | 'tech_tree' | 'repair' | 'live_teacher' | 'live_student';
 
 // --- v7.0 Phase 2: Skill Tree ---
 
