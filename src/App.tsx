@@ -1594,7 +1594,7 @@ export default function App() {
                       const classTag = activeRoom.liveMeta?.class_tag;
                       if (!classTag) return;
                       await supabase.rpc('create_assignment', {
-                        p_grade: profile?.grade ?? 7,
+                        p_grade: activeRoom.liveMeta?.grade ?? 7,
                         p_class_tag: classTag,
                         p_mission_ids: missionIds,
                         p_title: `Live Session Practice — ${kpId}`,

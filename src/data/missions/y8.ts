@@ -1376,8 +1376,8 @@ export const MISSIONS_Y8: Mission[] = [
     title: { zh: '税收分配', en: 'Tax Distribution' },
     skillName: { zh: '百分比+比例综合', en: 'Percentage & Ratio Combined' },
     skillSummary: { zh: '先算百分比，再按比例分配', en: 'Calculate percentage first, then distribute by ratio' },
-    story: { zh: '荆州税收 {total} 万金，按 $3:2$ 分配给军事和民生。', en: 'Jingzhou tax is {total} ten-thousand gold, split $3:2$ between military and civilian.' },
-    description: { zh: '军事部分分到多少？', en: 'How much goes to the military?' },
+    story: { zh: '荆州税收按比例分配：当 $x={x1}$ 时 $y={y1}$，求 $x={x2}$ 时的 $y$。', en: 'Jingzhou tax is proportional: when $x={x1}$, $y={y1}$. Find $y$ when $x={x2}$.' },
+    description: { zh: '$y$ 与 $x$ 成正比。当 $x={x1}$ 时 $y={y1}$，求 $x={x2}$ 时的 $y$。', en: '$y$ is directly proportional to $x$. When $x={x1}$, $y={y1}$. Find $y$ when $x={x2}$.' },
     data: { mode: 'direct', k: 100, x1: 5, y1: 500, x2: 3, y2: 300, answer: 300, generatorType: 'RATIO_Y8_RANDOM' },
     difficulty: 'Medium', reward: 180, kpId: 'kp-1.11-01', sectionId: 'number',
     discoverSteps: [
