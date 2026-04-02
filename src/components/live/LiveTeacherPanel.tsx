@@ -27,7 +27,7 @@ type Props = {
   questionStats: QuestionStats | null;
   sessionSummary: SessionSummary | null;
   questionIndex: number;
-  onPushQuestion: (missionId: number, kpId: string, timerSecs?: number) => Promise<string>;
+  onPushQuestion: (missionId: number, kpId: string, questionData: Record<string, unknown>, timerSecs?: number) => Promise<string>;
   onEndSession: () => Promise<string>;
   onClose: () => void;
   onAssign?: (kpId: string, missionIds: number[], studentIds: string[]) => void;
@@ -64,7 +64,16 @@ export function LiveTeacherPanel({
     const m = missions.find(mi => mi.id === selectedMissionId);
     if (!m) return;
     setPushing(true);
-    const err = await onPushQuestion(selectedMissionId, m.kpId || '', timerSecs ?? undefined);
+    // Generate randomized question data so all students see the same numbers
+    let questionData = m.data;
+    if (m.data?.generatorType) {
+      try {
+        const { generateMission } = await import('../../utils/generateMission');
+        const generated = generateMission(m);
+        questionData = generated.data;
+      } catch { /* fallback to template data */ }
+    }
+    const err = await onPushQuestion(selectedMissionId, m.kpId || '', questionData, timerSecs ?? undefined);
     setPushing(false);
     if (err) alert(err);
     else setShowMissionPicker(false);

@@ -253,7 +253,7 @@ export default function App() {
   } = useProfile(user, isGuest);
   const { missions, loading: missionsLoading, offline } = useMissions(profile?.grade);
   const missionSummaries = useMemo(() => toMissionSummaries(missions), [missions]);
-  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
+  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound, fetchAndSetRoom } = useMultiplayer(user, profile);
   const liveSession = useLiveSession(activeRoom, user);
   const { notifications: sysNotifications, markAsRead: markNotifRead, markAllAsRead: markAllNotifsRead } = useNotifications(user);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
@@ -1180,8 +1180,9 @@ export default function App() {
                 <LiveSessionBanner
                   notifications={sysNotifications}
                   onJoin={async (roomId) => {
-                    const err = await joinRoom(roomId);
-                    if (err) alert(err);
+                    const err = await liveSession.joinLiveRoom(roomId);
+                    if (err) { alert(err); return; }
+                    await fetchAndSetRoom(roomId);
                     // auto-detect effect will switch to live_student
                   }}
                   onDismiss={markNotifRead}
@@ -1551,17 +1552,11 @@ export default function App() {
                   onStartLive={async (classTag: string, grade: number) => {
                     const { data, error } = await supabase.rpc('create_live_room', { p_class_tag: classTag, p_grade: grade });
                     if (error || data?.error) { alert(error?.message || data?.error); return; }
-                    // Room will be picked up by useMultiplayer rejoin via sessionStorage
-                    // and auto-detect effect will set gameState to live_teacher
                     const roomId = data?.room_id;
                     if (roomId) {
-                      const { data: room } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
-                      if (room) {
-                        // Manually set the room since useMultiplayer's rejoin is async
-                        // This triggers the auto-detect effect above
-                      }
+                      await fetchAndSetRoom(roomId);
+                      // auto-detect effect will set gameState to live_teacher
                     }
-                    setGameState('live_teacher');
                   }}
                 />
               )}

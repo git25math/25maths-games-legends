@@ -35,6 +35,14 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
   const isSessionEnded = room.status === 'finished';
   const myPlayer = room.players[userId];
 
+  // Use generated data from live_meta if available (teacher-generated, same for all students)
+  const effectiveMission = useMemo(() => {
+    if (!mission) return null;
+    const genData = currentQ?.generated_data;
+    if (!genData) return mission;
+    return { ...mission, data: { ...mission.data, ...genData } };
+  }, [mission, currentQ?.generated_data]);
+
   // ─── Answer state ───
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -56,6 +64,7 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
 
   // ─── Timer countdown ───
   const [countdown, setCountdown] = useState<number | null>(null);
+  const handleSubmitRef = useRef<() => void>(() => {});
   useEffect(() => {
     if (!currentQ || !timerSecs || submitted) { setCountdown(null); return; }
     const tick = () => {
@@ -63,7 +72,7 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
       const remaining = Math.max(0, timerSecs - elapsed);
       setCountdown(Math.ceil(remaining));
       if (remaining <= 0 && !submitted) {
-        handleSubmit(); // auto-submit on timeout
+        handleSubmitRef.current(); // use ref to avoid stale closure
       }
     };
     tick();
@@ -72,21 +81,21 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
   }, [currentQ?.pushed_at, timerSecs, submitted]);
 
   const handleSubmit = async () => {
-    if (submitted || submitting || !mission || !currentQ) return;
+    if (submitted || submitting || !effectiveMission || !currentQ) return;
     setSubmitting(true);
     const durationMs = Date.now() - questionStartRef.current;
 
     // Check answer locally
-    const isCorrect = checkAnswer(mission, inputs);
+    const isCorrect = checkAnswer(effectiveMission, inputs);
 
     setResult({ correct: isCorrect });
     setSubmitted(true);
 
     // Bridge errors to errorMemory for cross-product recommendations
     const errorType: ErrorType = 'method'; // simplified for MVP
-    if (!isCorrect && mission.id) {
+    if (!isCorrect && effectiveMission.id) {
       const mistakes = getMistakes(completedMissions);
-      const updated = recordErrors(mistakes, mission.id, [errorType]);
+      const updated = recordErrors(mistakes, effectiveMission.id, [errorType]);
       onUpdateMistakes({ ...completedMissions, _mistakes: updated });
     }
 
@@ -94,6 +103,7 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
     await onSubmitResponse(inputs, isCorrect, isCorrect ? undefined : errorType, durationMs);
     setSubmitting(false);
   };
+  handleSubmitRef.current = handleSubmit;
 
   // ─── Leaderboard (from room.players) ───
   const leaderboard = useMemo(() => {
@@ -107,7 +117,7 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
   const myRank = leaderboard.findIndex(e => e.uid === userId) + 1;
 
   // ─── INPUT FIELDS from mission config ───
-  const inputFields = mission?.data?.choices
+  const inputFields = effectiveMission?.data?.choices
     ? null // MC questions handled differently
     : [{ id: 'ans', label: en ? 'Answer' : '答案', placeholder: '' }]; // simplified for MVP
 
@@ -149,7 +159,7 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
         )}
 
         {/* ─── State: Answering ─── */}
-        {currentQ && !isSessionEnded && mission && (
+        {currentQ && !isSessionEnded && effectiveMission && (
           <div className="space-y-4">
             {/* Timer */}
             {countdown !== null && !submitted && (
@@ -162,13 +172,13 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
             {/* Question */}
             <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
               <p className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-2">
-                Q{questionIndex} · {mission.topic}
+                Q{questionIndex} · {effectiveMission.topic}
               </p>
               <div className="text-white font-bold mb-3">
-                <LatexText text={lt(mission.description, lang)} className="text-white" />
+                <LatexText text={lt(effectiveMission.description, lang)} className="text-white" />
               </div>
-              {mission.data?.story && (
-                <p className="text-white/40 text-xs italic">{lt(mission.story, lang)}</p>
+              {effectiveMission.data?.story && (
+                <p className="text-white/40 text-xs italic">{lt(effectiveMission.story, lang)}</p>
               )}
             </div>
 

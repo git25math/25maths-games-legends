@@ -174,6 +174,12 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     return true;
   };
 
+  /** Fetch a room by ID and set it as active (used when joining live rooms externally) */
+  const fetchAndSetRoom = async (roomId: string) => {
+    const { data } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
+    if (data) setActiveRoom(parseRoom(data));
+  };
+
   /** Remove self from room (host: closes room; non-host: removes player). Always clears local state. */
   const leaveRoomClean = async () => {
     if (user && activeRoom) {
@@ -250,5 +256,5 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     return () => window.removeEventListener('beforeunload', handler);
   }, [activeRoom?.id, user?.id]);
 
-  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound };
+  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound, fetchAndSetRoom };
 }

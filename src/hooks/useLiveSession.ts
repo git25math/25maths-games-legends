@@ -146,8 +146,17 @@ export function useLiveSession(activeRoom: Room | null, user: User | null) {
     return { weakKps, studentMap, totalQuestions: questionIndex, totalResponses: responses.length };
   }, [isLive, responses, questionIndex]);
 
+  /** Student joins a live room (validates class membership server-side) */
+  const joinLiveRoom = async (roomId: string): Promise<string> => {
+    const { data, error } = await supabase.rpc('join_live_room', { p_room_id: roomId });
+    if (error) { handleSupabaseError(error, 'rpc', 'join_live_room'); return error.message; }
+    if (data?.error) return data.error;
+    return '';
+  };
+
   // ─── Teacher actions ───
-  const pushQuestion = async (missionId: number, kpId: string, timerSecs?: number): Promise<string> => {
+  /** Teacher pushes a question. `questionData` is the generated mission.data so all students see the same numbers. */
+  const pushQuestion = async (missionId: number, kpId: string, questionData: Record<string, unknown>, timerSecs?: number): Promise<string> => {
     if (!activeRoom) return 'no_room';
     const { data, error } = await supabase.rpc('push_live_question', {
       p_room_id: activeRoom.id,
@@ -157,6 +166,22 @@ export function useLiveSession(activeRoom: Room | null, user: User | null) {
     });
     if (error) { handleSupabaseError(error, 'rpc', 'push_live_question'); return error.message; }
     if (data?.error) return data.error;
+
+    // Store generated question data in live_meta so all students use the same numbers
+    await supabase.from('gl_rooms').update({
+      live_meta: {
+        ...activeRoom.liveMeta,
+        question_index: (activeRoom.liveMeta?.question_index ?? 0) + 1,
+        current_question: {
+          mission_id: missionId,
+          kp_id: kpId,
+          pushed_at: Date.now(),
+          generated_data: questionData,
+        },
+        timer_secs: timerSecs ?? null,
+      },
+    }).eq('id', activeRoom.id);
+
     return '';
   };
 
@@ -197,6 +222,7 @@ export function useLiveSession(activeRoom: Room | null, user: User | null) {
     currentQuestion,
     questionIndex,
     isTeacherHost,
+    joinLiveRoom,
     pushQuestion,
     endSession,
     submitResponse,

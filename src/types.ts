@@ -174,6 +174,7 @@ export type LiveQuestion = {
   mission_id: number;
   kp_id: string;
   pushed_at: number;
+  generated_data?: Record<string, unknown>;
 };
 
 export type LiveMeta = {
