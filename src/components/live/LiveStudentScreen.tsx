@@ -19,6 +19,7 @@ import { getMistakes, recordErrors } from '../../utils/errorMemory';
 import type { ErrorType } from '../../utils/diagnoseError';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import { loadMissionById } from '../../hooks/useMissions';
+import { renderDiagram } from '../../utils/renderDiagram';
 
 type Props = {
   lang: Language;
@@ -226,6 +227,16 @@ export function LiveStudentScreen({ lang, room, userId, questionIndex, completed
                 </p>
               )}
             </div>
+
+            {/* SVG Diagram (coordinates, triangles, graphs, etc.) */}
+            {(() => {
+              const diagram = renderDiagram(effectiveMission, 'amber', 999);
+              return diagram ? (
+                <div className="bg-white rounded-2xl p-4 border border-white/10">
+                  {diagram}
+                </div>
+              ) : null;
+            })()}
 
             {/* Input or Result */}
             {!submitted ? (
