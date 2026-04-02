@@ -2,12 +2,12 @@ import { memo } from 'react';
 import { motion } from 'motion/react';
 
 const AVATAR_IMAGES: Record<string, string> = {
-  caocao: './avatars/caocao.png',
-  liubei: './avatars/liubei.png',
-  guanyu: './avatars/guanyu.png',
-  zhugeliang: './avatars/zhugeliang.png',
-  sunquan: './avatars/sunquan.png',
-  diaochan: './avatars/diaochan.png',
+  caocao: './avatars/caocao.webp',
+  liubei: './avatars/liubei.webp',
+  guanyu: './avatars/guanyu.webp',
+  zhugeliang: './avatars/zhugeliang.webp',
+  sunquan: './avatars/sunquan.webp',
+  diaochan: './avatars/diaochan.webp',
 };
 
 export const CharacterAvatar = memo(function CharacterAvatar({
