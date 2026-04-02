@@ -32,6 +32,7 @@ import type { StudentRow, UnitEntry } from '../components/dashboard/types';
 type Props = {
   lang: Language;
   onClose: () => void;
+  onStartLive?: (classTag: string, grade: number) => void;
 };
 
 // Group missions by unitId → ordered missions
@@ -87,7 +88,7 @@ function TagBadge({ tag, onRemove }: { key?: string | number; tag: string; onRem
   );
 }
 
-export function DashboardScreen({ lang, onClose }: Props) {
+export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
   const [grade, setGrade] = useState(7);
   const [filterTag, setFilterTag] = useState('');
   const [students, setStudents] = useState<StudentRow[]>([]);
@@ -525,6 +526,16 @@ export function DashboardScreen({ lang, onClose }: Props) {
           >
             <RefreshCw size={14} className={isDashboardLoading ? 'animate-spin' : ''} />
           </button>
+          {onStartLive && filterTag && (
+            <button
+              onClick={() => onStartLive(filterTag, grade)}
+              className="flex items-center gap-1 bg-rose-50 border border-rose-200 rounded-lg px-3 py-1.5 text-xs font-bold text-rose-700 hover:bg-rose-100 transition-colors shadow-sm"
+              title={lang === 'en' ? 'Start Live Classroom' : '开始实时课堂'}
+            >
+              <span className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
+              {lang === 'en' ? 'Live' : '课堂'}
+            </button>
+          )}
           <button
             onClick={() => setShowWeeklyReport(true)}
             disabled={students.length === 0}

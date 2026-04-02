@@ -13,6 +13,8 @@ import { useProfile } from './hooks/useProfile';
 import { useMissions } from './hooks/useMissions';
 import { useMultiplayer, PK_COUNTDOWN_SECS, getFirstFinishTime, getFirstOpponentFinishTime } from './hooks/useMultiplayer';
 import { useNotifications } from './hooks/useNotifications';
+import { useLiveSession } from './hooks/useLiveSession';
+import { LiveSessionBanner } from './components/LiveSessionBanner';
 
 // generateMission is loaded lazily via dynamic import() to keep it out of the
 // critical path (352 KB generators chunk deferred until first use).
@@ -65,6 +67,8 @@ const PKSetupPanel = lazy(() => import('./components/PKSetupPanel').then(module 
 const PKResultPanel = lazy(() => import('./components/PKResultPanel').then(module => ({ default: module.PKResultPanel })));
 const ExpeditionScreen = lazy(() => import('./screens/ExpeditionScreen').then(module => ({ default: module.ExpeditionScreen })));
 const NotificationModal = lazy(() => import('./components/NotificationModal').then(module => ({ default: module.NotificationModal })));
+const LiveTeacherPanel = lazy(() => import('./components/live/LiveTeacherPanel').then(module => ({ default: module.LiveTeacherPanel })));
+const LiveStudentScreen = lazy(() => import('./components/live/LiveStudentScreen').then(module => ({ default: module.LiveStudentScreen })));
 
 // Clean up stale practice localStorage keys on startup
 cleanStalePracticeKeys();
@@ -157,7 +161,7 @@ function loadPersistedState(): PersistedState {
 function saveAppState(gameState: GameState, charId: string | null, isGuest: boolean, missionId?: number | null) {
   try {
     // Battle/onboarding/expedition can't be restored → save as map
-    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'modeSelect' || gameState === 'expedition' || gameState === 'leaderboard' || gameState === 'achievements' || gameState === 'pk_setup' || gameState === 'tech_tree' || gameState === 'repair') ? 'map' : gameState;
+    const safeState = (gameState === 'battle' || gameState === 'onboarding' || gameState === 'modeSelect' || gameState === 'expedition' || gameState === 'leaderboard' || gameState === 'achievements' || gameState === 'pk_setup' || gameState === 'tech_tree' || gameState === 'repair' || gameState === 'live_teacher' || gameState === 'live_student') ? 'map' : gameState;
     const safeMission = safeState === 'practice' ? missionId : null;
     localStorage.setItem(LS_STATE_KEY, JSON.stringify({ gameState: safeState, charId, isGuest, missionId: safeMission }));
   } catch { /* ignore */ }
@@ -250,6 +254,7 @@ export default function App() {
   const { missions, loading: missionsLoading, offline } = useMissions(profile?.grade);
   const missionSummaries = useMemo(() => toMissionSummaries(missions), [missions]);
   const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
+  const liveSession = useLiveSession(activeRoom, user);
   const { notifications: sysNotifications, markAsRead: markNotifRead, markAllAsRead: markAllNotifsRead } = useNotifications(user);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
   const hasRestoredMissionRef = useRef(false);
@@ -428,6 +433,16 @@ export default function App() {
       }
     }
   }, [activeRoom?.missionId, activeRoom?.status, activeMission, gameState, missions, missionsLoading]);
+
+  // Auto-detect live room: students enter live_student mode when they join a live room
+  useEffect(() => {
+    if (!activeRoom || activeRoom.type !== 'live' || !user) return;
+    if (user.id === activeRoom.hostId) {
+      if (gameState !== 'live_teacher') setGameState('live_teacher');
+    } else {
+      if (gameState !== 'live_student') setGameState('live_student');
+    }
+  }, [activeRoom?.type, activeRoom?.id, user?.id]);
 
   // If not logged in and stuck on a screen that requires auth, redirect to welcome
   useEffect(() => {
@@ -1160,6 +1175,20 @@ export default function App() {
                 </div>
               )}
 
+              {/* Live Session Banner — shown when teacher starts a session */}
+              {gameState === 'map' && sysNotifications.some(n => n.type === 'live_session') && (
+                <LiveSessionBanner
+                  notifications={sysNotifications}
+                  onJoin={async (roomId) => {
+                    const err = await joinRoom(roomId);
+                    if (err) alert(err);
+                    // auto-detect effect will switch to live_student
+                  }}
+                  onDismiss={markNotifRead}
+                  lang={lang}
+                />
+              )}
+
               {!isMissionShellLoading && gameState === 'map' && profile && profile.grade && (
                 <MapScreen
                   lang={lang}
@@ -1519,7 +1548,55 @@ export default function App() {
                 <DashboardScreen
                   lang={lang}
                   onClose={() => setGameState(isLoggedIn ? 'map' : 'welcome')}
+                  onStartLive={async (classTag: string, grade: number) => {
+                    const { data, error } = await supabase.rpc('create_live_room', { p_class_tag: classTag, p_grade: grade });
+                    if (error || data?.error) { alert(error?.message || data?.error); return; }
+                    // Room will be picked up by useMultiplayer rejoin via sessionStorage
+                    // and auto-detect effect will set gameState to live_teacher
+                    const roomId = data?.room_id;
+                    if (roomId) {
+                      const { data: room } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
+                      if (room) {
+                        // Manually set the room since useMultiplayer's rejoin is async
+                        // This triggers the auto-detect effect above
+                      }
+                    }
+                    setGameState('live_teacher');
+                  }}
                 />
+              )}
+
+              {/* Live Classroom screens */}
+              {gameState === 'live_teacher' && activeRoom?.type === 'live' && user && (
+                <Suspense fallback={<ScreenLoader lang={lang} label={lang === 'en' ? 'Loading classroom' : '加载课堂'} />}>
+                  <LiveTeacherPanel
+                    lang={lang}
+                    room={activeRoom}
+                    userId={user.id}
+                    missions={missions}
+                    grade={profile?.grade ?? 7}
+                    questionStats={liveSession.questionStats}
+                    sessionSummary={liveSession.sessionSummary}
+                    questionIndex={liveSession.questionIndex}
+                    onPushQuestion={liveSession.pushQuestion}
+                    onEndSession={liveSession.endSession}
+                    onClose={async () => { await leaveRoomClean(); setGameState('dashboard'); }}
+                  />
+                </Suspense>
+              )}
+
+              {gameState === 'live_student' && activeRoom?.type === 'live' && user && (
+                <Suspense fallback={<ScreenLoader lang={lang} label={lang === 'en' ? 'Joining classroom' : '加入课堂'} />}>
+                  <LiveStudentScreen
+                    lang={lang}
+                    room={activeRoom}
+                    userId={user.id}
+                    mission={liveSession.currentQuestion ? missions.find(m => m.id === liveSession.currentQuestion!.mission_id) ?? null : null}
+                    questionIndex={liveSession.questionIndex}
+                    onSubmitResponse={liveSession.submitResponse}
+                    onClose={async () => { await leaveRoomClean(); setGameState('map'); }}
+                  />
+                </Suspense>
               )}
 
               {gameState === 'leaderboard' && profile && profile.grade && (
