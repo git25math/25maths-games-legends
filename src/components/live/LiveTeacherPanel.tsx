@@ -124,6 +124,26 @@ export function LiveTeacherPanel({
           </div>
         </div>
 
+        {/* ─── PIN Display (prominent when no students yet) ─── */}
+        {studentCount === 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-gradient-to-r from-indigo-600/20 to-rose-600/20 rounded-2xl p-6 border border-indigo-400/20 text-center"
+          >
+            <p className="text-white/60 text-sm font-bold mb-2">{en ? 'Share this PIN with your students' : '把 PIN 码分享给学生'}</p>
+            <button onClick={copyCode} className="inline-flex items-center gap-3 px-8 py-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors">
+              <span className="text-5xl font-black text-white tracking-[0.3em]">{roomCode}</span>
+              {copied ? <Check size={24} className="text-emerald-400" /> : <Copy size={24} className="text-white/40" />}
+            </button>
+            <p className="text-white/30 text-xs mt-3">
+              {copied
+                ? (en ? 'Copied! Share with students' : '已复制！分享给学生')
+                : (en ? 'Students join at play.25maths.com?live' : '学生打开 play.25maths.com?live 输入此 PIN')}
+            </p>
+          </motion.div>
+        )}
+
         {/* ─── Student Count + Progress ─── */}
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-white/5 rounded-2xl p-4 border border-white/10 text-center">

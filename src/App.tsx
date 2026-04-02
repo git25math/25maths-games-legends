@@ -1563,11 +1563,15 @@ export default function App() {
                   onClose={() => setGameState(isLoggedIn ? 'map' : 'welcome')}
                   onStartLive={async (classTag: string, grade: number) => {
                     const { data, error } = await supabase.rpc('create_live_room', { p_class_tag: classTag, p_grade: grade });
-                    if (error || data?.error) { alert(error?.message || data?.error); return; }
+                    if (error || data?.error) {
+                      alert(lang === 'en'
+                        ? `Failed to create session: ${error?.message || data?.error}`
+                        : `创建失败: ${error?.message || data?.error}`);
+                      return;
+                    }
                     const roomId = data?.room_id;
                     if (roomId) {
                       await fetchAndSetRoom(roomId);
-                      // auto-detect effect will set gameState to live_teacher
                     }
                   }}
                 />

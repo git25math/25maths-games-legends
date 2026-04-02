@@ -528,12 +528,16 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
           </button>
           {onStartLive && filterTag && (
             <button
-              onClick={() => onStartLive(filterTag, grade)}
-              className="flex items-center gap-1 bg-rose-50 border border-rose-200 rounded-lg px-3 py-1.5 text-xs font-bold text-rose-700 hover:bg-rose-100 transition-colors shadow-sm"
-              title={lang === 'en' ? 'Start Live Classroom' : '开始实时课堂'}
+              onClick={() => {
+                const msg = lang === 'en'
+                  ? `Start a live session for class "${filterTag}"?\n\nAll students in this class will be notified. You\'ll get a PIN code to share.`
+                  : `为 "${filterTag}" 班开始实时课堂？\n\n该班所有学生将收到通知，你会获得一个 PIN 码分享给学生。`;
+                if (confirm(msg)) onStartLive(filterTag, grade);
+              }}
+              className="flex items-center gap-2 bg-gradient-to-r from-rose-500 to-indigo-500 rounded-lg px-4 py-2 text-sm font-black text-white hover:opacity-90 transition-opacity shadow-md"
             >
-              <span className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
-              {lang === 'en' ? 'Live' : '课堂'}
+              <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+              {lang === 'en' ? 'Start Live' : '开始课堂'}
             </button>
           )}
           <button
