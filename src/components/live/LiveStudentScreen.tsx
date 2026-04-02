@@ -55,6 +55,13 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
   const questionStartRef = useRef<number>(0);
   const lastQuestionIndexRef = useRef<number>(-1);
 
+  // Auto-close after session ends (give 10s to see final ranking)
+  useEffect(() => {
+    if (!isSessionEnded) return;
+    const timer = setTimeout(() => onClose(), 10000);
+    return () => clearTimeout(timer);
+  }, [isSessionEnded]);
+
   // Reset state when new question arrives
   useEffect(() => {
     if (questionIndex !== lastQuestionIndexRef.current && questionIndex > 0) {
@@ -200,10 +207,24 @@ export function LiveStudentScreen({ lang, room, userId, mission, questionIndex, 
                   <MultipleChoice
                     choices={effectiveMission.data.choices}
                     onSelect={(value) => {
-                      setInputs({ ans: value });
+                      const mcInputs = { ans: value };
+                      setInputs(mcInputs);
                       setMcSelected(effectiveMission.data.choices.findIndex((c: any) => c.value === value));
-                      // Auto-submit on MC selection
-                      setTimeout(() => handleSubmitRef.current(), 100);
+                      // Auto-submit MC: use direct check instead of handleSubmit to avoid stale closure
+                      if (!submitted && !submitting && effectiveMission && currentQ) {
+                        setSubmitting(true);
+                        const durationMs = Date.now() - questionStartRef.current;
+                        const cr = checkAnswer(effectiveMission, mcInputs);
+                        let et: string | undefined;
+                        if (!cr.correct) { et = diagnoseError(mcInputs, cr.expected, cr.partial).type; }
+                        setResult({ correct: cr.correct, expected: cr.expected });
+                        setSubmitted(true);
+                        if (!cr.correct && effectiveMission.id && et) {
+                          const m = getMistakes(completedMissions);
+                          onUpdateMistakes({ ...completedMissions, _mistakes: recordErrors(m, effectiveMission.id, [et as ErrorType]) });
+                        }
+                        onSubmitResponse(mcInputs, cr.correct, et, durationMs).then(() => setSubmitting(false));
+                      }
                     }}
                     disabled={submitting}
                     lang={lang}
