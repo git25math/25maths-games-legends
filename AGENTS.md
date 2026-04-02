@@ -2,7 +2,7 @@
 
 > **重要**: 完整开发规范见 `docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）。
 > 本文件是 Codex / OpenAI Agents / 任何外部 AI 专用的启动协议 + 深度交接文档。
-> **最后更新**: v10.7.0 (2026-04-02)
+> **最后更新**: v10.8.0 (2026-04-02)
 
 ---
 
@@ -25,7 +25,7 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 | **根目录** | `/Users/zhuxingzhe/Project/ExamBoard/25maths-games-legends` |
 | **部署** | push main → GitHub Actions → https://play.25maths.com |
 | **仓库** | `git25math/25maths-games-legends` |
-| **当前版本** | v10.7.0 (2026-04-02) |
+| **当前版本** | v10.8.0 (2026-04-02) |
 | **技术栈** | React 19 + TypeScript + Vite + KaTeX + Supabase |
 | **测试框架** | Vitest (2422 tests, `npm test -- --run`) |
 | **部署验证** | `gh run list --repo git25math/25maths-games-legends --limit 1` |
@@ -84,6 +84,16 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 - 地图首屏不再同步打包这些非首屏弹层，打开对应面板时再加载 chunk
 - 构建 `MapScreen` chunk `114.45 kB → 68.20 kB`，主入口维持 `361.89 kB`
 - 测试: `2420 passed`, build 零错误
+
+#### v10.8.0 — 静态资源瘦身 22MB + UX/可访问性全面修复 (2026-04-02)
+- **资源压缩**: 世界地图/章节图/头像全部 PNG→WebP（public/ 从 25MB→2.7MB，-89%）
+- **删除冗余**: 2 个未使用 BGM (9.9MB) + PNG 原始文件 (11.4MB)
+- **DB 索引**: `gl_battle_results(created_at)` + 部分索引 `(success,created_at)` + `gl_user_progress(total_score DESC)`
+- **SEO**: meta description + theme-color + Supabase preconnect/dns-prefetch
+- **UX 修复**: auth 表单加载态/验证、InputFields 防自动大写、MultipleChoice 禁用态、SkillBadge 公式溢出
+- **可访问性**: BottomNav tablist/tab/aria-selected、NotificationModal dialog 角色、CharacterCard 键盘可操作、GradeSelect aria-label、LeaderboardPanel close aria-label
+- **类型安全**: `getTranslations()` 消除 35 处 `(t as any)`，y8.ts `as any` 清理
+- 测试: `2422 passed`, lint 零错误, TODO 零
 
 #### v10.7.0 — RLS 安全修复 + 139 discoverSteps + SkillBadge LaTeX (2026-04-02)
 - **排行榜 RLS 修复**: 创建 4 个 SECURITY DEFINER RPCs（get_grade/class/school/weekly_leaderboard），排行榜从"空白"恢复正常

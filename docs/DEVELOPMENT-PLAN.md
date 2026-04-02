@@ -2,7 +2,7 @@
 
 > **项目地址**：https://play.25maths.com
 > **仓库**：git25math/25maths-games-legends
-> **版本**：v10.7.0 | 最后更新：2026-04-02
+> **版本**：v10.8.0 | 最后更新：2026-04-02
 > **开发规范**：`docs/CONTRIBUTING.md`（适用于任何 AI/人类开发者）
 > **Bug 防范**：`docs/BUG-POSTMORTEM.md`（15 条规则 + 根因分析）
 > **优化全记录**：`docs/OPTIMIZATION-HISTORY.md`（v0.1→v7.5 全量分析）
