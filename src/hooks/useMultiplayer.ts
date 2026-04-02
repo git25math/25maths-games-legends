@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase, SUPABASE_URL, SUPABASE_KEY } from '../supabase';
 import type { Room, RoomPlayer, UserProfile } from '../types';
 import type { User } from '@supabase/supabase-js';
@@ -232,14 +232,22 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     };
   }, [activeRoom?.id]);
 
+  // ─── Cache auth token for synchronous access in beforeunload ───
+  const tokenRef = useRef<string | null>(null);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => { tokenRef.current = data.session?.access_token ?? null; });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      tokenRef.current = session?.access_token ?? null;
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   // ─── Cleanup on tab close / navigation ───
   useEffect(() => {
     if (!activeRoom || !user) return;
     const roomId = activeRoom.id;
     const handler = () => {
-      // Use fetch with keepalive to fire-and-forget during unload
-      const token = (supabase as any).auth?.session?.()?.access_token
-        ?? sessionStorage.getItem('supabase.auth.token');
+      const token = tokenRef.current;
       if (!token) return;
       fetch(`${SUPABASE_URL}/rest/v1/rpc/leave_room`, {
         method: 'POST',
