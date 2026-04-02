@@ -131,11 +131,11 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
             <div className="text-[10px] font-bold uppercase tracking-wide mb-2" style={{ color: '#b8860b' }}>
               {t.summary}
             </div>
-            <div className="text-white/80 text-sm leading-relaxed mb-3">
+            <div className="text-white/80 text-sm leading-relaxed mb-3 overflow-x-auto">
               <LatexText text={lt(skillSummary, lang)} className="text-white/80" />
             </div>
             {formula && (
-              <div className="flex justify-center">
+              <div className="flex justify-center overflow-x-auto">
                 <LatexText text={formula} className="text-base text-yellow-300" />
               </div>
             )}

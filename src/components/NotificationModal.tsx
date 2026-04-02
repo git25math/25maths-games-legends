@@ -49,6 +49,9 @@ export function NotificationModal({ lang, notifications, onDismiss, onDismissAll
       >
         <motion.div
           key="notif-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label={lang === 'en' ? 'Notifications' : '通知'}
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -88,7 +91,7 @@ export function NotificationModal({ lang, notifications, onDismiss, onDismissAll
               >
                 <button
                   onClick={() => onDismiss(n.id)}
-                  className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white shadow flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
                   aria-label={t.close}
                 >
                   <X size={14} className="text-slate-400" />

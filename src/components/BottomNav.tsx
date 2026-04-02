@@ -23,16 +23,20 @@ type Props = {
 
 export function BottomNav({ activeTab, onTabChange, lang, badge = {} }: Props) {
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-slate-900/95 backdrop-blur-md border-t border-white/10 safe-area-pb">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-slate-900/95 backdrop-blur-md border-t border-white/10 safe-area-pb" role="tablist" aria-label="Navigation">
       <div className="flex items-center justify-around h-14">
         {TABS.map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           const count = badge[tab.id];
+          const label = lang === 'en' ? tab.en : tab.zh;
 
           return (
             <button
               key={tab.id}
+              role="tab"
+              aria-selected={isActive}
+              aria-label={count ? `${label} (${count})` : label}
               onClick={() => onTabChange(tab.id)}
               className={`flex flex-col items-center justify-center gap-0.5 w-full h-full relative transition-colors ${
                 isActive ? 'text-gold-light' : 'text-white/40'

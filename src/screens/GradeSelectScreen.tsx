@@ -26,6 +26,8 @@ export const GradeSelectScreen = ({
           <motion.button
             key={g}
             {...buttonBase}
+            aria-label={`Year ${g}`}
+            aria-pressed={selectedGrade === g}
             onClick={() => setSelectedGrade(g)}
             animate={selectedGrade === g ? { scale: 1.05, borderColor: '#818cf8' } : { scale: 1, borderColor: 'rgba(255,255,255,0.1)' }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}

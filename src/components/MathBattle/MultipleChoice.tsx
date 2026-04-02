@@ -38,8 +38,8 @@ export function MultipleChoice({ choices, onSelect, disabled, lang, result, sele
         const showWrong = result === 'wrong' && isSelected && !isCorrectChoice;
         const showSuccess = result === 'correct' && isSelected;
 
-        let borderColor = 'border-slate-200 hover:border-indigo-400';
-        let bgColor = 'bg-white hover:bg-indigo-50/50';
+        let borderColor = disabled ? 'border-slate-200' : 'border-slate-200 hover:border-indigo-400';
+        let bgColor = disabled ? 'bg-white' : 'bg-white hover:bg-indigo-50/50';
         let textColor = 'text-slate-800';
         let letterBg = 'bg-slate-100 text-slate-500';
 
