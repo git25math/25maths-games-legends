@@ -108,13 +108,18 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
       const { data: teacher } = await supabase
         .from('teachers').select('id').eq('user_id', user.id).maybeSingle();
       if (!teacher) return;
-      // Find classes directly assigned to this teacher
-      const { data: classes } = await supabase
-        .from('kw_classes').select('name').eq('teacher_id', teacher.id);
-      if (classes && classes.length > 0) {
-        setTeacherClasses(classes.map(c => c.name));
+      // Find classes via RPC (handles super admin + teacher correctly)
+      const { data: allClasses } = await supabase.rpc('get_my_classes');
+      if (allClasses && allClasses.length > 0) {
+        // Filter to classes assigned to this teacher, or show all for admin
+        const myClasses = allClasses.filter((c: { teacher_id: string }) => c.teacher_id === teacher.id);
+        if (myClasses.length > 0) {
+          setTeacherClasses(myClasses.map((c: { name: string }) => c.name));
+        } else {
+          // Admin or super admin → see all classes
+          setTeacherClasses(null);
+        }
       } else {
-        // No direct class assignments → admin, see everything
         setTeacherClasses(null);
       }
       // Find teaching groups this teacher owns or supervises
