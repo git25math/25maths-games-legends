@@ -249,7 +249,7 @@ export default function App() {
   } = useProfile(user, isGuest);
   const { missions, loading: missionsLoading, offline } = useMissions(profile?.grade);
   const missionSummaries = useMemo(() => toMissionSummaries(missions), [missions]);
-  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
+  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound } = useMultiplayer(user, profile);
   const { notifications: sysNotifications, markAsRead: markNotifRead, markAllAsRead: markAllNotifsRead } = useNotifications(user);
   const initialMissionIdRef = useRef<number | null>(persisted.missionId ?? null);
   const hasRestoredMissionRef = useRef(false);
@@ -272,6 +272,7 @@ export default function App() {
   if (profile) latestScoreRef.current = profile.total_score;
   // Snapshot players from finished round (before reset clears scores to 0)
   const lastRoundPlayersRef = useRef<Record<string, any> | null>(null);
+  const pkXpAwardedRef = useRef(false);
   useEffect(() => {
     if (activeRoom?.status === 'finished' && activeRoom.type === 'pk') {
       lastRoundPlayersRef.current = { ...activeRoom.players };
@@ -381,22 +382,27 @@ export default function App() {
     }
   }, [activeRoom?.status]);
 
+  /** Award PK bonus XP exactly once per round (guard via pkXpAwardedRef) */
+  const awardPkXp = () => {
+    if (pkXpAwardedRef.current || !profile || !user || !activeRoom) return;
+    const snap = lastRoundPlayersRef.current ?? activeRoom.players;
+    const ranked = Object.entries(snap).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
+    const myRank = ranked.findIndex(([uid]) => uid === user.id);
+    const myScore = (snap[user.id] as any)?.score ?? 0;
+    if (myScore <= 0) { pkXpAwardedRef.current = true; return; }
+    const multiplier = getRankMultiplier(myRank);
+    const bonusXP = Math.round(myScore * (multiplier - 1));
+    pkXpAwardedRef.current = true;
+    if (bonusXP > 0) {
+      latestScoreRef.current += bonusXP;
+      addScore(bonusXP);
+    }
+  };
+
   // PK: When room resets to 'waiting' (host picked next round), settle XP + navigate to lobby
   useEffect(() => {
     if (activeRoom?.status === 'waiting' && showPKResult && user && activeRoom.type === 'pk') {
-      // Non-host: settle XP using snapshotted players (current players have score=0 after reset)
-      if (activeRoom.hostId !== user.id && profile && lastRoundPlayersRef.current) {
-        const snap = lastRoundPlayersRef.current;
-        const ranked = Object.entries(snap).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
-        const myRank = ranked.findIndex(([uid]) => uid === user.id);
-        const myScore = (snap[user.id] as any)?.score ?? 0;
-        const multiplier = getRankMultiplier(myRank);
-        const bonusXP = Math.round(myScore * (multiplier - 1));
-        if (bonusXP > 0) {
-          latestScoreRef.current += bonusXP;
-          addScore(bonusXP);
-        }
-      }
+      awardPkXp();
       lastRoundPlayersRef.current = null;
       setShowPKResult(false);
       pkAutoCompleteRef.current = false;
@@ -411,6 +417,7 @@ export default function App() {
     if (gameState !== 'lobby' || activeRoom?.status !== 'playing') return;
     if (activeMission) return; // already set
     if (missionsLoading || missions.length === 0) return; // wait for missions to load
+    pkXpAwardedRef.current = false; // Reset XP guard for new round
     const m = missions.find(mi => mi.id === activeRoom.missionId);
     if (m) {
       if (m.data?.generatorType) {
@@ -1234,14 +1241,13 @@ export default function App() {
                   userId={user.id}
                   onReady={toggleReady}
                   onStart={async () => {
-                    await startGame();
-                    // Set activeMission from room's missionId so MathBattle can render
-                    const m = missions.find(mi => mi.id === activeRoom.missionId);
-                    if (m) {
-                      const gen = await lazyGenerate();
-                      setActiveMission(m.data?.generatorType ? gen(m) : m);
+                    const err = await startGame();
+                    if (err) {
+                      // RPC validation failed — stay in lobby
+                      alert(lang === 'en' ? `Cannot start: ${err}` : `无法开始: ${err}`);
                     }
-                    setGameState('battle');
+                    // Don't manually set gameState — Effect #6 will detect status='playing'
+                    // via realtime and transition ALL players (host + guests) simultaneously
                   }}
                   onLeave={async () => { await leaveRoomClean(); setGameState('map'); }}
                 />
@@ -1649,7 +1655,7 @@ export default function App() {
                       alert(msg);
                     }
                   }}
-                  onClose={() => { leaveRoom(); setGameState('map'); }}
+                  onClose={async () => { await leaveRoomClean(); setGameState('map'); }}
                 />
               )}
               </Suspense>
@@ -1836,19 +1842,7 @@ export default function App() {
                 currentUserId={user.id}
                 grade={profile?.grade ?? 7}
                 onNextRound={async (missionId: number) => {
-                  // Apply XP bonus first, then start next round
-                  if (profile) {
-                    const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
-                    const myRank = ranked.findIndex(([uid]) => uid === user.id);
-                    const myScore = activeRoom.players[user.id]?.score ?? 0;
-                    const multiplier = getRankMultiplier(myRank);
-                    const bonusXP = Math.round(myScore * (multiplier - 1));
-                    if (bonusXP > 0) {
-                      latestScoreRef.current += bonusXP;
-                      await addScore(bonusXP);
-                    }
-                  }
-                  // Start next round first — only close panel + transition if successful
+                  awardPkXp();
                   const ok = await startNextRound(missionId);
                   if (ok) {
                     setShowPKResult(false);
@@ -1857,18 +1851,7 @@ export default function App() {
                   }
                 }}
                 onClose={async () => {
-                  // Apply PK rank XP bonus
-                  if (profile) {
-                    const ranked = Object.entries(activeRoom.players).sort(([, a]: [string, any], [, b]: [string, any]) => b.score - a.score);
-                    const myRank = ranked.findIndex(([uid]) => uid === user.id);
-                    const myScore = activeRoom.players[user.id]?.score ?? 0;
-                    const multiplier = getRankMultiplier(myRank);
-                    const bonusXP = Math.round(myScore * (multiplier - 1));
-                    if (bonusXP > 0) {
-                      latestScoreRef.current += bonusXP;
-                      await addScore(bonusXP);
-                    }
-                  }
+                  awardPkXp();
                   setShowPKResult(false);
                   pkAutoCompleteRef.current = false;
                   await leaveRoomClean();

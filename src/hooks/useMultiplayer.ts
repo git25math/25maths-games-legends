@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../supabase';
+import { supabase, SUPABASE_URL, SUPABASE_KEY } from '../supabase';
 import type { Room, RoomPlayer, UserProfile } from '../types';
 import type { User } from '@supabase/supabase-js';
 import { handleSupabaseError } from '../utils/errors';
@@ -16,8 +16,7 @@ export function getFirstFinishTime(room: Room | null): number | null {
   return times.length > 0 ? Math.min(...times) : null;
 }
 
-/** Get the earliest finishedAt among OTHER players (excludes currentUserId).
- *  Returns null if no opponent has finished yet. */
+/** Get the earliest finishedAt among OTHER players (excludes currentUserId). */
 export function getFirstOpponentFinishTime(room: Room | null, currentUserId: string | undefined): number | null {
   if (!room || !currentUserId) return null;
   const times = Object.entries(room.players)
@@ -38,6 +37,29 @@ function parseRoom(d: any): Room {
 
 export function useMultiplayer(user: User | null, profile: UserProfile | null) {
   const [activeRoom, setActiveRoom] = useState<Room | null>(null);
+
+  // ─── Persist roomId for rejoin on refresh ───
+  useEffect(() => {
+    if (activeRoom) {
+      sessionStorage.setItem('gl_pk_room', activeRoom.id);
+    } else {
+      sessionStorage.removeItem('gl_pk_room');
+    }
+  }, [activeRoom?.id]);
+
+  // ─── Attempt rejoin on mount ───
+  useEffect(() => {
+    if (!user || activeRoom) return;
+    const savedId = sessionStorage.getItem('gl_pk_room');
+    if (!savedId) return;
+    supabase.from('gl_rooms').select('*').eq('id', savedId).single().then(({ data }) => {
+      if (data && data.status !== 'finished' && data.players?.[user.id]) {
+        setActiveRoom(parseRoom(data));
+      } else {
+        sessionStorage.removeItem('gl_pk_room');
+      }
+    });
+  }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /** Create a room. Returns true on success. */
   const createRoom = async (type: 'team' | 'pk', missionId: number): Promise<boolean> => {
@@ -62,7 +84,7 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     return true;
   };
 
-  /** Join a room by full UUID or short code prefix. Returns error message or empty string on success. */
+  /** Join a room by full UUID or short code prefix. Returns error message or empty string. */
   const joinRoom = async (roomId: string): Promise<string> => {
     if (!user || !profile) return 'not_logged_in';
 
@@ -83,7 +105,6 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
       actualId = match.id;
     }
 
-    // Use RPC to bypass host-only RLS on gl_rooms update
     const { data: result, error: rpcErr } = await supabase.rpc('join_room', {
       p_room_id: actualId,
       p_player_name: profile.display_name,
@@ -92,7 +113,6 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     if (rpcErr) return `rpc_error: ${rpcErr.message}`;
     if (result?.error) return result.error;
 
-    // Fetch full room to set local state
     const { data: room } = await supabase.from('gl_rooms').select('*').eq('id', actualId).single();
     if (room) setActiveRoom(parseRoom(room));
     return '';
@@ -100,26 +120,27 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
 
   const toggleReady = async () => {
     if (!user || !activeRoom) return;
-    // Use RPC to bypass host-only RLS
     const { error } = await supabase.rpc('toggle_ready', { p_room_id: activeRoom.id });
     if (error) handleSupabaseError(error, 'update', 'gl_rooms');
-    // Optimistic update
+    // Optimistic update for immediate UI feedback
     const players = { ...activeRoom.players };
     players[user.id] = { ...players[user.id], isReady: !players[user.id].isReady };
     setActiveRoom({ ...activeRoom, players });
   };
 
-  const startGame = async () => {
-    if (!activeRoom) return;
-    const { error } = await supabase.from('gl_rooms').update({ status: 'playing' }).eq('id', activeRoom.id);
-    if (error) handleSupabaseError(error, 'update', 'gl_rooms');
-    setActiveRoom({ ...activeRoom, status: 'playing' });
+  /** Host starts the game. Returns error string or empty on success. */
+  const startGame = async (): Promise<string> => {
+    if (!activeRoom) return 'no_room';
+    const { data, error } = await supabase.rpc('start_game', { p_room_id: activeRoom.id });
+    if (error) { handleSupabaseError(error, 'update', 'gl_rooms'); return error.message; }
+    if (data?.error) return data.error;
+    // No optimistic update — realtime will propagate status='playing' to ALL players simultaneously
+    return '';
   };
 
   /** Submit score + mark player as finished. Auto-finishes room when all done. */
   const submitScore = async (score: number) => {
     if (!user || !activeRoom) return;
-    // Use RPC to bypass host-only RLS
     const { error } = await supabase.rpc('submit_pk_score', { p_room_id: activeRoom.id, p_score: score });
     if (error) handleSupabaseError(error, 'update', 'gl_rooms');
     // Optimistic update
@@ -134,20 +155,15 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     setActiveRoom({ ...activeRoom, ...updates, players } as Room);
   };
 
-  const leaveRoom = () => setActiveRoom(null);
-
-  /** Host starts a new round with a different mission. Resets all player states.
-   *  Removes players who have left (leaveRoom only clears local state). */
+  /** Host starts a new round with a different mission. Resets all player states. */
   const startNextRound = async (newMissionId: number): Promise<boolean> => {
     if (!user || !activeRoom || activeRoom.hostId !== user.id) return false;
 
-    // Re-fetch room from DB to get latest player list (some may have left)
     const { data: freshRoom } = await supabase.from('gl_rooms').select('*').eq('id', activeRoom.id).single();
     const currentPlayers = freshRoom ? (freshRoom.players as Record<string, RoomPlayer>) : activeRoom.players;
 
     const resetPlayers: Record<string, RoomPlayer> = {};
     for (const [uid, p] of Object.entries(currentPlayers) as [string, RoomPlayer][]) {
-      // Keep host always; keep others only if they haven't been gone too long
       resetPlayers[uid] = { name: p.name, score: 0, isReady: false, charId: p.charId };
     }
     const updates = { mission_id: newMissionId, status: 'waiting' as const, players: resetPlayers };
@@ -157,36 +173,81 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     return true;
   };
 
-  /** Remove self from room's players in DB before leaving */
+  /** Remove self from room (host: closes room; non-host: removes player). Always clears local state. */
   const leaveRoomClean = async () => {
-    if (user && activeRoom && activeRoom.hostId !== user.id) {
+    if (user && activeRoom) {
       await supabase.rpc('leave_room', { p_room_id: activeRoom.id });
     }
     setActiveRoom(null);
   };
 
-  // Sync room state: polling every 2s + realtime attempt
+  // ─── Sync room state: realtime primary, polling fallback ───
   useEffect(() => {
     if (!activeRoom) return;
     const roomId = activeRoom.id;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
 
-    const poll = setInterval(async () => {
-      const { data } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
-      if (data) setActiveRoom(parseRoom(data));
-    }, 2000);
+    const startPolling = () => {
+      if (pollTimer) return;
+      pollTimer = setInterval(async () => {
+        const { data } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
+        if (data) setActiveRoom(parseRoom(data));
+      }, 3000);
+    };
+
+    const stopPolling = () => {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    };
 
     const channel = supabase
       .channel(`room-${roomId}`)
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'gl_rooms', filter: `id=eq.${roomId}` },
+      .on('postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'gl_rooms', filter: `id=eq.${roomId}` },
         (payload) => setActiveRoom(parseRoom(payload.new))
       )
-      .subscribe();
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          stopPolling();
+          // Fetch once to catch updates missed during subscription handshake
+          supabase.from('gl_rooms').select('*').eq('id', roomId).single()
+            .then(({ data }) => { if (data) setActiveRoom(parseRoom(data)); });
+        } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+          startPolling();
+        }
+      });
+
+    // Start polling immediately as safety net until realtime connects
+    startPolling();
 
     return () => {
-      clearInterval(poll);
+      stopPolling();
       supabase.removeChannel(channel);
     };
   }, [activeRoom?.id]);
 
-  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoom, leaveRoomClean, startNextRound };
+  // ─── Cleanup on tab close / navigation ───
+  useEffect(() => {
+    if (!activeRoom || !user) return;
+    const roomId = activeRoom.id;
+    const handler = () => {
+      // Use fetch with keepalive to fire-and-forget during unload
+      const token = (supabase as any).auth?.session?.()?.access_token
+        ?? sessionStorage.getItem('supabase.auth.token');
+      if (!token) return;
+      fetch(`${SUPABASE_URL}/rest/v1/rpc/leave_room`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ p_room_id: roomId }),
+        keepalive: true,
+      }).catch(() => {});
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [activeRoom?.id, user?.id]);
+
+  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound };
 }
