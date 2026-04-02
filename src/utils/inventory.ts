@@ -95,11 +95,6 @@ export function getInventory(completedMissions: Record<string, unknown>): Invent
   return ((completedMissions as any)?._inventory ?? {}) as InventoryMap;
 }
 
-/** Get count of a specific item */
-export function getItemCount(inventory: InventoryMap, itemId: string): number {
-  return inventory[itemId] ?? 0;
-}
-
 /** Get total items in inventory */
 export function getTotalItems(inventory: InventoryMap): number {
   return Object.values(inventory).reduce((sum, count) => sum + count, 0);
@@ -115,14 +110,6 @@ export function useItem(inventory: InventoryMap, itemId: string): InventoryMap |
   const current = inventory[itemId] ?? 0;
   if (current <= 0) return null;
   return { ...inventory, [itemId]: current - 1 };
-}
-
-/** Write inventory back into completed_missions JSONB */
-export function setInventory(
-  completedMissions: Record<string, unknown>,
-  inventory: InventoryMap,
-): Record<string, unknown> {
-  return { ...completedMissions, _inventory: inventory };
 }
 
 /** Get the item definition by ID */

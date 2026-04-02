@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getRemediationTopics, getRemediationChain, getAllRemediations } from '../utils/errorRemediation';
+import { getRemediationTopics, getRemediationChain } from '../utils/errorRemediation';
 import type { ErrorType } from '../utils/diagnoseError';
 import type { MistakeRecord } from '../utils/errorMemory';
 import { CHAPTERS } from '../data/curriculum/kp-registry';
@@ -111,12 +111,4 @@ describe('errorRemediation', () => {
     });
   });
 
-  describe('getAllRemediations returns all 5 error types', () => {
-    it('returns Record with all 5 keys', () => {
-      const result = getAllRemediations('2.5');
-      expect(Object.keys(result).sort()).toEqual(ERROR_TYPES.sort());
-      // Method should have entries for 2.5
-      expect(result.method.length).toBeGreaterThan(0);
-    });
-  });
 });

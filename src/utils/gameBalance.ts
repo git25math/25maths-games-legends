@@ -23,14 +23,6 @@ export const ITEM_REWARDS = {
   SCROLL_MIN_ACCURACY: 0.8,
 } as const;
 
-/** Repair item effectiveness */
-export const REPAIR_POWER = {
-  HAMMER: 30,
-  SCROLL: 60,
-  CRYSTAL: 100,
-  /** Bonus multiplier when scroll matches dominant error pattern */
-  PATTERN_BONUS: 1.5,
-} as const;
 
 /** Tech tree unlock thresholds */
 export const TECH_TREE = {

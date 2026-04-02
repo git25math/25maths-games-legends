@@ -32,11 +32,6 @@ export function getRemainingAttempts(stamina: DailyStamina): number {
   return Math.max(0, MAX_DAILY + stamina.bonus - stamina.used);
 }
 
-/** Can the student start a battle? */
-export function canBattle(completedMissions: Record<string, unknown>): boolean {
-  return getRemainingAttempts(getStamina(completedMissions)) > 0;
-}
-
 /** Consume 1 attempt. Returns updated stamina (caller must persist to JSONB). */
 export function consumeAttempt(stamina: DailyStamina): DailyStamina {
   return { ...stamina, used: stamina.used + 1 };
@@ -45,14 +40,6 @@ export function consumeAttempt(stamina: DailyStamina): DailyStamina {
 /** Grant bonus attempt (e.g. from Master Crystal). Returns updated stamina. */
 export function grantBonusAttempt(stamina: DailyStamina): DailyStamina {
   return { ...stamina, bonus: stamina.bonus + 1 };
-}
-
-/** Write stamina back into completed_missions JSONB (pure, returns new object) */
-export function setStamina(
-  completedMissions: Record<string, unknown>,
-  stamina: DailyStamina,
-): Record<string, unknown> {
-  return { ...completedMissions, _stamina: stamina };
 }
 
 /** Seconds until midnight (for countdown display) */
