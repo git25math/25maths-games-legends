@@ -85,6 +85,17 @@ Step 5: npm test -- --run     → 2422 测试必须全通过
 - 构建 `MapScreen` chunk `114.45 kB → 68.20 kB`，主入口维持 `361.89 kB`
 - 测试: `2420 passed`, build 零错误
 
+#### v10.9.1 — 哈罗海口学生账号批量创建工具 (2026-04-03)
+- **SQL 脚本**: `scripts/create-students-2026-04-03.sql`，在 Supabase SQL Editor 中一键创建学生账号
+  - 创建 auth.users + auth.identities（密码加密，邮箱已确认）
+  - 创建 gl_user_progress（含年级、班级标签 class_tags）
+  - 自动为班级生成邀请码（teacher_classes 表，如不存在则创建）
+  - 最终验证查询确认结果
+- **TS 脚本**: `scripts/create-students.ts`，本地 `npx tsx` 可执行版本（调用 Supabase Auth signUp API）
+- **本批学生**: julia.feng (Y9/9A), ruining.jia (Y9/9B), bonnie.ma (Y8/8A)
+- **操作方式**: 因 CI 环境无外网，需在 Supabase Dashboard SQL Editor 或本地终端执行
+- 测试: 无代码变更，不影响现有测试
+
 #### v10.9.0 — Live Classroom 实时课堂 + PK 系统重构 (2026-04-02)
 - **Live Classroom**: DrFrost Live 式实时课堂——教师推题→全班同步→实时反馈→错题桥接→一键布置
 - **数据库**: gl_rooms 'live' 类型 + gl_live_responses 表 + 5 个 RPC（含教师验证/班级校验/去重/生成数据）
