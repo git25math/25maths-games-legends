@@ -91,7 +91,31 @@ BEGIN
   RAISE NOTICE '✅ 创建完成: julia.feng(%), ruining.jia(%), bonnie.ma(%)', uid1, uid2, uid3;
 END $$;
 
--- Step 3: 验证创建结果
+-- Step 3: 确保班级存在并生成邀请码
+-- 如果 8A / 9A / 9B 班级已存在则跳过，不存在则创建
+-- teacher_id 使用 nzhu@harrowhaikou.cn（老师账号）
+
+INSERT INTO teacher_classes (teacher_id, name, invite_code, grade)
+SELECT
+  (SELECT id FROM auth.users WHERE email = 'nzhu@harrowhaikou.cn'),
+  c.name, c.code, c.grade
+FROM (VALUES
+  ('8A', upper(substr(md5(random()::text), 1, 6)), 8),
+  ('9A', upper(substr(md5(random()::text), 1, 6)), 9),
+  ('9B', upper(substr(md5(random()::text), 1, 6)), 9)
+) AS c(name, code, grade)
+WHERE NOT EXISTS (
+  SELECT 1 FROM teacher_classes tc WHERE tc.name = c.name
+)
+RETURNING name, invite_code, grade;
+
+-- Step 4: 查看所有相关班级的邀请码
+SELECT name AS class, invite_code, grade, is_active
+FROM teacher_classes
+WHERE name IN ('8A', '9A', '9B')
+ORDER BY grade, name;
+
+-- Step 5: 验证学生创建结果
 SELECT u.email, g.display_name, g.grade, g.class_tags, g.class_name
 FROM auth.users u
 JOIN gl_user_progress g ON g.user_id = u.id
