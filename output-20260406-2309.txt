@@ -1,0 +1,51 @@
+=== Play Phase 1 完成报告 ===
+
+日期: 2026-04-06
+任务: 1.7 (meta_node_progress 写入) + 1.8 (统一进度读取)
+
+--- 改动文件清单 ---
+
+1. supabase/migrations/20260406000000_meta_node_progress.sql (新建)
+   - CREATE TABLE meta_node_progress (PK: user_id, kn_id, source)
+   - 字段: attempts, wins, last_score, best_score, mastery_score, flm_state
+   - RLS: 用户只能读写自己的行
+   - CREATE FUNCTION upsert_meta_node_progress() — 原子 upsert + FLM 计算
+   - CREATE FUNCTION get_student_meta_progress() — 教师/学生 RPC
+
+2. src/App.tsx
+   - Line ~809-815: 成功后 fire-and-forget 调用 upsert_meta_node_progress
+   - Line ~823-835: 失败后同样写入 (tracks attempts)
+   - kn_id 来源: getKnIdForKp(activeMission.kpId)
+
+3. src/components/dashboard/types.ts
+   - 新增 MetaNodeProgressRow 类型
+
+4. src/components/dashboard/StudentDetailCard.tsx
+   - 新增 metaProgress state + get_student_meta_progress RPC 调用
+   - 新增 "综合掌握度" 面板: Play Mastery / Practice Accuracy / Mastered (Unified)
+
+5. src/components/dashboard/KPWeaknessPanel.tsx
+   - 新增 meta_node_progress 查询 (第三个 Promise)
+   - 新增 metaMasteryByKnId lookup (kn_id → avg mastery)
+   - 每个 KP 行显示 "综合 X%" 统一掌握度
+
+--- FLM 状态计算逻辑 ---
+  new:       attempts = 0
+  learning:  attempts >= 1
+  familiar:  wins >= 2 AND mastery >= 60%
+  mastered:  wins >= 4 AND mastery >= 80%
+
+--- 数据流 ---
+  Battle Complete
+    → record_battle_result (existing)
+    → upsert_play_kp (existing)
+    → upsert_meta_node_progress (NEW)
+
+  Teacher Dashboard
+    → get_class_kp_progress (existing)
+    → meta_node_progress SELECT (NEW)
+    → 合并显示 failure rate + unified mastery
+
+--- Build & Test ---
+  build: 0 errors (7.69s)
+  tests: 2687 passed (0 failed)

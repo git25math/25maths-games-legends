@@ -6,10 +6,11 @@
 import { useEffect, useState, useMemo } from 'react';
 import { AlertTriangle, BookOpen, ExternalLink, ChevronDown, ChevronUp, ClipboardList } from 'lucide-react';
 import type { Language } from '../../types';
-import type { StudentRow, KPProgressRow } from './types';
+import type { StudentRow, KPProgressRow, MetaNodeProgressRow } from './types';
 import { supabase } from '../../supabase';
 import { getExamHubLessonUrl, getLessonId } from '../../utils/lessonMap';
 import { getKPPrereqs } from '../../data/curriculum/kp-graph';
+import { getKnIdForKp } from '../../data/curriculum/kp-registry';
 
 type AggregatedKP = {
   kpId: string;
@@ -40,6 +41,7 @@ export function KPWeaknessPanel({
 }) {
   const [kpData, setKpData] = useState<KPProgressRow[]>([]);
   const [healthData, setHealthData] = useState<{ user_id: string; node_id: string; corruption_level: string }[]>([]);
+  const [metaData, setMetaData] = useState<MetaNodeProgressRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
 
@@ -60,9 +62,16 @@ export function KPWeaknessPanel({
             .in('user_id', ids)
             .in('corruption_level', ['blocked', 'critical'])
         : Promise.resolve({ data: [] }),
-    ]).then(([kpRes, healthRes]) => {
+      // Fetch unified meta_node_progress for cross-product mastery
+      ids.length > 0
+        ? supabase.from('meta_node_progress')
+            .select('kn_id, source, mastery_score, flm_state, last_practiced_at, attempts, wins')
+            .in('user_id', ids)
+        : Promise.resolve({ data: [] }),
+    ]).then(([kpRes, healthRes, metaRes]) => {
       setKpData((kpRes.data as KPProgressRow[]) ?? []);
       setHealthData((healthRes.data as any[]) ?? []);
+      setMetaData((metaRes.data as MetaNodeProgressRow[]) ?? []);
       setLoading(false);
     }).catch(() => { setLoading(false); });
   }, [grade, filterTag, studentIdSet]);
@@ -126,6 +135,22 @@ export function KPWeaknessPanel({
       .filter(k => k.failureRate > 0)
       .sort((a, b) => b.failureRate - a.failureRate || b.strugglingCount - a.strugglingCount);
   }, [kpData, studentIdSet, healthData]);
+
+  // Build kn_id → average mastery score from meta_node_progress
+  const metaMasteryByKnId = useMemo(() => {
+    const map = new Map<string, { total: number; count: number }>();
+    for (const row of metaData) {
+      const entry = map.get(row.kn_id) ?? { total: 0, count: 0 };
+      entry.total += Number(row.mastery_score);
+      entry.count += 1;
+      map.set(row.kn_id, entry);
+    }
+    const result = new Map<string, number>();
+    for (const [knId, { total, count }] of map) {
+      result.set(knId, Math.round(total / count));
+    }
+    return result;
+  }, [metaData]);
 
   if (loading) {
     return (
@@ -214,10 +239,22 @@ export function KPWeaknessPanel({
                 </div>
               </div>
 
-              {/* Failure rate */}
-              <span className={`text-sm font-black w-12 text-right ${textColor}`}>
-                {kp.failureRate}%
-              </span>
+              {/* Failure rate + unified mastery */}
+              <div className="text-right w-16">
+                <span className={`text-sm font-black ${textColor}`}>
+                  {kp.failureRate}%
+                </span>
+                {(() => {
+                  const knId = getKnIdForKp(kp.kpId);
+                  const unified = knId ? metaMasteryByKnId.get(knId) : undefined;
+                  if (unified == null) return null;
+                  return (
+                    <div className="text-[9px] text-blue-500 font-bold">
+                      {lang === 'en' ? 'unified' : '综合'} {unified}%
+                    </div>
+                  );
+                })()}
+              </div>
 
               {/* Lesson link */}
               {kp.lessonUrl ? (

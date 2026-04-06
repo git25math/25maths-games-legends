@@ -45,3 +45,14 @@ export type KPProgressRow = {
   attempts: number;
   mastered_at: string | null;
 };
+
+/** Unified cross-product progress from meta_node_progress table */
+export type MetaNodeProgressRow = {
+  kn_id: string;
+  source: string;
+  mastery_score: number;
+  flm_state: string;
+  last_practiced_at: string | null;
+  attempts: number;
+  wins: number;
+};

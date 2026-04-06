@@ -807,11 +807,19 @@ export default function App() {
 
         // Step 7: Bridge to shared play_kp_progress table (fire-and-forget)
         if (activeMission.kpId && user) {
+          const knId = getKnIdForKp(activeMission.kpId) ?? null;
           supabase.rpc('upsert_play_kp', {
             p_user_id: user.id, p_kp_id: activeMission.kpId,
             p_success: true, p_score: score,
-            p_kn_id: getKnIdForKp(activeMission.kpId) ?? null,
+            p_kn_id: knId,
           });
+          // Step 7b: Bridge to unified meta_node_progress (fire-and-forget)
+          if (knId) {
+            supabase.rpc('upsert_meta_node_progress', {
+              p_user_id: user.id, p_kn_id: knId,
+              p_source: 'play', p_score: score, p_correct: true,
+            });
+          }
         }
       }
 
@@ -821,11 +829,19 @@ export default function App() {
 
     // Bridge failed attempts too (tracks attempts without incrementing wins)
     if (!success && activeMission?.kpId && user) {
+      const knId = getKnIdForKp(activeMission.kpId) ?? null;
       supabase.rpc('upsert_play_kp', {
         p_user_id: user.id, p_kp_id: activeMission.kpId,
         p_success: false, p_score: score,
-        p_kn_id: getKnIdForKp(activeMission.kpId) ?? null,
+        p_kn_id: knId,
       });
+      // Bridge to unified meta_node_progress (fire-and-forget)
+      if (knId) {
+        supabase.rpc('upsert_meta_node_progress', {
+          p_user_id: user.id, p_kn_id: knId,
+          p_source: 'play', p_score: score, p_correct: false,
+        });
+      }
     }
     // Failed battles: consume stamina + record errors + update skill health
     if (!success && profile && activeMission) {
