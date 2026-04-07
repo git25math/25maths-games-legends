@@ -1,0 +1,23 @@
+=== Play 合并到 main ===
+Branch: main
+Latest commit: bf86ad6 merge: Phase 1 — meta_node_progress写入 + 统一进度读取
+
+=== Build ===
+✓ built in 8.57s (0 errors)
+
+=== meta_node_progress 写入确认 ===
+9 处引用 (src/ 目录):
+  src/App.tsx:816           — Step 7b: fire-and-forget write (success path)
+  src/App.tsx:818           — supabase.rpc('upsert_meta_node_progress', {...})
+  src/App.tsx:838           — fire-and-forget write (failure path)
+  src/App.tsx:840           — supabase.rpc('upsert_meta_node_progress', {...})
+  src/components/dashboard/StudentDetailCard.tsx:288  — Unified Progress panel
+  src/components/dashboard/KPWeaknessPanel.tsx:65     — meta_node_progress SELECT
+  src/components/dashboard/KPWeaknessPanel.tsx:67     — supabase.from('meta_node_progress')
+  src/components/dashboard/KPWeaknessPanel.tsx:139    — kn_id→mastery_score map
+  src/components/dashboard/types.ts:49                — MetaNodeProgressRow type
+
+=== 合并详情 ===
+  claude/analyze-play-project-6bpX2 → main (--no-ff)
+  8 files changed, 715 insertions(+), 10 deletions(-)
+  新增迁移: supabase/migrations/20260406000000_meta_node_progress.sql
