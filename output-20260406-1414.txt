@@ -1,0 +1,377 @@
+# Play 项目全量摸底分析 + 三产品融合现状
+# 日期: 2026-04-06
+# 项目: play.25maths.com (25maths-games-legends)
+# 版本: v10.9.1
+
+================================================================
+## 1. 项目位置与数据文件
+================================================================
+
+- 项目路径: /home/user/25maths-games-legends
+- 技术栈: React 19 + TypeScript + Vite + Tailwind + KaTeX + Supabase
+- 无 public/data/ 目录 — 所有数据内嵌于 TypeScript 文件
+- Supabase 共享实例: jjjigohjvmyewasmmmyf
+
+关键数据文件:
+  src/data/curriculum/kp-registry.ts   — 294 个 KP 定义 + KP→kn_id 映射
+  src/data/curriculum/kp-graph.ts      — 362 条前置/后续边 (DAG)
+  src/data/missions/y7.ts ~ y12.ts     — 425 关卡 (按年级拆分)
+  src/utils/generators/index.ts        — 89 个生成器注册表
+  src/utils/checkCorrectness.ts        — 答案校验 (~410 行)
+  src/types.ts                         — 核心类型定义
+
+================================================================
+## 2. KP 体系 (Knowledge Points)
+================================================================
+
+### 2.1 总览
+- KP 总数: 294 个原子知识点
+- 章节: 9 章 (CIE 0580 大纲)
+- 话题: 63+ 个 topic
+- KP 覆盖: 287/288 = 99.7% (仅 kp-1.14-01 计算器跳过)
+
+### 2.2 KP 字段结构 (KnowledgePoint Interface)
+  id: string            — KP 标识 (如 "kp-2.5-06")
+  title: string         — 英文标题
+  titleZh: string       — 中文标题
+  type: ScriptType      — 游戏机制类型 (T1-T8)
+  tier: Tier            — 教学层级 ('core' | 'both' | 'ext')
+  duration: number      — 视频时长 (秒)
+  prereqs: string[]     — 前置 KP ID 数组
+  topicId: string       — 话题引用 (如 "2.5")
+  chapterId: string     — 章节引用 (如 "ch2")
+  kn_id?: string        — 规范化知识网络节点 ID (如 "kn_0042")
+
+### 2.3 KP 分布
+  Chapter 1 (Number):               64 KPs, 18 topics (1.1-1.18)
+  Chapter 2 (Algebra & Graphs):     78 KPs, 13 topics (2.1-2.13)
+  Chapter 3 (Coordinate Geometry):  16 KPs,  7 topics (3.1-3.7)
+  Chapter 4 (Geometry):             37 KPs,  8 topics (4.1-4.8)
+  Chapter 5 (Mensuration):          22 KPs,  5 topics (5.1-5.5)
+  Chapter 6 (Trigonometry):         19 KPs,  6 topics (6.1-6.6)
+  Chapter 7 (Transformations):      18 KPs,  4 topics (7.1-7.4)
+  Chapter 8 (Probability):          14 KPs,  4 topics (8.1-8.4)
+  Chapter 9 (Statistics):           26 KPs,  7 topics (9.1-9.7)
+
+### 2.4 KP 图 (Prerequisites Graph)
+- 总边数: 362 条有向边
+- 硬边 (Hard): 73 条 — 严格数学前置依赖
+- 软边 (Soft): 289 条 — 推荐学习顺序
+- 图结构: DAG (有向无环图，已验证无环)
+- 导出函数: getKPPrereqs(), getKPLeadsTo(), getPrereqChain(), getForwardChain(), getHubKPs()
+
+### 2.5 与 CIE Section 对应关系
+KP ID 格式: kp-{chapter}.{topic}-{serial}
+  kp-1.1-01 ~ kp-1.18-04  → CIE 0580 Section 1 (Number)
+  kp-2.1-01 ~ kp-2.13-04  → CIE 0580 Section 2 (Algebra)
+  kp-3.1-01 ~ kp-3.7-02   → CIE 0580 Section 3 (Coord Geom)
+  ...以此类推
+
+================================================================
+## 3. FLM 状态机 (Forgetting-Learning-Mastery)
+================================================================
+
+### 3.1 词汇池 FLM (src/utils/vocabPool.ts)
+四状态机:
+  'new' → 'learning' → 'familiar' → 'mastered'
+
+状态转换:
+  new       — 首次遇到词汇 (tap event)
+  learning  — 需要 L2/L3 深层帮助，或 correctStreak < 2
+  familiar  — correctStreak >= 2，interval 倍增
+  mastered  — correctStreak >= 4，interval = 30 天
+
+间隔复习 (Spaced Repetition):
+  答对: correctStreak++, interval *= 2 (上限 30 天)
+  答错: correctStreak = 0, interval = 1 (重置)
+
+VocabPoolEntry 字段:
+  wordId, state, interval, lastReview, reviewCount,
+  correctStreak, tapCount, maxLevel, lastKpId
+
+### 3.2 技能健康状态机 (src/utils/skillHealth.ts)
+四级腐蚀等级:
+  'none' (100-76) → 'warning' (75-51) → 'blocked' (50-26) → 'critical' (0-25)
+
+SkillHealthState 字段:
+  healthScore (0-100), corruptionLevel, dominantPatternId,
+  consecutiveSamePattern, recentErrorCount, totalAttempts,
+  blockingPatterns, lastErrorAt, recoveredAt
+
+伤害计算:
+  答错: -20 基础伤害 × 严重性权重 (1.0-5.0)
+  答对: +8 恢复
+  恢复完成: 重置到 100
+
+### 3.3 装备耐久系统 (src/utils/equipment.ts)
+  'pristine' (0-7天) → 'worn' (7-21天) → 'damaged' (21-60天) → 'broken' (60+天)
+
+  修复道具:
+    锤子 (Hammers): +30 HP
+    水晶 (Crystals): +50 HP + 特定加成
+    卷轴 (Scrolls): +20 HP + 错误模式免疫
+
+### 3.4 数据存储位置
+  localStorage:
+    gl_practice_*  — 练习阶段状态 (7 天过期)
+    gl_vocab_pool  — 词汇间隔复习状态
+    gl_vocab_events — 最近 500 条词汇事件
+    gl_guest_profile — 游客档案
+
+  Supabase:
+    gl_user_progress.completed_missions (JSONB):
+      ._skillHealth[nodeId]     — 技能健康
+      ._equipment[missionId]    — 装备耐久
+      ._streak_milestones       — 连续登录
+      ._char_progression        — 角色成长
+
+================================================================
+## 4. KP → 题目映射
+================================================================
+
+### 4.1 映射链路
+  KP (294个) → Mission (425个) → Generator (89个) → Question (运行时生成)
+
+### 4.2 Mission 结构 (src/types.ts)
+  id: number              — 唯一关卡 ID
+  grade: number           — 年级 (7-12)
+  unitId: number          — 单元编号
+  order: number           — 单元内顺序
+  type: QuestionType      — 56 种题型之一
+  kpId?: string           — 绑定的 KP ID (如 "kp-1.1-02")
+  kn_id?: string          — 规范化知识网络 ID
+  data: any               — 生成器专用载荷 (含 generatorType)
+  discoverSteps           — 交互式探索序列
+  tutorialSteps           — 引导教程
+  secret                  — 概念/公式/提示
+
+### 4.3 关卡分布
+  Y7:  90 关
+  Y8:  78 关
+  Y9:  95 关
+  Y10: 87 关
+  Y11: 60 关
+  Y12: 15 关
+  总计: 425 关 (404 关已绑定 kpId = 95%)
+
+### 4.4 Variant 概念
+- 无显式 variantId — 通过 generatorType + mission.data 参数实现变体
+- generatorType (89种) 在运行时根据 DifficultyTier (1-3) 生成不同难度的题目
+- 例: QUADRATIC_RANDOM 根据 tier 调整系数范围
+
+### 4.5 考频权重
+- 目前无显式考频权重字段
+- KP tier ('core'/'both'/'ext') 隐含优先级
+- 关卡 difficulty ('Easy'/'Medium'/'Hard') 控制题目难度
+
+================================================================
+## 5. 学习路线
+================================================================
+
+### 5.1 现状
+- 无集中式学习路线表
+- 学习路径由以下结构隐含:
+  1. KP 前置图 (362 边 DAG) — 定义学习顺序
+  2. 关卡 unitId + order — 年级内线性推进
+  3. grade (7-12) — 年级递进
+  4. 三国叙事弧线 — 故事驱动进度
+
+### 5.2 练习阶段 (src/hooks/usePracticeState.ts)
+  5 阶段学习流:
+    'discover' → 'green' → 'amber' → 'red' → 'battle'
+
+  阶段内自适应:
+    adaptiveTier: 1 | 2 | 3
+    consecutiveCorrect / consecutiveWrong 触发升降级
+
+================================================================
+## 6. 成就/进度体系
+================================================================
+
+### 6.1 XP 与军衔 (src/utils/xpLevels.ts)
+50 级三国军衔系统:
+  Tier 1 (散兵) Lv 1-10:   0 - 2,000 XP
+  Tier 2 (营级) Lv 11-25:  2,000 - 15,000 XP
+  Tier 3 (大将) Lv 26-40:  15,000 - 85,000 XP
+  Tier 4 (九卿) Lv 41-49:  85,000 - 270,000 XP
+  Tier 5 (大将军) Lv 50:   ~299,000 XP
+
+XP 曲线: base=140, growth=1.12 (指数)
+存储: gl_user_progress.total_score (Supabase RPC 保护)
+
+### 6.2 连续登录 (src/data/streakMilestones.ts)
+  14天: 200 XP + "铁壁之志"
+  21天: 300 XP + 1 SP + "三周战士"
+  30天: 500 XP + 1 SP + "不屈之心"
+  60天: 1000 XP + 2 SP + "无敌"
+  100天: 2000 XP + 3 SP + "天选之人"
+
+存储: completed_missions._streak_milestones
+
+### 6.3 赛季任务 (src/data/seasons/season1.ts)
+  日常: 每日重置 (3 场战斗, 1 次练习, 3 连胜)
+  周常: 周一重置 (3 次红色通关, 1 次修复, 5 次首通)
+  里程碑: 永不重置 (达到 10 级, 完成 50 关)
+  奖励: 赛季 XP → 解锁边框/称号/技能点
+
+### 6.4 关卡完成度
+  三色难度独立追踪:
+    green: boolean  — 引导难度
+    amber: boolean  — 提示难度
+    red: boolean    — 独立难度
+  推进顺序: Green → Amber → Red
+
+================================================================
+## 7. Supabase 表结构 (Play 相关)
+================================================================
+
+### 7.1 Play 专有表 (gl_ 前缀)
+  gl_user_progress     — 用户档案 (completed_missions JSONB, total_score, stats)
+  gl_battle_results    — 战斗记录 (mission_id, success, score, duration, hp)
+  gl_missions          — 425 关卡定义 (从 TS 同步到 DB)
+  gl_rooms             — 多人房间 (PK/Live/Team)
+  gl_live_responses    — Live Classroom 逐题答题记录
+  gl_assignments       — 教师布置作业
+  gl_lesson_runs       — ExamHub 课程完成追踪
+  gl_bug_reports       — 用户 Bug 报告
+
+### 7.2 弹性引擎表 (Resilience Engine)
+  error_pattern_remedy_map  — 错误模式分类注册表 (severity_weight, recovery_pack_id)
+  recovery_packs            — 恢复练习包 (question_ids, success_threshold)
+  user_attempt_log          — 原始答题日志 (error_pattern_id, kn_id)
+  user_skill_health         — 技能健康状态 (health_score, corruption_level)
+
+### 7.3 跨产品共享表
+  auth.users          — 用户账号 (全产品共享)
+  teachers            — 教师身份 (ExamHub 主写, Play 读)
+  teacher_classes     — 班级 + 邀请码 (Play + Practice 共写)
+  play_kp_progress    — KP 进度 (Play 写, 未来 ExamHub 读)
+  leaderboard         — ExamHub 词汇掌握度 (ExamHub 写, Play 读)
+  notifications       — 事件通知 (ExamHub 主写, Play 插入)
+
+### 7.4 RLS 策略
+  gl_user_progress    — 仅读写自己
+  gl_battle_results   — 仅读写自己
+  gl_rooms            — 全员可读, 仅自己写
+  gl_live_responses   — 自己写, 自己+老师读
+  gl_assignments      — 仅看自己年级+班级
+
+### 7.5 SECURITY DEFINER RPCs
+  get_class_progress()        — 教师读班级学生
+  get_class_leaderboard()     — 公共排行榜
+  get_weekly_leaderboard()    — 周战斗排名
+  create_assignment()         — 教师布置作业
+  push_live_question()        — 教师 Live 控制
+  get_student_kp_progress()   — 学生/教师 KP 数据
+  record_battle_result()      — 防重复写入
+  add_score()                 — 服务端加分
+
+================================================================
+## 8. kn_id 坐标系
+================================================================
+
+### 8.1 定义
+kn_id = 规范化知识网络节点 ID (Knowledge Network ID)
+格式: "kn_XXXX" (如 kn_0001, kn_0042, kn_0346)
+
+### 8.2 KP → kn_id 映射
+完整映射在 kp-registry.ts 的 KP_KN_MAP 对象 (305-662行):
+  'kp-1.1-01' → 'kn_0001' (Place value)
+  'kp-1.1-02' → 'kn_0002' (Prime numbers)
+  'kp-2.1-01' → 'kn_0083' (Substitution)
+  ...全部 294 个 KP 有映射
+
+### 8.3 三产品共用情况
+- kn_id 在 2026-04-01 迁移中添加到:
+    play_kp_progress.kn_id
+    user_attempt_log.kn_id
+    user_skill_health.kn_id
+- 设计意图: 作为三产品共享的规范化坐标系
+- 当前状态: Play 已写入 kn_id, ExamHub 未来读取
+- KP_KN_MAP 是唯一映射表 (294 对 1:1 映射)
+
+================================================================
+## 9. 词汇体系
+================================================================
+
+### 9.1 架构
+- 无独立 vocab 数据目录 — 词汇系统内嵌于组件
+- 三级深度: L1 (定义) → L2 (题意解读) → L3 (方法指导)
+- 数据来源: src/utils/mathVocab.ts
+
+### 9.2 词汇与 KP 关系
+- 每个词汇通过 lastKpId 关联到最近学习的 KP
+- 词汇出现在关卡上下文中 (VocabPopup.tsx)
+- 独立于战斗系统的掌握追踪
+
+### 9.3 进度追踪
+  客户端 (localStorage):
+    gl_vocab_pool   — VocabPoolEntry 数组 (state/interval/streak)
+    gl_vocab_events — 最近 500 条 tap 事件
+
+  间隔复习算法: SM-2 变体 (spacedRepetition.ts)
+  分析: vocabAnalytics.ts 追踪跨关卡词汇模式
+
+### 9.4 ExamHub 词汇桥接
+- Play 通过 ExamHubBridge 组件读取 ExamHub 的 leaderboard 表
+- 显示: mastery_pct + mastered_words / total_words
+- 教师看板中展示学生词汇进度
+
+================================================================
+## 10. 三产品数据共享现状
+================================================================
+
+### 10.1 用户账号
+✅ 已打通 — 三产品共用 auth.users (UUID)
+✅ 教师身份 — teachers 表全产品共享
+✅ 班级管理 — teacher_classes 表 Play + Practice 共用
+
+### 10.2 进度数据互通
+⚠️ 部分互通:
+  - Play → ExamHub: play_kp_progress 表 (kn_id 已加, ExamHub 尚未读)
+  - ExamHub → Play: leaderboard 表 (Play 只读词汇掌握度)
+  - Play → ExamHub: gl_lesson_runs (课程完成记录)
+  - Practice ↔ Play: 仅共享班级管理, 进度各自独立
+
+### 10.3 数据流向图
+  ┌──────────┐         ┌──────────┐        ┌──────────┐
+  │ ExamHub  │         │   Play   │        │ Practice │
+  │          │ ←─kn_id─│ (Games)  │        │          │
+  │ vocab    │─leaderboard→│     │        │          │
+  │ teachers │─────────→│ 教师验证│        │          │
+  │          │         │          │        │          │
+  └──────────┘         └──────────┘        └──────────┘
+       ↑                    │                    ↑
+       └─── auth.users (共享) ──── teacher_classes (共享) ─┘
+
+### 10.4 融合差距
+❌ 尚未实现:
+  - ExamHub 尚未读取 play_kp_progress (FLM 状态提升)
+  - Practice 无 kn_id 坐标系
+  - 三产品无统一学习路径
+  - 词汇系统各自独立 (Play=localStorage, ExamHub=Supabase)
+  - 无跨产品进度同步机制
+
+================================================================
+## 附录: 关键数字汇总
+================================================================
+
+  KP 总数:           294
+  KP 图边数:         362 (73 硬 + 289 软)
+  关卡总数:          425
+  生成器类型:        89
+  题型:              56
+  测试用例:          2,422
+  年级跨度:          Y7-Y12
+  Supabase 表:       ~20 (8 Play专有 + 4 弹性引擎 + 8 共享)
+  军衔等级:          50 级
+  赛季任务类型:      3 (日常/周常/里程碑)
+  词汇深度层级:      3 (L1/L2/L3)
+  FLM 状态:          4 (new/learning/familiar/mastered)
+  技能腐蚀等级:      4 (none/warning/blocked/critical)
+  装备状态:          4 (pristine/worn/damaged/broken)
+  XP 上限:           ~299,000
+
+================================================================
+## 生成时间: 2026-04-06T14:14:00Z
+================================================================

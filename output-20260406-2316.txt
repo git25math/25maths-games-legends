@@ -1,0 +1,61 @@
+=== Play Phase 1 完成报告 ===
+日期: 2026-04-06T23:16Z
+
+=== kn_id 映射现状 ===
+- kn_id 定义在 kp-registry.ts 的 KP_KN_MAP (294 个 KP → kn_id 完整映射)
+- mission 文件本身不含 kn_id 字段 — 运行时通过 getKnIdForKp(mission.kpId) 解析
+- 425 关卡中 404 关有 kpId (95%), 均可解析到 kn_id
+
+=== meta_node_progress 写入状态 ===
+src/App.tsx:816   — Step 7b: Bridge to unified meta_node_progress (fire-and-forget) [成功路径]
+src/App.tsx:818   — supabase.rpc('upsert_meta_node_progress', { p_user_id, p_kn_id, p_source:'play', p_score, p_correct:true })
+src/App.tsx:838   — Bridge to unified meta_node_progress (fire-and-forget) [失败路径]
+src/App.tsx:840   — supabase.rpc('upsert_meta_node_progress', { p_user_id, p_kn_id, p_source:'play', p_score, p_correct:false })
+
+=== meta_node_progress 读取状态 ===
+src/components/dashboard/StudentDetailCard.tsx:288  — Unified Progress 面板 (Play掌握度/Practice准确率/综合已掌握)
+src/components/dashboard/KPWeaknessPanel.tsx:65     — 从 meta_node_progress 读取跨产品数据
+src/components/dashboard/KPWeaknessPanel.tsx:139    — 构建 kn_id→mastery_score 映射, 每行显示 "综合 X%"
+src/components/dashboard/types.ts:49                — MetaNodeProgressRow 类型定义
+
+=== Supabase 迁移 ===
+supabase/migrations/20260406000000_meta_node_progress.sql:
+  - CREATE TABLE meta_node_progress (PK: user_id, kn_id, source)
+  - CREATE FUNCTION upsert_meta_node_progress() — 原子 upsert + FLM 自动计算
+  - CREATE FUNCTION get_student_meta_progress() — 教师/学生 SECURITY DEFINER RPC
+  - RLS: 用户仅可读写自己的行
+
+=== FLM 状态自动计算 ===
+  new:       attempts = 0
+  learning:  attempts >= 1
+  familiar:  wins >= 2 AND mastery_score >= 60%
+  mastered:  wins >= 4 AND mastery_score >= 80%
+
+=== 数据流 ===
+  Battle Complete
+    → record_battle_result (existing, gl_battle_results)
+    → upsert_play_kp (existing, play_kp_progress)
+    → upsert_meta_node_progress (NEW, meta_node_progress)
+
+  Teacher Dashboard - StudentDetailCard
+    → get_student_battles + get_student_kp_progress (existing)
+    → get_student_meta_progress (NEW)
+    → 显示: Play Mastery% / Practice Accuracy% / Unified Mastered count
+
+  Teacher Dashboard - KPWeaknessPanel
+    → get_class_kp_progress + user_skill_health (existing)
+    → meta_node_progress SELECT (NEW)
+    → 每行显示: failure rate% + "综合 X%"
+
+=== Build ===
+✓ built in 8.20s (0 errors)
+
+=== Tests ===
+2687 passed (0 failed)
+
+=== 改动文件 ===
+M  src/App.tsx
+M  src/components/dashboard/KPWeaknessPanel.tsx
+M  src/components/dashboard/StudentDetailCard.tsx
+M  src/components/dashboard/types.ts
+A  supabase/migrations/20260406000000_meta_node_progress.sql

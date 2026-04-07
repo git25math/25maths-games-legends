@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { X, AlertTriangle, BarChart3, ClipboardList, Clock } from 'lucide-react';
 import type { Language } from '../../types';
-import type { StudentRow, UnitEntry } from './types';
+import type { StudentRow, UnitEntry, MetaNodeProgressRow } from './types';
 import { RadarChart } from './RadarChart';
 import { supabase } from '../../supabase';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
@@ -114,6 +114,7 @@ export const StudentDetailCard = ({
   useEscapeKey(onClose);
   const [battles, setBattles] = useState<BattleRecord[]>([]);
   const [kpRecords, setKpRecords] = useState<KPRecord[]>([]);
+  const [metaProgress, setMetaProgress] = useState<MetaNodeProgressRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Fetch via SECURITY DEFINER RPCs (bypasses RLS for teacher access)
@@ -123,10 +124,12 @@ export const StudentDetailCard = ({
     Promise.all([
       supabase.rpc('get_student_battles', { p_user_id: student.user_id }),
       supabase.rpc('get_student_kp_progress', { p_user_id: student.user_id }),
-    ]).then(([battleRes, kpRes]) => {
+      supabase.rpc('get_student_meta_progress', { p_user_id: student.user_id }),
+    ]).then(([battleRes, kpRes, metaRes]) => {
       if (!mounted) return;
       setBattles((battleRes.data as BattleRecord[]) || []);
       setKpRecords((kpRes.data as KPRecord[]) || []);
+      setMetaProgress((metaRes.data as MetaNodeProgressRow[]) || []);
       setLoading(false);
     }).catch(() => { if (mounted) setLoading(false); });
     return () => { mounted = false; };
@@ -278,6 +281,45 @@ export const StudentDetailCard = ({
             <div className="bg-amber-50 rounded-xl p-2.5 text-center">
               <div className="text-lg font-black text-amber-600">{kpRecords.filter(k => k.mastered_at).length}</div>
               <div className="text-[10px] text-amber-500 font-bold">{lang === 'en' ? 'Topics Mastered' : '知识点已掌握'}</div>
+            </div>
+          </div>
+        )}
+
+        {/* Unified Progress (meta_node_progress) */}
+        {metaProgress.length > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center gap-1.5 mb-2">
+              <BarChart3 size={14} className="text-blue-400" />
+              <span className="text-xs font-bold text-slate-600">{lang === 'en' ? 'Unified Mastery' : '综合掌握度'}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {(() => {
+                const playRows = metaProgress.filter(r => r.source === 'play');
+                const practiceRows = metaProgress.filter(r => r.source === 'practice');
+                const avgPlay = playRows.length > 0
+                  ? Math.round(playRows.reduce((s, r) => s + Number(r.mastery_score), 0) / playRows.length)
+                  : null;
+                const avgPractice = practiceRows.length > 0
+                  ? Math.round(practiceRows.reduce((s, r) => s + Number(r.mastery_score), 0) / practiceRows.length)
+                  : null;
+                const masteredCount = playRows.filter(r => r.flm_state === 'mastered').length;
+                return (
+                  <>
+                    <div className="bg-blue-50 rounded-xl p-2.5 text-center">
+                      <div className="text-lg font-black text-blue-600">{avgPlay ?? '—'}%</div>
+                      <div className="text-[10px] text-blue-500 font-bold">{lang === 'en' ? 'Play Mastery' : 'Play 掌握度'}</div>
+                    </div>
+                    <div className="bg-purple-50 rounded-xl p-2.5 text-center">
+                      <div className="text-lg font-black text-purple-600">{avgPractice != null ? `${avgPractice}%` : '—'}</div>
+                      <div className="text-[10px] text-purple-500 font-bold">{lang === 'en' ? 'Practice Accuracy' : 'Practice 准确率'}</div>
+                    </div>
+                    <div className="bg-teal-50 rounded-xl p-2.5 text-center">
+                      <div className="text-lg font-black text-teal-600">{masteredCount}</div>
+                      <div className="text-[10px] text-teal-500 font-bold">{lang === 'en' ? 'Mastered (Unified)' : '已掌握(综合)'}</div>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         )}
