@@ -1,0 +1,34 @@
+=== Play Mock 数据接入 ===
+日期: 2026-04-07T21:30Z
+
+=== KPWeaknessPanel ===
+source 优先级: practice_mock > practice > play
+每行显示带颜色 badge: "Mock 85%" (绿) / "Mock 45%" (红) / "Practice 72%" (蓝) / "Play 60%" (紫)
+
+引用点:
+  line 139: type MasteryInfo + metaMasteryByKnId (source-prioritized)
+  line 143: grouped by kn_id
+  line 148: mockRow = rows.find(r => r.source === 'practice_mock')
+  line 149: practiceRow = rows.find(r => r.source === 'practice')
+  line 150: playRow = rows.find(r => r.source === 'play')
+  line 152: Mock badge with color (>=70 green, <70 red)
+  line 260: display badge in KP row
+
+=== StudentDetailCard ===
+统一掌握度面板: 4 列 (Mock / Practice / Play / Mastered)
+Mock 历史面板: 按日期分组, 显示各 kn_id 得分 + 进步趋势
+
+引用点:
+  line 3:   import FileText icon
+  line 297: practice_mock filter for mockRows
+  line 298: practice filter for practiceRows
+  line 299: avg() helper for mastery_score
+  line 300: avgMock display (>=70 green, <70 orange)
+  line 329: Mock History panel
+  line 332: sort by last_practiced_at desc, limit 20
+  line 338: group by date
+  line 352: per-kn_id score badges (green/amber/red)
+  line 346: trend calculation vs previous date (+N / -N)
+
+=== Build ===
+✓ built in 7.99s (0 errors)

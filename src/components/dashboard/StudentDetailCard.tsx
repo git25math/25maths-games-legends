@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { X, AlertTriangle, BarChart3, ClipboardList, Clock } from 'lucide-react';
+import { X, AlertTriangle, BarChart3, ClipboardList, Clock, FileText } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, UnitEntry, MetaNodeProgressRow } from './types';
 import { RadarChart } from './RadarChart';
@@ -285,37 +285,41 @@ export const StudentDetailCard = ({
           </div>
         )}
 
-        {/* Unified Progress (meta_node_progress) */}
+        {/* Unified Progress (meta_node_progress) — source-prioritized */}
         {metaProgress.length > 0 && (
           <div className="mb-4">
             <div className="flex items-center gap-1.5 mb-2">
               <BarChart3 size={14} className="text-blue-400" />
               <span className="text-xs font-bold text-slate-600">{lang === 'en' ? 'Unified Mastery' : '综合掌握度'}</span>
             </div>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               {(() => {
                 const playRows = metaProgress.filter(r => r.source === 'play');
                 const practiceRows = metaProgress.filter(r => r.source === 'practice');
-                const avgPlay = playRows.length > 0
-                  ? Math.round(playRows.reduce((s, r) => s + Number(r.mastery_score), 0) / playRows.length)
-                  : null;
-                const avgPractice = practiceRows.length > 0
-                  ? Math.round(practiceRows.reduce((s, r) => s + Number(r.mastery_score), 0) / practiceRows.length)
-                  : null;
+                const mockRows = metaProgress.filter(r => r.source === 'practice_mock');
+                const avg = (rows: MetaNodeProgressRow[]) =>
+                  rows.length > 0 ? Math.round(rows.reduce((s, r) => s + Number(r.mastery_score), 0) / rows.length) : null;
+                const avgMock = avg(mockRows);
+                const avgPractice = avg(practiceRows);
+                const avgPlay = avg(playRows);
                 const masteredCount = playRows.filter(r => r.flm_state === 'mastered').length;
                 return (
                   <>
+                    <div className={`rounded-xl p-2.5 text-center ${avgMock != null && avgMock >= 70 ? 'bg-emerald-50' : 'bg-orange-50'}`}>
+                      <div className={`text-lg font-black ${avgMock != null && avgMock >= 70 ? 'text-emerald-600' : 'text-orange-600'}`}>{avgMock != null ? `${avgMock}%` : '—'}</div>
+                      <div className="text-[10px] text-slate-500 font-bold">Mock</div>
+                    </div>
                     <div className="bg-blue-50 rounded-xl p-2.5 text-center">
-                      <div className="text-lg font-black text-blue-600">{avgPlay ?? '—'}%</div>
-                      <div className="text-[10px] text-blue-500 font-bold">{lang === 'en' ? 'Play Mastery' : 'Play 掌握度'}</div>
+                      <div className="text-lg font-black text-blue-600">{avgPractice != null ? `${avgPractice}%` : '—'}</div>
+                      <div className="text-[10px] text-blue-500 font-bold">Practice</div>
                     </div>
                     <div className="bg-purple-50 rounded-xl p-2.5 text-center">
-                      <div className="text-lg font-black text-purple-600">{avgPractice != null ? `${avgPractice}%` : '—'}</div>
-                      <div className="text-[10px] text-purple-500 font-bold">{lang === 'en' ? 'Practice Accuracy' : 'Practice 准确率'}</div>
+                      <div className="text-lg font-black text-purple-600">{avgPlay ?? '—'}%</div>
+                      <div className="text-[10px] text-purple-500 font-bold">Play</div>
                     </div>
                     <div className="bg-teal-50 rounded-xl p-2.5 text-center">
                       <div className="text-lg font-black text-teal-600">{masteredCount}</div>
-                      <div className="text-[10px] text-teal-500 font-bold">{lang === 'en' ? 'Mastered (Unified)' : '已掌握(综合)'}</div>
+                      <div className="text-[10px] text-teal-500 font-bold">{lang === 'en' ? 'Mastered' : '已掌握'}</div>
                     </div>
                   </>
                 );
@@ -323,6 +327,76 @@ export const StudentDetailCard = ({
             </div>
           </div>
         )}
+
+        {/* Mock History Panel */}
+        {(() => {
+          const mockRows = metaProgress
+            .filter(r => r.source === 'practice_mock' && r.last_practiced_at)
+            .sort((a, b) => new Date(b.last_practiced_at!).getTime() - new Date(a.last_practiced_at!).getTime())
+            .slice(0, 20);
+          if (mockRows.length === 0) return null;
+
+          // Group by date for section scores
+          const byDate = new Map<string, MetaNodeProgressRow[]>();
+          for (const r of mockRows) {
+            const date = r.last_practiced_at!.slice(0, 10);
+            const arr = byDate.get(date) ?? [];
+            arr.push(r);
+            byDate.set(date, arr);
+          }
+          const dates = [...byDate.keys()].sort().reverse();
+
+          return (
+            <div className="mb-4">
+              <div className="flex items-center gap-1.5 mb-2">
+                <FileText size={14} className="text-orange-400" />
+                <span className="text-xs font-bold text-slate-600">{lang === 'en' ? 'Mock Exam History' : '模拟卷历史'}</span>
+              </div>
+              <div className="space-y-2">
+                {dates.slice(0, 5).map((date, di) => {
+                  const rows = byDate.get(date)!;
+                  const avgScore = Math.round(rows.reduce((s, r) => s + Number(r.mastery_score), 0) / rows.length);
+                  // Trend vs previous date
+                  const prevDate = dates[di + 1];
+                  const prevRows = prevDate ? byDate.get(prevDate) : undefined;
+                  const prevAvg = prevRows ? Math.round(prevRows.reduce((s, r) => s + Number(r.mastery_score), 0) / prevRows.length) : null;
+                  const trend = prevAvg != null ? avgScore - prevAvg : null;
+                  return (
+                    <div key={date} className="bg-slate-50 rounded-lg px-3 py-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[11px] font-bold text-slate-600">{date}</span>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-sm font-black ${avgScore >= 70 ? 'text-emerald-600' : avgScore >= 50 ? 'text-amber-600' : 'text-rose-600'}`}>
+                            {avgScore}%
+                          </span>
+                          {trend != null && (
+                            <span className={`text-[10px] font-bold ${trend > 0 ? 'text-emerald-500' : trend < 0 ? 'text-rose-500' : 'text-slate-400'}`}>
+                              {trend > 0 ? `+${trend}` : trend}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex gap-1 flex-wrap">
+                        {rows.map(r => (
+                          <span
+                            key={r.kn_id}
+                            className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${
+                              Number(r.mastery_score) >= 70 ? 'bg-emerald-100 text-emerald-700'
+                                : Number(r.mastery_score) >= 50 ? 'bg-amber-100 text-amber-700'
+                                : 'bg-rose-100 text-rose-700'
+                            }`}
+                          >
+                            {r.kn_id} {Math.round(Number(r.mastery_score))}%
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Error Patterns */}
         {errorSummary.length > 0 && (

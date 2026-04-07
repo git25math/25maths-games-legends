@@ -136,18 +136,29 @@ export function KPWeaknessPanel({
       .sort((a, b) => b.failureRate - a.failureRate || b.strugglingCount - a.strugglingCount);
   }, [kpData, studentIdSet, healthData]);
 
-  // Build kn_id → average mastery score from meta_node_progress
+  // Build kn_id → best mastery info from meta_node_progress (mock > practice > play)
+  type MasteryInfo = { score: number; badge: string; colorClass: string };
   const metaMasteryByKnId = useMemo(() => {
-    const map = new Map<string, { total: number; count: number }>();
+    // Group rows by kn_id
+    const grouped = new Map<string, MetaNodeProgressRow[]>();
     for (const row of metaData) {
-      const entry = map.get(row.kn_id) ?? { total: 0, count: 0 };
-      entry.total += Number(row.mastery_score);
-      entry.count += 1;
-      map.set(row.kn_id, entry);
+      const arr = grouped.get(row.kn_id) ?? [];
+      arr.push(row);
+      grouped.set(row.kn_id, arr);
     }
-    const result = new Map<string, number>();
-    for (const [knId, { total, count }] of map) {
-      result.set(knId, Math.round(total / count));
+    const result = new Map<string, MasteryInfo>();
+    for (const [knId, rows] of grouped) {
+      const mockRow = rows.find(r => r.source === 'practice_mock');
+      const practiceRow = rows.find(r => r.source === 'practice');
+      const playRow = rows.find(r => r.source === 'play');
+      if (mockRow) {
+        const s = Math.round(Number(mockRow.mastery_score));
+        result.set(knId, { score: s, badge: 'Mock', colorClass: s >= 70 ? 'text-emerald-600 bg-emerald-50' : 'text-rose-600 bg-rose-50' });
+      } else if (practiceRow) {
+        result.set(knId, { score: Math.round(Number(practiceRow.mastery_score)), badge: 'Practice', colorClass: 'text-blue-600 bg-blue-50' });
+      } else if (playRow) {
+        result.set(knId, { score: Math.round(Number(playRow.mastery_score)), badge: 'Play', colorClass: 'text-purple-600 bg-purple-50' });
+      }
     }
     return result;
   }, [metaData]);
@@ -239,18 +250,18 @@ export function KPWeaknessPanel({
                 </div>
               </div>
 
-              {/* Failure rate + unified mastery */}
-              <div className="text-right w-16">
+              {/* Failure rate + source-prioritized mastery badge */}
+              <div className="text-right w-20">
                 <span className={`text-sm font-black ${textColor}`}>
                   {kp.failureRate}%
                 </span>
                 {(() => {
                   const knId = getKnIdForKp(kp.kpId);
-                  const unified = knId ? metaMasteryByKnId.get(knId) : undefined;
-                  if (unified == null) return null;
+                  const info = knId ? metaMasteryByKnId.get(knId) : undefined;
+                  if (!info) return null;
                   return (
-                    <div className="text-[9px] text-blue-500 font-bold">
-                      {lang === 'en' ? 'unified' : '综合'} {unified}%
+                    <div className={`text-[9px] font-bold px-1 rounded mt-0.5 inline-block ${info.colorClass}`}>
+                      {info.badge} {info.score}%
                     </div>
                   );
                 })()}
