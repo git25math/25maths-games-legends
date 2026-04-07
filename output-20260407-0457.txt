@@ -1,0 +1,79 @@
+=== Play Phase 3 验证报告 ===
+日期: 2026-04-07T04:57Z
+分支: main
+
+=== 验证 1: meta_node_progress 写入点 ===
+2 处写入:
+  src/App.tsx:818  — supabase.rpc('upsert_meta_node_progress', { p_correct: true })   [成功路径]
+  src/App.tsx:840  — supabase.rpc('upsert_meta_node_progress', { p_correct: false })  [失败路径]
+✅ 成功/失败路径均已覆盖
+
+=== 验证 2: kn_id 来源确认 ===
+Mission 文件不含 kn_id 字段 — 运行时通过 getKnIdForKp(mission.kpId) 解析
+kpId 覆盖 (per mission file):
+  y7.ts:  89 missions with kpId
+  y8.ts:  78 missions with kpId
+  y9.ts:  95 missions with kpId
+  y10.ts: 87 missions with kpId
+  y11.ts: 60 missions with kpId
+  y12.ts: 15 missions with kpId
+  总计:   424/425 missions (99.8%)
+
+KP_KN_MAP: 294 个 KP → kn_id 完整映射 (kp-registry.ts:305-662)
+getKnIdForKp() 在 App.tsx 中 6 处调用 (line 30, 775, 810, 832, 875, 1405)
+✅ kn_id 解析链路完整
+
+=== 验证 3: StudentDetailCard 统一进度面板 ===
+7 处引用:
+  line 5:   import MetaNodeProgressRow
+  line 117: useState<MetaNodeProgressRow[]>
+  line 132: setMetaProgress from get_student_meta_progress RPC
+  line 288: Unified Progress (meta_node_progress) 面板
+  line 300: Play mastery_score 平均计算
+  line 303: Practice mastery_score 平均计算
+显示: Play 掌握度% | Practice 准确率% | 综合已掌握数
+✅ 统一进度面板已实现
+
+=== 验证 4: KPWeaknessPanel 读取确认 ===
+7 处引用:
+  line 65:  // Fetch unified meta_node_progress
+  line 67:  supabase.from('meta_node_progress') SELECT
+  line 68:  .select('kn_id, source, mastery_score, flm_state, ...')
+  line 139: metaMasteryByKnId = kn_id → avg mastery_score
+  line 143: row.kn_id lookup
+  line 146: map.set(row.kn_id, ...)
+  line 249: getKnIdForKp(kp.kpId) → metaMasteryByKnId.get(knId) 显示 "综合 X%"
+✅ KP 薄弱点面板已集成统一掌握度
+
+=== 验证 5: 数据完整性链路 ===
+  Battle Complete
+    → record_battle_result (gl_battle_results)          ✅ existing
+    → upsert_play_kp (play_kp_progress + kn_id)        ✅ existing
+    → upsert_meta_node_progress (meta_node_progress)    ✅ NEW
+       kn_id ← getKnIdForKp(activeMission.kpId)
+       source = 'play'
+       FLM auto: new→learning→familiar→mastered
+
+  Teacher Dashboard
+    → get_class_kp_progress + user_skill_health          ✅ existing
+    → meta_node_progress SELECT (cross-product)          ✅ NEW
+    → StudentDetailCard: get_student_meta_progress RPC   ✅ NEW
+
+=== Supabase 迁移 ===
+  supabase/migrations/20260406000000_meta_node_progress.sql  ✅
+  - CREATE TABLE meta_node_progress (PK: user_id, kn_id, source)
+  - CREATE FUNCTION upsert_meta_node_progress() + FLM 计算
+  - CREATE FUNCTION get_student_meta_progress() (SECURITY DEFINER)
+  - RLS policies (select/insert/update own rows)
+
+=== Build ===
+✓ built in 8.11s (0 errors)
+
+=== 结论 ===
+Phase 3 进度同步已完整实现:
+  ✅ 写入: 成功/失败路径均 fire-and-forget 写入 meta_node_progress
+  ✅ kn_id: 通过 KP_KN_MAP 运行时解析, 424/425 missions 覆盖
+  ✅ 读取: StudentDetailCard + KPWeaknessPanel 均已集成
+  ✅ FLM: 自动计算 (new→learning→familiar→mastered)
+  ✅ 迁移: 表+RPC+RLS 完整
+  ✅ Build: 0 errors
