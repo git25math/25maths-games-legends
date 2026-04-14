@@ -6,6 +6,7 @@ import { motion } from 'motion/react';
 import { Radio, X } from 'lucide-react';
 import type { Language } from '../types';
 import type { AppNotification } from '../hooks/useNotifications';
+import { tt } from '../i18n/resolveText';
 
 type Props = {
   notifications: AppNotification[];
@@ -37,12 +38,12 @@ export function LiveSessionBanner({ notifications, onJoin, onDismiss, lang }: Pr
         onClick={() => onJoin(notif.link_id)}
         className="px-4 py-2 bg-white text-slate-900 font-black text-xs rounded-xl shrink-0 hover:bg-white/90 transition-colors"
       >
-        {en ? 'Join Now' : '立即加入'}
+        {tt(lang, 'Join Now', '立即加入')}
       </button>
       <button
         onClick={() => onDismiss(notif.id)}
         className="p-1 text-white/40 hover:text-white transition-colors shrink-0"
-        aria-label={en ? 'Dismiss' : '关闭'}
+        aria-label={tt(lang, 'Dismiss', '关闭')}
       >
         <X size={16} />
       </button>

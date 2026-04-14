@@ -8,6 +8,7 @@ import { motion } from 'motion/react';
 import { Radio, ArrowRight, Loader2 } from 'lucide-react';
 import type { Language } from '../../types';
 import { supabase } from '../../supabase';
+import { tt } from '../../i18n/resolveText';
 
 type Props = {
   lang: Language;
@@ -37,8 +38,8 @@ export function LivePinJoin({ lang, onJoined, onBack }: Props) {
       p_nickname: nickname.trim(),
     });
     setLoading(false);
-    if (rpcErr) { setError(en ? 'Connection failed. Try again.' : '连接失败，请重试。'); return; }
-    if (data?.error === 'invalid_pin') { setError(en ? 'Invalid PIN. Check and try again.' : 'PIN 码无效，请检查后重试。'); setStep('pin'); return; }
+    if (rpcErr) { setError(tt(lang, 'Connection failed. Try again.', '连接失败，请重试。')); return; }
+    if (data?.error === 'invalid_pin') { setError(tt(lang, 'Invalid PIN. Check and try again.', 'PIN 码无效，请检查后重试。')); setStep('pin'); return; }
     if (data?.error) { setError(data.error); return; }
     if (data?.ok && data?.room_id && data?.anon_id) {
       onJoined(data.room_id, data.anon_id, nickname.trim());
@@ -58,7 +59,7 @@ export function LivePinJoin({ lang, onJoined, onBack }: Props) {
             <Radio size={32} className="text-rose-400 animate-pulse" />
           </div>
           <h1 className="text-3xl font-black text-white">25 Math Live</h1>
-          <p className="text-white/40 text-sm">{en ? 'Join a live classroom session' : '加入实时课堂'}</p>
+          <p className="text-white/40 text-sm">{tt(lang, 'Join a live classroom session', '加入实时课堂')}</p>
         </div>
 
         {/* Step 1: PIN */}
@@ -66,7 +67,7 @@ export function LivePinJoin({ lang, onJoined, onBack }: Props) {
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
             <div>
               <label className="text-white/60 text-xs font-bold uppercase tracking-wider block mb-2">
-                {en ? 'Enter PIN Code' : '输入 PIN 码'}
+                {tt(lang, 'Enter PIN Code', '输入 PIN 码')}
               </label>
               <input
                 type="text"
@@ -92,7 +93,7 @@ export function LivePinJoin({ lang, onJoined, onBack }: Props) {
                   : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
-              {en ? 'Next' : '下一步'} <ArrowRight size={18} />
+              {tt(lang, 'Next', '下一步')} <ArrowRight size={18} />
             </button>
           </motion.div>
         )}
@@ -104,12 +105,12 @@ export function LivePinJoin({ lang, onJoined, onBack }: Props) {
               <span className="text-white/40 text-xs">PIN:</span>
               <span className="text-white font-black tracking-widest">{pin}</span>
               <button onClick={() => setStep('pin')} className="text-indigo-400 text-xs font-bold hover:text-indigo-300">
-                {en ? 'Change' : '修改'}
+                {tt(lang, 'Change', '修改')}
               </button>
             </div>
             <div>
               <label className="text-white/60 text-xs font-bold uppercase tracking-wider block mb-2">
-                {en ? 'Your Nickname' : '你的昵称'}
+                {tt(lang, 'Your Nickname', '你的昵称')}
               </label>
               <input
                 type="text"
@@ -117,7 +118,7 @@ export function LivePinJoin({ lang, onJoined, onBack }: Props) {
                 value={nickname}
                 onChange={e => { setNickname(e.target.value); setError(''); }}
                 onKeyDown={e => e.key === 'Enter' && handleJoin()}
-                placeholder={en ? 'Enter your name' : '输入你的名字'}
+                placeholder={tt(lang, 'Enter your name', '输入你的名字')}
                 className="w-full text-center text-2xl font-black px-6 py-4 bg-white/10 border-2 border-white/20 rounded-2xl text-white placeholder-white/20 focus:border-indigo-400 outline-none transition-all"
                 autoFocus
               />
@@ -133,7 +134,7 @@ export function LivePinJoin({ lang, onJoined, onBack }: Props) {
               }`}
             >
               {loading ? <Loader2 size={20} className="animate-spin" /> : null}
-              {loading ? (en ? 'Joining...' : '加入中...') : (en ? 'Join Session' : '加入课堂')}
+              {loading ? (tt(lang, 'Joining...', '加入中...')) : (tt(lang, 'Join Session', '加入课堂'))}
             </button>
           </motion.div>
         )}
@@ -143,7 +144,7 @@ export function LivePinJoin({ lang, onJoined, onBack }: Props) {
           onClick={onBack}
           className="text-white/30 text-xs font-bold hover:text-white/60 transition-colors"
         >
-          {en ? '← Back to 25 Math Legends' : '← 返回 25 数学三国'}
+          {tt(lang, '← Back to 25 Math Legends', '← 返回 25 数学三国')}
         </button>
       </motion.div>
     </div>

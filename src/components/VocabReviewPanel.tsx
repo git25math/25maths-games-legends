@@ -13,6 +13,7 @@ import type { Language } from '../types';
 import { getWordById } from '../data/vocab/mathVocab';
 import { getReviewRecommendations } from '../utils/spacedRepetition';
 import { recordReview, getPoolStats } from '../utils/vocabPool';
+import { tt } from '../i18n/resolveText';
 
 type Props = {
   lang: Language;
@@ -62,13 +63,13 @@ export function VocabReviewPanel({ lang, currentKpId, onClose }: Props) {
         >
           <div className="text-4xl mb-3">✨</div>
           <h3 className="text-lg font-black text-slate-800 mb-2">
-            {en ? 'No words to review!' : '没有需要复习的词汇！'}
+            {tt(lang, 'No words to review!', '没有需要复习的词汇！')}
           </h3>
           <p className="text-sm text-slate-500 mb-4">
-            {en ? 'Keep practising — new words will appear as you learn.' : '继续练习——遇到新词时它们会自动加入复习池。'}
+            {tt(lang, 'Keep practising — new words will appear as you learn.', '继续练习——遇到新词时它们会自动加入复习池。')}
           </p>
           <button onClick={onClose} className="px-6 py-3 bg-indigo-500 text-white font-bold rounded-xl hover:bg-indigo-400 transition-colors min-h-[44px]">
-            {en ? 'Got it' : '知道了'}
+            {tt(lang, 'Got it', '知道了')}
           </button>
         </motion.div>
       </motion.div>
@@ -91,7 +92,7 @@ export function VocabReviewPanel({ lang, currentKpId, onClose }: Props) {
           <div className="flex items-center gap-2">
             <BookOpen size={16} className="text-indigo-500" />
             <span className="text-sm font-black text-slate-700">
-              {en ? 'Vocab Review' : '词汇复习'}
+              {tt(lang, 'Vocab Review', '词汇复习')}
             </span>
             <span className="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-bold">
               {completed + 1}/{recommendations.length}
@@ -104,9 +105,9 @@ export function VocabReviewPanel({ lang, currentKpId, onClose }: Props) {
 
         {/* Pool stats */}
         <div className="px-5 pb-2 flex gap-2 text-[10px]">
-          <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">{stats.mastered} {en ? 'mastered' : '已掌握'}</span>
-          <span className="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">{stats.learning} {en ? 'learning' : '学习中'}</span>
-          <span className="bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-bold">{stats.total} {en ? 'total' : '总计'}</span>
+          <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">{stats.mastered} {tt(lang, 'mastered', '已掌握')}</span>
+          <span className="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">{stats.learning} {tt(lang, 'learning', '学习中')}</span>
+          <span className="bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-bold">{stats.total} {tt(lang, 'total', '总计')}</span>
         </div>
 
         {/* Card area */}
@@ -114,7 +115,7 @@ export function VocabReviewPanel({ lang, currentKpId, onClose }: Props) {
           <div className="px-5 py-8 text-center">
             <div className="text-4xl mb-3">🎉</div>
             <h3 className="text-lg font-black text-slate-800 mb-2">
-              {en ? 'Review complete!' : '复习完成！'}
+              {tt(lang, 'Review complete!', '复习完成！')}
             </h3>
             <p className="text-sm text-slate-500 mb-4">
               {en ? `You reviewed ${completed} words. Great job!` : `你复习了 ${completed} 个词汇。做得好！`}
@@ -141,7 +142,7 @@ export function VocabReviewPanel({ lang, currentKpId, onClose }: Props) {
                 <>
                   <h3 className="text-2xl font-black text-slate-800 mb-2">{currentWord.en}</h3>
                   {currentWord.examFreq.tier === 'core' && <span className="text-[10px] text-red-500 font-bold">🔥 CORE</span>}
-                  <p className="text-xs text-slate-400 mt-3">{en ? 'Tap to reveal meaning' : '点击翻转查看含义'}</p>
+                  <p className="text-xs text-slate-400 mt-3">{tt(lang, 'Tap to reveal meaning', '点击翻转查看含义')}</p>
                 </>
               ) : (
                 <>
@@ -164,14 +165,14 @@ export function VocabReviewPanel({ lang, currentKpId, onClose }: Props) {
               className="flex-1 py-3 bg-rose-100 text-rose-700 font-bold text-sm rounded-xl hover:bg-rose-200 transition-colors flex items-center justify-center gap-1 min-h-[44px]"
             >
               <RotateCcw size={14} />
-              {en ? 'Not yet' : '还不熟'}
+              {tt(lang, 'Not yet', '还不熟')}
             </button>
             <button
               onClick={() => handleResponse(true)}
               className="flex-1 py-3 bg-emerald-500 text-white font-bold text-sm rounded-xl hover:bg-emerald-400 transition-colors flex items-center justify-center gap-1 min-h-[44px]"
             >
               <Check size={14} />
-              {en ? 'Got it!' : '记住了！'}
+              {tt(lang, 'Got it!', '记住了！')}
             </button>
           </div>
         )}
@@ -184,7 +185,7 @@ export function VocabReviewPanel({ lang, currentKpId, onClose }: Props) {
               className="w-full py-3 bg-indigo-500 text-white font-bold rounded-xl hover:bg-indigo-400 transition-colors flex items-center justify-center gap-2 min-h-[44px]"
             >
               <ArrowRight size={16} />
-              {en ? 'Continue learning' : '继续学习'}
+              {tt(lang, 'Continue learning', '继续学习')}
             </button>
           </div>
         )}
@@ -192,7 +193,7 @@ export function VocabReviewPanel({ lang, currentKpId, onClose }: Props) {
         {/* Soul message */}
         <div className="px-5 pb-3">
           <p className="text-[10px] text-slate-300 text-center italic">
-            {en ? 'Every word you review is one less barrier in your exam.' : '每复习一个词，考试就少一个障碍。'}
+            {tt(lang, 'Every word you review is one less barrier in your exam.', '每复习一个词，考试就少一个障碍。')}
           </p>
         </div>
       </motion.div>

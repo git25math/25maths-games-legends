@@ -49,3 +49,14 @@ export function lt(text: { zh: string; en: string }, lang: Language): string {
   const base = lang === 'en' ? text.en : text.zh;
   return lang === 'zh_TW' ? toTraditional(base) : base;
 }
+
+/**
+ * Ternary-style text picker for inline JSX: `tt(lang, 'English', '简体中文')`.
+ * Automatically converts Simplified → Traditional when lang === 'zh_TW'.
+ * Prefer this over `lang === 'en' ? 'English' : '中文'` (which breaks zh_TW users).
+ */
+export function tt(lang: Language, en: string, zh: string): string {
+  if (lang === 'en') return en;
+  if (lang === 'zh_TW') return toTraditional(zh);
+  return zh;
+}

@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Radio, Users, CheckCircle2, XCircle, Clock, ChevronRight, Copy, Check, Trophy, BookOpen, X } from 'lucide-react';
 import type { Language, Room, Mission } from '../../types';
 import type { QuestionStats } from '../../hooks/useLiveSession';
-import { lt } from '../../i18n/resolveText';
+import { lt, tt } from '../../i18n/resolveText';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import { loadGradeMissions } from '../../hooks/useMissions';
@@ -86,7 +86,7 @@ export function LiveTeacherPanel({
   };
 
   const handleEnd = async () => {
-    if (!confirm(en ? 'End the live session?' : '确定结束课堂？')) return;
+    if (!confirm(tt(lang, 'End the live session?', '确定结束课堂？'))) return;
     await onEndSession();
     setShowSummary(true);
   };
@@ -114,7 +114,7 @@ export function LiveTeacherPanel({
             </div>
             <div>
               <h1 className="text-xl font-black text-white flex items-center gap-2">
-                {en ? 'Live Classroom' : '实时课堂'}
+                {tt(lang, 'Live Classroom', '实时课堂')}
                 <span className="px-2 py-0.5 bg-rose-500/20 text-rose-400 text-xs font-bold rounded-full">LIVE</span>
               </h1>
               <p className="text-white/40 text-xs">{room.liveMeta?.class_tag} · Q{questionIndex}</p>
@@ -137,15 +137,15 @@ export function LiveTeacherPanel({
             animate={{ opacity: 1, scale: 1 }}
             className="bg-gradient-to-r from-indigo-600/20 to-rose-600/20 rounded-2xl p-6 border border-indigo-400/20 text-center"
           >
-            <p className="text-white/60 text-sm font-bold mb-2">{en ? 'Share this PIN with your students' : '把 PIN 码分享给学生'}</p>
+            <p className="text-white/60 text-sm font-bold mb-2">{tt(lang, 'Share this PIN with your students', '把 PIN 码分享给学生')}</p>
             <button onClick={copyCode} className="inline-flex items-center gap-3 px-8 py-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors">
               <span className="text-5xl font-black text-white tracking-[0.3em]">{roomCode}</span>
               {copied ? <Check size={24} className="text-emerald-400" /> : <Copy size={24} className="text-white/40" />}
             </button>
             <p className="text-white/30 text-xs mt-3">
               {copied
-                ? (en ? 'Copied! Share with students' : '已复制！分享给学生')
-                : (en ? 'Students join at play.25maths.com?live' : '学生打开 play.25maths.com?live 输入此 PIN')}
+                ? (tt(lang, 'Copied! Share with students', '已复制！分享给学生'))
+                : (tt(lang, 'Students join at play.25maths.com?live', '学生打开 play.25maths.com?live 输入此 PIN'))}
             </p>
           </motion.div>
         )}
@@ -155,17 +155,17 @@ export function LiveTeacherPanel({
           <div className="bg-white/5 rounded-2xl p-4 border border-white/10 text-center">
             <Users size={20} className="text-indigo-400 mx-auto mb-1" />
             <p className="text-2xl font-black text-white">{studentCount}</p>
-            <p className="text-[10px] text-white/40 font-bold">{en ? 'Students' : '学生'}</p>
+            <p className="text-[10px] text-white/40 font-bold">{tt(lang, 'Students', '学生')}</p>
           </div>
           <div className="bg-white/5 rounded-2xl p-4 border border-white/10 text-center">
             <CheckCircle2 size={20} className="text-emerald-400 mx-auto mb-1" />
             <p className="text-2xl font-black text-white">{questionStats?.answeredCount ?? 0}/{studentCount}</p>
-            <p className="text-[10px] text-white/40 font-bold">{en ? 'Answered' : '已答'}</p>
+            <p className="text-[10px] text-white/40 font-bold">{tt(lang, 'Answered', '已答')}</p>
           </div>
           <div className="bg-white/5 rounded-2xl p-4 border border-white/10 text-center">
             <Trophy size={20} className="text-yellow-400 mx-auto mb-1" />
             <p className="text-2xl font-black text-white">{questionStats?.correctRate ?? 0}%</p>
-            <p className="text-[10px] text-white/40 font-bold">{en ? 'Correct' : '正确率'}</p>
+            <p className="text-[10px] text-white/40 font-bold">{tt(lang, 'Correct', '正确率')}</p>
           </div>
         </div>
 
@@ -173,7 +173,7 @@ export function LiveTeacherPanel({
         {questionStats && studentCount > 0 && (
           <div className="bg-white/5 rounded-xl p-3 border border-white/10">
             <div className="flex justify-between text-[10px] text-white/40 font-bold mb-1">
-              <span>{en ? 'Response progress' : '答题进度'}</span>
+              <span>{tt(lang, 'Response progress', '答题进度')}</span>
               <span>{questionStats.answeredCount}/{studentCount}</span>
             </div>
             <div className="h-3 bg-white/10 rounded-full overflow-hidden">
@@ -201,7 +201,7 @@ export function LiveTeacherPanel({
         {/* ─── Student Roster ─── */}
         <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
           <div className="px-4 py-3 border-b border-white/10">
-            <h3 className="text-sm font-black text-white">{en ? 'Student Responses' : '学生答题状态'}</h3>
+            <h3 className="text-sm font-black text-white">{tt(lang, 'Student Responses', '学生答题状态')}</h3>
           </div>
           <div className="max-h-[300px] overflow-y-auto divide-y divide-white/5">
             {students.map(([uid, p]) => {
@@ -211,10 +211,10 @@ export function LiveTeacherPanel({
                   <CharacterAvatar characterId={p.charId || ''} size={32} />
                   <span className="flex-1 text-sm font-bold text-white truncate">{p.name}</span>
                   {!currentQ ? (
-                    <span className="text-white/20 text-xs">{en ? 'Waiting' : '等待中'}</span>
+                    <span className="text-white/20 text-xs">{tt(lang, 'Waiting', '等待中')}</span>
                   ) : !stat?.answered ? (
                     <span className="flex items-center gap-1 text-amber-400/60 text-xs animate-pulse">
-                      <Clock size={12} /> {en ? 'Answering...' : '答题中...'}
+                      <Clock size={12} /> {tt(lang, 'Answering...', '答题中...')}
                     </span>
                   ) : stat.isCorrect ? (
                     <span className="flex items-center gap-1 text-emerald-400 text-xs">
@@ -231,7 +231,7 @@ export function LiveTeacherPanel({
             })}
             {studentCount === 0 && (
               <div className="px-4 py-8 text-center text-white/30 text-sm">
-                {en ? 'Waiting for students to join...' : '等待学生加入...'}
+                {tt(lang, 'Waiting for students to join...', '等待学生加入...')}
               </div>
             )}
           </div>
@@ -245,13 +245,13 @@ export function LiveTeacherPanel({
               className="flex-[2] py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-colors flex items-center justify-center gap-2"
             >
               <ChevronRight size={18} />
-              {questionIndex === 0 ? (en ? 'Push First Question' : '推送第一题') : (en ? 'Next Question' : '下一题')}
+              {questionIndex === 0 ? (tt(lang, 'Push First Question', '推送第一题')) : (tt(lang, 'Next Question', '下一题'))}
             </button>
             <button
               onClick={handleEnd}
               className="flex-1 py-4 bg-rose-500/20 text-rose-400 font-black rounded-2xl hover:bg-rose-500/30 transition-colors"
             >
-              {en ? 'End Session' : '结束课堂'}
+              {tt(lang, 'End Session', '结束课堂')}
             </button>
           </div>
         )}
@@ -259,21 +259,21 @@ export function LiveTeacherPanel({
         {/* ─── Session Ended: Summary ─── */}
         {isSessionEnded && sessionSummary && (
           <div className="bg-white/5 rounded-2xl p-6 border border-white/10 space-y-4">
-            <h3 className="text-lg font-black text-white">{en ? 'Session Summary' : '课堂总结'}</h3>
+            <h3 className="text-lg font-black text-white">{tt(lang, 'Session Summary', '课堂总结')}</h3>
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-indigo-500/10 rounded-xl p-3 text-center">
                 <p className="text-2xl font-black text-white">{sessionSummary.totalQuestions}</p>
-                <p className="text-[10px] text-white/40">{en ? 'Questions' : '题目数'}</p>
+                <p className="text-[10px] text-white/40">{tt(lang, 'Questions', '题目数')}</p>
               </div>
               <div className="bg-emerald-500/10 rounded-xl p-3 text-center">
                 <p className="text-2xl font-black text-white">{sessionSummary.totalResponses}</p>
-                <p className="text-[10px] text-white/40">{en ? 'Responses' : '答题数'}</p>
+                <p className="text-[10px] text-white/40">{tt(lang, 'Responses', '答题数')}</p>
               </div>
             </div>
 
             {sessionSummary.weakKps.length > 0 && (
               <div>
-                <h4 className="text-sm font-bold text-white/60 mb-2">{en ? 'Weak Areas' : '薄弱知识点'}</h4>
+                <h4 className="text-sm font-bold text-white/60 mb-2">{tt(lang, 'Weak Areas', '薄弱知识点')}</h4>
                 {sessionSummary.weakKps.slice(0, 5).map(kp => (
                   <div key={kp.kpId} className="flex items-center justify-between py-2 border-b border-white/5">
                     <span className="text-sm text-white font-bold">{kp.kpId}</span>
@@ -297,7 +297,7 @@ export function LiveTeacherPanel({
                     className="w-full mt-3 py-3 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-500 transition-colors flex items-center justify-center gap-2"
                   >
                     <BookOpen size={16} />
-                    {en ? 'Assign Practice for Weak KPs' : '布置薄弱知识点练习'}
+                    {tt(lang, 'Assign Practice for Weak KPs', '布置薄弱知识点练习')}
                   </button>
                 )}
               </div>
@@ -307,7 +307,7 @@ export function LiveTeacherPanel({
               onClick={onClose}
               className="w-full py-3 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-colors"
             >
-              {en ? 'Close' : '关闭'}
+              {tt(lang, 'Close', '关闭')}
             </button>
           </div>
         )}
@@ -326,7 +326,7 @@ export function LiveTeacherPanel({
                 className="bg-slate-800 rounded-2xl border border-white/10 w-full max-w-lg max-h-[70vh] flex flex-col overflow-hidden"
               >
                 <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between shrink-0">
-                  <h3 className="font-black text-white">{en ? 'Select Question' : '选择题目'}</h3>
+                  <h3 className="font-black text-white">{tt(lang, 'Select Question', '选择题目')}</h3>
                   <div className="flex items-center gap-2">
                     <select
                       value={timerSecs ?? ''}
@@ -334,7 +334,7 @@ export function LiveTeacherPanel({
                       className="bg-white/10 text-white text-xs rounded-lg px-2 py-1 border border-white/10"
                     >
                       {TIMER_OPTIONS.map(t => (
-                        <option key={String(t)} value={t ?? ''}>{t ? `${t}s` : (en ? 'No timer' : '无计时')}</option>
+                        <option key={String(t)} value={t ?? ''}>{t ? `${t}s` : (tt(lang, 'No timer', '无计时'))}</option>
                       ))}
                     </select>
                   </div>
@@ -370,7 +370,7 @@ export function LiveTeacherPanel({
                         : 'bg-white/10 text-white/30 cursor-not-allowed'
                     }`}
                   >
-                    {pushing ? (en ? 'Pushing...' : '推送中...') : (en ? 'Push to Class' : '推送给全班')}
+                    {pushing ? (tt(lang, 'Pushing...', '推送中...')) : (tt(lang, 'Push to Class', '推送给全班'))}
                   </button>
                 </div>
               </motion.div>

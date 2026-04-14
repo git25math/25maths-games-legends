@@ -5,6 +5,7 @@
  */
 import { useMemo } from 'react';
 import type { Language, CompletedMissions } from '../types';
+import { tt } from '../i18n/resolveText';
 
 type Props = {
   lang: Language;
@@ -71,7 +72,7 @@ export function ProgressReport({ lang, displayName, grade, totalScore, completed
         {/* Header */}
         <div className="text-center">
           <h2 className="text-lg font-black text-slate-800">
-            {en ? 'Weekly Learning Report' : '本周学习报告'}
+            {tt(lang, 'Weekly Learning Report', '本周学习报告')}
           </h2>
           <p className="text-sm text-slate-500 mt-1">
             {displayName} · Y{grade} · {new Date().toLocaleDateString(en ? 'en-GB' : 'zh-CN')}
@@ -84,30 +85,30 @@ export function ProgressReport({ lang, displayName, grade, totalScore, completed
         <div className="grid grid-cols-3 gap-3">
           <div className="text-center p-3 bg-blue-50 rounded-xl">
             <div className="text-2xl font-black text-blue-600">{stats.sessions}</div>
-            <div className="text-[10px] text-blue-500 font-bold">{en ? 'Sessions' : '学习次数'}</div>
+            <div className="text-[10px] text-blue-500 font-bold">{tt(lang, 'Sessions', '学习次数')}</div>
           </div>
           <div className="text-center p-3 bg-emerald-50 rounded-xl">
             <div className="text-2xl font-black text-emerald-600">{stats.weekAttempts}</div>
-            <div className="text-[10px] text-emerald-500 font-bold">{en ? 'Questions' : '答题数'}</div>
+            <div className="text-[10px] text-emerald-500 font-bold">{tt(lang, 'Questions', '答题数')}</div>
           </div>
           <div className="text-center p-3 bg-amber-50 rounded-xl">
             <div className="text-2xl font-black text-amber-600">{stats.weekAccuracy}%</div>
-            <div className="text-[10px] text-amber-500 font-bold">{en ? 'Accuracy' : '正确率'}</div>
+            <div className="text-[10px] text-amber-500 font-bold">{tt(lang, 'Accuracy', '正确率')}</div>
           </div>
         </div>
 
         {/* Progress summary */}
         <div className="bg-slate-50 rounded-xl p-4 space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-slate-600">{en ? 'Total missions mastered' : '已掌握关卡'}</span>
+            <span className="text-slate-600">{tt(lang, 'Total missions mastered', '已掌握关卡')}</span>
             <span className="font-black text-slate-800">{stats.totalMissions}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-slate-600">{en ? 'Total score' : '总积分'}</span>
+            <span className="text-slate-600">{tt(lang, 'Total score', '总积分')}</span>
             <span className="font-black text-slate-800">{totalScore.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-slate-600">{en ? 'This week\'s score' : '本周得分'}</span>
+            <span className="text-slate-600">{tt(lang, 'This week\\\'s score', '本周得分')}</span>
             <span className="font-black text-indigo-600">+{stats.weekScore.toLocaleString()}</span>
           </div>
         </div>
@@ -137,7 +138,7 @@ export function ProgressReport({ lang, displayName, grade, totalScore, completed
           onClick={onClose}
           className="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-colors text-sm"
         >
-          {en ? 'Close' : '关闭'}
+          {tt(lang, 'Close', '关闭')}
         </button>
       </div>
     </div>

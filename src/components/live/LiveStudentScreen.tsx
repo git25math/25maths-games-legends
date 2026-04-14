@@ -7,7 +7,7 @@ import { motion } from 'motion/react';
 import { Radio, Clock, CheckCircle2, XCircle, Trophy, BookOpen, Loader2 } from 'lucide-react';
 import type { Language, Room, Mission } from '../../types';
 import type { LiveQuestion } from '../../types';
-import { lt } from '../../i18n/resolveText';
+import { lt, tt } from '../../i18n/resolveText';
 import { LatexText } from '../MathView';
 import { CharacterAvatar } from '../CharacterAvatar';
 import { InputFields } from '../MathBattle/InputFields';
@@ -172,7 +172,7 @@ export function LiveStudentScreen({ lang, room, userId, questionIndex, completed
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Radio size={16} className="text-rose-400 animate-pulse" />
-            <span className="text-sm font-black text-white">{en ? 'Live Classroom' : '实时课堂'}</span>
+            <span className="text-sm font-black text-white">{tt(lang, 'Live Classroom', '实时课堂')}</span>
             <span className="text-xs text-white/40">{room.liveMeta?.class_tag}</span>
           </div>
           {myRank > 0 && (
@@ -184,9 +184,9 @@ export function LiveStudentScreen({ lang, room, userId, questionIndex, completed
         {!currentQ && !isSessionEnded && (
           <div className="text-center py-16 space-y-4">
             <Loader2 size={40} className="text-indigo-400 mx-auto animate-spin" />
-            <p className="text-white/60 font-bold">{en ? 'Waiting for teacher to push a question...' : '等待老师推送题目...'}</p>
+            <p className="text-white/60 font-bold">{tt(lang, 'Waiting for teacher to push a question...', '等待老师推送题目...')}</p>
             <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
-              <p className="text-[10px] text-white/30 font-bold uppercase mb-2">{en ? 'Class Ranking' : '班级排名'}</p>
+              <p className="text-[10px] text-white/30 font-bold uppercase mb-2">{tt(lang, 'Class Ranking', '班级排名')}</p>
               {leaderboard.map((e, i) => (
                 <div key={e.uid} className={`flex items-center gap-2 py-1.5 ${e.uid === userId ? 'text-indigo-300' : 'text-white/60'}`}>
                   <span className="w-5 text-xs font-bold">{i < 3 ? ['🥇','🥈','🥉'][i] : `#${i+1}`}</span>
@@ -196,7 +196,7 @@ export function LiveStudentScreen({ lang, room, userId, questionIndex, completed
                 </div>
               ))}
               {leaderboard.length === 0 && (
-                <p className="text-white/20 text-xs py-4">{en ? 'No scores yet' : '暂无分数'}</p>
+                <p className="text-white/20 text-xs py-4">{tt(lang, 'No scores yet', '暂无分数')}</p>
               )}
             </div>
           </div>
@@ -288,7 +288,7 @@ export function LiveStudentScreen({ lang, room, userId, questionIndex, completed
                           : 'bg-indigo-600 text-white hover:bg-indigo-500'
                       }`}
                     >
-                      {submitting ? (en ? 'Submitting...' : '提交中...') : (en ? 'Submit' : '提交')}
+                      {submitting ? (tt(lang, 'Submitting...', '提交中...')) : (tt(lang, 'Submit', '提交'))}
                     </button>
                   </>
                 )}
@@ -306,20 +306,20 @@ export function LiveStudentScreen({ lang, room, userId, questionIndex, completed
                 {result?.correct ? (
                   <>
                     <CheckCircle2 size={48} className="text-emerald-400 mx-auto mb-2" />
-                    <p className="text-emerald-400 font-black text-xl">{en ? 'Correct!' : '答对了！'}</p>
+                    <p className="text-emerald-400 font-black text-xl">{tt(lang, 'Correct!', '答对了！')}</p>
                   </>
                 ) : (
                   <>
                     <XCircle size={48} className="text-rose-400 mx-auto mb-2" />
-                    <p className="text-rose-400 font-black text-xl">{en ? 'Incorrect' : '答错了'}</p>
+                    <p className="text-rose-400 font-black text-xl">{tt(lang, 'Incorrect', '答错了')}</p>
                     {result?.expected && Object.keys(result.expected).length > 0 && (
                       <p className="text-white/40 text-sm mt-2">
-                        {en ? 'Answer: ' : '正确答案：'}{Object.values(result.expected).join(', ')}
+                        {tt(lang, 'Answer: ', '正确答案：')}{Object.values(result.expected).join(', ')}
                       </p>
                     )}
                   </>
                 )}
-                <p className="text-white/30 text-xs mt-3">{en ? 'Waiting for next question...' : '等待下一题...'}</p>
+                <p className="text-white/30 text-xs mt-3">{tt(lang, 'Waiting for next question...', '等待下一题...')}</p>
               </motion.div>
             )}
           </div>
@@ -329,16 +329,16 @@ export function LiveStudentScreen({ lang, room, userId, questionIndex, completed
         {isSessionEnded && (
           <div className="text-center py-8 space-y-6">
             <Trophy size={48} className="text-yellow-400 mx-auto" />
-            <h2 className="text-2xl font-black text-white">{en ? 'Session Complete!' : '课堂结束！'}</h2>
+            <h2 className="text-2xl font-black text-white">{tt(lang, 'Session Complete!', '课堂结束！')}</h2>
 
             {/* Final ranking */}
             <div className="bg-white/5 rounded-2xl p-4 border border-white/10 text-left">
-              <p className="text-[10px] text-white/30 font-bold uppercase mb-3">{en ? 'Final Ranking' : '最终排名'}</p>
+              <p className="text-[10px] text-white/30 font-bold uppercase mb-3">{tt(lang, 'Final Ranking', '最终排名')}</p>
               {leaderboard.map((e, i) => (
                 <div key={e.uid} className={`flex items-center gap-3 py-2 ${e.uid === userId ? 'text-indigo-300 bg-indigo-500/10 -mx-2 px-2 rounded-lg' : 'text-white/60'}`}>
                   <span className="w-6 text-center font-black">{i < 3 ? ['🥇','🥈','🥉'][i] : `#${i+1}`}</span>
                   <CharacterAvatar characterId={e.charId || ''} size={28} />
-                  <span className="flex-1 font-bold text-sm truncate">{e.name}{e.uid === userId ? (en ? ' (You)' : ' (我)') : ''}</span>
+                  <span className="flex-1 font-bold text-sm truncate">{e.name}{e.uid === userId ? (tt(lang, ' (You)', ' (我)')) : ''}</span>
                   <span className="font-black text-yellow-400">{e.score}</span>
                 </div>
               ))}
@@ -348,7 +348,7 @@ export function LiveStudentScreen({ lang, room, userId, questionIndex, completed
               onClick={onClose}
               className="w-full py-4 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-500 transition-colors"
             >
-              {en ? 'Back to Map' : '返回地图'}
+              {tt(lang, 'Back to Map', '返回地图')}
             </button>
           </div>
         )}

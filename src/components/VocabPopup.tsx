@@ -16,6 +16,7 @@ import { X, BookOpen, ChevronRight, Check, HelpCircle } from 'lucide-react';
 import type { Language } from '../types';
 import type { MathWord } from '../data/vocab/mathVocab';
 import { getTopicForKp } from '../data/curriculum/kp-registry';
+import { tt } from '../i18n/resolveText';
 
 type Props = {
   word: MathWord;
@@ -72,10 +73,10 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
             <h3 className="text-2xl font-black text-slate-800">{word.en}</h3>
             {/* Exam frequency badge */}
             {word.examFreq && word.examFreq.tier === 'core' && (
-              <span className="px-1.5 py-0.5 bg-red-100 text-red-600 text-[9px] font-black rounded">🔥 {en ? 'CORE' : '核心'}</span>
+              <span className="px-1.5 py-0.5 bg-red-100 text-red-600 text-[9px] font-black rounded">🔥 {tt(lang, 'CORE', '核心')}</span>
             )}
             {word.examFreq && word.examFreq.tier === 'high' && (
-              <span className="px-1.5 py-0.5 bg-amber-100 text-amber-600 text-[9px] font-black rounded">⭐ {en ? 'HIGH' : '高频'}</span>
+              <span className="px-1.5 py-0.5 bg-amber-100 text-amber-600 text-[9px] font-black rounded">⭐ {tt(lang, 'HIGH', '高频')}</span>
             )}
           </div>
           <p className="text-lg text-indigo-600 font-bold mb-2">{word.zh}</p>
@@ -88,7 +89,7 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
           {/* Multiple senses (一词多义) */}
           {word.senses && word.senses.length > 0 && (
             <div className="mt-2 space-y-1">
-              <p className="text-[10px] font-bold text-purple-500 uppercase">{en ? 'Multiple meanings' : '一词多义'}</p>
+              <p className="text-[10px] font-bold text-purple-500 uppercase">{tt(lang, 'Multiple meanings', '一词多义')}</p>
               {word.senses.map((s, i) => (
                 <div key={i} className="text-xs text-slate-600 bg-purple-50 rounded px-2 py-1">
                   <span className="font-bold">{s.meaning.zh}</span> — {s.meaning.en}
@@ -100,7 +101,7 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
           {/* Exam phrases (真题句式) */}
           {word.examPhrases && word.examPhrases.length > 0 && (
             <div className="mt-2">
-              <p className="text-[10px] font-bold text-emerald-500 uppercase mb-1">{en ? 'In exam questions' : '真题句式'}</p>
+              <p className="text-[10px] font-bold text-emerald-500 uppercase mb-1">{tt(lang, 'In exam questions', '真题句式')}</p>
               {word.examPhrases.slice(0, 2).map((p, i) => (
                 <p key={i} className="text-[11px] text-slate-500 italic leading-relaxed">"{p.en}"</p>
               ))}
@@ -136,15 +137,13 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
                 <div className="flex items-center gap-1.5 mb-2">
                   <BookOpen size={14} className="text-amber-500" />
                   <span className="text-xs font-bold text-amber-700">
-                    {en ? 'What the question is asking' : '题意解读'}
+                    {tt(lang, 'What the question is asking', '题意解读')}
                   </span>
                 </div>
                 <p className="text-sm text-slate-700 leading-relaxed bg-amber-50 rounded-lg p-3">
                   {missionDesc
                     ? (en ? missionDesc.en : missionDesc.zh)
-                    : (en
-                      ? 'Read the question carefully — identify what is given and what you need to find.'
-                      : '仔细读题——找出已知条件和求解目标。')}
+                    : (tt(lang, 'Read the question carefully — identify what is given and what you need to find.', '仔细读题——找出已知条件和求解目标。'))}
                 </p>
               </div>
             </motion.div>
@@ -164,7 +163,7 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
                 <div className="flex items-center gap-1.5 mb-2">
                   <BookOpen size={14} className="text-emerald-500" />
                   <span className="text-xs font-bold text-emerald-700">
-                    {en ? 'How to solve it' : '解法引导'}
+                    {tt(lang, 'How to solve it', '解法引导')}
                   </span>
                 </div>
                 <p className="text-sm text-slate-600 mb-2">
@@ -179,7 +178,7 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
                   className="w-full py-2.5 bg-emerald-500 text-white font-bold text-sm rounded-xl hover:bg-emerald-400 transition-colors flex items-center justify-center gap-2"
                 >
                   <BookOpen size={14} />
-                  {en ? 'Open Tutorial' : '打开教程'}
+                  {tt(lang, 'Open Tutorial', '打开教程')}
                 </button>
               </div>
             </motion.div>
@@ -193,7 +192,7 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
             className="flex-1 py-3 bg-indigo-500 text-white font-bold text-sm rounded-xl hover:bg-indigo-400 transition-colors flex items-center justify-center gap-2 min-h-[44px]"
           >
             <Check size={16} />
-            {en ? 'Got it!' : '我懂了！'}
+            {tt(lang, 'Got it!', '我懂了！')}
           </button>
 
           {level === 1 && (
@@ -201,7 +200,7 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
               onClick={() => advanceLevel(2)}
               className="flex-1 py-3 bg-slate-100 text-slate-600 font-bold text-sm rounded-xl hover:bg-slate-200 transition-colors flex items-center justify-center gap-1 min-h-[44px]"
             >
-              {en ? "Don't understand the question" : '不理解题意'}
+              {tt(lang, 'Don\'t understand the question', '不理解题意')}
               <ChevronRight size={14} />
             </button>
           )}
@@ -211,7 +210,7 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
               onClick={() => advanceLevel(3)}
               className="flex-1 py-3 bg-slate-100 text-slate-600 font-bold text-sm rounded-xl hover:bg-slate-200 transition-colors flex items-center justify-center gap-1 min-h-[44px]"
             >
-              {en ? "Don't know how to solve" : '不知道怎么做'}
+              {tt(lang, 'Don\'t know how to solve', '不知道怎么做')}
               <ChevronRight size={14} />
             </button>
           )}
@@ -220,9 +219,7 @@ export function VocabPopup({ word, lang, kpId, missionDesc, onClose, onLevelChan
         {/* Soul message */}
         <div className="px-5 pb-4">
           <p className="text-[10px] text-slate-300 text-center italic">
-            {en
-              ? "Tapping words doesn't affect your score. I'm here to help. 😊"
-              : '点击查词不影响分数。我在这里帮你。😊'}
+            {tt(lang, 'Tapping words doesn\'t affect your score. I\'m here to help. 😊', '点击查词不影响分数。我在这里帮你。😊')}
           </p>
         </div>
       </motion.div>

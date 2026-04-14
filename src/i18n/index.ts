@@ -1,3 +1,3 @@
 export { toTraditional } from './zhHantMap';
-export { resolveText } from './resolveText';
+export { resolveText, lt, tt } from './resolveText';
 export { translations } from './translations';

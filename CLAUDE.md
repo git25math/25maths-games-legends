@@ -1,6 +1,6 @@
 # Play.25maths.com (games-legends) — CLAUDE.md
 
-> **版本**: v10.9.1 | **日期**: 2026-04-03
+> **版本**: v10.11.1 | **日期**: 2026-04-14
 > **主战场**: 三国故事化闯关 + 教师看板 — 424 关卡 Y7-Y12 + Live Classroom + 班级管理
 
 ---
@@ -27,7 +27,7 @@
 | 关卡 | 424 个 (Y7:89 + Y8:78 + Y9:95 + Y10:87 + Y11:60 + Y12:15) |
 | 生成器 | 81 个活跃 generatorType + 51 个 MC 多选 |
 | 题型 | 46 个 QuestionType |
-| 测试 | 2,422 个 Vitest 用例 |
+| 测试 | 2,704 个 Vitest 用例 |
 | KP 覆盖 | 287/288 = 99.7% (仅 kp-1.14-01 计算器跳过) |
 
 ### 架构
@@ -84,7 +84,7 @@ src/
 1. `git pull` — 确认最新代码
 2. 读本文件 `CLAUDE.md` + `docs/DEVELOPMENT-PLAN.md`
 3. `npm run build` — 必须零错误
-4. `npm test -- --run` — 必须 2422 passed
+4. `npm test -- --run` — 必须 2704 passed
 5. 开始工作
 
 ### 结束协议（每次会话结束前，必须执行）
@@ -168,6 +168,7 @@ git push                         # 触发 GitHub Actions 部署
 | 修改共享 Supabase 表不通知其他产品 | 必须同步 ExamHub/Practice |
 | 新文件不 `git add` | commit 前 `git status` 检查 `??` 未跟踪文件（规则I）|
 | FractionPie step 检查 `>= 1` | step 从 0 开始，step=0 必须有内容（规则C）|
+| 组件内用 `const en = lang === 'en'` + `en ? 'EN' : '中'` 三元 | 绕过 `toTraditional()`，zh_TW 用户看到简体字。用 `tt(lang, 'EN', '简体')` 或 `{zh,en}` + `lt()`（规则M）|
 
 ---
 
