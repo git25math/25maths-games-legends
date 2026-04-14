@@ -46,8 +46,11 @@ export function checkAnswer(mission: Mission, inputs: { [key: string]: string })
     if (data.answer !== undefined) {
       return { correct: parse(inputs.ans || '') === data.answer, expected: { ans: String(data.answer) } };
     }
+    if (data.value === undefined) return { correct: false, expected: {} };
     const val = Math.round(Math.sqrt(data.value));
-    return { correct: parseInt(inputs.ans || '') === val, expected: { ans: String(val) } };
+    // Use `parse` (supports floats) instead of parseInt so "3.5" etc. are
+    // handled consistently with the answer-path branch above.
+    return { correct: parse(inputs.ans || '') === val, expected: { ans: String(val) } };
   }
   if (type === 'PERCENTAGE') {
     if (data.answer !== undefined) {

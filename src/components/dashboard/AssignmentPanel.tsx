@@ -9,7 +9,7 @@ import { ClipboardList, Plus, Archive, Calendar, CheckCircle2, Clock, ChevronDow
 import type { Language, MissionSummary } from '../../types';
 import type { StudentRow, UnitEntry } from './types';
 import { supabase } from '../../supabase';
-import { lt } from '../../i18n/resolveText';
+import { lt, tt } from '../../i18n/resolveText';
 import { buildMissionSummaryMap } from '../../utils/missionSummary';
 
 type Assignment = {
@@ -111,7 +111,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
     if (!error && data !== false) {
       setAssignments(prev => prev.map(a => a.id === id ? { ...a, archived_at: new Date().toISOString() } : a));
     } else {
-      setToast(lang === 'en' ? 'Could not archive — you may not be the creator' : '归档失败——可能不是您创建的任务');
+      setToast(tt(lang, 'Could not archive — you may not be the creator', '归档失败——可能不是您创建的任务'));
       setTimeout(() => setToast(null), 3000);
     }
   };
@@ -125,15 +125,15 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
   };
 
   const formatDeadline = (deadline: string | null) => {
-    if (!deadline) return lang === 'en' ? 'No deadline' : '无截止日期';
+    if (!deadline) return tt(lang, 'No deadline', '无截止日期');
     const d = new Date(deadline);
     const now = new Date();
     const diffMs = d.getTime() - now.getTime();
     const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) return lang === 'en' ? `⚠ Overdue ${-diffDays}d` : `⚠ 逾期 ${-diffDays} 天`;
-    if (diffDays === 0) return lang === 'en' ? 'Due today!' : '今天截止！';
-    if (diffDays === 1) return lang === 'en' ? 'Due tomorrow' : '明天截止';
+    if (diffDays === 0) return tt(lang, 'Due today!', '今天截止！');
+    if (diffDays === 1) return tt(lang, 'Due tomorrow', '明天截止');
     return lang === 'en' ? `${diffDays} days left` : `剩余 ${diffDays} 天`;
   };
 
@@ -141,9 +141,9 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
     <div className="bg-white/60 backdrop-blur rounded-2xl border border-slate-100 p-4">
       <div className="flex items-center gap-2 mb-2">
         <ClipboardList size={16} className="text-indigo-500" />
-        <h3 className="text-sm font-black text-slate-700">{lang === 'en' ? 'Assignments' : '任务布置'}</h3>
+        <h3 className="text-sm font-black text-slate-700">{tt(lang, 'Assignments', '任务布置')}</h3>
       </div>
-      <p className="text-xs text-slate-400">{lang === 'en' ? 'Select a class above to manage assignments.' : '请先在上方选择一个班级，才能布置作业。'}</p>
+      <p className="text-xs text-slate-400">{tt(lang, 'Select a class above to manage assignments.', '请先在上方选择一个班级，才能布置作业。')}</p>
     </div>
   );
 
@@ -153,7 +153,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-black text-slate-700 flex items-center gap-2">
           <ClipboardList size={16} className="text-indigo-500" />
-          {lang === 'en' ? 'Assignments' : '任务布置'}
+          {tt(lang, 'Assignments', '任务布置')}
           {active.length > 0 && (
             <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 text-[10px] font-black rounded-full">
               {active.length}
@@ -164,7 +164,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
           onClick={() => setShowCreate(!showCreate)}
           className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-colors"
         >
-          <Plus size={14} /> {lang === 'en' ? 'New' : '新建'}
+          <Plus size={14} /> {tt(lang, 'New', '新建')}
         </button>
       </div>
 
@@ -182,7 +182,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
       ) : active.length === 0 ? (
         <div className="bg-white/60 backdrop-blur rounded-2xl p-6 border border-slate-100 text-center">
           <p className="text-sm text-slate-400">
-            {lang === 'en' ? 'No active assignments for this class' : '该班级暂无活跃任务'}
+            {tt(lang, 'No active assignments for this class', '该班级暂无活跃任务')}
           </p>
         </div>
       ) : (
@@ -219,16 +219,16 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
                           {formatDeadline(a.deadline)}
                         </span>
                         <span className="text-[10px] text-slate-400">
-                          {a.mission_ids.length} {lang === 'en' ? 'missions' : '关卡'}
+                          {a.mission_ids.length} {tt(lang, 'missions', '关卡')}
                         </span>
                         {stats.totalStudents - stats.completedStudents > 0 && (
                           <span className="text-[10px] font-bold text-rose-500">
-                            {stats.totalStudents - stats.completedStudents} {lang === 'en' ? 'incomplete' : '人未完成'}
+                            {stats.totalStudents - stats.completedStudents} {tt(lang, 'incomplete', '人未完成')}
                           </span>
                         )}
                         {stats.completedStudents === stats.totalStudents && stats.totalStudents > 0 && (
                           <span className="text-[10px] font-bold text-emerald-500">
-                            ✓ {lang === 'en' ? 'All done' : '全部完成'}
+                            ✓ {tt(lang, 'All done', '全部完成')}
                           </span>
                         )}
                       </div>
@@ -261,7 +261,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
                           });
                         }}
                         className="p-2 text-slate-300 hover:text-indigo-500 transition-colors"
-                        title={lang === 'en' ? 'Copy homework link' : '复制作业链接'}
+                        title={tt(lang, 'Copy homework link', '复制作业链接')}
                       >
                         {copiedAssignmentId === a.id ? <Check size={14} className="text-emerald-500" /> : <Link2 size={14} />}
                       </button>
@@ -273,7 +273,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
                           }
                         }}
                         className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
-                        title={lang === 'en' ? 'Archive' : '归档'}
+                        title={tt(lang, 'Archive', '归档')}
                       >
                         <Archive size={14} />
                       </button>
@@ -312,9 +312,9 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
                           const inProgress = stats.perStudent.filter(ps => ps.done > 0 && ps.done < ps.total);
                           return (
                             <div className="flex items-center gap-2 mb-2 text-[10px] flex-wrap">
-                              {notStarted.length > 0 && <span className="font-bold text-rose-500">{notStarted.length} {lang === 'en' ? 'not started' : '人未开始'}</span>}
-                              {inProgress.length > 0 && <><span className="text-slate-300">|</span><span className="font-bold text-amber-500">{inProgress.length} {lang === 'en' ? 'in progress' : '人进行中'}</span></>}
-                              {stats.completedStudents > 0 && <><span className="text-slate-300">|</span><span className="font-bold text-emerald-500">{stats.completedStudents} {lang === 'en' ? 'done' : '人已完成'}</span></>}
+                              {notStarted.length > 0 && <span className="font-bold text-rose-500">{notStarted.length} {tt(lang, 'not started', '人未开始')}</span>}
+                              {inProgress.length > 0 && <><span className="text-slate-300">|</span><span className="font-bold text-amber-500">{inProgress.length} {tt(lang, 'in progress', '人进行中')}</span></>}
+                              {stats.completedStudents > 0 && <><span className="text-slate-300">|</span><span className="font-bold text-emerald-500">{stats.completedStudents} {tt(lang, 'done', '人已完成')}</span></>}
                             </div>
                           );
                         })()}
@@ -359,7 +359,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
           >
             {showArchived ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
             {showArchived
-              ? (lang === 'en' ? 'Hide archived' : '隐藏归档')
+              ? (tt(lang, 'Hide archived', '隐藏归档'))
               : (lang === 'en' ? `Show ${archived.length} archived` : `显示 ${archived.length} 个归档任务`)
             }
           </button>
@@ -370,7 +370,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
                   <div className="flex items-center gap-2">
                     <Archive size={12} className="text-slate-400" />
                     <span className="text-xs text-slate-500 font-bold">{a.title}</span>
-                    <span className="text-[10px] text-slate-400">{a.mission_ids.length} {lang === 'en' ? 'missions' : '关卡'}</span>
+                    <span className="text-[10px] text-slate-400">{a.mission_ids.length} {tt(lang, 'missions', '关卡')}</span>
                   </div>
                 </div>
               ))}
@@ -436,7 +436,7 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
             >
               <div className="text-3xl mb-3">🎉</div>
               <h3 className="text-lg font-black text-slate-800 mb-1">
-                {lang === 'en' ? 'Assignment Created!' : '作业已创建！'}
+                {tt(lang, 'Assignment Created!', '作业已创建！')}
               </h3>
               <p className="text-sm text-slate-500 mb-4">"{sharePrompt.title}"</p>
               <button
@@ -447,13 +447,13 @@ export function AssignmentPanel({ lang, grade, filterTag, students, units, kpAss
                 }}
                 className="w-full py-3 min-h-[48px] bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-xl transition-colors text-base"
               >
-                {copiedAssignmentId === 'share-prompt' ? (lang === 'en' ? '✓ Copied!' : '✓ 已复制！') : (lang === 'en' ? '📋 Copy Link to Share' : '📋 复制链接发到班级群')}
+                {copiedAssignmentId === 'share-prompt' ? (tt(lang, '✓ Copied!', '✓ 已复制！')) : (tt(lang, '📋 Copy Link to Share', '📋 复制链接发到班级群'))}
               </button>
               <button
                 onClick={() => setSharePrompt(null)}
                 className="w-full mt-2 py-2 text-slate-400 text-sm"
               >
-                {lang === 'en' ? 'Later' : '稍后'}
+                {tt(lang, 'Later', '稍后')}
               </button>
             </motion.div>
           </motion.div>
@@ -522,11 +522,11 @@ function CreateAssignmentModal({
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      setError(lang === 'en' ? 'Title is required' : '请输入任务标题');
+      setError(tt(lang, 'Title is required', '请输入任务标题'));
       return;
     }
     if (selectedMissions.size === 0) {
-      setError(lang === 'en' ? 'Select at least one mission' : '请至少选择一个关卡');
+      setError(tt(lang, 'Select at least one mission', '请至少选择一个关卡'));
       return;
     }
 
@@ -544,7 +544,7 @@ function CreateAssignmentModal({
     });
 
     if (rpcErr) {
-      setError(lang === 'en' ? 'Failed to create assignment' : '创建任务失败');
+      setError(tt(lang, 'Failed to create assignment', '创建任务失败'));
       setSubmitting(false);
       return;
     }
@@ -571,7 +571,7 @@ function CreateAssignmentModal({
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-black text-slate-800">
-              {lang === 'en' ? 'New Assignment' : '新建任务'}
+              {tt(lang, 'New Assignment', '新建任务')}
             </h3>
             <button onClick={onClose} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-slate-400 hover:text-slate-600 rounded-full" aria-label="Close">
               <X size={20} />
@@ -581,13 +581,13 @@ function CreateAssignmentModal({
           {/* Title */}
           <label className="block mb-4">
             <span className="text-xs font-bold text-slate-500 mb-1 block">
-              {lang === 'en' ? 'Title' : '任务标题'} *
+              {tt(lang, 'Title', '任务标题')} *
             </span>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder={lang === 'en' ? 'e.g., Week 5 Algebra Practice' : '例：第5周代数练习'}
+              placeholder={tt(lang, 'e.g., Week 5 Algebra Practice', '例：第5周代数练习')}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
             />
           </label>
@@ -595,13 +595,13 @@ function CreateAssignmentModal({
           {/* Description */}
           <label className="block mb-4">
             <span className="text-xs font-bold text-slate-500 mb-1 block">
-              {lang === 'en' ? 'Note to students (optional)' : '给学生的备注（可选）'}
+              {tt(lang, 'Note to students (optional)', '给学生的备注（可选）')}
             </span>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
-              placeholder={lang === 'en' ? 'Any instructions or encouragement...' : '写点鼓励的话吧...'}
+              placeholder={tt(lang, 'Any instructions or encouragement...', '写点鼓励的话吧...')}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
             />
           </label>
@@ -609,7 +609,7 @@ function CreateAssignmentModal({
           {/* Deadline */}
           <label className="block mb-4">
             <span className="text-xs font-bold text-slate-500 mb-1 block">
-              {lang === 'en' ? 'Deadline (optional)' : '截止日期（可选）'}
+              {tt(lang, 'Deadline (optional)', '截止日期（可选）')}
             </span>
             <input
               type="datetime-local"
@@ -619,7 +619,7 @@ function CreateAssignmentModal({
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
             />
             {deadline && new Date(deadline) < new Date() && (
-              <p className="text-[10px] text-rose-500 mt-1">{lang === 'en' ? '⚠ This deadline is in the past' : '⚠ 此截止日期已过'}</p>
+              <p className="text-[10px] text-rose-500 mt-1">{tt(lang, '⚠ This deadline is in the past', '⚠ 此截止日期已过')}</p>
             )}
           </label>
 
@@ -640,17 +640,17 @@ function CreateAssignmentModal({
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-slate-500">
-                {lang === 'en' ? 'Select missions' : '选择关卡'} *
+                {tt(lang, 'Select missions', '选择关卡')} *
               </span>
               <span className="text-[10px] font-bold text-indigo-500">
-                {selectedMissions.size} {lang === 'en' ? 'selected' : '已选'}
+                {selectedMissions.size} {tt(lang, 'selected', '已选')}
               </span>
             </div>
             <input
               type="text"
               value={missionSearch}
               onChange={e => setMissionSearch(e.target.value)}
-              placeholder={lang === 'en' ? 'Search by topic name...' : '搜索知识点名称...'}
+              placeholder={tt(lang, 'Search by topic name...', '搜索知识点名称...')}
               className="w-full px-3 py-2 mb-2 text-xs border border-slate-200 rounded-lg focus:border-indigo-400 focus:outline-none"
             />
             <div className="space-y-2 max-h-48 overflow-y-auto rounded-xl border border-slate-100 p-2">
@@ -710,7 +710,7 @@ function CreateAssignmentModal({
               onClick={onClose}
               className="flex-1 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 transition-colors"
             >
-              {lang === 'en' ? 'Cancel' : '取消'}
+              {tt(lang, 'Cancel', '取消')}
             </button>
             <button
               onClick={handleSubmit}
@@ -718,8 +718,8 @@ function CreateAssignmentModal({
               className="flex-1 py-3 min-h-[44px] rounded-xl bg-indigo-600 text-white text-sm font-black hover:bg-indigo-700 transition-colors disabled:opacity-50"
             >
               {submitting
-                ? (lang === 'en' ? 'Creating...' : '创建中...')
-                : (lang === 'en' ? 'Create' : '创建')}
+                ? (tt(lang, 'Creating...', '创建中...'))
+                : (tt(lang, 'Create', '创建'))}
             </button>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { getLevelInfo } from '../utils/xpLevels';
 import { CharacterAvatar } from './CharacterAvatar';
 import type { Language } from '../types';
 import { useEscapeKey } from '../hooks/useEscapeKey';
+import { tt } from '../i18n/resolveText';
 
 type LeaderEntry = {
   user_id: string;
@@ -128,9 +129,9 @@ export const LeaderboardPanel = ({
   const title = tab === 'class' && hasClass
     ? (lang === 'en' ? `${classTags![0]} Leaderboard` : `${classTags![0]} 排行榜`)
     : tab === 'school'
-    ? (lang === 'en' ? 'School Top 50' : '全校前 50')
+    ? (tt(lang, 'School Top 50', '全校前 50'))
     : tab === 'weekly'
-    ? (lang === 'en' ? 'Weekly Progress' : '本周进步')
+    ? (tt(lang, 'Weekly Progress', '本周进步'))
     : (lang === 'en' ? `Year ${grade} Leaderboard` : `${grade} 年级排行榜`);
 
   const renderEntry = (entry: LeaderEntry, idx: number, weeklyXP?: number) => {
@@ -153,7 +154,7 @@ export const LeaderboardPanel = ({
         <CharacterAvatar characterId={entry.selected_char_id || ''} size={32} />
         <div className="flex-1 min-w-0">
           <p className={`font-black text-sm truncate ${isMe ? 'text-indigo-300' : 'text-white'}`}>
-            {entry.display_name}{isMe && (lang === 'en' ? ' (You)' : ' (我)')}
+            {entry.display_name}{isMe && (tt(lang, ' (You)', ' (我)'))}
           </p>
           <p className="text-white/30 text-[10px]">Lv.{levelInfo.level} · {rankName}</p>
         </div>
@@ -218,24 +219,24 @@ export const LeaderboardPanel = ({
         <div className="overflow-y-auto flex-1 space-y-2 pr-1">
           {loading ? (
             <div className="text-white/30 text-center py-12 text-sm">
-              {lang === 'en' ? 'Loading...' : '加载中...'}
+              {tt(lang, 'Loading...', '加载中...')}
             </div>
           ) : error ? (
             <div className="text-center py-12">
-              <p className="text-rose-400/60 text-sm mb-3">{lang === 'en' ? 'Failed to load' : '加载失败'}</p>
+              <p className="text-rose-400/60 text-sm mb-3">{tt(lang, 'Failed to load', '加载失败')}</p>
               <button onClick={fetchData} className="inline-flex items-center gap-1.5 px-4 py-2 bg-white/10 border border-white/10 rounded-xl text-white/60 text-xs font-bold hover:bg-white/20 transition-colors">
-                <RefreshCw size={12} /> {lang === 'en' ? 'Retry' : '重试'}
+                <RefreshCw size={12} /> {tt(lang, 'Retry', '重试')}
               </button>
             </div>
           ) : isWeekly ? (
             weeklyEntries.length === 0 ? (
               <div className="text-white/30 text-center py-12 text-sm">
-                {lang === 'en' ? 'No battles this week yet' : '本周还没有闯关记录'}
+                {tt(lang, 'No battles this week yet', '本周还没有闯关记录')}
               </div>
             ) : weeklyEntries.map((entry, idx) => renderEntry(entry, idx, entry.weeklyXP))
           ) : entries.length === 0 ? (
             <div className="text-white/30 text-center py-12 text-sm">
-              {lang === 'en' ? 'No data yet' : '暂无数据'}
+              {tt(lang, 'No data yet', '暂无数据')}
             </div>
           ) : entries.map((entry, idx) => renderEntry(entry, idx))}
         </div>

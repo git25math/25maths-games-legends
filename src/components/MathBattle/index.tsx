@@ -147,6 +147,10 @@ export const MathBattle = ({
   const milestoneTimerRef = useRef<number | null>(null);
   const victoryReturnTimerRef = useRef<number | null>(null);
   const floatingKeyRef = useRef(0);
+  // Rule K: stash latest handleSubmit so setTimeout callbacks read the latest
+  // closure (with latest `inputs`) instead of stale render-time closure.
+  const handleSubmitRef = useRef<() => void>(() => {});
+  const mcTimerRef = useRef<number | null>(null);
 
   const {
     playBGM, stopBGM, playClick, muted, toggleMute,
@@ -182,6 +186,7 @@ export const MathBattle = ({
       if (advanceTimerRef.current !== null) clearTimeout(advanceTimerRef.current);
       if (milestoneTimerRef.current !== null) clearTimeout(milestoneTimerRef.current);
       if (victoryReturnTimerRef.current !== null) clearTimeout(victoryReturnTimerRef.current);
+      if (mcTimerRef.current !== null) clearTimeout(mcTimerRef.current);
       if (speedIntervalRef.current !== null) clearInterval(speedIntervalRef.current);
     };
   }, []);
@@ -262,10 +267,13 @@ export const MathBattle = ({
     const isCorrect = String(value) === String(currentQuestion.data.correctChoice);
     setMcResult(isCorrect ? 'correct' : 'wrong');
     playClick();
-    // Delay then process via normal submit flow
-    setTimeout(() => {
-      setInputs({ ans: value, _mc: '1' });
-      handleSubmit();
+    // Delay then process via normal submit flow.
+    // Use handleSubmitRef (updated every render) so the callback reads the
+    // LATEST closure — otherwise this render's handleSubmit reads stale
+    // `inputs` captured before the setInputs above took effect (Rule K).
+    if (mcTimerRef.current !== null) clearTimeout(mcTimerRef.current);
+    mcTimerRef.current = window.setTimeout(() => {
+      handleSubmitRef.current();
     }, 600); // Show visual feedback before advancing
   };
 
@@ -371,6 +379,9 @@ export const MathBattle = ({
       setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
     }
   };
+  // Update ref every render so timer callbacks invoke the latest handleSubmit
+  // (which captures the latest `inputs`). See handleMcSelect / Rule K.
+  handleSubmitRef.current = handleSubmit;
 
   const handleWrongAnswerContinue = () => {
     const wasPartial = !!partialCreditInfo;

@@ -793,7 +793,8 @@ export default function App() {
                   consecutive_same_pattern_count: newState.consecutiveSamePattern,
                   total_attempt_count: newState.totalAttempts,
                   last_attempt_at: new Date().toISOString(),
-                }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+                }, { onConflict: 'user_id,node_id' })
+                  .then(({ error }) => { if (error) console.error('[user_skill_health] upsert failed:', error); });
               }
             } catch (error) {
               console.error('Failed to lazy-load processAttempt for battle success', error);
@@ -816,14 +817,15 @@ export default function App() {
         // Step 6: Notifications only (no writes)
         showLevelUpNotifications(prevScore, score, levelsGained);
 
-        // Step 7: Bridge to shared play_kp_progress table (fire-and-forget)
+        // Step 7: Bridge to shared play_kp_progress table (fire-and-forget,
+        // but log errors so silent failures don't mask lost learning data).
         if (activeMission.kpId && user) {
           const knId = getKnIdForKp(activeMission.kpId) ?? null;
           supabase.rpc('upsert_play_kp', {
             p_user_id: user.id, p_kp_id: activeMission.kpId,
             p_success: true, p_score: score,
             p_kn_id: knId,
-          });
+          }).then(({ error }) => { if (error) console.error('[upsert_play_kp win] failed:', error); });
           // Step 7b: Bridge to unified meta_node_progress (fire-and-forget)
           // Daily battles use source='play' intentionally — daily is a gameplay
           // mode on top of play, not a separate learning context. mastery_score
@@ -833,7 +835,7 @@ export default function App() {
             supabase.rpc('upsert_meta_node_progress', {
               p_user_id: user.id, p_kn_id: knId,
               p_source: 'play', p_score: score, p_correct: true,
-            });
+            }).then(({ error }) => { if (error) console.error('[upsert_meta_node_progress win] failed:', error); });
           }
         }
       }
@@ -849,13 +851,13 @@ export default function App() {
         p_user_id: user.id, p_kp_id: activeMission.kpId,
         p_success: false, p_score: score,
         p_kn_id: knId,
-      });
+      }).then(({ error }) => { if (error) console.error('[upsert_play_kp loss] failed:', error); });
       // Bridge to unified meta_node_progress (fire-and-forget)
       if (knId) {
         supabase.rpc('upsert_meta_node_progress', {
           p_user_id: user.id, p_kn_id: knId,
           p_source: 'play', p_score: score, p_correct: false,
-        });
+        }).then(({ error }) => { if (error) console.error('[upsert_meta_node_progress loss] failed:', error); });
       }
     }
     // Failed battles: consume stamina + record errors + update skill health
@@ -903,7 +905,8 @@ export default function App() {
                 recommended_recovery_pack_id: newState.corruptionLevel === 'blocked' || newState.corruptionLevel === 'critical'
                   ? healthResult.recoveryPackId
                   : null,
-              }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+              }, { onConflict: 'user_id,node_id' })
+                .then(({ error }) => { if (error) console.error('[user_skill_health loss] upsert failed:', error); });
             }
           } catch (error) {
             console.error('Failed to lazy-load processAttempt for battle failure', error);
@@ -1418,7 +1421,7 @@ export default function App() {
                           p_user_id: user.id, p_kp_id: activeMission.kpId,
                           p_success: true, p_score: 0,
                           p_kn_id: getKnIdForKp(activeMission.kpId) ?? null,
-                        });
+                        }).then(({ error }) => { if (error) console.error('[upsert_play_kp repair] failed:', error); });
                       }
                     }
                     // Clear persisted practice state + error refs

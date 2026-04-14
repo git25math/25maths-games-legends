@@ -6,7 +6,7 @@
 import { motion } from 'motion/react';
 import { Trophy, Flame, Clock, Zap, Share2 } from 'lucide-react';
 import type { Language, BilingualText, Character } from '../types';
-import { lt } from '../i18n/resolveText';
+import { lt, tt } from '../i18n/resolveText';
 import { CharacterAvatar } from './CharacterAvatar';
 
 type Props = {
@@ -34,10 +34,10 @@ export function ShareCard({
   const dateStr = new Date().toLocaleDateString(lang === 'en' ? 'en-GB' : 'zh-CN', { month: 'short', day: 'numeric' });
 
   const badge = isPerfect
-    ? { text: lang === 'en' ? 'PERFECT CLEAR' : '完美通关', color: 'from-purple-500 to-pink-500', glow: 'shadow-purple-500/30' }
+    ? { text: tt(lang, 'PERFECT CLEAR', '完美通关'), color: 'from-purple-500 to-pink-500', glow: 'shadow-purple-500/30' }
     : isFirstClear
-    ? { text: lang === 'en' ? 'FIRST CLEAR' : '首次通关', color: 'from-yellow-500 to-amber-500', glow: 'shadow-yellow-500/30' }
-    : { text: lang === 'en' ? 'VICTORY' : '胜利', color: 'from-indigo-500 to-blue-500', glow: 'shadow-indigo-500/30' };
+    ? { text: tt(lang, 'FIRST CLEAR', '首次通关'), color: 'from-yellow-500 to-amber-500', glow: 'shadow-yellow-500/30' }
+    : { text: tt(lang, 'VICTORY', '胜利'), color: 'from-indigo-500 to-blue-500', glow: 'shadow-indigo-500/30' };
 
   return (
     <motion.div
@@ -88,17 +88,17 @@ export function ShareCard({
               <div className="bg-white/5 rounded-xl p-3 text-center">
                 <Trophy size={16} className="text-yellow-400 mx-auto mb-1" />
                 <div className="text-lg font-black text-white">{score}</div>
-                <div className="text-[9px] text-white/40 font-bold uppercase">{lang === 'en' ? 'Score' : '得分'}</div>
+                <div className="text-[9px] text-white/40 font-bold uppercase">{tt(lang, 'Score', '得分')}</div>
               </div>
               <div className="bg-white/5 rounded-xl p-3 text-center">
                 <Clock size={16} className="text-blue-400 mx-auto mb-1" />
                 <div className="text-lg font-black text-white">{duration}s</div>
-                <div className="text-[9px] text-white/40 font-bold uppercase">{lang === 'en' ? 'Time' : '用时'}</div>
+                <div className="text-[9px] text-white/40 font-bold uppercase">{tt(lang, 'Time', '用时')}</div>
               </div>
               <div className="bg-white/5 rounded-xl p-3 text-center">
                 <Flame size={16} className="text-orange-400 mx-auto mb-1" />
                 <div className="text-lg font-black text-white">{streak}</div>
-                <div className="text-[9px] text-white/40 font-bold uppercase">{lang === 'en' ? 'Streak' : '连胜'}</div>
+                <div className="text-[9px] text-white/40 font-bold uppercase">{tt(lang, 'Streak', '连胜')}</div>
               </div>
             </div>
 
@@ -108,7 +108,7 @@ export function ShareCard({
                 <Zap size={14} className="text-indigo-400" />
                 <span className="text-[11px] text-white/50 font-black tracking-wide">play.25maths.com</span>
               </div>
-              <span className="text-[10px] text-white/30 font-bold">{lang === 'en' ? 'Three Kingdoms Math' : '三国数学'}</span>
+              <span className="text-[10px] text-white/30 font-bold">{tt(lang, 'Three Kingdoms Math', '三国数学')}</span>
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@ export function ShareCard({
             onClick={onClose}
             className="px-6 py-2.5 bg-white/10 text-white/70 text-sm font-bold rounded-xl hover:bg-white/20 transition-colors backdrop-blur-sm"
           >
-            {lang === 'en' ? 'Close' : '关闭'}
+            {tt(lang, 'Close', '关闭')}
           </button>
         </div>
       </motion.div>

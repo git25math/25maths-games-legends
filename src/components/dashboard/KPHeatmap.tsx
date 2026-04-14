@@ -3,6 +3,7 @@ import { Grid3X3, ChevronDown, ChevronUp } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow, KPProgressRow } from './types';
 import { supabase } from '../../supabase';
+import { tt } from '../../i18n/resolveText';
 
 type CellStatus = 'mastered' | 'learning' | 'struggling' | 'untouched';
 
@@ -94,7 +95,7 @@ export const KPHeatmap = ({
   if (loading) {
     return (
       <div className="mb-4 p-4 bg-slate-50 rounded-2xl border border-slate-200 text-center text-slate-400 text-sm">
-        {lang === 'en' ? 'Loading KP data...' : '加载知识点数据...'}
+        {tt(lang, 'Loading KP data...', '加载知识点数据...')}
       </div>
     );
   }
@@ -111,10 +112,10 @@ export const KPHeatmap = ({
         <div className="flex items-center gap-2">
           <Grid3X3 size={14} className="text-indigo-500" />
           <span className="text-xs font-black text-slate-700">
-            {lang === 'en' ? 'Topic Mastery by Student' : '每生知识点掌握一览'}
+            {tt(lang, 'Topic Mastery by Student', '每生知识点掌握一览')}
           </span>
           <span className="text-[10px] text-slate-400 font-bold">
-            {kpIds.length} KPs · {students.length} {lang === 'en' ? 'students' : '人'}
+            {kpIds.length} KPs · {students.length} {tt(lang, 'students', '人')}
           </span>
         </div>
         {/* Legend */}
@@ -133,7 +134,7 @@ export const KPHeatmap = ({
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
               <th className="sticky left-0 bg-slate-50 z-10 px-2 py-2 text-left font-bold text-slate-600 min-w-[100px]">
-                {lang === 'en' ? 'Student' : '学生'}
+                {tt(lang, 'Student', '学生')}
               </th>
               {visibleKPs.map(kp => {
                 const avg = kpAvg[kp] ?? 0;
@@ -185,8 +186,8 @@ export const KPHeatmap = ({
             {/* Class average row */}
             <tr className="bg-slate-50 border-t-2 border-slate-200">
               <td className="sticky left-0 bg-slate-50 z-10 px-2 py-1.5 font-black text-slate-600 whitespace-nowrap">
-                {lang === 'en' ? 'Class Avg' : '班级平均'}
-                {students.length === 1 && <span className="text-[8px] text-slate-400 font-normal ml-1">({lang === 'en' ? '1 student' : '仅1人'})</span>}
+                {tt(lang, 'Class Avg', '班级平均')}
+                {students.length === 1 && <span className="text-[8px] text-slate-400 font-normal ml-1">({tt(lang, '1 student', '仅1人')})</span>}
               </td>
               {visibleKPs.map(kp => {
                 const avg = kpAvg[kp] ?? 0;
@@ -214,7 +215,7 @@ export const KPHeatmap = ({
         >
           {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           {expanded
-            ? (lang === 'en' ? 'Show less' : '收起')
+            ? (tt(lang, 'Show less', '收起'))
             : (lang === 'en' ? `Show all ${kpIds.length} KPs` : `展开全部 ${kpIds.length} 个知识点`)
           }
         </button>

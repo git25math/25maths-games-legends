@@ -11,6 +11,7 @@ import { supabase } from '../../supabase';
 import { getExamHubLessonUrl, getLessonId } from '../../utils/lessonMap';
 import { getKPPrereqs } from '../../data/curriculum/kp-graph';
 import { getKnIdForKp } from '../../data/curriculum/kp-registry';
+import { tt } from '../../i18n/resolveText';
 
 type AggregatedKP = {
   kpId: string;
@@ -168,7 +169,7 @@ export function KPWeaknessPanel({
       <div className="bg-white/60 backdrop-blur rounded-2xl p-4 border border-slate-100">
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <AlertTriangle size={14} className="animate-pulse" />
-          {lang === 'en' ? 'Analyzing weak points...' : '分析薄弱点...'}
+          {tt(lang, 'Analyzing weak points...', '分析薄弱点...')}
         </div>
       </div>
     );
@@ -179,7 +180,7 @@ export function KPWeaknessPanel({
       <div className="bg-white/60 backdrop-blur rounded-2xl p-4 border border-slate-100">
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <AlertTriangle size={14} />
-          {lang === 'en' ? 'Students need at least 3 attempts per topic before weak points appear here.' : '学生每个知识点需至少尝试3次，薄弱点才会显示在此。'}
+          {tt(lang, 'Students need at least 3 attempts per topic before weak points appear here.', '学生每个知识点需至少尝试3次，薄弱点才会显示在此。')}
         </div>
       </div>
     );
@@ -195,14 +196,14 @@ export function KPWeaknessPanel({
         <div className="flex items-center gap-2">
           <AlertTriangle size={14} className="text-rose-500" />
           <span className="text-sm font-black text-slate-700">
-            {lang === 'en' ? 'Topics to Review' : '需重点复习的知识点'}
+            {tt(lang, 'Topics to Review', '需重点复习的知识点')}
           </span>
           <span className="px-2 py-0.5 bg-rose-100 text-rose-600 text-[10px] font-black rounded-full">
             {weakestKPs.length} KPs
           </span>
         </div>
         <span className="text-[10px] text-slate-400">
-          {lang === 'en' ? 'by failure rate' : '按失败率排序'}
+          {tt(lang, 'by failure rate', '按失败率排序')}
         </span>
       </div>
 
@@ -226,7 +227,7 @@ export function KPWeaknessPanel({
                   <span className="text-xs font-bold text-slate-700 truncate">{kp.kpId}</span>
                   {kp.hasLesson && (
                     <span className="px-1.5 py-0.5 bg-purple-100 text-purple-600 text-[9px] font-bold rounded">
-                      {lang === 'en' ? 'LESSON' : '有课程'}
+                      {tt(lang, 'LESSON', '有课程')}
                     </span>
                   )}
                 </div>
@@ -235,15 +236,15 @@ export function KPWeaknessPanel({
                     <div className={`h-full rounded-full ${barColor}`} style={{ width: `${kp.failureRate}%` }} />
                   </div>
                   <span className="text-[10px] text-slate-400">
-                    {kp.studentCount}{lang === 'en' ? ' students' : '人'}
+                    {kp.studentCount}{tt(lang, ' students', '人')}
                     {kp.blockedCount > 0 && (
                       <span className="text-rose-500 ml-1 font-bold">
-                        ({kp.blockedCount}{lang === 'en' ? ' blocked' : '人受阻'})
+                        ({kp.blockedCount}{tt(lang, ' blocked', '人受阻')})
                       </span>
                     )}
                     {kp.blockedCount === 0 && kp.strugglingCount > 0 && (
                       <span className="text-amber-500 ml-1">
-                        ({kp.strugglingCount}{lang === 'en' ? ' weak' : '人薄弱'})
+                        ({kp.strugglingCount}{tt(lang, ' weak', '人薄弱')})
                       </span>
                     )}
                   </span>
@@ -274,7 +275,7 @@ export function KPWeaknessPanel({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 text-[10px] font-bold rounded-lg hover:bg-purple-200 transition-colors"
-                  title={lang === 'en' ? 'Open guided lesson in ExamHub' : '在 ExamHub 打开引导课'}
+                  title={tt(lang, 'Open guided lesson in ExamHub', '在 ExamHub 打开引导课')}
                 >
                   <BookOpen size={10} />
                   <ExternalLink size={8} />
@@ -288,10 +289,10 @@ export function KPWeaknessPanel({
                 <button
                   onClick={() => onAssignKP(kp.kpId, kp.weakStudentNames, kp.weakStudentIds)}
                   className="flex items-center gap-1 px-2 py-1 bg-indigo-100 text-indigo-700 text-[10px] font-bold rounded-lg hover:bg-indigo-200 transition-colors"
-                  title={lang === 'en' ? 'Assign targeted practice for this topic' : '针对此知识点布置练习'}
+                  title={tt(lang, 'Assign targeted practice for this topic', '针对此知识点布置练习')}
                 >
                   <ClipboardList size={10} />
-                  {lang === 'en' ? 'Assign' : '布置'}
+                  {tt(lang, 'Assign', '布置')}
                 </button>
               )}
             </div>
@@ -333,7 +334,7 @@ export function KPWeaknessPanel({
           className="w-full flex items-center justify-center gap-1 py-2 text-[11px] text-slate-400 hover:text-slate-600 transition-colors border-t border-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
         >
           {expanded
-            ? <>{lang === 'en' ? 'Show less' : '收起'} <ChevronUp size={12} /></>
+            ? <>{tt(lang, 'Show less', '收起')} <ChevronUp size={12} /></>
             : <>{lang === 'en' ? `Show all ${weakestKPs.length}` : `查看全部 ${weakestKPs.length} 个`} <ChevronDown size={12} /></>
           }
         </button>

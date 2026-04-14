@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import type { Mission, Language, DifficultyMode } from '../../types';
 import { LatexText } from '../MathView';
 import { INPUT_FIELDS } from './inputConfig';
+import { tt } from '../../i18n/resolveText';
 
 export const InputFields = ({
   mission,
@@ -74,7 +75,7 @@ export const InputFields = ({
               }`}
             />
             <div className="mt-1 text-[9px] text-ink-light/40 px-2">
-              {lang === 'zh' ? '支持分数(3/4)、根号(√5)、负数(-3)' : 'Supports fractions(3/4), roots(√5), negatives(-3)'}
+              {tt(lang, 'Supports fractions(3/4), roots(√5), negatives(-3)', '支持分数(3/4)、根号(√5)、负数(-3)')}
             </div>
           </motion.div>
         );

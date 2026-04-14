@@ -13,7 +13,7 @@ import { getMissionIdsForKP } from '../utils/kpMissions';
 import { SkeletonRow } from '../components/SkeletonRow';
 import { INPUT_FOCUS_CLASS } from '../utils/animationPresets';
 import { useMissionSummaries } from '../hooks/useMissionSummaries';
-import { lt } from '../i18n/resolveText';
+import { lt, tt } from '../i18n/resolveText';
 import { AlertPanel, computeAlerts } from '../components/dashboard/AlertPanel';
 import { StudentDetailCard } from '../components/dashboard/StudentDetailCard';
 import { ClassOverview } from '../components/dashboard/ClassOverview';
@@ -237,7 +237,7 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
         const { data, error: err } = await supabase
           .rpc('get_students_by_class', { p_class_tag: filterTag });
         if (err) {
-          setError(lang === 'en' ? 'Failed to load data' : '加载数据失败');
+          setError(tt(lang, 'Failed to load data', '加载数据失败'));
           setStudents([]);
         } else {
           setStudents((data as StudentRow[] || []).map(s => ({ ...s, class_tags: s.class_tags || [] })));
@@ -262,7 +262,7 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
         setStudents(merged);
       }
     } catch {
-      setError(lang === 'en' ? 'Network error' : '网络错误');
+      setError(tt(lang, 'Network error', '网络错误'));
       setStudents([]);
     }
     fetchingRef.current = false;
@@ -292,7 +292,7 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
     ));
     const { error: err } = await supabase.rpc('remove_student_tag', { p_user_id: userId, p_tag: tag });
     if (err) {
-      setError(lang === 'en' ? 'Failed to remove tag — restored' : '标签删除失败，已恢复');
+      setError(tt(lang, 'Failed to remove tag — restored', '标签删除失败，已恢复'));
       setStudents(prev => prev.map(s =>
         s.user_id === userId && !s.class_tags.includes(tag)
           ? { ...s, class_tags: [...s.class_tags, tag] }
@@ -553,22 +553,22 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
               className="flex items-center gap-2 bg-gradient-to-r from-rose-500 to-indigo-500 rounded-lg px-4 py-2 text-sm font-black text-white hover:opacity-90 transition-opacity shadow-md"
             >
               <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-              {lang === 'en' ? 'Start Live' : '开始课堂'}
+              {tt(lang, 'Start Live', '开始课堂')}
             </button>
           )}
           <button
             onClick={() => setShowWeeklyReport(true)}
             disabled={students.length === 0}
             className="flex items-center gap-1 bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-1.5 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-colors shadow-sm disabled:opacity-40"
-            title={lang === 'en' ? 'Weekly Report' : '周报'}
+            title={tt(lang, 'Weekly Report', '周报')}
           >
-            📊 {lang === 'en' ? 'Report' : '周报'}
+            📊 {tt(lang, 'Report', '周报')}
           </button>
           <button
             onClick={exportCSV}
             disabled={students.length === 0}
             className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-emerald-50 hover:border-emerald-200 transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-50 disabled:hover:border-slate-200"
-            title={lang === 'en' ? 'Export CSV' : '导出 CSV'}
+            title={tt(lang, 'Export CSV', '导出 CSV')}
           >
             <Download size={14} />
           </button>
@@ -609,7 +609,7 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
             {lang === 'en' ? `Viewing: Y${grade} ${filterTag}` : `当前查看：Y${grade} ${filterTag}`}
           </span>
           <span className="text-[10px] text-indigo-400 font-bold">
-            {students.length} {lang === 'en' ? 'students' : '名学生'}
+            {students.length} {tt(lang, 'students', '名学生')}
           </span>
         </div>
       )}
@@ -657,7 +657,7 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
                 className={`bg-white border border-indigo-200 rounded-lg px-3 py-1.5 text-sm text-indigo-900 font-bold ${INPUT_FOCUS_CLASS}`}
                 autoFocus
               >
-                <option value="">{lang === 'en' ? 'Select...' : '选择...'}</option>
+                <option value="">{tt(lang, 'Select...', '选择...')}</option>
                 {allTags.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
               <button onClick={batchAddTag} className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-500 transition-colors">{t.confirm}</button>
@@ -672,7 +672,7 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
          ╚══════════════════════════════════════════╝ */}
       <div className="mt-2 mb-3 flex items-center gap-2">
         <div className="h-px flex-1 bg-slate-200" />
-        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{lang === 'en' ? 'Action' : '今日行动'}</span>
+        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{tt(lang, 'Action', '今日行动')}</span>
         <div className="h-px flex-1 bg-slate-200" />
       </div>
 
@@ -765,12 +765,10 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
                     <div className="px-6 py-4">
                       <Users size={28} className="text-slate-200 mx-auto mb-2" />
                       <p className="text-sm font-bold text-slate-500 mb-1">
-                        {lang === 'en' ? 'No students yet' : '暂无学生数据'}
+                        {tt(lang, 'No students yet', '暂无学生数据')}
                       </p>
                       <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
-                        {lang === 'en'
-                          ? 'Students appear here after they sign in at play.25maths.com and select their year group. Use the tag system above to organize them into classes.'
-                          : '学生在 play.25maths.com 登录并选择年级后会自动出现。用上方标签系统将他们分入班级。'
+                        {tt(lang, 'Students appear here after they sign in at play.25maths.com and select their year group. Use the tag system above to organize them into classes.', '学生在 play.25maths.com 登录并选择年级后会自动出现。用上方标签系统将他们分入班级。')
                         }
                       </p>
                     </div>
@@ -803,8 +801,8 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
                       const login = (s.completed_missions as any)?._login as { lastDate?: string } | undefined;
                       const daysSince = login?.lastDate ? Math.floor((Date.now() - new Date(login.lastDate).getTime()) / 86400000) : -1;
                       const dotColor = daysSince < 0 ? 'bg-slate-300' : daysSince <= 1 ? 'bg-emerald-400' : daysSince <= 3 ? 'bg-amber-400' : 'bg-rose-400';
-                      const dotTitle = daysSince < 0 ? (lang === 'en' ? 'Never active' : '从未活跃')
-                        : daysSince === 0 ? (lang === 'en' ? 'Active today' : '今天活跃')
+                      const dotTitle = daysSince < 0 ? (tt(lang, 'Never active', '从未活跃'))
+                        : daysSince === 0 ? (tt(lang, 'Active today', '今天活跃'))
                         : (lang === 'en' ? `${daysSince}d ago` : `${daysSince}天前`);
                       return (
                         <div className="flex items-center gap-2">
@@ -834,7 +832,7 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
                             className={`text-[9px] bg-white border border-indigo-300 rounded px-1 py-0.5 font-bold text-indigo-900 ${INPUT_FOCUS_CLASS}`}
                             autoFocus
                           >
-                            <option value="">{lang === 'en' ? 'Select class...' : '选择班级...'}</option>
+                            <option value="">{tt(lang, 'Select class...', '选择班级...')}</option>
                             {allTags.filter(c => !(s.class_tags || []).includes(c)).map(c => (
                               <option key={c} value={c}>{c}</option>
                             ))}
@@ -897,7 +895,7 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
       >
         <div className="h-px flex-1 bg-slate-200" />
         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1">
-          {lang === 'en' ? 'Analysis' : '深入分析'}
+          {tt(lang, 'Analysis', '深入分析')}
           <span className="text-slate-300">{showAnalysis ? '▲' : '▼'}</span>
         </span>
         <div className="h-px flex-1 bg-slate-200" />

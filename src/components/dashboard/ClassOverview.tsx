@@ -5,6 +5,7 @@ import type { Language } from '../../types';
 import type { StudentRow, UnitEntry } from './types';
 import { countGreenMissions } from './types';
 import { supabase } from '../../supabase';
+import { tt } from '../../i18n/resolveText';
 
 type BattleStat = {
   user_id: string;
@@ -62,33 +63,33 @@ export const ClassOverview = ({
   const cards = [
     {
       icon: Users,
-      label: lang === 'en' ? 'Students' : '学生',
+      label: tt(lang, 'Students', '学生'),
       value: String(students.length),
-      sub: `${activeCount} ${lang === 'en' ? 'played this week' : '人本周参与'}`,
+      sub: `${activeCount} ${tt(lang, 'played this week', '人本周参与')}`,
       color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
       iconColor: 'text-indigo-400',
     },
     {
       icon: Target,
-      label: lang === 'en' ? 'Avg Progress' : '平均进度',
+      label: tt(lang, 'Avg Progress', '平均进度'),
       value: `${avgProgress}%`,
-      sub: `${totalMissions} ${lang === 'en' ? 'missions' : '关卡'}`,
+      sub: `${totalMissions} ${tt(lang, 'missions', '关卡')}`,
       color: 'bg-emerald-50 text-emerald-600 border-emerald-100',
       iconColor: 'text-emerald-400',
     },
     {
       icon: TrendingUp,
-      label: lang === 'en' ? 'Avg Score' : '平均分',
+      label: tt(lang, 'Avg Score', '平均分'),
       value: String(avgScore),
-      sub: lang === 'en' ? 'total XP' : '总功勋',
+      sub: tt(lang, 'total XP', '总功勋'),
       color: 'bg-amber-50 text-amber-600 border-amber-100',
       iconColor: 'text-amber-400',
     },
     {
       icon: Zap,
-      label: lang === 'en' ? 'Weekly Battles' : '本周对局',
+      label: tt(lang, 'Weekly Battles', '本周对局'),
       value: String(weeklyBattles),
-      sub: `${lang === 'en' ? 'last 7 days' : '近 7 天'}`,
+      sub: `${tt(lang, 'last 7 days', '近 7 天')}`,
       color: 'bg-rose-50 text-rose-600 border-rose-100',
       iconColor: 'text-rose-400',
     },
@@ -141,13 +142,13 @@ export const ClassOverview = ({
           {topPerformer && (
             <span className="flex items-center gap-1.5 text-[10px] font-bold text-amber-600">
               <Star size={12} className="text-amber-400" />
-              {lang === 'en' ? 'Top performer:' : '本周之星:'} {topPerformer}
+              {tt(lang, 'Top performer:', '本周之星:')} {topPerformer}
             </span>
           )}
           {needsHelp && (
             <span className="flex items-center gap-1.5 text-[10px] font-bold text-rose-500">
               <AlertTriangle size={12} className="text-rose-400" />
-              {lang === 'en' ? 'Needs support:' : '最需关注:'} {needsHelp}
+              {tt(lang, 'Needs support:', '最需关注:')} {needsHelp}
             </span>
           )}
         </div>

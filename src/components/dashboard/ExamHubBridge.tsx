@@ -8,6 +8,7 @@ import { BookOpen, ExternalLink } from 'lucide-react';
 import type { Language } from '../../types';
 import type { StudentRow } from './types';
 import { supabase } from '../../supabase';
+import { tt } from '../../i18n/resolveText';
 
 type LeaderboardEntry = {
   user_id: string;
@@ -70,7 +71,7 @@ export function ExamHubBridge({ lang, students }: Props) {
       <div className="bg-white/60 backdrop-blur rounded-2xl p-4 border border-slate-100">
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <BookOpen size={14} className="animate-pulse" />
-          {lang === 'en' ? 'Loading ExamHub data...' : '加载 ExamHub 数据...'}
+          {tt(lang, 'Loading ExamHub data...', '加载 ExamHub 数据...')}
         </div>
       </div>
     );
@@ -82,7 +83,7 @@ export function ExamHubBridge({ lang, students }: Props) {
         <div className="flex items-center gap-2 text-sm text-rose-400">
           <BookOpen size={14} />
           <span className="font-bold">ExamHub</span>
-          <span>— {lang === 'en' ? 'Failed to load vocab data' : '词汇数据加载失败'}</span>
+          <span>— {tt(lang, 'Failed to load vocab data', '词汇数据加载失败')}</span>
         </div>
       </div>
     );
@@ -95,7 +96,7 @@ export function ExamHubBridge({ lang, students }: Props) {
           <div className="flex items-center gap-2 text-sm text-slate-400">
             <BookOpen size={14} />
             <span className="font-bold">ExamHub</span>
-            <span>— {lang === 'en' ? 'No vocab data for this class yet' : '该班级暂无词汇数据'}</span>
+            <span>— {tt(lang, 'No vocab data for this class yet', '该班级暂无词汇数据')}</span>
           </div>
           <a
             href="https://examhub.25maths.com"
@@ -128,7 +129,7 @@ export function ExamHubBridge({ lang, students }: Props) {
         <div className="flex items-center gap-2">
           <BookOpen size={14} className="text-purple-500" />
           <span className="text-sm font-black text-slate-700">
-            ExamHub {lang === 'en' ? 'Vocab Mastery' : '词汇掌握率'}
+            ExamHub {tt(lang, 'Vocab Mastery', '词汇掌握率')}
           </span>
           <span className="px-2 py-0.5 bg-purple-100 text-purple-600 text-[10px] font-black rounded-full">
             {matchedStudents.length}/{students.length}
@@ -140,7 +141,7 @@ export function ExamHubBridge({ lang, students }: Props) {
           rel="noopener noreferrer"
           className="text-[10px] text-indigo-400 hover:text-indigo-600 flex items-center gap-1 font-bold"
         >
-          {lang === 'en' ? 'Open ExamHub' : '打开 ExamHub'} <ExternalLink size={10} />
+          {tt(lang, 'Open ExamHub', '打开 ExamHub')} <ExternalLink size={10} />
         </a>
       </div>
 
@@ -148,11 +149,11 @@ export function ExamHubBridge({ lang, students }: Props) {
       <div className="px-4 py-3 flex items-center gap-6 bg-purple-50/50 border-b border-slate-100">
         <div className="text-center">
           <div className="text-lg font-black text-purple-600">{avgMastery}%</div>
-          <div className="text-[10px] text-slate-400 font-bold">{lang === 'en' ? 'Avg Mastery' : '平均掌握率'}</div>
+          <div className="text-[10px] text-slate-400 font-bold">{tt(lang, 'Avg Mastery', '平均掌握率')}</div>
         </div>
         <div className="text-center">
           <div className="text-lg font-black text-purple-600">{avgWords}</div>
-          <div className="text-[10px] text-slate-400 font-bold">{lang === 'en' ? 'Avg Words' : '平均词汇量'}</div>
+          <div className="text-[10px] text-slate-400 font-bold">{tt(lang, 'Avg Words', '平均词汇量')}</div>
         </div>
         <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
           <div

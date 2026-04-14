@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, Swords, Coffee, Crown, ArrowLeft, Package, ChevronRight, Shield, Trophy, Skull, Scroll } from 'lucide-react';
 import type { Language, Mission, Character } from '../types';
 import { getTranslations } from '../i18n/translations';
-import { lt } from '../i18n/resolveText';
+import { lt, tt } from '../i18n/resolveText';
 import type { Expedition, ExpeditionQuote } from '../data/expeditions';
 import { generateMission } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
@@ -276,8 +276,8 @@ export const ExpeditionScreen = ({
               const estMin = Math.ceil(totalQ * 1.5);
               return (
                 <div className="flex flex-wrap justify-center gap-3 mb-5 text-xs">
-                  <span className="flex items-center gap-1 text-amber-400/70"><Package size={12} /> {expedition.startingRations} {lang === 'en' ? 'rations' : '军粮'}</span>
-                  <span className="flex items-center gap-1 text-white/30"><Swords size={12} /> {battleNodes.length} {lang === 'en' ? 'battles' : '关'}</span>
+                  <span className="flex items-center gap-1 text-amber-400/70"><Package size={12} /> {expedition.startingRations} {tt(lang, 'rations', '军粮')}</span>
+                  <span className="flex items-center gap-1 text-white/30"><Swords size={12} /> {battleNodes.length} {tt(lang, 'battles', '关')}</span>
                   <span className="text-white/20">{lang === 'en' ? `~${estMin} min · ${totalQ}Q` : `约${estMin}分钟 · ${totalQ}题`}</span>
                 </div>
               );
@@ -287,35 +287,35 @@ export const ExpeditionScreen = ({
             {prevRecord ? (
               <div className="bg-white/5 rounded-xl p-3 mb-5 space-y-1.5">
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">{lang === 'en' ? 'Last run' : '上次战绩'}</span>
-                  <span className="text-white/60">{prevRecord.lastNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '关'}  ·  +{prevRecord.lastXP} XP</span>
+                  <span className="text-white/40">{tt(lang, 'Last run', '上次战绩')}</span>
+                  <span className="text-white/60">{prevRecord.lastNodes}/{expedition.nodes.length} {tt(lang, 'nodes', '关')}  ·  +{prevRecord.lastXP} XP</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">{lang === 'en' ? 'Best' : '最佳战绩'}</span>
-                  <span className="text-amber-400 font-bold">{prevRecord.bestNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '关'}  ·  +{prevRecord.bestXP} XP  {getRating(prevRecord.bestNodes, expedition.nodes.length)}</span>
+                  <span className="text-white/40">{tt(lang, 'Best', '最佳战绩')}</span>
+                  <span className="text-amber-400 font-bold">{prevRecord.bestNodes}/{expedition.nodes.length} {tt(lang, 'nodes', '关')}  ·  +{prevRecord.bestXP} XP  {getRating(prevRecord.bestNodes, expedition.nodes.length)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">{lang === 'en' ? 'Attempts' : '出征次数'}</span>
+                  <span className="text-white/40">{tt(lang, 'Attempts', '出征次数')}</span>
                   <span className="text-white/40">{lang === 'en' ? `#${prevRecord.attempts + 1}` : `第 ${prevRecord.attempts + 1} 次`}</span>
                 </div>
               </div>
             ) : (
               <div className="bg-white/5 rounded-xl p-3 mb-5 text-center">
-                <p className="text-white/30 text-xs">{lang === 'en' ? 'First expedition' : '首次出征'}</p>
+                <p className="text-white/30 text-xs">{tt(lang, 'First expedition', '首次出征')}</p>
               </div>
             )}
 
             {/* Buttons */}
             <button onClick={() => { playTap(); setPhase('map'); }} className="w-full py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 transition-all text-sm">
-              {lang === 'en' ? 'March Out →' : '今日出征 →'}
+              {tt(lang, 'March Out →', '今日出征 →')}
             </button>
             <div className="flex gap-2 mt-2">
               <button onClick={onCancel} className="flex-1 py-2 text-white/30 text-sm hover:text-white/50 transition-colors">
-                {lang === 'en' ? 'Return' : '返回'}
+                {tt(lang, 'Return', '返回')}
               </button>
               {prevRecord && (
                 <button onClick={() => { playTap(); setPhase('map'); }} className="flex-1 py-2 text-amber-400/40 text-sm hover:text-amber-400/70 transition-colors">
-                  {lang === 'en' ? 'Skip intro' : '跳过简报'}
+                  {tt(lang, 'Skip intro', '跳过简报')}
                 </button>
               )}
             </div>
@@ -359,8 +359,8 @@ export const ExpeditionScreen = ({
             />
           </div>
           <div className="flex justify-between mt-1 text-[9px] text-white/20">
-            <span>{lang === 'en' ? 'Start' : '出发'}</span>
-            <span>{lang === 'en' ? 'Final Battle' : '决战'}</span>
+            <span>{tt(lang, 'Start', '出发')}</span>
+            <span>{tt(lang, 'Final Battle', '决战')}</span>
           </div>
         </div>
 
@@ -399,7 +399,7 @@ export const ExpeditionScreen = ({
                   <div className="text-white/40 text-[10px]">
                     {node.type === 'rest' ? (lang === 'en' ? `+${node.rationReward} rations` : `+${node.rationReward} 军粮`)
                       : node.type === 'boss' ? (lang === 'en' ? `${node.questionCount}Q · ×${node.xpMultiplier} XP` : `${node.questionCount}题 · ×${node.xpMultiplier} XP`)
-                      : `${node.questionCount}${lang === 'en' ? 'Q' : '题'}`}
+                      : `${node.questionCount}${tt(lang, 'Q', '题')}`}
                   </div>
                   {/* Node intel for current node */}
                   {isCurrent && node.intel && (
@@ -435,7 +435,7 @@ export const ExpeditionScreen = ({
           {currentNode.intel && (
             <p className="text-amber-400/60 text-xs italic mb-3 max-w-xs mx-auto">{lt(currentNode.intel, lang)}</p>
           )}
-          <p className="text-amber-400 font-bold mb-6">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '军粮'}</p>
+          <p className="text-amber-400 font-bold mb-6">+{currentNode.rationReward} {tt(lang, 'rations', '军粮')}</p>
           <p className="text-white/40 text-sm mb-8">{lang === 'en' ? `You now have ${rations} rations.` : `现在有 ${rations} 份军粮。`}</p>
           <button onClick={() => { setCurrentNodeIdx(prev => prev + 1); setPhase('map'); }} className="px-8 py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-400 transition-all">
             {t.continueMarching ?? 'Continue March'}
@@ -493,14 +493,14 @@ export const ExpeditionScreen = ({
                   className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-2xl sm:rounded-3xl backdrop-blur-sm">
                   <div className="text-center p-4 sm:p-6">
                     <Shield size={32} className="text-amber-400 mx-auto mb-3" />
-                    <p className="text-white font-bold text-sm mb-1">{lang === 'en' ? 'Retreat?' : '确定撤退？'}</p>
-                    <p className="text-white/40 text-xs mb-4">{lang === 'en' ? 'Keep earned XP, end expedition.' : '保留已获经验，结束远征。'}</p>
+                    <p className="text-white font-bold text-sm mb-1">{tt(lang, 'Retreat?', '确定撤退？')}</p>
+                    <p className="text-white/40 text-xs mb-4">{tt(lang, 'Keep earned XP, end expedition.', '保留已获经验，结束远征。')}</p>
                     <div className="flex gap-2 justify-center">
                       <button onClick={() => setShowRetreatConfirm(false)} className="px-4 py-2 bg-white/10 text-white/70 rounded-xl text-xs font-bold">
-                        {lang === 'en' ? 'Continue' : '继续战斗'}
+                        {tt(lang, 'Continue', '继续战斗')}
                       </button>
                       <button onClick={confirmRetreat} className="px-4 py-2 bg-amber-500 text-white rounded-xl text-xs font-bold">
-                        {lang === 'en' ? 'Retreat' : '撤退'}
+                        {tt(lang, 'Retreat', '撤退')}
                       </button>
                     </div>
                   </div>
@@ -545,7 +545,7 @@ export const ExpeditionScreen = ({
               {showResult === 'wrong' && (
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
                   className="absolute inset-0 flex items-center justify-center bg-rose-500/20 rounded-3xl pointer-events-none">
-                  <span className="text-rose-400 font-black text-xl">-1 {lang === 'en' ? 'ration' : '军粮'}</span>
+                  <span className="text-rose-400 font-black text-xl">-1 {tt(lang, 'ration', '军粮')}</span>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -555,7 +555,7 @@ export const ExpeditionScreen = ({
               {showCorrectAnswer && (
                 <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                   className="mt-3 bg-amber-900/30 border border-amber-600/20 rounded-xl p-3 text-center">
-                  <p className="text-amber-400/50 text-[10px] mb-0.5">{lang === 'en' ? 'Correct answer' : '正确答案'}</p>
+                  <p className="text-amber-400/50 text-[10px] mb-0.5">{tt(lang, 'Correct answer', '正确答案')}</p>
                   <p className="text-amber-300 font-bold text-sm">{correctAnswerText}</p>
                 </motion.div>
               )}
@@ -577,10 +577,10 @@ export const ExpeditionScreen = ({
                   <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 200 }}
                     className="text-center">
                     <Shield size={40} className="text-emerald-400 mx-auto mb-2" />
-                    <h3 className="text-emerald-400 font-black text-xl">{lang === 'en' ? 'Node Cleared!' : '关卡通过！'}</h3>
+                    <h3 className="text-emerald-400 font-black text-xl">{tt(lang, 'Node Cleared!', '关卡通过！')}</h3>
                     <p className="text-amber-400 font-bold mt-1">+{nodeCompleteXP} XP</p>
                     {currentNode.rationReward > 0 && (
-                      <p className="text-amber-400/60 text-xs mt-0.5">+{currentNode.rationReward} {lang === 'en' ? 'rations' : '军粮'}</p>
+                      <p className="text-amber-400/60 text-xs mt-0.5">+{currentNode.rationReward} {tt(lang, 'rations', '军粮')}</p>
                     )}
                   </motion.div>
                 </motion.div>
@@ -610,7 +610,7 @@ export const ExpeditionScreen = ({
           {/* Report header */}
           <div className="bg-amber-900/30 px-5 py-3 border-b border-amber-700/20 flex items-center justify-between">
             <div>
-              <h3 className="text-amber-300 font-black text-sm">{lt(expedition.name, lang)} {lang === 'en' ? 'Report' : '战报'}</h3>
+              <h3 className="text-amber-300 font-black text-sm">{lt(expedition.name, lang)} {tt(lang, 'Report', '战报')}</h3>
               <div className="text-amber-400/40 text-[10px]">{reportDate}</div>
             </div>
             {isVictory ? (
@@ -630,9 +630,9 @@ export const ExpeditionScreen = ({
                 : (t.rationsDepleted ?? 'Rations Depleted')}
             </h2>
             <p className="text-white/40 text-xs">
-              {isVictory ? (lang === 'en' ? 'Full victory. All rewards earned.' : '大获全胜，全额奖励已发放。')
-                : isRetreat ? (lang === 'en' ? 'Withdrew safely. Keep what you earned.' : '安全撤退，已获经验保留。')
-                : (lang === 'en' ? 'Rations depleted. Keep the XP you earned.' : '军粮耗尽，已获经验保留。')}
+              {isVictory ? (tt(lang, 'Full victory. All rewards earned.', '大获全胜，全额奖励已发放。'))
+                : isRetreat ? (tt(lang, 'Withdrew safely. Keep what you earned.', '安全撤退，已获经验保留。'))
+                : (tt(lang, 'Rations depleted. Keep the XP you earned.', '军粮耗尽，已获经验保留。'))}
             </p>
           </div>
 
@@ -640,10 +640,10 @@ export const ExpeditionScreen = ({
           <div className="px-5 pb-4">
             <div className="bg-white/5 rounded-xl p-4 mb-3">
               <div className="text-white/30 text-[10px] font-bold uppercase tracking-wider mb-2">
-                {lang === 'en' ? 'This Run' : '本次战绩'}
+                {tt(lang, 'This Run', '本次战绩')}
               </div>
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-white/50 text-xs">{lang === 'en' ? 'Nodes' : '通关'}</span>
+                <span className="text-white/50 text-xs">{tt(lang, 'Nodes', '通关')}</span>
                 <span className="text-white font-black">{nodesCleared}/{expedition.nodes.length} {rating}</span>
               </div>
               <div className="flex justify-between items-center mb-1.5">
@@ -651,7 +651,7 @@ export const ExpeditionScreen = ({
                 <span className="text-amber-400 font-black">+{xpEarned}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-white/50 text-xs">{lang === 'en' ? 'Rations left' : '军粮余量'}</span>
+                <span className="text-white/50 text-xs">{tt(lang, 'Rations left', '军粮余量')}</span>
                 <span className="text-white/60 font-bold">{rations}</span>
               </div>
             </div>
@@ -659,23 +659,23 @@ export const ExpeditionScreen = ({
             {/* Historical records */}
             <div className="bg-white/5 rounded-xl p-4 mb-4">
               <div className="text-white/30 text-[10px] font-bold uppercase tracking-wider mb-2">
-                {lang === 'en' ? 'Historical' : '历史战绩'}
+                {tt(lang, 'Historical', '历史战绩')}
               </div>
               {savedRecord && (
                 <>
                   <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Best' : '最佳'}</span>
+                    <span className="text-white/50 text-xs">{tt(lang, 'Best', '最佳')}</span>
                     <span className="text-amber-400 font-bold text-sm">
-                      {savedRecord.bestNodes}/{expedition.nodes.length} {lang === 'en' ? 'nodes' : '关'}
-                      {(isNewBest || isFirstRun) && <span className="text-amber-300 ml-1 text-[10px]">{lang === 'en' ? 'NEW!' : '新纪录！'}</span>}
+                      {savedRecord.bestNodes}/{expedition.nodes.length} {tt(lang, 'nodes', '关')}
+                      {(isNewBest || isFirstRun) && <span className="text-amber-300 ml-1 text-[10px]">{tt(lang, 'NEW!', '新纪录！')}</span>}
                     </span>
                   </div>
                   <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Best XP' : '最高XP'}</span>
+                    <span className="text-white/50 text-xs">{tt(lang, 'Best XP', '最高XP')}</span>
                     <span className="text-amber-400/70 font-bold text-sm">+{savedRecord.bestXP}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/50 text-xs">{lang === 'en' ? 'Attempts' : '出征次数'}</span>
+                    <span className="text-white/50 text-xs">{tt(lang, 'Attempts', '出征次数')}</span>
                     <span className="text-white/40 text-sm">{savedRecord.attempts}</span>
                   </div>
                 </>
@@ -709,7 +709,7 @@ export const ExpeditionScreen = ({
                 }}
                 className="flex-1 py-3 bg-amber-500/20 text-amber-400 border border-amber-500/30 font-black rounded-2xl hover:bg-amber-500/30 transition-all text-sm"
               >
-                {lang === 'en' ? 'Try Again' : '再战一次'}
+                {tt(lang, 'Try Again', '再战一次')}
               </button>
               <button
                 onClick={() => onComplete(xpEarned, nodesCleared)}

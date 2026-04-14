@@ -10,6 +10,7 @@ import type { BilingualText, Language, UserProfile } from '../types';
 import { getLevelInfo } from '../utils/xpLevels';
 import { supabase } from '../supabase';
 import { loadAllMissionSummaries } from '../data/missionSummaries/loader';
+import { tt } from '../i18n/resolveText';
 
 // ── Types ──
 
@@ -149,7 +150,7 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
             type: 'streak', success: true, missionId: 0,
             missionTitle: { zh: `连续登录 ${m.day} 天`, en: `${m.day}-day login streak` },
             score: 0, duration: 0, difficulty: '',
-            reward: lang === 'en' ? 'Streak bonus' : '连签奖励',
+            reward: tt(lang, 'Streak bonus', '连签奖励'),
             soulMessage: SOUL_STREAK[m.day % SOUL_STREAK.length],
           });
         }
@@ -190,8 +191,8 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
   const formatDate = (dateStr: string) => {
     const today = new Date().toISOString().slice(0, 10);
     const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-    if (dateStr === today) return lang === 'en' ? 'Today' : '今天';
-    if (dateStr === yesterday) return lang === 'en' ? 'Yesterday' : '昨天';
+    if (dateStr === today) return tt(lang, 'Today', '今天');
+    if (dateStr === yesterday) return tt(lang, 'Yesterday', '昨天');
     const d = new Date(dateStr);
     return d.toLocaleDateString(lang === 'en' ? 'en-GB' : 'zh-CN', { month: 'short', day: 'numeric' });
   };
@@ -224,7 +225,7 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
           <div className="flex items-center gap-2">
             <Sparkles size={18} className="text-amber-500" />
             <h2 className="text-lg font-black text-slate-800">
-              {lang === 'en' ? 'My Learning Journey' : '我的成长轨迹'}
+              {tt(lang, 'My Learning Journey', '我的成长轨迹')}
             </h2>
           </div>
           <button onClick={onClose} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-slate-400 hover:text-slate-600 rounded-full" aria-label="Close"><X size={18} /></button>
@@ -235,11 +236,11 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
           <div className="flex gap-3 text-center">
             <div className="flex-1">
               <div className="text-lg font-black text-indigo-600">{stats.total}</div>
-              <div className="text-[9px] text-indigo-400 font-bold">{lang === 'en' ? 'Battles' : '对局'}</div>
+              <div className="text-[9px] text-indigo-400 font-bold">{tt(lang, 'Battles', '对局')}</div>
             </div>
             <div className="flex-1">
               <div className="text-lg font-black text-emerald-600">{stats.winRate}%</div>
-              <div className="text-[9px] text-emerald-400 font-bold">{lang === 'en' ? 'Win Rate' : '胜率'}</div>
+              <div className="text-[9px] text-emerald-400 font-bold">{tt(lang, 'Win Rate', '胜率')}</div>
             </div>
             <div className="flex-1">
               <div className="text-lg font-black text-amber-600">{stats.totalXP}</div>
@@ -247,7 +248,7 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
             </div>
             <div className="flex-1">
               <div className="text-lg font-black text-purple-600">{getLevelInfo(profile.total_score).level}</div>
-              <div className="text-[9px] text-purple-400 font-bold">{lang === 'en' ? 'Level' : '等级'}</div>
+              <div className="text-[9px] text-purple-400 font-bold">{tt(lang, 'Level', '等级')}</div>
             </div>
           </div>
         </div>
@@ -257,16 +258,16 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
           {loading ? (
             <div className="text-center py-8 animate-pulse">
               <Sparkles size={24} className="text-slate-200 mx-auto mb-2" />
-              <p className="text-sm text-slate-300">{lang === 'en' ? 'Loading your journey...' : '加载你的旅程...'}</p>
+              <p className="text-sm text-slate-300">{tt(lang, 'Loading your journey...', '加载你的旅程...')}</p>
             </div>
           ) : allEntries.length === 0 ? (
             <div className="text-center py-8">
               <Sparkles size={32} className="text-slate-200 mx-auto mb-3" />
               <p className="text-sm text-slate-400 font-bold">
-                {lang === 'en' ? 'Your journey is just beginning!' : '你的旅程才刚刚开始！'}
+                {tt(lang, 'Your journey is just beginning!', '你的旅程才刚刚开始！')}
               </p>
               <p className="text-xs text-slate-300 mt-1">
-                {lang === 'en' ? 'Complete missions to fill your timeline' : '完成关卡来填满你的时间线'}
+                {tt(lang, 'Complete missions to fill your timeline', '完成关卡来填满你的时间线')}
               </p>
             </div>
           ) : (
@@ -276,7 +277,7 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-[11px] font-black text-slate-400">{formatDate(date)}</span>
                     <div className="flex-1 h-px bg-slate-100" />
-                    <span className="text-[10px] text-slate-300">{evts.length} {lang === 'en' ? 'events' : '条记录'}</span>
+                    <span className="text-[10px] text-slate-300">{evts.length} {tt(lang, 'events', '条记录')}</span>
                   </div>
 
                   <div className="space-y-2 pl-1">
@@ -350,7 +351,7 @@ export function LearningTimeline({ lang, profile, onClose }: Props) {
                   className="w-full flex items-center justify-center gap-1 py-2 text-xs text-indigo-500 font-bold"
                 >
                   {showAll
-                    ? <><ChevronUp size={14} /> {lang === 'en' ? 'Show less' : '收起'}</>
+                    ? <><ChevronUp size={14} /> {tt(lang, 'Show less', '收起')}</>
                     : <><ChevronDown size={14} /> {lang === 'en' ? `Show all ${allEntries.length}` : `查看全部 ${allEntries.length} 条`}</>
                   }
                 </button>

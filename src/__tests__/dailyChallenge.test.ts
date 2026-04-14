@@ -90,7 +90,7 @@ describe('isValidDailySubmission', () => {
   });
 
   it('returns false when already completed today (anti-double-count)', () => {
-    const completed: CompletedMissions = { [getDailyKey()]: true } as CompletedMissions;
+    const completed = { [getDailyKey()]: true } as unknown as CompletedMissions;
     expect(isValidDailySubmission(today, missions, 7, completed)).toBe(false);
   });
 
@@ -106,7 +106,7 @@ describe('isValidDailySubmission', () => {
 describe('isDailyCompleted', () => {
   it('matches the current day key', () => {
     const k = getDailyKey();
-    const completed = { [k]: true } as CompletedMissions;
+    const completed = { [k]: true } as unknown as CompletedMissions;
     expect(isDailyCompleted(completed)).toBe(true);
   });
 

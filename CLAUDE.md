@@ -27,7 +27,7 @@
 | 关卡 | 424 个 (Y7:89 + Y8:78 + Y9:95 + Y10:87 + Y11:60 + Y12:15) |
 | 生成器 | 81 个活跃 generatorType + 51 个 MC 多选 |
 | 题型 | 46 个 QuestionType |
-| 测试 | 2,704 个 Vitest 用例 |
+| 测试 | 2,711 个 Vitest 用例 |
 | KP 覆盖 | 287/288 = 99.7% (仅 kp-1.14-01 计算器跳过) |
 
 ### 架构
@@ -84,7 +84,7 @@ src/
 1. `git pull` — 确认最新代码
 2. 读本文件 `CLAUDE.md` + `docs/DEVELOPMENT-PLAN.md`
 3. `npm run build` — 必须零错误
-4. `npm test -- --run` — 必须 2704 passed
+4. `npm test -- --run` — 必须 2711 passed
 5. 开始工作
 
 ### 结束协议（每次会话结束前，必须执行）

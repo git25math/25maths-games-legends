@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { MapIcon, Crown, CheckCircle2, Lock, Swords, BookOpen, Star, Flame, Zap, ChevronDown, ChevronRight, Wrench, AlertTriangle, ClipboardList, MoreHorizontal, X, Sparkles } from 'lucide-react';
 import type { Language, UserProfile, Mission, Character, CompletedMissions } from '../types';
 import { getTranslations } from '../i18n/translations';
-import { lt } from '../i18n/resolveText';
+import { lt, tt } from '../i18n/resolveText';
 import { MathView, LatexText } from '../components/MathView';
 import { CharacterAvatar } from '../components/CharacterAvatar';
 import { interpolate } from '../utils/interpolate';
@@ -687,10 +687,10 @@ export const MapScreen = ({
             <div className="min-w-0">
               <p className={`text-[10px] font-bold ${smartRecommendation.isWeakRecommendation ? 'text-rose-400' : 'text-indigo-400'}`}>
                 {(smartRecommendation as any).isRepairRecommendation
-                  ? (lang === 'en' ? 'Skill needs repair' : '技能需要修复')
+                  ? (tt(lang, 'Skill needs repair', '技能需要修复'))
                   : smartRecommendation.isWeakRecommendation
-                  ? (lang === 'en' ? 'Needs review' : '建议复习')
-                  : (lang === 'en' ? 'Next up' : '推荐下一步')}
+                  ? (tt(lang, 'Needs review', '建议复习'))
+                  : (tt(lang, 'Next up', '推荐下一步'))}
               </p>
               <p className="text-sm font-black text-white truncate">{lt(smartRecommendation.recommendedMission.title, lang)}</p>
             </div>
@@ -702,7 +702,7 @@ export const MapScreen = ({
               smartRecommendation.isWeakRecommendation ? 'bg-rose-600 hover:bg-rose-500' : 'bg-indigo-600 hover:bg-indigo-500'
             }`}
           >
-            {lang === 'en' ? 'Go →' : '去学习 →'}
+            {tt(lang, 'Go →', '去学习 →')}
           </motion.button>
         </motion.div>
       )}
@@ -733,7 +733,7 @@ export const MapScreen = ({
             onClick={() => { playTap(); onTechTree(); }}
             className="flex-shrink-0 px-3 py-1.5 bg-orange-600 hover:bg-orange-500 text-white text-xs font-black rounded-lg transition-colors relative"
           >
-            {lang === 'en' ? 'Tech Tree →' : '科技树 →'}
+            {tt(lang, 'Tech Tree →', '科技树 →')}
           </button>
         </motion.div>
       )}
@@ -857,7 +857,7 @@ export const MapScreen = ({
                 const daysLeft = next.days - loginData.streak;
                 return (
                   <span className="px-2 py-0.5 bg-emerald-600/20 border border-emerald-500/30 rounded text-[10px] text-emerald-300 font-bold">
-                    🔥 {loginData.streak}{lang === 'en' ? 'd' : '天'} · {lang === 'en' ? `${daysLeft}d to ${next.title.en}` : `${daysLeft}天→${next.title.zh}`}
+                    🔥 {loginData.streak}{tt(lang, 'd', '天')} · {lang === 'en' ? `${daysLeft}d to ${next.title.en}` : `${daysLeft}天→${next.title.zh}`}
                   </span>
                 );
               })()}
@@ -881,7 +881,7 @@ export const MapScreen = ({
               <div className="hidden md:contents">
                 {onTechTree && (
                   <button onClick={onTechTree} className="px-2 py-0.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-xs text-cyan-300 hover:bg-cyan-600/40 transition-colors flex items-center gap-1">
-                    🌿 {lang === 'en' ? 'Tech Tree' : '科技树'}
+                    🌿 {tt(lang, 'Tech Tree', '科技树')}
                   </button>
                 )}
                 {getCharProgression && selectedChar && (
@@ -918,17 +918,17 @@ export const MapScreen = ({
                 )}
                 {onLeaderboard && (
                   <button onClick={onLeaderboard} className="px-2 py-0.5 bg-yellow-600/20 border border-yellow-500/30 rounded text-xs text-yellow-300 hover:bg-yellow-600/40 transition-colors flex items-center gap-1">
-                    🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
+                    🏆 {tt(lang, 'Ranks', '排行榜')}
                   </button>
                 )}
                 {onAchievements && (
                   <button onClick={onAchievements} className="px-2 py-0.5 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-300 hover:bg-purple-600/40 transition-colors">
-                    {lang === 'en' ? 'Achievements' : '成就墙'}
+                    {tt(lang, 'Achievements', '成就墙')}
                   </button>
                 )}
                 {onFriendPK && (
                   <button onClick={onFriendPK} className="px-2 py-0.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-xs text-cyan-300 hover:bg-cyan-600/40 transition-colors">
-                    {lang === 'en' ? 'Friend PK' : '好友对决'}
+                    {tt(lang, 'Friend PK', '好友对决')}
                   </button>
                 )}
                 <button onClick={() => setShowBattlePass(true)} className="px-2 py-0.5 bg-rose-600/20 border border-rose-500/30 rounded text-xs text-rose-300 hover:bg-rose-600/40 transition-colors">
@@ -983,7 +983,7 @@ export const MapScreen = ({
                   <div className="flex flex-wrap gap-2 p-2 bg-white/5 rounded-xl border border-white/10">
                     {onTechTree && (
                       <button onClick={() => { onTechTree(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded-lg text-xs text-cyan-300">
-                        🌿 {lang === 'en' ? 'Tech Tree' : '科技树'}
+                        🌿 {tt(lang, 'Tech Tree', '科技树')}
                       </button>
                     )}
                     {getCharProgression && selectedChar && (
@@ -1012,17 +1012,17 @@ export const MapScreen = ({
                     )}
                     {onLeaderboard && (
                       <button onClick={() => { onLeaderboard(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-yellow-600/20 border border-yellow-500/30 rounded-lg text-xs text-yellow-300">
-                        🏆 {lang === 'en' ? 'Ranks' : '排行榜'}
+                        🏆 {tt(lang, 'Ranks', '排行榜')}
                       </button>
                     )}
                     <button onClick={() => { setShowProgressReport(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-blue-600/20 border border-blue-500/30 rounded-lg text-xs text-blue-300">
-                      📊 {lang === 'en' ? 'Report' : '学习报告'}
+                      📊 {tt(lang, 'Report', '学习报告')}
                     </button>
                     <button onClick={() => { setShowVocabReview(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300">
-                      📖 {lang === 'en' ? 'Vocab Review' : '词汇复习'}
+                      📖 {tt(lang, 'Vocab Review', '词汇复习')}
                     </button>
                     <button onClick={() => { setShowTimeline(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-amber-600/20 border border-amber-500/30 rounded-lg text-xs text-amber-300">
-                      ✨ {lang === 'en' ? 'My Journey' : '成长轨迹'}
+                      ✨ {tt(lang, 'My Journey', '成长轨迹')}
                     </button>
                     {onLearnerModeChange && (
                       <div className="flex gap-1">
@@ -1041,12 +1041,12 @@ export const MapScreen = ({
                     )}
                     {onAchievements && (
                       <button onClick={() => { onAchievements(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300">
-                        {lang === 'en' ? 'Achievements' : '成就墙'}
+                        {tt(lang, 'Achievements', '成就墙')}
                       </button>
                     )}
                     {onFriendPK && (
                       <button onClick={() => { onFriendPK(); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded-lg text-xs text-cyan-300">
-                        {lang === 'en' ? 'Friend PK' : '好友对决'}
+                        {tt(lang, 'Friend PK', '好友对决')}
                       </button>
                     )}
                     <button onClick={() => { setShowBattlePass(true); setShowMoreMenu(false); }} className="px-3 py-1.5 bg-rose-600/20 border border-rose-500/30 rounded-lg text-xs text-rose-300">
@@ -1155,7 +1155,7 @@ export const MapScreen = ({
             <div className="flex items-center gap-2">
               <Crown size={16} className="text-amber-400" />
               <span className="text-sm font-black text-white">
-                {profile.class_tags[0]} {lang === 'en' ? 'Arena' : '竞技场'}
+                {profile.class_tags[0]} {tt(lang, 'Arena', '竞技场')}
               </span>
             </div>
             {classRankInfo && (
@@ -1180,7 +1180,7 @@ export const MapScreen = ({
                   </span>
                   <span className={`flex-1 text-xs font-bold truncate ${isMe ? 'text-amber-300' : 'text-white/70'}`}>
                     {entry.display_name || 'Anonymous'}
-                    {isMe && <span className="ml-1 text-[9px] text-amber-400/60">{lang === 'en' ? '(you)' : '(我)'}</span>}
+                    {isMe && <span className="ml-1 text-[9px] text-amber-400/60">{tt(lang, '(you)', '(我)')}</span>}
                   </span>
                   <span className={`text-xs font-black tabular-nums ${isMe ? 'text-amber-400' : 'text-white/40'}`}>
                     {entry.total_score.toLocaleString()}
@@ -1204,7 +1204,7 @@ export const MapScreen = ({
       {/* ═══════════════════ Mission Map ═══════════════════ */}
       <div className="relative rounded-3xl overflow-hidden bg-[#1a1a2e]">
         <img
-          src={lang === 'zh' ? './map/world-map-zh.webp' : './map/world-map-en.webp'}
+          src={lang === 'en' ? './map/world-map-en.webp' : './map/world-map-zh.webp'}
           alt="Three Kingdoms Map"
           loading="lazy"
           className="w-full rounded-3xl opacity-10 md:opacity-30 absolute inset-0 object-cover h-full pointer-events-none"
@@ -1430,31 +1430,31 @@ export const MapScreen = ({
                   <button onClick={() => { onMobileMenuClose?.(); onLeaderboard(); }}
                     className="flex flex-col items-center gap-1.5 py-4 bg-yellow-500/10 rounded-xl border border-yellow-500/20 text-yellow-300 active:bg-yellow-500/20">
                     <span className="text-2xl">🏆</span>
-                    <span className="text-xs font-bold">{lang === 'en' ? 'Ranks' : '排行'}</span>
+                    <span className="text-xs font-bold">{tt(lang, 'Ranks', '排行')}</span>
                   </button>
                 )}
                 <button onClick={() => { onMobileMenuClose?.(); setShowProgressReport(true); }}
                   className="flex flex-col items-center gap-1.5 py-4 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-300 active:bg-blue-500/20">
                   <span className="text-2xl">📊</span>
-                  <span className="text-xs font-bold">{lang === 'en' ? 'Report' : '报告'}</span>
+                  <span className="text-xs font-bold">{tt(lang, 'Report', '报告')}</span>
                 </button>
                 {onStartExpedition && (
                   <button onClick={() => { const exps = getExpeditionsForGrade(profile.grade!); if (exps.length > 0) { onStartExpedition(exps[0].id); } onMobileMenuClose?.(); }}
                     className="flex flex-col items-center gap-1.5 py-4 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-300 active:bg-amber-500/20">
                     <span className="text-2xl">⚔️</span>
-                    <span className="text-xs font-bold">{lang === 'en' ? 'Quest' : '远征'}</span>
+                    <span className="text-xs font-bold">{tt(lang, 'Quest', '远征')}</span>
                   </button>
                 )}
                 <button onClick={() => { onMobileMenuClose?.(); setShowJoinClass(true); }}
                   className="flex flex-col items-center gap-1.5 py-4 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-300 active:bg-indigo-500/20">
                   <span className="text-2xl">🏫</span>
-                  <span className="text-xs font-bold">{lang === 'en' ? 'Class' : '班级'}</span>
+                  <span className="text-xs font-bold">{tt(lang, 'Class', '班级')}</span>
                 </button>
               </div>
 
               {/* ══�� More items (collapsed) ═══ */}
               <button onClick={() => setShowMoreItems(!showMoreItems)} className="w-full text-center text-white/30 text-[10px] font-bold mb-2">
-                {showMoreItems ? (lang === 'en' ? '▲ Less' : '▲ 收起') : (lang === 'en' ? '▼ More tools' : '▼ 更多工具')}
+                {showMoreItems ? (tt(lang, '▲ Less', '▲ 收起')) : (tt(lang, '▼ More tools', '▼ 更多工具'))}
               </button>
               {showMoreItems && (
               <div className="grid grid-cols-4 gap-2">
@@ -1463,7 +1463,7 @@ export const MapScreen = ({
                   <button onClick={() => { onMobileMenuClose?.(); onTechTree(); }}
                     className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🌿</span>
-                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Tech Tree' : '科技树'}</span>
+                    <span className="text-[11px] font-bold">{tt(lang, 'Tech Tree', '科技树')}</span>
                   </button>
                 )}
                 {/* 技能树 */}
@@ -1471,7 +1471,7 @@ export const MapScreen = ({
                   <button onClick={() => { onMobileMenuClose?.(); setShowSkillTree(true); }}
                     className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🃏</span>
-                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Skills' : '技能'}</span>
+                    <span className="text-[11px] font-bold">{tt(lang, 'Skills', '技能')}</span>
                   </button>
                 )}
                 {/* 装备库 */}
@@ -1479,7 +1479,7 @@ export const MapScreen = ({
                   <button onClick={() => { onMobileMenuClose?.(); setShowEquipmentPanel(true); }}
                     className="relative flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🛡️</span>
-                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Arsenal' : '装备'}</span>
+                    <span className="text-[11px] font-bold">{tt(lang, 'Arsenal', '装备')}</span>
                     {countNeedsRepair(profile.completed_missions as Record<string, unknown>) > 0 && (
                       <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">
                         {countNeedsRepair(profile.completed_missions as Record<string, unknown>)}
@@ -1492,7 +1492,7 @@ export const MapScreen = ({
                   <button onClick={() => { onMobileMenuClose?.(); onLeaderboard(); }}
                     className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🏆</span>
-                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Ranks' : '排行'}</span>
+                    <span className="text-[11px] font-bold">{tt(lang, 'Ranks', '排行')}</span>
                   </button>
                 )}
                 {/* 好友对决 */}
@@ -1508,7 +1508,7 @@ export const MapScreen = ({
                   <button onClick={() => { onMobileMenuClose?.(); onAchievements(); }}
                     className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">🏅</span>
-                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Awards' : '成就'}</span>
+                    <span className="text-[11px] font-bold">{tt(lang, 'Awards', '成就')}</span>
                   </button>
                 )}
                 {/* 教师看板 */}
@@ -1516,7 +1516,7 @@ export const MapScreen = ({
                   <button onClick={() => { onMobileMenuClose?.(); onDashboard(); }}
                     className="flex flex-col items-center gap-1 py-3 min-h-[52px] bg-white/5 rounded-xl border border-white/8 text-white/70 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-indigo-400">
                     <span className="text-xl">📊</span>
-                    <span className="text-[11px] font-bold">{lang === 'en' ? 'Dashboard' : '看板'}</span>
+                    <span className="text-[11px] font-bold">{tt(lang, 'Dashboard', '看板')}</span>
                   </button>
                 )}
               </div>
@@ -1531,7 +1531,7 @@ export const MapScreen = ({
         <Suspense fallback={<MapOverlayFallback lang={lang} />}>
           <ProgressReport
             lang={lang}
-            displayName={profile.display_name || (lang === 'en' ? 'Student' : '学生')}
+            displayName={profile.display_name || (tt(lang, 'Student', '学生'))}
             grade={profile.grade || 7}
             totalScore={profile.total_score || 0}
             completedMissions={(profile.completed_missions || {}) as CompletedMissions}

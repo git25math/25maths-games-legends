@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { X, Swords, UserPlus } from 'lucide-react';
 import type { Language, MissionSummary } from '../types';
-import { lt } from '../i18n/resolveText';
+import { lt, tt } from '../i18n/resolveText';
 import { useAudio } from '../audio';
 import { useEscapeKey } from '../hooks/useEscapeKey';
 
@@ -53,7 +53,7 @@ export const PKSetupPanel = ({
               <Swords size={20} className="text-rose-400" />
             </div>
             <h2 className="text-lg font-black text-white">
-              {lang === 'en' ? 'Friend PK' : '好友对决'}
+              {tt(lang, 'Friend PK', '好友对决')}
             </h2>
           </div>
           <button onClick={onClose} className="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-white/60 hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-400 rounded-lg transition-colors" aria-label="Close">
@@ -65,9 +65,7 @@ export const PKSetupPanel = ({
         {mode === 'choose' && (
           <div className="flex flex-col gap-3">
             <p className="text-white/50 text-xs text-center mb-2">
-              {lang === 'en'
-                ? 'Challenge a friend to a math duel!'
-                : '向朋友发起数学对决！'}
+              {tt(lang, 'Challenge a friend to a math duel!', '向朋友发起数学对决！')}
             </p>
             <button
               onClick={() => { playTap(); setMode('create'); }}
@@ -78,10 +76,10 @@ export const PKSetupPanel = ({
               </div>
               <div className="text-left">
                 <p className="text-white font-bold text-sm">
-                  {lang === 'en' ? 'Create Room' : '创建房间'}
+                  {tt(lang, 'Create Room', '创建房间')}
                 </p>
                 <p className="text-white/40 text-xs">
-                  {lang === 'en' ? 'Pick a topic and invite your friend' : '选择题目，邀请好友加入'}
+                  {tt(lang, 'Pick a topic and invite your friend', '选择题目，邀请好友加入')}
                 </p>
               </div>
             </button>
@@ -94,10 +92,10 @@ export const PKSetupPanel = ({
               </div>
               <div className="text-left">
                 <p className="text-white font-bold text-sm">
-                  {lang === 'en' ? 'Join Room' : '加入房间'}
+                  {tt(lang, 'Join Room', '加入房间')}
                 </p>
                 <p className="text-white/40 text-xs">
-                  {lang === 'en' ? 'Enter a room code from your friend' : '输入好友的房间代码'}
+                  {tt(lang, 'Enter a room code from your friend', '输入好友的房间代码')}
                 </p>
               </div>
             </button>
@@ -111,14 +109,14 @@ export const PKSetupPanel = ({
               onClick={() => { playTap(); setMode('choose'); }}
               className="text-white/40 text-xs font-bold mb-3 hover:text-white transition-colors"
             >
-              {'< '}{lang === 'en' ? 'Back' : '返回'}
+              {'< '}{tt(lang, 'Back', '返回')}
             </button>
             <p className="text-white/50 text-xs mb-3">
-              {lang === 'en' ? 'Choose a mission for the duel:' : '选择对决题目：'}
+              {tt(lang, 'Choose a mission for the duel:', '选择对决题目：')}
             </p>
             {gradeMissions.length === 0 && (
               <p className="text-white/30 text-xs text-center py-8">
-                {lang === 'en' ? 'No missions available for your grade.' : '当前年级暂无可用关卡。'}
+                {tt(lang, 'No missions available for your grade.', '当前年级暂无可用关卡。')}
               </p>
             )}
             <div className="space-y-3">
@@ -153,7 +151,7 @@ export const PKSetupPanel = ({
                 onClick={() => onCreateRoom(selectedMission.id)}
                 className="w-full mt-4 py-3 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-colors text-sm"
               >
-                {lang === 'en' ? 'Create Room' : '创建房间'}
+                {tt(lang, 'Create Room', '创建房间')}
               </motion.button>
             )}
           </div>
@@ -166,10 +164,10 @@ export const PKSetupPanel = ({
               onClick={() => { playTap(); setMode('choose'); }}
               className="text-white/40 text-xs font-bold mb-3 hover:text-white transition-colors"
             >
-              {'< '}{lang === 'en' ? 'Back' : '返回'}
+              {'< '}{tt(lang, 'Back', '返回')}
             </button>
             <p className="text-white/50 text-xs mb-3">
-              {lang === 'en' ? 'Enter the room code from your friend:' : '输入好友发送的房间代码：'}
+              {tt(lang, 'Enter the room code from your friend:', '输入好友发送的房间代码：')}
             </p>
             <input
               type="text"
@@ -184,7 +182,7 @@ export const PKSetupPanel = ({
                   setTimeout(() => onJoinRoom(pasted), 100);
                 }
               }}
-              placeholder={lang === 'en' ? 'Room code or full ID' : '房间代码或完整 ID'}
+              placeholder={tt(lang, 'Room code or full ID', '房间代码或完整 ID')}
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-center font-mono text-lg tracking-[0.2em] placeholder:text-white/20 placeholder:tracking-normal placeholder:text-sm focus:outline-none focus:border-indigo-400/50"
               maxLength={36}
               autoFocus
@@ -194,7 +192,7 @@ export const PKSetupPanel = ({
               disabled={roomCode.length < 6}
               className="w-full mt-4 py-3 bg-emerald-600 text-white font-black rounded-2xl hover:bg-emerald-500 transition-colors text-sm disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              {lang === 'en' ? 'Join Room' : '加入房间'}
+              {tt(lang, 'Join Room', '加入房间')}
             </button>
           </div>
         )}

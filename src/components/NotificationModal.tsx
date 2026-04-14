@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Bell, X, CheckCheck } from 'lucide-react';
 import type { Language } from '../types';
 import type { AppNotification } from '../hooks/useNotifications';
+import { tt } from '../i18n/resolveText';
 
 type Props = {
   lang: Language;
@@ -51,7 +52,7 @@ export function NotificationModal({ lang, notifications, onDismiss, onDismissAll
           key="notif-modal"
           role="dialog"
           aria-modal="true"
-          aria-label={lang === 'en' ? 'Notifications' : '通知'}
+          aria-label={tt(lang, 'Notifications', '通知')}
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -66,7 +67,7 @@ export function NotificationModal({ lang, notifications, onDismiss, onDismissAll
               </div>
               <div>
                 <h3 className="font-black text-slate-800 text-lg">{t.title}</h3>
-                <p className="text-xs text-slate-400 font-bold">{notifications.length} {lang === 'en' ? 'unread' : '未读'}</p>
+                <p className="text-xs text-slate-400 font-bold">{notifications.length} {tt(lang, 'unread', '未读')}</p>
               </div>
             </div>
             <button
@@ -118,7 +119,7 @@ export function NotificationModal({ lang, notifications, onDismiss, onDismissAll
               onClick={onDismissAll}
               className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-2xl transition-colors text-sm"
             >
-              {lang === 'en' ? 'Got it' : '我知道了'}
+              {tt(lang, 'Got it', '我知道了')}
             </button>
           </div>
         </motion.div>
