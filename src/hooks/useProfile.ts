@@ -5,6 +5,7 @@ import type { User } from '@supabase/supabase-js';
 import { handleSupabaseError } from '../utils/errors';
 import { getSkillById, defaultProgression } from '../data/heroSkills';
 import { markBattleDifficultyCompleted } from '../utils/completionState';
+import { pruneOldDailyKeys } from '../utils/dailyChallenge';
 
 const DEFAULT_STATS = { Algebra: 0, Geometry: 0, Functions: 0, Calculus: 0, Statistics: 0 };
 const GUEST_STORAGE_KEY = 'gl_guest_profile';
@@ -12,7 +13,13 @@ const GUEST_STORAGE_KEY = 'gl_guest_profile';
 function loadGuestProfile(): UserProfile {
   try {
     const stored = localStorage.getItem(GUEST_STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
+    if (stored) {
+      const parsed = JSON.parse(stored) as UserProfile;
+      // Prune stale daily_YYYYMMDD keys on load (guest profile)
+      const { cleaned } = pruneOldDailyKeys(parsed.completed_missions || {}, 7);
+      parsed.completed_missions = cleaned;
+      return parsed;
+    }
   } catch { /* ignore */ }
   return {
     user_id: 'guest',
@@ -65,11 +72,19 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
       } else if (error) {
         handleSupabaseError(error, 'get', 'gl_user_progress');
       } else {
+        // Prune stale daily_YYYYMMDD keys (>7 days old) to keep JSONB bounded.
+        // Fire-and-forget write back if anything was removed.
+        const { cleaned, removed } = pruneOldDailyKeys(data.completed_missions || {}, 7);
         setProfile({
           ...data,
-          completed_missions: data.completed_missions || {},
+          completed_missions: cleaned,
           stats: data.stats || DEFAULT_STATS,
         });
+        if (removed > 0) {
+          supabase.from('gl_user_progress')
+            .update({ completed_missions: cleaned })
+            .eq('user_id', user.id);
+        }
       }
     };
 

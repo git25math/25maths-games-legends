@@ -70,6 +70,32 @@ export function isValidDailySubmission(
   return !!today && today.id === mission.id;
 }
 
+/**
+ * Prune daily completion keys older than `retainDays` days from completed_missions.
+ * Returns { cleaned, removed } where removed is the count of pruned keys.
+ * Keeps the JSONB payload bounded (was accumulating ~365 keys/year).
+ */
+export function pruneOldDailyKeys(
+  completedMissions: CompletedMissions,
+  retainDays = 7,
+): { cleaned: CompletedMissions; removed: number } {
+  const cutoff = Date.now() - retainDays * 86400000;
+  const cm = completedMissions as Record<string, unknown>;
+  const cleaned: Record<string, unknown> = {};
+  let removed = 0;
+  for (const [k, v] of Object.entries(cm)) {
+    if (k.startsWith('daily_') && /^daily_\d{8}$/.test(k)) {
+      const y = parseInt(k.slice(6, 10));
+      const m = parseInt(k.slice(10, 12)) - 1;
+      const d = parseInt(k.slice(12, 14));
+      const keyDate = new Date(y, m, d).getTime();
+      if (keyDate < cutoff) { removed++; continue; }
+    }
+    cleaned[k] = v;
+  }
+  return { cleaned: cleaned as CompletedMissions, removed };
+}
+
 /** Get the daily challenge key for marking completion */
 export function getDailyKey(): string {
   return `daily_${getTodayKey()}`;

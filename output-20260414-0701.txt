@@ -1,0 +1,67 @@
+=== Play 每日试炼 深度审查报告 ===
+日期: 2026-04-14T07:01Z
+分支: main (4cba9f1 之后增量)
+
+=== 子代理深度审查 10 项发现 ===
+
+| # | 发现                                        | 严重度   | 本轮处理       |
+|---|---------------------------------------------|----------|----------------|
+| 1 | 测试覆盖率 0 (dailyChallenge.ts 无单测)     | HIGH    | ✅ 新增17用例   |
+| 2 | 游客多标签 localStorage 不同步              | MEDIUM  | ⏸ 保留(罕见)   |
+| 3 | JSONB 膨胀 (daily_ 键累积 365/年)           | MEDIUM  | ✅ 加入定期清理 |
+| 4 | profile.grade 变更时 missions 栈旧          | MEDIUM  | ⏸ 罕见        |
+| 5 | record_battle_result RPC 无 daily_key 去重  | HIGH    | ⏸ 跨 tab 竞争 |
+| 6 | 体力消耗对 daily 不豁免                      | LOW     | ⏸ 设计意图    |
+| 7 | isDailyBattle 在 PK/Live 中转未清理         | MEDIUM  | ✅ 由 #4 守卫捕获 |
+| 8 | awardCurrency mutate 注释误导               | LOW     | ⏸ 非 bug      |
+| 9 | recordBattleComplete null 场景 daily 丢奖   | EDGE    | ⏸ 客户端 ref 已挡 |
+| 10| DailyQuestPanel 无 memo                    | LOW     | ⏸ 纯视觉      |
+
+=== 本轮修复 ===
+
+A. JSONB 清理 (Finding #3)
+   src/utils/dailyChallenge.ts:
+     新增 pruneOldDailyKeys(cm, retainDays=7)
+     - 匹配 daily_YYYYMMDD 格式
+     - 8位数字验证，防误删
+     - 返回 { cleaned, removed } 便于统计
+   src/hooks/useProfile.ts:
+     - loadGuestProfile(): 加载时自动清理 > 7天
+     - loadProfile(): 加载时清理 + fire-and-forget 回写数据库
+
+B. 测试覆盖 (Finding #1)
+   src/__tests__/dailyChallenge.test.ts: 17 个新用例
+     - getTodayKey 格式 + 匹配本地日期
+     - getDailyKey 前缀正确
+     - getDailyMission 确定性 (同日同 grade 同 mission)
+     - getDailyMission 过滤无生成器的关卡
+     - getDailyMission 按 grade 过滤
+     - isDailyCompleted 完整检测
+     - isValidDailySubmission 4 场景 (对/错/已完成/无池)
+     - pruneOldDailyKeys 3 场景 (正常/畸形key/全新)
+     - DAILY_MULTIPLIER 常量验证
+
+=== 由上一轮 (4cba9f1) 已覆盖的深度问题 ===
+
+Finding #7 (isDailyBattle flag 在 PK/Live 中转未清理):
+  ✅ isValidDailySubmission 已防御:
+     PK/Live 的 mission.id 必然与今日 daily.id 不同
+     → 守卫返回 false → 不错发奖励
+
+Finding #4 部分 (grade 变更致 missions 栈旧):
+  ✅ isValidDailySubmission 同样捕获:
+     旧 missions 选出的 mission.id 与 新 grade 的 daily.id 不匹配
+     → 守卫返回 false
+
+=== 未处理项 (保留记录) ===
+
+Finding #2 (游客多标签): 低频场景, 加 storage 监听器复杂度不划算
+Finding #5 (服务端 daily_key 去重): 需 migration + RPC 签名变更, 超出本次范围
+Finding #6 (体力): 设计意图 (daily 同样消耗, UI 层已明确)
+Finding #8-10: 代码风格/视觉, 非正确性 bug
+
+=== 验收结果 ===
+✓ build: 0 errors (7.75s)
+✓ tests: 2704 passed (+17 new)
+✓ 新增 pruneOldDailyKeys 每次加载自动运行
+✓ 游客/认证用户两条路径都覆盖
