@@ -21,6 +21,7 @@ import { LiveSessionBanner } from './components/LiveSessionBanner';
 const lazyGenerate = () => import('./utils/generateMission').then(m => m.generateMission);
 const loadProcessAttemptUtils = () => import('./utils/processAttempt');
 import { getDailyKey, DAILY_MULTIPLIER, isValidDailySubmission } from './utils/dailyChallenge';
+import { isSuperAdmin } from './utils/superAdmin';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
 import { OnboardingScreen, isOnboardingDone, clearOnboardingFlag } from './screens/OnboardingScreen';
@@ -1249,6 +1250,7 @@ export default function App() {
                   onMissionStart={handleMissionStart}
                   onPracticeStart={handlePracticeStart}
                   onGradeChange={() => updateProfile({ grade: null })}
+                  canChangeGrade={isSuperAdmin(user)}
                   onCharChange={() => { setSelectedCharId(null); setGameState('welcome'); }}
                   onCreateRoom={createRoom}
                   onDashboard={isTeacher ? () => setGameState('dashboard') : undefined}

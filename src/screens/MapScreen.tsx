@@ -111,6 +111,7 @@ export const MapScreen = ({
   onMissionStart,
   onPracticeStart,
   onGradeChange,
+  canChangeGrade = false,
   onCharChange,
   onCreateRoom,
   onDashboard,
@@ -144,6 +145,7 @@ export const MapScreen = ({
   onMissionStart: (mission: Mission) => void;
   onPracticeStart: (mission: Mission) => void;
   onGradeChange: () => void;
+  canChangeGrade?: boolean;
   onCharChange: () => void;
   onCreateRoom: (type: 'team' | 'pk', missionId: number) => void;
   onDashboard?: () => void;
@@ -836,9 +838,18 @@ export const MapScreen = ({
             <div className="flex flex-wrap items-center gap-2 mt-1">
               <p className="text-indigo-400 font-bold text-sm">{selectedChar ? lt(selectedChar.name, lang) : ''}</p>
               <span className="text-white/20">|</span>
-              <button onClick={onGradeChange} className="px-3 py-1.5 min-h-[36px] bg-amber-600/20 border border-amber-500/30 rounded-xl text-xs text-amber-300 hover:bg-amber-600/40 transition-colors">
-                {t.year} {profile.grade}
-              </button>
+              {canChangeGrade ? (
+                <button onClick={onGradeChange} className="px-3 py-1.5 min-h-[36px] bg-amber-600/20 border border-amber-500/30 rounded-xl text-xs text-amber-300 hover:bg-amber-600/40 transition-colors">
+                  {t.year} {profile.grade}
+                </button>
+              ) : (
+                <span
+                  className="px-3 py-1.5 min-h-[36px] flex items-center bg-amber-600/10 border border-amber-500/20 rounded-xl text-xs text-amber-300/70 cursor-default"
+                  title={lang === 'en' ? 'Grade cannot be changed' : '年级不可更改'}
+                >
+                  {t.year} {profile.grade}
+                </span>
+              )}
               <button onClick={onCharChange} className="px-3 py-1.5 min-h-[36px] bg-indigo-600/20 border border-indigo-500/30 rounded-xl text-xs text-indigo-300 hover:bg-indigo-600/40 transition-colors">
                 {t.switchChar}
               </button>

@@ -6,6 +6,7 @@ import { handleSupabaseError } from '../utils/errors';
 import { getSkillById, defaultProgression } from '../data/heroSkills';
 import { markBattleDifficultyCompleted } from '../utils/completionState';
 import { pruneOldDailyKeys } from '../utils/dailyChallenge';
+import { isSuperAdmin } from '../utils/superAdmin';
 
 const DEFAULT_STATS = { Algebra: 0, Geometry: 0, Functions: 0, Calculus: 0, Statistics: 0 };
 const GUEST_STORAGE_KEY = 'gl_guest_profile';
@@ -104,6 +105,18 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     if (!user) return;
     // Strip total_score (must use addScore RPC) and user_id (immutable)
     const { total_score: _ts, user_id: _uid, updated_at: _ua, ...safeUpdates } = updates as any;
+    // Grade gate: regular students can set grade once (null → value) during onboarding,
+    // but cannot change it afterwards. Only super admins may mutate an existing grade.
+    if ('grade' in safeUpdates) {
+      const currentGrade = profile?.grade ?? null;
+      const newGrade = (safeUpdates as { grade: number | null }).grade;
+      const isInitialSet = currentGrade === null;
+      if (!isInitialSet && newGrade !== currentGrade && !isSuperAdmin(user)) {
+        console.warn('[useProfile] grade change blocked: not super admin');
+        delete (safeUpdates as { grade?: number | null }).grade;
+        if (Object.keys(safeUpdates).length === 0) return;
+      }
+    }
     const { error } = await supabase.rpc('update_user_progress_safe', {
       p_updates: safeUpdates,
     });
