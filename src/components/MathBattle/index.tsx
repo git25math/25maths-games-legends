@@ -271,11 +271,15 @@ export const MathBattle = ({
 
   const handleSubmit = () => {
     if (isSubmitting || showResult !== 'none') return;
-    // Validate: all fields must have content
+    // Validate: all fields must have content.
+    // Skip field validation when the answer came from a multiple-choice click
+    // (_mc flag is set); MC supplies `inputs.ans` while the mission type's
+    // input config may list different field ids (e.g. SIMPLE_EQ expects 'x').
+    const isMcSubmission = inputs._mc === '1';
     const langKey = lang === 'en' ? 'en' : lang === 'zh_TW' ? 'zh_TW' : 'zh';
     const fieldConfig = INPUT_FIELDS[currentQuestion.type];
     const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
-    if (fields.some((f: { id: string }) => !inputs[f.id]?.trim())) {
+    if (!isMcSubmission && fields.some((f: { id: string }) => !inputs[f.id]?.trim())) {
       setShakeKey(k => k + 1);
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), 400);

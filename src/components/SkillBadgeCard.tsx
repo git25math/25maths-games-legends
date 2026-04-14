@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { motion } from 'motion/react';
 import { CharacterAvatar } from './CharacterAvatar';
-import { LatexText } from './MathView';
+import { LatexText, MathView } from './MathView';
 import { lt } from '../i18n/resolveText';
 
 type Props = {
@@ -136,7 +136,11 @@ export const SkillBadgeCard = memo(function SkillBadgeCard({
             </div>
             {formula && (
               <div className="flex justify-center overflow-x-auto">
-                <LatexText text={formula} className="text-base text-yellow-300" />
+                {/* `formula` comes from resolveFormula() which STRIPS $ delimiters,
+                    leaving raw LaTeX (e.g. "V = \pi r^2 h"). LatexText splits on
+                    $...$ and would render this as plain text; use MathView which
+                    hands the string directly to KaTeX. */}
+                <MathView tex={formula} inline={false} className="text-base text-yellow-300" />
               </div>
             )}
           </div>

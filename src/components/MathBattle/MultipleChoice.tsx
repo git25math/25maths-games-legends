@@ -8,7 +8,7 @@ import { motion } from 'motion/react';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import type { Language, BilingualText } from '../../types';
 import { lt } from '../../i18n/resolveText';
-import { MathView } from '../MathView';
+import { MathView, LatexText } from '../MathView';
 
 export type ChoiceOption = {
   label: BilingualText;
@@ -77,10 +77,16 @@ export function MultipleChoice({ choices, onSelect, disabled, lang, result, sele
             <span className="flex-1 text-left text-sm font-bold">
               {(() => {
                 const text = lt(choice.label, lang);
-                const hasLatex = choice.isLatex || /\\frac|\\sqrt|\\times|\\div|\$/.test(text);
-                return hasLatex
-                  ? <MathView tex={text} className="text-sm" />
-                  : text;
+                // Text contains $...$ delimiters → use LatexText (splits and renders segments).
+                // Text is raw LaTeX (no $, but has LaTeX commands) → strip to MathView.
+                // Plain text → render as-is.
+                if (text.includes('$')) {
+                  return <LatexText text={text} className="text-sm" />;
+                }
+                if (choice.isLatex || /\\frac|\\sqrt|\\times|\\div/.test(text)) {
+                  return <MathView tex={text} className="text-sm" />;
+                }
+                return text;
               })()}
             </span>
             {showSuccess && <CheckCircle2 size={20} className="text-emerald-500 shrink-0" />}
