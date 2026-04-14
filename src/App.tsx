@@ -20,7 +20,7 @@ import { LiveSessionBanner } from './components/LiveSessionBanner';
 // critical path (352 KB generators chunk deferred until first use).
 const lazyGenerate = () => import('./utils/generateMission').then(m => m.generateMission);
 const loadProcessAttemptUtils = () => import('./utils/processAttempt');
-import { getDailyKey, DAILY_MULTIPLIER } from './utils/dailyChallenge';
+import { getDailyKey, DAILY_MULTIPLIER, isValidDailySubmission } from './utils/dailyChallenge';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 import { GradeSelectScreen } from './screens/GradeSelectScreen';
 import { OnboardingScreen, isOnboardingDone, clearOnboardingFlag } from './screens/OnboardingScreen';
@@ -663,7 +663,13 @@ export default function App() {
       if (battleData) {
         let { completedMissions: cm, stats } = battleData; // cm is reassigned below by setSkillHealth
 
-        if (isDailyBattle) {
+        // Bug #4 guard: only mark daily complete if the mission is truly today's
+        // daily for this grade AND daily hasn't already been marked today.
+        // Protects against stale isDailyBattle flag (cross-midnight, DevTools tamper).
+        const isValidDaily = isDailyBattle && isValidDailySubmission(
+          activeMission, missions, profile.grade, cm as any,
+        );
+        if (isValidDaily) {
           cm[getDailyKey()] = true;
         }
 
@@ -680,9 +686,13 @@ export default function App() {
 
         // Step 3: Merge season tasks into the same completed_missions
         let sp = getSeasonProgress(cm);
-        { const { updatedProgress, justCompleted } = incrementTaskCount(sp, 'daily_battles_3');
+        // Bug #7 fix: daily_battles_3 only increments on valid daily battles,
+        // not every battle. Previously any 3 battles would complete this task.
+        if (isValidDaily) {
+          const { updatedProgress, justCompleted } = incrementTaskCount(sp, 'daily_battles_3');
           sp = updatedProgress;
-          if (justCompleted) awardCurrency(cm, 'rations', CURRENCY_REWARDS.DAILY_TASK); }
+          if (justCompleted) awardCurrency(cm, 'rations', CURRENCY_REWARDS.DAILY_TASK);
+        }
         if (selectedDifficulty === 'red') {
           const { updatedProgress } = incrementTaskCount(sp, 'weekly_red_3');
           sp = updatedProgress;
@@ -793,7 +803,8 @@ export default function App() {
 
         // Award merit currency for battle win
         awardCurrency(cm, 'merit', CURRENCY_REWARDS.BATTLE_WIN);
-        if (isDailyBattle) {
+        // Bug #4 fix: daily bonus only on validated daily (same guard as mark-complete)
+        if (isValidDaily) {
           awardCurrency(cm, 'merit', CURRENCY_REWARDS.DAILY_WIN_BONUS);
         }
 
@@ -814,6 +825,10 @@ export default function App() {
             p_kn_id: knId,
           });
           // Step 7b: Bridge to unified meta_node_progress (fire-and-forget)
+          // Daily battles use source='play' intentionally — daily is a gameplay
+          // mode on top of play, not a separate learning context. mastery_score
+          // is a ratio (wins/attempts), so every attempt contributes correctly
+          // regardless of daily status.
           if (knId) {
             supabase.rpc('upsert_meta_node_progress', {
               p_user_id: user.id, p_kn_id: knId,

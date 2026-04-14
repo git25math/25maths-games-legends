@@ -1,0 +1,60 @@
+=== Play 每日试炼 Bug 全量修复报告 ===
+日期: 2026-04-14T04:17Z
+分支: main
+
+=== 验证结果 (7 个疑点) ===
+#1 本地时区跨 0 点双领        ✅ 真 bug  → 由 #4 间接修复 (validate 时会检测日期变化)
+#2 getTodayKey 代码重复        ✅ 真 bug  → 提取到 src/utils/dateKey.ts
+#3 battleSubmittingRef 竞态    ❌ 误报    → try/finally 已正确保护
+#4 isDailyBattle 客户端作弊    ✅ 真 bug  → 新增 isValidDailySubmission()
+#5 meta_node_progress 未区分   ⚠️ 设计   → 添加注释说明 source='play' 是 intentional
+#6 午夜倒计时归零              ❌ 误报    → setInterval 每秒 re-render 已自动刷新
+#7 daily_battles_3 全战斗计数  🔴 严重    → 包 if (isValidDaily) 守卫
+
+=== 修复清单 ===
+新增:
+  src/utils/dateKey.ts                     — 唯一 getTodayKey() 源
+  src/utils/dailyChallenge.ts::isValidDailySubmission()  — 提交前校验
+
+修改:
+  src/utils/dailyChallenge.ts  — 删除本地 getTodayKey, 改为 re-export
+  src/utils/stamina.ts         — 删除本地 getTodayKey, 改为 re-export
+  src/App.tsx                  — isValidDaily 守卫 + daily_battles_3 收窄 + meta_node 注释
+
+=== 关键逻辑变更 ===
+
+Before (L666, L683-685, L796):
+  if (isDailyBattle) cm[getDailyKey()] = true;              // 客户端可篡改
+  incrementTaskCount(sp, 'daily_battles_3');                // 所有战斗都计数
+  if (isDailyBattle) awardCurrency(..., DAILY_WIN_BONUS);   // 同上可篡改
+
+After:
+  const isValidDaily = isDailyBattle && isValidDailySubmission(
+    activeMission, missions, profile.grade, cm,
+  );
+  if (isValidDaily) cm[getDailyKey()] = true;               // 校验: 是今日 daily + 未完成
+  if (isValidDaily) {                                       // 收窄到真 daily
+    incrementTaskCount(sp, 'daily_battles_3');
+    if (justCompleted) awardCurrency(..., DAILY_TASK);
+  }
+  if (isValidDaily) awardCurrency(..., DAILY_WIN_BONUS);
+
+=== isValidDailySubmission 守卫逻辑 ===
+返回 false 的情况:
+  1. daily 已被标记完成 (重入保护)
+  2. mission.id !== getDailyMission(missions, grade).id (作弊防护, 跨日防护)
+
+跨 0 点场景自动处理:
+  - 23:59 开始 daily → mission=X
+  - 00:01 完成 → getDailyMission 返回 mission=Y (新日期 coprime)
+  - isValidDailySubmission 返回 false → 无 daily 奖励
+  (代价: 跨 0 点 完成者失去奖励, 但杜绝了"一个日历日刷两次 daily")
+
+=== 未修改项 ===
+- dailyMultiplier (L1331): 游戏内 3x 分数乘数保留现状
+  理由: 开始战斗时 isDailyBattle 必然有效;
+        中途跨日只影响结算奖励, 分数 3x 已记入 score 属于用户"真实"游玩分数
+
+=== Build & Test ===
+✓ build:  0 errors (9.71s)
+✓ tests:  2687 passed (0 failed)

@@ -2,6 +2,9 @@
 // Same mission for all players on the same day, 3x reward multiplier
 
 import type { Mission, CompletedMissions } from '../types';
+import { getTodayKey } from './dateKey';
+
+export { getTodayKey };
 
 export const DAILY_MULTIPLIER = 3;
 
@@ -33,15 +36,6 @@ function dailyIndex(dateStr: string, poolSize: number): number {
   return (dayOfYear * step + yearOffset) % poolSize;
 }
 
-/** Get today's date string in YYYYMMDD format (local time) */
-export function getTodayKey(): string {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}${m}${day}`;
-}
-
 /** Select today's daily mission from the pool */
 export function getDailyMission(missions: Mission[], grade: number | null): Mission | null {
   // Filter to missions matching grade, with generators (so they produce varied questions)
@@ -58,6 +52,22 @@ export function getDailyMission(missions: Mission[], grade: number | null): Miss
 export function isDailyCompleted(completedMissions: CompletedMissions): boolean {
   const key = `daily_${getTodayKey()}`;
   return !!(completedMissions as Record<string, unknown>)[key];
+}
+
+/**
+ * Validate that the given mission is actually today's daily for the grade,
+ * and that the daily has not already been completed.
+ * Used to guard against stale isDailyBattle flags (e.g., cross-midnight submit).
+ */
+export function isValidDailySubmission(
+  mission: Mission,
+  allMissions: Mission[],
+  grade: number | null,
+  completedMissions: CompletedMissions,
+): boolean {
+  if (isDailyCompleted(completedMissions)) return false;
+  const today = getDailyMission(allMissions, grade);
+  return !!today && today.id === mission.id;
 }
 
 /** Get the daily challenge key for marking completion */

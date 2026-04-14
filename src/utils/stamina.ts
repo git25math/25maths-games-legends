@@ -2,6 +2,9 @@
 // Practice (GREEN/AMBER/RED) is always free; only Battle costs stamina
 
 import { STAMINA } from './gameBalance';
+import { getTodayKey } from './dateKey';
+
+export { getTodayKey };
 
 const MAX_DAILY = STAMINA.MAX_DAILY;
 
@@ -10,12 +13,6 @@ export type DailyStamina = {
   used: number;   // 0..3+
   bonus: number;  // extra attempts earned (e.g. from Master Crystal)
 };
-
-/** Get today's date key in YYYYMMDD format (local time) */
-export function getTodayKey(): string {
-  const d = new Date();
-  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
-}
 
 /** Read stamina from completed_missions JSONB, auto-reset if day changed */
 export function getStamina(completedMissions: Record<string, unknown>): DailyStamina {
