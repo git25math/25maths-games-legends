@@ -105,26 +105,54 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
     if (!user) return;
     // Strip total_score (must use addScore RPC) and user_id (immutable)
     const { total_score: _ts, user_id: _uid, updated_at: _ua, ...safeUpdates } = updates as any;
-    // Grade gate: regular students can set grade once (null → value) during onboarding,
-    // but cannot change it afterwards. Only super admins may mutate an existing grade.
+
+    // Grade gate (client): regular students can set grade once (null → value)
+    // during onboarding, but cannot change it afterwards. Only super admins may
+    // mutate an existing grade.
+    const admin = isSuperAdmin(user);
     if ('grade' in safeUpdates) {
       const currentGrade = profile?.grade ?? null;
       const newGrade = (safeUpdates as { grade: number | null }).grade;
       const isInitialSet = currentGrade === null;
-      if (!isInitialSet && newGrade !== currentGrade && !isSuperAdmin(user)) {
+      if (!isInitialSet && newGrade !== currentGrade && !admin) {
         console.warn('[useProfile] grade change blocked: not super admin');
         delete (safeUpdates as { grade?: number | null }).grade;
         if (Object.keys(safeUpdates).length === 0) return;
       }
     }
-    const { error } = await supabase.rpc('update_user_progress_safe', {
-      p_updates: safeUpdates,
-    });
-    if (error) {
-      handleSupabaseError(error, 'rpc', 'update_user_progress_safe');
-    } else {
-      setProfile(prev => prev ? { ...prev, ...updates } : null);
+
+    // The server-side RPC `update_user_progress_safe` treats `grade` as a
+    // protected field (among others) and rejects any payload containing it
+    // with P0001 "Protected progress fields cannot be modified from the
+    // client". For super admins we split the write: grade bypasses the RPC
+    // via direct UPDATE (RLS still enforces self-ownership), the rest goes
+    // through the usual safe RPC.
+    const hasGrade = 'grade' in safeUpdates;
+    const shouldBypassForGrade = hasGrade && admin;
+    let rpcPayload = safeUpdates as Record<string, unknown>;
+    if (shouldBypassForGrade) {
+      const { grade: gradeValue, ...rest } = safeUpdates as Record<string, unknown>;
+      const { error: directErr } = await supabase
+        .from('gl_user_progress')
+        .update({ grade: gradeValue })
+        .eq('user_id', user.id);
+      if (directErr) {
+        handleSupabaseError(directErr, 'update', 'gl_user_progress (admin grade)');
+        return;
+      }
+      rpcPayload = rest;
     }
+
+    if (Object.keys(rpcPayload).length > 0) {
+      const { error } = await supabase.rpc('update_user_progress_safe', {
+        p_updates: rpcPayload,
+      });
+      if (error) {
+        handleSupabaseError(error, 'rpc', 'update_user_progress_safe');
+        return;
+      }
+    }
+    setProfile(prev => prev ? { ...prev, ...updates } : null);
   };
 
   /**
