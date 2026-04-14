@@ -857,7 +857,7 @@ export const MapScreen = ({
                 const daysLeft = next.days - loginData.streak;
                 return (
                   <span className="px-2 py-0.5 bg-emerald-600/20 border border-emerald-500/30 rounded text-[10px] text-emerald-300 font-bold">
-                    🔥 {loginData.streak}{tt(lang, 'd', '天')} · {lang === 'en' ? `${daysLeft}d to ${next.title.en}` : `${daysLeft}天→${next.title.zh}`}
+                    🔥 {loginData.streak}{tt(lang, 'd', '天')} · {tt(lang, `${daysLeft}d to ${next.title.en}`, `${daysLeft}天→${next.title.zh}`)}
                   </span>
                 );
               })()}

@@ -147,10 +147,20 @@ export const MathBattle = ({
   const milestoneTimerRef = useRef<number | null>(null);
   const victoryReturnTimerRef = useRef<number | null>(null);
   const floatingKeyRef = useRef(0);
-  // Rule K: stash latest handleSubmit so setTimeout callbacks read the latest
-  // closure (with latest `inputs`) instead of stale render-time closure.
+  // Rule K: stash latest handleSubmit / handleWrongAnswerContinue so timers
+  // and the window keydown listener read the latest closure (with latest
+  // `inputs`) instead of a stale render-time closure.
   const handleSubmitRef = useRef<() => void>(() => {});
+  const handleWrongAnswerContinueRef = useRef<() => void>(() => {});
   const mcTimerRef = useRef<number | null>(null);
+  // State refs for Enter-key gating conditions; kept in sync at the bottom
+  // of the render so the effect can use `[]` deps without stale reads.
+  const wrongAnswerDataRef = useRef<typeof wrongAnswerData>(null);
+  const showResultRef = useRef<typeof showResult>('none');
+  const modeRef = useRef<typeof mode>('battle');
+  wrongAnswerDataRef.current = wrongAnswerData;
+  showResultRef.current = showResult;
+  modeRef.current = mode;
 
   const {
     playBGM, stopBGM, playClick, muted, toggleMute,
@@ -216,15 +226,18 @@ export const MathBattle = ({
     }
   }, [showResult]);
 
+  // Register Enter-key listener exactly once per mount; delegate to refs so
+  // the handler always picks up the latest closure (Rule K). Previously the
+  // effect had no deps array, re-adding/removing the listener every render.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Enter') return;
-      if (wrongAnswerData) handleWrongAnswerContinue();
-      else if (showResult === 'none' && mode === 'battle') handleSubmit();
+      if (wrongAnswerDataRef.current) handleWrongAnswerContinueRef.current();
+      else if (showResultRef.current === 'none' && modeRef.current === 'battle') handleSubmitRef.current();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  });
+  }, []);
 
   // ── Core Logic ──
 
@@ -460,6 +473,9 @@ export const MathBattle = ({
       }
     }
   };
+  // Keep ref in sync each render so the Enter-key listener (mounted once)
+  // always invokes the latest closure. See Rule K.
+  handleWrongAnswerContinueRef.current = handleWrongAnswerContinue;
 
   const heroScoreBonus = heroSkillEffect?.effect === 'time_extend' ? (heroSkillEffect.value / 100) : 0;
 

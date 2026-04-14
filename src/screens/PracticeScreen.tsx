@@ -145,6 +145,19 @@ export const PracticeScreen = ({
 
   // Enter key refs (declared here, updated after function definitions below)
   const enterKeyStateRef = useRef({ wrongAnswerData, currentPhase, isSubmitting, showCorrectFlash, handleSubmit: () => {}, handleWrongAnswerContinue: () => {} });
+  // Single phase-toast timer: auto-cancels the previous pending clear and
+  // is swept on unmount so stale setState warnings don't fire.
+  const phaseToastTimerRef = useRef<number | null>(null);
+  const scheduleClearPhaseToast = (ms: number) => {
+    if (phaseToastTimerRef.current !== null) clearTimeout(phaseToastTimerRef.current);
+    phaseToastTimerRef.current = window.setTimeout(() => {
+      setPhaseToast(null);
+      phaseToastTimerRef.current = null;
+    }, ms);
+  };
+  useEffect(() => () => {
+    if (phaseToastTimerRef.current !== null) clearTimeout(phaseToastTimerRef.current);
+  }, []);
 
   const phaseIndex = PHASE_ORDER.indexOf(currentPhase);
 
@@ -207,7 +220,7 @@ export const PracticeScreen = ({
     const hasEmpty = fields.some((f: { id: string }) => !inputs[f.id]?.trim());
     if (hasEmpty) {
       setPhaseToast({ text: t.fillFieldsFirst ?? (lang === 'en' ? 'Fill in all fields first' : '请先填写所有答题栏'), phase: currentPhase });
-      setTimeout(() => setPhaseToast(null), 2000);
+      scheduleClearPhaseToast(2000);
       return;
     }
     setIsSubmitting(true);
@@ -230,7 +243,7 @@ export const PracticeScreen = ({
               : `✨ 你解锁了：${nextKP.reason.zh}`,
             phase: currentPhase,
           });
-          setTimeout(() => setPhaseToast(null), 3000);
+          scheduleClearPhaseToast(3000);
         }
       }
       // Adaptive: track consecutive correct, level up after 3
@@ -244,7 +257,7 @@ export const PracticeScreen = ({
         setAdaptiveTier(prev => Math.min(3, prev + 1) as DifficultyTier);
         setConsecutiveCorrect(0);
         setPhaseToast(t.difficultyUp ?? 'Difficulty up!');
-        setTimeout(() => setPhaseToast(null), 2000);
+        scheduleClearPhaseToast(2000);
       }
       setTimeout(() => {
         setShowCorrectFlash(false);
@@ -282,7 +295,7 @@ export const PracticeScreen = ({
         setAdaptiveTier(prev => Math.max(1, prev - 1) as DifficultyTier);
         setConsecutiveWrong(0);
         setPhaseToast(t.difficultyDown ?? 'Easier numbers!');
-        setTimeout(() => setPhaseToast(null), 2000);
+        scheduleClearPhaseToast(2000);
       }
       // Record error type for persistent memory
       const errorDiag = diagnoseErrorFn(inputs, result.expected);
@@ -332,7 +345,7 @@ export const PracticeScreen = ({
         text: lang === 'en' ? '🛠 Quick fix — let\'s strengthen the foundation first!' : '🛠 军师紧急来报——先巩固基础再继续！',
         phase: currentPhase,
       });
-      setTimeout(() => setPhaseToast(null), 3000);
+      scheduleClearPhaseToast(3000);
       // If repair handler exists, use it (navigates to RepairScreen for deeper repair)
       if (onRepairIntercept) { onRepairIntercept(); return; }
     }
@@ -393,7 +406,7 @@ export const PracticeScreen = ({
     const label = phaseLabels[nextPhase] ?? '';
     if (label || xpLabel) {
       setPhaseToast({ text: `${label}${xpLabel}`, phase: nextPhase });
-      setTimeout(() => setPhaseToast(null), 2500);
+      scheduleClearPhaseToast(2500);
     }
     regenerateQuestion();
   };

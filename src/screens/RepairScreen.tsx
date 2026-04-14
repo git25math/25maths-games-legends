@@ -17,7 +17,7 @@ import { getPattern } from '../utils/errorPatterns';
 import { getTopicInfo } from '../utils/techTree';
 import type { SkillHealthState } from '../utils/skillHealth';
 import { processRecoveryComplete } from '../utils/skillHealth';
-import { lt } from '../i18n/resolveText';
+import { lt, tt } from '../i18n/resolveText';
 import { generateMission } from '../utils/generateMission';
 import { checkAnswer } from '../utils/checkCorrectness';
 import { INPUT_FIELDS } from '../components/MathBattle/inputConfig';
@@ -403,8 +403,8 @@ export const RepairScreen = ({
               className="text-emerald-400 font-bold"
             >
               {pattern
-                ? (lang === 'en' ? `${pattern.label.en} resolved` : `${pattern.label.zh}已消除`)
-                : (lang === 'en' ? `${topicTitle} stabilised` : `${topicTitle}已稳定`)
+                ? tt(lang, `${pattern.label.en} resolved`, `${pattern.label.zh}已消除`)
+                : tt(lang, `${topicTitle} stabilised`, `${topicTitle}已稳定`)
               }
             </motion.p>
             <motion.p
