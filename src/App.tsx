@@ -267,9 +267,13 @@ export default function App() {
   // Homework badge: count active assignments for bottom nav
   useEffect(() => {
     if (!user || isGuest) { setHomeworkBadge(0); return; }
-    supabase.rpc('get_my_assignments').then(({ data }) => {
-      if (data) setHomeworkBadge((data as any[]).filter((a: any) => !a.archived_at).length);
-    });
+    supabase.rpc('get_my_assignments').then(
+      ({ data, error }) => {
+        if (error) { setHomeworkBadge(0); return; }
+        setHomeworkBadge((data as any[] | null ?? []).filter((a: any) => !a.archived_at).length);
+      },
+      () => setHomeworkBadge(0),
+    );
   }, [user, isGuest]);
 
   // ExamHub lesson recovery detection — "you just completed training!"

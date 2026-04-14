@@ -110,6 +110,11 @@ export const MathBattle = ({
   const [tutorialStep, setTutorialStep] = useState(0);
   const [encouragement, setEncouragement] = useState('');
   const [inputs, setInputs] = useState<{ [key: string]: string }>({});
+  // Latest-inputs ref: setTimeout callbacks (MC auto-submit) capture a stale
+  // handleSubmit closure; reading from this ref bypasses that closure and
+  // always sees the most recent inputs. (Project rule K.)
+  const inputsRef = useRef(inputs);
+  inputsRef.current = inputs;
   const [showResult, setShowResult] = useState<'none' | 'success' | 'fail'>('none');
   const [wrongAnswerData, setWrongAnswerData] = useState<{ userInputs: Record<string, string>; expected: Record<string, string> } | null>(null);
   const [hp, setHp] = useState(MODE_HP[battleMode]);
@@ -271,15 +276,19 @@ export const MathBattle = ({
 
   const handleSubmit = () => {
     if (isSubmitting || showResult !== 'none') return;
+    // Read inputs via ref to defeat stale-closure bug: setTimeout-triggered
+    // submits (from MC auto-submit) capture this function at click-time, when
+    // React state had not yet updated. inputsRef is updated on every render.
+    const latestInputs = inputsRef.current;
     // Validate: all fields must have content.
     // Skip field validation when the answer came from a multiple-choice click
     // (_mc flag is set); MC supplies `inputs.ans` while the mission type's
     // input config may list different field ids (e.g. SIMPLE_EQ expects 'x').
-    const isMcSubmission = inputs._mc === '1';
+    const isMcSubmission = latestInputs._mc === '1';
     const langKey = lang === 'en' ? 'en' : lang === 'zh_TW' ? 'zh_TW' : 'zh';
     const fieldConfig = INPUT_FIELDS[currentQuestion.type];
     const fields = fieldConfig?.[langKey] ?? fieldConfig?.zh ?? [];
-    if (!isMcSubmission && fields.some((f: { id: string }) => !inputs[f.id]?.trim())) {
+    if (!isMcSubmission && fields.some((f: { id: string }) => !latestInputs[f.id]?.trim())) {
       setShakeKey(k => k + 1);
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), 400);
@@ -287,10 +296,10 @@ export const MathBattle = ({
     }
     setIsSubmitting(true);
     playClick();
-    const rawResult = checkAnswer(currentQuestion, inputs);
-    const result = checkPartialCredit(currentQuestion, inputs, rawResult);
+    const rawResult = checkAnswer(currentQuestion, latestInputs);
+    const result = checkPartialCredit(currentQuestion, latestInputs, rawResult);
     const qDurationMs = Date.now() - questionStartRef.current;
-    const firstVal = (Object.values(inputs)[0] as string) || '';
+    const firstVal = (Object.values(latestInputs)[0] as string) || '';
 
     if (result.correct) {
       logAttempt({ questionId: `${mission.id}-battle-${currentQIdx}`, nodeId: mission.kpId || mission.type, isCorrect: true, rawAnswer: firstVal, sourceMode: 'practice', durationMs: qDurationMs });
@@ -356,10 +365,10 @@ export const MathBattle = ({
         floatingKeyRef.current += 1;
         setFloatingScore({ value: `+${partialScore} (50%)`, key: floatingKeyRef.current });
         setPartialCreditInfo({ score: partialScore });
-        setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
+        setWrongAnswerData({ userInputs: { ...latestInputs }, expected: result.expected });
       } else {
         setPartialCreditInfo({ score: 0 });
-        setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
+        setWrongAnswerData({ userInputs: { ...latestInputs }, expected: result.expected });
       }
     } else {
       playWrong();
@@ -367,12 +376,12 @@ export const MathBattle = ({
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       setShakeKey(k => k + 1);
       shakeTimerRef.current = window.setTimeout(() => setShakeKey(0), BATTLE_TIMING.shake);
-      const diag = diagnoseError(inputs, result.expected);
+      const diag = diagnoseError(latestInputs, result.expected);
       logAttempt({ questionId: `${mission.id}-battle-${currentQIdx}`, nodeId: mission.kpId || mission.type, isCorrect: false, rawAnswer: firstVal, errorPatternId: diag.type, sourceMode: 'practice', durationMs: qDurationMs });
       if (onRecordError) {
         onRecordError(diag.type);
       }
-      setWrongAnswerData({ userInputs: { ...inputs }, expected: result.expected });
+      setWrongAnswerData({ userInputs: { ...latestInputs }, expected: result.expected });
     }
   };
 

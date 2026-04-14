@@ -82,9 +82,15 @@ export function useProfile(user: User | null, isGuest: boolean = false) {
           stats: data.stats || DEFAULT_STATS,
         });
         if (removed > 0) {
+          // Fire-and-forget write-back of pruned daily keys. Not critical: on
+          // error we log (via new formatError) and leave DB payload untouched;
+          // next session will prune again from the latest DB state.
           supabase.from('gl_user_progress')
             .update({ completed_missions: cleaned })
-            .eq('user_id', user.id);
+            .eq('user_id', user.id)
+            .then(({ error: pruneErr }) => {
+              if (pruneErr) handleSupabaseError(pruneErr, 'update', 'gl_user_progress (prune daily)');
+            });
         }
       }
     };
