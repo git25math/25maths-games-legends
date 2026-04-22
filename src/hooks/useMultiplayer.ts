@@ -196,16 +196,23 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     if (!activeRoom) return;
     const roomId = activeRoom.id;
     let pollTimer: ReturnType<typeof setInterval> | null = null;
+    let pollInFlight = false;
 
     const startPolling = () => {
       if (pollTimer) return;
       pollTimer = setInterval(async () => {
-        const { data } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
-        if (!data) { setActiveRoom(null); return; }
-        // Kicked from room (host removed us or room was reset): release local state so parent can navigate away
-        const players = data.players as Record<string, RoomPlayer> | null;
-        if (user && players && !players[user.id]) { setActiveRoom(null); return; }
-        setActiveRoom(parseRoom(data));
+        if (pollInFlight) return; // prevent request pile-up on slow networks
+        pollInFlight = true;
+        try {
+          const { data } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
+          if (!data) { setActiveRoom(null); return; }
+          // Kicked from room (host removed us or room was reset): release local state so parent can navigate away
+          const players = data.players as Record<string, RoomPlayer> | null;
+          if (user && players && !players[user.id]) { setActiveRoom(null); return; }
+          setActiveRoom(parseRoom(data));
+        } finally {
+          pollInFlight = false;
+        }
       }, 3000);
     };
 
