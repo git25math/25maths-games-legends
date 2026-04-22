@@ -210,36 +210,43 @@ export const MapScreen = ({
   useEffect(() => {
     const tags = profile.class_tags;
     if (!tags?.length || !profile.grade) { setClassRankLoading(false); return; }
+    let cancelled = false;
     setClassRankLoading(true);
     supabase
       .rpc('get_class_leaderboard', { p_class_tag: tags[0], p_limit: 100 })
       .then(({ data }) => {
+        if (cancelled) return;
         if (!data) { setClassRankLoading(false); return; }
         const entries = data as { user_id: string; display_name: string; total_score: number }[];
         const rank = entries.findIndex(d => d.user_id === profile.user_id) + 1;
         setClassRankInfo(rank > 0 ? { rank, total: entries.length } : null);
         setClassTop5(entries.slice(0, 5) as any[]);
         setClassRankLoading(false);
-      }, () => { setClassRankLoading(false); });
-  }, [profile.user_id]);
+      }, () => { if (!cancelled) setClassRankLoading(false); });
+    return () => { cancelled = true; };
+    // lastClearedMissionId: refetch so the leaderboard reflects the score earned from the mission just finished
+  }, [profile.user_id, lastClearedMissionId]);
 
   // KP progress from shared bridge table (for badges on mission cards)
   const [kpProgress, setKpProgress] = useState<Map<string, { wins: number; mastered: boolean }>>(new Map());
   useEffect(() => {
     if (profile.user_id === 'guest') return;
+    let cancelled = false;
     supabase
       .from('play_kp_progress')
       .select('kp_id, wins, mastered_at')
       .eq('user_id', profile.user_id)
       .then(({ data }) => {
-        if (!data) return;
+        if (cancelled || !data) return;
         const map = new Map<string, { wins: number; mastered: boolean }>();
         for (const r of data as { kp_id: string; wins: number; mastered_at: string | null }[]) {
           map.set(r.kp_id, { wins: r.wins, mastered: !!r.mastered_at });
         }
         setKpProgress(map);
       }, () => { /* KP progress load failed — non-blocking */ });
-  }, [profile.user_id]);
+    return () => { cancelled = true; };
+    // lastClearedMissionId: refetch so KP mastery badges update after the mission just finished
+  }, [profile.user_id, lastClearedMissionId]);
 
   useEffect(() => { playBGMMap(); return () => stopBGM(); }, []);
 

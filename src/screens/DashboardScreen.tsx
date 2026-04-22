@@ -169,11 +169,14 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
   const [dashAssignments, setDashAssignments] = useState<AssignmentRecord[]>([]);
   useEffect(() => {
     if (!filterTag) { setDashAssignments([]); return; }
+    let cancelled = false;
     supabase.rpc('get_class_assignments', { p_grade: grade, p_class_tag: filterTag })
       .then(({ data, error: err }) => {
+        if (cancelled) return;
         if (!err && data) setDashAssignments(data as AssignmentRecord[]);
         else setDashAssignments([]);
-      }, () => setDashAssignments([]));
+      }, () => { if (!cancelled) setDashAssignments([]); });
+    return () => { cancelled = true; };
   }, [grade, filterTag]);
 
   // Persist sort preference in localStorage
@@ -381,16 +384,18 @@ export function DashboardScreen({ lang, onClose, onStartLive }: Props) {
   // Only depends on grade/filterTag — NOT students (avoids refetch on every realtime update)
   const [kpMasteryMap, setKpMasteryMap] = useState<Map<string, number>>(new Map());
   useEffect(() => {
+    let cancelled = false;
     setKpMasteryMap(new Map()); // clear stale data on filter change
     supabase.rpc('get_class_kp_progress', { p_grade: grade, p_class: filterTag || null })
       .then(({ data, error }) => {
-        if (error || !data) return;
+        if (cancelled || error || !data) return;
         const map = new Map<string, number>();
         for (const r of data as { user_id: string; mastered_at: string | null }[]) {
           if (r.mastered_at) map.set(r.user_id, (map.get(r.user_id) ?? 0) + 1);
         }
         setKpMasteryMap(map);
       }, () => {});
+    return () => { cancelled = true; };
   }, [grade, filterTag]);
 
   // CSV export — enriched with grade, unit breakdown, last active
