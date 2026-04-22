@@ -54,7 +54,10 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     const savedId = sessionStorage.getItem('gl_pk_room');
     if (!savedId) return;
     supabase.from('gl_rooms').select('*').eq('id', savedId).single().then(({ data }) => {
-      if (data && data.status !== 'finished' && data.players?.[user.id]) {
+      const player = data?.players?.[user.id] as RoomPlayer | undefined;
+      // Reject rejoin if mid-battle with no finishedAt: local question state was lost on refresh, resuming would strand the user in battle without a mission loaded
+      const safeToRejoin = data && data.status !== 'finished' && player && (data.status !== 'playing' || !!player.finishedAt);
+      if (safeToRejoin) {
         setActiveRoom(parseRoom(data));
       } else {
         sessionStorage.removeItem('gl_pk_room');
