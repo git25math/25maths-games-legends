@@ -7,3 +7,7 @@ coverage/
 .env*
 !.env.example
 supabase/.temp/
+
+# Bootstrap workspace for sibling repo git25math/25maths-os
+# This directory is an independent git repository and lives at its own remote.
+25maths-os/
