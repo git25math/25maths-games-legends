@@ -466,7 +466,13 @@ export default function App() {
   const voluntaryLeaveRef = useRef(false);
   const leaveRoomUser = async () => {
     voluntaryLeaveRef.current = true;
-    await leaveRoomClean();
+    // Safety reset if leaveRoomClean hangs (network timeout) — otherwise the flag swallows a future legitimate room-closed alert
+    const fallbackReset = setTimeout(() => { voluntaryLeaveRef.current = false; }, 5000);
+    try {
+      await leaveRoomClean();
+    } finally {
+      clearTimeout(fallbackReset);
+    }
   };
   useEffect(() => {
     if (voluntaryLeaveRef.current) { voluntaryLeaveRef.current = false; return; }
