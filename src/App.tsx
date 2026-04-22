@@ -477,6 +477,11 @@ export default function App() {
     }
   }, [activeRoom, gameState, lang]);
 
+  // Clear PK result overlay when the room disappears — prevents stale result flashing if user joins a new room later
+  useEffect(() => {
+    if (!activeRoom && showPKResult) setShowPKResult(false);
+  }, [activeRoom, showPKResult]);
+
   // If not logged in and stuck on a screen that requires auth, redirect to welcome
   useEffect(() => {
     if (!authLoading && !user && !isGuest && gameState !== 'welcome' && gameState !== 'dashboard') {
