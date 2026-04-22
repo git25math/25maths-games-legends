@@ -68,23 +68,20 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
   /** Create a room. Returns true on success. */
   const createRoom = async (type: 'team' | 'pk', missionId: number): Promise<boolean> => {
     if (!user || !profile) return false;
-    const roomData = {
-      type,
-      mission_id: missionId,
-      status: 'waiting',
-      players: {
-        [user.id]: {
-          name: profile.display_name,
-          score: 0,
-          isReady: false,
-          charId: profile.selected_char_id,
-        }
-      },
-      host_id: user.id,
-    };
-    const { data, error } = await supabase.from('gl_rooms').insert(roomData).select().single();
-    if (error) { handleSupabaseError(error, 'create', 'gl_rooms'); return false; }
-    setActiveRoom(parseRoom(data));
+    const { data, error } = await supabase.rpc('create_pk_room', {
+      p_type: type,
+      p_mission_id: missionId,
+      p_player_name: profile.display_name,
+      p_char_id: profile.selected_char_id || '',
+    });
+    if (error) { handleSupabaseError(error, 'create_pk_room', 'gl_rooms'); return false; }
+    if (data?.error) { handleSupabaseError(data.error, 'create_pk_room', 'gl_rooms'); return false; }
+    const roomId = data?.room_id as string | undefined;
+    if (!roomId) return false;
+    // RPC returns only room_id; fetch the full row to hydrate local state
+    const { data: roomRow, error: fetchErr } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
+    if (fetchErr || !roomRow) { handleSupabaseError(fetchErr, 'fetch', 'gl_rooms'); return false; }
+    setActiveRoom(parseRoom(roomRow));
     return true;
   };
 
