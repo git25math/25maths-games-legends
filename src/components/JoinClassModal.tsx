@@ -2,7 +2,7 @@
  * JoinClassModal — Student enters a 6-digit invite code to join a class.
  * Accessible from MapScreen profile area.
  */
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import type { Language } from '../types';
 import { joinClassByCode } from '../utils/classInvite';
@@ -17,7 +17,12 @@ export function JoinClassModal({ lang, onJoined, onClose }: {
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const txt = (zh: string, en: string) => lang === 'en' ? en : lang === 'zh_TW' ? toTraditional(zh) : zh;
+
+  useEffect(() => () => {
+    if (successTimerRef.current !== null) clearTimeout(successTimerRef.current);
+  }, []);
 
   const handleJoin = async () => {
     const trimmed = code.trim().toUpperCase();
@@ -31,7 +36,7 @@ export function JoinClassModal({ lang, onJoined, onClose }: {
     setJoining(false);
     if (result.success) {
       setSuccess(result.className || trimmed);
-      setTimeout(() => {
+      successTimerRef.current = setTimeout(() => {
         onJoined(result.className || trimmed);
         onClose();
       }, 1500);

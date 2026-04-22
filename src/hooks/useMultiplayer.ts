@@ -198,7 +198,11 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
       if (pollTimer) return;
       pollTimer = setInterval(async () => {
         const { data } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
-        if (data) setActiveRoom(parseRoom(data));
+        if (!data) { setActiveRoom(null); return; }
+        // Kicked from room (host removed us or room was reset): release local state so parent can navigate away
+        const players = data.players as Record<string, RoomPlayer> | null;
+        if (user && players && !players[user.id]) { setActiveRoom(null); return; }
+        setActiveRoom(parseRoom(data));
       }, 3000);
     };
 

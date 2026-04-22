@@ -207,25 +207,29 @@ export const MapScreen = ({
   const [classRankInfo, setClassRankInfo] = useState<{ rank: number; total: number } | null>(null);
   const [classTop5, setClassTop5] = useState<{ display_name: string; total_score: number; user_id: string }[]>([]);
   const [classRankLoading, setClassRankLoading] = useState(true);
+  const [classRankError, setClassRankError] = useState(false);
+  const [leaderboardReloadNonce, setLeaderboardReloadNonce] = useState(0);
   useEffect(() => {
     const tags = profile.class_tags;
     if (!tags?.length || !profile.grade) { setClassRankLoading(false); return; }
     let cancelled = false;
     setClassRankLoading(true);
+    setClassRankError(false);
     supabase
       .rpc('get_class_leaderboard', { p_class_tag: tags[0], p_limit: 100 })
-      .then(({ data }) => {
+      .then(({ data, error }) => {
         if (cancelled) return;
-        if (!data) { setClassRankLoading(false); return; }
+        if (error || !data) { setClassRankError(true); setClassRankLoading(false); return; }
         const entries = data as { user_id: string; display_name: string; total_score: number }[];
         const rank = entries.findIndex(d => d.user_id === profile.user_id) + 1;
         setClassRankInfo(rank > 0 ? { rank, total: entries.length } : null);
         setClassTop5(entries.slice(0, 5) as any[]);
         setClassRankLoading(false);
-      }, () => { if (!cancelled) setClassRankLoading(false); });
+      }, () => { if (!cancelled) { setClassRankError(true); setClassRankLoading(false); } });
     return () => { cancelled = true; };
     // lastClearedMissionId: refetch so the leaderboard reflects the score earned from the mission just finished
-  }, [profile.user_id, lastClearedMissionId]);
+    // leaderboardReloadNonce: manual retry trigger when load failed
+  }, [profile.user_id, lastClearedMissionId, leaderboardReloadNonce]);
 
   // KP progress from shared bridge table (for badges on mission cards)
   const [kpProgress, setKpProgress] = useState<Map<string, { wins: number; mastered: boolean }>>(new Map());
@@ -814,6 +818,13 @@ export const MapScreen = ({
             </div>
             {classRankLoading ? (
               <div className="h-3 w-36 bg-white/10 rounded-full animate-pulse mt-1" />
+            ) : classRankError ? (
+              <button
+                onClick={() => setLeaderboardReloadNonce(n => n + 1)}
+                className="text-amber-400/70 hover:text-amber-300 text-[10px] font-bold mt-1 underline decoration-dotted"
+              >
+                {lang === 'en' ? 'Class rank failed to load · tap to retry' : lang === 'zh_TW' ? '班級排名加載失敗·點擊重試' : '班级排名加载失败·点击重试'}
+              </button>
             ) : classRankInfo && (
               <p className="text-white/30 text-[10px] font-bold mt-1">
                 {lang === 'en'

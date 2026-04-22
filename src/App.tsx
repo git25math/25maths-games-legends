@@ -461,6 +461,22 @@ export default function App() {
     }
   }, [activeRoom?.type, activeRoom?.id, user?.id]);
 
+  // Room auto-close: when in lobby/battle but room disappears (host left, kicked, etc.), return to map with feedback.
+  // voluntaryLeaveRef suppresses the alert for user-initiated leaves, which clear activeRoom before gameState updates in the same tick.
+  const voluntaryLeaveRef = useRef(false);
+  const leaveRoomUser = async () => {
+    voluntaryLeaveRef.current = true;
+    await leaveRoomClean();
+  };
+  useEffect(() => {
+    if (voluntaryLeaveRef.current) { voluntaryLeaveRef.current = false; return; }
+    if ((gameState === 'lobby' || gameState === 'battle' || gameState === 'live_student') && !activeRoom) {
+      const msg = lang === 'en' ? 'The room was closed.' : lang === 'zh_TW' ? '房間已關閉' : '房间已关闭';
+      alert(msg);
+      setGameState('map');
+    }
+  }, [activeRoom, gameState, lang]);
+
   // If not logged in and stuck on a screen that requires auth, redirect to welcome
   useEffect(() => {
     if (!authLoading && !user && !isGuest && gameState !== 'welcome' && gameState !== 'dashboard') {
@@ -1331,7 +1347,7 @@ export default function App() {
                     // Don't manually set gameState — Effect #6 will detect status='playing'
                     // via realtime and transition ALL players (host + guests) simultaneously
                   }}
-                  onLeave={async () => { await leaveRoomClean(); setGameState('map'); }}
+                  onLeave={async () => { await leaveRoomUser(); setGameState('map'); }}
                 />
               )}
 
@@ -1629,7 +1645,7 @@ export default function App() {
                     questionIndex={liveSession.questionIndex}
                     onPushQuestion={liveSession.pushQuestion}
                     onEndSession={liveSession.endSession}
-                    onClose={async () => { await leaveRoomClean(); setGameState('dashboard'); }}
+                    onClose={async () => { await leaveRoomUser(); setGameState('dashboard'); }}
                     onAssign={async (kpId, missionIds, studentIds) => {
                       const classTag = activeRoom.liveMeta?.class_tag;
                       if (!classTag) return;
@@ -1658,7 +1674,7 @@ export default function App() {
                     completedMissions={profile?.completed_missions as Record<string, unknown> ?? {}}
                     onSubmitResponse={liveSession.submitResponse}
                     onUpdateMistakes={(cm) => updateProfile({ completed_missions: cm })}
-                    onClose={async () => { await leaveRoomClean(); setGameState('map'); }}
+                    onClose={async () => { await leaveRoomUser(); setGameState('map'); }}
                   />
                 </Suspense>
               )}
@@ -1843,7 +1859,7 @@ export default function App() {
                       alert(msg);
                     }
                   }}
-                  onClose={async () => { await leaveRoomClean(); setGameState('map'); }}
+                  onClose={async () => { await leaveRoomUser(); setGameState('map'); }}
                 />
               )}
               </Suspense>
@@ -2042,7 +2058,7 @@ export default function App() {
                   awardPkXp();
                   setShowPKResult(false);
                   pkAutoCompleteRef.current = false;
-                  await leaveRoomClean();
+                  await leaveRoomUser();
                 }}
               />
             </Suspense>
