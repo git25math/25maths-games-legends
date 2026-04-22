@@ -198,6 +198,14 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     let pollTimer: ReturnType<typeof setInterval> | null = null;
     let pollInFlight = false;
 
+    // Unified room-data sink: covers deletion (null) and kick (user no longer in players) consistently across polling, realtime UPDATE, and post-subscribe refresh
+    const applyRoomData = (data: any) => {
+      if (!data) { setActiveRoom(null); return; }
+      const players = data.players as Record<string, RoomPlayer> | null;
+      if (user && players && !players[user.id]) { setActiveRoom(null); return; }
+      setActiveRoom(parseRoom(data));
+    };
+
     const startPolling = () => {
       if (pollTimer) return;
       pollTimer = setInterval(async () => {
@@ -205,11 +213,7 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
         pollInFlight = true;
         try {
           const { data } = await supabase.from('gl_rooms').select('*').eq('id', roomId).single();
-          if (!data) { setActiveRoom(null); return; }
-          // Kicked from room (host removed us or room was reset): release local state so parent can navigate away
-          const players = data.players as Record<string, RoomPlayer> | null;
-          if (user && players && !players[user.id]) { setActiveRoom(null); return; }
-          setActiveRoom(parseRoom(data));
+          applyRoomData(data);
         } finally {
           pollInFlight = false;
         }
@@ -224,14 +228,14 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
       .channel(`room-${roomId}`)
       .on('postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'gl_rooms', filter: `id=eq.${roomId}` },
-        (payload) => setActiveRoom(parseRoom(payload.new))
+        (payload) => applyRoomData(payload.new)
       )
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           stopPolling();
           // Fetch once to catch updates missed during subscription handshake
           supabase.from('gl_rooms').select('*').eq('id', roomId).single()
-            .then(({ data }) => { if (data) setActiveRoom(parseRoom(data)); });
+            .then(({ data }) => applyRoomData(data));
         } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
           startPolling();
         }
