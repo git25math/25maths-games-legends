@@ -35,7 +35,11 @@ export const LobbyScreen = ({
 
   const copyCode = async () => {
     try {
-      await navigator.clipboard.writeText(room.id);
+      // Copy what the user sees, not the full UUID. The friend's join form
+      // handles both short (prefix-scanned in joinRoom) and full IDs, but
+      // copying a 36-char UUID when the button shows "ABC123" surprises the
+      // sender ("I sent the code on screen, why is the link so long?").
+      await navigator.clipboard.writeText(roomCode);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {

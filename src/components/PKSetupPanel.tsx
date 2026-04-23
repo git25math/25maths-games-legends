@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
-import { X, Swords, UserPlus } from 'lucide-react';
+import { X, Swords, UserPlus, Search } from 'lucide-react';
 import type { Language, MissionSummary } from '../types';
 import { lt } from '../i18n/resolveText';
 import { useAudio } from '../audio';
@@ -26,11 +26,28 @@ export const PKSetupPanel = ({
   const [mode, setMode] = useState<'choose' | 'create' | 'join'>('choose');
   const [roomCode, setRoomCode] = useState('');
   const [selectedMission, setSelectedMission] = useState<MissionSummary | null>(null);
+  const [missionFilter, setMissionFilter] = useState('');
 
-  const gradeMissions = missions.filter(m => m.grade === grade);
+  const gradeMissions = useMemo(
+    () => missions.filter(m => m.grade === grade),
+    [missions, grade],
+  );
 
-  // Group by unit
-  const units = Array.from(new Set(gradeMissions.map(m => lt(m.unitTitle, lang))));
+  // Filter by case-insensitive substring on title or unit. Empty filter shows all.
+  const visibleMissions = useMemo(() => {
+    const q = missionFilter.trim().toLowerCase();
+    if (!q) return gradeMissions;
+    return gradeMissions.filter(m => {
+      const title = lt(m.title, lang).toLowerCase();
+      const unit = lt(m.unitTitle, lang).toLowerCase();
+      return title.includes(q) || unit.includes(q);
+    });
+  }, [gradeMissions, missionFilter, lang]);
+
+  const units = useMemo(
+    () => Array.from(new Set(visibleMissions.map(m => lt(m.unitTitle, lang)))),
+    [visibleMissions, lang],
+  );
 
   return (
     <motion.div
@@ -116,14 +133,41 @@ export const PKSetupPanel = ({
             <p className="text-white/50 text-xs mb-3">
               {lang === 'en' ? 'Choose a mission for the duel:' : '选择对决题目：'}
             </p>
-            {gradeMissions.length === 0 && (
+            {/* Mission search — Y7-Y12 each have 60-95 missions, scroll-only is painful */}
+            {gradeMissions.length > 8 && (
+              <div className="relative mb-3">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+                <input
+                  type="text"
+                  value={missionFilter}
+                  onChange={(e) => setMissionFilter(e.target.value)}
+                  placeholder={lang === 'en' ? 'Search by topic or unit…' : '按知识点或单元搜索…'}
+                  className="w-full pl-9 pr-8 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-xs placeholder:text-white/30 focus:outline-none focus:border-indigo-400/40"
+                />
+                {missionFilter && (
+                  <button
+                    onClick={() => setMissionFilter('')}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-white/40 hover:text-white p-1"
+                    aria-label={lang === 'en' ? 'Clear search' : '清空搜索'}
+                  >
+                    <X size={12} />
+                  </button>
+                )}
+              </div>
+            )}
+            {gradeMissions.length === 0 ? (
               <p className="text-white/30 text-xs text-center py-8">
                 {lang === 'en' ? 'No missions available for your grade.' : '当前年级暂无可用关卡。'}
               </p>
-            )}
+            ) : visibleMissions.length === 0 ? (
+              <p className="text-white/30 text-xs text-center py-8">
+                {lang === 'en' ? 'No missions match your search.' : '没有匹配的关卡。'}
+              </p>
+            ) : null}
             <div className="space-y-3">
               {units.map(unitTitle => {
-                const unitMissions = gradeMissions.filter(m => lt(m.unitTitle, lang) === unitTitle);
+                const unitMissions = visibleMissions.filter(m => lt(m.unitTitle, lang) === unitTitle);
+                if (unitMissions.length === 0) return null;
                 return (
                   <div key={unitTitle}>
                     <div className="text-[10px] font-bold uppercase text-white/30 mb-1 tracking-wider">{unitTitle}</div>
@@ -147,14 +191,26 @@ export const PKSetupPanel = ({
               })}
             </div>
             {selectedMission && (
-              <motion.button
+              <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                onClick={() => onCreateRoom(selectedMission.id)}
-                className="w-full mt-4 py-3 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-colors text-sm"
+                className="mt-4 space-y-2"
               >
-                {lang === 'en' ? 'Create Room' : '创建房间'}
-              </motion.button>
+                {/* Mission preview — confirms what host is committing to */}
+                <div className="p-3 rounded-xl bg-indigo-400/10 border border-indigo-400/20">
+                  <div className="text-[10px] uppercase text-indigo-300/60 font-bold tracking-wider mb-1">
+                    {lang === 'en' ? 'Selected' : '已选'}
+                  </div>
+                  <div className="text-white text-sm font-bold mb-1">{lt(selectedMission.title, lang)}</div>
+                  <div className="text-white/50 text-[11px]">{lt(selectedMission.unitTitle, lang)}</div>
+                </div>
+                <button
+                  onClick={() => onCreateRoom(selectedMission.id)}
+                  className="w-full py-3 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-colors text-sm"
+                >
+                  {lang === 'en' ? 'Create Room' : '创建房间'}
+                </button>
+              </motion.div>
             )}
           </div>
         )}
@@ -174,21 +230,19 @@ export const PKSetupPanel = ({
             <input
               type="text"
               value={roomCode}
-              onChange={(e) => setRoomCode(e.target.value.trim())}
+              // Normalize on input: trim whitespace, drop dashes (so "abc-123" pasted
+              // from a chat works), uppercase since LobbyScreen now copies the
+              // displayed UPPERCASE short code.
+              onChange={(e) => setRoomCode(e.target.value.trim().replace(/-/g, '').toUpperCase())}
               onKeyDown={(e) => { if (e.key === 'Enter' && roomCode.length >= 6) onJoinRoom(roomCode); }}
-              onPaste={(e) => {
-                const pasted = e.clipboardData.getData('text').trim();
-                if (pasted.length >= 6) {
-                  e.preventDefault();
-                  setRoomCode(pasted);
-                  setTimeout(() => onJoinRoom(pasted), 100);
-                }
-              }}
               placeholder={lang === 'en' ? 'Room code or full ID' : '房间代码或完整 ID'}
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-center font-mono text-lg tracking-[0.2em] placeholder:text-white/20 placeholder:tracking-normal placeholder:text-sm focus:outline-none focus:border-indigo-400/50"
               maxLength={36}
               autoFocus
             />
+            <p className="text-white/30 text-[11px] text-center mt-2">
+              {lang === 'en' ? 'Press Enter or tap Join when ready' : '按回车或点"加入房间"'}
+            </p>
             <button
               onClick={() => { if (roomCode.length >= 6) onJoinRoom(roomCode); }}
               disabled={roomCode.length < 6}
