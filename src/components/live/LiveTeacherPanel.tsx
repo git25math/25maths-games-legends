@@ -26,7 +26,13 @@ type Props = {
   questionStats: QuestionStats | null;
   sessionSummary: SessionSummary | null;
   questionIndex: number;
-  onPushQuestion: (missionId: number, kpId: string, questionData: Record<string, unknown>, timerSecs?: number) => Promise<string>;
+  onPushQuestion: (
+    missionId: number,
+    kpId: string,
+    questionData: Record<string, unknown>,
+    timerSecs?: number,
+    expectedAnswer?: Record<string, unknown>,
+  ) => Promise<string>;
   onEndSession: () => Promise<string>;
   onClose: () => void;
   onAssign?: (kpId: string, missionIds: number[], studentIds: string[]) => void;
@@ -70,16 +76,30 @@ export function LiveTeacherPanel({
     const m = missions.find(mi => mi.id === selectedMissionId);
     if (!m) return;
     setPushing(true);
-    // Generate randomized question data so all students see the same numbers
+    // Generate randomized question data so all students see the same numbers.
+    // Also derive the expected-answer key via checkAnswer's `expected` field —
+    // server uses it to grade authoritatively (defeats client-side is_correct
+    // tampering). For question types without a computable key, expected stays
+    // undefined and the server falls back to client-reported is_correct.
     let questionData = m.data;
+    let expectedAnswer: Record<string, unknown> | undefined;
+    let missionForKey = m;
     if (m.data?.generatorType) {
       try {
         const { generateMission } = await import('../../utils/generateMission');
         const generated = generateMission(m);
         questionData = generated.data;
+        missionForKey = generated;
       } catch { /* fallback to template data */ }
     }
-    const err = await onPushQuestion(selectedMissionId, m.kpId || '', questionData, timerSecs ?? undefined);
+    try {
+      const { checkAnswer } = await import('../../utils/checkCorrectness');
+      const { expected } = checkAnswer(missionForKey, {});
+      if (expected && Object.keys(expected).length > 0) {
+        expectedAnswer = expected as Record<string, unknown>;
+      }
+    } catch { /* no key → degrade to client-reported is_correct */ }
+    const err = await onPushQuestion(selectedMissionId, m.kpId || '', questionData, timerSecs ?? undefined, expectedAnswer);
     setPushing(false);
     if (err) alert(err);
     else setShowMissionPicker(false);
