@@ -215,6 +215,11 @@ export default function App() {
   const [selectedCharId, setSelectedCharId] = useState<string | null>(persisted.charId);
   const [activeMission, setActiveMission] = useState<Mission | null>(null);
   const [sharedQuestionQueue, setSharedQuestionQueue] = useState<Mission[] | null>(null);
+  // Host-authoritative difficulty for the active multiplayer match. Pulled
+  // from game_meta.generated_data.difficulty so guest's MathBattle uses the
+  // same DIFFICULTY_MULTIPLIER as host, keeping scores comparable. null when
+  // not in a multiplayer match (single-player uses selectedDifficulty).
+  const [sharedDifficulty, setSharedDifficulty] = useState<DifficultyMode | null>(null);
   const [showSecret, setShowSecret] = useState(false);
   const [selectedSkillCard, setSelectedSkillCard] = useState<string | null>(null);
   const [showSkillCards, setShowSkillCards] = useState(false);
@@ -471,9 +476,17 @@ export default function App() {
     //   b) flat data object for single-question static matches.
     // Fallback to local generate for legacy rooms created before the game_meta rollout.
     const sharedData = activeRoom.gameMeta?.generated_data as
-      | { queue?: Array<Record<string, unknown>>; [k: string]: unknown }
+      | { queue?: Array<Record<string, unknown>>; difficulty?: DifficultyMode; [k: string]: unknown }
       | null
       | undefined;
+    // Apply host's difficulty before mounting MathBattle so the score
+    // multiplier matches across players. Only red/amber/green accepted —
+    // anything else falls back to the local selection.
+    if (sharedData?.difficulty && ['green', 'amber', 'red'].includes(sharedData.difficulty)) {
+      setSharedDifficulty(sharedData.difficulty);
+    } else {
+      setSharedDifficulty(null);
+    }
     if (sharedData?.queue && sharedData.queue.length > 0) {
       const queue = sharedData.queue.map(d => ({ ...m, data: d as typeof m.data }));
       setSharedQuestionQueue(queue);
@@ -503,9 +516,14 @@ export default function App() {
     }
   }, [activeRoom?.type, activeRoom?.id, user?.id]);
 
-  // Shared question queue lifetime is tied to activeMission — when battle ends (or is cancelled), drop the queue.
+  // Shared question queue + difficulty lifetime is tied to activeMission —
+  // when battle ends (or is cancelled), drop both so subsequent single-player
+  // sessions don't inherit the host's choices.
   useEffect(() => {
-    if (!activeMission) setSharedQuestionQueue(null);
+    if (!activeMission) {
+      setSharedQuestionQueue(null);
+      setSharedDifficulty(null);
+    }
   }, [activeMission]);
 
   // Room auto-close: when in lobby/battle but room disappears (host left, kicked, etc.), return to map with feedback.
@@ -1434,7 +1452,7 @@ export default function App() {
                         seen.add(fp);
                         queue.push(q.data as Record<string, unknown>);
                       }
-                      genData = { queue, battle_mode: selectedBattleMode };
+                      genData = { queue, battle_mode: selectedBattleMode, difficulty: selectedDifficulty };
                     }
                     const err = await startGame(genData);
                     if (err) {
@@ -1455,7 +1473,7 @@ export default function App() {
                   onComplete={handleBattleComplete}
                   onCancel={() => { setIsDailyBattle(false); setGameState('map'); }}
                   lang={lang}
-                  difficultyMode={selectedDifficulty}
+                  difficultyMode={sharedDifficulty ?? selectedDifficulty}
                   isMultiplayer={!!activeRoom}
                   roomData={activeRoom}
                   skillCard={selectedSkillCard}
@@ -1938,7 +1956,11 @@ export default function App() {
                   lang={lang}
                   grade={profile.grade}
                   missions={missionSummaries}
-                  onCreateRoom={async (missionId) => {
+                  onCreateRoom={async (missionId, chosenDifficulty) => {
+                    // Apply host's difficulty before createRoom so the next
+                    // start_game (which bundles selectedDifficulty into
+                    // game_meta.generated_data.difficulty) reflects the choice.
+                    setSelectedDifficulty(chosenDifficulty);
                     const ok = await createRoom('pk', missionId);
                     if (ok) {
                       setGameState('lobby');

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { X, Swords, UserPlus, Search } from 'lucide-react';
-import type { Language, MissionSummary } from '../types';
+import type { Language, MissionSummary, DifficultyMode } from '../types';
 import { lt } from '../i18n/resolveText';
 import { useAudio } from '../audio';
 import { useEscapeKey } from '../hooks/useEscapeKey';
@@ -17,7 +17,7 @@ export const PKSetupPanel = ({
   lang: Language;
   grade: number;
   missions: MissionSummary[];
-  onCreateRoom: (missionId: number) => void;
+  onCreateRoom: (missionId: number, difficulty: DifficultyMode) => void;
   onJoinRoom: (roomCode: string) => void;
   onClose: () => void;
 }) => {
@@ -27,6 +27,15 @@ export const PKSetupPanel = ({
   const [roomCode, setRoomCode] = useState('');
   const [selectedMission, setSelectedMission] = useState<MissionSummary | null>(null);
   const [missionFilter, setMissionFilter] = useState('');
+  // Host-chosen difficulty syncs to guest via game_meta.generated_data.difficulty
+  // (App.tsx onStart bundles it). Default 'green' matches single-player.
+  const [difficulty, setDifficulty] = useState<DifficultyMode>('green');
+
+  const DIFFICULTY_OPTIONS: { value: DifficultyMode; label: { zh: string; en: string }; color: string }[] = [
+    { value: 'green', label: { zh: '简单', en: 'Easy' },   color: 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300' },
+    { value: 'amber', label: { zh: '中等', en: 'Medium' }, color: 'border-amber-400/40 bg-amber-400/10 text-amber-300' },
+    { value: 'red',   label: { zh: '困难', en: 'Hard' },   color: 'border-rose-400/40 bg-rose-400/10 text-rose-300' },
+  ];
 
   const gradeMissions = useMemo(
     () => missions.filter(m => m.grade === grade),
@@ -194,7 +203,7 @@ export const PKSetupPanel = ({
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 space-y-2"
+                className="mt-4 space-y-3"
               >
                 {/* Mission preview — confirms what host is committing to */}
                 <div className="p-3 rounded-xl bg-indigo-400/10 border border-indigo-400/20">
@@ -204,8 +213,29 @@ export const PKSetupPanel = ({
                   <div className="text-white text-sm font-bold mb-1">{lt(selectedMission.title, lang)}</div>
                   <div className="text-white/50 text-[11px]">{lt(selectedMission.unitTitle, lang)}</div>
                 </div>
+                {/* Difficulty — applies to both players via game_meta sync */}
+                <div>
+                  <div className="text-[10px] uppercase text-white/40 font-bold tracking-wider mb-1.5">
+                    {lang === 'en' ? 'Difficulty (both players)' : '难度（双方共用）'}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {DIFFICULTY_OPTIONS.map(opt => (
+                      <button
+                        key={opt.value}
+                        onClick={() => { playTap(); setDifficulty(opt.value); }}
+                        className={`py-2 rounded-xl border text-xs font-black transition-all ${
+                          difficulty === opt.value
+                            ? opt.color
+                            : 'border-white/10 bg-white/[0.02] text-white/50 hover:bg-white/5'
+                        }`}
+                      >
+                        {opt.label[lang === 'en' ? 'en' : 'zh']}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <button
-                  onClick={() => onCreateRoom(selectedMission.id)}
+                  onClick={() => onCreateRoom(selectedMission.id, difficulty)}
                   className="w-full py-3 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-500 transition-colors text-sm"
                 >
                   {lang === 'en' ? 'Create Room' : '创建房间'}
