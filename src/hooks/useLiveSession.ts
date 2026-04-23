@@ -155,8 +155,16 @@ export function useLiveSession(activeRoom: Room | null, user: User | null) {
   };
 
   // ─── Teacher actions ───
-  /** Teacher pushes a question. `questionData` is the generated mission.data so all students see the same numbers. */
-  const pushQuestion = async (missionId: number, kpId: string, questionData: Record<string, unknown>, timerSecs?: number): Promise<string> => {
+  /** Teacher pushes a question. `questionData` is the generated mission.data so all students see the same numbers.
+   * `expectedAnswer` (optional) lets the server grade without trusting client-side is_correct.
+   * Omit for free-response / proof questions where exact-match server-side grading isn't reliable. */
+  const pushQuestion = async (
+    missionId: number,
+    kpId: string,
+    questionData: Record<string, unknown>,
+    timerSecs?: number,
+    expectedAnswer?: Record<string, unknown> | null,
+  ): Promise<string> => {
     if (!activeRoom) return 'no_room';
     // Single atomic write via RPC — includes generated_data for all students
     const { data, error } = await supabase.rpc('push_live_question', {
@@ -165,6 +173,7 @@ export function useLiveSession(activeRoom: Room | null, user: User | null) {
       p_kp_id: kpId,
       p_timer_secs: timerSecs ?? null,
       p_generated_data: questionData,
+      p_expected_answer: expectedAnswer ?? null,
     });
     if (error) { handleSupabaseError(error, 'rpc', 'push_live_question'); return error.message; }
     if (data?.error) return data.error;
