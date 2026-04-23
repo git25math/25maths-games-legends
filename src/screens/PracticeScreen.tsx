@@ -356,16 +356,19 @@ export const PracticeScreen = ({
   }, []);
 
   const advancePhase = () => {
-    // Award XP for completing the current phase (skip in repair mode)
+    // Award XP for completing the current phase (skip in repair mode).
+    // First-clear: full base XP derived from mission.reward × phase ratio.
+    // Repeat (any practice phase ever completed on this mission): 50% — still
+    // rewards review/drilling meaningfully. Previous 20% penalty punished
+    // students who wanted to reinforce concepts.
     let earnedXP = 0;
     if (!repairMode && onEarnXP) {
       const phaseRatios: Record<PracticePhase, number> = {
         discover: 0.05, green: 0.10, amber: 0.15, red: 0.25, battle: 0.50,
       };
       const base = Math.max(3, Math.round((mission.reward || 50) * phaseRatios[currentPhase]));
-      // First clear: full XP; repeat (any phase ever done): 20%
       const isRepeat = hasAnyPracticeCompletion(phaseCompletions);
-      earnedXP = isRepeat ? Math.max(1, Math.round(base * 0.2)) : base;
+      earnedXP = isRepeat ? Math.max(3, Math.round(base * 0.5)) : base;
       onEarnXP(earnedXP);
     }
 
