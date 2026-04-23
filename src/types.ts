@@ -185,6 +185,15 @@ export type LiveMeta = {
   timer_secs: number | null;
 };
 
+export type GameMeta = {
+  /** Server-authoritative mission.data for PK/team rounds. Host runs the generator once
+   * at start_game time and passes the result through so every player solves the same
+   * question. Null until start_game is called with a generator-backed mission. */
+  generated_data?: Record<string, unknown> | null;
+  /** Incremented each start_game call (including next-round restarts). */
+  round?: number;
+};
+
 export type Room = {
   id: string;
   type: 'team' | 'pk' | 'live';
@@ -194,6 +203,7 @@ export type Room = {
   hostId: string;
   winnerId?: string;
   liveMeta?: LiveMeta;
+  gameMeta?: GameMeta;
 };
 
 export type BattleResult = {

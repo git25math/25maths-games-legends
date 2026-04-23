@@ -33,6 +33,7 @@ function parseRoom(d: any): Room {
     hostId: d.host_id,
     missionId: d.mission_id,
     liveMeta: d.live_meta ?? undefined,
+    gameMeta: d.game_meta ?? undefined,
   } as Room;
 }
 
@@ -129,13 +130,18 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     setActiveRoom({ ...activeRoom, players });
   };
 
-  /** Host starts the game. Returns error string or empty on success. */
-  const startGame = async (): Promise<string> => {
+  /** Host starts the game. `generatedData` is the pre-generated mission.data payload
+   * for generatorType missions so every player gets the same question. Omit for
+   * missions with static data. Returns error string or empty on success. */
+  const startGame = async (generatedData?: Record<string, unknown>): Promise<string> => {
     if (!activeRoom) return 'no_room';
-    const { data, error } = await supabase.rpc('start_game', { p_room_id: activeRoom.id });
+    const { data, error } = await supabase.rpc('start_game', {
+      p_room_id: activeRoom.id,
+      p_generated_data: generatedData ?? null,
+    });
     if (error) { handleSupabaseError(error, 'update', 'gl_rooms'); return error.message; }
     if (data?.error) return data.error;
-    // No optimistic update — realtime will propagate status='playing' to ALL players simultaneously
+    // No optimistic update — realtime will propagate status='playing' + game_meta to ALL players simultaneously
     return '';
   };
 

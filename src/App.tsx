@@ -441,15 +441,20 @@ export default function App() {
     if (missionsLoading || missions.length === 0) return; // wait for missions to load
     pkXpAwardedRef.current = false; // Reset XP guard for new round
     const m = missions.find(mi => mi.id === activeRoom.missionId);
-    if (m) {
-      if (m.data?.generatorType) {
-        lazyGenerate().then(gen => { setActiveMission(gen(m)); setGameState('battle'); });
-      } else {
-        setActiveMission(m);
-        setGameState('battle');
-      }
+    if (!m) return;
+    // Prefer server-authoritative generated data so both players solve the same question.
+    // Fallback to local generate for legacy rooms created before the game_meta rollout.
+    const sharedData = activeRoom.gameMeta?.generated_data;
+    if (sharedData) {
+      setActiveMission({ ...m, data: sharedData as typeof m.data });
+      setGameState('battle');
+    } else if (m.data?.generatorType) {
+      lazyGenerate().then(gen => { setActiveMission(gen(m)); setGameState('battle'); });
+    } else {
+      setActiveMission(m);
+      setGameState('battle');
     }
-  }, [activeRoom?.missionId, activeRoom?.status, activeMission, gameState, missions, missionsLoading]);
+  }, [activeRoom?.missionId, activeRoom?.status, activeRoom?.gameMeta?.round, activeMission, gameState, missions, missionsLoading]);
 
   // Auto-detect live room: students enter live_student mode when they join a live room
   useEffect(() => {
@@ -1350,7 +1355,16 @@ export default function App() {
                   userId={user.id}
                   onReady={toggleReady}
                   onStart={async () => {
-                    const err = await startGame();
+                    // Pre-generate data for generator-backed missions so every player
+                    // solves the same question (fairness). Non-generator missions just
+                    // pass null and hydrate from static mission.data.
+                    let genData: Record<string, unknown> | undefined;
+                    const m = missions.find(mi => mi.id === activeRoom.missionId);
+                    if (m?.data?.generatorType) {
+                      const gen = await lazyGenerate();
+                      genData = gen(m).data as Record<string, unknown>;
+                    }
+                    const err = await startGame(genData);
                     if (err) {
                       // RPC validation failed — stay in lobby
                       alert(lang === 'en' ? `Cannot start: ${err}` : `无法开始: ${err}`);
