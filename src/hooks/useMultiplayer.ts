@@ -66,6 +66,16 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     });
   }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // ─── Opportunistic cleanup of the user's own stale rooms on mount ───
+  // cleanup_my_stale_rooms() deletes 'waiting' rooms > 30 min old and marks
+  // 'playing' rooms > 2 h old as 'finished'. Best-effort: errors ignored,
+  // since this is hygiene, not critical-path. Without this call the DB just
+  // accumulates orphans until global cron fires.
+  useEffect(() => {
+    if (!user) return;
+    supabase.rpc('cleanup_my_stale_rooms').then(() => { /* silent */ });
+  }, [user?.id]);
+
   /** Create a room. Returns true on success. */
   const createRoom = async (type: 'team' | 'pk', missionId: number): Promise<boolean> => {
     if (!user || !profile) return false;
