@@ -22,16 +22,18 @@ export function logAttempt(event: AttemptEvent): void {
     if (!data?.user?.id) return; // guest mode — skip logging
     // Resolve canonical kn_id from nodeId (kpId format)
     const knId = getKnIdForKp(event.nodeId) ?? null;
-    supabase.from('user_attempt_log').insert({
-      user_id: data.user.id,
-      question_id: event.questionId,
-      node_id: event.nodeId,
-      kn_id: knId,
-      is_correct: event.isCorrect,
-      raw_answer: event.rawAnswer?.slice(0, 200),
-      primary_error_pattern_id: event.errorPatternId || null,
-      source_mode: event.sourceMode,
-      recovery_pack_id: null,
+    // SECURITY DEFINER RPC (20260423180000) — server enforces user_id =
+    // auth.uid() and validates enums + length caps. Direct INSERT policy
+    // was dropped to prevent client spoofing of error_pattern_id, etc.
+    supabase.rpc('log_user_attempt', {
+      p_question_id: event.questionId,
+      p_node_id: event.nodeId,
+      p_kn_id: knId,
+      p_is_correct: event.isCorrect,
+      p_raw_answer: event.rawAnswer ?? null,
+      p_primary_error_pattern_id: event.errorPatternId || null,
+      p_source_mode: event.sourceMode,
+      p_recovery_pack_id: null,
     }).then(() => {/* silent */}, () => {/* silent */});
   }).catch(() => {/* silent */});
 }

@@ -862,17 +862,19 @@ export default function App() {
               // Fire-and-forget: sync to Supabase user_skill_health table
               if (user && !isGuest) {
                 const knId = activeMission.kpId ? getKnIdForKp(activeMission.kpId) ?? null : null;
-                supabase.from('user_skill_health').upsert({
-                  user_id: user.id,
-                  node_id: topicId,
-                  kn_id: knId,
-                  health_score: newState.healthScore,
-                  corruption_level: newState.corruptionLevel,
-                  dominant_error_pattern_id: newState.dominantPatternId,
-                  consecutive_same_pattern_count: newState.consecutiveSamePattern,
-                  total_attempt_count: newState.totalAttempts,
-                  last_attempt_at: new Date().toISOString(),
-                }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+                // SECURITY DEFINER RPC (20260423180000) — server enforces user_id =
+                // auth.uid() and validates enums + bounds. Direct upsert was dropped
+                // to prevent fabricating health_score=100 / mastery='flawless'.
+                supabase.rpc('upsert_user_skill_health', {
+                  p_node_id: topicId,
+                  p_kn_id: knId,
+                  p_health_score: newState.healthScore,
+                  p_corruption_level: newState.corruptionLevel,
+                  p_dominant_error_pattern_id: newState.dominantPatternId,
+                  p_consecutive_same_pattern_count: newState.consecutiveSamePattern,
+                  p_total_attempt_count: newState.totalAttempts,
+                  p_mastery_state: 'learning',
+                }).then(() => {}, () => {});
               }
             } catch (error) {
               console.error('Failed to lazy-load processAttempt for battle success', error);
@@ -967,22 +969,26 @@ export default function App() {
             // Fire-and-forget: sync to Supabase
             if (user && !isGuest) {
               const knId = activeMission?.kpId ? getKnIdForKp(activeMission.kpId) ?? null : null;
-              supabase.from('user_skill_health').upsert({
-                user_id: user.id,
-                node_id: topicId,
-                kn_id: knId,
-                health_score: newState.healthScore,
-                corruption_level: newState.corruptionLevel,
-                dominant_error_pattern_id: newState.dominantPatternId,
-                consecutive_same_pattern_count: newState.consecutiveSamePattern,
-                recent_error_count: newState.recentErrorCount,
-                total_attempt_count: newState.totalAttempts,
-                last_attempt_at: new Date().toISOString(),
-                last_error_at: new Date().toISOString(),
-                recommended_recovery_pack_id: newState.corruptionLevel === 'blocked' || newState.corruptionLevel === 'critical'
-                  ? healthResult.recoveryPackId
-                  : null,
-              }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
+              // SECURITY DEFINER RPC — see companion call above for rationale.
+              // Failure-path additionally passes recent_error_count, the recovery
+              // pack hint (only when corruption is blocked/critical), and stamps
+              // last_error_at server-side via p_set_last_error_at=true.
+              const recoveryPackId = (newState.corruptionLevel === 'blocked' || newState.corruptionLevel === 'critical')
+                ? healthResult.recoveryPackId ?? null
+                : null;
+              supabase.rpc('upsert_user_skill_health', {
+                p_node_id: topicId,
+                p_kn_id: knId,
+                p_health_score: newState.healthScore,
+                p_corruption_level: newState.corruptionLevel,
+                p_dominant_error_pattern_id: newState.dominantPatternId,
+                p_consecutive_same_pattern_count: newState.consecutiveSamePattern,
+                p_total_attempt_count: newState.totalAttempts,
+                p_mastery_state: newState.masteryState ?? 'learning',
+                p_recent_error_count: newState.recentErrorCount,
+                p_recommended_recovery_pack_id: recoveryPackId,
+                p_set_last_error_at: true,
+              }).then(() => {}, () => {});
             }
           } catch (error) {
             console.error('Failed to lazy-load processAttempt for battle failure', error);
