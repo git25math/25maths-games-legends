@@ -19,7 +19,12 @@ import { LiveSessionBanner } from './components/LiveSessionBanner';
 // generateMission is loaded lazily via dynamic import() to keep it out of the
 // critical path (352 KB generators chunk deferred until first use).
 const lazyGenerate = () => import('./utils/generateMission').then(m => m.generateMission);
+const lazyFingerprint = () => import('./utils/questionFingerprint').then(m => m.createQuestionFingerprint);
 const loadProcessAttemptUtils = () => import('./utils/processAttempt');
+
+// Queue sizes by battle mode. Mirrors MODE_QUESTIONS inside MathBattle/index.tsx —
+// hardcoded here to avoid pulling MathBattle (600+ LoC) into the critical path.
+const MODE_QUESTIONS = { classic: 5, speed: 50, marathon: 20 } as const;
 import { getDailyKey, DAILY_MULTIPLIER, isValidDailySubmission } from './utils/dailyChallenge';
 import { isSuperAdmin } from './utils/superAdmin';
 import { WelcomeScreen } from './screens/WelcomeScreen';
@@ -209,6 +214,7 @@ export default function App() {
   const [gameState, setGameState] = useState<GameState>(persisted.gameState);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(persisted.charId);
   const [activeMission, setActiveMission] = useState<Mission | null>(null);
+  const [sharedQuestionQueue, setSharedQuestionQueue] = useState<Mission[] | null>(null);
   const [showSecret, setShowSecret] = useState(false);
   const [selectedSkillCard, setSelectedSkillCard] = useState<string | null>(null);
   const [showSkillCards, setShowSkillCards] = useState(false);
@@ -442,15 +448,29 @@ export default function App() {
     pkXpAwardedRef.current = false; // Reset XP guard for new round
     const m = missions.find(mi => mi.id === activeRoom.missionId);
     if (!m) return;
-    // Prefer server-authoritative generated data so both players solve the same question.
+    // Prefer server-authoritative generated data so both players solve the same question(s).
+    // Shape: game_meta.generated_data may carry either
+    //   a) { queue: [data1, data2, ...] } for multi-question (generatorType) matches, or
+    //   b) flat data object for single-question static matches.
     // Fallback to local generate for legacy rooms created before the game_meta rollout.
-    const sharedData = activeRoom.gameMeta?.generated_data;
-    if (sharedData) {
+    const sharedData = activeRoom.gameMeta?.generated_data as
+      | { queue?: Array<Record<string, unknown>>; [k: string]: unknown }
+      | null
+      | undefined;
+    if (sharedData?.queue && sharedData.queue.length > 0) {
+      const queue = sharedData.queue.map(d => ({ ...m, data: d as typeof m.data }));
+      setSharedQuestionQueue(queue);
+      setActiveMission(queue[0]);
+      setGameState('battle');
+    } else if (sharedData && !sharedData.queue) {
+      setSharedQuestionQueue(null);
       setActiveMission({ ...m, data: sharedData as typeof m.data });
       setGameState('battle');
     } else if (m.data?.generatorType) {
+      setSharedQuestionQueue(null);
       lazyGenerate().then(gen => { setActiveMission(gen(m)); setGameState('battle'); });
     } else {
+      setSharedQuestionQueue(null);
       setActiveMission(m);
       setGameState('battle');
     }
@@ -465,6 +485,11 @@ export default function App() {
       if (gameState !== 'live_student') setGameState('live_student');
     }
   }, [activeRoom?.type, activeRoom?.id, user?.id]);
+
+  // Shared question queue lifetime is tied to activeMission — when battle ends (or is cancelled), drop the queue.
+  useEffect(() => {
+    if (!activeMission) setSharedQuestionQueue(null);
+  }, [activeMission]);
 
   // Room auto-close: when in lobby/battle but room disappears (host left, kicked, etc.), return to map with feedback.
   // voluntaryLeaveRef suppresses the alert for user-initiated leaves, which clear activeRoom before gameState updates in the same tick.
@@ -1355,14 +1380,28 @@ export default function App() {
                   userId={user.id}
                   onReady={toggleReady}
                   onStart={async () => {
-                    // Pre-generate data for generator-backed missions so every player
-                    // solves the same question (fairness). Non-generator missions just
-                    // pass null and hydrate from static mission.data.
+                    // Pre-generate questions for generator-backed missions so every player
+                    // solves the SAME set of questions (fairness). Generates a queue of
+                    // selectedBattleMode size (classic=5) with dedup, mirroring the logic
+                    // inside MathBattle. Non-generator missions pass null and hydrate from
+                    // static mission.data.
                     let genData: Record<string, unknown> | undefined;
                     const m = missions.find(mi => mi.id === activeRoom.missionId);
                     if (m?.data?.generatorType) {
-                      const gen = await lazyGenerate();
-                      genData = gen(m).data as Record<string, unknown>;
+                      const [gen, fingerprint] = await Promise.all([lazyGenerate(), lazyFingerprint()]);
+                      const targetCount = MODE_QUESTIONS[selectedBattleMode];
+                      const queue: Record<string, unknown>[] = [];
+                      const seen = new Set<string>();
+                      let attempts = 0;
+                      while (queue.length < targetCount && attempts < targetCount * 3) {
+                        const q = gen(m);
+                        const fp = fingerprint(q);
+                        attempts++;
+                        if (seen.has(fp) && attempts < targetCount * 2) continue;
+                        seen.add(fp);
+                        queue.push(q.data as Record<string, unknown>);
+                      }
+                      genData = { queue, battle_mode: selectedBattleMode };
                     }
                     const err = await startGame(genData);
                     if (err) {
@@ -1398,6 +1437,7 @@ export default function App() {
                   onDiagnose={() => setGameState('tech_tree')}
                   battleMode={selectedBattleMode}
                   heroSkillEffect={selectedChar ? getActiveSkillEffect(getCharProgression(selectedChar.id)) : null}
+                  preGeneratedQueue={sharedQuestionQueue}
                 />
               )}
 

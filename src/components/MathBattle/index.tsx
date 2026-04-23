@@ -28,7 +28,7 @@ import type { BattleMode } from '../BattleModeSelector';
 import { createQuestionFingerprint } from '../../utils/questionFingerprint';
 
 const DIFFICULTY_MULTIPLIER: Record<DifficultyMode, number> = { green: 1, amber: 1.5, red: 2 };
-const MODE_QUESTIONS: Record<BattleMode, number> = { classic: 5, speed: 50, marathon: 20 };
+export const MODE_QUESTIONS: Record<BattleMode, number> = { classic: 5, speed: 50, marathon: 20 };
 const MODE_HP: Record<BattleMode, number> = { classic: 4, speed: 999, marathon: 999 };
 
 export const MathBattle = ({
@@ -52,6 +52,7 @@ export const MathBattle = ({
   onDiagnose,
   battleMode = 'classic',
   heroSkillEffect = null,
+  preGeneratedQueue = null,
 }: {
   mission: Mission;
   character: Character;
@@ -72,27 +73,35 @@ export const MathBattle = ({
   onRecordError?: (errorType: import('../../utils/diagnoseError').ErrorType) => void;
   onDiagnose?: () => void;
   battleMode?: BattleMode;
+  /** Pre-generated question queue (multiplayer): all players hydrate the SAME queue so
+   * PK/team isn't unfair. Null = legacy single-player path, generate locally. */
+  preGeneratedQueue?: Mission[] | null;
   heroSkillEffect?: { effect: 'extra_hint' | 'time_extend' | 'error_forgive'; value: number } | null;
 }) => {
   const isMultiQuestion = !!mission.data?.generatorType;
-  const totalQuestions = isMultiQuestion ? MODE_QUESTIONS[battleMode] : 1;
 
-  // Build question queue with deduplication
+  // Build question queue with deduplication.
+  // Multiplayer: use server-provided preGeneratedQueue so every player solves identical questions.
+  // Single-player: generate locally (legacy behavior).
   const [questionQueue] = useState<Mission[]>(() => {
+    if (preGeneratedQueue && preGeneratedQueue.length > 0) return preGeneratedQueue;
     if (!isMultiQuestion) return [mission];
+    const fallbackCount = MODE_QUESTIONS[battleMode];
     const queue: Mission[] = [];
     const seen = new Set<string>();
     let attempts = 0;
-    while (queue.length < totalQuestions && attempts < totalQuestions * 3) {
+    while (queue.length < fallbackCount && attempts < fallbackCount * 3) {
       const q = generateMission(mission);
       const fp = createQuestionFingerprint(q);
       attempts++;
-      if (seen.has(fp) && attempts < totalQuestions * 2) continue;
+      if (seen.has(fp) && attempts < fallbackCount * 2) continue;
       seen.add(fp);
       queue.push(q);
     }
     return queue;
   });
+
+  const totalQuestions = questionQueue.length;
 
   const [currentQIdx, setCurrentQIdx] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
