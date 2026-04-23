@@ -410,7 +410,22 @@ export default function App() {
     }
   }, [activeRoom?.status]);
 
-  /** Award PK bonus XP exactly once per round (guard via pkXpAwardedRef) */
+  /** Award PK XP exactly once per round (guard via pkXpAwardedRef).
+   *
+   * XP is normalized to mission.reward so PK and practice share one economy:
+   *   Practice first-clear total ≈ reward × 1.05 across 5 phases
+   *   PK rank 0 (winner) : reward × 2.0   — twice a practice first-clear
+   *   PK rank 1 (2nd)    : reward × 1.5
+   *   PK rank 2 (3rd)    : reward × 1.2
+   *   PK rank 3 (last)   : reward × 1.0   — participation XP
+   *
+   * Old formula awarded `myScore × (multiplier − 1)`, i.e. ≈ reward × 50 for
+   * the winner — ~48× a practice first-clear, which destroyed the incentive
+   * to drill fundamentals. Skill-based multipliers (streak, double card, diff,
+   * daily, hot topic) still drive in-match score and therefore rank, but no
+   * longer compound into the XP credited to total_score.
+   *
+   * Players who scored 0 (disconnected / didn't submit) get no XP. */
   const awardPkXp = () => {
     if (pkXpAwardedRef.current || !profile || !user || !activeRoom) return;
     const snap = lastRoundPlayersRef.current ?? activeRoom.players;
@@ -419,11 +434,13 @@ export default function App() {
     const myScore = (snap[user.id] as any)?.score ?? 0;
     if (myScore <= 0) { pkXpAwardedRef.current = true; return; }
     const multiplier = getRankMultiplier(myRank);
-    const bonusXP = Math.round(myScore * (multiplier - 1));
+    const mission = missions.find(mi => mi.id === activeRoom.missionId);
+    const reward = mission?.reward ?? 0;
+    const xp = Math.round(reward * multiplier);
     pkXpAwardedRef.current = true;
-    if (bonusXP > 0) {
-      latestScoreRef.current += bonusXP;
-      addScore(bonusXP);
+    if (xp > 0) {
+      latestScoreRef.current += xp;
+      addScore(xp);
     }
   };
 
@@ -2120,6 +2137,7 @@ export default function App() {
                 room={activeRoom}
                 currentUserId={user.id}
                 grade={profile?.grade ?? 7}
+                currentReward={missions.find(m => m.id === activeRoom.missionId)?.reward ?? 0}
                 onNextRound={async (missionId: number) => {
                   awardPkXp();
                   const ok = await startNextRound(missionId);

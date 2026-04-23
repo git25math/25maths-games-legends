@@ -18,6 +18,7 @@ export const PKResultPanel = ({
   room,
   currentUserId,
   grade,
+  currentReward = 0,
   onClose,
   onNextRound,
 }: {
@@ -26,6 +27,8 @@ export const PKResultPanel = ({
   room: Room;
   currentUserId: string;
   grade?: number;
+  /** Reward of the current round's mission; used to display actual XP earned. */
+  currentReward?: number;
   onClose: () => void;
   onNextRound?: (missionId: number) => void;
 }) => {
@@ -191,9 +194,10 @@ export const PKResultPanel = ({
                         {p.name || 'Player'}
                         {isMe && <span className="text-indigo-400 text-[10px] ml-1">({lang === 'en' ? 'You' : '你'})</span>}
                       </p>
-                      {multiplier > 1 && (
+                      {currentReward > 0 && (p.score ?? 0) > 0 && (
                         <p className={`text-[10px] font-bold ${MEDAL_COLORS[medal] ?? 'text-white/30'}`}>
-                          XP ×{multiplier}
+                          +{Math.round(currentReward * multiplier)} XP
+                          {multiplier !== 1 && <span className="ml-1 opacity-60">(×{multiplier})</span>}
                         </p>
                       )}
                     </div>
