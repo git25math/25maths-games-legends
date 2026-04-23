@@ -996,7 +996,17 @@ export default function App() {
     if (activeRoom?.type === 'pk' && user) {
       // Guard: skip if already submitted (race between countdown auto-complete and manual answer)
       if (activeRoom.players[user.id]?.finishedAt) return;
-      await submitScore(score);
+      const submitErr = await submitScore(score);
+      if (submitErr) {
+        // Server rejected (cap exceeded, bad status, dedup). Don't unmount MathBattle
+        // or null the mission — the player is still "mid-match" from the server's
+        // perspective, and leaving would hang the opponent. Surface the error and
+        // let the user try again / report it.
+        alert(lang === 'en'
+          ? `Score submission failed: ${submitErr}. Please try again.`
+          : `分数提交失败: ${submitErr}。请重试。`);
+        return;
+      }
       pkAutoCompleteRef.current = false;
       setPkCountdown(null);
       setPkFirstFinish(null);

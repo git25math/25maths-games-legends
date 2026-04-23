@@ -145,11 +145,21 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     return '';
   };
 
-  /** Submit score + mark player as finished. Auto-finishes room when all done. */
-  const submitScore = async (score: number) => {
-    if (!user || !activeRoom) return;
+  /** Submit score + mark player as finished. Auto-finishes room when all done.
+   * Returns '' on success, error message on failure. Callers should treat a
+   * non-empty return as submission rejected and NOT advance the user to the
+   * podium, since the room state on the server is unchanged. */
+  const submitScore = async (score: number): Promise<string> => {
+    if (!user || !activeRoom) return 'no_room';
     const { error } = await supabase.rpc('submit_pk_score', { p_room_id: activeRoom.id, p_score: score });
-    if (error) handleSupabaseError(error, 'update', 'gl_rooms');
+    if (error) {
+      // DO NOT optimistic-update here — server rejected (cap / status / dedup),
+      // so room.players[uid].finishedAt is still unset. Faking it locally would
+      // hang the opponent forever waiting for an "all finished" that never
+      // comes. Surface the error instead.
+      handleSupabaseError(error, 'update', 'gl_rooms');
+      return error.message;
+    }
     // Optimistic update
     const now = Date.now();
     const players = { ...activeRoom.players };
@@ -160,6 +170,7 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     const updates: Record<string, unknown> = { players };
     if (allFinished) updates.status = 'finished';
     setActiveRoom({ ...activeRoom, ...updates, players } as Room);
+    return '';
   };
 
   /** Host starts a new round with a different mission. Resets all player states. */
