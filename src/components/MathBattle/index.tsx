@@ -54,6 +54,7 @@ export const MathBattle = ({
   heroSkillEffect = null,
   preGeneratedQueue = null,
   currentUserId,
+  onReportProgress,
 }: {
   mission: Mission;
   character: Character;
@@ -80,6 +81,9 @@ export const MathBattle = ({
   /** Current user id (PK/team only). Used by BattleHeader to distinguish
    * "me" vs opponent in roomData.players. Undefined in single-player. */
   currentUserId?: string;
+  /** Broadcast question index to the room so opponents see live progress.
+   * PK/team only — omitted in single-player. */
+  onReportProgress?: (qIdx: number) => void;
   heroSkillEffect?: { effect: 'extra_hint' | 'time_extend' | 'error_forgive'; value: number } | null;
 }) => {
   const isMultiQuestion = !!mission.data?.generatorType;
@@ -110,6 +114,14 @@ export const MathBattle = ({
   const [currentQIdx, setCurrentQIdx] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [streak, setStreak] = useState(0);
+
+  // Fire-and-forget broadcast of current question index so the opponent sees
+  // "Q 3/5" instead of a static "Solving…". Fires on mount (reset to 0 on
+  // new match) and each advancement. Silent on error — analytics-style.
+  useEffect(() => {
+    if (!onReportProgress || !isMultiQuestion) return;
+    onReportProgress(currentQIdx);
+  }, [currentQIdx, isMultiQuestion, onReportProgress]);
   const [peakStreak, setPeakStreak] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [floatingScore, setFloatingScore] = useState<{ value: string; key: number } | null>(null);

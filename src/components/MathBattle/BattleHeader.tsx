@@ -57,8 +57,9 @@ export function BattleHeader({
   const opponent = (isMultiplayer && roomData?.players && currentUserId)
     ? Object.entries(roomData.players).find(([uid]) => uid !== currentUserId)
     : null;
-  const opponentEntry = opponent?.[1] as (Room['players'][string] & { finishedAt?: number }) | undefined;
+  const opponentEntry = opponent?.[1] as (Room['players'][string] & { finishedAt?: number; currentQIdx?: number }) | undefined;
   const opponentFinished = !!opponentEntry?.finishedAt;
+  const opponentQIdx = typeof opponentEntry?.currentQIdx === 'number' ? opponentEntry.currentQIdx : null;
 
   return (
     <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
@@ -192,7 +193,9 @@ export function BattleHeader({
               <span>
                 {opponentFinished
                   ? `${lang === 'en' ? 'Done' : '完成'} ${opponentEntry.score ?? 0}`
-                  : (lang === 'en' ? 'Solving…' : '答题中')}
+                  : (opponentQIdx !== null && questionQueueLength > 0
+                      ? `Q ${Math.min(opponentQIdx + 1, questionQueueLength)}/${questionQueueLength}`
+                      : (lang === 'en' ? 'Solving…' : '答题中'))}
               </span>
             </div>
           );

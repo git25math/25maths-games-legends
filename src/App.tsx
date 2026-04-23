@@ -266,7 +266,7 @@ export default function App() {
   } = useProfile(user, isGuest);
   const { missions, loading: missionsLoading, offline } = useMissions(profile?.grade);
   const missionSummaries = useMemo(() => toMissionSummaries(missions), [missions]);
-  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound, fetchAndSetRoom } = useMultiplayer(user, profile);
+  const { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, reportProgress, leaveRoomClean, startNextRound, fetchAndSetRoom } = useMultiplayer(user, profile);
   const liveSession = useLiveSession(activeRoom, user);
   const { notifications: sysNotifications, markAsRead: markNotifRead, markAllAsRead: markAllNotifsRead } = useNotifications(user);
   // Anonymous live session state (PIN-based, no login)
@@ -1494,6 +1494,7 @@ export default function App() {
                   heroSkillEffect={selectedChar ? getActiveSkillEffect(getCharProgression(selectedChar.id)) : null}
                   preGeneratedQueue={sharedQuestionQueue}
                   currentUserId={user?.id}
+                  onReportProgress={activeRoom?.type === 'pk' || activeRoom?.type === 'team' ? reportProgress : undefined}
                 />
               )}
 

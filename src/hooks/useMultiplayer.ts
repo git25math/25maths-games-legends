@@ -189,6 +189,18 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     return '';
   };
 
+  /** Broadcast local question index to the room so the opponent badge can
+   * show "Q 3/5" instead of a static "Solving…". Fire-and-forget: errors
+   * are swallowed since a lost progress tick isn't worth interrupting the
+   * battle over. Caller should debounce to avoid flooding the room. */
+  const reportProgress = async (qIdx: number): Promise<void> => {
+    if (!activeRoom || !user) return;
+    await supabase.rpc('update_pk_progress', {
+      p_room_id: activeRoom.id,
+      p_q_idx: qIdx,
+    }).catch(() => { /* silent */ });
+  };
+
   /** Host starts a new round with a different mission. Resets all player states. */
   const startNextRound = async (newMissionId: number): Promise<boolean> => {
     if (!user || !activeRoom || activeRoom.hostId !== user.id) return false;
@@ -312,5 +324,5 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     return () => window.removeEventListener('beforeunload', handler);
   }, [activeRoom?.id, user?.id]);
 
-  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, leaveRoomClean, startNextRound, fetchAndSetRoom };
+  return { activeRoom, createRoom, joinRoom, toggleReady, startGame, submitScore, reportProgress, leaveRoomClean, startNextRound, fetchAndSetRoom };
 }
