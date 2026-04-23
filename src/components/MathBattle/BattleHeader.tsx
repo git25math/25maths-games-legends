@@ -2,8 +2,8 @@
  * BattleHeader — Top bar of MathBattle (v8.4 refactor)
  * Shows character avatar, title, HP/timer, streak, badges, progress, controls.
  */
-import { Shield, Swords, Zap, Volume2, VolumeX, XCircle, Flame, Eye, Heart, CheckCircle2 } from 'lucide-react';
-import type { Mission, Character, Language, DifficultyMode } from '../../types';
+import { Shield, Swords, Zap, Volume2, VolumeX, XCircle, Flame, Eye, Heart, CheckCircle2, User } from 'lucide-react';
+import type { Mission, Character, Language, DifficultyMode, Room } from '../../types';
 import { translations } from '../../i18n/translations';
 import { lt } from '../../i18n/resolveText';
 import { CharacterAvatar } from '../CharacterAvatar';
@@ -33,6 +33,10 @@ type Props = {
   muted: boolean;
   toggleMute: () => void;
   onCancel: () => void;
+  /** PK only — live room snapshot for opponent status display. */
+  roomData?: Room | null;
+  /** PK only — identifies "me" vs opponent in roomData.players. */
+  currentUserId?: string;
 };
 
 export function BattleHeader({
@@ -41,8 +45,19 @@ export function BattleHeader({
   skillCard, shieldCharges, speedTimeLeft,
   currentQIdx, correctCount, totalQuestions, questionQueueLength, showResult,
   muted, toggleMute, onCancel,
+  roomData, currentUserId,
 }: Props) {
   const t = translations[lang];
+
+  // Opponent snapshot (PK only). Uses finishedAt to distinguish "still playing"
+  // vs "finished" — in-progress scores aren't broadcast (the player's own
+  // totalScore is local until submit), so "live streak" can't be shown, but
+  // "they finished before you" is visible the moment their submit lands.
+  const opponent = (isMultiplayer && roomData?.players && currentUserId)
+    ? Object.entries(roomData.players).find(([uid]) => uid !== currentUserId)
+    : null;
+  const opponentEntry = opponent?.[1] as (Room['players'][string] & { finishedAt?: number }) | undefined;
+  const opponentFinished = !!opponentEntry?.finishedAt;
 
   return (
     <div className="bg-[#3d2b1f] p-4 text-[#f4e4bc] flex justify-between items-center border-b-4 border-[#5c4033]">
@@ -153,6 +168,28 @@ export function BattleHeader({
         </div>
       </div>
       <div className="flex items-center gap-2">
+        {/* Opponent badge — PK only. Finished status is live via realtime;
+            score only appears after they submit (in-progress score isn't
+            broadcast). Gives the player pressure/relief feedback. */}
+        {opponent && opponentEntry && (
+          <div
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
+              opponentFinished
+                ? 'bg-amber-400/15 border-amber-400/40 text-amber-200'
+                : 'bg-white/5 border-white/15 text-white/70'
+            }`}
+            aria-label={lang === 'en' ? 'Opponent status' : '对手状态'}
+          >
+            <User size={14} />
+            <span className="truncate max-w-[80px]">{opponentEntry.name || (lang === 'en' ? 'Friend' : '好友')}</span>
+            <span className="opacity-60">•</span>
+            <span>
+              {opponentFinished
+                ? `${lang === 'en' ? 'Done' : '完成'} ${opponentEntry.score ?? 0}`
+                : (lang === 'en' ? 'Solving…' : '答题中')}
+            </span>
+          </div>
+        )}
         {/* Mute button */}
         <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'} className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-white/10 rounded-full transition-colors">
           {muted ? <VolumeX size={20} /> : <Volume2 size={20} />}

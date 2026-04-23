@@ -186,6 +186,10 @@ export type LiveMeta = {
 };
 
 export type GameMeta = {
+  /** Host-chosen difficulty for the whole match. Written by create_pk_room
+   * so the guest can see it in the lobby; both players' MathBattle renders
+   * with the same DIFFICULTY_MULTIPLIER. */
+  difficulty?: 'green' | 'amber' | 'red';
   /** Server-authoritative mission.data for PK/team rounds. Host runs the generator once
    * at start_game time and passes the result through so every player solves the same
    * question. Null until start_game is called with a generator-backed mission. */

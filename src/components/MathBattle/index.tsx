@@ -53,6 +53,7 @@ export const MathBattle = ({
   battleMode = 'classic',
   heroSkillEffect = null,
   preGeneratedQueue = null,
+  currentUserId,
 }: {
   mission: Mission;
   character: Character;
@@ -76,6 +77,9 @@ export const MathBattle = ({
   /** Pre-generated question queue (multiplayer): all players hydrate the SAME queue so
    * PK/team isn't unfair. Null = legacy single-player path, generate locally. */
   preGeneratedQueue?: Mission[] | null;
+  /** Current user id (PK/team only). Used by BattleHeader to distinguish
+   * "me" vs opponent in roomData.players. Undefined in single-player. */
+  currentUserId?: string;
   heroSkillEffect?: { effect: 'extra_hint' | 'time_extend' | 'error_forgive'; value: number } | null;
 }) => {
   const isMultiQuestion = !!mission.data?.generatorType;
@@ -541,6 +545,8 @@ export const MathBattle = ({
           muted={muted}
           toggleMute={toggleMute}
           onCancel={onCancel}
+          roomData={roomData}
+          currentUserId={currentUserId}
         />
 
         <BattleContent

@@ -76,14 +76,20 @@ export function useMultiplayer(user: User | null, profile: UserProfile | null) {
     supabase.rpc('cleanup_my_stale_rooms').then(() => { /* silent */ });
   }, [user?.id]);
 
-  /** Create a room. Returns true on success. */
-  const createRoom = async (type: 'team' | 'pk', missionId: number): Promise<boolean> => {
+  /** Create a room. `difficulty` is host's choice for PK (both players bound by
+   * it via game_meta.difficulty). Returns true on success. */
+  const createRoom = async (
+    type: 'team' | 'pk',
+    missionId: number,
+    difficulty: 'green' | 'amber' | 'red' = 'green',
+  ): Promise<boolean> => {
     if (!user || !profile) return false;
     const { data, error } = await supabase.rpc('create_pk_room', {
       p_type: type,
       p_mission_id: missionId,
       p_player_name: profile.display_name,
       p_char_id: profile.selected_char_id || '',
+      p_difficulty: difficulty,
     });
     if (error) { handleSupabaseError(error, 'create_pk_room', 'gl_rooms'); return false; }
     if (data?.error) { handleSupabaseError(data.error, 'create_pk_room', 'gl_rooms'); return false; }

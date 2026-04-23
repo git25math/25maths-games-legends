@@ -480,10 +480,14 @@ export default function App() {
       | null
       | undefined;
     // Apply host's difficulty before mounting MathBattle so the score
-    // multiplier matches across players. Only red/amber/green accepted —
-    // anything else falls back to the local selection.
-    if (sharedData?.difficulty && ['green', 'amber', 'red'].includes(sharedData.difficulty)) {
-      setSharedDifficulty(sharedData.difficulty);
+    // multiplier matches across players. Prefer top-level game_meta.difficulty
+    // (set at create time by create_pk_room so it shows in the lobby); fall
+    // back to generated_data.difficulty for backward compat with rooms
+    // created before 20260423190000.
+    const topLevelDifficulty = (activeRoom.gameMeta as { difficulty?: DifficultyMode } | undefined)?.difficulty;
+    const effectiveDifficulty = topLevelDifficulty ?? sharedData?.difficulty;
+    if (effectiveDifficulty && ['green', 'amber', 'red'].includes(effectiveDifficulty)) {
+      setSharedDifficulty(effectiveDifficulty);
     } else {
       setSharedDifficulty(null);
     }
@@ -1489,6 +1493,7 @@ export default function App() {
                   battleMode={selectedBattleMode}
                   heroSkillEffect={selectedChar ? getActiveSkillEffect(getCharProgression(selectedChar.id)) : null}
                   preGeneratedQueue={sharedQuestionQueue}
+                  currentUserId={user?.id}
                 />
               )}
 
@@ -1957,11 +1962,12 @@ export default function App() {
                   grade={profile.grade}
                   missions={missionSummaries}
                   onCreateRoom={async (missionId, chosenDifficulty) => {
-                    // Apply host's difficulty before createRoom so the next
-                    // start_game (which bundles selectedDifficulty into
-                    // game_meta.generated_data.difficulty) reflects the choice.
+                    // Difficulty is persisted in game_meta.difficulty by
+                    // create_pk_room so the guest sees it in the lobby before
+                    // battle even starts. selectedDifficulty is also set so
+                    // host's MathBattle renders with the same multiplier.
                     setSelectedDifficulty(chosenDifficulty);
-                    const ok = await createRoom('pk', missionId);
+                    const ok = await createRoom('pk', missionId, chosenDifficulty);
                     if (ok) {
                       setGameState('lobby');
                     } else {

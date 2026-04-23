@@ -64,6 +64,24 @@ export const LobbyScreen = ({
                 {lt(mission.title, lang)}
               </p>
             )}
+            {isPK && room.gameMeta?.difficulty && (() => {
+              const d = room.gameMeta.difficulty;
+              const styles = d === 'red'
+                ? 'bg-rose-100 text-rose-700 border-rose-200'
+                : d === 'amber'
+                  ? 'bg-amber-100 text-amber-700 border-amber-200'
+                  : 'bg-emerald-100 text-emerald-700 border-emerald-200';
+              const label = d === 'red'
+                ? (lang === 'en' ? 'Hard' : '困难')
+                : d === 'amber'
+                  ? (lang === 'en' ? 'Medium' : '中等')
+                  : (lang === 'en' ? 'Easy' : '简单');
+              return (
+                <span className={`inline-block mt-2 px-2.5 py-0.5 rounded-full border text-[10px] font-black uppercase tracking-wider ${styles}`}>
+                  {label} ×{d === 'red' ? 2 : d === 'amber' ? 1.5 : 1}
+                </span>
+              );
+            })()}
             <p className={`flex items-center gap-2 font-bold text-sm mt-1 ${playerCount < 2 ? 'text-amber-500 animate-pulse' : 'text-emerald-500'}`}>
               <Timer size={16} />
               {playerCount < 2
