@@ -17,13 +17,13 @@ interface FlmToast { id: number; copy: { en: string; zh: string } }
 
 /** FLM 升级文案 — 以学生为主语,描述感受,不暴露 mastery_state 标签 */
 function flmUpgradeCopy(before: string, after: string): { en: string; zh: string } | null {
-  if (before === 'learning' && after === 'familiarity') {
+  if (before === 'learning' && after === 'stable') {
     return {
       en: "You're starting to know this one.",
       zh: '你开始熟悉它了。',
     };
   }
-  if (before === 'familiarity' && after === 'mastery') {
+  if (before === 'stable' && after === 'mastered') {
     return {
       en: "This one is yours now.",
       zh: '这块已经是你的了。',
