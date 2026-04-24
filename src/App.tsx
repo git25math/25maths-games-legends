@@ -31,6 +31,7 @@ import { getHotTopic } from './utils/hotTopic';
 import { getKnIdForKp } from './data/curriculum/kp-registry';
 import { getActiveSkillEffect } from './data/heroSkills';
 import { STREAK_MILESTONES, getNewlyEarnedMilestone, getNextMilestone } from './data/streakMilestones';
+import { DerivationToasts } from './components/DerivationToasts';
 const ScrollOfWisdom = lazy(() => import('./components/ScrollOfWisdom').then(m => ({ default: m.ScrollOfWisdom })));
 const SkillCardSelector = lazy(() => import('./components/SkillCardSelector').then(m => ({ default: m.SkillCardSelector })));
 const BattleModeSelector = lazy(() => import('./components/BattleModeSelector').then(m => ({ default: m.BattleModeSelector })));
@@ -2091,6 +2092,9 @@ export default function App() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* ═══ M0 Phase 3 · Derivation Toasts (XP + FLM upgrade) ═══ */}
+        <DerivationToasts lang={lang} />
 
         {/* ═══ Skill Heal Toast (shown after successful battle when health was low) ═══ */}
         <AnimatePresence>

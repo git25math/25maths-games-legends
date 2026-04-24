@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import type { DiscoverStep, Language } from '../types';
 import { lt } from '../i18n/resolveText';
 import { LatexText } from './MathView';
-import { logAttempt } from '../utils/logAttempt';
+import { recordAttempt as logAttempt } from '../utils/recordAttempt';
 
 type Props = {
   steps: DiscoverStep[];

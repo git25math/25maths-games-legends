@@ -17,7 +17,7 @@ import { Confetti } from '../Confetti';
 import { CalculatorWidget } from '../Calculator';
 import { generateMission } from '../../utils/generateMission';
 import { diagnoseError } from '../../utils/diagnoseError';
-import { logAttempt } from '../../utils/logAttempt';
+import { recordAttempt as logAttempt } from '../../utils/recordAttempt';
 
 import { BattleHeader } from './BattleHeader';
 import { BattleContent } from './BattleContent';

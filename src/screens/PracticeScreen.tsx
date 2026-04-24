@@ -28,7 +28,7 @@ import { usePracticePersistedState } from '../hooks/usePracticeState';
 import { hasAnyPracticeCompletion } from '../utils/completionState';
 import { getTopicForKp } from '../data/curriculum/kp-registry';
 import { createQuestionFingerprint } from '../utils/questionFingerprint';
-import { logAttempt } from '../utils/logAttempt';
+import { recordAttempt as logAttempt } from '../utils/recordAttempt';
 import { DiscoverPanel } from '../components/DiscoverPanel';
 
 type PracticePhase = 'discover' | 'green' | 'amber' | 'red' | 'battle';
