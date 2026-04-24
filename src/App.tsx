@@ -785,21 +785,8 @@ export default function App() {
                 setSkillHealToast({ topicId, delta: healthResult.healthDelta, newHealth: newState.healthScore });
                 setTimeout(() => setSkillHealToast(null), 3000);
               }
-              // Fire-and-forget: sync to Supabase user_skill_health table
-              if (user && !isGuest) {
-                const knId = activeMission.kpId ? getKnIdForKp(activeMission.kpId) ?? null : null;
-                supabase.from('user_skill_health').upsert({
-                  user_id: user.id,
-                  node_id: topicId,
-                  kn_id: knId,
-                  health_score: newState.healthScore,
-                  corruption_level: newState.corruptionLevel,
-                  dominant_error_pattern_id: newState.dominantPatternId,
-                  consecutive_same_pattern_count: newState.consecutiveSamePattern,
-                  total_attempt_count: newState.totalAttempts,
-                  last_attempt_at: new Date().toISOString(),
-                }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
-              }
+              // Supabase sync moved to log_attempt_and_derive RPC (M0 Phase 3).
+              // Local state (setSkillHealth above) continues to drive UI.
             } catch (error) {
               console.error('Failed to lazy-load processAttempt for battle success', error);
             }
@@ -888,28 +875,10 @@ export default function App() {
             // Use first error as dominant pattern (or generic if none)
             const dominantErr = pendingErrorsRef.current[0];
             const patternId = dominantErr === 'sign' ? 'sign_distribution' : dominantErr === 'method' ? 'generic_algebra' : dominantErr ? 'generic_number' : undefined;
-            const { newState, result: healthResult } = processAttempt(health, false, patternId, topicId);
+            const { newState } = processAttempt(health, false, patternId, topicId);
             cm = setSkillHealth(cm as Record<string, unknown>, topicId, newState) as any;
-            // Fire-and-forget: sync to Supabase
-            if (user && !isGuest) {
-              const knId = activeMission?.kpId ? getKnIdForKp(activeMission.kpId) ?? null : null;
-              supabase.from('user_skill_health').upsert({
-                user_id: user.id,
-                node_id: topicId,
-                kn_id: knId,
-                health_score: newState.healthScore,
-                corruption_level: newState.corruptionLevel,
-                dominant_error_pattern_id: newState.dominantPatternId,
-                consecutive_same_pattern_count: newState.consecutiveSamePattern,
-                recent_error_count: newState.recentErrorCount,
-                total_attempt_count: newState.totalAttempts,
-                last_attempt_at: new Date().toISOString(),
-                last_error_at: new Date().toISOString(),
-                recommended_recovery_pack_id: newState.corruptionLevel === 'blocked' || newState.corruptionLevel === 'critical'
-                  ? healthResult.recoveryPackId
-                  : null,
-              }, { onConflict: 'user_id,node_id' }).then(() => {}, () => {});
-            }
+            // Supabase sync moved to log_attempt_and_derive RPC (M0 Phase 3).
+            // Local state (setSkillHealth above) continues to drive UI.
           } catch (error) {
             console.error('Failed to lazy-load processAttempt for battle failure', error);
           }
